@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Chain } from '@chain-registry/types';
-import { WalletAccount, WalletConnectOptions } from '@cosmos-kit/core';
+import { WalletAccount } from '@cosmos-kit/core';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -22,9 +22,6 @@ import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
 export class WalletConnectComponent implements OnInit {
   CHAIN_ID = this.env.chainId;
 
-  walletSupportedList = this.env.isMobile ? mobileWallets : [...desktopWallets, ...wcWallets];
-  walletConnectionOption: WalletConnectOptions = this.env.walletConnect;
-
   signerOptions = {
     signingCosmwasm: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
     signingStargate: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
@@ -32,7 +29,6 @@ export class WalletConnectComponent implements OnInit {
   };
 
   wallet$: Observable<WalletAccount> = this.walletsService.walletAccount$;
-  chainInfo = this.env.chainInfo;
 
   constructor(
     public commonService: CommonService,
@@ -47,14 +43,15 @@ export class WalletConnectComponent implements OnInit {
     try {
       const chain = allChains.find((chain) => chain.chain_id == this.CHAIN_ID);
 
-      const wallets = this.walletSupportedList.filter((w) => checkDesktopWallets(w.walletName));
+      const desktop = desktopWallets.filter((w) => checkDesktopWallets(w.walletName));
+      const wallets = this.env.isMobile ? mobileWallets : [...desktop, ...wcWallets];
 
       this.walletsService
         .initWalletManager({
           chain,
           wallets,
           throwErrors: true,
-          walletConnectOptions: this.walletConnectionOption,
+          walletConnectOptions: this.env.walletConnect,
           disableIframe: true,
           signerOptions: this.signerOptions as any,
         })

@@ -1,13 +1,17 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChainWalletBase, MainWalletBase, State, Wallet } from '@cosmos-kit/core';
+import * as _ from 'lodash';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import {
   desktopWallets as _desktopWallets,
   mobileWallets as _mobileWallets,
   wcWallets,
 } from 'src/app/core/utils/cosmoskit';
+import { Errors } from 'src/app/core/utils/cosmoskit/constant';
 import { checkDesktopWallets } from 'src/app/core/utils/cosmoskit/wallets';
+
 @Component({
   selector: 'app-wallet-provider',
   templateUrl: './wallet-provider.component.html',
@@ -41,6 +45,7 @@ export class WalletProviderComponent implements AfterViewInit {
   constructor(
     private walletService: WalletService,
     private environmentService: EnvironmentService,
+    private toastr: NgxToastrService,
   ) {}
 
   async ngAfterViewInit() {
@@ -64,12 +69,20 @@ export class WalletProviderComponent implements AfterViewInit {
   }
 
   connect(wallet: Wallet & { state?: State }) {
-    this.isWalletConnectMode = wallet.mode == 'wallet-connect';
+    this.isWalletConnectMode = wallet.mode == 'wallet-connect' && !this.walletService.isMobile;
+
+    // Only reset pending state
+    [...this.otherWallets, ...this.wallets].forEach((wallet) => {
+      wallet.state = wallet?.state == State.Pending ? State.Done : wallet.state;
+    });
 
     if (wallet.state === State.Error) {
-      window.open(wallet.downloads[0].link, '_blank');
+      window.open(_.get(wallet, 'downloads[0].link'), '_blank');
+
+      this.currentChainWallet = null;
       return;
     }
+
     wallet.state = State.Pending;
 
     this.currentChainWallet = this.walletService.connect(wallet, {
@@ -79,7 +92,11 @@ export class WalletProviderComponent implements AfterViewInit {
         this.close();
       }).bind(this),
       error: ((error) => {
-        console.error('Connect error: ', error);
+        // Throw error if no wallet added
+        if (typeof error?.message == 'string' && error?.message?.includes(Errors.NoWalletExists)) {
+          this.toastr.error(Errors.NoWalletExists);
+        }
+
         this.isWalletConnectMode = false;
         wallet.state = State.Done;
         this.currentChainWallet = null;

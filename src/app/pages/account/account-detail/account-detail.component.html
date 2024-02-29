@@ -6,7 +6,7 @@
         [routerLink]="['/contracts/', currentAddress]"
         *ngIf="isContractAddress && breakpoint.value.matches"
         class="contract-label text--primary ml-6 caption fw-normal"
-      >Contract</a
+        >Contract</a
       >
     </div>
     <div class="d-flex mb-2 mb-lg-0" [class.justify-content-between]="breakpoint.value.matches">
@@ -41,37 +41,11 @@
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
-            <div
-              *ngIf="(currentAddress | nameTag: false) !== currentAddress"
-              class="name-tag cursor-pointer mt-2"
-              [appTooltip]="(currentAddress | isPublicNameTag) ? ('Public name: ' + (currentAddress | nameTag: false)) : null">
-              <div class="d-inline-flex w-100 align-items-center justify-content-between">
-                <span class="line-claim">{{ (currentAddress | nameTag: false) || '-' }}</span>
-                <a
-                  target="_blank"
-                  [href]="extendLink(currentAddress | nameTag: null : 'url')"
-                  *ngIf="currentAddress | nameTag: null : 'url'">
-                  <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+            <app-name-tag [value]="currentAddress" [mode]="ENameTag.Public"></app-name-tag>
 
-          <button
-            class="button button-outline button-outline__in-card button-pill mt-2 btn-private"
-            *ngIf="!(currentAddress | isPrivateNameTag)"
-            (click)="editPrivateName()">
-            <span class="caption fw-normal"> Set Private Name Tag </span>
-          </button>
-          <div
-            *ngIf="currentAddress | isPrivateNameTag"
-            [appTooltip]="(currentAddress | isPrivateNameTag) ? ('Private name: ' + (currentAddress | nameTag)) : null"
-            class="mt-2 d-inline-flex box-private align-items-center">
-            <div class="d-inline-flex align-items-center private-name-tag">
-              <span class="line-claim">{{ (currentAddress | nameTag) || '-' }}</span>
+            <div class="mt-2">
+              <app-name-tag [value]="currentAddress" [mode]="ENameTag.Private"></app-name-tag>
             </div>
-            <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
-          </div>
 
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
@@ -94,7 +68,7 @@
                 class="ml-10"
                 width="20"
                 height="20"
-                *ngIf="isNoData"/>
+                *ngIf="isNoData" />
             </div>
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
@@ -102,7 +76,7 @@
                 alt=""
                 width="36px"
                 height="36px"
-                (click)="viewQrAddress(modalManage)"/>
+                (click)="viewQrAddress(modalManage)" />
             </div>
           </div>
         </div>
@@ -131,7 +105,7 @@
             alt=""
             width="14"
             height="14"
-            (click)="closePopup()"/>
+            (click)="closePopup()" />
         </div>
         <app-qr [address]="currentAddress || ''"></app-qr>
       </div>
@@ -176,9 +150,9 @@
 <ng-template #reloadTemplate>
   <div class="card p-5 d-flex justify-content-between align-items-center" *ngIf="isNoData">
     <div class="text-center">
-      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40"/>
+      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40" />
       <div class="small-text text--light-gray mt-4">
-        Fetching data, might take longer than usual. <br/>
+        Fetching data, might take longer than usual. <br />
         Please come back later or
         <span class="link-reset-data" (click)="reloadData()">refresh the page</span>
       </div>
