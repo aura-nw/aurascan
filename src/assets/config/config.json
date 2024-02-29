@@ -103,11 +103,11 @@
     "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
     "banner": [
       {
-        "src": "assets/images/pages/banner_aurascan.png",
+        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan.png",
         "url": "https://beta.seekhype.io/"
       },
       {
-        "src": "assets/images/pages/banner_aurascan-2.png",
+        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan-2.png",
         "url": "https://beta.seekhype.io/"
       }
     ]
