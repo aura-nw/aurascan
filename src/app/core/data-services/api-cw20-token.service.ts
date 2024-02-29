@@ -19,7 +19,7 @@ export interface IAsset {
   balance: number;
   max_total_supply: number;
   price: number;
-  price_change_percentage_24h: number;
+  priceChangePercentage24h: number;
   value: number | string;
   denom: string;
   decimals: number;
@@ -102,7 +102,7 @@ export class ApiCw20TokenService {
           contract_address: item?.cw20_contract?.smart_contract?.address || '-',
           balance: item?.amount,
           price: coinMarket?.currentPrice || 0,
-          price_change_percentage_24h: coinMarket?.priceChangePercentage24h || 0,
+          priceChangePercentage24h: coinMarket?.priceChangePercentage24h || 0,
           type: COIN_TOKEN_TYPE.CW20,
           value: value.toFixed(),
           verify_status: coinMarket?.verifyStatus || '',
@@ -130,7 +130,7 @@ export class ApiCw20TokenService {
       contract_address: '-',
       balance: account.data.total,
       price: coinMarket?.currentPrice || 0,
-      price_change_percentage_24h: coinMarket?.priceChangePercentage24h || 0,
+      priceChangePercentage24h: coinMarket?.priceChangePercentage24h || 0,
       value: account.data.total * coinMarket?.currentPrice || 0,
       max_total_supply: coinMarket?.max_total_supply || coinMarket?.totalSupply || 0,
       type: COIN_TOKEN_TYPE.NATIVE,
@@ -158,7 +158,7 @@ export class ApiCw20TokenService {
                   contract_address: '-',
                   balance: balanceOf(item.amount, this.currencies.coinDecimals),
                   price: coinMarket?.currentPrice || 0,
-                  price_change_percentage_24h: coinMarket?.priceChangePercentage24h || 0,
+                  priceChangePercentage24h: coinMarket?.priceChangePercentage24h || 0,
                   value: value.toFixed(),
                   type: COIN_TOKEN_TYPE.IBC,
                   verify_status: coinMarket?.verifyStatus || '',

@@ -1,7 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { filter, take } from 'rxjs';
+import { DATEFORMAT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ETokenCoinTypeBE } from 'src/app/core/constants/token.constant';
@@ -33,23 +36,82 @@ export class TokenDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private contractService: ContractService,
     private ibcService: IBCService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-
-    if (this.router.snapshot.url[0]?.path !== 'token') {
-      this.getTokenDetailNFT();
+    if (this.contractAddress?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
+      if (this.router.snapshot.url[0]?.path === 'token') {
+        this.getCW20Detail();
+      } else {
+        this.getTokenDetailNFT();
+      }
     } else {
       this.getTokenDetail();
     }
   }
 
-  getTokenDetail(): void {
+  getCW20Detail(): void {
     let now = new Date();
     now.setDate(now.getDate() - 1);
+    this.tokenService
+      .getCW20Detail(this.contractAddress, this.datePipe.transform(now, DATEFORMAT.DATE_ONLY))
+      .subscribe({
+        next: (res) => {
+          const data = _.get(res, `smart_contract`);
+          if (data.length > 0) {
+            this.tokenService.tokensMarket$
+              .pipe(
+                filter((data) => _.isArray(data)),
+                take(1),
+              )
+              .subscribe((item) => {
+                const tokenMarket = item.find((token) => token.denom === data[0].address);
+
+                const token = data[0];
+                token.contract_address = token.address;
+                token.name = tokenMarket?.name || token.cw20_contract.name;
+                token.symbol = tokenMarket?.symbol || token.cw20_contract.symbol;
+                token.decimals = token.cw20_contract.decimal;
+                token.type = this.contractType.CW20;
+                token.max_total_supply = tokenMarket?.max_supply || 0;
+                token.price = tokenMarket?.currentPrice || 0;
+                token.verify_status = tokenMarket?.verifyStatus || '';
+                token.verify_text = tokenMarket?.verifyText || '';
+                token.modeToken = EModeToken.CWToken;
+                token.priceChangePercentage24h = tokenMarket?.priceChangePercentage24h || 0;
+                token.contract_verification = token.code?.code_id_verifications[0]?.verification_status;
+                token.supplyAmount = BigNumber(token.cw20_contract?.total_supply).dividedBy(
+                  BigNumber(10).pow(token.decimals),
+                );
+                this.tokenDetail = token;
+              });
+          }
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
+  }
+
+  getTokenDetail(): void {
     this.tokenService.getTokenDetail(this.contractAddress).subscribe({
       next: (token) => {
+        if (!token) {
+          this.loading = false;
+          this.errTxt = 'No Data';
+          return;
+        }
+
         let type;
         let modeToken;
         switch (token.type) {
@@ -57,10 +119,6 @@ export class TokenDetailComponent implements OnInit {
             modeToken = EModeToken.Native;
             token.symbol = this.chainInfo?.currencies[0].coinDenom;
             token.name = this.environmentService.chainInfo.chainName;
-            break;
-          case ETokenCoinTypeBE.CW20:
-            type = ContractRegisterType.CW20;
-            modeToken = EModeToken.CWToken;
             break;
           case ETokenCoinTypeBE.IBC:
             modeToken = EModeToken.IBCCoin;
@@ -91,7 +149,9 @@ export class TokenDetailComponent implements OnInit {
           supplyAmount: token.totalSupply,
           price: token.currentPrice,
           decimals: token.decimal,
-          denomHash: token.denom
+          denomHash: token.denom,
+          verify_status: token.verifyStatus,
+          verify_text: token.verifyText,
         };
 
         if (this.contractAddress !== this.chainInfo?.currencies[0].coinMinimalDenom) {
@@ -144,17 +204,6 @@ export class TokenDetailComponent implements OnInit {
   getMoreTx(event) {
     this.tokenDetail['hasMoreTx'] = event;
   }
-
-  // getDataCoin() {
-  //   const listTokenIBC = local.getItem<any>(STORAGE_KEYS.LIST_TOKEN_IBC);
-  //   let findData = listTokenIBC?.find((k) => k['denom']?.indexOf(this.contractAddress) > 0);
-  //   // check exit ibc denom
-  //   if (!findData) {
-  //     this.loading = false;
-  //     this.errTxt = 'No Data';
-  //   }
-  //   this.getInfoTokenIBC(findData);
-  // }
 
   getInfoTokenIBC(denom) {
     this.ibcService.getChannelInfoByDenom(encodeURIComponent(denom)).subscribe((res) => {

@@ -44,12 +44,19 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail.change = Number(this.tokenDetail.change.toString().substring(1));
     }
 
-    this.tokenDetail.holder =
-      this.tokenDetail.tokenHolderStatistics[this.tokenDetail.tokenHolderStatistics?.length - 1]?.totalHolder;
-    this.tokenDetail.holderChange =
-      (this.tokenDetail.cw20_contract.cw20_total_holder_stats[1].total_holder * 100) /
-        this.tokenDetail.cw20_contract.cw20_total_holder_stats[0].total_holder -
-      100;
+    if (this.tokenDetail.cw20_contract?.cw20_total_holder_stats?.length > 1) {
+      this.tokenDetail.holderChange =
+        (this.tokenDetail.cw20_contract.cw20_total_holder_stats[1].total_holder * 100) /
+          this.tokenDetail.cw20_contract.cw20_total_holder_stats[0].total_holder -
+        100;
+    } else if (this.tokenDetail.tokenHolderStatistics?.length > 1) {
+      this.tokenDetail.holder =
+        this.tokenDetail.tokenHolderStatistics[this.tokenDetail.tokenHolderStatistics?.length - 1]?.totalHolder;
+      this.tokenDetail.holderChange =
+        (this.tokenDetail.cw20_contract.cw20_total_holder_stats[1].total_holder * 100) /
+          this.tokenDetail.cw20_contract.cw20_total_holder_stats[0].total_holder -
+        100;
+    }
 
     this.tokenDetail['isHolderUp'] = true;
     if (this.tokenDetail.holderChange < 0) {

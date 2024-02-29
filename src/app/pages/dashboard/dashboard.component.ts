@@ -90,10 +90,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   staking_APR = 0;
   tokenInfo: {
     currentPrice: number;
-    market_cap: number;
+    marketCap: number;
     max_supply: number;
     priceChangePercentage24h: number;
-    total_volume: number;
+    totalVolume: number;
     totalSupply: number;
   };
 

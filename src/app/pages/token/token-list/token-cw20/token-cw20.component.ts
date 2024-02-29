@@ -57,8 +57,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
   listTokenIBC: any;
   nativeToken: any;
-  isMobileMatched = false;
-  dataSourceMobile = [];
   lstCw20Token = [];
   listDataFilter = [];
 
@@ -67,15 +65,9 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   constructor(
     public translate: TranslateService,
     private tokenService: TokenService,
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
     private breakpointObserver: BreakpointObserver,
-  ) {
-    this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
-      if (state) {
-        this.isMobileMatched = state.matches;
-      }
-    });
-  }
+  ) {}
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
@@ -150,11 +142,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           this.dataSource = new MatTableDataSource<any>(res.data);
-          this.dataSourceMobile = this.dataSource.data.slice(
-            this.pageData.pageIndex * this.pageData.pageSize,
-            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-          );
-
           this.pageData.length = res.meta?.count;
           this.isLoadingTable = false;
         },
@@ -204,5 +191,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       this.filterType.push(val);
     }
     this.getListToken();
+
+    this.pageData.length = this.dataSource.data.length;
+    this.pageChange.selectPage(0);
   }
 }

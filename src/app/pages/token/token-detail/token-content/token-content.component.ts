@@ -6,7 +6,6 @@ import BigNumber from 'bignumber.js';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -63,7 +62,6 @@ export class TokenContentComponent implements OnInit {
     private tokenService: TokenService,
     private nameTagService: NameTagService,
     private contractService: ContractService,
-    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {

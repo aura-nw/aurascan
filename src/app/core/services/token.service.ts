@@ -56,6 +56,49 @@ export class TokenService extends CommonService {
     });
   }
 
+  getCW20Detail(address: string, date): Observable<any> {
+    const operationsDoc = `query queryCW20Detail($address: String, $date: date) { 
+      ${this.envDB} { smart_contract(where: {address: {_eq: $address}}) {
+          address
+          cw20_contract {
+            name
+            symbol
+            marketing_info
+            decimal
+            total_supply
+            smart_contract {
+              address
+            }
+            cw20_holders {
+              address
+              amount
+            }
+            cw20_total_holder_stats(where: {date: {_gte: $date}}) {
+              date
+              total_holder
+            }
+          }
+          code {
+            code_id_verifications(order_by: {updated_at: desc}) {
+              verification_status
+            }
+          }
+        } 
+      } 
+    }`;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: address,
+          date: date,
+        },
+        operationName: 'queryCW20Detail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListCW721Token(payload, textSearch: string = null): Observable<any> {
     if (textSearch?.length > 0) {
       textSearch = '%' + textSearch + '%';

@@ -364,7 +364,6 @@ export class IBCService extends CommonService {
   }
 
   getChannelInfoByDenom(denomHash: string) {
-    // return axios.get(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`).catch(() => null);
     return this.http
       .get<any>(`${this.chainInfo.rest}/ibc/apps/transfer/v1/denom_traces/${denomHash}`)
       .pipe(catchError((_) => of([])));
