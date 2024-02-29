@@ -81,7 +81,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   typeContract: string;
   contractAddress: string;
   EModeToken = EModeToken;
-  linkAddress: string;
   destroyed$ = new Subject<void>();
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
@@ -98,8 +97,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
-    this.contractAddress = this.tokenDetail?.contract_address;
+    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.typeContract = this.tokenDetail?.type;
     this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       this.keyWord = params?.a || '';
@@ -137,7 +135,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         this.getListTransactionTokenCW20(nextKey, isReload);
       }
     } else {
-      this.getListTransactionTokenIBC(nextKey, isReload);
+      setTimeout(() => {
+        this.getListTransactionTokenIBC(nextKey);
+      }, 500);
     }
   }
 
@@ -276,7 +276,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async getListTransactionTokenIBC(nextKey = null, isReload = false) {
+  getListTransactionTokenIBC(nextKey = null) {
     const denomFilter = this.tokenDetail.channelPath?.path + '/' + this.tokenDetail.channelPath?.base_denom;
     let payload = {
       limit: this.pageData.pageSize,
@@ -300,9 +300,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
           this.nextKey = null;
           if (res.ibc_ics20?.length >= this.pageData.pageSize) {
             this.nextKey = res?.ibc_ics20[res.ibc_ics20.length - 1]?.height;
-            this.hasMore.emit(true);
-          } else {
-            this.hasMore.emit(false);
           }
 
           const txs = convertTxIBC(res, this.coinInfo);

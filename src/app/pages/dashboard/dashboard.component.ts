@@ -28,6 +28,7 @@ import {
 } from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -88,11 +89,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   staking_APR = 0;
   tokenInfo: {
-    current_price: number;
+    currentPrice: number;
     market_cap: number;
     max_supply: number;
-    price_change_percentage_24h: number;
+    priceChangePercentage24h: number;
     total_volume: number;
+    totalSupply: number;
   };
 
   originalData = [];
@@ -219,7 +221,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.tokenService.tokensMarket$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
-      this.tokenInfo = res.find((k) => k.coin_id === this.environmentService.coingecko?.ids[0]);
+      this.tokenInfo = res.find((k) => k.coinId === this.environmentService.coingecko?.ids[0]);
     });
   }
 

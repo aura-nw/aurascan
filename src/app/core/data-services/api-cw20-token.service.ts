@@ -119,7 +119,7 @@ export class ApiCw20TokenService {
 
   parseNativeToken(account, coinsMarkets) {
     const nativeId = this.env.coingecko.ids[0];
-    const coinMarket = coinsMarkets.find((coin) => coin.coin_id === nativeId);
+    const coinMarket = coinsMarkets.find((coin) => coin.coinId === nativeId);
     return {
       name: this.env.chainName,
       symbol: this.currencies.coinDenom,
