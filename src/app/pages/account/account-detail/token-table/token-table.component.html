@@ -104,7 +104,9 @@
                     <img [appImg]="element?.image" [defaultImage]="defaultLogoAura" class="image-token" alt="" />
                   </div>
                   <div>
-                    <a class="d-flex align-items-center text-nowrap mr-3" [routerLink]="['/tokens/token', element.tokenUrl]">
+                    <a
+                      class="d-flex align-items-center text-nowrap mr-3"
+                      [routerLink]="['/tokens/token', element.tokenUrl]">
                       <div class="d-flex align-items-center">
                         <div class="ml-2 body-03 fw-semibold">
                           {{ element.name | ellipsis: 30 }}
@@ -140,7 +142,8 @@
                     [value]="element.contract_address"
                     *ngIf="element.contract_address !== '-'"
                     [iconContract]="true"
-                    [url]="'contracts'"></app-name-tag>
+                    [linkRouter]="['/contracts', element.contract_address]">
+                  </app-name-tag>
                   <span *ngIf="element.contract_address === '-'">-</span>
                 </div>
               </td>

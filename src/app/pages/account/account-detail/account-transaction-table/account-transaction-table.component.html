@@ -468,12 +468,16 @@
                         <div class="item-show d-flex justify-content-between align-items-center">
                           <app-name-tag
                             [value]="item.fromAddress || currentAddress"
-                            [url]="(item.fromAddress || currentAddress | isContract) ? 'contracts' : 'account'"
                             [iconContract]="item.fromAddress || currentAddress | isContract"
-                            [isLink]="
+                            [linkRouter]="[
+                              (item.toAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                              item.toAddress || currentAddress
+                            ]"
+                            [isEnableRouter]="
                               !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                               item.fromAddress !== currentAddress
-                            "></app-name-tag>
+                            ">
+                          </app-name-tag>
                           <div class="box-token-transfer d-flex mr-8">
                             <span
                               class="token-transfer-status d-inline-flex align-items-center caption"
@@ -514,12 +518,16 @@
                           <div [style]="'min-width: 148px'">
                             <app-name-tag
                               [value]="item.toAddress || currentAddress"
-                              [url]="(item.toAddress || currentAddress | isContract) ? 'contracts' : 'account'"
+                              [linkRouter]="[
+                                (item.toAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                                item.toAddress || currentAddress
+                              ]"
                               [iconContract]="item.toAddress || currentAddress | isContract"
-                              [isLink]="
+                              [isEnableRouter]="
                                 !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                                 item.toAddress !== currentAddress
-                              "></app-name-tag>
+                              ">
+                            </app-name-tag>
                           </div>
                           <ng-container *ngIf="index === 0">
                             <div
@@ -561,10 +569,10 @@
                           <div class="mt-1">
                             <app-name-tag
                               [iconContract]="true"
-                              [url]="'contracts'"
+                              [linkRouter]="['/contracts', item.toAddress || currentAddress]"
                               [isShorterText]="true"
                               [value]="item.contractAddress"
-                              [isLink]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                              [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                           </div>
                         </div>
                       </div>

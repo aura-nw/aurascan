@@ -57,44 +57,11 @@
           <app-qr [address]="currentAddress || ''"></app-qr>
         </div>
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
-          <div>
-            <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
-            <div
-              *ngIf="(currentAddress | nameTag: false) !== currentAddress"
-              class="name-tag cursor-pointer mt-2 aura-tooltip-contain d-inline-flex">
-              <div class="d-inline-flex w-100 aura-tooltip-object align-items-center justify-content-between">
-                <span class="line-claim">{{ (currentAddress | nameTag: false) || '-' }}</span>
-                <a
-                  target="_blank"
-                  [href]="extendLink(currentAddress | nameTag: null : 'url')"
-                  *ngIf="currentAddress | nameTag: null : 'url'">
-                  <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
-                </a>
-              </div>
+          <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
+          <app-name-tag [value]="currentAddress" [mode]="ENameTag.Public"></app-name-tag>
 
-              <app-tooltip-customize
-                *ngIf="currentAddress | isPublicNameTag"
-                [content]="'Public name: ' + (currentAddress | nameTag: false)"></app-tooltip-customize>
-            </div>
-          </div>
-
-          <button
-            class="button button-outline button-outline__in-card button-pill mt-2 btn-private"
-            *ngIf="!(currentAddress | isPrivateNameTag)"
-            (click)="editPrivateName()">
-            <span class="caption fw-normal"> Set Private Name Tag </span>
-          </button>
-          <div
-            *ngIf="currentAddress | isPrivateNameTag"
-            class="mt-2 aura-tooltip-contain d-inline-flex box-private align-items-center">
-            <div class="d-inline-flex aura-tooltip-object align-items-center private-name-tag">
-              <span class="line-claim">{{ (currentAddress | nameTag) || '-' }}</span>
-            </div>
-
-            <app-tooltip-customize
-              *ngIf="currentAddress | isPrivateNameTag"
-              [content]="'Private name: ' + (currentAddress | nameTag)"></app-tooltip-customize>
-            <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
+          <div class="mt-2">
+            <app-name-tag [value]="currentAddress" [mode]="ENameTag.Private"></app-name-tag>
           </div>
 
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">

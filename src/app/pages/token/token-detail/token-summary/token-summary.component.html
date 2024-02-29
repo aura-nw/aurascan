@@ -35,7 +35,7 @@
             <div class="break-word">
               <app-name-tag
                 [value]="tokenDetail?.contract_address"
-                [url]="'contracts'"
+                [linkRouter]="['/contracts', tokenDetail?.contract_address]"
                 [fullText]="true"></app-name-tag>
             </div>
           </div>

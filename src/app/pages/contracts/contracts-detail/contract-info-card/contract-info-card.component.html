@@ -22,36 +22,19 @@
       </div>
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
-        <ng-container *ngIf="(contractDetail?.address | nameTag: false) !== contractDetail?.address; else NoNameTag">
-          <div class="box-name-tag">
-            <span class="line-claim">{{ (contractDetail?.address | nameTag: false) || '-' }}</span>
-            <a
-              target="_blank"
-              [href]="extendLink(contractDetail?.address | nameTag: null : 'url')"
-              *ngIf="contractDetail?.address | nameTag: null : 'url'">
-              <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer mb-1"></i>
-            </a>
-          </div>
-        </ng-container>
-        <ng-template #NoNameTag><span class="text--white">-</span></ng-template>
+        <app-name-tag
+          [value]="contractDetail?.address"
+          [mode]="ENameTag.Public"
+          [screen]="EScreen.Contract"
+          [fullText]="true">
+        </app-name-tag>
       </div>
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Private Name Tag</div>
-
-        <button
-          class="button button-outline button-outline--gradient button-outline__in-card button-pill mt-1 btn-private"
-          *ngIf="!(contractDetail?.address | isPrivateNameTag)"
-          (click)="editPrivateName()">
-          <span class="caption fw-normal"> Set Private Name Tag </span>
-        </button>
-        <div
-          *ngIf="contractDetail?.address | isPrivateNameTag"
-          class="mt-2 d-inline-flex box-private align-items-center text--white">
-          <div class="d-inline-flex align-items-center private-name-tag">
-            <span class="line-claim">{{ (contractDetail?.address | nameTag) || '-' }}</span>
-          </div>
-          <i class="ph ph-note-pencil ml-2 body-01 cursor-pointer" (click)="editPrivateName()"></i>
-        </div>
+        <app-name-tag
+          [value]="contractDetail?.address"
+          [mode]="ENameTag.Private"
+          [screen]="EScreen.Contract"></app-name-tag>
       </div>
     </div>
   </div>
@@ -84,7 +67,11 @@
             <app-name-tag
               [value]="contractDetail?.creator"
               [widthAuto]="true"
-              [url]="contractDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"></app-name-tag>
+              [linkRouter]="[
+                (contractDetail?.creator | isContract) ? '/contracts' : '/account',
+                contractDetail?.creator
+              ]">
+            </app-name-tag>
           </span>
           at txn
           <a

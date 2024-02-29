@@ -162,14 +162,13 @@
                             !data[template.matColumnDef]?.startsWith('Null')
                           ">
                           <app-name-tag
+                            *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]"
                             [value]="data[template.matColumnDef]"
-                            [isHref]="true"
-                            [url]="'/tokens/' + linkToken + '/' + linkAddress + '?a='"
-                            [isTokenDetail]="true"
-                            [maxCharacter]="15"
-                            *ngIf="
-                              data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
-                            "></app-name-tag>
+                            [linkRouter]="['/tokens', linkToken, linkAddress]"
+                            [linkParams]="{ a: data[template.matColumnDef] }"
+                            [iconContract]="data[template.matColumnDef] | isContract"
+                            [maxCharacter]="15">
+                          </app-name-tag>
                         </ng-container>
                       </div>
                       <ng-container *ngIf="!isSearchAddress">
@@ -194,20 +193,14 @@
                   <ng-container *ngSwitchCase="'to_address'">
                     <div [style.min-width]="'210px'">
                       <app-name-tag
+                        *ngIf="data[template.matColumnDef]"
                         [value]="data[template.matColumnDef]"
-                        [isHref]="true"
-                        [isTokenDetail]="true"
+                        [iconContract]="data[template.matColumnDef] | isContract"
                         [maxCharacter]="15"
-                        [url]="'/tokens/' + linkToken + '/' + linkAddress + '?a='"
-                        [type]="data.type"
-                        *ngIf="
-                          !data[template.matColumnDef]?.startsWith('Null') && data[template.matColumnDef]
-                        "></app-name-tag>
-                      <app-name-tag
-                        [value]="data[template.matColumnDef]"
-                        [isLink]="false"
-                        [isTokenDetail]="true"
-                        *ngIf="data[template.matColumnDef]?.startsWith('Null')"></app-name-tag>
+                        [isEnableRouter]="!data[template.matColumnDef]?.startsWith('Null')"
+                        [linkRouter]="['/tokens', linkToken, linkAddress]"
+                        [linkParams]="{ a: data[template.matColumnDef] }">
+                      </app-name-tag>
                       <span *ngIf="!data[template.matColumnDef]"> - </span>
                     </div>
                   </ng-container>

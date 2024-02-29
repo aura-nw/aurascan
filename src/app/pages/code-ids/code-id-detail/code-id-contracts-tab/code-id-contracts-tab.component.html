@@ -16,7 +16,7 @@
               <ng-container *ngIf="template.matColumnDef === 'contract_address'">
                 <app-name-tag
                   [value]="data[template.matColumnDef]"
-                  [url]="template.isUrl"
+                  [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                   [tooltipPosition]="'tooltip--right'"></app-name-tag>
               </ng-container>
               <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
@@ -31,7 +31,11 @@
               <ng-container *ngIf="template.matColumnDef === 'creator_address'">
                 <app-name-tag
                   [value]="data[template.matColumnDef]"
-                  [url]="data[template.matColumnDef]?.length > lengthAddress ? 'contracts' : 'account'"></app-name-tag>
+                  [linkRouter]="[
+                    (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                    data[template.matColumnDef]
+                  ]">
+                </app-name-tag>
               </ng-container>
               <ng-container *ngIf="template.matColumnDef === 'type'">
                 <div>{{ data[template.matColumnDef] }}</div>

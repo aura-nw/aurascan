@@ -93,30 +93,18 @@
                 <div *ngSwitchCase="'type'" class="text-capitalize">
                   {{ data[template.matColumnDef] }}
                 </div>
-                <div
-                  *ngSwitchCase="'public_name_tag'"
-                  class="pe-auto aura-tooltip-contain"
-                  [ngClass]="(data.address | isPublicNameTag) ? 'box-name-tag' : ''">
-                  <div class="aura-tooltip-object">
-                    {{ (data.address | isPublicNameTag) ? (data.address | nameTag: false | ellipsis: 10) : '-' }}
-                  </div>
-
-                  <app-tooltip-customize
-                    *ngIf="data.address | isPublicNameTag"
-                    [content]="data.address | nameTag: false"></app-tooltip-customize>
-                </div>
-                <div
-                  *ngSwitchCase="'private_name_tag'"
-                  class="pe-auto aura-tooltip-contain"
-                  [ngClass]="(data.address | isPrivateNameTag) ? 'private-name-tag' : ''">
-                  <div class="aura-tooltip-object">
-                    {{ (data.address | isPrivateNameTag) ? (data.address | nameTag | ellipsis: 12) : '-' }}
-                  </div>
-
-                  <app-tooltip-customize
-                    *ngIf="data.address | isPrivateNameTag"
-                    [content]="data.address | nameTag"></app-tooltip-customize>
-                </div>
+                <app-name-tag
+                  [value]="data.address"
+                  [mode]="ENameTag.Public"
+                  [maxCharacter]="10"
+                  [screen]="EScreen.WatchList"
+                  *ngSwitchCase="'public_name_tag'"></app-name-tag>
+                <app-name-tag
+                  [value]="data.address"
+                  [mode]="ENameTag.Private"
+                  [maxCharacter]="12"
+                  [screen]="EScreen.WatchList"
+                  *ngSwitchCase="'private_name_tag'"></app-name-tag>
                 <div *ngSwitchCase="'group'" class="">
                   <div class="d-flex align-items-center">
                     <i class="ph ph-bell-simple body-01" *ngIf="data.tracking"></i>

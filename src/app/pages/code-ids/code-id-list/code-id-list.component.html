@@ -102,7 +102,10 @@
                     </a>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'creator'">
-                    <app-name-tag [value]="data[template.matColumnDef]" [url]="template.isUrl"></app-name-tag>
+                    <app-name-tag
+                      [value]="data[template.matColumnDef]"
+                      [linkRouter]="[template.isUrl, data[template.matColumnDef]]">
+                    </app-name-tag>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'type'">
                     <div>
