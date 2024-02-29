@@ -52,7 +52,7 @@ const routes: Routes = [
       {
         path: 'evm-transactions',
         loadChildren: () =>
-          import('./pages/evm-transaction/evm-transaction.module').then((m) => m.EvmTransactionModule),
+          import('./pages/evm-transactions/evm-transactions.module').then((m) => m.EvmTransactionsModule),
       },
       {
         path: 'votings',
