@@ -19,6 +19,72 @@ export class TransactionService extends CommonService {
     super(http, environmentService);
   }
 
+  queryTransactionByEvmHash(payload) {
+    const envDB = 'evmostestnet'; // hard code
+    const operationsDoc = `
+    query QueryTransactionByEvmHash(
+      $limit: Int = 100
+      $order: order_by = desc
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $indexGT: Int = null
+      $indexLT: Int = null
+      $hash: String = null
+      $height: Int = null
+    ) {
+      ${envDB} {
+        transaction(
+          limit: $limit
+          where: {
+            evm_transaction: {hash: {_eq: $hash}}
+            height: { _eq: $height }
+            _and: [
+              { height: { _gt: $heightGT } }
+              { index: { _gt: $indexGT } }
+              { height: { _lt: $heightLT } }
+              { index: { _lt: $indexLT } }
+            ]
+          }
+          order_by: [{ height: $order}, {index: $order }]
+        ) {
+          id
+          height
+          hash
+          timestamp
+          code
+          gas_used
+          gas_wanted
+          data
+          fee
+          memo
+          evm_transaction {
+            hash
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          hash: payload.hash,
+          value: payload.value,
+          key: payload.key,
+          heightGT: null,
+          heightLT: payload.heightLT,
+          indexGT: null,
+          indexLT: null,
+          height: null,
+        },
+        operationName: 'QueryTransactionByEvmHash',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+  }
+
   getListTxDetail(payload) {
     const operationsDoc = `
     query queryTxDetail(

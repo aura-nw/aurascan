@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-transaction',
@@ -8,7 +8,18 @@ import { map } from 'rxjs';
   styleUrls: ['./transaction.component.scss'],
 })
 export class TransactionComponent {
-  hash$ = this.route.paramMap.pipe(map((data) => data.get('id')));
+  hash$: Observable<{
+    type: 'cosmos' | 'evm';
+    hash: string;
+  }> = this.route.paramMap.pipe(
+    map((data) => {
+      const hash = data.get('id');
+      return {
+        type: hash.startsWith('0x') ? 'evm' : 'cosmos',
+        hash,
+      };
+    }),
+  );
 
   constructor(private route: ActivatedRoute) {}
 }
