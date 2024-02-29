@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-evm-transaction-detail',
@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./evm-transaction-detail.component.scss']
 })
 export class EvmTransactionDetailComponent {
+  loading = true;
+  transaction = null;
 
 }
