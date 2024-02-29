@@ -1,16 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TransactionComponent } from './transaction.component';
+import { EvmTransactionsComponent } from 'src/app/pages/evm-transactions/evm-transactions.component';
 
 const routes: Routes = [
   {
-    path: ':id',
-    component: TransactionComponent,
-  },
-  {
     path: '',
-    redirectTo: '/',
-    pathMatch: 'full',
+    component: EvmTransactionsComponent,
   },
 ];
 
@@ -18,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TransactionRoutingModule {}
+export class EvmTransactionRoutingModule {}

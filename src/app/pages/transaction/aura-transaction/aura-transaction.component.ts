@@ -1,22 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CodeTransaction } from '../../../core/constants/transaction.enum';
-import { CommonService } from '../../../core/services/common.service';
-import { MappingErrorService } from '../../../core/services/mapping-error.service';
-import { TransactionService } from '../../../core/services/transaction.service';
-import { convertDataTransaction } from '../../../global/global';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { CommonService } from 'src/app/core/services/common.service';
+import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
-  selector: 'app-transaction-detail',
-  templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.scss'],
+  selector: 'app-aura-transaction',
+  templateUrl: './aura-transaction.component.html',
+  styleUrls: ['./aura-transaction.component.scss'],
 })
-export class TransactionDetailComponent implements OnInit {
-  txHash = '';
+export class AuraTransactionComponent implements OnChanges {
+  @Input() txHash = '';
+
   transaction = null;
   codeTransaction = CodeTransaction;
   isRawData = false;
@@ -49,12 +49,10 @@ export class TransactionDetailComponent implements OnInit {
     public environmentService: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {
-    this.txHash = this.route.snapshot.paramMap.get('id');
-    if (!this.txHash || this.txHash === 'null') {
-      this.router.navigate(['/']);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.txHash) {
+      this.getDetail();
     }
-    this.getDetail();
   }
 
   getDetail(): void {
@@ -101,6 +99,8 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   handleLoadData(res) {
+    this.loading = false;
+
     const txs = convertDataTransaction(res, this.coinInfo);
     if (txs?.length === 0) {
       this.loading = false;

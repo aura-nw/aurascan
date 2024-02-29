@@ -1,22 +1,22 @@
-import {Component, OnInit} from '@angular/core';
-import {TableTemplate} from "src/app/core/models/common.model";
-import {MatLegacyTableDataSource as MatTableDataSource} from "@angular/material/legacy-table";
+import { Component, OnInit } from '@angular/core';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 
 @Component({
-  selector: 'app-evm-transaction',
-  templateUrl: './evm-transaction.component.html',
-  styleUrls: ['./evm-transaction.component.scss']
+  selector: 'app-evm-transactions',
+  templateUrl: './evm-transactions.component.html',
+  styleUrls: ['./evm-transactions.component.scss'],
 })
-export class EvmTransactionComponent {
+export class EvmTransactionsComponent {
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn hash', headerWidth: 214},
-    {matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 216},
-    {matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 110},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 136},
-    {matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214},
-    {matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214},
-    {matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176},
-    {matColumnDef: 'aura_txn', headerCellDef: 'AURA Txn', headerWidth: 102},
+    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn hash', headerWidth: 214 },
+    { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 216 },
+    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 110 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 136 },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214 },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214 },
+    { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176 },
+    { matColumnDef: 'aura_txn', headerCellDef: 'AURA Txn', headerWidth: 102 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -26,9 +26,7 @@ export class EvmTransactionComponent {
   loading = true;
   errTxt = null;
 
-
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.getListTx();
