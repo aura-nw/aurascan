@@ -7,6 +7,11 @@ const routes: Routes = [
     path: ':id',
     component: TransactionComponent,
   },
+  {
+    path: '',
+    redirectTo: '/',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

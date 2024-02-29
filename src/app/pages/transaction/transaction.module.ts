@@ -17,6 +17,7 @@ import { TransactionService } from '../../core/services/transaction.service';
 import { MaterialModule } from '../../material.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../shared/shared.module';
+import { AuraTransactionComponent } from './aura-transaction/aura-transaction.component';
 import { TokenTransferComponent } from './token-transfer/token-transfer.component';
 import { MessagesItemComponent } from './transaction-messages/messages-item/messages-item.component';
 import { TransactionMessagesComponent } from './transaction-messages/transaction-messages.component';
@@ -24,7 +25,13 @@ import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
 
 @NgModule({
-  declarations: [TransactionComponent, TransactionMessagesComponent, MessagesItemComponent, TokenTransferComponent],
+  declarations: [
+    TransactionComponent,
+    TransactionMessagesComponent,
+    MessagesItemComponent,
+    TokenTransferComponent,
+    AuraTransactionComponent,
+  ],
   imports: [
     CommonModule,
     TransactionRoutingModule,
