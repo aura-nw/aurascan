@@ -17,7 +17,8 @@ app-tooltip-customize,
 }
 
 .aura-tooltip-contain {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   position: relative;
 
   .aura-tooltip-object {
@@ -150,6 +151,7 @@ app-tooltip-customize.tooltip--right,
   position: relative;
   text-transform: initial;
   font-size: 1.2rem;
+  font-weight: 400;
   max-width: 650px;
 
   &:before {
@@ -206,14 +208,4 @@ app-tooltip-customize.tooltip--left .aura-tooltip,
     left: unset;
     right: -6px;
   }
-}
-
-.spacer-tooltip {
-  padding-top: 100px;
-  margin-top: -100px;
-}
-
-.spacer-tooltip--sm {
-  padding-top: 20px;
-  margin-top: -20px;
 }

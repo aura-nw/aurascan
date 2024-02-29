@@ -111,19 +111,24 @@ export class CommonService {
     return this._environmentService.imageUrl + 'images/aura__ntf-default-img.png';
   }
 
-  showToolTip(element) {
-    const parent = element.parentNode;
-    const tooltip = element.nextSibling;
-    const offset = ((el) => {
+  getOffSet(el) {
+    // calculate tooltip position
+    // param el: tooltip element's parent
+    return ((el) => {
       const rect = el.getBoundingClientRect();
       return {
         left: rect.left + window.scrollX + rect.width / 2,
         top: rect.top,
       };
-    })(parent);
+    })(el);
+  }
+
+  showToolTip(element) {
+    const parent = element.parentNode;
+    const tooltip = element.nextSibling;
     if (tooltip) {
-      tooltip.style.top = offset.top + 'px';
-      tooltip.style.left = offset.left + 'px';
+      tooltip.style.top = this.getOffSet(parent).top + 'px';
+      tooltip.style.left = this.getOffSet(parent).left + 'px';
     }
 
     if (element.classList.contains('disabled-hover')) {

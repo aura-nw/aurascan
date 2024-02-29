@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js';
 export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
   @Input() appTooltip: string | { priceAmount: any; multipliedBy?: number; decimal?: number; lt?: number };
   @Input() classTooltip: string;
+  @Input() decimalLengthTooltip: number | null = null;
   @Input() disableTooltipHover: boolean = false;
   @Input() getTooltipPosition: boolean = true;
   element: HTMLElement
@@ -37,7 +38,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
       if ((gte || lt) && this.appTooltip.priceAmount != 0) {
         tooltipValue = BigNumber(this.appTooltip.priceAmount)
           .multipliedBy(this.appTooltip.multipliedBy ?? 1)
-          .toFormat();
+          .toFormat(this.decimalLengthTooltip);
       } else {
         tooltipValue = null;
       }
@@ -54,7 +55,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
     tooltipParent.classList.add('app-tooltip-customize');
     tooltip.classList.add('aura-tooltip');
     if (this.classTooltip) {
-      tooltip.classList.add(this.classTooltip);
+      tooltipParent.classList.add(this.classTooltip);
     }
     // set tooltip content
     tooltip.innerHTML = tooltipValue;
@@ -84,18 +85,18 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
     tooltipParent.style.position = 'fixed';
     tooltipParent.style.top = marginTopValue + 'px';
     tooltipParent.style.zIndex = '9999999';
-    switch (tooltipParent.className) {
+    switch (this.classTooltip) {
       case 'tooltip--left':
         tooltipParent.style.left = elementBounding.right + 'px';
-        tooltipParent.style.transform = 'translate(calc(-100% - 32px), -2px)';
+        tooltipParent.style.transform = 'translate(calc(-100% - 12px), 0)';
         break;
       case 'tooltip--right':
         tooltipParent.style.left = elementBounding.left + 'px';
-        tooltipParent.style.transform = 'translate(0, -2px)';
+        tooltipParent.style.transform = 'translate(0, 0)';
         break;
       default:
         tooltipParent.style.left = elementBounding.left + elementBounding.width / 2 + 'px';
-        tooltipParent.style.transform = 'translate(-50%, -2px)';
+        tooltipParent.style.transform = 'translate(-50%, 0)';
         break;
     }
   }

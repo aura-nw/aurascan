@@ -1,12 +1,12 @@
 .contract-table {
   .status {
-    &.TO,
-    &.IN {
+    &-TO,
+    &-IN {
       background: rgba(84, 206, 140, 0.2);
       color: var(--aura-green-3);
     }
 
-    &.OUT {
+    &-OUT {
       background: rgba(213, 98, 94, 0.2);
       color: var(--aura-red-3);
     }

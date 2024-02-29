@@ -6,33 +6,41 @@
   opacity: 0;
   transition: opacity 0.35s ease-in-out;
 }
+
 .soulbound-list {
   width: 100%;
   flex-grow: 1;
   overflow-x: auto;
+
   .sbt-validator {
     display: flex;
-    >div {
+
+    > div {
       min-width: 110px;
       margin-right: 5px;
       @media (min-width: 912px) {
         margin-right: 30px;
       }
     }
+
     &__label {
       display: none;
     }
   }
+
   &::-webkit-scrollbar {
     height: 0;
   }
+
   .soulbound__item {
     flex-basis: 50%;
     box-sizing: border-box;
+
     .nft-card {
       min-height: 120px;
       max-width: 90px;
     }
+
     @media (min-width: 413.98px) {
       .nft-card {
         max-width: 100px;
@@ -47,18 +55,22 @@
         max-width: 110px;
       }
     }
+
     &:not(:last-child) {
       margin-right: var(--spacer-2);
       @media (min-width: 912px) {
         margin-right: var(--spacer-6);
       }
     }
+
     &:hover {
       border-radius: 8px;
+
       .btn-preview {
         opacity: 1;
       }
     }
+
     ::ng-deep {
       img,
       video,
@@ -69,10 +81,21 @@
     }
   }
 }
+
+.btn-sbt {
+  ::ng-deep .aura-tooltip-contain {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+  }
+}
+
+
 .nft__unclaimed {
   img {
     transition: unset;
   }
+
   @media (min-width: 991.98px) {
     &:hover img {
       opacity: 0.5;
@@ -81,6 +104,7 @@
     }
   }
 }
+
 .nft__unclaimed-noti {
   position: absolute;
   top: 0;
@@ -88,6 +112,7 @@
   color: white;
   transform: translate(50%, -50%);
 }
+
 .sbt-card-contain {
   width: 130px;
   @media (min-width: 991.98px) {
@@ -100,6 +125,7 @@
     width: 150px;
   }
 }
+
 @media (min-width: 991.98px) {
   .sbt-contain {
     padding: 0 8px;
