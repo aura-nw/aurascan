@@ -75,7 +75,6 @@ export class ContractsTransactionsComponent implements OnInit {
       next: (res) => {
         if (res?.smart_contract[0]) {
           this.payload['id'] = res?.smart_contract[0].id;
-          this.getData();
         }
       },
       error: (e) => {
@@ -87,7 +86,7 @@ export class ContractsTransactionsComponent implements OnInit {
         this.isLoadingTX = false;
       },
       complete: () => {
-        this.isLoadingTX = false;
+        this.getData();
       },
     });
     this.timerGetUpTime = setInterval(() => {
