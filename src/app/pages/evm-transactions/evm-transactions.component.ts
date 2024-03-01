@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { Component } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
   selector: 'app-evm-transactions',
@@ -9,7 +11,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 })
 export class EvmTransactionsComponent {
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn hash', headerWidth: 214 },
+    { matColumnDef: 'hash', headerCellDef: 'EVM Txn hash', headerWidth: 214 },
     { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 216 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 110 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 136 },
@@ -26,158 +28,38 @@ export class EvmTransactionsComponent {
   loading = true;
   errTxt = null;
 
-  constructor() {}
+  constructor(private transactionService: TransactionService) {}
 
   ngOnInit(): void {
     this.getListTx();
   }
 
   getListTx(): void {
-    // const payload = {
-    //   limit: this.pageSize,
-    // };
-    this.dataSource.data = [
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
+    const payload = {
+      limit: this.pageSize,
+    };
+
+    this.transactionService.queryTransactionByEvmHash(payload).subscribe({
+      next: (res) => {
+        if (res?.transaction?.length > 0) {
+          const txs = res.transaction;
+          txs.forEach((element) => {
+            element.type = element.transaction_messages[0].type?.split('.').pop();
+          });
+          this.dataSource.data = [...txs];
+        }
       },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.loading = false;
       },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
+      complete: () => {
+        this.loading = false;
       },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-      {
-        tx_hash: '0xe9293a50b62cbfc50b39de4884b1a8506fad060180b0c619fc685d11104d34c8',
-        method: 'swapExactETHForTokens',
-        height: '4569415',
-        timestamp: '2024-02-28T07:00:00.000Z',
-        from: '0xf99ee98167b41e226527b83982acd618678a510c',
-        to: '0xf99ee98167b41e226527b83982acd618678a510c',
-        amount: '0.593883',
-        aura_txn: '6CFC0EC66419AD0F95EA93652AD5A29ECE919C12E3DD9B5C45108378E2018DE5',
-      },
-    ];
-    this.loading = false;
+    });
   }
 }

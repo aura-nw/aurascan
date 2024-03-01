@@ -57,8 +57,17 @@ export class TransactionService extends CommonService {
           data
           fee
           memo
+          transaction_messages {
+            type
+            content
+          }
           evm_transaction {
             hash
+            from
+            data
+            height
+            to
+            value
           }
         }
       }

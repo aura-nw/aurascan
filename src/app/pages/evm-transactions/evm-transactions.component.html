@@ -7,9 +7,7 @@
           <table mat-table [dataSource]="dataSource" class="aura-table tx">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
-                <th
-                  mat-header-cell [style.min-width]="template.headerWidth + 'px'"
-                  *matHeaderCellDef>
+                <th mat-header-cell [style.min-width]="template.headerWidth + 'px'" *matHeaderCellDef>
                   <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
 
@@ -20,42 +18,42 @@
                         {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                       </div>
                       <a
-                        *ngSwitchCase="'tx_hash'"
+                        *ngSwitchCase="'hash'"
                         [copyBtn]="data[template.matColumnDef]"
                         class="text--primary cursor-pointer hash-link"
-                        [routerLink]="['/transaction', data['tx_hash']]">
-                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                        [routerLink]="['/transaction', data['hash']]">
+                        {{ data?.evm_transaction?.hash | ellipsis: 8 : 8 }}
                       </a>
                       <div *ngSwitchCase="'method'">
-                        {{ data[template.matColumnDef] | ellipsis: 15 }}
+                        {{ data.type | ellipsis: 15 }}
                       </div>
                       <a
                         *ngSwitchCase="'from'"
                         [copyBtn]="data[template.matColumnDef]"
                         class="text--primary cursor-pointer hash-link"
                         [routerLink]="['/transaction', data['from']]">
-                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                        {{ data?.evm_transaction?.from | ellipsis: 8 : 8 }}
                       </a>
                       <a
                         *ngSwitchCase="'to'"
                         [copyBtn]="data[template.matColumnDef]"
                         class="text--primary cursor-pointer hash-link"
                         [routerLink]="['/transaction', data['to']]">
-                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                        {{ data?.evm_transaction?.to | ellipsis: 8 : 8 }}
                       </a>
                       <a
                         *ngSwitchCase="'height'"
                         class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks', data['height']]">
-                        {{ data[template.matColumnDef] }}
+                        {{ data?.evm_transaction?.height }}
                       </a>
                       <div *ngSwitchCase="'amount'">
-                        {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                        {{ data.transaction_messages[0].content.data.value | mask: 'separator.6' }}
                         EVMOS
                       </div>
                       <div *ngSwitchCase="'aura_txn'" class="text-center">
                         <a
-                          [routerLink]="['/transaction', data[template.matColumnDef]]"
+                          [routerLink]="['/transaction', data.hash]"
                           target="_blank"
                           class="ml-2 p-0 button button--ssm button-ghost d-inline-flex">
                           <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
@@ -85,11 +83,11 @@
             [title]="{
               size: 'md',
               titleClass: 'h6-mob',
-              label: data.tx_hash | ellipsis: 6 : 6,
+              label: data.hash | ellipsis: 6 : 6,
               subLabelContent: data.type,
               subLabelClass: 'label__status',
               status: data.code,
-              link: '/transaction/' + data.tx_hash
+              link: '/transaction/' + data.hash
             }"
             [content]="[
               {
