@@ -46,15 +46,15 @@
         [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
         (keyup)="onKeyUp()"
         name="search"
-        autocomplete="off" />
+        autocomplete="off"/>
       <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
       </button>
       <button
         type="reset"
         class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
         (click)="resetFilterSearch()">
-        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
       </button>
     </div>
   </form>
@@ -75,9 +75,9 @@
                 [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
                 (keyup)="onKeyUp()"
                 name="search"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
               <button
                 type="reset"
@@ -85,7 +85,7 @@
                   !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
                 }}"
                 (click)="resetFilterSearch()">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
             </div>
           </form>
@@ -113,7 +113,7 @@
                             alt="contract_verification"
                             width="16px"
                             height="16px"
-                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified" />
+                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified"/>
                         </div>
 
                         <app-name-tag
@@ -152,19 +152,15 @@
                     <div *ngIf="data[template.matColumnDef] !== ContractVerifyType.Verified">-</div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'name'">
-                    <div class="aura-tooltip-contain">
-                      <span class="aura-tooltip-object text-nowrap">
-                        {{ (data[template.matColumnDef] | ellipsis: 28) || '-' }}
-                      </span>
-                      <app-tooltip-customize [content]="data[template.matColumnDef]"></app-tooltip-customize>
+                    <div class="text-nowrap"
+                         [appTooltip]="data[template.matColumnDef]">
+                      {{ (data[template.matColumnDef] | ellipsis: 28) || '-' }}
                     </div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'label'">
-                    <div class="aura-tooltip-contain">
-                      <span class="aura-tooltip-object text-nowrap">
-                        {{ (data[template.matColumnDef] | ellipsis: 22) || '-' }}
-                      </span>
-                      <app-tooltip-customize [content]="data[template.matColumnDef]"></app-tooltip-customize>
+                    <div class="text-nowrap"
+                         [appTooltip]="data[template.matColumnDef]">>
+                      {{ (data[template.matColumnDef] | ellipsis: 22) || '-' }}
                     </div>
                   </ng-container>
 
@@ -195,9 +191,9 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchDefault>
                         {{
-                          (template.isShort
-                            ? shortenAddress(data[template.matColumnDef])
-                            : data[template.matColumnDef]) || '-'
+                        (template.isShort
+                          ? shortenAddress(data[template.matColumnDef])
+                          : data[template.matColumnDef]) || '-'
                         }}
                       </ng-container>
                     </ng-container>

@@ -26,7 +26,7 @@
             href="https://docs.aura.network/product/aurascan/getting-started/stake/choose-a-trust-validator"
             target="_blank"
             class="text--primary ml-2"
-            >How to stake?</a
+          >How to stake?</a
           >
         </div>
       </div>
@@ -39,12 +39,12 @@
             [(ngModel)]="textSearch"
             (ngModelChange)="searchValidator()"
             name="search"
-            autocomplete="off" />
+            autocomplete="off"/>
           <button
             type="submit"
             class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
             (click)="searchValidator()">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
           </button>
           <button
             type="reset"
@@ -52,7 +52,7 @@
               !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
             }}"
             (click)="textSearch = ''; searchValidator()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
           </button>
         </div>
       </form>
@@ -86,12 +86,12 @@
             [(ngModel)]="textSearch"
             (ngModelChange)="searchValidator()"
             name="search"
-            autocomplete="off" />
+            autocomplete="off"/>
           <button
             type="submit"
             class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
             (click)="searchValidator()">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
           </button>
           <button
             type="reset"
@@ -99,7 +99,7 @@
               !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
             }}"
             (click)="textSearch = ''; searchValidator()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
           </button>
         </div>
       </form>
@@ -127,44 +127,30 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'uptime'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
-                      <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="
-                            'Validator\'s availability in the last ' + numBlock + ' blocks.'
-                          "></app-tooltip-customize>
-                      </div>
+                      <div [innerHTML]="template.headerCellDef | translate"
+                           [appTooltip]="'Validator\'s availability in the last ' + numBlock + ' blocks.'"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'power'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-power">
-                      <div class="aura-tooltip-contain">
-                        <div class="pl-5 aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="
-                            'The more AURA delegated to a validator, the higher the validator\'s voting power.'
-                          ">
-                        </app-tooltip-customize>
-                      </div>
+                      <div class="pl-8"
+                           [innerHTML]="template.headerCellDef | translate"
+                           [appTooltip]="'The more AURA delegated to a validator, the higher the validator\'s voting power.'"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'commission'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
                       <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="'The proportion of staking reward being taken by the validator as a commission.'">
-                        </app-tooltip-customize>
+                        <div [innerHTML]="template.headerCellDef | translate"
+                             [appTooltip]="'The proportion of staking reward being taken by the validator as a commission.'"></div>
                       </div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'participation'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
                       <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="'Vote participation stat for the last ' + countProposal || 0 + 'proposals.'">
-                        </app-tooltip-customize>
+                        <div [innerHTML]="template.headerCellDef | translate"
+                             [appTooltip]="'Vote participation stat for the last ' + countProposal || 0 + 'proposals.'"></div>
                       </div>
                     </th>
                   </ng-container>
@@ -183,14 +169,13 @@
                           {{ data[template.matColumnDef] | percent: number2Digit }}
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
-                          <div [style.min-width]="'120px'" class="text-end aura-tooltip-contain">
+                          <div [style.min-width]="'120px'" class="text-end">
                             <span
-                              class="cursor-pointer aura-tooltip-object"
+                              class="cursor-pointer"
+                              [appTooltip]="data[template.matColumnDef] | number"
                               [votingPower]="true"
                               [appBigNumber]="data[template.matColumnDef]"
                               [decimal]="0"></span>
-                            <app-tooltip-customize [content]="data[template.matColumnDef] | number">
-                            </app-tooltip-customize>
                           </div>
                           <div
                             *ngIf="data['status'] === statusValidator.Active"
@@ -215,21 +200,15 @@
                             "></div>
                           <span class="percent-vote fw-normal" *ngIf="data['status'] === statusValidator.Active">{{
                             data['percent_power'] + '%'
-                          }}</span>
-                          <div class="aura-tooltip-contain">
-                            <i
-                              class="ph-warning-fill cursor-pointer ml-1 aura-tooltip-object"
-                              *ngIf="
-                                (data['status'] === statusValidator.Active ||
-                                  (data['status'] !== statusValidator.Active && !data['jailed'])) &&
-                                data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH
-                              "></i>
-                            <app-tooltip-customize
-                              [content]="
-                                'Validators with too much voting power will lessen the security and decentralization of the network.'
-                              ">
-                            </app-tooltip-customize>
-                          </div>
+                            }}</span>
+                          <i
+                            class="ph-warning-fill cursor-pointer ml-1"
+                            [appTooltip]="'Validators with too much voting power will lessen the security and decentralization of the network.'"
+                            *ngIf="
+                              (data['status'] === statusValidator.Active ||
+                                (data['status'] !== statusValidator.Active && !data['jailed'])) &&
+                              data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH
+                            "></i>
                         </div>
                         <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] + '/' + countProposal }}
@@ -238,7 +217,7 @@
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
                             {{ calculatorUpTime(data['account_address']) | formatDigit: 2 }}%
                           </ng-container>
-                          <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
+                          <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00%</ng-container>
                         </div>
                         <a
                           *ngSwitchCase="'title'"
@@ -401,7 +380,7 @@
         class="d-lg-none mb-6"
         width="24px"
         height="24px"
-        (click)="closeDialog(modal)" />
+        (click)="closeDialog(modal)"/>
       <div class="mb-4 mb-xl-6">
         <div class="mb-4 d-flex align-items-center">
           <div class="avatar-wrapper">
@@ -447,7 +426,7 @@
               [max]="maxNumberInput"
               [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
               [(ngModel)]="amountFormat"
-              (blur)="resetCheck()" />
+              (blur)="resetCheck()"/>
             <div class="d-flex align-items-center mr-2 mr-lg-4">
               <button
                 class="button button-primary active button-flat button--xs button--sm-mob button-max"
@@ -461,7 +440,7 @@
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
           <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-            <input [max]="maxNumberInput" mask="separator.6" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
+            <input [max]="maxNumberInput" mask="separator.6" [(ngModel)]="amountFormat" (blur)="resetCheck()"/>
             <div class="d-flex align-items-center mr-4">
               <button
                 class="button button-primary active button-flat button--xs button--sm-mob button-max"
@@ -522,7 +501,7 @@
               <span appLinkDenom> {{ denom }} </span>
             </div>
             <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-              <input [(ngModel)]="amountFormat" [max]="maxNumberInput" mask="separator.6" (blur)="resetCheck()" />
+              <input [(ngModel)]="amountFormat" [max]="maxNumberInput" mask="separator.6" (blur)="resetCheck()"/>
               <div class="d-flex align-items-center mr-4">
                 <button
                   class="button button-primary active button-flat button--xs button--sm-mob button-max"
@@ -558,7 +537,7 @@
                     alt=""
                     width="20"
                     height="20"
-                    *ngIf="isLoading" />
+                    *ngIf="isLoading"/>
                   <button type="button" class="button p-0">Undelegate</button>
                 </li>
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Redelegate)">
@@ -568,7 +547,7 @@
                     alt=""
                     width="20"
                     height="20"
-                    *ngIf="isLoading" />
+                    *ngIf="isLoading"/>
                   <button type="button" class="button p-0">Redelegate</button>
                 </li>
               </ul>
@@ -584,7 +563,7 @@
                 alt=""
                 width="20"
                 height="20"
-                *ngIf="isLoading" />
+                *ngIf="isLoading"/>
               <span>Delegate</span>
             </button>
           </div>
@@ -608,7 +587,7 @@
                 alt=""
                 width="20"
                 height="20"
-                *ngIf="isLoading" />
+                *ngIf="isLoading"/>
               <span>Undelegate</span>
             </button>
           </div>
@@ -633,7 +612,7 @@
                 alt=""
                 width="20"
                 height="20"
-                *ngIf="isLoading" />
+                *ngIf="isLoading"/>
               <span>Delegate</span>
             </button>
           </div>
@@ -657,7 +636,7 @@
                 alt=""
                 width="20"
                 height="20"
-                *ngIf="isLoading" />
+                *ngIf="isLoading"/>
               <span>Redelegate</span>
             </button>
           </div>

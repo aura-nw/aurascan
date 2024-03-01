@@ -21,9 +21,9 @@
             class="button button--sm button-outline button-outline--gradient button-pill button-outline__in-card body flex-shrink-0 fw-semibold">
             <span>
               {{
-                proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                  ? 'Voting Ended'
-                  : 'Vote'
+              proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                ? 'Voting Ended'
+                : 'Vote'
               }}
             </span>
           </button>
@@ -116,8 +116,8 @@
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob" *ngIf="specialDataArr.length > 0">
           <div class="col-auto col-md-2 text--gray-4">
-            <ng-container *ngIf="proDetail?.plan"> Plan </ng-container>
-            <ng-container *ngIf="proDetail?.changes"> Changes </ng-container>
+            <ng-container *ngIf="proDetail?.plan"> Plan</ng-container>
+            <ng-container *ngIf="proDetail?.changes"> Changes</ng-container>
           </div>
           <div class="col-12 col-md-10 mt-0">
             <ul
@@ -136,14 +136,14 @@
             <ng-container *ngIf="proDetail?.plan">
               <div *ngFor="let key of getObjectKey(proDetail?.plan)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">
-                  {{ proDetail?.plan[key] | appJson: { checkType: true } }}
+                  {{ proDetail?.plan[key] | appJson: {checkType: true} }}
                 </ng-container>
               </div>
             </ng-container>
             <ng-container *ngIf="proDetail?.changes">
               <div *ngFor="let key of getObjectKey(proDetail?.changes)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">
-                  {{ proDetail?.changes[key] | appJson: { checkType: true } }}
+                  {{ proDetail?.changes[key] | appJson: {checkType: true} }}
                 </ng-container>
               </div>
             </ng-container>
@@ -217,25 +217,21 @@
         </div>
         <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
           <ul class="vote-bar-ul">
-            <li class="bg--primary aura-tooltip-contain" [style.width]="proDetail.yesPercent + '%'">
-              <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'Yes ' + (proDetail.yesPercent | formatDigit: 2) + '%'">
-              </app-tooltip-customize>
+            <li class="bg--primary" [style.width]="proDetail.yesPercent + '%'">
+              <div class="w-100 h-100"
+                   [appTooltip]="'Yes ' + (proDetail.yesPercent | formatDigit: 2) + '%'"></div>
             </li>
-            <li class="bg--danger aura-tooltip-contain" [style.width]="proDetail.noPercent + '%'">
-              <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'No ' + (proDetail.noPercent | formatDigit: 2) + '%'">
-              </app-tooltip-customize>
+            <li class="bg--danger" [style.width]="proDetail.noPercent + '%'">
+              <div class="w-100 h-100"
+                   [appTooltip]="'No ' + (proDetail.noPercent | formatDigit: 2) + '%'"></div>
             </li>
-            <li class="bg--info aura-tooltip-contain" [style.width]="proDetail.noWithVetoPercent + '%'">
-              <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'No with veto ' + (proDetail.noWithVetoPercent | formatDigit: 2) + '%'">
-              </app-tooltip-customize>
+            <li class="bg--inf" [style.width]="proDetail.noWithVetoPercent + '%'">
+              <div class="w-100 h-100"
+                   [appTooltip]="'No with veto ' + (proDetail.noWithVetoPercent | formatDigit: 2) + '%'"></div>
             </li>
-            <li class="bg--secondary aura-tooltip-contain" [style.width]="proDetail.abstainPercent + '%'">
-              <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'Abstain ' + (proDetail.abstainPercent | formatDigit: 2) + '%'">
-              </app-tooltip-customize>
+            <li class="bg--secondary" [style.width]="proDetail.abstainPercent + '%'">
+              <div class="w-100 h-100"
+                   [appTooltip]="'Abstain ' + (proDetail.abstainPercent | formatDigit: 2) + '%'"></div>
             </li>
           </ul>
         </div>
@@ -367,9 +363,9 @@
               class="button button--md button-fixed button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0 h5-mob">
               <span>
                 {{
-                  proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                    ? 'Voting Ended'
-                    : 'Vote'
+                proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  ? 'Voting Ended'
+                  : 'Vote'
                 }}
               </span>
             </button>
