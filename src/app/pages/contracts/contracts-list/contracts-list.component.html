@@ -165,20 +165,19 @@
                   </ng-container>
 
                   <ng-container *ngIf="template.matColumnDef === 'token_tracker'">
-                    <div class="aura-tooltip-contain">
-                      <a class="aura-tooltip-object" *ngIf="data['token_tracker']" [routerLink]="data.url">
-                        {{ data['token_tracker'] | ellipsis: 18 }}
-                      </a>
-                      <span
-                        *ngIf="
-                          !data['code']?.type ||
-                          (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
-                          (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
-                        ">
-                        -
-                      </span>
-                      <app-tooltip-customize [content]="data['token_tracker']"></app-tooltip-customize>
-                    </div>
+                    <a *ngIf="data['token_tracker']"
+                       [appTooltip]="data['token_tracker']"
+                       [routerLink]="data.url">
+                      {{ data['token_tracker'] | ellipsis: 18 }}
+                    </a>
+                    <span
+                      *ngIf="
+                        !data['code']?.type ||
+                        (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
+                        (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
+                      ">
+                      -
+                    </span>
                   </ng-container>
                   <ng-container
                     *ngIf="
