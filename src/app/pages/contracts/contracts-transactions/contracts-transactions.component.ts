@@ -7,6 +7,7 @@ import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.consta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { convertDataTransaction } from 'src/app/global/global';
 
@@ -40,12 +41,9 @@ export class ContractsTransactionsComponent implements OnInit {
   timerGetUpTime: any;
   isLoadingTX = true;
   lengthTxsExecute = 0;
-  txsInstantiate = [];
   currentPage = 0;
   destroyed$ = new Subject<void>();
   modeTxType = { Out: 0, In: 1, Instantiate: 2 };
-  hashIns = '';
-  hasLoadIns = true;
   payload = {
     limit: 100,
   };
@@ -58,6 +56,7 @@ export class ContractsTransactionsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private transactionService: TransactionService,
+    private contractService: ContractService,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
@@ -71,8 +70,25 @@ export class ContractsTransactionsComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractInfo.contractsAddress = this.contractAddress;
-    this.payload['value'] = this.contractAddress;
-    this.getData();
+
+    this.contractService.loadContractDetail(this.contractAddress).subscribe({
+      next: (res) => {
+        if (res?.smart_contract[0]) {
+          this.payload['id'] = res?.smart_contract[0].id;
+        }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoadingTX = false;
+      },
+      complete: () => {
+        this.getData();
+      },
+    });
     this.timerGetUpTime = setInterval(() => {
       this.errTxt = null;
       // reload when page = 0
