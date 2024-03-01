@@ -1,0 +1,14 @@
+.message-container {
+  .header-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--aura-white);
+  }
+
+  .box-event-log {
+    background-color: var(--aura-gray-9);
+    border-radius: 8px;
+    padding: 12px 16px;
+    overflow-y: auto;
+  }
+}

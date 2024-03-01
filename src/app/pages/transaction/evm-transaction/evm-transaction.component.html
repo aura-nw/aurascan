@@ -23,8 +23,13 @@
         <div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">EVM Txn hash</div>
-            <div class="col-auto col-lg-10 text--gray-1 mb-0">{{ transaction?.evm_transaction?.hash }}</div>
+            <div class="col-auto col-lg-10 mb-0">
+              <span class="text--gray-1" [copyBtn]="transaction?.evm_hash">
+                {{ transaction?.evm_hash }}
+              </span>
+            </div>
           </div>
+
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">AURA Txn hash</div>
             <div class="col-auto col-lg-10">
@@ -33,6 +38,7 @@
               </a>
             </div>
           </div>
+
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Status</div>
             <div class="col-auto col-lg-10 d-flex align-items-center">
@@ -70,35 +76,65 @@
               </div>
             </div>
           </div>
+
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Fee</div>
+            <div class="col-auto col-lg-2 text--gray-4">From</div>
+            <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+              <ng-container *ngIf="transaction.from; else dash">
+                <app-name-tag [value]="transaction.from" [fullText]="true"></app-name-tag>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
+            <div class="col-auto col-lg-2 text--gray-4">To</div>
+            <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+              <ng-container *ngIf="transaction.to; else dash">
+                <app-name-tag [value]="transaction.to" [fullText]="true"></app-name-tag>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
+            <div class="col-auto col-lg-2 text--gray-4">Amount</div>
+            <div class="col-auto col-lg-10 text--gray-1">
+              {{ +transaction?.amount | mask: 'separator.6' }}
+              <span appLinkDenom>{{ denom }}</span>
+            </div>
+          </div>
+
+          <div class="row mb-2 body justify-content-between justify-content-lg-start">
+            <div class="col-auto col-lg-2 text--gray-4">Transaction Fee</div>
             <div class="col-auto col-lg-10 text--gray-1">
               {{ +transaction?.fee | mask: 'separator.6' }}
               <span appLinkDenom>{{ denom }}</span>
             </div>
           </div>
+
           <div class="row body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-              <div>Gas</div>
-              <div class="ml-md-1">(used / wanted)</div>
+              <div>Gas limit & Usage by Txn</div>
             </div>
             <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
-            </div>
-          </div>
-          <div class="row body mt-2 justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-              <div>Memo</div>
-            </div>
-            <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
-              {{ !transaction?.memo ? '-' : (transaction?.memo | ellipsis: (environmentService.isMobile ? 25 : 100)) }}
+              {{ transaction?.gasUsed | number }} / {{ transaction?.gasWanted | number }}
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="row mb-2 body justify-content-between justify-content-lg-start">
+      <h2 class="text--white">Messages</h2>
+      <app-evm-message
+        [title]="'Contract'"
+        [type]="transaction.type"
+        [inputData]="transaction.inputData"
+        [eventLog]="transaction.eventLog">
+      </app-evm-message>
+    </div>
   </ng-container>
   <ng-template #noValues>
     <app-table-no-data [textNull]="errTxt"></app-table-no-data>
   </ng-template>
+  <ng-template #dash> - </ng-template>
 </ng-container>

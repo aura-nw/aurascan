@@ -57,8 +57,26 @@ export class TransactionService extends CommonService {
           data
           fee
           memo
+          codespace
+          gas_limit    
+          transaction_messages {
+            content
+          }
           evm_transaction {
             hash
+            from
+            gas
+            data
+            gas_fee_cap
+            gas_tip_cap
+            height
+            id
+            nonce
+            size
+            to
+            tx_id
+            tx_msg_id
+            value
           }
         }
       }

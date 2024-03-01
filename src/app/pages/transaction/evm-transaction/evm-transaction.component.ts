@@ -1,14 +1,13 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TxResponse } from 'cosmjs-types/cosmos/base/abci/v1beta1/abci';
 import * as _ from 'lodash';
 import { map, of, switchMap } from 'rxjs';
-import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { getBalance } from 'src/app/core/utils/common/parsing';
 import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
@@ -18,20 +17,26 @@ import { convertDataTransaction } from 'src/app/global/global';
 })
 export class EvmTransactionComponent implements OnChanges {
   @Input() txHash = '';
-  transaction;
-  // : {
-  //   evm_hash: string;
-  //   hash: string;
-  //   status: StatusTransaction;
-  //   height: number;
-  //   time: string | Date;
-  //   from: string;
-  //   to: string;
-  //   amount: string;
-  //   txFee: string;
-  //   gasLimit: string;
-  //   gasUsed: string;
-  // };
+  transaction: {
+    evm_hash: string;
+    hash: string;
+    status: StatusTransaction;
+    height: number;
+    timestamp: string;
+    from: string;
+    to: string;
+    amount: string;
+    gasWanted: string;
+    gasUsed: string;
+    code: CodeTransaction;
+    fee: string;
+    memo: string;
+    type: string;
+    inputData: { [key: string]: unknown };
+    eventLog: { [key: string]: unknown };
+  };
+
+  transactionDetail;
 
   codeTransaction = CodeTransaction;
   errorMessage = '';
@@ -68,12 +73,15 @@ export class EvmTransactionComponent implements OnChanges {
         .pipe(
           switchMap((response) => {
             const txData = _.get(response, 'transaction[0]');
-            const linkS3 = _.get(response, 'transaction[0]');
+            const linkS3 = _.get(response, 'transaction[0].data.linkS3');
 
-            if (linkS3 && false) {
+            if (linkS3) {
               return this.transactionService.getRawData(linkS3).pipe(
                 map((rawData) => {
-                  txData.transaction[0].data = rawData;
+                  if (response) {
+                    txData.data = rawData;
+                  }
+
                   return txData;
                 }),
               );
@@ -84,8 +92,9 @@ export class EvmTransactionComponent implements OnChanges {
         )
         .subscribe({
           next: (res) => {
+            console.log('🐛 res: ', res);
             if (res) {
-              this.transaction = res;
+              this.transaction = this.parseEvmTx(res);
             }
           },
           error: (e) => {
@@ -107,19 +116,31 @@ export class EvmTransactionComponent implements OnChanges {
     }
   }
 
-  parseEvmTx(data) {
+  parseEvmTx(tx: unknown): typeof this.transaction {
+    const txBodyMessage: unknown[] = _.get(tx, 'data.tx.body.messages[0]');
+
     return {
-      evm_hash: data?.evm_transaction?.hash,
-      hash: data?.hash,
-      status: _.get(data, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail,
-      height: data?.height,
-      time: data?.timestamp,
-      from: data?.hash,
-      to: data?.hash,
-      amount: data?.hash,
-      txFee: data?.hash,
-      gasLimit: data?.hash,
-      gasUsed: data?.hash,
+      evm_hash: _.get(tx, 'evm_transaction.hash'),
+      hash: tx['hash'],
+      status: _.get(tx, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail,
+      code: _.get(tx, 'code'),
+      height: _.get(tx, 'height'),
+      timestamp: _.get(tx, 'timestamp'),
+      gasUsed: _.get(tx, 'gas_used'),
+      gasWanted: _.get(tx, 'gas_wanted'),
+      memo: _.get(tx, 'memo'),
+      // TODO
+      amount: getBalance(_.get(tx, 'fee[0].amount'), 18),
+      fee: getBalance(_.get(tx, 'fee[0].amount'), 18),
+      from: _.get(tx, 'evm_transaction.from'),
+      to: _.get(txBodyMessage, 'data.to'),
+      type: txBodyMessage['@type'],
+      inputData: {
+        hexSignature: _.get(txBodyMessage, 'data.data'),
+      },
+      eventLog: {
+        hexSignature: txBodyMessage['data'],
+      },
     };
   }
 }

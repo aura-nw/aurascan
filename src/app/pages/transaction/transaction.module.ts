@@ -18,6 +18,7 @@ import { MaterialModule } from '../../material.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AuraTransactionComponent } from './aura-transaction/aura-transaction.component';
+import { EvmMessageComponent } from './evm-transaction/evm-message/evm-message.component';
 import { EvmTransactionComponent } from './evm-transaction/evm-transaction.component';
 import { TokenTransferComponent } from './token-transfer/token-transfer.component';
 import { MessagesItemComponent } from './transaction-messages/messages-item/messages-item.component';
@@ -33,6 +34,7 @@ import { TransactionComponent } from './transaction.component';
     TokenTransferComponent,
     AuraTransactionComponent,
     EvmTransactionComponent,
+    EvmMessageComponent,
   ],
   imports: [
     CommonModule,
