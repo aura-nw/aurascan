@@ -110,7 +110,7 @@
                   <div class="ml-3 d-flex align-items-center">
                     <a
                       [routerLink]="['/tokens/token', element.contract_address || element.denom?.replace('ibc/', '')]"
-                      class="text--primary">
+                      class="text--primary text-nowrap">
                       {{ element.name | ellipsis: 25 }}
                       <span *ngIf="element.symbol"> ({{ element.symbol | ellipsis: 15 }}) </span>
                     </a>

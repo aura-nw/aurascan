@@ -24,6 +24,7 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
 import { ProfileComponent } from './profile.component';
 import { PopupWatchlistComponent } from './watchlist/popup-watchlist/popup-watchlist.component';
 import { WatchListComponent } from './watchlist/watchlist.component';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { WatchListComponent } from './watchlist/watchlist.component';
     TableNoDataModule,
     PaginatorModule,
     TooltipCustomizeModule,
+    CommonDirectiveModule
   ],
   providers: [UntypedFormBuilder, provideEnvironmentNgxMask(MASK_CONFIG)],
 })
