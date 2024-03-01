@@ -135,7 +135,7 @@
                       <div>
                         <div *ngIf="data.amountTemp === 0">0</div>
                         <div
-                          [appTooltip]="data.amountTemp | balance: data.dataDenom?.decimals | mask: 'separator'"
+                          [appTooltip]="{ priceAmount: data.amountTemp, decimal: data.dataDenom?.decimals }"
                           *ngIf="
                             data.amountTemp !== 0 && (data.amountTemp | balance: data.dataDenom?.decimals | lt: 0.001)
                           ">
@@ -143,7 +143,7 @@
                         </div>
                         <div
                           *ngIf="data.amountTemp | balance: data.dataDenom?.decimals | gte: 0.001"
-                          [appTooltip]="data.amountTemp | balance: data.dataDenom?.decimals | mask: 'separator'"
+                          [appTooltip]="{ priceAmount: data.amountTemp, decimal: data.dataDenom?.decimals }"
                           [class.cursor-text]="
                             data.amountTemp === 0 ||
                             ((data.amountTemp | balance: data.dataDenom?.decimals | gte: 0.001) &&
