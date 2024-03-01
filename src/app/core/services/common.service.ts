@@ -123,24 +123,6 @@ export class CommonService {
     })(el);
   }
 
-  showToolTip(element) {
-    const parent = element.parentNode;
-    const tooltip = element.nextSibling;
-    if (tooltip) {
-      tooltip.style.top = this.getOffSet(parent).top + 'px';
-      tooltip.style.left = this.getOffSet(parent).left + 'px';
-    }
-
-    if (element.classList.contains('disabled-hover')) {
-      element.classList.remove('disabled-hover');
-      element.classList.add('show');
-      setTimeout(function () {
-        element.classList.remove('show');
-        element.classList.add('disabled-hover');
-      }, 800);
-    }
-  }
-
   exportCSV(payload, getPrivate = false): Observable<any> {
     const headers = new HttpHeaders().append('recaptcha', payload.responseCaptcha);
     const options = {

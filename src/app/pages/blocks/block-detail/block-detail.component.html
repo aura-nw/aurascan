@@ -22,36 +22,19 @@
 
     <div class="card text--white mt-4" *ngIf="{ value: breakpoint$ | async } as breakpoint">
       <div class="d-flex align-items-baseline">
-        <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0" id="popupCopy">
+        <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0"
+            [copyBtn]="isRawData ? (blockDetail?.json_data | json) : null"
+            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
           {{ !isRawData ? 'Information' : 'Raw Data' }}
         </h2>
-        <div class="aura-tooltip-contain">
-          <button
-            class="button button--xxs button--sm-mob button-circle ml-2 d-none d-lg-flex aura-tooltip-object disabled-hover"
-            *ngIf="isRawData"
-            #tooltip
-            (click)="commonService.showToolTip(tooltip)"
-            [cdkCopyToClipboard]="blockDetail?.json_data | json">
-            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
-          </button>
-          <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-        </div>
       </div>
       <div class="card-body body">
         <div class="d-lg-none mb-4">
           <div class="d-flex align-items-baseline">
-            <h2 class="mb-4 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
-            <div class="aura-tooltip-contain">
-              <button
-                class="button button--xxs button--sm-mob button-circle ml-2 aura-tooltip-object disabled-hover"
-                *ngIf="isRawData"
-                #tooltip
-                (click)="commonService.showToolTip(tooltip)"
-                [cdkCopyToClipboard]="blockDetail?.json_data | json">
-                <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
-              </button>
-              <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-            </div>
+            <h2 class="mb-4 text--white"
+                [copyBtn]="isRawData ? (blockDetail?.json_data | json) : null"
+                [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']"
+            >{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
           </div>
           <!-- Tabs -->
           <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
@@ -272,7 +255,7 @@
                     {{ item.type }}
                   </div>
                 </mat-panel-title>
-                <mat-panel-description> </mat-panel-description>
+                <mat-panel-description></mat-panel-description>
               </mat-expansion-panel-header>
 
               <div class="content-log">

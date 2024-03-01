@@ -14,19 +14,11 @@
         <div>
           <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Address</div>
           <div class="d-flex align-items-center mb-1">
-            <div class="body text--gray-1" id="userAddress">
+            <div class="body text--gray-1" id="userAddress"
+                 [copyBtn]="userAddress"
+                 [btnClass]="['button', 'button--xxs', 'button-circle']">
               <span class="d-md-flex d-none">{{ userAddress }}</span>
               <span class="d-md-none d-flex">{{ userAddress | ellipsis: 8 : 8 }}</span>
-            </div>
-            <div class="aura-tooltip-contain ml-2">
-              <button
-                class="button button--xxs button-circle aura-tooltip-object disabled-hover"
-                #tooltip
-                (click)="commonService.showToolTip(tooltip)"
-                [cdkCopyToClipboard]="userAddress">
-                <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" width="12px" height="12px" />
-              </button>
-              <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
             </div>
           </div>
 
@@ -51,7 +43,7 @@
                 alt=""
                 width="36px"
                 height="36px"
-                (click)="viewQrAddress(modalManage)" />
+                (click)="viewQrAddress(modalManage)"/>
             </div>
           </div>
         </div>
@@ -82,7 +74,7 @@
               class="nft__unclaimed-noti text--white"
               *ngIf="totalNotify >= 1 && index === 1"
               [class.noti--pill]="totalNotify > 9"
-              >{{ totalNotify > 99 ? '99+' : totalNotify }}</span
+            >{{ totalNotify > 99 ? '99+' : totalNotify }}</span
             >
           </a>
         </li>
@@ -111,7 +103,7 @@
         alt=""
         width="14"
         height="14"
-        (click)="closePopup()" />
+        (click)="closePopup()"/>
     </div>
     <app-qr [address]="userAddress || ''"></app-qr>
   </div>

@@ -7,7 +7,7 @@ import {CommonService} from "src/app/core/services/common.service";
 })
 export class CopyButtonDirective implements OnChanges {
   @Input() copyBtn: string;
-  @Input() copyText: boolean = false;
+  @Input() copyText: string | null = null;
   @Input() isDisableCopy: boolean = false;
   @Input() btnClass: string[];
   @Input() iconClass: string[];
@@ -64,7 +64,7 @@ export class CopyButtonDirective implements OnChanges {
       this.button.appendChild(icon);
     } else {
       const span = document.createElement('span');
-      span.innerText = 'Copy';
+      span.innerText = this.copyText;
       this.button.appendChild(span);
     }
     this.button.appendChild(this.tooltip);

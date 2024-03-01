@@ -27,8 +27,8 @@ app-tooltip-customize,
     @media (min-width: 991.98px) {
       &:not(.disabled-hover):hover ~ app-tooltip-customize,
       &:not(.disabled-hover):hover ~ .app-tooltip-customize {
-        max-width: 900px;
-        max-height: 900px;
+        max-width: 500px;
+        max-height: 500px;
         opacity: 1;
         height: fit-content;
 
@@ -41,8 +41,8 @@ app-tooltip-customize,
 
     &.show ~ app-tooltip-customize,
     &.show ~ .app-tooltip-customize {
-      max-width: 900px;
-      max-height: 900px;
+      max-width: 500px;
+      max-height: 500px;
       opacity: 1;
 
       .aura-tooltip {
