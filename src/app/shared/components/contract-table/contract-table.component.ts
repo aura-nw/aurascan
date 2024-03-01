@@ -141,6 +141,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       }
       from =
         _.get(contract, 'messages[0].sender') ||
+        _.get(contract, 'messages[0].from_address') ||
         _.get(contract, 'messages[0].content.sender') ||
         _.get(contract, 'messages[0].content.from_address');
 
