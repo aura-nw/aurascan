@@ -27,8 +27,8 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                        '-'
+                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                    '-'
                     }}
                   </a>
                 </ng-container>
@@ -51,20 +51,15 @@
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
-                      <div class="aura-tooltip-contain d-flex">
-                        <div class="aura-tooltip-object" *ngIf="data[template.matColumnDef] < 0.001"><0.001</div>
-                        <div
-                          [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
-                          [class.cursor-text]="data[template.matColumnDef] < 1000000"
-                          *ngIf="data[template.matColumnDef] >= 0.001"
-                          [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="0"></div>
-                        <span class="ml-1" appLinkDenom>{{ coinInfo.coinDenom }}</span>
-                        <app-tooltip-customize
-                          *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
-                          [content]="data[template.matColumnDef]">
-                        </app-tooltip-customize>
+                      <div [appTooltip]="{priceAmount: data[template.matColumnDef]}"
+                           *ngIf="data[template.matColumnDef] < 0.001"><0.001
                       </div>
+                      <div [appTooltip]="{priceAmount: data[template.matColumnDef]}"
+                           [class.cursor-text]="data[template.matColumnDef] < 1000000"
+                           *ngIf="data[template.matColumnDef] >= 0.001"
+                           [appBigNumber]="data[template.matColumnDef]"
+                           [decimal]="0"></div>
+                      <span class="ml-1" appLinkDenom>{{ coinInfo.coinDenom }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'vote_option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}
@@ -75,7 +70,7 @@
                     <ng-container *ngSwitchCase="'rank'">
                       <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
                         data[template.matColumnDef]
-                      }}</span>
+                        }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -152,7 +147,7 @@
                 <div class="text--gray-4">TxHash</div>
                 <a href="/transaction/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
                   data.txhash | ellipsis: 6 : 6
-                }}</a>
+                  }}</a>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Answer</div>
@@ -188,7 +183,7 @@
                 <div class="text--gray-4">TxHash</div>
                 <a href="/transaction/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
                   data.txhash | ellipsis: 6 : 6
-                }}</a>
+                  }}</a>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Answer</div>
@@ -240,7 +235,7 @@
                 <div class="text--gray-4">TxHash</div>
                 <a href="/transaction/{{ data.hash }}" class="text--primary" [copyBtn]="data.hash">{{
                   data.hash | ellipsis: 6 : 6
-                }}</a>
+                  }}</a>
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">Amount</div>

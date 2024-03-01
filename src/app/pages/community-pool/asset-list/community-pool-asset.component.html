@@ -15,9 +15,9 @@
                 [maxLength]="maxLengthSearch"
                 (keyup)="onKeyUp()"
                 name="search"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
               <button
                 type="reset"
@@ -25,7 +25,7 @@
                   !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
                 }}"
                 (click)="resetSearch()">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
             </div>
           </form>
@@ -42,7 +42,7 @@
                     <th mat-header-cell *matHeaderCellDef>Name</th>
                     <td mat-cell *matCellDef="let element" class="title-cell py-4 vertical-align-top">
                       <div class="d-flex">
-                        <img class="rounded-circle" [appImg]="element.logo" width="18" height="18" />
+                        <img class="rounded-circle" [appImg]="element.logo" width="18" height="18"/>
                         <div class="ml-3">{{ element.name }}</div>
                       </div>
                     </td>
@@ -62,21 +62,15 @@
                   <ng-container matColumnDef="amount">
                     <th mat-header-cell *matHeaderCellDef>Amount</th>
                     <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                      <div class="aura-tooltip-contain">
-                        <span
-                          class="aura-tooltip-object"
-                          *ngIf="element.symbol === ''"
-                          [appBigNumber]="element.amount"
-                          [decimal]="0"></span>
-                        <span
-                          class="aura-tooltip-object"
-                          *ngIf="element.symbol !== ''"
-                          [appBigNumber]="element.amount"
-                          [decimal]="element.decimal"></span>
-                        <app-tooltip-customize
-                          *ngIf="element.amount | balance: (element.symbol === '' ? 0 : element.decimal) | gte: 1000000"
-                          [content]="element.amount"></app-tooltip-customize>
-                      </div>
+                      <span
+                        *ngIf="element.symbol === ''"
+                        [appBigNumber]="element.amount"
+                        [decimal]="0"></span>
+                      <span
+                        *ngIf="element.symbol !== ''"
+                        [appTooltip]="{priceAmount: element.amount, decimal: element.symbol === '' ? 0 : element.decimal}"
+                        [appBigNumber]="element.amount"
+                        [decimal]="element.decimal"></span>
                     </td>
                   </ng-container>
 
