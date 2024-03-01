@@ -147,21 +147,15 @@ export class TransactionService extends CommonService {
 
   getListTxCondition(payload) {
     const operationsDoc = `    
-    query queryTransaction(
+    query queryTransaction(  
       $limit: Int = 100
-      $order: order_by = desc
-      $compositeKey: String = null
-      $value: String = null
-      $key: String = null
-      $compositeKeyIn: [String!] = null
-      $valueIn: [String!] = null
-      $keyIn: [String!] = null
       $heightGT: Int = null
       $heightLT: Int = null
-      $indexGT: Int = null
-      $indexLT: Int = null
       $hash: String = null
       $height: Int = null
+      $actionEq: String = null
+      $actionNEq: String = null
+      $id: Int = null
     ) {
       ${this.envDB} {
         transaction(
@@ -169,28 +163,30 @@ export class TransactionService extends CommonService {
           where: {
             hash: { _eq: $hash }
             height: { _eq: $height }
-            event_attribute_index: {
-              value: { _eq: $value, _in: $valueIn }
-              composite_key: { _eq: $compositeKey, _in: $compositeKeyIn }
-              key: { _eq: $key, _in: $keyIn }
+            smart_contract_events: {
+              smart_contract: { id: { _eq: $id } }
+              _and: [
+                { action: { _eq: $actionEq } }
+                { action: { _nlike: $actionNEq } }
+              ]
             }
             _and: [
               { height: { _gt: $heightGT } }
-              { index: { _gt: $indexGT } }
               { height: { _lt: $heightLT } }
-              { index: { _lt: $indexLT } }
             ]
           }
-          order_by: [{ height: $order}, {index: $order }]
+          order_by: { height: desc }
         ) {
           id
           height
           hash
           timestamp
           code
-          gas_used
-          gas_wanted
           data
+          fee
+          transaction_messages {
+            content
+          }
         }
       }
     }
@@ -200,16 +196,13 @@ export class TransactionService extends CommonService {
         query: operationsDoc,
         variables: {
           limit: payload.limit,
-          order: 'desc',
-          hash: payload.hash,
-          compositeKey: payload.compositeKey,
-          value: payload.value,
-          key: payload.key,
           heightGT: null,
           heightLT: payload.heightLT,
-          indexGT: null,
-          indexLT: null,
+          hash: payload.hash,
           height: null,
+          actionEq: payload.actionEq,
+          actionNEq: payload.actionNEq,
+          id: payload.id
         },
         operationName: 'queryTransaction',
       })

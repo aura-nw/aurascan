@@ -243,7 +243,7 @@ export function convertDataTransaction(data, coinInfo) {
     }
 
     const fee = balanceOf(
-      _.get(element, 'fee[0].amount') || _.get(element, 'data.tx.auth_info.fee.amount[0].amount') || 0,
+      _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
     ).toFixed(coinInfo.coinDecimals);
 
     const typeOrigin = _type;

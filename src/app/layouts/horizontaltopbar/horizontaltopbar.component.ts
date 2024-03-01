@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
@@ -42,7 +41,6 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
-    private notificationsService: NotificationsService,
     private userService: UserService,
   ) {}
 
