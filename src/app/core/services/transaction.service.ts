@@ -116,7 +116,6 @@ export class TransactionService extends CommonService {
           gas_used
           gas_wanted
           fee
-          data(path: "tx.body.messages")
           transaction_messages {
             type
             content
@@ -182,7 +181,6 @@ export class TransactionService extends CommonService {
           hash
           timestamp
           code
-          data
           fee
           transaction_messages {
             content
@@ -276,7 +274,6 @@ export class TransactionService extends CommonService {
           code
           gas_used
           gas_wanted
-          data
           event_attributes (where: {_and: {composite_key: {_eq: "transfer.amount"}, value: {_like: "%ibc%"}}}) {
             value
             composite_key

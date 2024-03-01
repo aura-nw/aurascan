@@ -220,8 +220,11 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
 
 export function convertDataTransaction(data, coinInfo) {
   const txs = _.get(data, 'transaction').map((element) => {
-    if (!element['data']['body'] && !element['data']['linkS3']) {
-      element['data']['body'] = element['data']['tx']['body'];
+    // check exit data field
+    if (element['data']) {
+      if (!element['data']['body'] && !element['data']['linkS3']) {
+        element['data']['body'] = element['data']['tx']['body'];
+      }
     }
 
     const code = _.get(element, 'code');

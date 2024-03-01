@@ -68,10 +68,15 @@ export class TransactionDetailComponent implements OnInit {
           if (res?.transaction?.length > 0) {
             const linkS3 = _.get(res, 'transaction[0].data.linkS3');
             if (linkS3?.length > 0) {
-              this.commonService.getRawData(linkS3).subscribe((data) => {
-                res.transaction[0]['data'] = data;
-                this.handleLoadData(res);
-              });
+              this.commonService.getRawData(linkS3).subscribe(
+                (data) => {
+                  res.transaction[0]['data'] = data;
+                  this.handleLoadData(res);
+                },
+                (error) => {
+                  this.handleLoadData(res);
+                },
+              );
             } else {
               this.handleLoadData(res);
             }
