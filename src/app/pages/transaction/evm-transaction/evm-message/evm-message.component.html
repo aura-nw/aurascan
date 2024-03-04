@@ -27,7 +27,15 @@
           {{ 'Input Data:' }}
         </div>
         <div class="col-12 col-lg-11 box-event-log">
-          {{ inputData ? (inputData | json) : '-' }}
+          <div class="row mb-3" *ngFor="let data of inputData | appObjectKeys">
+            <div class="col-2 body-03 text--gray-4">
+              {{ data.key }}
+            </div>
+
+            <div class="col-10" [class.callable]="data.callable">
+              {{ data.value }}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -35,8 +43,13 @@
         <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
           {{ 'Event log' }}
         </div>
-        <div class="col-12 col-lg-11 box-event-log">
-          {{ eventLog ? (eventLog | json) : '-' }}
+        <div class="col-12 col-lg-11">
+          <mat-slide-toggle (toggleChange)="showAll = !showAll"> Show all events </mat-slide-toggle>
+
+          <div class="box-event-log mt-2" *ngIf="showAll">
+            <div>Transaction Receipt Event Logs (108)</div>
+            <div class=""></div>
+          </div>
         </div>
       </div>
     </div>

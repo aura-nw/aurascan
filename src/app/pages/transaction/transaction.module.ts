@@ -8,6 +8,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
+import { ObjectKeysPipe } from 'src/app/core/pipes/object-keys.pipe';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
@@ -18,6 +19,7 @@ import { MaterialModule } from '../../material.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AuraTransactionComponent } from './aura-transaction/aura-transaction.component';
+import { EvmTransactionEventLogComponent } from './evm-transaction-event-log/evm-transaction-event-log.component';
 import { EvmMessageComponent } from './evm-transaction/evm-message/evm-message.component';
 import { EvmTransactionComponent } from './evm-transaction/evm-transaction.component';
 import { TokenTransferComponent } from './token-transfer/token-transfer.component';
@@ -35,6 +37,7 @@ import { TransactionComponent } from './transaction.component';
     AuraTransactionComponent,
     EvmTransactionComponent,
     EvmMessageComponent,
+    EvmTransactionEventLogComponent,
   ],
   imports: [
     CommonModule,

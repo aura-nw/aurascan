@@ -136,7 +136,10 @@ export class EvmTransactionComponent implements OnChanges {
       to: _.get(txBodyMessage, 'data.to'),
       type: txBodyMessage['@type'],
       inputData: {
-        hexSignature: _.get(txBodyMessage, 'data.data'),
+        ['Hex Signature']: _.get(txBodyMessage, 'data.r'),
+        ['Call']: function approve(address, uint256) {},
+        ['Method']: 'Approve',
+        ['Parameter']: '',
       },
       eventLog: {
         hexSignature: txBodyMessage['data'],

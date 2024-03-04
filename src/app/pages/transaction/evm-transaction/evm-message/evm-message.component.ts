@@ -10,4 +10,6 @@ export class EvmMessageComponent {
   @Input() type: string;
   @Input() inputData: { [key: string]: unknown };
   @Input() eventLog: { [key: string]: unknown };
+
+  showAll = false;
 }
