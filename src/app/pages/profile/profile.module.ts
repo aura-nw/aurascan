@@ -5,15 +5,12 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { WatchListService } from 'src/app/core/services/watch-list.service';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { MaterialModule } from '../../material.module';
 import { SharedModule } from '../../shared/shared.module';
@@ -24,7 +21,6 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
 import { ProfileComponent } from './profile.component';
 import { PopupWatchlistComponent } from './watchlist/popup-watchlist/popup-watchlist.component';
 import { WatchListComponent } from './watchlist/watchlist.component';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -52,7 +48,6 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     NgbNavModule,
     TableNoDataModule,
     PaginatorModule,
-    TooltipCustomizeModule,
     CommonDirectiveModule
   ],
   providers: [UntypedFormBuilder, provideEnvironmentNgxMask(MASK_CONFIG)],

@@ -113,13 +113,11 @@ export class CommonService {
   getOffSet(el) {
     // calculate tooltip position
     // param el: tooltip element's parent
-    return ((el) => {
-      const rect = el.getBoundingClientRect();
-      return {
-        left: rect.left + window.scrollX + rect.width / 2,
-        top: rect.top,
-      };
-    })(el);
+    const rect = el.getBoundingClientRect();
+    return {
+      left: rect.left + window.scrollX + rect.width / 2,
+      top: rect.top,
+    };
   }
 
   exportCSV(payload, getPrivate = false): Observable<any> {

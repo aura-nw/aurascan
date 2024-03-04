@@ -1,6 +1,5 @@
 import { Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import BigNumber from 'bignumber.js';
-import { NgxMaskPipe, NgxMaskService } from 'ngx-mask';
 
 @Directive({
   selector: '[appTooltip]',
@@ -15,7 +14,6 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
 
   constructor(
     private elRef: ElementRef,
-    private maskPipe: NgxMaskService,
   ) {
     this.element = this.elRef.nativeElement;
   }
