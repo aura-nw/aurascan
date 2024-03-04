@@ -158,7 +158,6 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'label'">
                     <div class="text-nowrap" [appTooltip]="data[template.matColumnDef]">
-                      >
                       {{ (data[template.matColumnDef] | ellipsis: 22) || '-' }}
                     </div>
                   </ng-container>
