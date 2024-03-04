@@ -81,12 +81,12 @@ export const DROPDOWN_ELEMENT = [
     label: 'View Ingoing Txns',
     key: '1',
   },
-  {
-    image: 'assets/icons/icons-svg/white/contract.svg',
-    imageActive: 'assets/icons/icons-svg/color/contract-active.svg',
-    label: 'View Contract Creation',
-    key: '2',
-  },
+  // {
+  //   image: 'assets/icons/icons-svg/white/contract.svg',
+  //   imageActive: 'assets/icons/icons-svg/color/contract-active.svg',
+  //   label: 'View Contract Creation',
+  //   key: '2',
+  // },
 ];
 
 export interface SmartContractStatus {
