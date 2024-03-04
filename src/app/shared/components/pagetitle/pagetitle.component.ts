@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Globals } from '../../../global/global';
+import {Component, Input} from '@angular/core';
+import {Globals} from '../../../global/global';
 
 @Component({
   selector: 'app-pagetitle',
@@ -19,6 +19,8 @@ export class PagetitleComponent {
 
   @Input() title: string | undefined;
   @Input() displayInfo: boolean = false;
+  @Input() mobileDisplay: boolean = false;
 
-  constructor(public global: Globals) {}
+  constructor(public global: Globals) {
+  }
 }
