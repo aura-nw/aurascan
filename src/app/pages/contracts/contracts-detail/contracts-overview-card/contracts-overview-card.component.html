@@ -16,17 +16,14 @@
       <div class="text--gray-4 caption fw-normal mb-1">{{ chainName | uppercase }} Balance</div>
       <div class="d-flex align-items-center">
         <div class="text--gray-light mr-1 aura-tooltip-contain">
-          <div *ngIf="contractBalance === 0">
-            0 <span appLinkDenom>{{ denom }}</span>
-          </div>
+          <div *ngIf="contractBalance === 0">0</div>
           <div
             class="aura-tooltip-object"
             *ngIf="contractBalance !== 0 && (contractBalance | balance: decimal : true).lt(0.001)">
-            {{ '<0.001' }} <span appLinkDenom>{{ denom }}</span>
+            {{ '<0.001' }}
           </div>
           <ng-container *ngIf="(contractBalance | balance: decimal : true).gte(0.001)">
             <span class="aura-tooltip-object" [appBigNumber]="contractBalance" [decimal]="6"></span>
-            <span appLinkDenom> {{ denom }}</span>
           </ng-container>
 
           <app-tooltip-customize
@@ -38,7 +35,8 @@
             [content]="contractBalance | balance: decimal | mask: 'separator'">
           </app-tooltip-customize>
         </div>
-        <a class="text--primary text-decoration-underline" [routerLink]="['/account', contractDetail.address]">
+        <span appLinkDenom>{{ denom }}</span>
+        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/account', contractDetail.address]">
           More info</a
         >
       </div>
@@ -53,10 +51,7 @@
               {{ '< $0.01' }}
             </div>
             <ng-container *ngIf="contractValue | gte: '0.01'">
-              $<span
-                class="aura-tooltip-object"
-                [appBigNumber]="contractValue"
-                [decimal]="0"></span>
+              $<span class="aura-tooltip-object" [appBigNumber]="contractValue" [decimal]="0"></span>
             </ng-container>
           </div>
           <app-tooltip-customize

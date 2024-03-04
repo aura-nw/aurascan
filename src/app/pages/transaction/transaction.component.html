@@ -22,6 +22,7 @@
                       </div>
                       <a
                         *ngSwitchCase="'tx_hash'"
+                        [copyBtn]="data[template.matColumnDef]"
                         class="text--primary cursor-pointer hash-link"
                         [routerLink]="['/transaction', data['tx_hash']]">
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
@@ -81,6 +82,7 @@
         <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
           <app-card-mob-simple
             *ngFor="let data of dataTx"
+            [dataCard]="data"
             [title]="{
               size: 'md',
               titleClass: 'h6-mob',

@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
@@ -23,8 +24,12 @@ export class BlocksComponent implements OnInit {
   pageSize = 20;
   loading = true;
   errTxt: string;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(private blockService: BlockService) {}
+  constructor(
+    private layout: BreakpointObserver,
+    private blockService: BlockService,
+  ) {}
 
   ngOnInit(): void {
     this.getList();

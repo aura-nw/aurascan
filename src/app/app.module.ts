@@ -26,6 +26,7 @@ import { LayoutsModule } from './layouts/layouts.module';
 import { SchemaViewerModule } from './pages/schema-viewer/schema-viewer.module';
 import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
 import { NgHttpCachingLocalStorage, NgHttpCachingModule, NgHttpCachingStrategy } from 'ng-http-caching';
+import { CommonDirectiveModule } from './core/directives/common-directive.module';
 import { ChainInfoInterceptor } from './core/helpers/chain-info.interceptor';
 initializeApp(environment.firebaseConfig);
 
@@ -48,6 +49,7 @@ initializeApp(environment.firebaseConfig);
     FormsModule,
     MediaExpandModule,
     SchemaViewerModule,
+    CommonDirectiveModule,
     NgHttpCachingModule.forRoot({
       cacheStrategy: NgHttpCachingStrategy.DISALLOW_ALL,
       lifetime: 1000 * 60 * 5, // 5 minutes,

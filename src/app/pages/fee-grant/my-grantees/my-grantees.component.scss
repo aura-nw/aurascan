@@ -21,15 +21,16 @@
       min-width: 160px;
     }
 
-    &:nth-child(3){
+    &:nth-child(3) {
       min-width: 100px;
     }
   }
 
   @media (max-width: 991.98px) {
-
     &:nth-child(1),
-    &:nth-child(2),
+    &:nth-child(2) {
+      min-width: 230px;
+    }
     &:nth-child(4) {
       min-width: 200px;
     }

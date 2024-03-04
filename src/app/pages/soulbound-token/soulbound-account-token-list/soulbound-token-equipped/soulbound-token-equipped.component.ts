@@ -1,6 +1,7 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatTableDataSource as MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { MEDIA_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
@@ -37,6 +38,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   walletAddress = null;
   searchValue = '';
   errTxt: string;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private soulboundService: SoulboundService,
@@ -44,11 +46,12 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     private walletService: WalletService,
     private contractService: ContractService,
     private toastr: NgxToastrService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
-      this.walletAddress = this.walletService.wallet?.bech32Address;
+    this.walletService.walletAccount$.subscribe((wallet) => {
+      this.walletAddress = wallet.address;
     });
 
     this.route.params.subscribe((params) => {
@@ -131,11 +134,12 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   async updatePick(data, pick = true) {
-    let dataWallet = await this.walletService.getWalletSign(this.walletAddress, data.token_id);
+    let signResult = await this.walletService.signArbitrary(this.walletAddress, data.token_id);
+
     const payload = {
-      signature: dataWallet['signature'],
+      signature: signResult['signature'],
       msg: data.token_id.toString(),
-      pubKey: dataWallet['pub_key']?.value,
+      pubKey: signResult['pub_key']?.value,
       id: data.token_id,
       picked: pick,
       contractAddress: data.contract_address,

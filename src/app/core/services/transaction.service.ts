@@ -54,6 +54,7 @@ export class TransactionService extends CommonService {
           gas_used
           gas_wanted
           data
+          fee
           memo
         }
       }
@@ -145,7 +146,7 @@ export class TransactionService extends CommonService {
   }
 
   getListTxCondition(payload) {
-    const operationsDoc = `
+    const operationsDoc = `    
     query queryTransaction(
       $limit: Int = 100
       $order: order_by = desc

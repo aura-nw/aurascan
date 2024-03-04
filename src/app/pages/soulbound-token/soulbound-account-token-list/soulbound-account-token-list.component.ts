@@ -55,10 +55,10 @@ export class SoulboundAccountTokenListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userAddress = this.route.snapshot.paramMap.get('address');
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       this.TABS = this.TAB_EQUIPPED;
       if (wallet) {
-        if (wallet?.bech32Address === this.userAddress) {
+        if (wallet?.address === this.userAddress) {
           this.TABS = this.TAB_ALL;
         }
       }
@@ -96,7 +96,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   }
 
   getABTNotify(): void {
-    this.soulboundService.getNotify(this.walletService.wallet?.bech32Address).subscribe((res) => {
+    this.soulboundService.getNotify(this.walletService.walletAccount?.address).subscribe((res) => {
       this.totalNotify = res.data.notify || 0;
     });
   }

@@ -113,7 +113,7 @@
                 </div>
 
                 <app-tooltip-customize
-                  *ngIf="!totalValue.eq(0) && (totalValue.lt(0.001) || totalValue.gte(1000000))"
+                  *ngIf="!totalValue.eq(0) && (totalValue.lt(0.01) || totalValue.gte(1000000))"
                   [content]="totalValue.toFixed() | mask: 'separator'">
                 </app-tooltip-customize>
               </div>

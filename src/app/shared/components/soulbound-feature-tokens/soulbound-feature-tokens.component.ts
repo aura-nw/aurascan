@@ -55,9 +55,9 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     }
 
     this.userAddress = this.router.snapshot.paramMap.get('address');
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       this.soulboundUnclaimedNum = 0;
-      this.wallet = wallet?.bech32Address;
+      this.wallet = wallet?.address;
       this.getABTNotify();
       this.getData();
       if (this.reloadAPI) {

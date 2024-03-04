@@ -1,472 +1,298 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { Decimal } from '@cosmjs/math';
-import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
-import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
-import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
-import { getLeap } from 'src/app/core/utils/leap';
-import { messageCreators } from 'src/app/core/utils/signing/messages';
-import { getSigner } from 'src/app/core/utils/signing/signer';
-import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
-import { WalletBottomSheetComponent } from 'src/app/shared/components/wallet-connect/wallet-bottom-sheet/wallet-bottom-sheet.component';
-import { WalletListComponent } from 'src/app/shared/components/wallet-connect/wallet-list/wallet-list.component';
-import { STORAGE_KEYS } from '../constants/common.constant';
-import { ESigningType, WALLET_PROVIDER } from '../constants/wallet.constant';
-import { EnvironmentService } from '../data-services/environment.service';
-import { isMobileBrowser } from '../helpers/wallet';
-import { WalletStorage } from '../models/wallet';
-import { getLastProvider, getSigningType } from '../utils/common/info-common';
-import { getKeplr, handleErrors } from '../utils/keplr';
-import local from '../utils/storage/local';
-import { NgxToastrService } from './ngx-toastr.service';
-
-export type WalletKey = Partial<Key> | AccountResponse;
+import { Chain } from '@chain-registry/types';
+import { JsonObject } from '@cosmjs/cosmwasm-stargate';
+import { EncodeObject } from '@cosmjs/proto-signing';
+import { Coin, StdFee } from '@cosmjs/stargate';
+import {
+  Actions,
+  ChainWalletBase,
+  CosmosClientType,
+  EndpointOptions,
+  Logger,
+  MainWalletBase,
+  SessionOptions,
+  SignerOptions,
+  Wallet,
+  WalletAccount,
+  WalletConnectOptions,
+  WalletManager,
+  WalletName,
+} from '@cosmos-kit/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WalletService implements OnDestroy {
-  chainId = this.environmentService.chainId;
-  chainInfo = this.environmentService.chainInfo;
-  graphUrl = `${this.environmentService.horoscope.url + this.environmentService.horoscope.graphql}`;
+  // wallet config
+  private _logger: Logger;
+  private _walletManager: WalletManager | null = null;
+  private _chain: Chain;
 
-  coin98Client: Coin98Client;
-  destroyed$ = new Subject<void>();
-  wallet$: Observable<WalletKey>;
+  private testnets = ['aura-testnet-2', 'serenity-testnet-001'];
 
-  private _wallet$: BehaviorSubject<WalletKey>;
+  // account subject config
+  private _walletAccountSubject$: BehaviorSubject<WalletAccount>;
+  walletAccount$: Observable<WalletAccount>;
 
-  get wallet(): WalletKey {
-    return this._wallet$.getValue();
+  set walletAccount(walletAccount: WalletAccount) {
+    this._walletAccountSubject$.next(walletAccount);
   }
 
-  setWallet(nextState: WalletKey): void {
-    this._wallet$.next(nextState);
+  get walletAccount() {
+    return this._walletAccountSubject$.getValue();
   }
 
-  isMobileMatched = false;
-  breakpoint$ = this.breakpointObserver
-    .observe([Breakpoints.Small, Breakpoints.XSmall])
-    .pipe(takeUntil(this.destroyed$));
+  get isMobile() {
+    return this._walletManager.isMobile;
+  }
 
-  constructor(
-    private environmentService: EnvironmentService,
-    private toastr: NgxToastrService,
-    private breakpointObserver: BreakpointObserver,
-    private http: HttpClient,
-    public translate: TranslateService,
-    private dialog: MatDialog,
-    private notificationsService: NotificationsService,
-    private bottomSheet: MatBottomSheet,
-  ) {
-    this.breakpoint$.subscribe((state) => {
-      if (state) {
-        this.isMobileMatched = state.matches;
-      }
-    });
+  get connectedChain() {
+    return this._chain;
+  }
 
-    this._wallet$ = new BehaviorSubject(null);
-    this.wallet$ = this._wallet$.asObservable();
-
-    const lastProvider = local.getItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER);
-    const currentTimestamp = moment().subtract(1, 'd').toDate().getTime();
-
-    if (lastProvider && currentTimestamp < lastProvider?.timestamp) {
-      const { provider } = lastProvider;
-      this.connect(provider);
-    } else if (currentTimestamp > lastProvider?.timestamp) {
-      local.removeItem(STORAGE_KEYS.LAST_USED_PROVIDER);
-    }
-
-    window.addEventListener('keplr_keystorechange', () => {
-      const lastProvider = local.getItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER);
-
-      if (lastProvider) {
-        this.connect(lastProvider.provider);
-      }
-    });
+  constructor() {
+    this._walletAccountSubject$ = new BehaviorSubject<WalletAccount>(null);
+    this.walletAccount$ = this._walletAccountSubject$.asObservable();
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-    window.removeAllListeners('keplr_keystorechange');
+    this._walletManager?.onUnmounted();
+
+    this._walletManager.off('refresh_connection', () => {
+      this.walletAccount = undefined;
+    });
   }
 
-  mobileConnect(): Promise<any> {
-    if (!this.coin98Client) {
-      this.coin98Client = new Coin98Client(this.chainInfo);
+  private _getSigningStargateClient() {
+    return this.getChainWallet().getSigningStargateClient();
+  }
+
+  private _getSigningCosmWasmClient() {
+    return this.getChainWallet().getSigningCosmWasmClient();
+  }
+
+  setWalletAction(config: Actions) {
+    try {
+      this._walletManager?.setActions(config);
+      this._walletManager?.getWalletRepo(this._chain.chain_name)?.setActions(config);
+    } catch (error) {
+      console.error(error);
     }
-    return this.coin98Client
-      .connect()
-      .then((id) => id && this.coin98Client.getAccount())
-      .then((account) => {
-        if (account) {
-          this.setWallet(account);
-          return true;
-        }
-        return undefined;
-      })
-      .catch((err) => {
-        this.catchErrors(err, true);
-        return { errors: err };
+  }
+
+  async initWalletManager({
+    chain,
+    wallets,
+    throwErrors,
+    subscribeConnectEvents,
+    walletConnectOptions,
+    signerOptions,
+    endpointOptions,
+    sessionOptions,
+    disableIframe,
+  }: {
+    chain: Chain;
+    wallets: MainWalletBase[];
+    throwErrors?: boolean;
+    subscribeConnectEvents?: boolean;
+    walletConnectOptions?: WalletConnectOptions;
+    signerOptions?: SignerOptions;
+    endpointOptions?: EndpointOptions;
+    sessionOptions?: SessionOptions;
+    disableIframe?: boolean;
+  }) {
+    if (!chain) {
+      throw new Error('Chain is required');
+    }
+
+    this._chain = chain;
+
+    this._logger = new Logger(this.testnets.includes(chain.chain_id) ? 'DEBUG' : 'INFO');
+    this._logger.info('Connect to chain: ', {
+      pretty_name: chain.pretty_name,
+      chain_id: chain.chain_id,
+    });
+
+    this._walletManager = new WalletManager(
+      [chain],
+      wallets,
+      this._logger,
+      throwErrors,
+      subscribeConnectEvents,
+      disableIframe,
+      allAssets,
+      undefined, // defaultNameService
+      walletConnectOptions,
+      signerOptions,
+      endpointOptions,
+      sessionOptions,
+    );
+
+    await this._walletManager.onMounted();
+
+    this.accountChangeEvent();
+  }
+
+  get wallets() {
+    return this._walletManager?.mainWallets || [];
+  }
+
+  disconnect() {
+    this.getChainWallet()
+      ?.disconnect(true, { walletconnect: { removeAllPairings: true } })
+      .then(() => {
+        this.walletAccount = null;
       });
   }
 
-  connect(provider: WALLET_PROVIDER): Promise<boolean> {
-    switch (provider) {
-      case WALLET_PROVIDER.KEPLR:
-        this.connectKeplr(this.chainInfo);
-        return Promise.resolve(true);
+  getWalletRepo() {
+    return this._walletManager.getWalletRepo(this._chain.chain_name);
+  }
 
-      case WALLET_PROVIDER.LEAP:
-        this.connectLeap(this.chainInfo);
-        return Promise.resolve(true);
+  connect(
+    wallet: Wallet | WalletName,
+    callback?: {
+      success?: () => void;
+      error?: (error) => void;
+    },
+  ) {
+    const currentChainWallet = this.getChainWallet(typeof wallet == 'string' ? wallet : wallet.name);
 
-      case WALLET_PROVIDER.COIN98:
-        const _coin98 = this.checkExistedCoin98();
+    if (currentChainWallet?.isWalletNotExist) {
+      window.open(currentChainWallet.downloadInfo?.link, '_blank');
+      callback?.error?.(currentChainWallet.message);
+      return undefined;
+    }
 
-        if (_coin98) {
-          this.connectCoin98(this.chainInfo);
-          return Promise.resolve(true);
-        } else {
-          if (this.isMobileMatched) {
-            return this.mobileConnect();
-            // return Promise.resolve(true);
-          }
-          return Promise.resolve(false);
-        }
+    currentChainWallet
+      ?.connect(true)
+      .then(() => {
+        return currentChainWallet.client.getAccount(currentChainWallet.chainId);
+      })
+      .then((account) => {
+        this.walletAccount = account;
+        callback?.success?.();
+      })
+      .catch((e) => {
+        this._walletManager.getWalletRepo(this._chain.chain_name).disconnect();
+        callback?.error?.(e);
+      });
+
+    return currentChainWallet;
+  }
+
+  restoreAccounts() {
+    const account = this.getChainWallet()?.data as WalletAccount;
+    if (account) {
+      this._logger.info('Restore accounts: ', account);
+      this.walletAccount = account;
     }
   }
 
-  disconnect(): void {
-    this.setWallet(null);
-    local.removeItem(STORAGE_KEYS.LAST_USED_PROVIDER);
-  }
-
-  private async connectKeplr(chainInfo: ChainInfo): Promise<void> {
-    const checkWallet = async () => {
-      try {
-        const keplr = await getKeplr();
-
-        if (keplr) {
-          // await keplrSuggestChain(chainInfo);
-          await this.suggestChain(keplr);
-          await keplr.enable(chainInfo.chainId);
-          const account = await keplr.getKey(chainInfo.chainId);
-
-          if (account) {
-            this.setWallet(account);
-            const timestamp = new Date().getTime();
-            local.setItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER, {
-              provider: WALLET_PROVIDER.KEPLR,
-              chainId: chainInfo.chainId,
-              timestamp,
-            });
+  accountChangeEvent() {
+    this._walletManager.on('refresh_connection', () => {
+      this.getChainWallet()
+        ?.client?.getAccount(this._chain.chain_id)
+        .then((account) => {
+          if (this.walletAccount && account.address != this.walletAccount.address) {
+            this.walletAccount = account;
           }
-        } else {
-          this.disconnect();
-          window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
-        }
-      } catch (e: any) {
-        this.catchErrors(e);
-      }
-    };
-    checkWallet();
+        });
+    });
   }
 
-  private async connectLeap(chainInfo: ChainInfo): Promise<void> {
-    const checkWallet = async () => {
-      try {
-        const leap = await getLeap();
-
-        if (leap) {
-          await this.suggestChain(leap);
-          await leap.enable(chainInfo.chainId);
-          const account = await leap.getKey(chainInfo.chainId);
-
-          if (account) {
-            this.setWallet(account);
-            const timestamp = new Date().getTime();
-            local.setItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER, {
-              provider: WALLET_PROVIDER.LEAP,
-              chainId: chainInfo.chainId,
-              timestamp,
-            });
-          }
-        } else {
-          this.disconnect();
-          window.open('https://chromewebstore.google.com/detail/leap-cosmos-wallet/fcfcfllfndlomdhbehjjcoimbgofdncg');
-        }
-      } catch (e: any) {
-        this.catchErrors(e);
-      }
-    };
-    checkWallet();
-  }
-
-  private async connectCoin98(chainInfo: ChainInfo): Promise<void> {
-    const coin98 = await this.checkExistedCoin98();
-
-    if (coin98) {
-      try {
-        // await keplrSuggestChain(chainInfo);
-        await this.suggestChain(coin98);
-        await coin98.enable(chainInfo.chainId);
-
-        const account = await coin98.getKey(chainInfo.chainId);
-
-        if (account) {
-          this.setWallet(account);
-          const timestamp = new Date().getTime();
-          local.setItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER, {
-            provider: WALLET_PROVIDER.KEPLR,
-            chainId: chainInfo.chainId,
-            timestamp,
-          });
-        }
-      } catch (e: any) {
-        this.catchErrors(e);
-        this.disconnect();
-      }
-    } else {
-      this.disconnect();
-      window.open('https://chrome.google.com/webstore/detail/coin98-wallet/aeachknmefphepccionboohckonoeemg');
-    }
-  }
-
-  checkExistedCoin98(): Keplr | null | undefined {
-    if (window?.coin98) {
-      if (window.coin98.keplr) {
-        return window.coin98.keplr;
-      } else {
-        return undefined; // c98 not override keplr
-      }
+  getChainWallet(walletName?: WalletName): ChainWalletBase {
+    let _walletName = walletName ?? localStorage.getItem(STORAGE_KEY.CURRENT_WALLET);
+    if (!_walletName) {
+      return null;
     }
 
-    return null; // not found coin98
+    const wallet = this._walletManager.getChainWallet(this._chain.chain_name, _walletName);
+
+    !wallet?.isActive && wallet?.activate();
+
+    return wallet;
   }
 
-  getAccount(): WalletKey {
-    const account = this.wallet;
+  async signAndBroadcast(
+    signerAddress: string,
+    messages: EncodeObject[],
+    fee: StdFee | number | 'auto' = 'auto',
+    memo?: string,
+    timeoutHeight?: bigint,
+  ) {
+    return (await this._getSigningCosmWasmClient()).signAndBroadcast(signerAddress, messages, fee, memo, timeoutHeight);
+  }
+
+  executeContract(
+    senderAddress: string,
+    contractAddress: string,
+    msg: JsonObject,
+    fee: StdFee | 'auto' | number = 'auto',
+    memo?: string,
+    funds?: readonly Coin[],
+  ) {
+    return this._getSigningCosmWasmClient().then(
+      (client) => client?.execute(senderAddress, contractAddress, msg, fee, memo, funds),
+    );
+  }
+
+  signArbitrary(signer: string, data: string | Uint8Array) {
+    return this.getChainWallet()?.client?.signArbitrary(this._chain.chain_id, signer, data);
+  }
+
+  getAccount() {
+    const account = this.walletAccount;
 
     if (account) {
       return account;
     }
 
-    this.openWalletPopup();
+    const repo = this._walletManager.getWalletRepo(this._chain?.chain_name);
 
+    repo?.openView();
     return null;
   }
 
-  async catchErrors(e, isMobileDevice = false) {
-    handleErrors(e).then((msg) => {
-      if (msg) {
-        this.toastr.error(isMobileDevice ? JSON.stringify(msg || '') : msg);
-      }
-    });
-  }
-
-  async signAndBroadcast(
-    {
-      messageType,
-      message,
-      senderAddress,
-      network,
-      chainId,
-    }: { messageType: any; message: any; senderAddress: any; network: ChainInfo; chainId: any },
-    validatorsCount?: number,
+  async delegateTokens(
+    delegatorAddress: string,
+    validatorAddress: string,
+    amount: Coin,
+    fee: StdFee | 'auto' | number = 'auto',
+    memo?: string,
   ) {
-    const lastProvider = getLastProvider();
-    const signingType = getSigningType(lastProvider);
-
-    if (this.isMobileMatched && !isMobileBrowser()) {
-      const msgs = messageCreators[messageType](senderAddress, message, network);
-      let fee;
-      if (this.coin98Client) {
-        fee = this.coin98Client.getGasEstimateMobile(network, messageType, validatorsCount);
-      } else {
-        fee = await getNetworkFee(network, senderAddress, msgs, '');
-      }
-
-      return this.makeSignDocData(senderAddress, {
-        msgs,
-        chain_id: chainId,
-        fee: fee,
-        memo: '',
-      })
-        .toPromise()
-        .then((signDoc) => {
-          return this.coin98Client.signAndBroadcast(senderAddress, signDoc).then((e) => {
-            let error;
-            if (e.result?.error) {
-              const temp = JSON.stringify(e.result?.error) || null;
-              const charAt = temp?.indexOf('code') + 5;
-              error = temp?.slice(charAt, charAt + 2) || JSON.stringify(e.result?.error) || null;
-            }
-
-            return {
-              hash: e?.result?.transactionHash || null,
-              error,
-            };
-          });
-        })
-        .catch((error) => {
-          this.catchErrors(error, true);
-          return {
-            hash: null,
-            error,
-          };
-        });
-    }
-
-    return createSignBroadcast(
-      {
-        messageType,
-        message,
-        senderAddress,
-        network,
-        signingType,
-        chainId,
-      },
-      validatorsCount || undefined,
+    return this._getSigningCosmWasmClient().then((client) =>
+      client.delegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
     );
   }
 
-  private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
-    const envDB = this.environmentService.horoscope.chain;
-    const operationsDoc = `
-    query getAccountInfo ($address: String) {
-      ${envDB} {
-        account (where: {address: {_eq: $address}}) {
-          account_number
-          sequence
-          type
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          address,
-        },
-        operationName: 'getAccountInfo',
-      })
-      .pipe(
-        map((res) => {
-          if (!res?.data[envDB].account[0]) {
-            throw new Error('Can not get Account');
-          }
-          const accountAuth: {
-            account_number: number | string;
-            sequence: number | string;
-          } = res?.data[envDB].account[0];
-
-          if (accountAuth) {
-            return makeSignDoc(
-              signDoc.msgs,
-              signDoc.fee,
-              signDoc.chain_id,
-              signDoc.memo,
-              accountAuth.account_number,
-              accountAuth.sequence || 0,
-            );
-          }
-          throw new Error('Can not get Account');
-        }),
-      );
-  }
-
-  async execute(userAddress, contract_address, msg, feeGas = null) {
-    let signer;
-    let gasStep = this.chainInfo?.gasPriceStep?.average || 0.0025;
-
-    //convert gasPrice to Decimal
-    let pow = 1;
-    while (!Number.isInteger(gasStep)) {
-      gasStep = gasStep * Math.pow(10, pow);
-      pow++;
-    }
-
-    const fee = {
-      gasPrice: {
-        amount: Decimal.fromAtomics(gasStep.toString(), pow),
-        denom: this.chainInfo.currencies[0].coinMinimalDenom,
-      },
-    };
-
-    let fund = [];
-    const key = Object.keys(msg)[0];
-    if (msg[key]?.fund) {
-      fund = JSON.parse(msg[key]?.fund);
-      delete msg[key]?.fund;
-    }
-
-    const lastProvider = getLastProvider();
-
-    if (this.isMobileMatched && !isMobileBrowser()) {
-      return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
-    } else {
-      let signingType: ESigningType = getSigningType(lastProvider);
-
-      signer = await getSigner(signingType, this.chainId);
-    }
-
-    return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
-      client.execute(userAddress, contract_address, msg, feeGas || 'auto', '', fund || []),
+  async undelegateTokens(
+    delegatorAddress: string,
+    validatorAddress: string,
+    amount: Coin,
+    fee: StdFee | 'auto' | number = 'auto',
+    memo?: string,
+  ) {
+    return this._getSigningCosmWasmClient().then((client) =>
+      client.undelegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
     );
   }
 
-  suggestChain(w: Keplr) {
-    return w.experimentalSuggestChain(this.chainInfo);
+  estimateFee(messages: EncodeObject[], type?: CosmosClientType, memo?: string, multiplier?: number) {
+    return this.getChainWallet().estimateFee(messages, type, memo, multiplier);
   }
 
-  async getWalletSign(minter, message) {
-    const lastProvider = getLastProvider();
-    let provider: Keplr;
-
-    switch (lastProvider) {
-      case WALLET_PROVIDER.LEAP:
-        provider = await getLeap();
-        break;
-      case WALLET_PROVIDER.COIN98:
-        provider = this.checkExistedCoin98();
-        if (this.isMobileMatched && !provider) {
-          return this.coin98Client.signArbitrary(minter, message);
-        }
-        break;
-      default:
-        provider = await getKeplr();
-    }
-
-    return provider.signArbitrary(this.chainInfo.chainId, minter, message);
-  }
-
-  openWalletPopup(): void {
-    if (!this.isMobileMatched) {
-      this.dialog.open(WalletListComponent, {
-        panelClass: 'wallet-popup',
-        width: '716px',
-      });
-    } else {
-      this.notificationsService.hiddenFooterSubject.next(true);
-      this.bottomSheet.open(WalletBottomSheetComponent, {
-        panelClass: 'wallet-popup--mob',
-      });
-      this.bottomSheet._openedBottomSheetRef.afterDismissed().subscribe((res) => {
-        this.notificationsService.hiddenFooterSubject.next(false);
-      });
-    }
+  signAndBroadcastStargate(
+    signerAddress: string,
+    messages: EncodeObject[],
+    fee: StdFee | number | 'auto' = 'auto',
+    memo?: string,
+    timeoutHeight?: bigint,
+  ) {
+    return this._getSigningStargateClient().then((client) =>
+      client.signAndBroadcast(signerAddress, messages, fee, memo, timeoutHeight),
+    );
   }
 }

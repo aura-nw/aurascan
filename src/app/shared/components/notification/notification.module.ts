@@ -5,6 +5,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { NotificationComponent } from './notification.component';
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { SharedModule } from '../../shared.module';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [NotificationComponent],

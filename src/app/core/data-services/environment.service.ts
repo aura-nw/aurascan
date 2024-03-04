@@ -1,13 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ChainInfo } from '@keplr-wallet/types';
+import { WalletConnectOptions } from '@cosmos-kit/core';
 import * as _ from 'lodash';
-import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
-import { LCD_COSMOS } from '../constants/url.constant';
-import { ELeapMode } from '../constants/wallet.constant';
+import { isMobileBrowser } from '../helpers/wallet';
 
 export interface IConfiguration {
   environment: {
@@ -38,7 +37,7 @@ export interface IConfiguration {
       logo: string;
     }[];
     features: string[];
-    chain_info: ChainInfo & { gasPriceStep: any };
+    chain_info: any;
     cosmos_sdk_version?: string;
   };
   image: {
@@ -69,6 +68,7 @@ export interface IConfiguration {
       rest: string;
       chain: string;
     };
+    walletConnect: WalletConnectOptions;
   };
 }
 
@@ -159,6 +159,10 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.coingecko');
   }
 
+  get walletConnect() {
+    return _.get(this.configValue, 'api.walletConnect');
+  }
+
   setLatestBlockHeight(value: string | number) {
     this.latestBlockHeight$.next(value);
   }
@@ -173,7 +177,7 @@ export class EnvironmentService {
       this.isMobile = state?.matches ? true : false;
     });
 
-    this.checkNativeApp();
+    this.isNativeApp = isMobileBrowser();
   }
 
   ngOnDestroy(): void {
@@ -225,19 +229,5 @@ export class EnvironmentService {
         this.config.next(configuration);
       }
     });
-  }
-
-  checkNativeApp() {
-    if ((window.coin98 || window.leap || window.keplr) && this.isMobile) {
-      try {
-        if (
-          window.coin98?.keplr ||
-          window.leap?.mode == ELeapMode.MobileWeb ||
-          window.keplr?.mode == ELeapMode.MobileWeb
-        ) {
-          this.isNativeApp = true;
-        }
-      } catch {}
-    }
   }
 }

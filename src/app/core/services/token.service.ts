@@ -575,11 +575,12 @@ export class TokenService extends CommonService {
     limit: number;
     offset: number;
     address: string;
+    txHash?: string;
   }): Observable<any> {
     const operationsDoc = `
-    query queryListTxIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null) {
+    query queryListTxIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null, $hash: String =null) {
       ${this.envDB} {
-        ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}, order_by: {id: desc}, limit: $limit, offset: $offset) {
+        ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}], ibc_message: {tx_hash: {_eq: $hash}}}, limit: $limit, offset: $offset) {
           denom
           sender
           receiver
@@ -596,7 +597,7 @@ export class TokenService extends CommonService {
             }
           }
         }
-        ibc_ics20_aggregate(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}]}) {
+        ibc_ics20_aggregate(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}], ibc_message: {tx_hash: {_eq: $hash}}}) {
           aggregate {
             count
           }
@@ -612,6 +613,7 @@ export class TokenService extends CommonService {
           limit: payload.limit,
           offset: payload.offset,
           address: payload.address,
+          hash: payload.txHash
         },
         operationName: 'queryListTxIBC',
       })
