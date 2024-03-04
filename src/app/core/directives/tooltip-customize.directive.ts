@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import BigNumber from 'bignumber.js';
 
 @Directive({
@@ -7,12 +7,14 @@ import BigNumber from 'bignumber.js';
 export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
   @Input() appTooltip: string | { priceAmount: any; multipliedBy?: number; decimal?: number; lt?: number };
   @Input() classTooltip: string;
-  @Input() decimalLengthTooltip: number | null = null;
+  @Input() decimalLengthTooltip: number = 6;
   @Input() disableTooltipHover: boolean = false;
   @Input() getTooltipPosition: boolean = true;
-  element: HTMLElement
+  element: HTMLElement;
 
-  constructor(private elRef: ElementRef) {
+  constructor(
+    private elRef: ElementRef,
+  ) {
     this.element = this.elRef.nativeElement;
   }
 
@@ -32,9 +34,11 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
         );
       }
       const gte = BigNumber(this.appTooltip.priceAmount)
-        .multipliedBy(this.appTooltip.multipliedBy ?? 1).gte(1000000);
+        .multipliedBy(this.appTooltip.multipliedBy ?? 1)
+        .gte(1000000);
       const lt = BigNumber(this.appTooltip.priceAmount)
-        .multipliedBy(this.appTooltip.multipliedBy ?? 1).lt(this.appTooltip.lt ?? 0.001);
+        .multipliedBy(this.appTooltip.multipliedBy ?? 1)
+        .lt(this.appTooltip.lt ?? 0.001);
       if ((gte || lt) && this.appTooltip.priceAmount != 0) {
         tooltipValue = BigNumber(this.appTooltip.priceAmount)
           .multipliedBy(this.appTooltip.multipliedBy ?? 1)
@@ -71,8 +75,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    this.element.removeEventListener('mouseenter', () => {
-    });
+    this.element.removeEventListener('mouseenter', () => {});
   }
 
   hoverAction(element, tooltipParent) {
