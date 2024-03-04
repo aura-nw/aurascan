@@ -118,7 +118,7 @@
 
                         <app-name-tag
                           [value]="data[template.matColumnDef]"
-                          [url]="template.isUrl"
+                          [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                           [maxCharacter]="12"
                           [tooltipPosition]="'tooltip--right'"></app-name-tag>
                       </div>
@@ -126,7 +126,7 @@
                     <ng-container *ngIf="template.matColumnDef !== 'address'">
                       <app-name-tag
                         [value]="data[template.matColumnDef]"
-                        [url]="template.isUrl"
+                        [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                         [tooltipPosition]="'tooltip--left'"></app-name-tag>
                     </ng-container>
                   </ng-container>

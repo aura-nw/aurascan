@@ -11,7 +11,7 @@
             width="18"
             height="18"
             class="ml-1 aura-tooltip-object"
-            *ngIf="tokenDetail?.verify_status === 'VERIFIED'" />
+            *ngIf="tokenDetail?.verify_status == 'VERIFIED'" />
           <app-tooltip-customize [content]="tokenDetail?.verify_text || 'Verified by Aura Network'">
           </app-tooltip-customize>
         </div>

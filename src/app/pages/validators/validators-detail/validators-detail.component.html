@@ -82,7 +82,7 @@
           <h6 class="mb-0 text--gray-1">Address</h6>
           <app-name-tag
             [value]="currentValidatorDetail?.acc_address"
-            [url]="'account'"
+            [linkRouter]="['/account', currentValidatorDetail?.acc_address]"
             [fullText]="true"
             [widthAuto]="true"
             [fullTextMob]="true"></app-name-tag>

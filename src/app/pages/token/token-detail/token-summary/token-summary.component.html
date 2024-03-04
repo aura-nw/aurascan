@@ -34,8 +34,8 @@
             <div class="first-col text--gray-5">Contract:</div>
             <div class="break-word">
               <app-name-tag
-                [value]="tokenDetail?.contract_address"
-                [url]="'contracts'"
+                [value]="tokenDetail?.contract_address || tokenDetail?.denom"
+                [linkRouter]="['/contracts', tokenDetail?.contract_address]"
                 [fullText]="true"></app-name-tag>
             </div>
           </div>
@@ -57,13 +57,13 @@
           <div class="d-flex align-items-center py-2">
             <div class="first-col text--gray-5">Hash</div>
             <div class="break-word text--primary d-flex align-items-center">
-              {{ tokenDetail.denomHash | ellipsis: 10 : 6 }}
+              {{ tokenDetail.denom | ellipsis: 10 : 6 }}
               <div class="aura-tooltip-contain">
                 <button
                   class="button btn-border aura-tooltip-object disabled-hover p-0 ml-2"
                   #tooltip
                   (click)="commonService.showToolTip(tooltip)"
-                  [cdkCopyToClipboard]="tokenDetail.denomHash">
+                  [cdkCopyToClipboard]="tokenDetail.denom">
                   <i class="ph ph-copy text--white body-01"></i>
                 </button>
                 <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
@@ -77,7 +77,7 @@
           <div class="d-flex align-items-center py-2">
             <div class="first-col text--gray-5">Path</div>
             <div class="text--white d-flex align-items-center">
-              {{ tokenDetail.channelPath?.path }}
+              {{ tokenDetail?.channelPath?.path }}
               <!-- <i
                 *ngIf="channelCounterId"
                 class="ph-arrow-square-out-fill body-01 h4-mob ml-4 cursor-pointer"

@@ -16,7 +16,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
-import { ACCOUNT_WALLET_COLOR_ENUM, WalletAcount } from '../../../core/constants/account.enum';
+import { ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
@@ -64,6 +64,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   isContractAddress = false;
   isWatchList = false;
   EFeature = EFeature;
+  ENameTag = ENameTag;
 
   constructor(
     public commonService: CommonService,
@@ -226,25 +227,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       () => {},
       () => {},
     );
-  }
-
-  extendLink(url) {
-    url = url.match(/^https?:/) ? url : '//' + url;
-    return url;
-  }
-
-  editPrivateName() {
-    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.currentAddress);
-    if (this.userEmail) {
-      if (dataNameTag) {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
-      } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.currentAddress });
-      }
-      this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
-    } else {
-      this.router.navigate(['/login']);
-    }
   }
 
   checkWatchList() {

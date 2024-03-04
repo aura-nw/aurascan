@@ -37,7 +37,7 @@
                   {{ tokenDetail.modeToken === EModeToken.CWToken ? 'Symbol' : 'Denom' }}
                 </span>
                 <div class="body-02 text--gray-11">
-                  {{ tokenDetail.modeToken === EModeToken.Native ? tokenDetail.denomHash : tokenDetail.symbol }}
+                  {{ tokenDetail.modeToken === EModeToken.Native ? tokenDetail.denom : tokenDetail.symbol }}
                 </div>
               </div>
               <div class="divider divider-item"></div>
@@ -183,7 +183,10 @@
       <tr>
         <td colspan="2" [ngClass]="params ? 'border-none' : ''">
           <div class="d-flex align-items-center">
-            <div class="{{ !tokenDetail.isNFTContract && tokenDetail.modeToken !== EModeToken.Native ? 'flex-item' : 'd-flex' }}">
+            <div
+              class="{{
+                !tokenDetail.isNFTContract && tokenDetail.modeToken !== EModeToken.Native ? 'flex-item' : 'd-flex'
+              }}">
               <div class="body-02 text--gray-5 fixed-col">Holders:</div>
               <div class="body-02 text--gray-1">
                 {{ tokenDetail?.holder || 0 | mask: 'separator.0' }}

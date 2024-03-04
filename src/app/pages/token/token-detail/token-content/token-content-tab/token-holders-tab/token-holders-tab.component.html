@@ -43,15 +43,14 @@
                       [value]="data[template.matColumnDef]"
                       [fullText]="true"
                       [fullTextMob]="true"
-                      [isHref]="true"
                       [tooltipPosition]="'tooltip--right'"
-                      [url]="
-                        '/tokens/' +
-                        (this.typeContract && this.typeContract !== contractType.CW20 ? 'token-nft' : 'token') +
-                        '/' +
-                        linkAddress +
-                        '?a='
-                      "></app-name-tag>
+                      [linkRouter]="[
+                        '/tokens',
+                        this.typeContract && this.typeContract !== contractType.CW20 ? 'token-nft' : 'token',
+                        linkAddress
+                      ]"
+                      [linkParams]="{ a: data[template.matColumnDef] }">
+                    </app-name-tag>
                   </ng-container>
                   <ng-container *ngSwitchCase="'balance'">
                     <div class="aura-tooltip-contain">

@@ -20,6 +20,7 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupWatchlistComponent } from './popup-watchlist/popup-watchlist.component';
 import local from 'src/app/core/utils/storage/local';
+import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
 
 @Component({
   selector: 'app-watchlist',
@@ -54,6 +55,8 @@ export class WatchListComponent implements OnInit, OnDestroy {
   totalGroupTracking = TOTAL_GROUP_TRACKING;
   isLoading = true;
   errTxt: string;
+  ENameTag = ENameTag;
+  EScreen = EScreen;
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
 
