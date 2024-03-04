@@ -5,9 +5,7 @@
         <div class="d-xl-flex justify-content-between align-items-center">
           <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">Fungible Token Transfer</h5>
         </div>
-        <div
-          class="table-responsive table-token"
-          *ngIf="dataSourceFTs?.data?.length > 0; else noFTValues">
+        <div class="table-responsive table-token" *ngIf="dataSourceFTs?.data?.length > 0; else noFTValues">
           <table mat-table [dataSource]="dataSourceFTs" class="aura-table none-header">
             <ng-container *ngFor="let template of templatesFTs; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
@@ -27,7 +25,7 @@
                           [appImg]="data | marketInfo: 'logo'"
                           width="20"
                           height="20"
-                          alt=""/>
+                          alt="" />
                         <div class="ml-2 ml-sm-3 d-flex transfer-token-info">
                           <span
                             *ngIf="data | marketInfo: 'symbol'"
@@ -62,12 +60,10 @@
                       </div>
                     </div>
                     <ng-container *ngIf="!breakpoint.value.matches">
-                      <div
-                        *ngSwitchCase="'amount'"
-                        class="d-flex transfer-token-info w-fit-content">
+                      <div *ngSwitchCase="'amount'" class="d-flex transfer-token-info w-fit-content">
                         <span class="caption fw-normal text--gray-4 mb-1">Amount</span>
                         <div
-                          [appTooltip]="{priceAmount: data[template.matColumnDef], decimal: data.decimal}"
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: data.decimal }"
                           *ngIf="data[template.matColumnDef] | balance: data.decimal | lt: 0.001">
                           {{ '<0.001' }}
                         </div>
@@ -75,7 +71,7 @@
                         <div
                           class="body-02"
                           *ngIf="data[template.matColumnDef] | balance: data.decimal | gte: 0.001"
-                          [appTooltip]="{priceAmount: data[template.matColumnDef], decimal: data.decimal}"
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: data.decimal }"
                           [class.cursor-text]="data[template.matColumnDef] | balance: data.decimal | lt: 1000000"
                           [appBigNumber]="data[template.matColumnDef]"
                           [decimal]="data.decimal"></div>
@@ -159,12 +155,12 @@
                         <div *ngIf="!breakpoint.value.matches" class="mb-1 d-flex align-items-center">
                           <span class="caption fw-normal text--gray-4 mr-1 text-nowrap">Token ID</span>
                           <span class="line-claim w-100" [copyBtn]="data?.cw721_token?.token_id"
-                          >#{{ data?.cw721_token?.token_id }}</span
+                            >#{{ data?.cw721_token?.token_id }}</span
                           >
                         </div>
                         <div *ngIf="breakpoint.value.matches" class="d-flex mb-1">
                           <span class="line-claim token-id" [copyBtn]="data?.cw721_token?.token_id"
-                          >#{{ data?.cw721_token?.token_id }}</span
+                            >#{{ data?.cw721_token?.token_id }}</span
                           >
                           <div
                             *ngIf="breakpoint.value.matches"

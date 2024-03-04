@@ -30,7 +30,9 @@
                     </a>
                     <div *ngSwitchCase="'amount'" class="d-flex align-items-center">
                       <div
-                        [appTooltip]="data[template.matColumnDef] >= 1000000 ? (data[template.matColumnDef] | formatDigit: 2) : null"
+                        [appTooltip]="
+                          data[template.matColumnDef] >= 1000000 ? (data[template.matColumnDef] | formatDigit: 2) : null
+                        "
                         [class.cursor-text]="data[template.matColumnDef] < 1000000"
                         [appBigNumber]="data[template.matColumnDef]"
                         [decimal]="0"></div>
@@ -38,7 +40,9 @@
                     </div>
                     <div *ngSwitchCase="'reward'" class="d-flex align-items-center">
                       <div
-                        [appTooltip]="data[template.matColumnDef] >= 1000000 ? (data[template.matColumnDef] | formatDigit: 2) : null"
+                        [appTooltip]="
+                          data[template.matColumnDef] >= 1000000 ? (data[template.matColumnDef] | formatDigit: 2) : null
+                        "
                         [class.cursor-text]="data[template.matColumnDef] < 1000000"
                         [appBigNumber]="data[template.matColumnDef]"
                         [decimal]="0"></div>
@@ -54,7 +58,7 @@
                     </div>
                     <div *ngSwitchCase="'vesting_schedule'">
                       {{ data['date_format'] | customDateTime: 'DateTime' }}
-                      <br/>
+                      <br />
                       ({{ data['date_format'] | customDateTime: 'Distance' }})
                     </div>
                     <a

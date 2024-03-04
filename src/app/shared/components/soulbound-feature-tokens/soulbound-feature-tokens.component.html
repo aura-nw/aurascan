@@ -10,7 +10,9 @@
       <span
         class="nft__unclaimed-noti caption"
         *ngIf="soulboundUnclaimedNum > 0 && wallet === userAddress"
-        [appTooltip]="'You have new un-claimed Account Bound Token(s) (ABTs). </br>Kindly check and manage your ABTs in your account.'"
+        [appTooltip]="
+          'You have new un-claimed Account Bound Token(s) (ABTs). </br>Kindly check and manage your ABTs in your account.'
+        "
         [classTooltip]="'tooltip--left'"
         [class.noti--pill]="soulboundUnclaimedNum > 9">
         {{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}

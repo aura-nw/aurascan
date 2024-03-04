@@ -22,19 +22,22 @@
 
     <div class="card text--white mt-4" *ngIf="{ value: breakpoint$ | async } as breakpoint">
       <div class="d-flex align-items-baseline">
-        <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0"
-            [copyBtn]="isRawData ? (blockDetail?.json_data | json) : null"
-            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
+        <h2
+          class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0"
+          [copyBtn]="isRawData ? (blockDetail?.json_data | json) : null"
+          [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
           {{ !isRawData ? 'Information' : 'Raw Data' }}
         </h2>
       </div>
       <div class="card-body body">
         <div class="d-lg-none mb-4">
           <div class="d-flex align-items-baseline">
-            <h2 class="mb-4 text--white"
-                [copyBtn]="isRawData ? (blockDetail?.json_data | json) : null"
-                [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']"
-            >{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+            <h2
+              class="mb-4 text--white"
+              [copyBtn]="isRawData ? (blockDetail?.json_data | json) : null"
+              [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
+              {{ !isRawData ? 'Information' : 'Raw Data' }}
+            </h2>
           </div>
           <!-- Tabs -->
           <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
@@ -220,8 +223,13 @@
               [content]="[
                 {
                   label: 'Fee',
-                  info: (+data.fee | mask: 'separator.6') + 
-                  ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
+                  info:
+                    (+data.fee | mask: 'separator.6') +
+                    ' <a class=text--primary href=' +
+                    ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+                    '>' +
+                    denom +
+                    '</a>'
                 },
                 { label: 'Time', info: (data.timestamp | customDateTime: 'DateTime') }
               ]"></app-card-mob-simple>

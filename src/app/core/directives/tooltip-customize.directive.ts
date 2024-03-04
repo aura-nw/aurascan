@@ -15,7 +15,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
 
   constructor(
     private elRef: ElementRef,
-    private maskPipe: NgxMaskService
+    private maskPipe: NgxMaskService,
   ) {
     this.element = this.elRef.nativeElement;
   }
@@ -45,7 +45,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
         tooltipValue = BigNumber(this.appTooltip.priceAmount)
           .multipliedBy(this.appTooltip.multipliedBy ?? 1)
           .toFormat(this.decimalLengthTooltip)
-          .replace(/\.?0+$/,'');
+          .replace(/\.?0+$/, '');
       } else {
         tooltipValue = null;
       }

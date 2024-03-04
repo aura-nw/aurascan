@@ -49,13 +49,21 @@
         class="form-check-input input-share text--gray-4"
         [(ngModel)]="shareLink"
         autocomplete="off"
-        disabled/>
-      <div class="ml-4"
-           [copyBtn]="shareLink"
-           [copyText]="'Copy link'"
-           [btnClass]="['button', 'button--md', 'button--xs-mob', 'button-outline', 'button-outline--gradient',
-                         'button-outline__in-card', 'button-pill', 'text-nowrap']">
-      </div>
+        disabled />
+      <div
+        class="ml-4"
+        [copyBtn]="shareLink"
+        [copyText]="'Copy link'"
+        [btnClass]="[
+          'button',
+          'button--md',
+          'button--xs-mob',
+          'button-outline',
+          'button-outline--gradient',
+          'button-outline__in-card',
+          'button-pill',
+          'text-nowrap'
+        ]"></div>
     </div>
   </div>
 </div>

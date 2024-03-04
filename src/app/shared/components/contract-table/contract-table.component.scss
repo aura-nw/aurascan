@@ -34,7 +34,8 @@
   }
 
   @media (max-width: 991.99px) {
-    thead th:nth-child(2), thead th:nth-child(7) {
+    thead th:nth-child(2),
+    thead th:nth-child(7) {
       padding-left: 32px;
     }
     tbody tr {

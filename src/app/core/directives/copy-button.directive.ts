@@ -1,6 +1,6 @@
-import {Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {NULL_ADDRESS} from '../constants/common.constant';
-import {CommonService} from "src/app/core/services/common.service";
+import { Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { NULL_ADDRESS } from '../constants/common.constant';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
@@ -14,15 +14,16 @@ export class CopyButtonDirective implements OnChanges {
   button;
   tooltip;
 
-
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     if (this.tooltip?.classList.contains('show')) {
       this.tooltip?.classList.remove('show');
     }
   }
 
-  constructor(private elRef: ElementRef, private commonService: CommonService) {
-  }
+  constructor(
+    private elRef: ElementRef,
+    private commonService: CommonService,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isDisableCopy || !this.copyBtn || this.copyBtn === NULL_ADDRESS) {

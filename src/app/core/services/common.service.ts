@@ -1,17 +1,17 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import axios from 'axios';
-import {formatDistanceToNowStrict} from 'date-fns';
+import { formatDistanceToNowStrict } from 'date-fns';
 import * as moment from 'moment';
-import {Observable} from 'rxjs';
-import {DATEFORMAT, STORAGE_KEYS} from '../constants/common.constant';
-import {EnvironmentService} from '../data-services/environment.service';
-import {formatTimeInWords, formatWithSchema} from '../helpers/date';
-import {isAddress, isContract, isValidBench32Address} from '../utils/common/validation';
+import { Observable } from 'rxjs';
+import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
+import { EnvironmentService } from '../data-services/environment.service';
+import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
 import local from '../utils/storage/local';
-import {LCD_COSMOS} from '../constants/url.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.coins;
@@ -90,8 +90,7 @@ export class CommonService {
           let temp = value?.match(/\d+/g)[0];
           value = value?.replace(temp, '');
         }
-      } catch {
-      }
+      } catch {}
       let temp = value.slice(value.indexOf('ibc'));
       result = listTokenIBC?.find((k) => k.denom === temp) || {
         display: value,

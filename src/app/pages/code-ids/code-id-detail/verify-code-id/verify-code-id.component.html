@@ -11,7 +11,7 @@
           alt=""
           width="16"
           height="16"
-          class="mr-2"/>
+          class="mr-2" />
         <div>
           Are you the Code ID's owner?
           <a class="text--primary" (click)="navigateToVerify()"> Verify and Publish </a>
@@ -27,7 +27,7 @@
           alt=""
           width="16"
           height="16"
-          class="mr-2 mt-1"/>
+          class="mr-2 mt-1" />
         <div>
           <div>This code ID source code is currently pending in Verify and Publish process.</div>
           <div>
@@ -46,7 +46,7 @@
           alt=""
           width="16"
           height="16"
-          class="mr-2"/>
+          class="mr-2" />
         <div>
           Are you the Code ID's owner?
           <a class="text--primary" (click)="navigateToVerify()"> Verify and Publish </a>
@@ -61,7 +61,7 @@
     <!-- Verify Successfull -->
     <ng-container *ngIf="codeIdDetail?.contract_verification === contractVerifyType.Verified">
       <div class="d-flex fw-semibold">
-        <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px"/>
+        <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px" />
         <div class="ml-2">Code ID Verified</div>
       </div>
       <div class="mt-6 fw-semibold">
@@ -83,10 +83,18 @@
           type="text"
           class="form-control form-check-input body mt-0 text--gray-1"
           readonly
-          value="{{ codeIdDetail.url }}"/>
-        <div [copyBtn]="codeIdDetail.url"
-             [copyText]="'Copy'"
-             [btnClass]="['button-pill', 'button--xlg', 'ml-4', 'button-outline', 'button-outline__in-card', 'body-01']"></div>
+          value="{{ codeIdDetail.url }}" />
+        <div
+          [copyBtn]="codeIdDetail.url"
+          [copyText]="'Copy'"
+          [btnClass]="[
+            'button-pill',
+            'button--xlg',
+            'ml-4',
+            'button-outline',
+            'button-outline__in-card',
+            'body-01'
+          ]"></div>
       </div>
     </ng-container>
   </div>

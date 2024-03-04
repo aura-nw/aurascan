@@ -47,9 +47,9 @@
                   [maxLength]="maxLengthSearch"
                   (keyup.enter)="searchToken()"
                   name="search"
-                  autocomplete="off"/>
+                  autocomplete="off" />
                 <button type="submit" class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                 </button>
                 <button
                   type="reset"
@@ -61,7 +61,7 @@
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
                     width="24"
-                    height="24"/>
+                    height="24" />
                 </button>
               </div>
             </form>
@@ -101,7 +101,7 @@
               <td mat-cell *matCellDef="let element">
                 <div class="d-flex align-items-center">
                   <div>
-                    <img [appImg]="element?.image" [defaultImage]="defaultLogoAura" class="image-token" alt=""/>
+                    <img [appImg]="element?.image" [defaultImage]="defaultLogoAura" class="image-token" alt="" />
                   </div>
                   <div>
                     <a
@@ -118,7 +118,7 @@
                             width="18"
                             height="18"
                             class="ml-1"
-                            *ngIf="element.verify_status === 'VERIFIED'"/>
+                            *ngIf="element.verify_status === 'VERIFIED'" />
                         </div>
                       </div>
                     </a>
@@ -172,15 +172,27 @@
                 <div *ngIf="element.balance === 0">0</div>
                 <div *ngIf="element.balance !== 0">
                   <div
-                    [appTooltip]="{priceAmount: element.balance, decimal: element.contract_address !== '-' ? element.decimals : 0}"
-                    *ngIf="(element.balance | balance: (element.contract_address !== '-' ? element.decimals : 0) : true).lt( 0.001)
-                  ">
+                    [appTooltip]="{
+                      priceAmount: element.balance,
+                      decimal: element.contract_address !== '-' ? element.decimals : 0
+                    }"
+                    *ngIf="
+                      (element.balance | balance: (element.contract_address !== '-' ? element.decimals : 0) : true).lt(
+                        0.001
+                      )
+                    ">
                     {{ '<0.001' }}
                   </div>
                   <div
-                    [appTooltip]="{priceAmount: element.balance, decimal: element.contract_address !== '-' ? element.decimals : 0}"
-                    *ngIf="(element.balance | balance: (element.contract_address !== '-' ? element.decimals : 0) : true).gte(0.001)
-                  "
+                    [appTooltip]="{
+                      priceAmount: element.balance,
+                      decimal: element.contract_address !== '-' ? element.decimals : 0
+                    }"
+                    *ngIf="
+                      (element.balance | balance: (element.contract_address !== '-' ? element.decimals : 0) : true).gte(
+                        0.001
+                      )
+                    "
                     [appBigNumber]="element.balance"
                     [decimal]="element.contract_address !== '-' ? element.decimals : 0"></div>
                 </div>
@@ -194,19 +206,23 @@
                 <div class="d-flex flex-column">
                   <span class="text--gray-4 caption fw-normal">Value</span>
                   <span *ngIf="element.price > 0; else defaultValues">
-                    
                     <div *ngIf="element.contract_address === '-'">
                       <div *ngIf="element.value == 0">$0.00</div>
                       <div *ngIf="element.value != 0">
-                        <div *ngIf="element.value | lt: '0.01'" [appTooltip]="{priceAmount: element.value, lt: 0.01}">
+                        <div *ngIf="element.value | lt: '0.01'" [appTooltip]="{ priceAmount: element.value, lt: 0.01 }">
                           {{ '< $0.01' }}
                         </div>
                         <ng-container *ngIf="element.value | gte: '0.01'">
-                          <span [appBigNumber]="element.balance"
-                                [tokenPrice]="element.price"
-                                [decimal]="0"
-                                [appTooltip]="{priceAmount: element.value, lt: 0.01, decimal: 0, multipliedBy: element.price}"
-                          ></span>
+                          <span
+                            [appBigNumber]="element.balance"
+                            [tokenPrice]="element.price"
+                            [decimal]="0"
+                            [appTooltip]="{
+                              priceAmount: element.value,
+                              lt: 0.01,
+                              decimal: 0,
+                              multipliedBy: element.price
+                            }"></span>
                         </ng-container>
                       </div>
                     </div>
@@ -214,7 +230,7 @@
                     <div *ngIf="element.contract_address !== '-'">
                       <div *ngIf="element.value === 0">0</div>
                       <div *ngIf="element.value != 0">
-                        <div *ngIf="element.value | lt: '0.01'" [appTooltip]="{priceAmount: element.value, lt: 0.01}">
+                        <div *ngIf="element.value | lt: '0.01'" [appTooltip]="{ priceAmount: element.value, lt: 0.01 }">
                           {{ '< $0.01' }}
                         </div>
 
@@ -223,8 +239,7 @@
                           [appBigNumber]="element.balance"
                           [decimal]="element.decimals"
                           [tokenPrice]="element.price"
-                          [appTooltip]="{priceAmount: element.value, decimal: element.decimal, lt: 0.01}"
-                        ></div>
+                          [appTooltip]="{ priceAmount: element.value, decimal: element.decimal, lt: 0.01 }"></div>
                       </div>
                     </div>
                   </span>
