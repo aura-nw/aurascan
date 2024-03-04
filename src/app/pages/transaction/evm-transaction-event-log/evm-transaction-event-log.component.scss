@@ -1,0 +1,35 @@
+.event-log-container {
+  width: 100%;
+  padding: 8px 0px;
+  display: flex;
+  gap: 24px;
+
+  .event-number {
+    min-width: 44px;
+    height: 34px;
+    border-radius: 8px;
+    background: #222f3d;
+    border: 1px solid var(--aura-blue-4);
+
+    padding: 8px 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &.secondary {
+      border: 1px solid var(--aura-gray-6);
+      background: var(--aura-gray-9);
+    }
+  }
+
+  .hight-light {
+    width: max-content;
+    display: flex;
+    padding: 4px 8px;
+    border-radius: 4px;
+
+    background-color: var(--aura-gray-10);
+  }
+}

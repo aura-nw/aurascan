@@ -1,1 +1,46 @@
-<p>evm-transaction-event-log works!</p>,
+<div class="event-log-container">
+  <div class="event-number flex-shrink-0">{{ eventLog.id }}</div>
+  <div class="flex-grow-1 d-flex flex-column gap-2 w-100">
+    <div class="d-flex flex-wrap mb-3">
+      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
+        {{ 'Contract' }}
+      </div>
+      <div class="col-12 col-lg-11">
+        <span class="text--primary">
+          {{ eventLog.contract }}
+        </span>
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap mb-3">
+      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
+        {{ 'Topics' }}
+      </div>
+      <div class="col-12 col-lg-11 d-flex flex-column gap-2">
+        <div class="topic d-flex gap-2" *ngFor="let top of eventLog.topics; index as index">
+          <div class="event-number secondary flex-shrink-0">{{ index }}</div>
+          <div class="flex-grow-1">
+            <div>
+              {{ top['address'] }}
+            </div>
+            <div>
+              {{ top['data'] }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap mb-3">
+      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
+        {{ 'Data' }}
+      </div>
+      <div class="col-12 col-lg-11">
+        <div class="mb-1">Value {{ eventLog.data['value'] }}</div>
+        <div class="hight-light">
+          {{ eventLog.data['hexValue'] }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

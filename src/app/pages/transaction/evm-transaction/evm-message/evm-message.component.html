@@ -32,7 +32,7 @@
               {{ data.key }}
             </div>
 
-            <div class="col-10" [class.callable]="data.callable">
+            <div class="col-10" [class.hight-light]="data.callable">
               {{ data.value }}
             </div>
           </div>
@@ -48,7 +48,9 @@
 
           <div class="box-event-log mt-2" *ngIf="showAll">
             <div>Transaction Receipt Event Logs (108)</div>
-            <div class=""></div>
+            <div class="">
+              <app-evm-transaction-event-log> </app-evm-transaction-event-log>
+            </div>
           </div>
         </div>
       </div>
