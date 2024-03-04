@@ -1,4 +1,4 @@
-import {TokenTab} from "./token.enum";
+import { TokenTab } from './token.enum';
 
 export const TOKEN_TAB = [
   {

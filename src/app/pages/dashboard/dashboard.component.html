@@ -28,15 +28,13 @@
                       <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">
                         {{ nativeName | uppercase }}
                       </div>
-                      <div class="aura-tooltip-contain">
-                        <a
-                          href="https://www.coingecko.com/en/coins/{{ coingeckoCoinId }}"
-                          target="_blank"
-                          class="ml-2 p-0 button button--ssm button-ghost aura-tooltip-object">
-                          <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
-                        </a>
-                        <app-tooltip-customize [content]="'Open CoinGecko'"></app-tooltip-customize>
-                      </div>
+                      <a
+                        [appTooltip]="'Open CoinGecko'"
+                        href="https://www.coingecko.com/en/coins/{{ coingeckoCoinId }}"
+                        target="_blank"
+                        class="ml-2 p-0 button button--ssm button-ghost">
+                        <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
+                      </a>
                     </div>
                     <div class="divider divider-horizontal"></div>
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
@@ -457,18 +455,11 @@
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchCase="'type'">
-                            <div class="aura-status aura-tooltip-contain">
-                              <div class="label__status aura-tooltip-object">
-                                {{ data[template.matColumnDef] | ellipsis: 20 }}
-                                <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
-                                  +{{ data.lstType?.length - 1 }}
-                                </div>
+                            <div class="label__status" [appTooltip]="data.lstType | combineTxsMsg">
+                              {{ data[template.matColumnDef] | ellipsis: 20 }}
+                              <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                                +{{ data.lstType?.length - 1 }}
                               </div>
-
-                              <app-tooltip-customize
-                                [class]="'message-custom'"
-                                [content]="data.lstType | combineTxsMsg">
-                              </app-tooltip-customize>
                             </div>
                           </div>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>

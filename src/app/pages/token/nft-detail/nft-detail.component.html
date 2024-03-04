@@ -382,10 +382,12 @@
                   </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
-                  <div class="aura-tooltip-contain d-flex pl-5 pl-lg-0" *ngIf="data[template.matColumnDef]">
-                    <div class="aura-tooltip-object" *ngIf="data[template.matColumnDef] < 0.001"><0.001</div>
+                  <div class="d-flex pl-5 pl-lg-0" *ngIf="data[template.matColumnDef]">
+                    <div *ngIf="data[template.matColumnDef] < 0.001" [appTooltip]="data[template.matColumnDef]">
+                      <0.001
+                    </div>
                     <div
-                      [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
+                      [appTooltip]="data[template.matColumnDef]"
                       [class.cursor-text]="data[template.matColumnDef] < 1000000"
                       *ngIf="data[template.matColumnDef] >= 0.001"
                       [appBigNumber]="data[template.matColumnDef]"
@@ -393,10 +395,6 @@
                     <span class="ml-1" appLinkDenom>
                       {{ data.denom || denom }}
                     </span>
-                    <app-tooltip-customize
-                      *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
-                      [content]="data[template.matColumnDef] | mask: 'separator'">
-                    </app-tooltip-customize>
                   </div>
                   <div class="pl-5 pl-lg-0" *ngIf="!data[template.matColumnDef]">-</div>
                 </ng-container>

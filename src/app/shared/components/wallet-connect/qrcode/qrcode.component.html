@@ -1,16 +1,7 @@
 <div class="qrcode-container" *ngIf="qrdata" #quContainer>
   <div class="d-flex justify-content-between align-items-center mb-4">
     <p class="h4 text--white">Scan with your phone</p>
-    <div class="aura-tooltip-contain">
-      <button
-        class="button btn-border aura-tooltip-object disabled-hover p-lg-4"
-        #tooltip
-        (click)="commonService.showToolTip(tooltip)"
-        [cdkCopyToClipboard]="qrdata?.data">
-        <i class="ph ph-copy text--white body-01"></i>
-      </button>
-      <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
-    </div>
+    <div [copyBtn]="qrdata?.data"></div>
   </div>
   <div class="qrcode-wrapper" [ngStyle]="{ 'height.px': quContainer.clientWidth }">
     <ng-container *ngIf="qrdata.state != 'Done'">

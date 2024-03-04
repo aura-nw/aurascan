@@ -188,10 +188,7 @@ export class TokenContentComponent implements OnInit {
     try {
       if (this.tokenDetail.isNFTContract) {
         this.countBalanceNFT(address);
-      } else if (
-        this.contractAddress &&
-        this.tokenDetail.modeToken !== ETokenCoinType.IBC
-      ) {
+      } else if (this.contractAddress && this.tokenDetail.modeToken !== ETokenCoinType.IBC) {
         const data = await client.queryContractSmart(this.contractAddress, queryData);
         this.infoSearch['balance'] = data?.balance;
         this.infoSearch['value'] = new BigNumber(data?.balance)

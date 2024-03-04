@@ -58,25 +58,13 @@
                 </div>
                 <div class="body-02">
                   <div class="text--gray-11">
-                    <span class="small-body">
-                      <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object">
-                          <span *ngIf="tokenDetail.price | lt: 0.001">
-                            {{ tokenDetail.price == 0 ? '$0.00' : '< $0.001' }}
-                          </span>
-                          <span *ngIf="tokenDetail.price | gte: 0.001">
-                            ${{ +tokenDetail.price | mask: 'separator.3' }}
-                          </span>
-                        </div>
-
-                        <app-tooltip-customize
-                          *ngIf="
-                            (tokenDetail.price != 0 && (tokenDetail.price | lt: 0.001)) ||
-                            (tokenDetail.price | gte: 1000000)
-                          "
-                          [content]="+tokenDetail.price | mask: 'separator'">
-                        </app-tooltip-customize>
-                      </div>
+                    <span class="small-body" [appTooltip]="{ priceAmount: +tokenDetail.price }">
+                      <span *ngIf="tokenDetail.price | lt: 0.001">
+                        {{ tokenDetail.price == 0 ? '$0.00' : '< $0.001' }}
+                      </span>
+                      <span *ngIf="tokenDetail.price | gte: 0.001">
+                        ${{ +tokenDetail.price | mask: 'separator.3' }}
+                      </span>
                     </span>
                     <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
                       (<span>
@@ -90,25 +78,16 @@
               <div class="pl-4">
                 <div class="text--gray-5 caption fw-normal">In-chain Supply Amount</div>
                 <div class="body-02 text--gray-11">
-                  <div class="aura-tooltip-contain">
-                    <div class="aura-tooltip-object">
-                      <div class="text--gray-1 item-amount">
-                        <span *ngIf="tokenDetail.supplyAmount | lt: 0.001">
-                          {{ tokenDetail.supplyAmount == 0 ? 0 : '< 0.001' }}
-                        </span>
-                        <span
-                          [decimal]="0"
-                          [appBigNumber]="tokenDetail.supplyAmount || 0"
-                          *ngIf="tokenDetail.supplyAmount | gte: 0.001"></span>
-                      </div>
+                  <div [appTooltip]="{ priceAmount: tokenDetail.supplyAmount }">
+                    <div class="text--gray-1 item-amount">
+                      <span *ngIf="tokenDetail.supplyAmount | lt: 0.001">
+                        {{ tokenDetail.supplyAmount == 0 ? 0 : '< 0.001' }}
+                      </span>
+                      <span
+                        [decimal]="0"
+                        [appBigNumber]="tokenDetail.supplyAmount || 0"
+                        *ngIf="tokenDetail.supplyAmount | gte: 0.001"></span>
                     </div>
-                    <app-tooltip-customize
-                      *ngIf="
-                        ((tokenDetail.supplyAmount | gte: 1000000) || (tokenDetail.supplyAmount | lt: 0.001)) &&
-                        tokenDetail.supplyAmount != 0
-                      "
-                      [content]="tokenDetail.supplyAmount | mask: 'separator'">
-                    </app-tooltip-customize>
                   </div>
                   {{ tokenDetail?.symbol }}
                 </div>
@@ -122,57 +101,29 @@
             <div class="d-flex">
               <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span>
               <div class="body-02 text--gray-11">
-                <div class="aura-tooltip-contain">
-                  <div class="aura-tooltip-object">
-                    <div class="text--gray-1 item-amount">
+                <div [appTooltip]="{ priceAmount: tokenDetail.supplyAmount, multipliedBy: tokenDetail.price }">
+                  <div class="text--gray-1 item-amount">
+                    <span
+                      *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
+                      {{ tokenDetail.price == 0 || tokenDetail.supplyAmount == 0 ? '$0.00' : '< $0.01' }}
+                    </span>
+                    <div
+                      *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
                       <span
                         *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
-                        {{ tokenDetail.price == 0 || tokenDetail.supplyAmount == 0 ? '$0.00' : '< $0.01' }}
+                        {{ tokenDetail.price == 0 ? '$0.00' : '< $0.01' }}
                       </span>
                       <div
                         *ngIf="
                           (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)
                         ">
                         <span
-                          *ngIf="
-                            (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)
-                          ">
-                          {{ tokenDetail.price == 0 ? '$0.00' : '< $0.01' }}
-                        </span>
-                        <div
-                          *ngIf="
-                            (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)
-                          ">
-                          <span
-                            [decimal]="0"
-                            [appBigNumber]="tokenDetail.supplyAmount"
-                            [tokenPrice]="tokenDetail.price"></span>
-                        </div>
+                          [decimal]="0"
+                          [appBigNumber]="tokenDetail.supplyAmount"
+                          [tokenPrice]="tokenDetail.price"></span>
                       </div>
                     </div>
-                    <app-tooltip-customize
-                      *ngIf="
-                        (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01) ||
-                        (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(1000000)
-                      "
-                      [content]="
-                        (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).toFixed()
-                          | mask: 'separator'
-                      ">
-                    </app-tooltip-customize>
                   </div>
-                  <app-tooltip-customize
-                    *ngIf="
-                      tokenDetail.price > 0 &&
-                      tokenDetail.supplyAmount > 0 &&
-                      ((tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01) ||
-                        (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(1000000))
-                    "
-                    [content]="
-                      (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).toFixed()
-                        | mask: 'separator'
-                    ">
-                  </app-tooltip-customize>
                 </div>
               </div>
             </div>

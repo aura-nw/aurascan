@@ -5,21 +5,18 @@
       [routerLink]="['/accountbound/account', accountAddress]"
       (click)="setLinkTab()"
       [class.mr-2]="soulboundUnclaimedNum > 0 && wallet === userAddress"
-      class="button button-pill button-outline button--sm position-relative aura-tooltip-contain d-inline-flex">
+      class="button button-pill button-outline button--sm position-relative d-inline-flex btn-sbt">
       <span class="caption fw-normal">{{ wallet === accountAddress ? 'Manage my ABTs' : 'See more' }} </span>
       <span
-        class="nft__unclaimed-noti caption aura-tooltip-object"
+        class="nft__unclaimed-noti caption"
         *ngIf="soulboundUnclaimedNum > 0 && wallet === userAddress"
+        [appTooltip]="
+          'You have new un-claimed Account Bound Token(s) (ABTs). </br>Kindly check and manage your ABTs in your account.'
+        "
+        [classTooltip]="'tooltip--left'"
         [class.noti--pill]="soulboundUnclaimedNum > 9">
         {{ soulboundUnclaimedNum > 99 ? '99+' : soulboundUnclaimedNum }}
       </span>
-      <app-tooltip-customize
-        [requestGetPosition]="false"
-        [className]="'tooltip--left ml-4'"
-        [content]="
-          'You have new un-claimed Account Bound Token(s) (ABTs). </br>Kindly check and manage your ABTs in your account.'
-        ">
-      </app-tooltip-customize>
     </a>
   </div>
   <div

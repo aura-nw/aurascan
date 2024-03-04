@@ -1,10 +1,9 @@
-app-tooltip-customize {
+app-tooltip-customize,
+.app-tooltip-customize {
   z-index: 2000;
   width: max-content;
-  position: absolute;
-  left: 50%;
-  bottom: 100%;
-  transform: translate(-50%, -16px);
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 8px));
   max-width: 0;
   max-height: 0;
   opacity: 0;
@@ -18,16 +17,19 @@ app-tooltip-customize {
 }
 
 .aura-tooltip-contain {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   position: relative;
 
   .aura-tooltip-object {
     cursor: pointer;
 
     @media (min-width: 991.98px) {
-      &:not(.disabled-hover):hover ~ app-tooltip-customize {
-        max-width: 900px;
-        max-height: 900px;
+
+      &:not(.disabled-hover):hover~app-tooltip-customize,
+      &:not(.disabled-hover):hover~.app-tooltip-customize {
+        max-width: 500px;
+        max-height: 500px;
         opacity: 1;
         height: fit-content;
 
@@ -38,9 +40,10 @@ app-tooltip-customize {
       }
     }
 
-    &.show ~ app-tooltip-customize {
-      max-width: 900px;
-      max-height: 900px;
+    &.show~app-tooltip-customize,
+    &.show~.app-tooltip-customize {
+      max-width: 500px;
+      max-height: 500px;
       opacity: 1;
 
       .aura-tooltip {
@@ -51,13 +54,15 @@ app-tooltip-customize {
   }
 }
 
-app-tooltip-customize.tooltip--left {
+app-tooltip-customize.tooltip--left,
+.app-tooltip-customize.tooltip--left {
   left: unset;
   right: 0;
   transform: translate(0, -32px);
 }
 
-app-tooltip-customize.tooltip--right {
+app-tooltip-customize.tooltip--right,
+.app-tooltip-customize.tooltip--right {
   right: unset;
   left: 0;
   transform: translate(0, -16px);
@@ -101,10 +106,9 @@ app-tooltip-customize.tooltip--right {
 }
 
 .tooltip-copy {
-  position: absolute;
-  transform: translate(0, -100%);
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 8px));
   display: none;
-  top: -12px;
   align-items: center;
   justify-content: center;
   padding: 9px;
@@ -139,12 +143,70 @@ app-tooltip-customize.tooltip--right {
   }
 }
 
-.spacer-tooltip {
-  padding-top: 100px;
-  margin-top: -100px;
+.aura-tooltip {
+  display: none;
+  border-radius: 4px;
+  background-color: var(--aura-gray-8);
+  border: 1px solid var(--aura-gray-8);
+  color: var(--aura-white);
+  position: relative;
+  text-transform: initial;
+  font-size: 1.2rem;
+  font-weight: 400;
+  max-width: 650px;
+
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid var(--aura-gray-8);
+  }
 }
 
-.spacer-tooltip--sm {
-  padding-top: 20px;
-  margin-top: -20px;
+app-tooltip-customize.tooltip--below .aura-tooltip:before,
+.app-tooltip-customize.tooltip--below .aura-tooltip:before {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid var(--aura-gray-8);
+  border-top: unset;
+  bottom: unset;
+  top: 0;
+  transform: translate(-50%, -100%);
+}
+
+app-tooltip-customize.tooltip--right .aura-tooltip,
+.app-tooltip-customize.tooltip--right .aura-tooltip {
+  border-bottom-left-radius: unset;
+
+  &:before {
+    border-top: 10px solid var(--aura-gray-8);
+    border-right: 10px solid transparent;
+    border-bottom: unset;
+    border-left: unset;
+    right: unset;
+    left: 20px;
+  }
+}
+
+app-tooltip-customize.tooltip--left .aura-tooltip,
+.app-tooltip-customize.tooltip--left .aura-tooltip {
+  border-bottom-right-radius: unset;
+
+  &:before {
+    border-top: 10px solid var(--aura-gray-8);
+    border-left: 10px solid transparent;
+    border-bottom: unset;
+    border-right: unset;
+    left: unset;
+    right: -6px;
+  }
 }

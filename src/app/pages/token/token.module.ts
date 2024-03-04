@@ -13,7 +13,6 @@ import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { MaterialModule } from '../../../app/material.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
@@ -77,7 +76,6 @@ import { TokenRoutingModule } from './token-routing.module';
     CommonDirectiveModule,
     CustomPaginatorModule,
     NameTagModule,
-    TooltipCustomizeModule,
     ClipboardModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],

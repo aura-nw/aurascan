@@ -335,7 +335,7 @@
 
 <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
   <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
-    <div class="table-responsive spacer-tooltip--sm" *ngIf="!breakpoint.value.matches">
+    <div class="table-responsive" *ngIf="!breakpoint.value.matches">
       <table
         mat-table
         [dataSource]="dataSource"
@@ -378,16 +378,11 @@
                       (click)="data.expand = false"></i>
                   </div>
                   <div *ngSwitchCase="'type'">
-                    <div class="aura-status aura-tooltip-contain p-0">
-                      <div class="status cursor-pointer aura-tooltip-object">
-                        {{ data[template.matColumnDef] | ellipsis: 22 }}
-                        <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
-                          +{{ data.lstTypeTemp?.length - 1 }}
-                        </div>
+                    <div class="status cursor-pointer d-flex" [appTooltip]="data.lstTypeTemp | combineTxsMsg">
+                      {{ data[template.matColumnDef] | ellipsis: 22 }}
+                      <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                        +{{ data.lstTypeTemp?.length - 1 }}
                       </div>
-
-                      <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
-                      </app-tooltip-customize>
                     </div>
                   </div>
                   <div *ngSwitchCase="'status'">
@@ -414,39 +409,26 @@
                         [class.show-detail]="data.expand || index === 0"
                         *ngIf="index < data.limit">
                         <div class="item-show d-flex align-items-center">
-                          <div class="aura-tooltip-contain">
-                            <div *ngIf="+item.amountTemp === 0">0</div>
-                            <div
-                              class="aura-tooltip-object"
-                              *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
-                              {{ '<0.001' }}
-                            </div>
-                            <div
-                              [class.aura-tooltip-object]="item.amountTemp !== 0"
-                              [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
-                              *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
-                              [appBigNumber]="item.amountTemp"
-                              [decimal]="item.decimal"></div>
-                            <app-tooltip-customize
-                              *ngIf="
-                                +item.amountTemp !== 0 &&
-                                ((item.amountTemp | balance: item.decimal | lt: 0.001) ||
-                                  (item.amountTemp | balance: item.decimal | gte: 1000000))
-                              "
-                              [content]="item.amountTemp | balance: item.decimal | mask: 'separator'">
-                            </app-tooltip-customize>
+                          <div *ngIf="+item.amountTemp === 0">0</div>
+                          <div
+                            [appTooltip]="{ priceAmount: item.amountTemp, decimal: item.decimal }"
+                            *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
+                            {{ '<0.001' }}
                           </div>
+                          <div
+                            [appTooltip]="{ priceAmount: item.amountTemp, decimal: item.decimal }"
+                            [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
+                            *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
+                            [appBigNumber]="item.amountTemp"
+                            [decimal]="item.decimal"></div>
                           <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
-                            <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                              <div [class.aura-tooltip-object]="item.denom !== denom" [appLinkDenom]="item.denomOrigin">
-                                {{ item.denom | ellipsis: 19 }}
-                              </div>
-
-                              <app-tooltip-customize
-                                [className]="'tooltip--left'"
-                                [class]="'message-custom'"
-                                [content]="item.denomOrigin">
-                              </app-tooltip-customize>
+                            <div
+                              *ngIf="modeQuery !== tabsData.FtsTxs"
+                              [appTooltip]="item.denom !== denom ? item.denomOrigin : null"
+                              [classTooltip]="'tooltip--left'"
+                              [class.aura-tooltip-object]="item.denom !== denom"
+                              [appLinkDenom]="item.denomOrigin">
+                              {{ item.denom | ellipsis: 19 }}
                             </div>
                             <a
                               class=""
