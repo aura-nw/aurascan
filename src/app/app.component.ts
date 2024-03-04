@@ -17,6 +17,7 @@ import { UserService } from './core/services/user.service';
 import { EnvironmentService } from './core/data-services/environment.service';
 import { IBCService } from './core/services/ibc.service';
 import BigNumber from 'bignumber.js';
+import { ETokenCoinTypeBE } from './core/constants/token.constant';
 
 @Component({
   selector: 'app-root',
@@ -208,11 +209,12 @@ export class AppComponent implements OnInit, OnDestroy {
       .getTokenMarketData(payload)
       .pipe(
         map((res) => {
-          const nativeData = res.find((k) => k.denom === this.coinMinimalDenom);
-          if (nativeData?.coin_id) {
+          const nativeData = res?.find((k) => k.denom === this.coinMinimalDenom);
+          if (nativeData?.coinId) {
             this.getDataNative(nativeData);
           }
-          const listFilterIBC = res.filter((k) => k.denom !== this.coinMinimalDenom);
+
+          const listFilterIBC = res?.filter((k) => k.type === ETokenCoinTypeBE.IBC);
           return listFilterIBC?.map((element) => ({
             ...element,
             display: element['display'] || element['symbol'],
