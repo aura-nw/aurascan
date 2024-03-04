@@ -34,7 +34,7 @@
             <div class="first-col text--gray-5">Contract:</div>
             <div class="break-word">
               <app-name-tag
-                [value]="tokenDetail?.contract_address"
+                [value]="tokenDetail?.contract_address || tokenDetail?.denom"
                 [linkRouter]="['/contracts', tokenDetail?.contract_address]"
                 [fullText]="true"></app-name-tag>
             </div>
@@ -57,8 +57,8 @@
           <div class="d-flex align-items-center py-2">
             <div class="first-col text--gray-5">Hash</div>
             <div class="break-word text--primary d-flex align-items-center"
-                 [copyBtn]="tokenDetail.denomHash">
-              {{ tokenDetail.denomHash | ellipsis: 10 : 6 }}
+                 [copyBtn]="tokenDetail.denom">
+              {{ tokenDetail.denom | ellipsis: 10 : 6 }}
             </div>
           </div>
         </td>
@@ -68,7 +68,7 @@
           <div class="d-flex align-items-center py-2">
             <div class="first-col text--gray-5">Path</div>
             <div class="text--white d-flex align-items-center">
-              {{ tokenDetail.channelPath?.path }}
+              {{ tokenDetail?.channelPath?.path }}
               <!-- <i
                 *ngIf="channelCounterId"
                 class="ph-arrow-square-out-fill body-01 h4-mob ml-4 cursor-pointer"

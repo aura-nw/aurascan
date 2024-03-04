@@ -69,7 +69,7 @@
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> -</ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
                               <span
-                                [appTooltip]="{priceAmount: data[template.matColumnDef], decimal: decimal}"
+                                [appTooltip]="{priceAmount: data[template.matColumnDef], decimal}"
                                 *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001">
                                 {{ '<0.001' }}
                               </span>

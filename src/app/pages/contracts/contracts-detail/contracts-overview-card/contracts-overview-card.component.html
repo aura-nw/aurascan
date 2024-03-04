@@ -17,7 +17,7 @@
       <div class="d-flex align-items-center">
         <div class="text--gray-light mr-1 aura-tooltip-contain">
           <div *ngIf="contractBalance === 0">0</div>
-          <div [appTooltip]="{priceAmount: contractBalance, decimal: decimal}"
+          <div [appTooltip]="{priceAmount: contractBalance, decimal}"
                *ngIf="contractBalance !== 0 && (contractBalance | balance: decimal : true).lt(0.001)">
             {{ '<0.001' }}
           </div>
