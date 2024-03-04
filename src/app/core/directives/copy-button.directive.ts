@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { NULL_ADDRESS } from '../constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NULL_ADDRESS } from '../constants/common.constant';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
@@ -26,13 +26,12 @@ export class CopyButtonDirective implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.isDisableCopy || !this.copyBtn || this.copyBtn === NULL_ADDRESS) {
+    if (this.isDisableCopy || !this.copyBtn || this.copyBtn === NULL_ADDRESS || this.button) {
       return;
     }
 
     const element: HTMLElement = this.elRef.nativeElement;
     if (!element) return;
-    const content = this.copyBtn;
     const parent = element.parentNode;
     const contain = document.createElement('div');
     this.button = document.createElement('button');
@@ -79,17 +78,18 @@ export class CopyButtonDirective implements OnChanges {
         this.tooltip.style.left = this.commonService.getOffSet(this.button).left + 'px';
       }
       this.tooltip.classList.add('show');
-      this.copyMessage(content);
+      this.copyMessage();
       setTimeout(() => {
         this.tooltip.classList.remove('show');
       }, 1000);
     });
   }
 
-  copyMessage(text: string) {
+  copyMessage() {
+    const content = this.copyBtn;
     const dummy = document.createElement('textarea');
     document.body.appendChild(dummy);
-    dummy.value = text;
+    dummy.value = content;
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);

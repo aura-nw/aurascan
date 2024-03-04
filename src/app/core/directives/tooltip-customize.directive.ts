@@ -12,9 +12,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
   @Input() getTooltipPosition: boolean = true;
   element: HTMLElement;
 
-  constructor(
-    private elRef: ElementRef,
-  ) {
+  constructor(private elRef: ElementRef) {
     this.element = this.elRef.nativeElement;
   }
 
