@@ -20,6 +20,7 @@ import { ContractTab, ContractVerifyType } from '../../../../core/constants/cont
 export class ContractContentComponent implements OnInit, OnDestroy {
   @Input() contractsAddress = '';
   @Input() contractTypeData: ContractVerifyType;
+  @Input() contractId;
 
   TABS = CONTRACT_TAB.filter((tab) => [ContractTab.Transactions, ContractTab.Contract].includes(tab.key)).map(
     (tab) => ({
@@ -49,7 +50,6 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject<void>();
   timerGetUpTime: any;
-
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
@@ -62,7 +62,6 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     private location: Location,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
-
     valueColumn &&
       ((v) => {
         v.suffix =
@@ -127,8 +126,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     if (this.commonService.isValidContract(this.contractsAddress)) {
       const payload = {
         limit: this.limit,
-        value: this.contractsAddress,
-        key: '_contract_address',
+        id: this.contractId,
       };
       this.transactionService.getListTxCondition(payload).subscribe({
         next: (res) => {

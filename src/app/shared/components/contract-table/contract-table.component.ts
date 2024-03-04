@@ -132,6 +132,8 @@ export class ContractTableComponent implements OnInit, OnChanges {
         contract.typeOrigin === TRANSACTION_TYPE_ENUM.InstantiateContract2
       ) {
         method = 'Instantiate';
+      } else if (contract.typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
+        method = contract?.type;
       } else {
         if (msg && Object.keys(msg)[0]?.length > 1) {
           method = Object.keys(msg)[0];
@@ -141,6 +143,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       }
       from =
         _.get(contract, 'messages[0].sender') ||
+        _.get(contract, 'messages[0].from_address') ||
         _.get(contract, 'messages[0].content.sender') ||
         _.get(contract, 'messages[0].content.from_address');
 

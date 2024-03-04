@@ -34,3 +34,9 @@ export enum ETokenCoinType {
   IBC = 'IBC Token',
   CW20 = 'CW20 Token',
 }
+
+export enum ETokenCoinTypeBE {
+  NATIVE = 'NATIVE',
+  IBC = 'IBC_TOKEN',
+  CW20 = 'CW20_TOKEN',
+}
