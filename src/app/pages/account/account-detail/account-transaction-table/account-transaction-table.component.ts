@@ -1,14 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';

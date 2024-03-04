@@ -103,27 +103,24 @@
             <!-- Name Column -->
             <ng-container matColumnDef="token">
               <th mat-header-cell *matHeaderCellDef class="col-per-30 text-capitalize">Name</th>
-              <td mat-cell *matCellDef="let element" class="title-cell py-4 vertical-align-top">
+              <td mat-cell *matCellDef="let element; let i = index" class="title-cell py-4 vertical-align-top">
                 <div class="d-flex align-items-center token-item">
                   <img class="rounded-circle" [appImg]="element.image" width="18" height="18" />
                   <div class="ml-3 d-flex align-items-center">
                     <a
                       [routerLink]="['/tokens/token', element.contract_address || element.denom?.replace('ibc/', '')]"
-                      class="text--primary">
+                      class="text--primary text-nowrap">
                       {{ element.name | ellipsis: 25 }}
                       <span *ngIf="element.symbol"> ({{ element.symbol | ellipsis: 15 }}) </span>
                     </a>
-                    <div class="status cursor-pointer aura-tooltip-contain">
-                      <img
-                        [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
-                        alt=""
-                        width="18"
-                        height="18"
-                        class="ml-1 mb-1 aura-tooltip-object"
-                        *ngIf="element.verifyStatus === 'VERIFIED'" />
-                      <app-tooltip-customize [content]="element.verifyText || 'Verified by Aura Network'">
-                      </app-tooltip-customize>
-                    </div>
+                    <img
+                      [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                      alt=""
+                      width="18"
+                      height="18"
+                      [appTooltip]="element.verifyText || 'Verified by Aura Network'"
+                      class="ml-1"
+                      *ngIf="element.verifyStatus === 'VERIFIED'" />
                   </div>
                 </div>
               </td>
@@ -142,13 +139,9 @@
               <th mat-header-cell *matHeaderCellDef>Price</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.price > 0; else noData">
-                  <div class="aura-tooltip-contain">
-                    <div class="mb-1 text--gray-1 aura-tooltip-object">
-                      <span *ngIf="element.price | lt: 0.000001">{{ '< $0.000001' }}</span>
-                      <span *ngIf="element.price | gte: 0.000001">{{ +element.price | mask: 'separator.6' }}</span>
-                    </div>
-                    <app-tooltip-customize *ngIf="element.price | lt: 0.000001" [content]="element.price">
-                    </app-tooltip-customize>
+                  <div class="mb-1 text--gray-1" [appTooltip]="{ priceAmount: element.price, lt: 0.000001 }">
+                    <span *ngIf="element.price | lt: 0.000001">{{ '< $0.000001' }}</span>
+                    <span *ngIf="element.price | gte: 0.000001">{{ +element.price | mask: 'separator.6' }}</span>
                   </div>
                 </ng-container>
               </td>
@@ -159,25 +152,16 @@
               <th mat-header-cell *matHeaderCellDef>In-Chain Supply Amount</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.totalSupply >= 0; else noData">
-                  <div class="aura-tooltip-contain">
-                    <div class="aura-tooltip-object">
-                      <div class="text--gray-1 item-amount">
-                        <span *ngIf="element.totalSupply | lt: 0.001">
-                          {{ element.totalSupply == 0 ? 0 : '< 0.001' }}
-                        </span>
-                        <span
-                          [decimal]="0"
-                          [appBigNumber]="element.totalSupply || 0"
-                          *ngIf="element.totalSupply | gte: 0.001"></span>
-                      </div>
+                  <div [appTooltip]="{ priceAmount: element.totalSupply }">
+                    <div class="text--gray-1 item-amount">
+                      <span *ngIf="element.totalSupply | lt: 0.001">
+                        {{ element.totalSupply == 0 ? 0 : '< 0.001' }}
+                      </span>
+                      <span
+                        [decimal]="0"
+                        [appBigNumber]="element.totalSupply || 0"
+                        *ngIf="element.totalSupply | gte: 0.001"></span>
                     </div>
-                    <app-tooltip-customize
-                      *ngIf="
-                        ((element.totalSupply | gte: 1000000) || (element.totalSupply | lt: 0.001)) &&
-                        element.totalSupply != 0
-                      "
-                      [content]="element.totalSupply | mask: 'separator'">
-                    </app-tooltip-customize>
                   </div>
                 </ng-container>
               </td>
@@ -188,27 +172,15 @@
               <th mat-header-cell *matHeaderCellDef>In-Chain Supply Value</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.price > 0 && element.totalSupply > 0; else zeroValue">
-                  <div class="aura-tooltip-contain">
-                    <div class="aura-tooltip-object">
-                      <div class="text--gray-1 item-amount">
-                        <span *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01)">
-                          {{ element.price == 0 ? '$0.00' : '< $0.01' }}
-                        </span>
-                        <div *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(0.01)">
-                          <span [decimal]="0" [appBigNumber]="element.totalSupply" [tokenPrice]="element.price"></span>
-                        </div>
+                  <div [appTooltip]="{ priceAmount: element.totalSupply, multipliedBy: element.price, lt: 0.01 }">
+                    <div class="text--gray-1 item-amount">
+                      <span *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01)">
+                        {{ element.price == 0 ? '$0.00' : '< $0.01' }}
+                      </span>
+                      <div *ngIf="(element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(0.01)">
+                        <span [decimal]="0" [appBigNumber]="element.totalSupply" [tokenPrice]="element.price"></span>
                       </div>
                     </div>
-                    <app-tooltip-customize
-                      *ngIf="
-                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).lt(0.01) ||
-                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).gte(1000000)
-                      "
-                      [content]="
-                        (element.totalSupply | balance: 0 : true).multipliedBy(element.price).toFixed()
-                          | mask: 'separator'
-                      ">
-                    </app-tooltip-customize>
                   </div>
                 </ng-container>
               </td>
@@ -247,16 +219,15 @@
                     {{ data.name | ellipsis: 12 }}
                     <span *ngIf="data.symbol"> ({{ data.symbol | ellipsis: 8 }}) </span>
                   </a>
-                  <div class="status cursor-pointer aura-tooltip-contain">
+                  <div class="cursor-pointer">
                     <img
                       [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
                       alt=""
                       width="18"
                       height="18"
-                      class="ml-1 mb-1 aura-tooltip-object"
+                      class="ml-1"
+                      [appTooltip]="data.verifyText || 'Verified by Aura Network'"
                       *ngIf="data.verifyStatus === 'VERIFIED'" />
-                    <app-tooltip-customize [content]="data.verifyText || 'Verified by Aura Network'">
-                    </app-tooltip-customize>
                   </div>
                 </div>
               </div>

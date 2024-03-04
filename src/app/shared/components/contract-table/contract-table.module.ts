@@ -5,6 +5,7 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 import { MASK_CONFIG } from 'src/app/app.config';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { MaterialModule } from 'src/app/material.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
@@ -13,8 +14,6 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { SharedModule } from '../../shared.module';
 import { NameTagModule } from '../name-tag/name-tag.module';
 import { ContractTableComponent } from './contract-table.component';
-import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.module';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [ContractTableComponent],
@@ -32,7 +31,6 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     RouterModule,
     SharedModule,
     NameTagModule,
-    TooltipCustomizeModule,
     CommonDirectiveModule
   ],
   exports: [ContractTableComponent],

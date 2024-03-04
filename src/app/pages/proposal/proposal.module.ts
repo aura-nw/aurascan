@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { NgbNavModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { MappingErrorService } from '../../core/services/mapping-error.service';
 import { ProposalService } from '../../core/services/proposal.service';
@@ -27,8 +28,6 @@ import { ProposalRoutingModule } from './proposal-routing.module';
 import { ProposalTableComponent } from './proposal-table/proposal-table.component';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
-import { MASK_CONFIG } from 'src/app/app.config';
-import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -60,7 +59,6 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
     LoadingImageModule,
     CustomPaginatorModule,
     NameTagModule,
-    TooltipCustomizeModule,
     CommonDirectiveModule,
   ],
   providers: [ProposalService, MappingErrorService, ValidatorService, provideEnvironmentNgxMask(MASK_CONFIG)],

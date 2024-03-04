@@ -121,26 +121,6 @@
     height: 64px;
   }
 
-  tr td {
-    vertical-align: top;
-    padding-top: var(--spacer-4);
-
-    &:nth-child(2) {
-      padding-top: var(--spacer-2);
-    }
-  }
-
-  tr:has(.tab-nft) td {
-    &:nth-child(1),
-    &:nth-child(3) {
-      padding-top: var(--spacer-5) !important;
-    }
-
-    &:nth-child(2) {
-      padding-top: var(--spacer-3) !important;
-    }
-  }
-
   .explain-data:not(:first-child) {
     transition: all 0.35s ease-in-out;
     height: 0;
@@ -285,13 +265,5 @@
 
   &:not(.filter-result) {
     min-width: 200px !important;
-  }
-}
-
-.table-transfer tr td {
-  &:nth-child(4),
-  &:nth-child(5),
-  &:nth-child(6) {
-    padding-top: var(--spacer-0) !important;
   }
 }

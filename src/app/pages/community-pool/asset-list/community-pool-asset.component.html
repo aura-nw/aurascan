@@ -62,21 +62,15 @@
                   <ng-container matColumnDef="amount">
                     <th mat-header-cell *matHeaderCellDef>Amount</th>
                     <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                      <div class="aura-tooltip-contain">
-                        <span
-                          class="aura-tooltip-object"
-                          *ngIf="element.symbol === ''"
-                          [appBigNumber]="element.amount"
-                          [decimal]="0"></span>
-                        <span
-                          class="aura-tooltip-object"
-                          *ngIf="element.symbol !== ''"
-                          [appBigNumber]="element.amount"
-                          [decimal]="element.decimal"></span>
-                        <app-tooltip-customize
-                          *ngIf="element.amount | balance: (element.symbol === '' ? 0 : element.decimal) | gte: 1000000"
-                          [content]="element.amount"></app-tooltip-customize>
-                      </div>
+                      <span *ngIf="element.symbol === ''" [appBigNumber]="element.amount" [decimal]="0"></span>
+                      <span
+                        *ngIf="element.symbol !== ''"
+                        [appTooltip]="{
+                          priceAmount: element.amount,
+                          decimal: element.symbol === '' ? 0 : element.decimal
+                        }"
+                        [appBigNumber]="element.amount"
+                        [decimal]="element.decimal"></span>
                     </td>
                   </ng-container>
 
