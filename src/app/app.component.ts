@@ -82,7 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.tokenService.getCoinData();
     }, 600000);
 
-    if (this.TESTNET) {
+    if (this.isTestnet) {
       let el = document.createElement('div');
       document.body.appendChild(el);
 

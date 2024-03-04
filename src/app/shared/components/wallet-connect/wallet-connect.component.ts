@@ -44,8 +44,8 @@ export class WalletConnectComponent implements OnInit {
       const chain = allChains.find((chain) => chain.chain_id == this.CHAIN_ID);
 
       const desktop = desktopWallets.filter((w) => checkDesktopWallets(w.walletName));
-      const wallets = this.env.isMobile ? mobileWallets : [...desktop, ...wcWallets];
-
+      // const wallets = this.env.isMobile ? mobileWallets : [...desktop, ...wcWallets];
+      const wallets = this.env.isMobile ? mobileWallets : [...desktop];
       this.walletsService
         .initWalletManager({
           chain,

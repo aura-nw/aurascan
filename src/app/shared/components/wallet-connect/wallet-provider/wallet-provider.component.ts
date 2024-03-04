@@ -59,12 +59,13 @@ export class WalletProviderComponent implements AfterViewInit {
         .filter((w) => !checkDesktopWallets(w.walletName) || w.isModeWalletConnect)
         .map((w) => ({ ...w.walletInfo, state: State.Error }));
 
-      this.otherWallets = [...otherWallets, ...wcWallets.map((w) => w.walletInfo)];
+      this.otherWallets = otherWallets;
+      // this.otherWallets = [...otherWallets, ...wcWallets.map((w) => w.walletInfo)];
 
-      this.wcLogo =
-        typeof wcWallets[0].walletInfo.logo == 'string'
-          ? wcWallets[0].walletInfo.logo
-          : wcWallets[0].walletInfo.logo?.major;
+      // this.wcLogo =
+      //   typeof wcWallets[0].walletInfo.logo == 'string'
+      //     ? wcWallets[0].walletInfo.logo
+      //     : wcWallets[0].walletInfo.logo?.major;
     }
   }
 
