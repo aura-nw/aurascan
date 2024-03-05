@@ -1,13 +1,13 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { formatNumber } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {formatNumber} from '@angular/common';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { from, interval } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-import { NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL } from 'src/app/core/constants/common.constant';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import {from, interval} from 'rxjs';
+import {map, mergeMap} from 'rxjs/operators';
+import {NUMBER_2_DIGIT, NUMBER_ONLY_DECIMAL} from 'src/app/core/constants/common.constant';
+import {WalletService} from 'src/app/core/services/wallet.service';
 import {
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
@@ -17,11 +17,12 @@ import {
   VOTING_STATUS,
   VOTING_SUBTITLE,
 } from '../../../../core/constants/proposal.constant';
-import { EnvironmentService } from '../../../../core/data-services/environment.service';
-import { CommonService } from '../../../../core/services/common.service';
-import { ProposalService } from '../../../../core/services/proposal.service';
-import { balanceOf } from '../../../../core/utils/common/parsing';
-import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
+import {EnvironmentService} from '../../../../core/data-services/environment.service';
+import {CommonService} from '../../../../core/services/common.service';
+import {ProposalService} from '../../../../core/services/proposal.service';
+import {balanceOf} from '../../../../core/utils/common/parsing';
+import {ProposalVoteComponent} from '../../proposal-vote/proposal-vote.component';
+
 const marked = require('marked');
 
 @Component({
@@ -67,7 +68,8 @@ export class SummaryInfoComponent implements OnInit {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private commonService: CommonService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getProposalDetail();
@@ -135,9 +137,9 @@ export class SummaryInfoComponent implements OnInit {
           if (!result) {
             return;
           }
-          const { quorum, threshold, veto_threshold } = result;
+          const {quorum, threshold, veto_threshold} = result;
           if (this.proDetail) {
-            const { votes_yes: votes_yes, total_vote, votes_abstain, votes_no_with_veto } = this.proDetail;
+            const {votes_yes: votes_yes, total_vote, votes_abstain, votes_no_with_veto} = this.proDetail;
             this.proDetail['quorum'] = quorum * 100;
             this.proDetail['threshold'] = threshold * 100;
             this.proDetail['veto_threshold'] = veto_threshold * 100;
@@ -408,11 +410,11 @@ export class SummaryInfoComponent implements OnInit {
     let key = '';
 
     const powers = [
-      { key: 'Q', value: Math.pow(10, 15) },
-      { key: 'T', value: Math.pow(10, 12) },
-      { key: 'B', value: Math.pow(10, 9) },
-      { key: 'M', value: Math.pow(10, 6) },
-      { key: 'K', value: 1000 },
+      {key: 'Q', value: Math.pow(10, 15)},
+      {key: 'T', value: Math.pow(10, 12)},
+      {key: 'B', value: Math.pow(10, 9)},
+      {key: 'M', value: Math.pow(10, 6)},
+      {key: 'K', value: 1000},
     ];
 
     for (let i = 0; i < powers.length; i++) {
