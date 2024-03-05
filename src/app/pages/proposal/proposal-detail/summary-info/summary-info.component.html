@@ -21,9 +21,9 @@
             class="button button--sm button-outline button-outline--gradient button-pill button-outline__in-card body flex-shrink-0 fw-semibold">
             <span>
               {{
-              proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                ? 'Voting Ended'
-                : 'Vote'
+                proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  ? 'Voting Ended'
+                  : 'Vote'
               }}
             </span>
           </button>
@@ -122,21 +122,23 @@
           <div class="col-12 col-md-10 mt-0">
             <div class="mb-4">
               <mat-tab-group (selectedTabChange)="changeTab($event.index)">
-                <mat-tab [label]="tab.value" *ngFor="let tab of specialDataArr; index as index"
-                         (click)="changeTab(tab.key)"></mat-tab>
+                <mat-tab
+                  [label]="tab.value"
+                  *ngFor="let tab of specialDataArr; index as index"
+                  (click)="changeTab(tab.key)"></mat-tab>
               </mat-tab-group>
             </div>
             <ng-container *ngIf="proDetail?.plan">
               <div *ngFor="let key of getObjectKey(proDetail?.plan)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">
-                  {{ proDetail?.plan[key] | appJson: {checkType: true} }}
+                  {{ proDetail?.plan[key] | appJson: { checkType: true } }}
                 </ng-container>
               </div>
             </ng-container>
             <ng-container *ngIf="proDetail?.changes">
               <div *ngFor="let key of getObjectKey(proDetail?.changes)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">
-                  {{ proDetail?.changes[key] | appJson: {checkType: true} }}
+                  {{ proDetail?.changes[key] | appJson: { checkType: true } }}
                 </ng-container>
               </div>
             </ng-container>
@@ -356,9 +358,9 @@
               class="button button--md button-fixed button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0 h5-mob">
               <span>
                 {{
-                proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                  ? 'Voting Ended'
-                  : 'Vote'
+                  proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                    ? 'Voting Ended'
+                    : 'Vote'
                 }}
               </span>
             </button>

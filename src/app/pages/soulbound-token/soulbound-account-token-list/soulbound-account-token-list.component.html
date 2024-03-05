@@ -45,7 +45,7 @@
                 alt=""
                 width="36px"
                 height="36px"
-                (click)="viewQrAddress(modalManage)"/>
+                (click)="viewQrAddress(modalManage)" />
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@
               class="nft__unclaimed-noti text--white"
               *ngIf="totalNotify >= 1 && index === 1"
               [class.noti--pill]="totalNotify > 9"
-            >{{ totalNotify > 99 ? '99+' : totalNotify }}</span
+              >{{ totalNotify > 99 ? '99+' : totalNotify }}</span
             >
           </a>
         </li>
@@ -105,7 +105,7 @@
         alt=""
         width="14"
         height="14"
-        (click)="closePopup()"/>
+        (click)="closePopup()" />
     </div>
     <app-qr [address]="userAddress || ''"></app-qr>
   </div>
