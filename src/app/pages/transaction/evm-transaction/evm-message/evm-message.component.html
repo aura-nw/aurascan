@@ -34,6 +34,14 @@
               {{ inputData.hexSignature ?? '-' }}
             </div>
           </div>
+
+          <div class="row mb-3 gap-1 gap-lg-0">
+            <div class="col-12 col-lg-2 body-03 text--gray-4">Call</div>
+
+            <div class="col-12 col-lg-10" [ngClass]="{ highlight: inputData.call }">
+              {{ inputData.call ?? '-' }}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -45,9 +53,11 @@
           <mat-slide-toggle (toggleChange)="showAll = !showAll"> Show all events </mat-slide-toggle>
 
           <div class="box-event-log mt-2" *ngIf="showAll">
-            <div>Transaction Receipt Event Logs (108)</div>
+            <div>Transaction Receipt Event Logs ({{ logs.length }})</div>
             <div class="">
-              <app-evm-transaction-event-log> </app-evm-transaction-event-log>
+              <ng-container *ngFor="let log of logs">
+                <app-evm-transaction-event-log [eventLog]="log"> </app-evm-transaction-event-log>
+              </ng-container>
             </div>
           </div>
         </div>

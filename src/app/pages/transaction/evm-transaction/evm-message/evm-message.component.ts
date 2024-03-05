@@ -14,7 +14,8 @@ export class EvmMessageComponent {
   logs = [
     {
       id: 1,
-      contract: 'XEN Crypto (0x2ab0e9e4ee70fff1fb9d67031e44f6410170d00e)',
+      contractName: 'XEN Crypto',
+      contract: '0x2ab0e9e4ee70fff1fb9d67031e44f6410170d00e',
       topics: [
         {
           address: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
@@ -36,29 +37,8 @@ export class EvmMessageComponent {
     },
     {
       id: 2,
-      contract: 'XEN Crypto (0x2ab0e9e4ee70fff1fb9d67031e44f6410170d00e)',
-      topics: [
-        {
-          address: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
-          data: '> Transfer(address indexed from,address indexed to,uint256 value)',
-        },
-        {
-          address: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
-          data: '> Transfer(address indexed from,address indexed to,uint256 value)',
-        },
-        {
-          address: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
-          data: '> Transfer(address indexed from,address indexed to,uint256 value)',
-        },
-      ],
-      data: {
-        value: '0 COXEN',
-        hexValue: '0000000000000000000000000000000000000000000000000000000000000000',
-      },
-    },
-    {
-      id: 3,
-      contract: 'XEN Crypto (0x2ab0e9e4ee70fff1fb9d67031e44f6410170d00e)',
+      contractName: 'XEN Crypto',
+      contract: '0x2ab0e9e4ee70fff1fb9d67031e44f6410170d00e',
       topics: [
         {
           address: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
