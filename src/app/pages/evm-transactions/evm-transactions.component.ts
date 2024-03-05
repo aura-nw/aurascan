@@ -5,6 +5,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import * as _ from 'lodash';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-evm-transactions',
@@ -25,7 +26,7 @@ export class EvmTransactionsComponent {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
-
+  currencies = this.env.chainInfo.currencies[0];
   maxPageSize = 20;
   loading = true;
   errTxt = null;
@@ -34,6 +35,7 @@ export class EvmTransactionsComponent {
   constructor(
     private layout: BreakpointObserver,
     private transactionService: TransactionService,
+    private env: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
