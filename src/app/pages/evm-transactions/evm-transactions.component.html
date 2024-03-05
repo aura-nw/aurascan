@@ -53,7 +53,7 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'amount'">
-                        {{ data[template.matColumnDef] | balance: 18 | mask: 'separator.6' }}
+                        {{ data[template.matColumnDef] | balance: currencies.coinDecimals | mask: 'separator.6' }}
                         EVMOS
                       </div>
                       <div *ngSwitchCase="'hash'" class="text-center">
@@ -124,7 +124,7 @@
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">Amount</div>
                   <div class="text--white">
-                    {{ data.amount | balance: 18 | mask: 'separator.6' }}
+                    {{ data.amount | balance: currencies.coinDecimals | mask: 'separator.6' }}
                     EVMOS
                   </div>
                 </div>
