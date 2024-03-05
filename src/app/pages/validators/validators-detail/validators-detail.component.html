@@ -333,6 +333,7 @@
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <app-name-tag
                             *ngSwitchCase="'delegator_address'"
+                            [linkRouter]="['/account', data.delegator_address]"
                             [value]="data.delegator_address"
                             [tooltipPosition]="'tooltip--right'"></app-name-tag>
                           <div *ngSwitchCase="'amount'">

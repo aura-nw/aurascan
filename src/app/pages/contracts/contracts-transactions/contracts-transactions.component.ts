@@ -7,7 +7,6 @@ import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.consta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
-import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { convertDataTransaction } from 'src/app/global/global';
 
@@ -33,7 +32,7 @@ export class ContractsTransactionsComponent implements OnInit {
   };
 
   pageSize = 20;
-  contractTransaction = {};
+  contractTransaction = { count: 0 };
   contractAddress = '';
   label = null;
   nextKey = null;
@@ -56,7 +55,6 @@ export class ContractsTransactionsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private transactionService: TransactionService,
-    private contractService: ContractService,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
 
@@ -69,26 +67,9 @@ export class ContractsTransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
+    this.payload['value'] = this.contractAddress;
     this.contractInfo.contractsAddress = this.contractAddress;
-
-    this.contractService.loadContractDetail(this.contractAddress).subscribe({
-      next: (res) => {
-        if (res?.smart_contract[0]) {
-          this.payload['id'] = res?.smart_contract[0].id;
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.isLoadingTX = false;
-      },
-      complete: () => {
-        this.getData();
-      },
-    });
+    this.getData();
     this.timerGetUpTime = setInterval(() => {
       this.errTxt = null;
       // reload when page = 0
@@ -113,20 +94,12 @@ export class ContractsTransactionsComponent implements OnInit {
       if (params['label']) {
         this.label = params['label'] || this.modeTxType.Out;
       }
-      this.payload['key'] = null;
-      switch (+this.label) {
-        case 1: //incoming
-          this.payload['actionNEq'] = '%instantiate%';
-          break;
-        case 2: //instantiate
-          this.payload['actionEq'] = 'instantiate';
-          break;
-        default: //out
-          this.payload['actionEq'] = null;
-          this.payload['actionNEq'] = null;
-          break;
+      if (this.label == 0) {
+        this.getListOutgoing(isReload);
+      } else {
+        this.payload['compositeKey'] = 'execute._contract_address';
+        this.getDataTable(null, isReload);
       }
-      this.getDataTable(null, isReload);
     });
   }
 
@@ -137,22 +110,9 @@ export class ContractsTransactionsComponent implements OnInit {
     }
     this.payload['heightLT'] = nextKey;
     this.transactionService.getListTxCondition(this.payload).subscribe({
-      next: (dataExecute) => {
-        if (dataExecute) {
-          const txsExecute = convertDataTransaction(dataExecute, this.coinInfo);
-          this.lengthTxsExecute = txsExecute.length;
-          if (dataExecute.transaction?.length > 0) {
-            this.nextKey = null;
-            if (txsExecute.length >= 100) {
-              this.nextKey = dataExecute?.transaction[txsExecute.length - 1].height;
-            }
-            if (this.contractTransaction['data']?.length > 0 && !isReload) {
-              this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-            } else if (txsExecute.length > 0) {
-              this.contractTransaction['data'] = txsExecute;
-            }
-          }
-          this.contractTransaction['count'] = this.contractTransaction['data']?.length;
+      next: (data) => {
+        if (data) {
+          this.getListData(data, isReload);
         }
       },
       error: (e) => {
@@ -167,6 +127,45 @@ export class ContractsTransactionsComponent implements OnInit {
         this.isLoadingTX = false;
       },
     });
+  }
+
+  getListOutgoing(isReload = false) {
+    this.payload['actionEq'] = "execute";
+    this.transactionService.getListOutgoing(this.payload).subscribe({
+      next: (data) => {
+        if (data) {
+          this.getListData(data, isReload);
+        }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoadingTX = false;
+      },
+      complete: () => {
+        this.isLoadingTX = false;
+      },
+    });
+  }
+
+  getListData(data, isReload = false) {
+    const txsExecute = convertDataTransaction(data, this.coinInfo);
+    if (data.transaction?.length > 0) {
+      this.nextKey = null;
+      if (txsExecute.length >= 100) {
+        this.nextKey = data?.transaction[txsExecute.length - 1].height;
+      }
+      if (this.contractTransaction['data']?.length > 0 && !isReload) {
+        this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
+      } else if (txsExecute.length > 0) {
+        this.contractTransaction['data'] = txsExecute;
+      }
+      this.lengthTxsExecute = txsExecute.length;
+    }
+    this.contractTransaction['count'] = this.contractTransaction['data']?.length;
   }
 
   onChangePage(event) {
