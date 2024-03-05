@@ -10,11 +10,6 @@
     <table mat-table [dataSource]="dataSource" class="aura-table">
       <ng-container *ngFor="let template of template; index as i">
         <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
-          <ng-container *ngSwitchCase="'type'">
-            <th mat-header-cell *matHeaderCellDef class="col-per-20">
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-          </ng-container>
           <ng-container *ngSwitchCase="'status'">
             <th mat-header-cell *matHeaderCellDef class="col-per-8">
               <div [innerHTML]="template.headerCellDef | translate" class="mr-3"></div>
@@ -25,38 +20,13 @@
               <div [innerHTML]="template.headerCellDef | translate" class="mr-3"></div>
             </th>
           </ng-container>
-          <ng-container *ngSwitchCase="'tx_hash'">
-            <th mat-header-cell *matHeaderCellDef class="col-per-15">
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-          </ng-container>
           <ng-container *ngSwitchCase="'action'">
             <th mat-header-cell *matHeaderCellDef class="col-per-5">
               <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
           </ng-container>
-          <ng-container *ngSwitchCase="'from_address'">
-            <th mat-header-cell *matHeaderCellDef>
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-          </ng-container>
-          <ng-container *ngSwitchCase="'to_address'">
-            <th mat-header-cell *matHeaderCellDef>
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-          </ng-container>
-          <ng-container *ngSwitchCase="'details'">
-            <th mat-header-cell *matHeaderCellDef class="col-per-15">
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-          </ng-container>
-          <ng-container *ngSwitchCase="'timestamp'">
-            <th mat-header-cell *matHeaderCellDef class="col-per-15">
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-          </ng-container>
           <ng-container *ngSwitchDefault>
-            <th mat-header-cell *matHeaderCellDef class="col-per-13">
+            <th mat-header-cell *matHeaderCellDef [style.min-width]="template.headerWidth + 'px'">
               <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
           </ng-container>
@@ -66,8 +36,8 @@
               <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                 <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                   {{
-                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                      '-'
+                  (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                  '-'
                   }}
                 </a>
               </ng-container>
@@ -91,6 +61,7 @@
                       <div
                         *ngIf="data.amount | balance: data.decimal | gte: 0.001"
                         [appTooltip]="{ priceAmount: data.amount, decimal: data.decimal }"
+                        [classTooltip]="'tooltip--left'"
                         [appBigNumber]="data.amount"
                         [decimal]="data.decimal"></div>
                     </div>
@@ -154,7 +125,7 @@
                           [src]="'assets/images/icons/arrow-right.png' | imageS3"
                           width="14"
                           height="9"
-                          class="mr-lg-3 mr-0 ml-3" />
+                          class="mr-lg-3 mr-0 ml-3"/>
                       </ng-container>
                       <ng-container *ngIf="isSearchAddress">
                         <div class="box-token-transfer">
@@ -184,7 +155,7 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'details'">
                     <button
-                      class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
+                      class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill px-3"
                       [disabled]="
                         !data.token_id ||
                         data['status'] === 'Fail' ||
