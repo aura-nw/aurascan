@@ -38,10 +38,15 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
         .multipliedBy(this.appTooltip.multipliedBy ?? 1)
         .lt(this.appTooltip.lt ?? 0.001);
       if ((gte || lt) && this.appTooltip.priceAmount != 0) {
-        tooltipValue = BigNumber(this.appTooltip.priceAmount)
-          .multipliedBy(this.appTooltip.multipliedBy ?? 1)
-          .toFormat(this.decimalLengthTooltip)
-          .replace(/\.?0+$/, '');
+        const amountTemp = BigNumber(this.appTooltip.priceAmount).multipliedBy(this.appTooltip.multipliedBy ?? 1);
+        const amountCondition = BigNumber(1).dividedBy(BigNumber(10).pow(this.decimalLengthTooltip)).toFixed();
+
+        // fixed if value less than 0.000001 
+        if (amountTemp.toFixed() < amountCondition) {
+          tooltipValue = amountTemp.toFixed().replace(/\.?0+$/, '');
+        } else {
+          tooltipValue = amountTemp.toFormat(this.decimalLengthTooltip).replace(/\.?0+$/, '');
+        }
       } else {
         tooltipValue = null;
       }
