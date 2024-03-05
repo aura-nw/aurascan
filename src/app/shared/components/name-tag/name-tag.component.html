@@ -114,7 +114,7 @@
       <a
         target="_blank"
         [href]="extendLink(value | nameTag: null : 'url')"
-        *ngIf="(value | nameTag: null : 'url') && mode === ENameTag.Public">
+        *ngIf="(value | nameTag: null : 'url') && mode === ENameTag.Public && screen != EScreen.WatchList">
         <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
       </a>
     </div>
