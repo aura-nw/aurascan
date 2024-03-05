@@ -4,24 +4,22 @@
     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
       <h1 class="mb-0 text--white fw-semibold">{{ title }}</h1>
       <div class="page-title-right d-lg-block mt-4 mt-lg-0" [class.d-none]="!mobileDisplay">
-        <ol class="breadcrumb m-0" *ngIf="!displayInfo">
-          <ng-container *ngFor="let item of breadcrumbItems">
-            <li class="breadcrumb-item" [ngClass]="{ active: item.active == true }">{{ item.label }}</li>
-          </ng-container>
-        </ol>
         <div class="text--white d-lg-flex align-items-center" *ngIf="displayInfo">
-          <div class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
-               *ngIf="global?.dataHeader?.total_blocks">
+          <div
+            class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
+            *ngIf="global?.dataHeader?.total_blocks">
             <span class="h4 body-mob breadcrumb__label">Height: </span>
             <span class="h4 body-mob breadcrumb__content">{{ global?.dataHeader?.total_blocks | number }}</span>
           </div>
-          <div class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
-               *ngIf="global?.dataHeader?.bonded_tokens">
+          <div
+            class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
+            *ngIf="global?.dataHeader?.bonded_tokens">
             <span class="h4 body-mob breadcrumb__label">Bonded: </span>
             <span class="h4 body-mob breadcrumb__content">{{ global?.dataHeader?.bonded_tokens }}</span>
           </div>
-          <div class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
-               *ngIf="global?.dataHeader?.inflation">
+          <div
+            class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
+            *ngIf="global?.dataHeader?.inflation">
             <span class="h4 body-mob breadcrumb__label">Inflation: </span>
             <span class="h4 body-mob breadcrumb__content">{{ global?.dataHeader?.inflation }}</span>
           </div>

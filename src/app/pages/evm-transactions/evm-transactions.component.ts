@@ -4,6 +4,7 @@ import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-evm-transactions',
@@ -12,20 +13,20 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 })
 export class EvmTransactionsComponent {
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'hash', headerCellDef: 'EVM Txn hash', headerWidth: 214 },
+    { matColumnDef: 'evm_hash', headerCellDef: 'EVM Txn hash', headerWidth: 214 },
     { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 216 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 110 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 136 },
     { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214 },
     { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176 },
-    { matColumnDef: 'aura_txn', headerCellDef: 'AURA Txn', headerWidth: 102 },
+    { matColumnDef: 'hash', headerCellDef: 'AURA Txn', headerWidth: 102 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
 
-  pageSize = 20;
+  maxPageSize = 20;
   loading = true;
   errTxt = null;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -41,7 +42,7 @@ export class EvmTransactionsComponent {
 
   getListTx(): void {
     const payload = {
-      limit: this.pageSize,
+      limit: this.maxPageSize,
     };
 
     this.transactionService.queryEvmTransactionList(payload).subscribe({
@@ -49,7 +50,11 @@ export class EvmTransactionsComponent {
         if (res?.transaction?.length > 0) {
           const txs = res.transaction;
           txs.forEach((element) => {
-            element.type = element.transaction_messages[0].type?.split('.').pop();
+            element.evm_hash = _.get(element, 'evm_transaction.hash');
+            element.type = _.get(element, 'transaction_messages[0].type')?.split('.').pop();
+            element.from = _.get(element, 'transaction_messages[0].sender');
+            element.to = _.get(element, 'evm_transaction.to');
+            element.amount = _.get(element, 'transaction_messages[0].content.data.value');
           });
           this.dataSource.data = [...txs];
         }

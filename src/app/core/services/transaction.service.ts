@@ -109,6 +109,7 @@ export class TransactionService extends CommonService {
         ) {
           id
           hash
+          height
           timestamp
           transaction_messages {
             type
@@ -117,11 +118,7 @@ export class TransactionService extends CommonService {
           }
           evm_transaction {
             hash
-            from
-            data
-            height
             to
-            value
           }
         }
       }
