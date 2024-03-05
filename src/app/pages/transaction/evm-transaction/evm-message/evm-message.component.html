@@ -4,7 +4,7 @@
       <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title d-flex align-items-center">
-            {{ title }}
+            {{ title || 'Transfers' }}
           </div>
         </div>
       </div>
@@ -22,18 +22,16 @@
         </div>
       </div>
 
-      <div class="d-flex flex-wrap mb-3">
+      <div class="d-flex flex-wrap mb-3" *ngIf="inputData">
         <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
           {{ 'Input Data:' }}
         </div>
         <div class="col-12 col-lg-11 box-event-log">
-          <div class="row mb-3" *ngFor="let data of inputData | appObjectKeys">
-            <div class="col-2 body-03 text--gray-4">
-              {{ data.key }}
-            </div>
+          <div class="row mb-3 gap-1 gap-lg-0">
+            <div class="col-12 col-lg-2 body-03 text--gray-4">Hex Signature</div>
 
-            <div class="col-10" [class.hight-light]="data.callable">
-              {{ data.value }}
+            <div class="col-12 col-lg-10">
+              {{ inputData.hexSignature ?? '-' }}
             </div>
           </div>
         </div>

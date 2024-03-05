@@ -25,7 +25,7 @@
             <div class="col-auto col-lg-2 text--gray-4">EVM Txn hash</div>
             <div class="col-auto col-lg-10 mb-0">
               <span class="text--gray-1" [copyBtn]="transaction?.evm_hash">
-                {{ transaction?.evm_hash }}
+                {{ environmentService.isMobile ? (transaction?.evm_hash | ellipsis: 8 : 8) : transaction?.evm_hash }}
               </span>
             </div>
           </div>
@@ -58,7 +58,10 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Height</div>
             <div class="col-auto col-lg-10">
-              <a class="text--primary" routerLink="/blocks/{{ transaction?.height }}">
+              <a
+                class="text--primary"
+                routerLink="/blocks/{{ transaction?.height }}"
+                [copyBtn]="transaction?.height?.toString()">
                 {{ transaction?.height | number }}
               </a>
             </div>
@@ -98,7 +101,7 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Amount</div>
             <div class="col-auto col-lg-10 text--gray-1">
-              {{ +transaction?.amount | mask: 'separator.6' }}
+              {{ +transaction?.amount }}
               <span appLinkDenom>{{ denom }}</span>
             </div>
           </div>
@@ -106,7 +109,7 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Transaction Fee</div>
             <div class="col-auto col-lg-10 text--gray-1">
-              {{ +transaction?.fee | mask: 'separator.6' }}
+              {{ transaction?.fee }}
               <span appLinkDenom>{{ denom }}</span>
             </div>
           </div>
@@ -116,7 +119,7 @@
               <div>Gas limit & Usage by Txn</div>
             </div>
             <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.gasUsed | number }} / {{ transaction?.gasWanted | number }}
+              {{ transaction?.gas_limit | number }} | {{ transaction?.gasUsed | number }}
             </div>
           </div>
         </div>
@@ -125,11 +128,7 @@
 
     <div class="row mb-2 body justify-content-between justify-content-lg-start">
       <h2 class="text--white">Messages</h2>
-      <app-evm-message
-        [title]="'Contract'"
-        [type]="transaction.type"
-        [inputData]="transaction.inputData"
-        [eventLog]="transaction.eventLog">
+      <app-evm-message [type]="transaction.type" [inputData]="transaction.inputData" [eventLog]="transaction.eventLog">
       </app-evm-message>
     </div>
   </ng-container>

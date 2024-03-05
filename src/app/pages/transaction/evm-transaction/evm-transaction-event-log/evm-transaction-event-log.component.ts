@@ -9,12 +9,14 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } 
 export class EvmTransactionEventLogComponent implements OnInit {
   @Input() eventLog: {
     id: number;
+    contractName?: string;
     contract?: string;
     topics?: unknown[];
     data?: unknown;
   } = {
     id: 1,
-    contract: 'XEN Crypto (0x2ab0e9e4ee70fff1fb9d67031e44f6410170d00e)',
+    contractName: 'XEN Crypto',
+    contract: '0x2ab0e9e4ee70fff1fb9d67031e44f6410170d00e',
     topics: [
       {
         address: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',

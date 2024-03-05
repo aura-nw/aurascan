@@ -4,11 +4,17 @@
   display: flex;
   gap: 24px;
 
+  @media (max-width: 992px) {
+    gap: 8px;
+  }
+
   .event-number {
-    min-width: 44px;
+    width: 44px;
+    max-width: 20%;
     height: 34px;
     border-radius: 8px;
     background: #222f3d;
+    color: var(--aura-primary);
     border: 1px solid var(--aura-blue-4);
 
     padding: 8px 16px;
@@ -19,14 +25,26 @@
     gap: 8px;
 
     &.secondary {
+      color: var(--while);
       border: 1px solid var(--aura-gray-6);
       background: var(--aura-gray-9);
+
+      width: 32px;
+      height: 24px;
     }
+  }
+
+  .topic {
+    max-width: calc(100% - 38px);
+  }
+
+  .event-content {
+    max-width: calc(100% - 52px);
   }
 
   .hight-light {
     width: max-content;
-    display: flex;
+    max-width: 100%;
     padding: 4px 8px;
     border-radius: 4px;
 

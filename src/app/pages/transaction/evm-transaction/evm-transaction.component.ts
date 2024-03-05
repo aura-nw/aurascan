@@ -1,14 +1,13 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
-import { map, of, switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { getBalance } from 'src/app/core/utils/common/parsing';
-import { convertDataTransaction } from 'src/app/global/global';
+import { getBalance, toHexData } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-evm-transaction',
@@ -28,6 +27,7 @@ export class EvmTransactionComponent implements OnChanges {
     amount: string;
     gasWanted: string;
     gasUsed: string;
+    gas_limit: string;
     code: CodeTransaction;
     fee: string;
     memo: string;
@@ -75,24 +75,23 @@ export class EvmTransactionComponent implements OnChanges {
             const txData = _.get(response, 'transaction[0]');
             const linkS3 = _.get(response, 'transaction[0].data.linkS3');
 
-            if (linkS3) {
-              return this.transactionService.getRawData(linkS3).pipe(
-                map((rawData) => {
-                  if (response) {
-                    txData.data = rawData;
-                  }
+            // if (linkS3) {
+            //   return this.transactionService.getRawData(linkS3).pipe(
+            //     map((rawData) => {
+            //       if (response) {
+            //         txData.data = rawData;
+            //       }
 
-                  return txData;
-                }),
-              );
-            }
+            //       return txData;
+            //     }),
+            //   );
+            // }
 
             return of(txData);
           }),
         )
         .subscribe({
           next: (res) => {
-            console.log('🐛 res: ', res);
             if (res) {
               this.transaction = this.parseEvmTx(res);
             }
@@ -117,7 +116,13 @@ export class EvmTransactionComponent implements OnChanges {
   }
 
   parseEvmTx(tx: unknown): typeof this.transaction {
-    const txBodyMessage: unknown[] = _.get(tx, 'data.tx.body.messages[0]');
+    const txMessage: unknown[] = _.get(tx, 'transaction_messages[0]');
+
+    const inputData = toHexData(_.get(tx, 'evm_transaction.data'))
+      ? {
+          hexSignature: toHexData(_.get(tx, 'evm_transaction.data')),
+        }
+      : null;
 
     return {
       evm_hash: _.get(tx, 'evm_transaction.hash'),
@@ -128,21 +133,17 @@ export class EvmTransactionComponent implements OnChanges {
       timestamp: _.get(tx, 'timestamp'),
       gasUsed: _.get(tx, 'gas_used'),
       gasWanted: _.get(tx, 'gas_wanted'),
+      gas_limit: _.get(tx, 'gas_limit'),
       memo: _.get(tx, 'memo'),
       // TODO
-      amount: getBalance(_.get(tx, 'fee[0].amount'), 18),
+      amount: getBalance(_.get(tx, 'evm_transaction.value'), 18),
       fee: getBalance(_.get(tx, 'fee[0].amount'), 18),
-      from: _.get(tx, 'evm_transaction.from'),
-      to: _.get(txBodyMessage, 'data.to'),
-      type: txBodyMessage['@type'],
-      inputData: {
-        ['Hex Signature']: _.get(txBodyMessage, 'data.r'),
-        ['Call']: function approve(address, uint256) {},
-        ['Method']: 'Approve',
-        ['Parameter']: '',
-      },
+      from: _.get(txMessage, 'sender'),
+      to: _.get(txMessage, 'content.data.to'),
+      type: _.get(txMessage, 'content.@type'),
+      inputData,
       eventLog: {
-        hexSignature: txBodyMessage['data'],
+        hexSignature: txMessage['content.data'],
       },
     };
   }
