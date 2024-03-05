@@ -1,0 +1,67 @@
+<div class="message-container">
+  <div class="card text--white">
+    <div class="card-body body">
+      <div class="mb-3 d-flex box-header">
+        <div class="col-12 col-lg-3">
+          <div class="card-text header-title d-flex align-items-center">
+            {{ title || 'Transfers' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="divider divider-horizontal mt-4 mb-6"></div>
+
+      <div class="d-flex flex-wrap mb-3">
+        <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
+          {{ 'Type: ' }}
+        </div>
+        <div class="col-12 col-lg-11">
+          <span [copyBtn]="type" class="text--primary">
+            {{ type }}
+          </span>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap mb-3" *ngIf="inputData">
+        <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
+          {{ 'Input Data:' }}
+        </div>
+        <div class="col-12 col-lg-11 box-event-log">
+          <div class="row mb-3 gap-1 gap-lg-0">
+            <div class="col-12 col-lg-2 body-03 text--gray-4">Hex Signature</div>
+
+            <div class="col-12 col-lg-10">
+              {{ inputData.hexSignature ?? '-' }}
+            </div>
+          </div>
+
+          <div class="row mb-3 gap-1 gap-lg-0">
+            <div class="col-12 col-lg-2 body-03 text--gray-4">Call</div>
+
+            <div class="col-12 col-lg-10" [ngClass]="{ highlight: inputData.call }">
+              {{ inputData.call ?? '-' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap mb-3">
+        <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
+          {{ 'Event log' }}
+        </div>
+        <div class="col-12 col-lg-11">
+          <mat-slide-toggle (toggleChange)="showAll = !showAll"> Show all events </mat-slide-toggle>
+
+          <div class="box-event-log mt-2" *ngIf="showAll">
+            <div>Transaction Receipt Event Logs ({{ logs.length }})</div>
+            <div class="">
+              <ng-container *ngFor="let log of logs">
+                <app-evm-transaction-event-log [eventLog]="log"> </app-evm-transaction-event-log>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
