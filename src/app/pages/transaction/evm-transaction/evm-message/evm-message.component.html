@@ -55,7 +55,7 @@
           <div class="box-event-log mt-2" *ngIf="showAll">
             <div>Transaction Receipt Event Logs ({{ logs.length }})</div>
             <div class="">
-              <ng-container *ngFor="let log of logs">
+              <ng-container *ngFor="let log of eventLog">
                 <app-evm-transaction-event-log [eventLog]="log"> </app-evm-transaction-event-log>
               </ng-container>
             </div>

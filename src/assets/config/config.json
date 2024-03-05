@@ -1,101 +1,68 @@
 {
   "environment": {
-    "name": "develop",
+    "name": "Evmos",
     "label": {
-      "desktop": "Develop Testnet Network",
-      "mobile": "Develop Testnet"
+      "desktop": "Evmos",
+      "mobile": "Evmos"
     },
     "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
     "notice": {
       "content": null,
       "url": null
     },
-    "nativeName": "Aura"
+    "nativeName": "Evmos"
   },
   "chainConfig": {
     "stakingTime": "86400",
-    "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
+    "excludedAddresses": [],
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
     "quotaSetWatchList": 10,
     "quotaNotification": 100,
-    "coins": [
-      {
-        "name": "Serenity Aura",
-        "display": "AURA",
-        "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Serenity Aura 2",
-        "display": "AURA",
-        "denom": "ibc/64846F530A4FFAF387CFC4F3F369EA9C83FC158B7F09B4573DD9A3EE8EA49F06",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Serenity Aura 3",
-        "display": "AURA",
-        "denom": "ibc/0BE15F56B56143F8E36B346577011F6661D3445EDC3B81891A9779F85ED90D75",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Serenity Aura 4",
-        "display": "AURA4",
-        "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      }
-    ],
+    "coins": [],
     "features": [],
     "chain_info": {
-      "chainId": "aura-testnet-2",
-      "chainName": "aura devnet",
-      "rpc": "https://rpc.dev.aura.network",
-      "rest": "https://lcd.dev.aura.network",
-      "bip44": {
-        "coinType": 118
+      "chainId": "evmos_9000-4",
+      "chainName": "Evmos Testnet",
+      "stakeCurrency": {
+        "coinDenom": "TEVMOS",
+        "coinMinimalDenom": "atevmos",
+        "coinDecimals": 18
       },
       "bech32Config": {
-        "bech32PrefixAccAddr": "aura",
-        "bech32PrefixAccPub": "aurapub",
-        "bech32PrefixValAddr": "auravaloper",
-        "bech32PrefixValPub": "auravaloperpub",
-        "bech32PrefixConsAddr": "auravalcons",
-        "bech32PrefixConsPub": "auravalconspub"
+        "bech32PrefixAccAddr": "evmos",
+        "bech32PrefixAccPub": "evmospub",
+        "bech32PrefixValAddr": "evmosvaloper",
+        "bech32PrefixValPub": "evmosvaloperpub",
+        "bech32PrefixConsAddr": "evmosvalcons",
+        "bech32PrefixConsPub": "evmosvalconspub"
       },
       "currencies": [
         {
-          "coinDenom": "TAURA",
-          "coinMinimalDenom": "utaura",
-          "coinDecimals": 6
+          "coinDenom": "TEVMOS",
+          "coinMinimalDenom": "atevmos",
+          "coinDecimals": 18
         }
       ],
       "feeCurrencies": [
         {
-          "coinDenom": "TAURA",
-          "coinMinimalDenom": "utaura",
-          "coinDecimals": 6
+          "coinDenom": "TEVMOS",
+          "coinMinimalDenom": "atevmos",
+          "coinDecimals": 18,
+          "gasPriceStep": {
+            "low": 25000000000,
+            "average": 25000000000,
+            "high": 40000000000
+          }
         }
       ],
-      "stakeCurrency": {
-        "coinDenom": "TAURA",
-        "coinMinimalDenom": "utaura",
-        "coinDecimals": 6
+      "bip44": {
+        "coinType": 60
       },
-      "coinType": 118,
-      "gasPriceStep": {
-        "low": 0.001,
-        "average": 0.0025,
-        "high": 0.004
-      },
-      "features": ["ibc-transfer"],
-      "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
-      "logo": "https://i.imgur.com/zi0mTYb.png",
-      "explorer": "https://explorer.dev.aura.network/",
-      "beta": "false"
+      "rpc": "https://tendermint.bd.evmos.dev:26657",
+      "rest": "https://rest.bd.evmos.dev:1317",
+      "beta": true,
+      "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
     }
   },
   "image": {
@@ -118,7 +85,7 @@
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": ["aura-network"]
+      "ids": ["evmos"]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -129,7 +96,7 @@
       "url": "https://indexer-v2.dev.aurascan.io/api",
       "graphql": "/v2/graphql",
       "rest": "/v2",
-      "chain": "auratestnet"
+      "chain": "evmostestnet"
     },
     "walletConnect": {
       "signClient": {

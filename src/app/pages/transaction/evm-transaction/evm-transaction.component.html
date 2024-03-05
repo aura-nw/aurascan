@@ -31,7 +31,7 @@
           </div>
 
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">AURA Txn hash</div>
+            <div class="col-auto col-lg-2 text--gray-4">{{ denom | titlecase }} Txn hash</div>
             <div class="col-auto col-lg-10">
               <a class="text--primary" routerLink="/transaction/{{ transaction?.hash }}" [copyBtn]="transaction?.hash">
                 {{ environmentService.isMobile ? (transaction?.hash | ellipsis: 8 : 8) : transaction?.hash }}
@@ -101,7 +101,7 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Amount</div>
             <div class="col-auto col-lg-10 text--gray-1">
-              {{ +transaction?.amount }}
+              {{ transaction?.amount }}
               <span appLinkDenom>{{ denom }}</span>
             </div>
           </div>
@@ -132,8 +132,9 @@
       </app-evm-message>
     </div>
   </ng-container>
-  <ng-template #noValues>
-    <app-table-no-data [textNull]="errTxt"></app-table-no-data>
-  </ng-template>
-  <ng-template #dash> - </ng-template>
 </ng-container>
+
+<ng-template #noValues>
+  <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+</ng-template>
+<ng-template #dash> - </ng-template>

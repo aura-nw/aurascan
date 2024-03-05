@@ -5,7 +5,6 @@ import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { getBalance, toHexData } from 'src/app/core/utils/common/parsing';
 
@@ -33,10 +32,14 @@ export class EvmTransactionComponent implements OnChanges {
     memo: string;
     type: string;
     inputData: { [key: string]: unknown };
-    eventLog: { [key: string]: unknown };
+    eventLog: {
+      id: number;
+      contractName?: string;
+      contract?: string;
+      topics?: unknown[];
+      data?: unknown;
+    }[];
   };
-
-  transactionDetail;
 
   codeTransaction = CodeTransaction;
   errorMessage = '';
@@ -44,6 +47,7 @@ export class EvmTransactionComponent implements OnChanges {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+
   loading = true;
   seeLess = false;
   isDisplayMore = false;
@@ -51,7 +55,6 @@ export class EvmTransactionComponent implements OnChanges {
   constructor(
     private transactionService: TransactionService,
     public commonService: CommonService,
-    private mappingErrorService: MappingErrorService,
     public environmentService: EnvironmentService,
   ) {}
 
@@ -73,19 +76,6 @@ export class EvmTransactionComponent implements OnChanges {
         .pipe(
           switchMap((response) => {
             const txData = _.get(response, 'transaction[0]');
-            const linkS3 = _.get(response, 'transaction[0].data.linkS3');
-
-            // if (linkS3) {
-            //   return this.transactionService.getRawData(linkS3).pipe(
-            //     map((rawData) => {
-            //       if (response) {
-            //         txData.data = rawData;
-            //       }
-
-            //       return txData;
-            //     }),
-            //   );
-            // }
 
             return of(txData);
           }),
@@ -135,16 +125,13 @@ export class EvmTransactionComponent implements OnChanges {
       gasWanted: _.get(tx, 'gas_wanted'),
       gas_limit: _.get(tx, 'gas_limit'),
       memo: _.get(tx, 'memo'),
-      // TODO
-      amount: getBalance(_.get(tx, 'evm_transaction.value'), 18),
-      fee: getBalance(_.get(tx, 'fee[0].amount'), 18),
+      amount: getBalance(_.get(tx, 'evm_transaction.value'), this.coinInfo.coinDecimals),
+      fee: getBalance(_.get(tx, 'fee[0].amount'), this.coinInfo.coinDecimals),
       from: _.get(txMessage, 'sender'),
       to: _.get(txMessage, 'content.data.to'),
       type: _.get(txMessage, 'content.@type'),
       inputData,
-      eventLog: {
-        hexSignature: txMessage['content.data'],
-      },
+      eventLog: [],
     };
   }
 }
