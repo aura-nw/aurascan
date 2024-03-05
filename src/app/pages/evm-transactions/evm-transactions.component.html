@@ -28,13 +28,13 @@
                       </div>
                       <ng-container *ngSwitchCase="'from'">
                         <a
-                          *ngIf="data?.evm_transaction?.from"
-                          [copyBtn]="data?.evm_transaction?.from"
+                          *ngIf="data?.transaction_messages[0].sender"
+                          [copyBtn]="data?.transaction_messages[0].sender"
                           class="text--primary cursor-pointer"
-                          [routerLink]="['/transaction', data?.evm_transaction?.from]">
-                          {{ data?.evm_transaction?.from | ellipsis: 8 : 8 }}
+                          [routerLink]="['/transaction', data?.transaction_messages[0].sender]">
+                          {{ data?.transaction_messages[0].sender | ellipsis: 8 : 8 }}
                         </a>
-                        <span *ngIf="!data.evm_transaction.from">-</span>
+                        <span *ngIf="!data?.transaction_messages[0].sender">-</span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to'">
                         <a
@@ -53,7 +53,7 @@
                         {{ data?.evm_transaction?.height }}
                       </a>
                       <div *ngSwitchCase="'amount'">
-                        {{ +data.transaction_messages[0].content.data.value | mask: 'separator.6' }}
+                        {{ +data.transaction_messages[0].content.data.value | balance: 18 | mask: 'separator.6' }}
                         EVMOS
                       </div>
                       <div *ngSwitchCase="'aura_txn'" class="text-center">

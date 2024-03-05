@@ -113,6 +113,7 @@ export class TransactionService extends CommonService {
           transaction_messages {
             type
             content
+            sender
           }
           evm_transaction {
             hash
