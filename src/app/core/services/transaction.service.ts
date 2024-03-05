@@ -269,7 +269,7 @@ export class TransactionService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: 100,
+          limit: payload.limit,
           heightGT: null,
           heightLT: null,
           height: null,
