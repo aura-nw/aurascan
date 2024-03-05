@@ -32,7 +32,7 @@ export class ContractsTransactionsComponent implements OnInit {
   };
 
   pageSize = 20;
-  contractTransaction = {};
+  contractTransaction = { count: 0 };
   contractAddress = '';
   label = null;
   nextKey = null;
@@ -40,12 +40,9 @@ export class ContractsTransactionsComponent implements OnInit {
   timerGetUpTime: any;
   isLoadingTX = true;
   lengthTxsExecute = 0;
-  txsInstantiate = [];
   currentPage = 0;
   destroyed$ = new Subject<void>();
   modeTxType = { Out: 0, In: 1, Instantiate: 2 };
-  hashIns = '';
-  hasLoadIns = true;
   payload = {
     limit: 100,
   };
@@ -70,8 +67,8 @@ export class ContractsTransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
-    this.contractInfo.contractsAddress = this.contractAddress;
     this.payload['value'] = this.contractAddress;
+    this.contractInfo.contractsAddress = this.contractAddress;
     this.getData();
     this.timerGetUpTime = setInterval(() => {
       this.errTxt = null;
@@ -97,20 +94,12 @@ export class ContractsTransactionsComponent implements OnInit {
       if (params['label']) {
         this.label = params['label'] || this.modeTxType.Out;
       }
-      this.payload['key'] = null;
-      this.payload['compositeKey'] = null;
-      switch (+this.label) {
-        case 1:
-          this.payload['compositeKey'] = 'execute._contract_address';
-          break;
-        case 2:
-          this.payload['compositeKey'] = 'instantiate._contract_address';
-          break;
-        default:
-          this.payload['key'] = '_contract_address';
-          break;
+      if (this.label == 0) {
+        this.getListOutgoing(isReload);
+      } else {
+        this.payload['compositeKey'] = 'execute._contract_address';
+        this.getDataTable(null, isReload);
       }
-      this.getDataTable(null, isReload);
     });
   }
 
@@ -121,22 +110,9 @@ export class ContractsTransactionsComponent implements OnInit {
     }
     this.payload['heightLT'] = nextKey;
     this.transactionService.getListTxCondition(this.payload).subscribe({
-      next: (dataExecute) => {
-        if (dataExecute) {
-          const txsExecute = convertDataTransaction(dataExecute, this.coinInfo);
-          this.lengthTxsExecute = txsExecute.length;
-          if (dataExecute.transaction?.length > 0) {
-            this.nextKey = null;
-            if (txsExecute.length >= 100) {
-              this.nextKey = dataExecute?.transaction[txsExecute.length - 1].height;
-            }
-            if (this.contractTransaction['data']?.length > 0 && !isReload) {
-              this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-            } else if (txsExecute.length > 0) {
-              this.contractTransaction['data'] = txsExecute;
-            }
-          }
-          this.contractTransaction['count'] = this.contractTransaction['data']?.length;
+      next: (data) => {
+        if (data) {
+          this.getListData(data, isReload);
         }
       },
       error: (e) => {
@@ -151,6 +127,45 @@ export class ContractsTransactionsComponent implements OnInit {
         this.isLoadingTX = false;
       },
     });
+  }
+
+  getListOutgoing(isReload = false) {
+    this.payload['actionEq'] = "execute";
+    this.transactionService.getListOutgoing(this.payload).subscribe({
+      next: (data) => {
+        if (data) {
+          this.getListData(data, isReload);
+        }
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoadingTX = false;
+      },
+      complete: () => {
+        this.isLoadingTX = false;
+      },
+    });
+  }
+
+  getListData(data, isReload = false) {
+    const txsExecute = convertDataTransaction(data, this.coinInfo);
+    if (data.transaction?.length > 0) {
+      this.nextKey = null;
+      if (txsExecute.length >= 100) {
+        this.nextKey = data?.transaction[txsExecute.length - 1].height;
+      }
+      if (this.contractTransaction['data']?.length > 0 && !isReload) {
+        this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
+      } else if (txsExecute.length > 0) {
+        this.contractTransaction['data'] = txsExecute;
+      }
+      this.lengthTxsExecute = txsExecute.length;
+    }
+    this.contractTransaction['count'] = this.contractTransaction['data']?.length;
   }
 
   onChangePage(event) {

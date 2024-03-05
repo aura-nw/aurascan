@@ -20,6 +20,7 @@ import { ContractTab, ContractVerifyType } from '../../../../core/constants/cont
 export class ContractContentComponent implements OnInit, OnDestroy {
   @Input() contractsAddress = '';
   @Input() contractTypeData: ContractVerifyType;
+  @Input() contractId;
 
   TABS = CONTRACT_TAB.filter((tab) => [ContractTab.Transactions, ContractTab.Contract].includes(tab.key)).map(
     (tab) => ({
@@ -34,7 +35,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   contractVerifyType = ContractVerifyType;
   activeId = 0;
   limit = 25;
-  contractTransaction = {};
+  contractTransaction = { count: 0 };
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
   errTxt: string;
   contractInfo = {
@@ -49,7 +50,6 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject<void>();
   timerGetUpTime: any;
-
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
@@ -62,7 +62,6 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     private location: Location,
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
-
     valueColumn &&
       ((v) => {
         v.suffix =
@@ -128,22 +127,22 @@ export class ContractContentComponent implements OnInit, OnDestroy {
       const payload = {
         limit: this.limit,
         value: this.contractsAddress,
-        key: '_contract_address',
+        compositeKey: 'execute._contract_address',
       };
       this.transactionService.getListTxCondition(payload).subscribe({
         next: (res) => {
           const data = res;
-          if (res) {
+          if (res?.transaction?.length > 0) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
-            if (res?.transaction?.length > 0) {
-              this.contractTransaction['data'] = txsExecute;
-              this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
-            }
+            this.contractTransaction['data'] = txsExecute;
+            this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
 
             if (!isInit && this.dataInstantiate?.length > 0) {
               this.contractTransaction['data'] = [...this.contractTransaction['data'], this.dataInstantiate[0]];
               this.contractTransaction['count'] = this.contractTransaction['count'] + this.dataInstantiate?.length;
             }
+          } else {
+            this.contractTransaction.count = 0;
           }
         },
         error: (e) => {
