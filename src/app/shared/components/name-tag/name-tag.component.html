@@ -9,7 +9,7 @@
       [ngClass]="{
         'box-name-tag': !(addressOnly || value | nameTagTooltipPipe),
         'w-auto': widthAuto,
-        'private-name-tag': (addressOnly || value | isPrivateNameTag),
+        'private-name-tag': (addressOnly || value | isPrivateNameTag)
       }">
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
@@ -32,7 +32,7 @@
           [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
           width="16px"
           height="16px"
-          *ngIf="iconContract"/>
+          *ngIf="iconContract" />
         <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
       </ng-container>
       <ng-container *ngIf="fullText">
@@ -56,14 +56,14 @@
       alt="token-contract"
       [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
-      height="16px"/>
+      height="16px" />
     <img
       [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
       [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       alt="contract_verification"
       width="16px"
       height="16px"
-      *ngIf="isVerified"/>
+      *ngIf="isVerified" />
     <ng-container *ngIf="!fullText">
       <ng-container [ngTemplateOutlet]="displayNameTag"></ng-container>
     </ng-container>
@@ -104,17 +104,22 @@
       (mode === ENameTag.Private && value | isPrivateNameTag) || (mode === ENameTag.Public && value | isPublicNameTag);
       else noValue
     ">
-    <div class="box-name-tag text--white {{ mode === ENameTag.Private ? 'private-name-tag' : '' }}"
-         [appTooltip]="screen !== EScreen.Contract ? ((screen === EScreen.Account ? mode + ' name: ' : '') + (value | nameTag: mode === ENameTag.Private)) : null">
+    <div
+      class="box-name-tag text--white {{ mode === ENameTag.Private ? 'private-name-tag' : '' }}"
+      [appTooltip]="
+        screen !== EScreen.Contract
+          ? (screen === EScreen.Account ? mode + ' name: ' : '') + (value | nameTag: mode === ENameTag.Private)
+          : null
+      ">
       {{
-      (value
-        | nameTag: mode === ENameTag.Private
-        | ellipsis: (maxCharacter && !fullText ? maxCharacter : maxLengthNameTag)) || '-'
+        (value
+          | nameTag: mode === ENameTag.Private
+          | ellipsis: (maxCharacter && !fullText ? maxCharacter : maxLengthNameTag)) || '-'
       }}
       <a
         target="_blank"
         [href]="extendLink(value | nameTag: null : 'url')"
-        *ngIf="(value | nameTag: null : 'url') && mode === ENameTag.Public">
+        *ngIf="(value | nameTag: null : 'url') && mode === ENameTag.Public && screen != EScreen.WatchList">
         <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
       </a>
     </div>

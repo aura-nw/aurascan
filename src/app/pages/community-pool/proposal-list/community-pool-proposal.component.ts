@@ -66,7 +66,7 @@ export class CommunityPoolProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAddressDistribution();
+    this.getAddressDistribution().then((r) => {});
   }
 
   async getAddressDistribution() {
