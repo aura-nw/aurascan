@@ -12,60 +12,60 @@
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                   <td mat-cell *matCellDef="let data">
-                    <div *ngIf="data?.evm_transaction">
-                      <ng-container [ngSwitch]="template.matColumnDef">
-                        <div *ngSwitchCase="'timestamp'">
-                          {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
-                        </div>
+                    <ng-container [ngSwitch]="template.matColumnDef">
+                      <div *ngSwitchCase="'timestamp'">
+                        {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
+                      </div>
+                      <a
+                        *ngSwitchCase="'hash'"
+                        [copyBtn]="data?.evm_transaction?.hash"
+                        class="text--primary cursor-pointer"
+                        [routerLink]="['/transaction', data?.evm_transaction?.hash]">
+                        {{ data?.evm_transaction?.hash | ellipsis: 8 : 8 }}
+                      </a>
+                      <div *ngSwitchCase="'method'">
+                        {{ data.type | ellipsis: 15 }}
+                      </div>
+                      <ng-container *ngSwitchCase="'from'">
                         <a
-                          *ngSwitchCase="'hash'"
-                          [copyBtn]="data[template.matColumnDef]"
+                          *ngIf="data?.evm_transaction?.from"
+                          [copyBtn]="data?.evm_transaction?.from"
                           class="text--primary cursor-pointer"
-                          [routerLink]="['/transaction', data?.hash]">
-                          {{ data?.evm_transaction?.hash | ellipsis: 8 : 8 }}
+                          [routerLink]="['/transaction', data?.evm_transaction?.from]">
+                          {{ data?.evm_transaction?.from | ellipsis: 8 : 8 }}
                         </a>
-                        <div *ngSwitchCase="'method'">
-                          {{ data.type | ellipsis: 15 }}
-                        </div>
-                        <ng-container *ngSwitchCase="'from'">
-                          <a *ngIf="data?.evm_transaction?.from"
-                             [copyBtn]="data?.evm_transaction?.from"
-                             class="text--primary cursor-pointer"
-                             [routerLink]="['/transaction', data?.evm_transaction?.from]">
-                            {{ data?.evm_transaction?.from | ellipsis: 8 : 8 }}
-                          </a>
-                          <span *ngIf="!data.evm_transaction.from">-</span>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="'to'">
-                          <a *ngIf="data.evm_transaction.to"
-                             [copyBtn]="data?.evm_transaction?.to"
-                             class="text--primary cursor-pointer"
-                             [routerLink]="['/transaction', data?.evm_transaction?.to]">
-                            {{ data?.evm_transaction?.to | ellipsis: 8 : 8 }}
-                          </a>
-                          <span *ngIf="!data.evm_transaction.to">-</span>
-                        </ng-container>
-                        <a
-                          *ngSwitchCase="'height'"
-                          class="text--primary cursor-pointer block-link"
-                          [routerLink]="['/blocks', data['height']]">
-                          {{ data?.evm_transaction?.height }}
-                        </a>
-                        <div *ngSwitchCase="'amount'">
-                          {{ +data.transaction_messages[0].content.data.value | mask: 'separator.6' }}
-                          EVMOS
-                        </div>
-                        <div *ngSwitchCase="'aura_txn'" class="text-center">
-                          <a
-                            [routerLink]="['/transaction', data.hash]"
-                            target="_blank"
-                            class="ml-2 p-0 button button--ssm button-ghost d-inline-flex">
-                            <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
-                          </a>
-                        </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        <span *ngIf="!data.evm_transaction.from">-</span>
                       </ng-container>
-                    </div>
+                      <ng-container *ngSwitchCase="'to'">
+                        <a
+                          *ngIf="data.evm_transaction.to"
+                          [copyBtn]="data?.evm_transaction?.to"
+                          class="text--primary cursor-pointer"
+                          [routerLink]="['/transaction', data?.evm_transaction?.to]">
+                          {{ data?.evm_transaction?.to | ellipsis: 8 : 8 }}
+                        </a>
+                        <span *ngIf="!data.evm_transaction.to">-</span>
+                      </ng-container>
+                      <a
+                        *ngSwitchCase="'height'"
+                        class="text--primary cursor-pointer block-link"
+                        [routerLink]="['/blocks', data['height']]">
+                        {{ data?.evm_transaction?.height }}
+                      </a>
+                      <div *ngSwitchCase="'amount'">
+                        {{ +data.transaction_messages[0].content.data.value | mask: 'separator.6' }}
+                        EVMOS
+                      </div>
+                      <div *ngSwitchCase="'aura_txn'" class="text-center">
+                        <a
+                          [routerLink]="['/transaction', data.hash]"
+                          target="_blank"
+                          class="ml-2 p-0 button button--ssm button-ghost d-inline-flex">
+                          <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
+                        </a>
+                      </div>
+                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                    </ng-container>
                   </td>
                 </ng-container>
               </ng-container>
@@ -97,12 +97,13 @@
                     <div class="align-items-center d-flex mt-1">
                       <div class="d-flex align-items-center">
                         <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
-                        <span class="text--gray-light caption fw-normal">{{ data?.timestamp | customDateTime: 'DateTime' }}</span>
+                        <span class="text--gray-light caption fw-normal">{{
+                          data?.timestamp | customDateTime: 'DateTime'
+                        }}</span>
                       </div>
                       <div class="d-flex align-items-center ml-5">
                         <i class="ph ph-chat-circle-text mr-1 text--gray-4 body-mob"></i>
-                        <span class="line-claim text--gray-light caption fw-normal">{{ data?.type }}
-                </span>
+                        <span class="line-claim text--gray-light caption fw-normal">{{ data?.type }} </span>
                       </div>
                     </div>
                   </div>
@@ -116,9 +117,7 @@
                 <div class="divider divider-horizontal divider-lighter my-2"></div>
                 <div class="d-flex justify-content-between">
                   <div class="text--gray-4">Height</div>
-                  <a
-                    class="text--primary cursor-pointer block-link"
-                    [routerLink]="['/blocks', data['height']]">
+                  <a class="text--primary cursor-pointer block-link" [routerLink]="['/blocks', data['height']]">
                     {{ data?.evm_transaction?.height }}
                   </a>
                 </div>
@@ -131,30 +130,33 @@
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">From</div>
-                  <a *ngIf="data?.evm_transaction?.from"
-                     [copyBtn]="data?.evm_transaction?.from"
-                     class="text--primary cursor-pointer"
-                     [routerLink]="['/transaction', data?.evm_transaction?.from]">
+                  <a
+                    *ngIf="data?.evm_transaction?.from"
+                    [copyBtn]="data?.evm_transaction?.from"
+                    class="text--primary cursor-pointer"
+                    [routerLink]="['/transaction', data?.evm_transaction?.from]">
                     {{ data?.evm_transaction?.from | ellipsis: 8 : 8 }}
                   </a>
                   <span *ngIf="!data.evm_transaction.from" class="text--white">-</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">To</div>
-                  <a *ngIf="data?.evm_transaction?.to"
-                     [copyBtn]="data?.evm_transaction?.to"
-                     class="text--primary cursor-pointer"
-                     [routerLink]="['/transaction', data?.evm_transaction?.to]">
+                  <a
+                    *ngIf="data?.evm_transaction?.to"
+                    [copyBtn]="data?.evm_transaction?.to"
+                    class="text--primary cursor-pointer"
+                    [routerLink]="['/transaction', data?.evm_transaction?.to]">
                     {{ data?.evm_transaction?.to | ellipsis: 8 : 8 }}
                   </a>
                   <span *ngIf="!data.evm_transaction.to" class="text--white">-</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">AURA Txn</div>
-                  <a *ngIf="data?.hash"
-                     [copyBtn]="data.hash"
-                     class="text--primary cursor-pointer"
-                     [routerLink]="['/transaction', data?.hash]">
+                  <a
+                    *ngIf="data?.hash"
+                    [copyBtn]="data.hash"
+                    class="text--primary cursor-pointer"
+                    [routerLink]="['/transaction', data?.hash]">
                     {{ data?.hash | ellipsis: 8 : 8 }}
                   </a>
                   <span *ngIf="!data.hash" class="text--white">-</span>

@@ -94,6 +94,51 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
   }
 
+  queryEvmTransactionList(payload) {
+    const envDB = 'evmostestnet'; // hard code
+    const operationsDoc = `
+    query QueryEvmTransactionList(
+      $limit: Int = 20
+      $order: order_by = desc
+    ) {
+      ${envDB} {
+        transaction(
+          limit: $limit
+          order_by: [{ height: $order}],
+          where: {evm_transaction: {hash: {_is_null: false}}}
+        ) {
+          id
+          hash
+          timestamp
+          transaction_messages {
+            type
+            content
+          }
+          evm_transaction {
+            hash
+            from
+            data
+            height
+            to
+            value
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+        },
+        operationName: 'QueryEvmTransactionList',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+  }
+
   getListTxDetail(payload) {
     const operationsDoc = `
     query queryTxDetail(

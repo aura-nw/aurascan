@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {TransactionService} from 'src/app/core/services/transaction.service';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { Component } from '@angular/core';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-evm-transactions',
@@ -12,14 +12,14 @@ import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 })
 export class EvmTransactionsComponent {
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'hash', headerCellDef: 'EVM Txn hash', headerWidth: 214},
-    {matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 216},
-    {matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 110},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 136},
-    {matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214},
-    {matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214},
-    {matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176},
-    {matColumnDef: 'aura_txn', headerCellDef: 'AURA Txn', headerWidth: 102},
+    { matColumnDef: 'hash', headerCellDef: 'EVM Txn hash', headerWidth: 214 },
+    { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 216 },
+    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 110 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 136 },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214 },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214 },
+    { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176 },
+    { matColumnDef: 'aura_txn', headerCellDef: 'AURA Txn', headerWidth: 102 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -33,8 +33,7 @@ export class EvmTransactionsComponent {
   constructor(
     private layout: BreakpointObserver,
     private transactionService: TransactionService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getListTx();
@@ -45,7 +44,7 @@ export class EvmTransactionsComponent {
       limit: this.pageSize,
     };
 
-    this.transactionService.queryTransactionByEvmHash(payload).subscribe({
+    this.transactionService.queryEvmTransactionList(payload).subscribe({
       next: (res) => {
         if (res?.transaction?.length > 0) {
           const txs = res.transaction;
