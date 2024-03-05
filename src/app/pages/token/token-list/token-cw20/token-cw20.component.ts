@@ -5,15 +5,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
-import * as _ from 'lodash';
 import { Subject } from 'rxjs';
-import { debounceTime, filter, map, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, map, takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
-import local from 'src/app/core/utils/storage/local';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../../core/constants/common.constant';
+import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../core/constants/common.constant';
 import { ETokenCoinType, ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 
@@ -82,6 +79,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
         this.getListToken();
+        this.pageChange.selectPage(0);
       });
   }
 
