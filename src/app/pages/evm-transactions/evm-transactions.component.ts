@@ -26,7 +26,8 @@ export class EvmTransactionsComponent {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
-  currencies = this.env.chainInfo.currencies[0];
+  denom = this.env.chainInfo.currencies[0].coinDenom;
+  decimal = this.env.chainInfo.currencies[0].coinDecimals;
   maxPageSize = 20;
   loading = true;
   errTxt = null;
