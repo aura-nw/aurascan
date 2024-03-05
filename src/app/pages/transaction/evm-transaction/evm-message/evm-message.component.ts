@@ -9,7 +9,13 @@ export class EvmMessageComponent {
   @Input() title: string;
   @Input() type: string;
   @Input() inputData: { [key: string]: unknown };
-  @Input() eventLog: { [key: string]: unknown };
+  @Input() eventLog: {
+    id: number;
+    contractName?: string;
+    contract?: string;
+    topics?: unknown[];
+    data?: unknown;
+  }[];
 
   logs = [
     {

@@ -20,7 +20,6 @@ export class TransactionService extends CommonService {
   }
 
   queryTransactionByEvmHash(payload) {
-    const envDB = 'evmostestnet'; // hard code
     const operationsDoc = `
     query QueryTransactionByEvmHash(
       $limit: Int = 100
@@ -32,7 +31,7 @@ export class TransactionService extends CommonService {
       $hash: String = null
       $height: Int = null
     ) {
-      ${envDB} {
+      ${this.envDB} {
         transaction(
           limit: $limit
           where: {
@@ -101,17 +100,16 @@ export class TransactionService extends CommonService {
         },
         operationName: 'QueryTransactionByEvmHash',
       })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   queryEvmTransactionList(payload) {
-    const envDB = 'evmostestnet'; // hard code
     const operationsDoc = `
     query QueryEvmTransactionList(
       $limit: Int = 20
       $order: order_by = desc
     ) {
-      ${envDB} {
+      ${this.envDB} {
         transaction(
           limit: $limit
           order_by: [{ height: $order}],
@@ -144,7 +142,7 @@ export class TransactionService extends CommonService {
         },
         operationName: 'QueryEvmTransactionList',
       })
-      .pipe(map((res) => (res?.data ? res?.data[envDB] : null)));
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getListTxDetail(payload) {
