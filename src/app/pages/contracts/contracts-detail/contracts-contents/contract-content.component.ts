@@ -35,7 +35,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   contractVerifyType = ContractVerifyType;
   activeId = 0;
   limit = 25;
-  contractTransaction = {};
+  contractTransaction = { count: 0 };
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
   errTxt: string;
   contractInfo = {
@@ -126,22 +126,23 @@ export class ContractContentComponent implements OnInit, OnDestroy {
     if (this.commonService.isValidContract(this.contractsAddress)) {
       const payload = {
         limit: this.limit,
-        id: this.contractId,
+        value: this.contractsAddress,
+        compositeKey: 'execute._contract_address',
       };
       this.transactionService.getListTxCondition(payload).subscribe({
         next: (res) => {
           const data = res;
-          if (res) {
+          if (res?.transaction?.length > 0) {
             const txsExecute = convertDataTransaction(data, this.coinInfo);
-            if (res?.transaction?.length > 0) {
-              this.contractTransaction['data'] = txsExecute;
-              this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
-            }
+            this.contractTransaction['data'] = txsExecute;
+            this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
 
             if (!isInit && this.dataInstantiate?.length > 0) {
               this.contractTransaction['data'] = [...this.contractTransaction['data'], this.dataInstantiate[0]];
               this.contractTransaction['count'] = this.contractTransaction['count'] + this.dataInstantiate?.length;
             }
+          } else {
+            this.contractTransaction.count = 0;
           }
         },
         error: (e) => {
