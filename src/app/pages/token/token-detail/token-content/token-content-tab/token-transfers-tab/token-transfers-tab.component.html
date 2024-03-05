@@ -83,8 +83,8 @@
                     {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'type'">
-                    <div class="aura-status status" [appTooltip]="data.lstTypeTemp | combineTxsMsg">
-                      <span>{{ data[template.matColumnDef] | ellipsis: 25 }}</span>
+                    <div class="aura-status status text-nowrap" [appTooltip]="data.lstTypeTemp | combineTxsMsg">
+                      <span>{{ data[template.matColumnDef] | ellipsis: 22 }}</span>
                       <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
                         +{{ data.lstTypeTemp?.length - 1 }}
                       </span>
