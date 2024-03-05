@@ -190,6 +190,7 @@ export class TransactionService extends CommonService {
           code
           gas_used
           gas_wanted
+          fee
           transaction_messages {
             content
           }
