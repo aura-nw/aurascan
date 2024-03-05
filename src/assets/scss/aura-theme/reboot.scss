@@ -100,3 +100,7 @@ app-paginator {
 .mat-button-focus-overlay {
   background-color: transparent !important;
 }
+
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+  background: unset !important;
+}

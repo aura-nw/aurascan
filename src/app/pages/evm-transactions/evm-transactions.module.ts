@@ -10,6 +10,7 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EvmTransactionRoutingModule } from './evm-transactions-routing.module';
 import { EvmTransactionsComponent } from './evm-transactions.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [EvmTransactionsComponent],
@@ -24,6 +25,7 @@ import { EvmTransactionsComponent } from './evm-transactions.component';
     MaterialModule,
     CommonDirectiveModule,
     CustomPipeModule,
+    MatIconModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })

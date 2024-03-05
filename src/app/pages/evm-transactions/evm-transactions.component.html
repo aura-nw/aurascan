@@ -1,48 +1,51 @@
-<app-pagetitle title="EVM Transactions" [displayInfo]="true"></app-pagetitle>
-<section *ngIf="!loading" class="mt-4 mt-md-6">
-  <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-    <div class="card">
-      <div class="card-body">
-        <div class="table-responsive d-none d-lg-block">
-          <table mat-table [dataSource]="dataSource" class="aura-table tx">
-            <ng-container *ngFor="let template of templates; index as i">
-              <ng-container [matColumnDef]="template.matColumnDef">
-                <th
-                  mat-header-cell [style.min-width]="template.headerWidth + 'px'"
-                  *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate"></div>
-                </th>
-
-                <td mat-cell *matCellDef="let data">
-                  <div>
+<ng-container class="evm-transaction" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <app-pagetitle title="EVM Transactions" [displayInfo]="!breakpoint.value.matches"></app-pagetitle>
+  <section *ngIf="!loading" class="mt-4 mt-md-6">
+    <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+      <div class="card" *ngIf="!breakpoint.value.matches">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="aura-table tx">
+              <ng-container *ngFor="let template of templates; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef">
+                  <th mat-header-cell [style.min-width]="template.headerWidth + 'px'" *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+                  <td mat-cell *matCellDef="let data">
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'timestamp'">
                         {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                       </div>
                       <a
-                        *ngSwitchCase="'tx_hash'"
+                        *ngSwitchCase="'evm_hash'"
                         [copyBtn]="data[template.matColumnDef]"
-                        class="text--primary cursor-pointer hash-link"
-                        [routerLink]="['/transaction', data['tx_hash']]">
+                        class="text--primary cursor-pointer"
+                        [routerLink]="['/transaction', data[template.matColumnDef]]">
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                       <div *ngSwitchCase="'method'">
-                        {{ data[template.matColumnDef] | ellipsis: 15 }}
+                        {{ data.type | ellipsis: 15 }}
                       </div>
-                      <a
-                        *ngSwitchCase="'from'"
-                        [copyBtn]="data[template.matColumnDef]"
-                        class="text--primary cursor-pointer hash-link"
-                        [routerLink]="['/transaction', data['from']]">
-                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
-                      </a>
-                      <a
-                        *ngSwitchCase="'to'"
-                        [copyBtn]="data[template.matColumnDef]"
-                        class="text--primary cursor-pointer hash-link"
-                        [routerLink]="['/transaction', data['to']]">
-                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
-                      </a>
+                      <ng-container *ngSwitchCase="'from'">
+                        <a
+                          *ngIf="data[template.matColumnDef]"
+                          [copyBtn]="data[template.matColumnDef]"
+                          class="text--primary cursor-pointer"
+                          [routerLink]="['/transaction', data[template.matColumnDef]]">
+                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                        </a>
+                        <span *ngIf="!data[template.matColumnDef]">-</span>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'to'">
+                        <a
+                          *ngIf="data[template.matColumnDef]"
+                          [copyBtn]="data[template.matColumnDef]"
+                          class="text--primary cursor-pointer"
+                          [routerLink]="['/transaction', data[template.matColumnDef]]">
+                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                        </a>
+                        <span *ngIf="!data[template.matColumnDef]">-</span>
+                      </ng-container>
                       <a
                         *ngSwitchCase="'height'"
                         class="text--primary cursor-pointer block-link"
@@ -50,10 +53,10 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'amount'">
-                        {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                        {{ data[template.matColumnDef] | balance: 18 | mask: 'separator.6' }}
                         EVMOS
                       </div>
-                      <div *ngSwitchCase="'aura_txn'" class="text-center">
+                      <div *ngSwitchCase="'hash'" class="text-center">
                         <a
                           [routerLink]="['/transaction', data[template.matColumnDef]]"
                           target="_blank"
@@ -63,63 +66,115 @@
                       </div>
                       <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
-                  </div>
-                </td>
+                  </td>
+                </ng-container>
               </ng-container>
-            </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns"></tr>
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell g-no-data" colspan="9999">
-                {{ 'NO DATA' | translate }}
-              </td>
-            </tr>
-          </table>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{ 'NO DATA' | translate }}
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
-        <!--
-        <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
-          <app-card-mob-simple
-            *ngFor="let data of dataTx"
-            [dataCard]="data"
-            [title]="{
-              size: 'md',
-              titleClass: 'h6-mob',
-              label: data.tx_hash | ellipsis: 6 : 6,
-              subLabelContent: data.type,
-              subLabelClass: 'label__status',
-              status: data.code,
-              link: '/transaction/' + data.tx_hash
-            }"
-            [content]="[
-              {
-                label: 'Fee',
-                class: 'body-01-mob text--gray-1',
-                info: (+data.fee | mask: 'separator.6') +
-                 ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
-              },
-              {
-                label: 'Time',
-                class: 'body-01-mob text--gray-1 card__date',
-                info:
-                  '<span>' +
-                  (data.timestamp | customDateTime: 'DateOnly') +
-                  '</span>' +
-                  '<span>' +
-                  (data.timestamp | customDateTime: 'TimeOnly') +
-                  '</span>'
-              }
-            ]"></app-card-mob-simple>
-        </div>
-        -->
       </div>
-    </div>
-  </ng-container>
-  <ng-template #noValues>
-    <app-table-no-data [textNull]="errTxt"></app-table-no-data>
-  </ng-template>
-</section>
+      <div *ngIf="breakpoint.value.matches">
+        <div *ngFor="let data of dataSource?.data">
+          <div class="custom-card-mob-simple card-explain body-01 mb-2 px-0">
+            <mat-expansion-panel class="px-3" hideToggle #panel [disabled]="true">
+              <mat-expansion-panel-header class="px-0">
+                <mat-panel-title>
+                  <div>
+                    <a
+                      [copyBtn]="data?.evm_hash"
+                      class="text--primary cursor-pointer body-02"
+                      [routerLink]="['/transaction', data?.evm_hash]">
+                      {{ data?.evm_hash | ellipsis: 8 : 8 }}
+                    </a>
+                    <div class="align-items-center d-flex mt-1">
+                      <div class="d-flex align-items-center">
+                        <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
+                        <span class="text--gray-light caption fw-normal">{{
+                          data?.timestamp | customDateTime: 'DateTime'
+                        }}</span>
+                      </div>
+                      <div class="d-flex align-items-center ml-5">
+                        <i class="ph ph-chat-circle-text mr-1 text--gray-4 body-mob"></i>
+                        <span class="line-claim text--gray-light caption fw-normal">{{ data?.type }} </span>
+                      </div>
+                    </div>
+                  </div>
+                </mat-panel-title>
+                <div class="body-01 text--white d-flex align-items-center" (click)="panel.expanded = !panel.expanded">
+                  <i class="ph ph-caret-up" *ngIf="panel.expanded"></i>
+                  <i class="ph ph-caret-down" *ngIf="!panel.expanded"></i>
+                </div>
+              </mat-expansion-panel-header>
+              <div class="body-03">
+                <div class="divider divider-horizontal divider-lighter my-2"></div>
+                <div class="d-flex justify-content-between">
+                  <div class="text--gray-4">Height</div>
+                  <a class="text--primary cursor-pointer block-link" [routerLink]="['/blocks', data['height']]">
+                    {{ data?.height }}
+                  </a>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="text--gray-4">Amount</div>
+                  <div class="text--white">
+                    {{ data.amount | balance: 18 | mask: 'separator.6' }}
+                    EVMOS
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="text--gray-4">From</div>
+                  <a
+                    *ngIf="data?.from"
+                    [copyBtn]="data?.from"
+                    class="text--primary cursor-pointer"
+                    [routerLink]="['/transaction', data?.from]">
+                    {{ data?.from | ellipsis: 8 : 8 }}
+                  </a>
+                  <span *ngIf="!data?.from" class="text--white">-</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="text--gray-4">To</div>
+                  <a
+                    *ngIf="data?.to"
+                    [copyBtn]="data?.to"
+                    class="text--primary cursor-pointer"
+                    [routerLink]="['/transaction', data?.to]">
+                    {{ data?.to | ellipsis: 8 : 8 }}
+                  </a>
+                  <span *ngIf="!data.evm_transaction.to" class="text--white">-</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="text--gray-4">AURA Txn</div>
+                  <a
+                    *ngIf="data?.hash"
+                    [copyBtn]="data.hash"
+                    class="text--primary cursor-pointer"
+                    [routerLink]="['/transaction', data?.hash]">
+                    {{ data?.hash | ellipsis: 8 : 8 }}
+                  </a>
+                  <span *ngIf="!data.hash" class="text--white">-</span>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noValues>
+      <div class="my-20 mb-lg-10">
+        <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+      </div>
+    </ng-template>
+  </section>
 
-<div *ngIf="loading">
-  <app-loading-sprint></app-loading-sprint>
-</div>
+  <div *ngIf="loading" class="my-20 mb-lg-10">
+    <app-loading-sprint></app-loading-sprint>
+  </div>
+</ng-container>
