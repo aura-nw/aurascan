@@ -452,8 +452,8 @@
                             [value]="item.fromAddress || currentAddress"
                             [iconContract]="item.fromAddress || currentAddress | isContract"
                             [linkRouter]="[
-                              (item.toAddress || currentAddress | isContract) ? '/contracts' : '/account',
-                              item.toAddress || currentAddress
+                              (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                              item.fromAddress || currentAddress
                             ]"
                             [isEnableRouter]="
                               !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
