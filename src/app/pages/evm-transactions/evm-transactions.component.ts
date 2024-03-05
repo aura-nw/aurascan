@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
@@ -13,6 +13,14 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
   styleUrls: ['./evm-transactions.component.scss'],
 })
 export class EvmTransactionsComponent {
+  dataTx: any[];
+  denom = this.env.chainInfo.currencies[0].coinDenom;
+  decimal = this.env.chainInfo.currencies[0].coinDecimals;
+  maxPageSize = 20;
+  loading = true;
+  errTxt = null;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
   templates: Array<TableTemplate> = [
     { matColumnDef: 'evm_hash', headerCellDef: 'EVM Txn hash', headerWidth: 214 },
     { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 216 },
@@ -21,17 +29,10 @@ export class EvmTransactionsComponent {
     { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214 },
     { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176 },
-    { matColumnDef: 'hash', headerCellDef: 'AURA Txn', headerWidth: 102 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `${this.denom} Txn` : 'Txn', headerWidth: 102 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
-  dataTx: any[];
-  denom = this.env.chainInfo.currencies[0].coinDenom;
-  decimal = this.env.chainInfo.currencies[0].coinDecimals;
-  maxPageSize = 20;
-  loading = true;
-  errTxt = null;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private layout: BreakpointObserver,
