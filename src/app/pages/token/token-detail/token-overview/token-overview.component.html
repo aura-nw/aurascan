@@ -69,7 +69,7 @@
                     <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
                       (<span>
                         {{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}% </span
-                      >)
+                    >)
                     </span>
                   </div>
                 </div>
@@ -78,18 +78,17 @@
               <div class="pl-4">
                 <div class="text--gray-5 caption fw-normal">In-chain Supply Amount</div>
                 <div class="body-02 text--gray-11">
-                  <div [appTooltip]="{ priceAmount: tokenDetail.supplyAmount }">
-                    <div class="text--gray-1 item-amount">
-                      <span *ngIf="tokenDetail.supplyAmount | lt: 0.001">
-                        {{ tokenDetail.supplyAmount == 0 ? 0 : '< 0.001' }}
-                      </span>
-                      <span
-                        [decimal]="0"
-                        [appBigNumber]="tokenDetail.supplyAmount || 0"
-                        *ngIf="tokenDetail.supplyAmount | gte: 0.001"></span>
-                    </div>
-                  </div>
-                  {{ tokenDetail?.symbol }}
+                  <span class="text--gray-1"
+                        [appTooltip]="{ priceAmount: tokenDetail.supplyAmount }">
+                    <span *ngIf="tokenDetail.supplyAmount | lt: 0.001">
+                      {{ tokenDetail.supplyAmount == 0 ? 0 : '< 0.001' }}
+                    </span>
+                    <span
+                      [decimal]="0"
+                      [appBigNumber]="tokenDetail.supplyAmount || 0"
+                      *ngIf="tokenDetail.supplyAmount | gte: 0.001"></span>
+                  </span>
+                  <span class="ml-1">{{ tokenDetail?.symbol }}</span>
                 </div>
               </div>
             </div>
@@ -100,31 +99,23 @@
           <td colspan="2">
             <div class="d-flex">
               <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span>
-              <div class="body-02 text--gray-11">
-                <div [appTooltip]="{ priceAmount: tokenDetail.supplyAmount, multipliedBy: tokenDetail.price }">
-                  <div class="text--gray-1 item-amount">
+              <div class="body-02 text--gray-1"
+                   [appTooltip]="{ priceAmount: tokenDetail.supplyAmount, multipliedBy: tokenDetail.price, lt: 0.01 }">
+                <span
+                  *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
+                  {{ tokenDetail.price == 0 || tokenDetail.supplyAmount == 0 ? '$0.00' : '< $0.01' }}
+                </span>
+                <ng-container *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
+                  <span *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
+                    {{ tokenDetail.price == 0 ? '$0.00' : '< $0.01' }}
+                  </span>
+                  <span *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
                     <span
-                      *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
-                      {{ tokenDetail.price == 0 || tokenDetail.supplyAmount == 0 ? '$0.00' : '< $0.01' }}
-                    </span>
-                    <div
-                      *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
-                      <span
-                        *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
-                        {{ tokenDetail.price == 0 ? '$0.00' : '< $0.01' }}
-                      </span>
-                      <div
-                        *ngIf="
-                          (tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)
-                        ">
-                        <span
-                          [decimal]="0"
-                          [appBigNumber]="tokenDetail.supplyAmount"
-                          [tokenPrice]="tokenDetail.price"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      [decimal]="0"
+                      [appBigNumber]="tokenDetail.supplyAmount"
+                      [tokenPrice]="tokenDetail.price"></span>
+                  </span>
+                </ng-container>
               </div>
             </div>
           </td>
@@ -146,8 +137,8 @@
                   *ngIf="!tokenDetail.isNFTContract">
                   (<span>
                     {{ tokenDetail.isHolderUp ? '↑' : '↓' }}
-                    {{ tokenDetail.holderChange || 0 | formatDigit: 2 }}% </span
-                  >)
+                  {{ tokenDetail.holderChange || 0 | formatDigit: 2 }}% </span
+                >)
                 </span>
               </div>
             </div>

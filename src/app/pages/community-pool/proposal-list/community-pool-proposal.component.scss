@@ -4,22 +4,22 @@
 
 .aura-table.proposal-table th.mat-header-cell:nth-child(4),
 .aura-table.proposal-table th.mat-header-cell:nth-child(5) {
-  min-width: 156px;
+  width: 156px;
 }
 
 .aura-table.proposal-table th.mat-header-cell:nth-child(1) {
-  min-width: 4%;
+  width: 80px;
 }
 
 .aura-table.proposal-table th.mat-header-cell:nth-child(2) {
-  min-width: 300px;
+  width: 200px;
 }
 
 .aura-table.proposal-table th.mat-header-cell:nth-child(3),
 .aura-table.proposal-table th.mat-header-cell:nth-child(6) {
-  min-width: 110px;
+  width: 110px;
 }
 
 .aura-table.proposal-table th.mat-header-cell:nth-child(7) {
-  min-width: 175px;
+  width: 175px;
 }
