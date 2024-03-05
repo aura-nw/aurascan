@@ -19,7 +19,7 @@
         [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
         <span>View all</span>
       </button>
-      <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)" [currentLabel]="label"> </app-dropdown>
+      <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)" [currentLabel]="label"></app-dropdown>
     </div>
   </div>
   <div *ngIf="isLoading">
@@ -65,18 +65,15 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
                     <div
-                      class="aura-status aura-tooltip-contain d-flex align-items-center"
-                      [style.justify-content]="template?.justify || 'flex-start'"
+                      class="aura-status d-flex align-items-center"
+                      [appTooltip]="data.lst_type | combineTxsMsg"
                       *ngIf="data[template.matColumnDef]">
-                      <div class="status aura-tooltip-object" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
+                      <div [ngClass]="'status-' + data[template.matColumnDef]?.toUpperCase()">
                         {{ data[template.matColumnDef] }}
                       </div>
                       <div *ngIf="data.lst_type?.length > 1" class="ml-1 text--gray-4">
                         +{{ data.lst_type?.length - 1 }}
                       </div>
-
-                      <app-tooltip-customize [class]="'message-custom'" [content]="data.lst_type | combineTxsMsg">
-                      </app-tooltip-customize>
                     </div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'result'">

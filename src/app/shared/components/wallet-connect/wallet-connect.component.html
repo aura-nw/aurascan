@@ -12,7 +12,7 @@
     <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
       <div class="button button-pill button-outline button-outline--gradient button--xs caption fw-normal">
         <span class="icon-connect connected"></span>
-        <span class="fw-semibold fw-normal-mob text--gray-1 d-flex align-items-center">
+        <span class="fw-semibold fw-normal-mob text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
           <span class="txt-wallet cursor-pointer" [routerLink]="['/account/', ng.wallet?.address]">
             <ng-container *ngIf="ng.wallet?.username">
               {{ ng.wallet?.username | ellipsis: 16 }}
@@ -21,16 +21,6 @@
               {{ ng.wallet?.address | ellipsis: 8 : 8 }}
             </ng-container>
           </span>
-          <div class="aura-tooltip-contain ml-2">
-            <button
-              class="aura-tooltip-object disabled-hover p-0"
-              #tooltip
-              (click)="commonService.showToolTip(tooltip)"
-              [cdkCopyToClipboard]="ng.wallet?.address">
-              <i class="ph-light ph-copy body-01 text--white"></i>
-            </button>
-            <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-          </div>
         </span>
       </div>
       <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
@@ -41,7 +31,7 @@
           alt=""
           width="18px"
           height="18px"
-          class="ml-1" />
+          class="ml-1"/>
       </div>
     </div>
   </ng-container>

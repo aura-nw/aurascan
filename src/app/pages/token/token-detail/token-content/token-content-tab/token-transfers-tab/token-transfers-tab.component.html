@@ -5,7 +5,7 @@
   A total of {{ pageData?.length | number }} transfer{{ pageData?.length > 1 ? 's' : '' }} found
 </div>
 <div *ngIf="pageData?.length > 0" class="divider divider-horizontal my-4 d-lg-none"></div>
-<div class="transfer-table-container overflow-scroll-x spacer-tooltip--sm">
+<div class="transfer-table-container overflow-scroll-x">
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <table mat-table [dataSource]="dataSource" class="aura-table">
       <ng-container *ngFor="let template of template; index as i">
@@ -81,35 +81,18 @@
               <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                 <ng-container [ngSwitch]="template.matColumnDef">
                   <ng-container *ngSwitchCase="'amountToken'">
-                    <div class="aura-tooltip-contain">
-                      <div *ngIf="data.amount === 0">0</div>
+                    <div *ngIf="data.amount === 0">0</div>
+                    <div *ngIf="data.amount !== 0">
                       <div
-                        class="aura-tooltip-object"
-                        *ngIf="data.amount !== 0 && (data.amount | balance: data.decimal) | lt: 0.001">
+                        *ngIf="data.amount | balance: data.decimal | lt: 0.001"
+                        [appTooltip]="{ priceAmount: data.amount, decimal: data.decimal }">
                         {{ '<0.001' }}
                       </div>
                       <div
-                        class="aura-tooltip-object"
                         *ngIf="data.amount | balance: data.decimal | gte: 0.001"
-                        [class.cursor-text]="
-                          data.amount === 0 ||
-                          ((data.amount | balance: data.decimal | gte: 0.001) &&
-                            (data.amount | balance: data.decimal | lt: 1000000))
-                        "
+                        [appTooltip]="{ priceAmount: data.amount, decimal: data.decimal }"
                         [appBigNumber]="data.amount"
                         [decimal]="data.decimal"></div>
-                      <app-tooltip-customize
-                        *ngIf="
-                          +data.amount !== 0 &&
-                          ((data.amount | balance: data.decimal | lt: 0.001) ||
-                            (data.amount | balance: data.decimal | gte: 1000000))
-                        "
-                        [content]="
-                          (data.amount | balance: data.decimal | lt: 0.001)
-                            ? (data.amount | balance: data.decimal)
-                            : (data.amount | balance: data.decimal | mask: 'separator')
-                        ">
-                      </app-tooltip-customize>
                     </div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'status'">
@@ -129,16 +112,11 @@
                     {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'type'">
-                    <div class="aura-status aura-tooltip-contain status">
-                      <div class="aura-tooltip-object">
-                        <span>{{ data[template.matColumnDef] | ellipsis: 25 }}</span>
-                        <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
-                          +{{ data.lstTypeTemp?.length - 1 }}
-                        </span>
-                      </div>
-
-                      <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
-                      </app-tooltip-customize>
+                    <div class="aura-status status" [appTooltip]="data.lstTypeTemp | combineTxsMsg">
+                      <span>{{ data[template.matColumnDef] | ellipsis: 25 }}</span>
+                      <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                        +{{ data.lstTypeTemp?.length - 1 }}
+                      </span>
                     </div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'tx_hash'">
