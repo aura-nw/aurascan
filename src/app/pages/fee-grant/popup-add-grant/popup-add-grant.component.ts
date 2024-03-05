@@ -213,7 +213,7 @@ export class PopupAddGrantComponent implements OnInit {
             let errorMessage = this.mappingErrorService.checkMappingError(error?.message, error?.code);
             this.toastr.error(errorMessage);
           } catch (e) {
-            this.toastr.error(error);
+            this.toastr.error(error?.message ?? error);
           }
         }
       });

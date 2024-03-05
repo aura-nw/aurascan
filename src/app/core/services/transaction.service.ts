@@ -316,7 +316,10 @@ export class TransactionService extends CommonService {
           code
           gas_used
           gas_wanted
-          data
+          fee
+          transaction_messages {
+            content
+          }
         }
       }
     }
@@ -336,6 +339,69 @@ export class TransactionService extends CommonService {
           indexGT: null,
           indexLT: null,
           height: null,
+        },
+        operationName: 'queryTransaction',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListOutgoing(payload) {
+    const operationsDoc = `    
+    query queryTransaction(  
+      $limit: Int = 100
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $hash: String = null
+      $height: Int = null
+      $actionEq: String = null
+      $actionNEq: String = null
+      $value: String = null
+    ) {
+      ${this.envDB} {
+        transaction(
+          limit: $limit
+          where: {
+            hash: { _eq: $hash }
+            height: { _eq: $height }
+            smart_contract_events: {
+              smart_contract: { address: { _eq: $value } }
+              _and: [
+                { action: { _eq: $actionEq } }
+                { action: { _nlike: $actionNEq } }
+              ]
+            }
+            _and: [
+              { height: { _gt: $heightGT } }
+              { height: { _lt: $heightLT } }
+            ]
+          }
+          order_by: { height: desc }
+        ) {
+          id
+          height
+          hash
+          timestamp
+          code
+          data
+          fee
+          transaction_messages {
+            content
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          heightGT: null,
+          heightLT: null,
+          height: null,
+          actionNEq: payload.actionNEq,
+          actionEq: payload.actionEq,
+          value: payload.value,
         },
         operationName: 'queryTransaction',
       })

@@ -220,8 +220,10 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
 
 export function convertDataTransaction(data, coinInfo) {
   const txs = _.get(data, 'transaction').map((element) => {
-    if (!element['data']['body'] && !element['data']['linkS3']) {
-      element['data']['body'] = element['data']['tx']['body'];
+    if (element['data']) {
+      if (!element['data']['body'] && !element['data']['linkS3']) {
+        element['data']['body'] = element['data']['tx']['body'];
+      }
     }
 
     const code = _.get(element, 'code');
@@ -243,7 +245,7 @@ export function convertDataTransaction(data, coinInfo) {
     }
 
     const fee = balanceOf(
-      _.get(element, 'fee[0].amount') || _.get(element, 'data.tx.auth_info.fee.amount[0].amount') || 0,
+      _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
     ).toFixed(coinInfo.coinDecimals);
 
     const typeOrigin = _type;
@@ -269,7 +271,8 @@ export function convertDataTransaction(data, coinInfo) {
 
     if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
       try {
-        let dataTemp = JSON.parse(messages[0]?.msg);
+        let msg = _.get(messages, '[0].msg') || _.get(messages, '[0].content.msg');
+        let dataTemp = JSON.parse(msg);
         let action = Object.keys(dataTemp)[0];
         type = 'Contract: ' + action;
       } catch {}

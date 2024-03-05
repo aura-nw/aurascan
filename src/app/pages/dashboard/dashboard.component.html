@@ -5,7 +5,7 @@
         <ngb-carousel [showNavigationArrows]="bannerList.length > 1" [showNavigationIndicators]="bannerList.length > 1">
           <ng-template ngbSlide *ngFor="let item of bannerList">
             <a class="picsum-img-wrapper" target="_blank" [href]="item.url">
-              <img [src]="item.src | imageS3" alt="Random first slide" class="carousel__img" />
+              <img [src]="item.src" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -237,7 +237,7 @@
         <ngb-carousel [showNavigationArrows]="bannerList.length > 1" [showNavigationIndicators]="bannerList.length > 1">
           <ng-template ngbSlide *ngFor="let item of bannerList">
             <a class="picsum-img-wrapper" target="_blank" [href]="item.url">
-              <img [src]="item.src | imageS3" alt="Random first slide" class="carousel__img" />
+              <img [src]="item.src" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
