@@ -551,7 +551,7 @@
                           <div class="mt-1">
                             <app-name-tag
                               [iconContract]="true"
-                              [linkRouter]="['/contracts', item.toAddress || currentAddress]"
+                              [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
                               [isShorterText]="true"
                               [value]="item.contractAddress"
                               [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
