@@ -120,19 +120,14 @@
             <ng-container *ngIf="proDetail?.changes"> Changes</ng-container>
           </div>
           <div class="col-12 col-md-10 mt-0">
-            <ul
-              ngbNav
-              #customNav="ngbNav"
-              [activeId]="activeId"
-              class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md mb-4">
-              <ng-container *ngFor="let tab of specialDataArr; index as index">
-                <li [ngbNavItem]="index">
-                  <a ngbNavLink (click)="changeTab(tab.key)">
-                    <span class="tab-title mb-0 text-capitalize">{{ tab.value }}</span>
-                  </a>
-                </li>
-              </ng-container>
-            </ul>
+            <div class="mb-4">
+              <mat-tab-group (selectedTabChange)="changeTab($event.index)">
+                <mat-tab
+                  [label]="tab.value"
+                  *ngFor="let tab of specialDataArr; index as index"
+                  (click)="changeTab(tab.key)"></mat-tab>
+              </mat-tab-group>
+            </div>
             <ng-container *ngIf="proDetail?.plan">
               <div *ngFor="let key of getObjectKey(proDetail?.plan)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">

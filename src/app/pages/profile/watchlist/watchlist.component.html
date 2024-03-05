@@ -106,10 +106,10 @@
                 <div *ngSwitchCase="'updated_at'">
                   {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </div>
-                <div *ngSwitchCase="'action'" class="text-end">
-                  <div class="d-flex align-items-center">
+                <div *ngSwitchCase="'action'">
+                  <div class="d-flex align-items-center justify-content-end">
                     <i
-                      class="ph ph-note-pencil body-01 cursor-pointer"
+                      class="ph ph-note-pencil body-01 cursor-pointer mr-4"
                       [appTooltip]="'Edit'"
                       (click)="openPopup(data)"></i>
                     <i

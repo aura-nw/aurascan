@@ -38,24 +38,24 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
-    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true, headerWidth: 230 },
+    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true, headerWidth: 220 },
     { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From' },
-    { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 150 },
+    { matColumnDef: 'from_address', headerCellDef: 'From, headerWidth: 250' },
+    { matColumnDef: 'to_address', headerCellDef: 'To', headerWidth: 180 },
+    { matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true, headerWidth: 100 },
   ];
 
   NFTTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
-    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true, headerWidth: 230 },
+    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true, headerWidth: 220 },
     { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From' },
-    { matColumnDef: 'to_address', headerCellDef: 'To' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 150 },
+    { matColumnDef: 'from_address', headerCellDef: 'From', headerWidth: 250 },
+    { matColumnDef: 'to_address', headerCellDef: 'To', headerWidth: 180 },
     { matColumnDef: 'token_id', headerCellDef: 'Token ID' },
-    { matColumnDef: 'details', headerCellDef: 'Details' },
+    { matColumnDef: 'details', headerCellDef: 'Details', headerWidth: 120 },
   ];
 
   displayedColumns: string[];
