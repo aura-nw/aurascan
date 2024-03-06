@@ -1,7 +1,7 @@
 <section class="d-inline-flex name-tag-content" *ngIf="mode == ENameTag.Normal">
   <ng-container *ngIf="isEnableRouter; else displayText">
     <a
-      [routerLink]="linkRouter"
+      [routerLink]="routerLinks"
       [queryParams]="linkParams"
       class="text--primary break-all d-flex align-items-center"
       [appTooltip]="!(addressOnly || value | nameTagTooltipPipe) ? displayContent(addressOnly || value) : null"
