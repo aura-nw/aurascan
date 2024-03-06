@@ -17,7 +17,7 @@ export class NameTagComponent implements OnInit {
   nullAddress = NULL_ADDRESS;
   @Input() value = '';
   @Input() addressOnly = '';
-  @Input() linkRouter: string | any[] = ['/account', this.value];
+  @Input() linkRouter: string | any[];
   @Input() linkParams: Params;
   @Input() isEnableRouter = true;
   @Input() fullText = false;
@@ -35,6 +35,10 @@ export class NameTagComponent implements OnInit {
   ENameTag = ENameTag;
   EScreen = EScreen;
   maxLengthNameTag = MAX_LENGTH_NAME_TAG;
+
+  get routerLinks() {
+    return this.linkRouter ? this.linkRouter : ['/account', this.addressOnly || this.value];
+  }
 
   constructor(
     public commonService: CommonService,

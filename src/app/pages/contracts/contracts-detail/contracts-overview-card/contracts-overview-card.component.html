@@ -40,11 +40,11 @@
         <div class="d-flex">
           <div *ngIf="contractValue == 0">$0.00</div>
           <div *ngIf="contractValue != 0">
-            <span *ngIf="contractValue | lt: 0.01" [appTooltip]="{ priceAmount: contractValue }">
+            <span *ngIf="contractValue | lt: 0.01" [appTooltip]="{ priceAmount: contractValue, decimal: 0 }">
               {{ '< $0.01' }}
             </span>
-            <span *ngIf="contractValue | gte: 0.01" [appTooltip]="{ priceAmount: contractValue, decimal: 6 }">
-              $<span [appBigNumber]="contractValue" [decimal]="6"></span>
+            <span *ngIf="contractValue | gte: 0.01" [appTooltip]="{ priceAmount: contractValue, decimal: 0 }">
+              $<span [appBigNumber]="contractValue" [decimal]="0"></span>
             </span>
           </div>
           <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
