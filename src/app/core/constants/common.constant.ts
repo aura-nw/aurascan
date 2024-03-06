@@ -75,7 +75,7 @@ export const COIN_TOKEN_TYPE = {
   NATIVE: 'native',
   IBC: 'ibc',
   CW20: 'cw20',
-}
+};
 
 export enum MEDIA_TYPE {
   IMG = 'img',
@@ -114,4 +114,4 @@ export const STORAGE_KEYS = {
   DATA_NATIVE: 'nativeData',
 };
 
-export const TITLE_LOGO = 'images/logo/title-logo.png';
+export const TITLE_LOGO = 'assets/images/logo/title-logo.png';
