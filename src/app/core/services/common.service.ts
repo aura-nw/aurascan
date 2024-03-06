@@ -14,7 +14,6 @@ import { LCD_COSMOS } from '../constants/url.constant';
 @Injectable({ providedIn: 'root' })
 export class CommonService {
   apiUrl = '';
-  coins = this._environmentService.coins;
   chainInfo = this._environmentService.chainInfo;
 
   horoscope = this._environmentService.horoscope;
