@@ -271,7 +271,8 @@ export function convertDataTransaction(data, coinInfo) {
 
     if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
       try {
-        let dataTemp = JSON.parse(messages[0]?.msg);
+        let msg = _.get(messages, '[0].msg') || _.get(messages, '[0].content.msg');
+        let dataTemp = JSON.parse(msg);
         let action = Object.keys(dataTemp)[0];
         type = 'Contract: ' + action;
       } catch {}
