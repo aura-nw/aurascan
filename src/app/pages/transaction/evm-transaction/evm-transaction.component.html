@@ -5,21 +5,14 @@
 <ng-container *ngIf="!loading">
   <ng-container *ngIf="transaction; else noValues">
     <!-- Title -->
-    <div class="d-lg-flex justify-content-between align-items-center mb-4 mb-lg-6">
-      <h1 class="text--white mb-0">Transaction Details</h1>
+    <div class="d-lg-flex justify-content-between align-items-center mb-6">
+      <h1 class="text--white mb-0">EVM Transaction Details</h1>
     </div>
-    <div class="text--white">
+
+    <div class="text--white mb-6">
       <!-- TODO: Error Box -->
 
-      <!-- Information title-->
-      <div class="d-flex align-items-baseline">
-        <h2 id="popupCopy" class="mb-0 text--white pb-0 pr-0">
-          {{ 'Information' }}
-        </h2>
-      </div>
-      <!-- Information detail -->
-
-      <div class="body py-4">
+      <div class="body">
         <div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">EVM Txn hash</div>
@@ -120,8 +113,7 @@
       </div>
     </div>
 
-    <div class="row mb-2 body justify-content-between justify-content-lg-start">
-      <h2 class="text--white">Method</h2>
+    <div class="row body justify-content-between justify-content-lg-start">
       <app-evm-message [type]="transaction.type" [inputData]="transaction.inputData" [eventLog]="transaction.eventLog">
       </app-evm-message>
     </div>

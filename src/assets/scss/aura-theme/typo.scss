@@ -49,6 +49,9 @@ h6,
 .body-03 {
   @include mono-font-size(1.4, 1.6, 400);
 }
+.body-04 {
+  @include mono-font-size(1.2, 1.6, 400);
+}
 .caption {
   @include mono-font-size(1.2, 1.6, 600);
 }

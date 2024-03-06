@@ -1,4 +1,10 @@
 .message-container {
+  padding-top: 24px;
+
+  @media (max-width: 991.99px) {
+    padding-top: 12px;
+  }
+
   .header-title {
     font-size: 16px;
     font-weight: 600;
@@ -9,10 +15,28 @@
     background-color: var(--aura-gray-9);
     border-radius: 8px;
     padding: 12px 16px;
+
     overflow-y: auto;
 
-    max-height: 704px;
-    overflow-y: auto;
+    .log-content {
+      display: flex;
+      gap: 24px;
+
+      .log {
+        &-label {
+          width: 110px;
+          flex-shrink: 0;
+        }
+        &-data {
+          flex-grow: 1;
+        }
+      }
+
+      @media (max-width: 991.99px) {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
   }
 
   .highlight {

@@ -5,6 +5,7 @@ import { ImageDirective } from './image.directive';
 import { FeatureDirective } from './feature.directive';
 import { LinkDenomDirective } from './link-denom.directive';
 import { CopyButtonDirective } from './copy-button.directive';
+import { ExpandableContentDirective } from './expandable-content.directive';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { CopyButtonDirective } from './copy-button.directive';
     FeatureDirective,
     LinkDenomDirective,
     CopyButtonDirective,
+    ExpandableContentDirective,
   ],
   imports: [],
   exports: [
@@ -23,6 +25,7 @@ import { CopyButtonDirective } from './copy-button.directive';
     FeatureDirective,
     LinkDenomDirective,
     CopyButtonDirective,
+    ExpandableContentDirective,
   ],
 })
 export class CommonDirectiveModule {}
