@@ -36,8 +36,14 @@ export class EvmTransactionComponent implements OnChanges {
       id: number;
       contractName?: string;
       contract?: string;
-      topics?: unknown[];
-      data?: unknown;
+      topics?: {
+        address: string;
+        data: string;
+      }[];
+      data?: {
+        value: string;
+        hexValue: string;
+      };
     }[];
   };
 
@@ -134,5 +140,26 @@ export class EvmTransactionComponent implements OnChanges {
       inputData,
       eventLog: [],
     };
+
+    /* 
+      eventLog: [
+        {
+          id: 1,
+          contract: '0xa58963d4224fb4a9fcb6b254b6d62e4922f7f71121679bffdb6a7b0c1d5d8a9f',
+          contractName: 'Contract Name',
+          data: {
+            hexValue: '0xa58963d4224fb4a9fcb6b254b6d62e4922f7f71121679bffdb6a7b0c1d5d8a9f',
+            value: '0',
+          },
+          topics: [
+            {
+              address: '0xa58963d4224fb4a9fcb6b254b6d62e4922f7f71121679bffdb6a7b0c1d5d8a9f',
+              data: '0xa58963d4224fb4a9fcb6b254b6d62e4922f7f71121679bffdb6a7b0c1d5d8a9f',
+            },
+          ],
+        },
+      ],
+     
+    */
   }
 }

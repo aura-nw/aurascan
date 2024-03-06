@@ -41,11 +41,9 @@
       <mat-slide-toggle (toggleChange)="showAll = !showAll"> Show all events </mat-slide-toggle>
 
       <div class="box-event-log mt-2" *ngIf="showAll">
-        <div>Transaction Receipt Event Logs ({{ eventLog.length }})</div>
+        <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog.length }})</div>
         <div class="">
-          <ng-container *ngFor="let log of eventLog">
-            <app-evm-transaction-event-log [eventLog]="log"> </app-evm-transaction-event-log>
-          </ng-container>
+          <app-evm-transaction-event-log *ngFor="let log of eventLog" [eventLog]="log"> </app-evm-transaction-event-log>
         </div>
       </div>
     </div>

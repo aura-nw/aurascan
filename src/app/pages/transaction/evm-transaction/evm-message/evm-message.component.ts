@@ -17,8 +17,14 @@ export class EvmMessageComponent {
     id: number;
     contractName?: string;
     contract?: string;
-    topics?: unknown[];
-    data?: unknown;
+    topics?: {
+      address: string;
+      data: string;
+    }[];
+    data?: {
+      value: string;
+      hexValue: string;
+    };
   }[];
 
   showAll = false;
