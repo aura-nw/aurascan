@@ -6,6 +6,8 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import * as _ from 'lodash';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { map } from 'rxjs';
+import { toHexData } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-evm-transactions',
@@ -29,7 +31,7 @@ export class EvmTransactionsComponent {
     { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214 },
     { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176 },
-    { matColumnDef: 'hash', headerCellDef: this.denom ? `${this.denom} Txn` : 'Txn', headerWidth: 102 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 102 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -49,31 +51,43 @@ export class EvmTransactionsComponent {
       limit: this.maxPageSize,
     };
 
-    this.transactionService.queryEvmTransactionList(payload).subscribe({
-      next: (res) => {
-        if (res?.transaction?.length > 0) {
-          const txs = res.transaction;
-          txs.forEach((element) => {
-            element.evm_hash = _.get(element, 'evm_transaction.hash');
-            element.type = _.get(element, 'transaction_messages[0].type')?.split('.').pop();
-            element.from = _.get(element, 'transaction_messages[0].sender');
-            element.to = _.get(element, 'evm_transaction.to');
-            element.amount = _.get(element, 'transaction_messages[0].content.data.value');
-          });
-          this.dataSource.data = [...txs];
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+    this.transactionService
+      .queryEvmTransactionList(payload)
+      .pipe(
+        map((txsRes) => {
+          if (txsRes?.transaction?.length > 0) {
+            return txsRes.transaction.map((tx) => {
+              const type = toHexData(_.get(tx, 'evm_transaction.data'));
+
+              return {
+                ...tx,
+                evm_hash: _.get(tx, 'evm_transaction.hash'),
+                type: type ? type : 'Transfer',
+                from: _.get(tx, 'transaction_messages[0].sender'),
+                to: _.get(tx, 'evm_transaction.to'),
+                amount: _.get(tx, 'transaction_messages[0].content.data.value'),
+              };
+            });
+          }
+
+          return [];
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          this.dataSource.data = res;
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 }

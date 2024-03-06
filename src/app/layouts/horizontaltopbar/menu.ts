@@ -3,7 +3,7 @@ import { MenuItem } from './menu.model';
 
 export enum MenuName {
   Dashboard = 'Dashboard',
-  Transaction = 'AURA Transactions',
+  Transaction = 'Cosmos Transactions',
   EvmTransaction = 'EVM Transactions',
   Proposal = 'Proposal',
   Validator = 'Validator',

@@ -31,7 +31,7 @@ export class EvmTransactionComponent implements OnChanges {
     fee: string;
     memo: string;
     type: string;
-    inputData: { [key: string]: unknown };
+    inputData: { [key: string]: string };
     eventLog: {
       id: number;
       contractName?: string;
@@ -47,6 +47,7 @@ export class EvmTransactionComponent implements OnChanges {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  chainName = this.environmentService.chainName;
 
   loading = true;
   seeLess = false;

@@ -31,7 +31,7 @@
           </div>
 
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">{{ denom | titlecase }} Txn hash</div>
+            <div class="col-auto col-lg-2 text--gray-4">Cosmos Txn hash</div>
             <div class="col-auto col-lg-10">
               <a class="text--primary" routerLink="/transaction/{{ transaction?.hash }}" [copyBtn]="transaction?.hash">
                 {{ environmentService.isMobile ? (transaction?.hash | ellipsis: 8 : 8) : transaction?.hash }}
@@ -100,18 +100,12 @@
 
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Amount</div>
-            <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.amount }}
-              <span appLinkDenom>{{ denom }}</span>
-            </div>
+            <div class="col-auto col-lg-10 text--gray-1">{{ transaction?.amount }} {{ denom }}</div>
           </div>
 
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Transaction Fee</div>
-            <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.fee }}
-              <span appLinkDenom>{{ denom }}</span>
-            </div>
+            <div class="col-auto col-lg-10 text--gray-1">{{ transaction?.fee }} {{ denom }}</div>
           </div>
 
           <div class="row body justify-content-between justify-content-lg-start">
@@ -127,7 +121,7 @@
     </div>
 
     <div class="row mb-2 body justify-content-between justify-content-lg-start">
-      <h2 class="text--white">Messages</h2>
+      <h2 class="text--white">Method</h2>
       <app-evm-message [type]="transaction.type" [inputData]="transaction.inputData" [eventLog]="transaction.eventLog">
       </app-evm-message>
     </div>

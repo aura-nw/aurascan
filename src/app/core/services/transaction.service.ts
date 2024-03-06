@@ -127,6 +127,7 @@ export class TransactionService extends CommonService {
           evm_transaction {
             hash
             to
+            data
           }
         }
       }
