@@ -63,11 +63,11 @@
                     <td mat-cell *matCellDef="let element">
                       <span [appTooltip]="element.percentage.toString()">
                         {{
-                        (element.percentage | gt: 0.01)
-                          ? (element.percentage | formatDigit: 2)
-                          : (element.percentage | lte: 0)
-                            ? 0
-                            : '< 0.01'
+                          (element.percentage | gt: 0.01)
+                            ? (element.percentage | formatDigit: 2)
+                            : (element.percentage | lte: 0)
+                              ? 0
+                              : '< 0.01'
                         }}%
                       </span>
                     </td>
@@ -113,7 +113,7 @@
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
                     <th mat-header-cell *matHeaderCellDef>{{ denom }} Amount</th>
-                    <td mat-cell *matCellDef="let element">                      
+                    <td mat-cell *matCellDef="let element">
                       <span
                         *ngIf="element.amount | balance: coinDecimals | lt: 0.001"
                         [appTooltip]="{ priceAmount: element.amount, decimal: coinDecimals }">
@@ -132,13 +132,13 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       <span [appTooltip]="element.percentage.toString()">
-                      {{
-                        (element.percentage | gt: 0.01)
-                          ? (element.percentage | formatDigit: 2)
-                          : (element.percentage | lte: 0)
-                            ? 0
-                            : '< 0.01'
-                        }}%                        
+                        {{
+                          (element.percentage | gt: 0.01)
+                            ? (element.percentage | formatDigit: 2)
+                            : (element.percentage | lte: 0)
+                              ? 0
+                              : '< 0.01'
+                        }}%
                       </span>
                     </td>
                   </ng-container>
@@ -183,9 +183,7 @@
                   <ng-container matColumnDef="total">
                     <th mat-header-cell *matHeaderCellDef>Txn Count</th>
                     <td mat-cell *matCellDef="let element">
-                      <span
-                        *ngIf="element.amount | lt: 0.001"
-                        [appTooltip]="element.amount">
+                      <span *ngIf="element.amount | lt: 0.001" [appTooltip]="element.amount">
                         {{ element.amount == 0 ? 0 : '<0.001' }}
                       </span>
                       <span
@@ -201,13 +199,13 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       <span [appTooltip]="element.percentage.toString()">
-                      {{
-                        (element.percentage | gt: 0.01)
-                          ? (element.percentage | formatDigit: 2)
-                          : (element.percentage | lte: 0)
-                            ? 0
-                            : '< 0.01'
-                        }}%                        
+                        {{
+                          (element.percentage | gt: 0.01)
+                            ? (element.percentage | formatDigit: 2)
+                            : (element.percentage | lte: 0)
+                              ? 0
+                              : '< 0.01'
+                        }}%
                       </span>
                     </td>
                   </ng-container>
@@ -252,9 +250,7 @@
                   <ng-container matColumnDef="total">
                     <th mat-header-cell *matHeaderCellDef>Gas Amount</th>
                     <td mat-cell *matCellDef="let element">
-                      <span
-                        *ngIf="element.amount | lt: 0.001"
-                        [appTooltip]="element.amount">
+                      <span *ngIf="element.amount | lt: 0.001" [appTooltip]="element.amount">
                         {{ element.amount == 0 ? 0 : '<0.001' }}
                       </span>
                       <span
@@ -270,13 +266,13 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       <span [appTooltip]="element.percentage.toString()">
-                      {{
-                        (element.percentage | gt: 0.01)
-                          ? (element.percentage | formatDigit: 2)
-                          : (element.percentage | lte: 0)
-                            ? 0
-                            : '< 0.01'
-                        }}%                        
+                        {{
+                          (element.percentage | gt: 0.01)
+                            ? (element.percentage | formatDigit: 2)
+                            : (element.percentage | lte: 0)
+                              ? 0
+                              : '< 0.01'
+                        }}%
                       </span>
                     </td>
                   </ng-container>
