@@ -179,7 +179,7 @@ export class BlockDetailComponent implements OnInit {
     }
   }
 
-  changeType(type: boolean): void {
+  changeType(type: boolean) {
     this.isRawData = type;
   }
 

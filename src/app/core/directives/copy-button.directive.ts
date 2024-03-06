@@ -29,7 +29,6 @@ export class CopyButtonDirective implements OnChanges {
     if (this.isDisableCopy || !this.copyBtn || this.copyBtn === NULL_ADDRESS || this.button) {
       return;
     }
-
     const element: HTMLElement = this.elRef.nativeElement;
     if (!element) return;
     const parent = element.parentNode;
@@ -44,7 +43,7 @@ export class CopyButtonDirective implements OnChanges {
     } else {
       this.button.classList.add('px-0', 'ml-3', 'button--xxs');
     }
-    contain.classList.add('d-inline-flex', 'align-items-center');
+    contain.classList.add('d-inline-flex', 'align-items-center', 'tooltip-contain');
     parent.replaceChild(contain, element);
     contain.appendChild(element);
     // tooltip
@@ -69,7 +68,6 @@ export class CopyButtonDirective implements OnChanges {
     }
     this.button.appendChild(this.tooltip);
     contain.appendChild(this.button);
-
     // click show tooltip
     this.button.addEventListener('click', () => {
       if (this.tooltip) {

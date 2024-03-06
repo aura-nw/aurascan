@@ -21,24 +21,35 @@
     </ul>
 
     <div class="card text--white mt-4" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-      <div class="d-flex align-items-baseline">
-        <h2
-          class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0"
-          [copyBtn]="isRawData ? (blockDetail?.json_data | json) : null"
-          [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
-          {{ !isRawData ? 'Information' : 'Raw Data' }}
-        </h2>
-      </div>
+      <ng-container *ngIf="!isRawData && !breakpoint.value.matches">
+        <h2 class="card-header mb-0 text--white">Information</h2>
+      </ng-container>
+      <ng-container *ngIf="isRawData && !breakpoint.value.matches">
+        <div>
+          <h2
+            class="card-header mb-0 text--white pr-4"
+            [copyBtn]="blockDetail?.json_data | json"
+            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
+            Raw Data
+          </h2>
+        </div>
+      </ng-container>
+
       <div class="card-body body">
         <div class="d-lg-none mb-4">
-          <div class="d-flex align-items-baseline">
-            <h2
-              class="mb-4 text--white"
-              [copyBtn]="isRawData ? (blockDetail?.json_data | json) : null"
-              [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
-              {{ !isRawData ? 'Information' : 'Raw Data' }}
-            </h2>
-          </div>
+          <ng-container *ngIf="!isRawData && breakpoint.value.matches">
+            <h2 class="mb-4 text--white">Information</h2>
+          </ng-container>
+          <ng-container *ngIf="isRawData && breakpoint.value.matches">
+            <div>
+              <h2
+                class="text--white m-0 mr-4"
+                [copyBtn]="blockDetail?.json_data | json"
+                [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
+                Raw Data
+              </h2>
+            </div>
+          </ng-container>
           <!-- Tabs -->
           <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
             <ng-container *ngFor="let tab of TAB; index as index">

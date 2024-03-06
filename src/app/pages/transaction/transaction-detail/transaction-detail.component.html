@@ -24,12 +24,15 @@
         </div>
       </div>
       <div class="d-flex align-items-baseline">
-        <h2
-          class="mb-0 text--white pb-0 pr-0"
-          [copyBtn]="isRawData ? (transaction.tx | json) : null"
-          [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2']">
-          {{ !isRawData ? 'Information' : 'Raw Data' }}
-        </h2>
+        <h2 *ngIf="!isRawData" class="mb-0 text--white pb-0 pr-0">Information</h2>
+        <div *ngIf="isRawData">
+          <h2
+            class="mb-0 text--white pb-0 pr-0"
+            [copyBtn]="transaction.tx | json"
+            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2']">
+            Raw Data
+          </h2>
+        </div>
       </div>
       <div class="body py-4">
         <div *ngIf="!isRawData">
