@@ -20,14 +20,14 @@
       </ng-container>
     </ul>
 
-    <div class="card text--white mt-4" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+    <div class="card text--white mt-4 pt-lg-6" *ngIf="{ value: breakpoint$ | async } as breakpoint">
       <ng-container *ngIf="!isRawData && !breakpoint.value.matches">
-        <h2 class="card-header mb-0 text--white">Information</h2>
+        <h2 class="card-header mb-0 text--white py-0">Information</h2>
       </ng-container>
       <ng-container *ngIf="isRawData && !breakpoint.value.matches">
         <div>
           <h2
-            class="card-header mb-0 text--white pr-4"
+            class="card-header mb-0 text--white pr-4 py-0"
             [copyBtn]="blockDetail?.json_data | json"
             [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
             Raw Data
@@ -38,12 +38,12 @@
       <div class="card-body body">
         <div class="d-lg-none mb-4">
           <ng-container *ngIf="!isRawData && breakpoint.value.matches">
-            <h2 class="mb-4 text--white">Information</h2>
+            <h2 class="mb-4 text--white py-0">Information</h2>
           </ng-container>
           <ng-container *ngIf="isRawData && breakpoint.value.matches">
             <div>
               <h2
-                class="text--white m-0 mr-4"
+                class="text--white m-0 mr-4 py-0"
                 [copyBtn]="blockDetail?.json_data | json"
                 [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
                 Raw Data
