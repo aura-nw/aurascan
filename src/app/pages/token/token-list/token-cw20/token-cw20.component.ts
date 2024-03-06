@@ -78,7 +78,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.getListToken();
         this.pageChange.selectPage(0);
       });
   }
@@ -170,7 +169,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     this.textSearch = '';
     this.dataSource.data = [];
     this.isLoadingTable = true;
-    // this.getListToken();
     this.pageChange.selectPage(0);
   }
 
