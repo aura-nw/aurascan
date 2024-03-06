@@ -1,17 +1,17 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Component, OnInit} from '@angular/core';
-import {PageEvent} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {map, of, switchMap} from 'rxjs';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TransactionService} from 'src/app/core/services/transaction.service';
-import {PAGE_EVENT, TIMEOUT_ERROR} from '../../../../app/core/constants/common.constant';
-import {TableTemplate} from '../../../../app/core/models/common.model';
-import {BlockService} from '../../../../app/core/services/block.service';
-import {CommonService} from '../../../../app/core/services/common.service';
-import {convertDataBlock, convertDataTransactionSimple} from '../../../../app/global/global';
+import { map, of, switchMap } from 'rxjs';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
+import { TableTemplate } from '../../../../app/core/models/common.model';
+import { BlockService } from '../../../../app/core/services/block.service';
+import { CommonService } from '../../../../app/core/services/common.service';
+import { convertDataBlock, convertDataTransactionSimple } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -41,12 +41,12 @@ export class BlockDetailComponent implements OnInit {
   ];
 
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash'},
-    {matColumnDef: 'type', headerCellDef: 'Message'},
-    {matColumnDef: 'status', headerCellDef: 'Result'},
-    {matColumnDef: 'fee', headerCellDef: 'Fee'},
-    {matColumnDef: 'height', headerCellDef: 'Height'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'type', headerCellDef: 'Message' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'fee', headerCellDef: 'Fee' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -69,8 +69,7 @@ export class BlockDetailComponent implements OnInit {
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private transactionService: TransactionService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.blockHeight = this.route.snapshot.paramMap.get('height');
@@ -187,7 +186,7 @@ export class BlockDetailComponent implements OnInit {
   handlePageEvent(e: any) {
     this.pageData.pageIndex = e.pageIndex;
     if (this.pageData) {
-      const {pageIndex, pageSize} = this.pageData;
+      const { pageIndex, pageSize } = this.pageData;
       const start = pageIndex * pageSize;
       const end = start + pageSize;
       this.dataTxs = this.dataSource.data.slice(start, end);

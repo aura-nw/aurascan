@@ -29,7 +29,9 @@
           <h2
             class="card-header mb-0 text--white pr-4"
             [copyBtn]="blockDetail?.json_data | json"
-            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">Raw Data</h2>
+            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
+            Raw Data
+          </h2>
         </div>
       </ng-container>
 
@@ -40,9 +42,12 @@
           </ng-container>
           <ng-container *ngIf="isRawData && breakpoint.value.matches">
             <div>
-              <h2 class="text--white m-0 mr-4"
-                  [copyBtn]="blockDetail?.json_data | json"
-                  [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">Raw Data</h2>
+              <h2
+                class="text--white m-0 mr-4"
+                [copyBtn]="blockDetail?.json_data | json"
+                [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
+                Raw Data
+              </h2>
             </div>
           </ng-container>
           <!-- Tabs -->

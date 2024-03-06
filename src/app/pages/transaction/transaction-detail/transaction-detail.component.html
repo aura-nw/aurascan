@@ -24,13 +24,14 @@
         </div>
       </div>
       <div class="d-flex align-items-baseline">
-        <h2 *ngIf="!isRawData"
-            class="mb-0 text--white pb-0 pr-0">Information </h2>
+        <h2 *ngIf="!isRawData" class="mb-0 text--white pb-0 pr-0">Information</h2>
         <div *ngIf="isRawData">
           <h2
             class="mb-0 text--white pb-0 pr-0"
             [copyBtn]="transaction.tx | json"
-            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2']">Raw Data</h2>
+            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2']">
+            Raw Data
+          </h2>
         </div>
       </div>
       <div class="body py-4">
@@ -58,10 +59,10 @@
                     : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
                 "
                 width="20px"
-                height="20px"/>
+                height="20px" />
               <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">{{
                 transaction?.status | uppercase
-                }}</span>
+              }}</span>
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">

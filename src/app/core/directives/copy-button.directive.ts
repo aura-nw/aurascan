@@ -1,6 +1,6 @@
-import {Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NULL_ADDRESS} from '../constants/common.constant';
+import { Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NULL_ADDRESS } from '../constants/common.constant';
 
 @Directive({
   selector: 'copyBtn, [copyBtn]',
@@ -23,8 +23,7 @@ export class CopyButtonDirective implements OnChanges {
   constructor(
     private elRef: ElementRef,
     private commonService: CommonService,
-  ) {
-  }
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isDisableCopy || !this.copyBtn || this.copyBtn === NULL_ADDRESS || this.button) {

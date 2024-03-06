@@ -26,7 +26,6 @@ app-tooltip-customize,
     cursor: pointer;
 
     @media (min-width: 991.98px) {
-
       &:not(.disabled-hover):hover ~ app-tooltip-customize,
       &:not(.disabled-hover):hover ~ .app-tooltip-customize {
         max-width: 500px;
