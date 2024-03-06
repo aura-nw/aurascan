@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -27,12 +28,14 @@ export class TokenInventoryComponent implements OnInit {
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   linkToken = 'token-nft';
   errTxt: string;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private route: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private router: Router,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {

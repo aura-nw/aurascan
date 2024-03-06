@@ -1000,11 +1000,4 @@ export class TransactionMessagesComponent implements OnInit {
   changeShowData(idx) {
     this.isDisplay[idx] = !this.isDisplay[idx];
   }
-
-  isContractAddress(address) {
-    if (this.commonService.isValidContract(address)) {
-      return true;
-    }
-    return false;
-  }
 }

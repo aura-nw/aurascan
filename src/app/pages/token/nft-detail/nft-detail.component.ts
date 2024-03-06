@@ -31,6 +31,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile, getTypeTx } from 'src/app/core/utils/common/info-common';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
 
@@ -53,7 +54,7 @@ export class NFTDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'price', headerCellDef: 'Price' },
+    { matColumnDef: 'price', headerCellDef: 'Price', cssClass: 'pl-5 pl-lg-0' },
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -116,9 +117,9 @@ export class NFTDetailComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
-    this.walletService.wallet$.subscribe((wallet) => {
+    this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
-        this.userAddress = wallet.bech32Address;
+        this.userAddress = wallet.address;
       } else {
         this.userAddress = null;
       }
@@ -280,48 +281,36 @@ export class NFTDetailComponent implements OnInit {
   }
 
   async execute(data) {
-    const user = this.walletService.wallet?.bech32Address;
+    const user = this.walletService.walletAccount?.address;
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
-    let dataWallet = await this.walletService.getWalletSign(user, this.nftDetail.token_id);
+    let signResult = await this.walletService.signArbitrary(user, this.nftDetail.token_id);
 
     const payload = {
-      signature: dataWallet['signature'],
+      signature: signResult['signature'],
       msg: true,
-      pubKey: dataWallet['pub_key'].value,
+      pubKey: signResult['pub_key'].value,
       id: this.nftDetail?.token_id,
       status: this.sbType.PENDING,
       contractAddress: this.nftDetail?.contract_address,
     };
 
-    let feeGas = {
-      amount: [
-        {
-          amount: (this.network.gasPriceStep?.average || 0.0025).toString(),
-          denom: this.network.currencies[0].coinMinimalDenom,
-        },
-      ],
-      gas: '200000',
-    };
-
     try {
       this.walletService
-        .execute(user, this.nftDetail.contract_address, data, feeGas)
-        .then((e) => {
-          if ((e as any).result?.error) {
-            this.toastr.error(msgError);
-          } else {
-            if ((e as any)?.transactionHash) {
-              this.toastr.loading((e as any)?.transactionHash);
-              setTimeout(() => {
-                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-                this.updateStatusSBT(payload, user);
-              }, 4000);
-            }
+        .executeContract(user, this.nftDetail.contract_address, data)
+        .then((result) => {
+          if (result?.transactionHash) {
+            this.toastr.loading(result?.transactionHash);
+
+            setTimeout(() => {
+              this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+              this.updateStatusSBT(payload, user);
+            }, 4000);
           }
         })
         .catch((error) => {
-          if (!error.toString().includes('Request rejected')) {
+          const _error = parseError(error);
+          if (_error?.code !== undefined) {
             this.toastr.error(msgError);
           }
         });

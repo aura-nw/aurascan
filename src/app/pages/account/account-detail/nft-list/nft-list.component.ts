@@ -1,17 +1,21 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+
 @Component({
   selector: 'app-nft-list',
   templateUrl: './nft-list.component.html',
   styleUrls: ['./nft-list.component.scss'],
 })
-export class NftListComponent implements OnInit, OnChanges {
+export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() address: string;
   @Output() totalValueNft = new EventEmitter<number>();
 
@@ -37,8 +41,14 @@ export class NftListComponent implements OnInit, OnChanges {
     },
   ];
   errTxt: string;
+  destroyed$ = new Subject<void>();
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
-  constructor(private accountService: AccountService, private router: Router) {}
+  constructor(
+    private accountService: AccountService,
+    private layout: BreakpointObserver,
+    private router: Router,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.address) {
@@ -49,6 +59,14 @@ export class NftListComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.getListCollection();
     this.setNFTFilter(this.listCollection[0]);
+  }
+
+  /**
+   * ngOnDestroy
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   filterCollecttion() {

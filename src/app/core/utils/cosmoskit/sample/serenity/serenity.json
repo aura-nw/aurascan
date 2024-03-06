@@ -1,0 +1,58 @@
+{
+  "$schema": "../chain.schema.json",
+  "chain_name": "serenity-testnet-001",
+  "status": "live",
+  "network_type": "testnet",
+  "pretty_name": "Aura Serenity Network",
+  "chain_id": "serenity-testnet-001",
+  "bech32_prefix": "aura",
+  "daemon_name": "aurad",
+  "node_home": "$HOME/.aura",
+  "slip44": 118,
+  "fees": {
+    "fee_tokens": [
+      {
+        "denom": "uaura",
+        "fixed_min_gas_price": 0.0025,
+        "low_gas_price": 0.001,
+        "average_gas_price": 0.0025,
+        "high_gas_price": 0.004
+      }
+    ]
+  },
+  "staking": {
+    "staking_tokens": [
+      {
+        "denom": "uaura"
+      }
+    ]
+  },
+
+  "logo_URIs": {
+    "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.png",
+    "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.svg"
+  },
+
+  "apis": {
+    "rpc": [
+      {
+        "address": "https://rpc.serenity.aura.network",
+        "provider": ""
+      }
+    ],
+    "rest": [
+      {
+        "address": "https://lcd.serenity.aura.network",
+        "provider": ""
+      }
+    ],
+    "grpc": []
+  },
+
+  "images": [
+    {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.svg"
+    }
+  ]
+}

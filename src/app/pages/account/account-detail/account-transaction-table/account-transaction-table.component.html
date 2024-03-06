@@ -334,293 +334,303 @@
 </div>
 
 <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-  <div class="table-responsive spacer-tooltip d-none d-lg-block">
-    <table
-      mat-table
-      [dataSource]="dataSource"
-      class="aura-table account-transaction-table"
-      [ngClass]="modeQuery !== tabsData.ExecutedTxs ? 'table-transfer' : ''">
-      <ng-container *ngFor="let template of templates; index as i">
-        <ng-container [matColumnDef]="template.matColumnDef">
-          <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
-            <div [innerHTML]="template.headerCellDef | translate"></div>
-          </th>
+  <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
+    <div class="table-responsive spacer-tooltip--sm" *ngIf="!breakpoint.value.matches">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="aura-table account-transaction-table"
+        [ngClass]="modeQuery !== tabsData.ExecutedTxs ? 'table-transfer' : ''">
+        <ng-container *ngFor="let template of templates; index as i">
+          <ng-container [matColumnDef]="template.matColumnDef">
+            <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
+              <div [innerHTML]="template.headerCellDef | translate"></div>
+            </th>
 
-          <td mat-cell *matCellDef="let data; let idx = index" [class.tab-nft]="modeQuery === tabsData.NftTxs">
-            <div>
-              <ng-container [ngSwitch]="template.matColumnDef">
-                <div *ngSwitchCase="'timestamp'">
-                  {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
-                </div>
-                <a
-                  *ngSwitchCase="'tx_hash'"
-                  class="text--primary cursor-pointer hash-link"
-                  [routerLink]="['/transaction', data['tx_hash']]">
-                  {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
-                </a>
-                <a
-                  *ngSwitchCase="'height'"
-                  class="text--primary cursor-pointer block-link"
-                  [routerLink]="['/blocks', data['height']]">
-                  {{ data[template.matColumnDef] }}
-                </a>
-                <div *ngSwitchCase="'expand'">
-                  <i
-                    *ngIf="!data.expand"
-                    class="ph ph-caret-down text--gray-6 h3 icon-expand"
-                    (click)="expandData(data)"
-                    [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
-                  <i
-                    *ngIf="data.expand"
-                    class="ph ph-caret-up text--white h3 cursor-pointer"
-                    (click)="data.expand = false"></i>
-                </div>
-                <div *ngSwitchCase="'type'">
-                  <div class="aura-status aura-tooltip-contain p-0">
-                    <div class="status cursor-pointer aura-tooltip-object">
-                      {{ data[template.matColumnDef] | ellipsis: 22 }}
-                      <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
-                        +{{ data.lstTypeTemp?.length - 1 }}
+            <td mat-cell *matCellDef="let data; let idx = index" [class.tab-nft]="modeQuery === tabsData.NftTxs">
+              <div>
+                <ng-container [ngSwitch]="template.matColumnDef">
+                  <div *ngSwitchCase="'timestamp'">
+                    {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
+                  </div>
+                  <a
+                    *ngSwitchCase="'tx_hash'"
+                    class="text--primary cursor-pointer hash-link"
+                    [routerLink]="['/transaction', data['tx_hash']]"
+                    [copyBtn]="data[template.matColumnDef]">
+                    {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                  </a>
+                  <a
+                    *ngSwitchCase="'height'"
+                    class="text--primary cursor-pointer block-link"
+                    [routerLink]="['/blocks', data['height']]">
+                    {{ data[template.matColumnDef] }}
+                  </a>
+                  <div *ngSwitchCase="'expand'">
+                    <i
+                      *ngIf="!data.expand"
+                      class="ph ph-caret-down text--gray-6 h3 icon-expand"
+                      (click)="expandData(data)"
+                      [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
+                    <i
+                      *ngIf="data.expand"
+                      class="ph ph-caret-up text--white h3 cursor-pointer"
+                      (click)="data.expand = false"></i>
+                  </div>
+                  <div *ngSwitchCase="'type'">
+                    <div class="aura-status aura-tooltip-contain p-0">
+                      <div class="status cursor-pointer aura-tooltip-object">
+                        {{ data[template.matColumnDef] | ellipsis: 22 }}
+                        <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                          +{{ data.lstTypeTemp?.length - 1 }}
+                        </div>
+                      </div>
+
+                      <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
+                      </app-tooltip-customize>
+                    </div>
+                  </div>
+                  <div *ngSwitchCase="'status'">
+                    <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                      <div *ngSwitchCase="'Success'" class="text--green-3">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'Fail'" class="text--red-3">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                        {{ data[template.matColumnDef] }}
                       </div>
                     </div>
-
-                    <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
-                    </app-tooltip-customize>
                   </div>
-                </div>
-                <div *ngSwitchCase="'status'">
-                  <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
-                    <div *ngSwitchCase="'Success'" class="text--green-3">
-                      {{ data[template.matColumnDef] }}
-                    </div>
-                    <div *ngSwitchCase="'Fail'" class="text--red-3">
-                      {{ data[template.matColumnDef] }}
-                    </div>
-                    <div *ngSwitchCase="'Pending'" class="text--yellow-3">
-                      {{ data[template.matColumnDef] }}
-                    </div>
+                  <div *ngSwitchCase="'fee'">
+                    {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                    <span appLinkDenom>{{ denom }}</span>
                   </div>
-                </div>
-                <div *ngSwitchCase="'fee'">
-                  {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                  <span appLinkDenom>{{ denom }}</span>
-                </div>
-                <div *ngSwitchCase="'amount'">
-                  <ng-container *ngFor="let item of data.arrEvent; let index = index">
-                    <div
-                      class="explain-data"
-                      [class.show-detail]="data.expand || index === 0"
-                      *ngIf="index < data.limit">
-                      <div class="item-show d-flex align-items-center">
-                        <div class="aura-tooltip-contain">
-                          <div *ngIf="+item.amountTemp === 0">0</div>
-                          <div
-                            class="aura-tooltip-object"
-                            *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
-                            {{ '<0.001' }}
-                          </div>
-                          <div
-                            [class.aura-tooltip-object]="item.amountTemp !== 0"
-                            [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
-                            *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
-                            [appBigNumber]="item.amountTemp"
-                            [decimal]="item.decimal"></div>
-                          <app-tooltip-customize
-                            *ngIf="
-                              +item.amountTemp !== 0 &&
-                              ((item.amountTemp | balance: item.decimal | lt: 0.001) ||
-                                (item.amountTemp | balance: item.decimal | gte: 1000000))
-                            "
-                            [content]="item.amountTemp | balance: item.decimal | mask: 'separator'">
-                          </app-tooltip-customize>
-                        </div>
-                        <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
-                          <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                            <div [class.aura-tooltip-object]="item.denom !== denom" [appLinkDenom]="item.denomOrigin">
-                              {{ item.denom | ellipsis: 19 }}
+                  <div *ngSwitchCase="'amount'">
+                    <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                      <div
+                        class="explain-data"
+                        [class.show-detail]="data.expand || index === 0"
+                        *ngIf="index < data.limit">
+                        <div class="item-show d-flex align-items-center">
+                          <div class="aura-tooltip-contain">
+                            <div *ngIf="+item.amountTemp === 0">0</div>
+                            <div
+                              class="aura-tooltip-object"
+                              *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
+                              {{ '<0.001' }}
                             </div>
-
+                            <div
+                              [class.aura-tooltip-object]="item.amountTemp !== 0"
+                              [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
+                              *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
+                              [appBigNumber]="item.amountTemp"
+                              [decimal]="item.decimal"></div>
                             <app-tooltip-customize
-                              [className]="'tooltip--left'"
-                              [class]="'message-custom'"
-                              [content]="item.denomOrigin">
+                              *ngIf="
+                                +item.amountTemp !== 0 &&
+                                ((item.amountTemp | balance: item.decimal | lt: 0.001) ||
+                                  (item.amountTemp | balance: item.decimal | gte: 1000000))
+                              "
+                              [content]="item.amountTemp | balance: item.decimal | mask: 'separator'">
                             </app-tooltip-customize>
                           </div>
-                          <a
-                            class=""
-                            [routerLink]="['/tokens/token', item.contractAddress]"
-                            *ngIf="modeQuery === tabsData.FtsTxs">
-                            {{ item.denom | ellipsis: 19 }}
-                          </a>
-                        </span>
-                      </div>
-                    </div>
-                  </ng-container>
-                </div>
-                <div *ngSwitchCase="'fromAddress'">
-                  <ng-container *ngFor="let item of data.arrEvent; let index = index">
-                    <div
-                      class="explain-data"
-                      [class.show-detail]="data.expand || index === 0"
-                      *ngIf="index < data.limit">
-                      <div class="item-show d-flex justify-content-between align-items-center">
-                        <app-name-tag
-                          [value]="item.fromAddress || currentAddress"
-                          [url]="((item.fromAddress || currentAddress) | isContract) ? 'contracts' : 'account'"
-                          [iconContract]="(item.fromAddress || currentAddress) | isContract"
-                          [isLink]="
-                            !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                            item.fromAddress !== currentAddress
-                          "></app-name-tag>
-                        <div class="box-token-transfer d-flex mr-8">
-                          <span
-                            class="token-transfer-status d-inline-flex align-items-center caption"
-                            [ngClass]="{ 'status-out': item['toAddress'] !== currentAddress }">
-                            <ng-container *ngIf="item['toAddress'] === currentAddress"> IN </ng-container>
-                            <ng-container *ngIf="item['toAddress'] !== currentAddress"> OUT </ng-container>
+                          <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
+                            <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
+                              <div [class.aura-tooltip-object]="item.denom !== denom" [appLinkDenom]="item.denomOrigin">
+                                {{ item.denom | ellipsis: 19 }}
+                              </div>
+
+                              <app-tooltip-customize
+                                [className]="'tooltip--left'"
+                                [class]="'message-custom'"
+                                [content]="item.denomOrigin">
+                              </app-tooltip-customize>
+                            </div>
+                            <a
+                              class=""
+                              [routerLink]="['/tokens/token', item.contractAddress]"
+                              *ngIf="modeQuery === tabsData.FtsTxs">
+                              {{ item.denom | ellipsis: 19 }}
+                            </a>
                           </span>
                         </div>
                       </div>
-                    </div>
-                  </ng-container>
-                  <div class="mt-3 mb-4 caption fw-normal d-lg-none" *ngIf="data.expand">
-                    <span
-                      (click)="seeMoreData(data)"
-                      *ngIf="data.limit < data.arrEvent?.length"
-                      class="cursor-pointer mr-8"
-                      >See more</span
-                    >
-                    <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
+                    </ng-container>
                   </div>
-                  <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="data.arrEvent?.length > 1 && data.expand">
-                    <span
-                      (click)="seeMoreData(data)"
-                      *ngIf="data.limit < data.arrEvent?.length"
-                      class="cursor-pointer mr-8"
-                      >See more</span
-                    >
-                    <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
-                  </div>
-                </div>
-                <div *ngSwitchCase="'toAddress'">
-                  <ng-container *ngFor="let item of data.arrEvent; let index = index">
-                    <div
-                      class="explain-data"
-                      [class.show-detail]="data.expand || index === 0"
-                      *ngIf="index < data.limit">
-                      <div class="item-show d-flex align-items-center">
-                        <div [style]="'min-width: 148px'">
+                  <div *ngSwitchCase="'fromAddress'">
+                    <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                      <div
+                        class="explain-data"
+                        [class.show-detail]="data.expand || index === 0"
+                        *ngIf="index < data.limit">
+                        <div class="item-show d-flex justify-content-between align-items-center">
                           <app-name-tag
-                            [value]="item.toAddress || currentAddress"
-                            [url]="((item.toAddress || currentAddress) | isContract) ? 'contracts' : 'account'"
-                            [iconContract]="(item.toAddress || currentAddress) | isContract"
+                            [value]="item.fromAddress || currentAddress"
+                            [url]="(item.fromAddress || currentAddress | isContract) ? 'contracts' : 'account'"
+                            [iconContract]="item.fromAddress || currentAddress | isContract"
                             [isLink]="
-                              !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                              item.toAddress !== currentAddress
+                              !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                              item.fromAddress !== currentAddress
                             "></app-name-tag>
-                        </div>
-                        <ng-container *ngIf="index === 0">
-                          <div
-                            class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
-                            (click)="expandData(data)"
-                            *ngIf="data.arrEvent?.length > 1">
-                            <ng-container *ngIf="data.arrEvent?.length > 100"> >99</ng-container>
-                            <ng-container *ngIf="data.arrEvent?.length <= 100">
-                              +{{ data.arrEvent?.length - 1 }}
-                            </ng-container>
-                            <i
-                              *ngIf="!data.expand"
-                              class="ph ph-caret-down text--gray-6 icon-expand ml-1"
-                              [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
-                            <i *ngIf="data.expand" class="ph ph-caret-up text--white cursor-pointer ml-1"></i>
+                          <div class="box-token-transfer d-flex mr-8">
+                            <span
+                              class="token-transfer-status d-inline-flex align-items-center caption"
+                              [ngClass]="{ 'status-out': item['toAddress'] !== currentAddress }">
+                              <ng-container *ngIf="item['toAddress'] === currentAddress"> IN </ng-container>
+                              <ng-container *ngIf="item['toAddress'] !== currentAddress"> OUT </ng-container>
+                            </span>
                           </div>
-                        </ng-container>
-                      </div>
-                    </div>
-                  </ng-container>
-                </div>
-                <div *ngSwitchCase="'nft'">
-                  <ng-container *ngFor="let item of data.arrEvent; let index = index">
-                    <div
-                      class="explain-data"
-                      [class.show-detail]="data.expand || index === 0"
-                      *ngIf="index < data.limit">
-                      <div class="item-show d-flex nft-column mb-2 justify-content-center">
-                        <div class="justify-content-between tokenId">
-                          <a
-                            *ngIf="item.tokenId"
-                            [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
-                            class="text--primary cursor-pointer"
-                            >#{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}</a
-                          >
-                          <ng-container *ngIf="!item.tokenId">-</ng-container>
-                        </div>
-                        <div class="mt-1">
-                          <app-name-tag
-                            [iconContract]="true"
-                            [url]="'contracts'"
-                            [value]="item.contractAddress"
-                            [isLink]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                         </div>
                       </div>
+                    </ng-container>
+                    <div class="mt-3 mb-4 caption fw-normal d-lg-none" *ngIf="data.expand">
+                      <span
+                        (click)="seeMoreData(data)"
+                        *ngIf="data.limit < data.arrEvent?.length"
+                        class="cursor-pointer mr-8"
+                        >See more</span
+                      >
+                      <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                     </div>
-                  </ng-container>
-                </div>
-                <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-              </ng-container>
-            </div>
-          </td>
+                    <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="data.arrEvent?.length > 1 && data.expand">
+                      <span
+                        (click)="seeMoreData(data)"
+                        *ngIf="data.limit < data.arrEvent?.length"
+                        class="cursor-pointer mr-8"
+                        >See more</span
+                      >
+                      <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
+                    </div>
+                  </div>
+                  <div *ngSwitchCase="'toAddress'">
+                    <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                      <div
+                        class="explain-data"
+                        [class.show-detail]="data.expand || index === 0"
+                        *ngIf="index < data.limit">
+                        <div class="item-show d-flex align-items-center">
+                          <div [style]="'min-width: 148px'">
+                            <app-name-tag
+                              [value]="item.toAddress || currentAddress"
+                              [url]="(item.toAddress || currentAddress | isContract) ? 'contracts' : 'account'"
+                              [iconContract]="item.toAddress || currentAddress | isContract"
+                              [isLink]="
+                                !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                                item.toAddress !== currentAddress
+                              "></app-name-tag>
+                          </div>
+                          <ng-container *ngIf="index === 0">
+                            <div
+                              class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
+                              (click)="expandData(data)"
+                              *ngIf="data.arrEvent?.length > 1">
+                              <ng-container *ngIf="data.arrEvent?.length > 100"> >99</ng-container>
+                              <ng-container *ngIf="data.arrEvent?.length <= 100">
+                                +{{ data.arrEvent?.length - 1 }}
+                              </ng-container>
+                              <i
+                                *ngIf="!data.expand"
+                                class="ph ph-caret-down text--gray-6 icon-expand ml-1"
+                                [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
+                              <i *ngIf="data.expand" class="ph ph-caret-up text--white cursor-pointer ml-1"></i>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <div *ngSwitchCase="'nft'">
+                    <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                      <div
+                        class="explain-data"
+                        [class.show-detail]="data.expand || index === 0"
+                        *ngIf="index < data.limit">
+                        <div class="item-show d-flex nft-column mb-2 justify-content-center">
+                          <div class="justify-content-between tokenId">
+                            <a
+                              *ngIf="item.tokenId"
+                              [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
+                              [copyBtn]="item.tokenId"
+                              class="text--primary cursor-pointer">
+                              #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
+                            </a>
+                            <ng-container *ngIf="!item.tokenId">-</ng-container>
+                          </div>
+                          <div class="mt-1">
+                            <app-name-tag
+                              [iconContract]="true"
+                              [url]="'contracts'"
+                              [isShorterText]="true"
+                              [value]="item.contractAddress"
+                              [isLink]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
         </ng-container>
-      </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="row-tx"></tr>
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell g-no-data pt-8" colspan="9999">
-          <app-loading-sprint></app-loading-sprint>
-        </td>
-      </tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="row-tx"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell g-no-data pt-8" colspan="9999">
+            <app-loading-sprint></app-loading-sprint>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div *ngIf="breakpoint.value.matches">
+      <app-card-mob-account
+        *ngFor="let data of dataSourceMobile; first as isFirst"
+        [link]="'/transaction/' + data.tx_hash"
+        [dataCard]="data"
+        [modeQuery]="modeQuery"
+        [currentAddress]="currentAddress"
+        [currentType]="currentType"
+        [expand]="isFirst"
+        [title]="{
+          size: 'md',
+          titleClass: 'body-02-mob',
+          label: data.tx_hash | ellipsis: 8 : 8,
+          subLabelContent: data.type,
+          subLabelClass: 'btn-mob',
+          status: data.code
+        }"
+        [content]="[
+          {
+            label: 'Height',
+            class: 'text--gray-1 body-02-mob fw-semibold',
+            info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+          },
+          {
+            label: 'Fee',
+            class: 'text--gray-1 body-02-mob',
+            info:
+              (+data.fee | mask: 'separator.6') +
+              ' <a class=text--primary href=' +
+              ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+              '>' +
+              denom +
+              '</a>'
+          }
+        ]"></app-card-mob-account>
+    </div>
+    <app-paginator
+      [length]="pageData.length"
+      [pageSize]="pageData.pageSize"
+      (paginator)="paginatorEmit($event)"
+      (pageEvent)="pageEvent($event)"
+      (pageChangeRecord)="pageChangeRecord($event)"
+      [showSelectRecord]="true">
+    </app-paginator>
   </div>
-  <div class="d-lg-none card-mob-account">
-    <app-card-mob-account
-      *ngFor="let data of dataSourceMobile; first as isFirst"
-      [link]="'/transaction/' + data.tx_hash"
-      [dataCard]="data"
-      [modeQuery]="modeQuery"
-      [currentAddress]="currentAddress"
-      [currentType]="currentType"
-      [expand]="isFirst"
-      [title]="{
-        size: 'md',
-        titleClass: 'body-02-mob',
-        label: data.tx_hash | ellipsis: 8 : 8,
-        subLabelContent: data.type,
-        subLabelClass: 'btn-mob',
-        status: data.code,
-      }"
-      [content]="[
-        {
-          label: 'Height',
-          class: 'text--gray-1 body-02-mob fw-semibold',
-          info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
-        },
-        {
-          label: 'Fee',
-          class: 'text--gray-1 body-02-mob',
-          info: (+data.fee | mask: 'separator.6') + 
-          ' <a class=text--primary href=' + ('/tokens/token/' + coinInfo.coinMinimalDenom) + '>' + denom + '</a>'
-        }
-      ]"></app-card-mob-account>
-  </div>
-  <app-paginator
-    [length]="pageData.length"
-    [pageSize]="pageData.pageSize"
-    (paginator)="paginatorEmit($event)"
-    (pageEvent)="pageEvent($event)"
-    (pageChangeRecord)="pageChangeRecord($event)"
-    [showSelectRecord]="true">
-  </app-paginator>
 </ng-container>
 <ng-template #noValues>
   <div class="noData">

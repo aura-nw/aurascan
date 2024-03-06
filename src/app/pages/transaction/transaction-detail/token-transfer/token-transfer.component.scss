@@ -1,7 +1,17 @@
 .transfer-card {
+  .card-body {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+
+  .card-header {
+    position: relative;
+    z-index: 10;
+  }
+
   .card-nodata,
   .table-token {
-    height: 205px;
+    height: 305px;
     margin-bottom: 0;
     overflow-y: auto;
 
@@ -9,22 +19,24 @@
       tr.mat-row {
         height: 68px;
       }
+
       td.mat-cell:first-of-type {
         padding-left: 8px;
       }
+
       td.mat-cell {
-        max-width: 150px;
+        max-width: 200px;
+      }
+
+      @media (max-width: 414px) {
+        ::ng-deep a {
+          font-size: 12px;
+        }
       }
     }
 
     .hide-td {
       display: none;
-    }
-
-    @media (max-width: 992px) {
-      .nft-list .mat-cell {
-        padding-right: 0 !important;
-      }
     }
   }
 
@@ -38,5 +50,15 @@
 
   .transfer-address {
     min-width: 180px;
+
+    @media (min-width: 991.98px) {
+      min-width: 225px;
+    }
+  }
+}
+
+@media (max-width: 430px) {
+  .token-id {
+    max-width: 80px;
   }
 }

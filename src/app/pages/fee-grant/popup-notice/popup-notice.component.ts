@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-popup-notice',
@@ -11,18 +10,11 @@ export class PopupNoticeComponent implements OnInit {
   isLoading = false;
   walletAccount: any;
 
-  constructor(
-    public dialogRef: MatDialogRef<PopupNoticeComponent>,
-    private walletService: WalletService,
-  ) {}
+  constructor(public dialogRef: MatDialogRef<PopupNoticeComponent>) {}
 
   ngOnInit(): void {}
 
   closeDialog(isConfirm = false) {
     this.dialogRef.close(isConfirm);
-  }
-
-  connectWallet(): void {
-    this.walletAccount = this.walletService.getAccount();
   }
 }

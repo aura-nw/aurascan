@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { STORAGE_KEYS, TOKEN_ID_GET_PRICE } from './core/constants/common.constant';
+import { STORAGE_KEYS } from './core/constants/common.constant';
 import { CommonService } from './core/services/common.service';
 import { TokenService } from './core/services/token.service';
 import { getInfo } from './core/utils/common/info-common';
 import { Globals } from './global/global';
-// import eruda from 'eruda';
+import eruda from 'eruda';
 import * as _ from 'lodash';
 import { forkJoin, map, Subject, takeUntil } from 'rxjs';
 import { NameTagService } from './core/services/name-tag.service';
@@ -24,10 +24,8 @@ import BigNumber from 'bignumber.js';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  // TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
-  // isTestnet = this.TESTNET.includes(
-  //   this.chainInfo?.chainId || ''
-  // );
+  TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
+  isTestnet = this.TESTNET.includes(this.environmentService.chainInfo?.chainId || '');
   isFirstLoad = true;
   user: IUser;
 
@@ -84,15 +82,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.tokenService.getCoinData();
     }, 600000);
 
-    // if (this.isTestnet) {
-    //   let el = document.createElement('div');
-    //   document.body.appendChild(el);
-    //
-    //   eruda.init({
-    //     container: el,
-    //     tool: ['console', 'elements', 'resources', 'network'],
-    //   });
-    // }
+    if (this.isTestnet) {
+      let el = document.createElement('div');
+      document.body.appendChild(el);
+
+      eruda.init({
+        container: el,
+        tool: ['console', 'elements', 'resources', 'network'],
+      });
+    }
   }
 
   getInfoCommon(): void {
@@ -228,17 +226,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async getDataNative(nativeData) {
     const tempTotal = await this.ibcService.getTotalSupplyLCD(this.coinMinimalDenom).catch(() => '0');
-    let totalSupply = BigNumber(_.get(tempTotal, 'data.amount.amount') || '0');
-
-    this.tokenService
-      .getListAmountNative(this.excludedAddresses)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((res) => {
-        res?.data?.forEach((item) => {
-          totalSupply = totalSupply.minus(BigNumber(_.get(item, 'amount')));
-        });
-        nativeData['totalSupply'] = totalSupply.toFixed();
-        local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
-      });
+    nativeData['totalSupply'] = BigNumber(_.get(tempTotal, 'data.amount.amount') || '0').toFixed();
+    local.setItem(STORAGE_KEYS.DATA_NATIVE, nativeData);
   }
 }

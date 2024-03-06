@@ -21,7 +21,7 @@ export class Globals {
   dataHeader = new CommonDataDto();
 }
 
-export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
+export function getAmount(arrayMsg, type) {
   let amount = 0;
   let amountFormat;
   let eTransType = TRANSACTION_TYPE_ENUM;
@@ -220,77 +220,59 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
 
 export function convertDataTransaction(data, coinInfo) {
   const txs = _.get(data, 'transaction').map((element) => {
-    if (!element['data']['body']) {
-      element['data']['body'] = element['data']['tx']['body'];
-      element['data']['auth_info'] = element['data']['tx']['auth_info'];
+    if (element['data']) {
+      if (!element['data']['body'] && !element['data']['linkS3']) {
+        element['data']['body'] = element['data']['tx']['body'];
+      }
     }
 
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
-    const messages = _.get(element, 'data.body.messages');
+    const messages = _.get(element, 'data.body.messages') || _.get(element, 'transaction_messages');
 
-    let _type = _.get(element, 'data.body.messages[0].@type');
-    let lstType = _.get(element, 'data.body.messages');
-    let denom = coinInfo.coinDenom;
-
-    // check send token ibc same chain
-    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0]?.amount[0]?.denom !== denom) {
-      denom = messages[0].amount[0].denom;
-    }
-
-    // check transfer token ibc different chain
-    if (_type === TRANSACTION_TYPE_ENUM.IBCTransfer && messages[0]?.token?.denom !== denom) {
-      denom = messages[0].token?.denom;
-    }
+    let _type =
+      _.get(element, 'data.body.messages[0].@type') || _.get(element, 'transaction_messages[0].content["@type"]');
+    let lstType = _.get(element, 'data.body.messages') || _.get(element, 'transaction_messages');
 
     if (lstType?.length > 1) {
       lstType.forEach((type) => {
-        if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'].indexOf('ibc') > -1) {
-          _type = type['@type'];
-          try {
-            let dataEncode = atob(type?.packet?.data);
-            const data = JSON.parse(dataEncode);
-            denom = data.denom;
-          } catch (e) {
-            denom = coinInfo.coinDenom;
-          }
+        const typeTemp = _.get(type, 'content[@type]') || _.get(type, '@type');
+        if (typeTemp !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && typeTemp?.indexOf('ibc') > -1) {
+          _type = typeTemp;
           return;
         }
       });
     }
 
-    const _amount = getAmount(
-      _.get(element, 'data.body.messages'),
-      _type,
-      _.get(element, 'data.body.raw_log'),
-      coinInfo.coinMinimalDenom,
-    );
+    const fee = balanceOf(
+      _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
+    ).toFixed(coinInfo.coinDecimals);
 
     const typeOrigin = _type;
-    let amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
     let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
     if (type.startsWith('Msg')) {
       type = type?.replace('Msg', '');
     }
 
     try {
-      if (lstType[0]['@type'].indexOf('ibc') == -1) {
-        if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.GetReward) {
+      const typeTemp = _.get(lstType, '[0].content[@type]') || _.get(lstType, '[0].@type');
+      if (typeTemp?.indexOf('ibc') == -1) {
+        if (typeTemp === TRANSACTION_TYPE_ENUM.GetReward) {
           type = TypeTransaction.GetReward;
         } else if (lstType?.length > 1) {
-          if (lstType[0]['@type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+          if (typeTemp === TRANSACTION_TYPE_ENUM.MultiSend) {
             type = TypeTransaction.MultiSend;
           } else {
             type = 'Multiple';
           }
-          amount = 'More';
         }
       }
     } catch (e) {}
 
     if (typeOrigin === TRANSACTION_TYPE_ENUM.ExecuteContract) {
       try {
-        let dataTemp = JSON.parse(messages[0]?.msg);
+        let msg = _.get(messages, '[0].msg') || _.get(messages, '[0].content.msg');
+        let dataTemp = JSON.parse(msg);
         let action = Object.keys(dataTemp)[0];
         type = 'Contract: ' + action;
       } catch {}
@@ -298,14 +280,8 @@ export function convertDataTransaction(data, coinInfo) {
 
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-
-    const fee = balanceOf(_.get(element, 'data.auth_info.fee.amount[0].amount') || 0, coinInfo.coinDecimals).toFixed(
-      coinInfo.coinDecimals,
-    );
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
-    const gas_used = _.get(element, 'gas_used');
-    const gas_wanted = _.get(element, 'gas_wanted');
     const memo = _.get(element, 'memo');
     let tx = _.get(element, 'data.tx_response');
     if (tx) {
@@ -317,13 +293,9 @@ export function convertDataTransaction(data, coinInfo) {
       tx_hash,
       type,
       status,
-      amount,
       fee,
       height,
       timestamp,
-      gas_used,
-      gas_wanted,
-      denom,
       messages,
       tx,
       typeOrigin,
@@ -347,14 +319,7 @@ export function convertDataBlock(data) {
   return block;
 }
 
-export function convertDataAccountTransaction(
-  data,
-  coinInfo,
-  modeQuery,
-  setReceive = false,
-  currentAddress = null,
-  coinConfig = null,
-) {
+export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false) {
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');

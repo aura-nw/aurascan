@@ -3,7 +3,7 @@
     *ngIf="title.label"
     class="d-flex justify-content-between align-items-center"
     [ngStyle]="{ 'margin-bottom': '6px' }">
-    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
+    <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}" [copyBtn]="dataCard['tx_hash']">
       <span
         class="{{ title.titleClass ? title.titleClass : '' }}"
         [routerLink]="['/transaction', dataCard['tx_hash']]"
@@ -74,19 +74,21 @@
                 <app-name-tag
                   [value]="item['address']"
                   [isLink]="!item['address']?.startsWith('Null')"
-                  [maxCharacter]="12"></app-name-tag>
+                  [maxCharacter]="10"></app-name-tag>
               </ng-container>
-              <ng-container *ngIf="item['address'] | nameTagTooltipPipe">
+              <div [copyBtn]="item['address']" [btnClass]="['pl-2']" *ngIf="item['address'] | nameTagTooltipPipe">
                 <a
                   *ngIf="!item['address']?.startsWith('Null')"
-                  class="text--primary cursor-pointer block-link"
+                  class="text--primary cursor-pointer block-link caption fw-normal"
                   [routerLink]="['/account', item['address']]">
-                  {{ item['address'] | ellipsis: 6 : 6 }}
+                  {{ item['address'] | ellipsis: 5 : 5 }}
                 </a>
-                <span *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')">
+                <span *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')"
+                      class="caption fw-normal"
+                >
                   {{ (item['address'] | ellipsis: 6 : 6) || '-' }}
                 </span>
-              </ng-container>
+              </div>
             </div>
             <div class="d-flex align-items-center">
               <div>
@@ -129,15 +131,16 @@
 
             <div *ngIf="modeQuery === tabsData.NftTxs">
               <div
-                class="item-show justify-content-between tokenId txt-top-expand body-mob {{
+                class="item-show justify-content-between tokenId txt-top-expand caption fw-normal {{
                   item['address'] === item['fromAddress'] ? 'text--green-3' : 'text--red-3'
-                }}">
+                }}"
+                [copyBtn]="item.tokenId">
                 <i class="icon icon-nft text--white mr-1" [style]="'font-size: 16px'"></i>
                 {{ item.tokenId || '-' | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
               </div>
               <i
                 [style]="'margin-top: 2px'"
-                class="ph-arrow-square-out-fill body-01-mob cursor-pointer mr-1"
+                class="ph-arrow-square-out-fill body-01-mob cursor-pointer mr-1 ml-2"
                 [routerLink]="['/tokens/token-nft/', item.contractAddress, item.tokenId]"></i>
             </div>
           </div>

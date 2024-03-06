@@ -14,6 +14,7 @@ import { SharedModule } from '../../shared.module';
 import { NameTagModule } from '../name-tag/name-tag.module';
 import { ContractTableComponent } from './contract-table.component';
 import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.module';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [ContractTableComponent],
@@ -31,7 +32,8 @@ import { TooltipCustomizeModule } from '../tooltip-customize/tooltip-customize.m
     RouterModule,
     SharedModule,
     NameTagModule,
-    TooltipCustomizeModule
+    TooltipCustomizeModule,
+    CommonDirectiveModule
   ],
   exports: [ContractTableComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],

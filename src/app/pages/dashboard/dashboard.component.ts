@@ -13,6 +13,7 @@ import { CoingeckoService } from 'src/app/core/data-services/coingecko.service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
 import { ProposalService } from 'src/app/core/services/proposal.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -27,7 +28,6 @@ import {
 } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -424,7 +424,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     // re-draw chart when connect coin98 app in mobile
-    this.walletService.wallet$.pipe(takeUntil(this.destroy$)).subscribe((wallet) => {
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroy$)).subscribe((wallet) => {
       if (wallet && this.isMobileMatched) {
         if (this.originalData.length === 0) {
           this.originalData = this.cacheData;

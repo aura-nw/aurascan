@@ -2,8 +2,8 @@
   <div *ngIf="title" class="title d-flex justify-content-between align-items-center mb-2">
     <div>
       <div class="body-01 d-flex mb-2">
-        <a href="{{ title.labelLink }}" class="text--primary">{{ title.label | ellipsis : 20 }}</a>
-        <span class="ml-2 text-gray-3">{{ title.subLabel }}</span>
+        <a href="{{ title.labelLink }}" class="text--primary">{{ title.label | ellipsis: 20 }}</a>
+        <span class="ml-2 text--gray-3">{{ title.subLabel }}</span>
       </div>
       <div class="aura-status-inline">
         <div class="status {{ status.class }}">
@@ -29,6 +29,7 @@
         [class.private-name-tag]="
           (data.label === 'Sender' || data.label === 'Recipient') && (data['address'] | isPrivateNameTag)
         "
+        [copyBtn]="data.label === 'Sender' || data.label === 'Recipient' ? data['address'] : null"
         [innerHTML]="data.info"></div>
       <div *ngIf="data.isAmount" class="{{ data.class }}">
         <span [appBigNumber]="data.info"></span>

@@ -158,6 +158,7 @@ export class ContractService extends CommonService {
     query queryContractDetail($contractAddress: String = null) {
       ${this.envDB} {
         smart_contract(limit: 1, where: {address: {_eq: $contractAddress}, status: {_eq: "LATEST"}}) {
+          id
           address
           creator
           instantiate_hash

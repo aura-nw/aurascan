@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import {
-  MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -56,7 +56,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
   }
 
   async onSubmit() {
-    const minter = this.walletService.wallet?.bech32Address;
+    const minter = this.walletService.walletAccount?.address;
     let { soulboundTokenURI, receiverAddress } = this.createSBTokenForm.value;
     soulboundTokenURI = soulboundTokenURI.trim();
     receiverAddress = receiverAddress.trim();
@@ -107,15 +107,15 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     );
   }
 
-  async signWalletABT(receiverAddress, minter, soulboundTokenURI) {
+  async signWalletABT(receiverAddress: string, minter: string, soulboundTokenURI: string) {
     const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
     const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
-    let dataWallet = await this.walletService.getWalletSign(minter, message);
+    let signResult = await this.walletService.signArbitrary(minter, message);
 
     const payload = {
-      signature: dataWallet['signature'],
+      signature: signResult['signature'],
       msg: message,
-      pubKey: dataWallet['pub_key']?.value,
+      pubKey: signResult['pub_key']?.value,
       contract_address: this.data.contractAddress,
       receiver_address: receiverAddress,
       token_uri: soulboundTokenURI,

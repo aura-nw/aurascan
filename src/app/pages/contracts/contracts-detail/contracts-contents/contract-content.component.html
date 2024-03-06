@@ -28,10 +28,10 @@
   </div>
   <div class="mt-5" [class.d-none]="currentTab !== contractTab.Transactions">
     <app-loading-sprint *ngIf="loadingContract"></app-loading-sprint>
-    <app-table-no-data *ngIf="!loadingContract && errTxt" [textNull]="errTxt"></app-table-no-data>
+    <app-table-no-data *ngIf="!loadingContract && (contractTransaction.count == 0 || errTxt)" [textNull]="errTxt"></app-table-no-data>
     <app-contract-table
       [length]="limit"
-      *ngIf="!loadingContract && contractTransaction['data'] && !errTxt"
+      *ngIf="!loadingContract && contractTransaction.count > 0 && !errTxt"
       [dataList]="contractTransaction"
       [templates]="templates"
       [contractInfo]="contractInfo"
