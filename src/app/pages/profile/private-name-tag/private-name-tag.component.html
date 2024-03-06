@@ -45,12 +45,10 @@
       <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
           <th mat-header-cell *matHeaderCellDef>
-            <div *ngIf="template.headerCellDef === 'Fav'" class="d-flex aura-tooltip-contain ml-lg-3 ml-2">
-              <i class="ph ph-info body-01 aura-tooltip-object"></i>
-              <app-tooltip-customize
-                [content]="'Click the star icon to mark your favorite address <br> on the top of the list'"
-                [class]="'fw-normal'">
-              </app-tooltip-customize>
+            <div *ngIf="template.headerCellDef === 'Fav'" class="d-flex ml-lg-3 ml-2">
+              <i
+                class="ph ph-info body-01"
+                [appTooltip]="'Click the star icon to mark your favorite address <br> on the top of the list'"></i>
             </div>
             <div [innerHTML]="template.headerCellDef | translate" *ngIf="template.headerCellDef !== 'Fav'"></div>
           </th>
@@ -75,18 +73,11 @@
                   <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
                     <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                   </a>
-                  <div class="aura-tooltip-contain">
-                    <div
-                      class="text--gray-5 line-claim"
-                      [class.aura-tooltip-object]="data.note"
-                      style="max-width: 200px; width: fit-content">
-                      {{ data.note || 'Note:-' }}
-                    </div>
-                    <app-tooltip-customize
-                      [content]="'<div>' + data.note + '</div>'"
-                      [class]="'txt-note'"
-                      [className]="'tooltip--below'">
-                    </app-tooltip-customize>
+                  <div
+                    class="text--gray-5 line-claim"
+                    [appTooltip]="data.note ? '<div>' + data.note + '</div>' : ''"
+                    style="max-width: 200px; width: fit-content">
+                    {{ data.note || 'Note:-' }}
                   </div>
                 </div>
                 <div *ngSwitchCase="'type'" class="text-capitalize">
@@ -101,16 +92,16 @@
                 <div *ngSwitchCase="'updatedAt'">
                   {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </div>
-                <div *ngSwitchCase="'action'" class="text-end">
-                  <div class="aura-tooltip-contain">
+                <div *ngSwitchCase="'action'">
+                  <div class="d-flex align-items-center justify-content-end">
                     <i
-                      class="ph ph-note-pencil body-01 cursor-pointer aura-tooltip-object"
+                      class="ph ph-note-pencil body-01 cursor-pointer mr-4"
+                      [appTooltip]="'Edit'"
                       (click)="openPopup(data)"></i>
-                    <app-tooltip-customize [content]="'Edit'"></app-tooltip-customize>
-                  </div>
-                  <div class="aura-tooltip-contain ml-6">
-                    <i class="ph ph-x body-01 cursor-pointer aura-tooltip-object" (click)="openPopupDelete(data)"></i>
-                    <app-tooltip-customize [content]="'Remove'"></app-tooltip-customize>
+                    <i
+                      class="ph ph-x body-01 cursor-pointer"
+                      [appTooltip]="'Remove'"
+                      (click)="openPopupDelete(data)"></i>
                   </div>
                 </div>
               </ng-container>
@@ -128,7 +119,7 @@
             <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
               <span class="fw-semibold">{{ data.address | ellipsis: 8 : 8 }}</span>
             </a>
-            <div class="text--gray-5 line-claim w-100" [class.aura-tooltip-object]="data.note">
+            <div class="text--gray-5 line-claim w-100">
               {{ data.note || 'Note:-' }}
             </div>
           </div>
@@ -157,13 +148,13 @@
                 <li
                   class="dropdown-item cursor-pointer d-flex align-items-center px-2 action-mob mb-1"
                   (click)="openPopup(data)">
-                  <i class="ph ph-note-pencil h3 cursor-pointer aura-tooltip-object mr-2"></i>
+                  <i class="ph ph-note-pencil h3 cursor-pointer mr-2"></i>
                   <span class="body-02">Edit</span>
                 </li>
                 <li
                   class="dropdown-item cursor-pointer d-flex align-items-center px-2 action-mob"
                   (click)="openPopupDelete(data)">
-                  <i class="ph ph-x h3 cursor-pointer aura-tooltip-object mr-2"></i>
+                  <i class="ph ph-x h3 cursor-pointer mr-2"></i>
                   <span class="body-02">Remove</span>
                 </li>
               </ul>

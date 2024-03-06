@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { NUMBER_CONVERT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { PROPOSAL_STATUS } from 'src/app/core/constants/proposal.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -51,7 +51,6 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   errText = null;
 
   chainName = this.environmentService.chainName;
-  listCoin = this.environmentService.coins;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(
@@ -94,7 +93,6 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
   }
 
   async getListAsset() {
-    let auraAsset;
     if (this.textSearch) {
       this.filterSearchData = this.listAssetLcd;
       this.filterSearchData = this.filterSearchData.filter(
@@ -115,45 +113,46 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
       try {
         const res = await this.tokenService.getListAssetCommunityPool();
         this.listAssetLcd = _.get(res, 'data.pool');
-
-        this.listAssetLcd.forEach((element) => {
-          element.isNative = false;
-          let findItem = this.listCoin.find((i) => i.denom === element.denom);
-          if (findItem) {
-            element.decimal = findItem.decimal;
-            element.symbol = findItem.display;
-            element.logo = findItem.logo;
-            element.name = findItem.name;
+        this.tokenService.tokensMarket$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+          this.listAssetLcd.forEach((element) => {
+            element.isNative = false;
+            let findItem = res?.find((i) => i.denom === element.denom);
+            if (findItem) {
+              element.decimal = findItem.decimal;
+              element.symbol = findItem.display || findItem.symbol;
+              element.logo = findItem.logo || findItem.image;
+              element.name =
+                findItem.type === ETokenCoinTypeBE?.NATIVE
+                  ? this.environmentService.chainName
+                  : findItem.name;
+            } else {
+              element.decimal = 6;
+              element.symbol = '';
+              element.logo = '';
+              element.name = this.environmentService.chainName;
+              element.amount = element.amount / NUMBER_CONVERT;
+              element.isNative = true;
+            }
+          });
+          this.listAssetLcd = this.listAssetLcd?.filter((k) => k.denom);
+          this.listAssetLcd = this.listAssetLcd?.sort((a, b) => {
+            return this.compare(balanceOf(a.amount, a.decimal), balanceOf(b.amount, b.decimal), false);
+          });
+          this.filterSearchData = this.listAssetLcd;
+          if (!this.dataSource) {
+            this.dataSource = new MatTableDataSource<any>(this.listAssetLcd);
+            this.dataSourceMob = this.listAssetLcd.slice(
+              this.pageData.pageIndex * this.pageSizeMob,
+              this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
+            );
           } else {
-            element.decimal = 6;
-            element.symbol = '';
-            element.logo = '';
-            element.name = this.environmentService.chainName;
-            element.amount = element.amount / NUMBER_CONVERT;
-            element.isNative = true;
-            auraAsset = element;
+            this.dataSource.data = this.listAssetLcd;
+            this.dataSourceMob = this.listAssetLcd.slice(
+              this.pageData.pageIndex * this.pageSizeMob,
+              this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
+            );
           }
         });
-        this.listAssetLcd = this.listAssetLcd.filter((k) => k.symbol !== '');
-        this.listAssetLcd = this.listAssetLcd.sort((a, b) => {
-          return this.compare(balanceOf(a.amount, a.decimal), balanceOf(b.amount, b.decimal), false);
-        });
-        this.listAssetLcd.unshift(auraAsset);
-        this.filterSearchData = this.listAssetLcd;
-        if (!this.dataSource) {
-          this.dataSource = new MatTableDataSource<any>(this.listAssetLcd);
-          this.dataSourceMob = this.listAssetLcd.slice(
-            this.pageData.pageIndex * this.pageSizeMob,
-            this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
-          );
-        } else {
-          this.dataSource.data = this.listAssetLcd;
-          this.dataSourceMob = this.listAssetLcd.slice(
-            this.pageData.pageIndex * this.pageSizeMob,
-            this.pageData.pageIndex * this.pageSizeMob + this.pageSizeMob,
-          );
-        }
-        this.pageData.length = this.listAssetLcd.length;
       } catch (e) {
         this.errText = e['status'] + ' ' + e['statusText'];
       }

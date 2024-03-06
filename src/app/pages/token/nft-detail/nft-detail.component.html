@@ -170,8 +170,9 @@
                   [value]="nftDetail?.owner"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [url]="nftDetail?.owner?.length > lengthNormalAddress ? 'contracts' : 'account'"
-                  [maxCharacter]="11"></app-name-tag>
+                  [linkRouter]="[(nftDetail?.owner | isContract) ? '/contracts' : '/account', nftDetail?.owner]"
+                  [maxCharacter]="11">
+                </app-name-tag>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -179,10 +180,10 @@
               <div class="d-flex align-items-center position-relative">
                 <app-name-tag
                   [value]="nftDetail?.contract_address"
-                  [url]="'contracts'"
+                  [linkRouter]="['/contracts', nftDetail?.contract_address]"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [iconVerify]="nftDetail['verification_status'] === ContractVerifyType.Verified"
+                  [isVerified]="nftDetail['verification_status'] === ContractVerifyType.Verified"
                   [maxCharacter]="11"></app-name-tag>
               </div>
             </div>
@@ -193,8 +194,9 @@
                   [value]="nftDetail?.creator"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [url]="nftDetail?.creator?.length > lengthNormalAddress ? 'contracts' : 'account'"
-                  [maxCharacter]="11"></app-name-tag>
+                  [linkRouter]="[(nftDetail?.creator | isContract) ? '/contracts' : '/account', nftDetail?.creator]"
+                  [maxCharacter]="11">
+                </app-name-tag>
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -337,16 +339,15 @@
                         !data[template.matColumnDef]?.startsWith('Null')
                       ">
                       <app-name-tag
+                        *ngIf="data[template.matColumnDef]"
                         [value]="data[template.matColumnDef]"
-                        [isTokenDetail]="true"
-                        *ngIf="
-                          data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]
-                        "></app-name-tag>
-                      <app-name-tag
-                        [value]="data[template.matColumnDef]"
-                        [isTokenDetail]="true"
-                        *ngIf="data.modeExecute === modeExecuteTransaction.Mint"
-                        [isLink]="false"></app-name-tag>
+                        [linkRouter]="[
+                          (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                          data[template.matColumnDef]
+                        ]"
+                        [iconContract]="data[template.matColumnDef] | isContract"
+                        [isEnableRouter]="data.modeExecute !== modeExecuteTransaction.Mint">
+                      </app-name-tag>
                     </ng-container>
                   </div>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
@@ -366,22 +367,27 @@
                   </ng-container>
                   <ng-container *ngIf="!data[template.matColumnDef]?.startsWith('Null')">
                     <app-name-tag
-                      [url]="data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account'"
-                      [value]="data[template.matColumnDef]"
-                      [type]="data.type"
-                      [isTokenDetail]="true"
                       *ngIf="
                         data.modeExecute !== modeExecuteTransaction.Burn &&
                         data.modeExecute !== modeExecuteTransaction.UnEquip &&
                         data[template.matColumnDef]
-                      "></app-name-tag>
+                      "
+                      [value]="data[template.matColumnDef]"
+                      [linkRouter]="[
+                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                        data[template.matColumnDef]
+                      ]"
+                      [iconContract]="data[template.matColumnDef] | isContract">
+                    </app-name-tag>
                   </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
-                  <div class="aura-tooltip-contain d-flex pl-5 pl-lg-0" *ngIf="data[template.matColumnDef]">
-                    <div class="aura-tooltip-object" *ngIf="data[template.matColumnDef] < 0.001"><0.001</div>
+                  <div class="d-flex pl-5 pl-lg-0" *ngIf="data[template.matColumnDef]">
+                    <div *ngIf="data[template.matColumnDef] < 0.001" [appTooltip]="data[template.matColumnDef]">
+                      <0.001
+                    </div>
                     <div
-                      [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
+                      [appTooltip]="data[template.matColumnDef]"
                       [class.cursor-text]="data[template.matColumnDef] < 1000000"
                       *ngIf="data[template.matColumnDef] >= 0.001"
                       [appBigNumber]="data[template.matColumnDef]"
@@ -389,10 +395,6 @@
                     <span class="ml-1" appLinkDenom>
                       {{ data.denom || denom }}
                     </span>
-                    <app-tooltip-customize
-                      *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
-                      [content]="data[template.matColumnDef] | mask: 'separator'">
-                    </app-tooltip-customize>
                   </div>
                   <div class="pl-5 pl-lg-0" *ngIf="!data[template.matColumnDef]">-</div>
                 </ng-container>

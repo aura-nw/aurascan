@@ -3,7 +3,7 @@
     <div class="card-body p-0">
       <!-- Title -->
       <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!assetsLoading">
-        <h3 class="mb-3 fw-700 text--gray-light-2 mb-xl-0">Fungible Tokens ({{ pageData?.length || 0 }})</h3>
+        <h3 class="mb-3 fw-700 text--gray-light-2 mb-lg-0">Fungible Tokens ({{ pageData?.length || 0 }})</h3>
         <div class="d-flex flex-lg-row align-items-center justify-content-end gap-2">
           <div
             class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100"
@@ -104,23 +104,21 @@
                     <img [appImg]="element?.image" [defaultImage]="defaultLogoAura" class="image-token" alt="" />
                   </div>
                   <div>
-                    <a class="d-flex align-items-center text-nowrap mr-3" [routerLink]="['/tokens/token', element.tokenUrl]">
+                    <a
+                      class="d-flex align-items-center text-nowrap mr-3"
+                      [routerLink]="['/tokens/token', element.tokenUrl]">
                       <div class="d-flex align-items-center">
                         <div class="ml-2 body-03 fw-semibold">
                           {{ element.name | ellipsis: 30 }}
                         </div>
-                        <div class="aura-tooltip-contain">
-                          <div class="status cursor-pointer aura-tooltip-object">
-                            <img
-                              [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
-                              alt=""
-                              width="18"
-                              height="18"
-                              class="ml-1"
-                              *ngIf="element.verify_status === 'VERIFIED'" />
-                          </div>
-                          <app-tooltip-customize [content]="element.verify_text || 'Verified by Aura Network'">
-                          </app-tooltip-customize>
+                        <div class="cursor-pointer" [appTooltip]="element.verify_text || 'Verified by Aura Network'">
+                          <img
+                            [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                            alt=""
+                            width="18"
+                            height="18"
+                            class="ml-1"
+                            *ngIf="element.verify_status === 'VERIFIED'" />
                         </div>
                       </div>
                     </a>
@@ -140,7 +138,8 @@
                     [value]="element.contract_address"
                     *ngIf="element.contract_address !== '-'"
                     [iconContract]="true"
-                    [url]="'contracts'"></app-name-tag>
+                    [linkRouter]="['/contracts', element.contract_address]">
+                  </app-name-tag>
                   <span *ngIf="element.contract_address === '-'">-</span>
                 </div>
               </td>
@@ -170,21 +169,25 @@
               <th *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
                 <span class="text--gray-4 caption fw-normal">Amount</span>
-                <div class="aura-tooltip-contain d-flex">
-                  <div class="aura-tooltip-object" *ngIf="element.balance === 0">0</div>
+                <div *ngIf="element.balance === 0">0</div>
+                <div *ngIf="element.balance !== 0">
                   <div
-                    class="aura-tooltip-object"
+                    [appTooltip]="{
+                      priceAmount: element.balance,
+                      decimal: element.contract_address !== '-' ? element.decimals : 0
+                    }"
                     *ngIf="
-                      element.balance !== 0 &&
                       (element.balance | balance: (element.contract_address !== '-' ? element.decimals : 0) : true).lt(
                         0.001
                       )
                     ">
                     {{ '<0.001' }}
                   </div>
-
                   <div
-                    class="aura-tooltip-object"
+                    [appTooltip]="{
+                      priceAmount: element.balance,
+                      decimal: element.contract_address !== '-' ? element.decimals : 0
+                    }"
                     *ngIf="
                       (element.balance | balance: (element.contract_address !== '-' ? element.decimals : 0) : true).gte(
                         0.001
@@ -192,23 +195,6 @@
                     "
                     [appBigNumber]="element.balance"
                     [decimal]="element.contract_address !== '-' ? element.decimals : 0"></div>
-
-                  <app-tooltip-customize
-                    *ngIf="
-                      element.balance !== 0 &&
-                      ((element.balance | balance: (element.contract_address !== '-' ? element.decimals : 0) : true).lt(
-                        0.001
-                      ) ||
-                        (
-                          element.balance | balance: (element.contract_address !== '-' ? element.decimals : 0) : true
-                        ).gte(1000000))
-                    "
-                    [content]="
-                      element.balance
-                        | balance: (element.contract_address !== '-' ? element.decimals : 0)
-                        | mask: 'separator'
-                    ">
-                  </app-tooltip-customize>
                 </div>
               </td>
             </ng-container>
@@ -220,41 +206,41 @@
                 <div class="d-flex flex-column">
                   <span class="text--gray-4 caption fw-normal">Value</span>
                   <span *ngIf="element.price > 0; else defaultValues">
-                    <div class="aura-tooltip-contain" *ngIf="element.contract_address === '-'">
+                    <div *ngIf="element.contract_address === '-'">
                       <div *ngIf="element.value == 0">$0.00</div>
-                      <div *ngIf="element.value != 0" class="aura-tooltip-object">
-                        <div *ngIf="element.value | lt: '0.01'">
+                      <div *ngIf="element.value != 0">
+                        <div *ngIf="element.value | lt: '0.01'" [appTooltip]="{ priceAmount: element.value, lt: 0.01 }">
                           {{ '< $0.01' }}
                         </div>
                         <ng-container *ngIf="element.value | gte: '0.01'">
-                          <span [appBigNumber]="element.balance" [tokenPrice]="element.price" [decimal]="0"></span>
+                          <span
+                            [appBigNumber]="element.balance"
+                            [tokenPrice]="element.price"
+                            [decimal]="0"
+                            [appTooltip]="{
+                              priceAmount: element.value,
+                              lt: 0.01,
+                              decimal: 0,
+                              multipliedBy: element.price
+                            }"></span>
                         </ng-container>
                       </div>
-                      <app-tooltip-customize
-                        *ngIf="(element.value | lt: '0.01') || (element.value | gte: '1000000')"
-                        [content]="element.value | balance | mask: 'separator'">
-                      </app-tooltip-customize>
                     </div>
 
-                    <div class="aura-tooltip-contain" *ngIf="element.contract_address !== '-'">
+                    <div *ngIf="element.contract_address !== '-'">
                       <div *ngIf="element.value === 0">0</div>
-                      <ng-container *ngIf="element.value !== 0">
-                        <div class="aura-tooltip-object" *ngIf="element.value | lt: '0.01'">
+                      <div *ngIf="element.value != 0">
+                        <div *ngIf="element.value | lt: '0.01'" [appTooltip]="{ priceAmount: element.value, lt: 0.01 }">
                           {{ '< $0.01' }}
                         </div>
 
                         <div
                           *ngIf="element.value | gte: '0.01'"
-                          class="aura-tooltip-object"
                           [appBigNumber]="element.balance"
                           [decimal]="element.decimals"
-                          [tokenPrice]="element.price"></div>
-
-                        <app-tooltip-customize
-                          *ngIf="(element.value | lt: '0.01') || (element.value | gte: '1000000')"
-                          [content]="element.value | mask: 'separator'">
-                        </app-tooltip-customize>
-                      </ng-container>
+                          [tokenPrice]="element.price"
+                          [appTooltip]="{ priceAmount: element.value, decimal: element.decimal, lt: 0.01 }"></div>
+                      </div>
                     </div>
                   </span>
                 </div>

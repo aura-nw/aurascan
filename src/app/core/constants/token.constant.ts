@@ -1,4 +1,4 @@
-import {TokenTab} from "./token.enum";
+import { TokenTab } from './token.enum';
 
 export const TOKEN_TAB = [
   {
@@ -33,4 +33,10 @@ export enum ETokenCoinType {
   NATIVE = 'Native',
   IBC = 'IBC Token',
   CW20 = 'CW20 Token',
+}
+
+export enum ETokenCoinTypeBE {
+  NATIVE = 'NATIVE',
+  IBC = 'IBC_TOKEN',
+  CW20 = 'CW20_TOKEN',
 }

@@ -197,14 +197,9 @@
       </div>
     </div>
 
-    <div [class.aura-tooltip-contain]="!userEmail">
-      <div class="aura-tooltip-object d-flex">
-        <mat-slide-toggle formControlName="displayPrivate" [disabled]="!userEmail" class="csv-hint"> </mat-slide-toggle>
-        <span class="txt-toggle ml-2" [class.text--white]="userEmail"
-          >Include Private name tags in data downloaded</span
-        >
-      </div>
-      <app-tooltip-customize [content]="'Need to login by email to enable this option'"> </app-tooltip-customize>
+    <div class="d-flex" [appTooltip]="!userEmail ? 'Need to login by email to enable this option' : null">
+      <mat-slide-toggle formControlName="displayPrivate" [disabled]="!userEmail" class="csv-hint"></mat-slide-toggle>
+      <span class="txt-toggle ml-2" [class.text--white]="userEmail">Include Private name tags in data downloaded</span>
     </div>
 
     <div id="box_recaptcha" class="mt-6"></div>

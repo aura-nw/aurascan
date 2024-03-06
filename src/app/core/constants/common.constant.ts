@@ -114,4 +114,5 @@ export const STORAGE_KEYS = {
   DATA_NATIVE: 'nativeData',
 };
 
-export const TITLE_LOGO = 'images/logo/title-logo.png';
+export const TITLE_LOGO = 'assets/images/logo/title-logo.png';
+export const MAX_LENGTH_NAME_TAG = 35;

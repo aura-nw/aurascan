@@ -335,7 +335,7 @@
 
 <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
   <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
-    <div class="table-responsive spacer-tooltip--sm" *ngIf="!breakpoint.value.matches">
+    <div class="table-responsive" *ngIf="!breakpoint.value.matches">
       <table
         mat-table
         [dataSource]="dataSource"
@@ -378,16 +378,11 @@
                       (click)="data.expand = false"></i>
                   </div>
                   <div *ngSwitchCase="'type'">
-                    <div class="aura-status aura-tooltip-contain p-0">
-                      <div class="status cursor-pointer aura-tooltip-object">
-                        {{ data[template.matColumnDef] | ellipsis: 22 }}
-                        <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
-                          +{{ data.lstTypeTemp?.length - 1 }}
-                        </div>
+                    <div class="status cursor-pointer d-flex" [appTooltip]="data.lstTypeTemp | combineTxsMsg">
+                      {{ data[template.matColumnDef] | ellipsis: 22 }}
+                      <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                        +{{ data.lstTypeTemp?.length - 1 }}
                       </div>
-
-                      <app-tooltip-customize [class]="'message-custom'" [content]="data.lstTypeTemp | combineTxsMsg">
-                      </app-tooltip-customize>
                     </div>
                   </div>
                   <div *ngSwitchCase="'status'">
@@ -414,39 +409,26 @@
                         [class.show-detail]="data.expand || index === 0"
                         *ngIf="index < data.limit">
                         <div class="item-show d-flex align-items-center">
-                          <div class="aura-tooltip-contain">
-                            <div *ngIf="+item.amountTemp === 0">0</div>
-                            <div
-                              class="aura-tooltip-object"
-                              *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
-                              {{ '<0.001' }}
-                            </div>
-                            <div
-                              [class.aura-tooltip-object]="item.amountTemp !== 0"
-                              [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
-                              *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
-                              [appBigNumber]="item.amountTemp"
-                              [decimal]="item.decimal"></div>
-                            <app-tooltip-customize
-                              *ngIf="
-                                +item.amountTemp !== 0 &&
-                                ((item.amountTemp | balance: item.decimal | lt: 0.001) ||
-                                  (item.amountTemp | balance: item.decimal | gte: 1000000))
-                              "
-                              [content]="item.amountTemp | balance: item.decimal | mask: 'separator'">
-                            </app-tooltip-customize>
+                          <div *ngIf="+item.amountTemp === 0">0</div>
+                          <div
+                            [appTooltip]="{ priceAmount: item.amountTemp, decimal: item.decimal }"
+                            *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
+                            {{ '<0.001' }}
                           </div>
+                          <div
+                            [appTooltip]="{ priceAmount: item.amountTemp, decimal: item.decimal }"
+                            [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
+                            *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
+                            [appBigNumber]="item.amountTemp"
+                            [decimal]="item.decimal"></div>
                           <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
-                            <div class="aura-tooltip-contain" *ngIf="modeQuery !== tabsData.FtsTxs">
-                              <div [class.aura-tooltip-object]="item.denom !== denom" [appLinkDenom]="item.denomOrigin">
-                                {{ item.denom | ellipsis: 19 }}
-                              </div>
-
-                              <app-tooltip-customize
-                                [className]="'tooltip--left'"
-                                [class]="'message-custom'"
-                                [content]="item.denomOrigin">
-                              </app-tooltip-customize>
+                            <div
+                              *ngIf="modeQuery !== tabsData.FtsTxs"
+                              [appTooltip]="item.denom !== denom ? item.denomOrigin : null"
+                              [classTooltip]="'tooltip--left'"
+                              [class.aura-tooltip-object]="item.denom !== denom"
+                              [appLinkDenom]="item.denomOrigin">
+                              {{ item.denom | ellipsis: 19 }}
                             </div>
                             <a
                               class=""
@@ -468,12 +450,16 @@
                         <div class="item-show d-flex justify-content-between align-items-center">
                           <app-name-tag
                             [value]="item.fromAddress || currentAddress"
-                            [url]="(item.fromAddress || currentAddress | isContract) ? 'contracts' : 'account'"
                             [iconContract]="item.fromAddress || currentAddress | isContract"
-                            [isLink]="
+                            [linkRouter]="[
+                              (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                              item.fromAddress || currentAddress
+                            ]"
+                            [isEnableRouter]="
                               !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                               item.fromAddress !== currentAddress
-                            "></app-name-tag>
+                            ">
+                          </app-name-tag>
                           <div class="box-token-transfer d-flex mr-8">
                             <span
                               class="token-transfer-status d-inline-flex align-items-center caption"
@@ -514,12 +500,16 @@
                           <div [style]="'min-width: 148px'">
                             <app-name-tag
                               [value]="item.toAddress || currentAddress"
-                              [url]="(item.toAddress || currentAddress | isContract) ? 'contracts' : 'account'"
+                              [linkRouter]="[
+                                (item.toAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                                item.toAddress || currentAddress
+                              ]"
                               [iconContract]="item.toAddress || currentAddress | isContract"
-                              [isLink]="
+                              [isEnableRouter]="
                                 !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                                 item.toAddress !== currentAddress
-                              "></app-name-tag>
+                              ">
+                            </app-name-tag>
                           </div>
                           <ng-container *ngIf="index === 0">
                             <div
@@ -561,10 +551,10 @@
                           <div class="mt-1">
                             <app-name-tag
                               [iconContract]="true"
-                              [url]="'contracts'"
+                              [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
                               [isShorterText]="true"
                               [value]="item.contractAddress"
-                              [isLink]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                              [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                           </div>
                         </div>
                       </div>

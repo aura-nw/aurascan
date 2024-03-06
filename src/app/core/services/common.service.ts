@@ -14,7 +14,6 @@ import { LCD_COSMOS } from '../constants/url.constant';
 @Injectable({ providedIn: 'root' })
 export class CommonService {
   apiUrl = '';
-  coins = this._environmentService.coins;
   chainInfo = this._environmentService.chainInfo;
 
   horoscope = this._environmentService.horoscope;
@@ -26,7 +25,10 @@ export class CommonService {
   addressPrefix = '';
   listValidator = [];
 
-  constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
+  constructor(
+    private _http: HttpClient,
+    private _environmentService: EnvironmentService,
+  ) {
     this._environmentService.config.asObservable().subscribe((res) => {
       this.apiUrl = res.api.backend;
       this.addressPrefix = res.chainConfig.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -107,15 +109,14 @@ export class CommonService {
     return this._environmentService.imageUrl + 'images/aura__ntf-default-img.png';
   }
 
-  showToolTip(element) {
-    if (element.classList.contains('disabled-hover')) {
-      element.classList.remove('disabled-hover');
-      element.classList.add('show');
-      setTimeout(function () {
-        element.classList.remove('show');
-        element.classList.add('disabled-hover');
-      }, 800);
-    }
+  getOffSet(el) {
+    // calculate tooltip position
+    // param el: tooltip element's parent
+    const rect = el.getBoundingClientRect();
+    return {
+      left: rect.left + window.scrollX + rect.width / 2,
+      top: rect.top,
+    };
   }
 
   exportCSV(payload, getPrivate = false): Observable<any> {
