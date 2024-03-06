@@ -8,6 +8,7 @@ app-tooltip-customize,
   max-height: 0;
   opacity: 0;
   transition: opacity 0.35s ease-in-out;
+  word-break: break-word;
 
   &.tooltip--below {
     bottom: 0;
@@ -25,9 +26,8 @@ app-tooltip-customize,
     cursor: pointer;
 
     @media (min-width: 991.98px) {
-
-      &:not(.disabled-hover):hover~app-tooltip-customize,
-      &:not(.disabled-hover):hover~.app-tooltip-customize {
+      &:not(.disabled-hover):hover ~ app-tooltip-customize,
+      &:not(.disabled-hover):hover ~ .app-tooltip-customize {
         max-width: 500px;
         max-height: 500px;
         opacity: 1;
@@ -40,8 +40,8 @@ app-tooltip-customize,
       }
     }
 
-    &.show~app-tooltip-customize,
-    &.show~.app-tooltip-customize {
+    &.show ~ app-tooltip-customize,
+    &.show ~ .app-tooltip-customize {
       max-width: 500px;
       max-height: 500px;
       opacity: 1;
