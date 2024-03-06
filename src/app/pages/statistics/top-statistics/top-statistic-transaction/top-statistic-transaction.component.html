@@ -44,20 +44,28 @@
                   <ng-container matColumnDef="total">
                     <th mat-header-cell *matHeaderCellDef>{{ denom }} Amount</th>
                     <td mat-cell *matCellDef="let element">
-                      {{ (element.amount | balance: coinDecimals | mask: 'separator.6') ?? 0 }}
+                      <span
+                        *ngIf="element.amount | balance: coinDecimals | lt: 0.001"
+                        [appTooltip]="{ priceAmount: element.amount, decimal: coinDecimals }">
+                         {{ (element.amount | balance: coinDecimals) == 0 ? 0 : '<0.001' }}
+                      </span>
+                      <span
+                        [appTooltip]="{ priceAmount: element.amount, decimal: coinDecimals }"
+                        [class.cursor-text]="element.amount | balance: coinDecimals | lt: 1000000"
+                        *ngIf="element.amount | balance: 6 | gte: 0.001"
+                        [appBigNumber]="element.amount"
+                        [decimal]="coinDecimals"></span>
                     </td>
                   </ng-container>
                   <!-- Percent Column -->
                   <ng-container matColumnDef="percentage">
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
-                      {{
-                        (element.percentage | gt: 0.01)
-                          ? (element.percentage | formatDigit: 2)
-                          : (element.percentage | lte: 0)
-                            ? 0
-                            : '< 0.01'
-                      }}%
+                      <span [appTooltip]="element.percentage.toString()">       
+                        {{
+                        (element.percentage | gt: 0.01) ? (element.percentage | formatDigit: 2) : (element.percentage | lte: 0) ? 0 : '< 0.01'
+                        }}%
+                      </span>
                     </td>
                   </ng-container>
 
@@ -110,11 +118,11 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | gt: 0.01)
-                          ? (element.percentage | formatDigit: 2)
-                          : (element.percentage | lte: 0)
-                            ? 0
-                            : '< 0.01'
+                      (element.percentage | gt: 0.01)
+                        ? (element.percentage | formatDigit: 2)
+                        : (element.percentage | lte: 0)
+                          ? 0
+                          : '< 0.01'
                       }}%
                     </td>
                   </ng-container>
@@ -167,11 +175,11 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | gt: 0.01)
-                          ? (element.percentage | formatDigit: 2)
-                          : (element.percentage | lte: 0)
-                            ? 0
-                            : '< 0.01'
+                      (element.percentage | gt: 0.01)
+                        ? (element.percentage | formatDigit: 2)
+                        : (element.percentage | lte: 0)
+                          ? 0
+                          : '< 0.01'
                       }}%
                     </td>
                   </ng-container>
@@ -224,11 +232,11 @@
                     <th mat-header-cell *matHeaderCellDef>Proportion</th>
                     <td mat-cell *matCellDef="let element">
                       {{
-                        (element.percentage | gt: 0.01)
-                          ? (element.percentage | formatDigit: 2)
-                          : (element.percentage | lte: 0)
-                            ? 0
-                            : '< 0.01'
+                      (element.percentage | gt: 0.01)
+                        ? (element.percentage | formatDigit: 2)
+                        : (element.percentage | lte: 0)
+                          ? 0
+                          : '< 0.01'
                       }}%
                     </td>
                   </ng-container>
