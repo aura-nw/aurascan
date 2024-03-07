@@ -1,9 +1,6 @@
 .content-transfer {
-  min-width: 180px;
+  min-width: 190px;
   display: inline-block;
-  @media (max-width: 991.99px) {
-    min-width: 180px;
-  }
 }
 
 .box-token-transfer {
@@ -35,32 +32,6 @@
   .status {
     padding: 8px 16px;
     border-radius: 4px;
-  }
-}
-
-.aura-table th.mat-header-cell:nth-child(1) {
-  min-width: 280px;
-}
-
-.aura-table th.mat-header-cell:nth-child(5) {
-  min-width: 250px;
-}
-
-@media (max-width: 991.99px) {
-  .aura-table th.mat-header-cell:not(:nth-child(5)) {
-    min-width: 150px;
-  }
-  .aura-table th.mat-header-cell:nth-child(2) {
-    min-width: 250px;
-  }
-  .aura-table th.mat-header-cell:nth-child(5) {
-    min-width: 260px;
-  }
-  .aura-table th.mat-header-cell:nth-child(6) {
-    min-width: 180px;
-  }
-  .aura-table th.mat-header-cell:nth-child(1) {
-    min-width: 250px;
   }
 }
 

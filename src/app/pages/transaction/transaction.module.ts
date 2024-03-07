@@ -10,11 +10,10 @@ import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
-import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { MappingErrorService } from '../../core/services/mapping-error.service';
 import { TransactionService } from '../../core/services/transaction.service';
 import { MaterialModule } from '../../material.module';
+import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AuraTransactionComponent } from './aura-transaction/aura-transaction.component';
@@ -55,7 +54,6 @@ import { TransactionComponent } from './transaction.component';
     NgxJsonViewerModule,
     CommonDirectiveModule,
     NameTagModule,
-    TooltipCustomizeModule,
     ClipboardModule,
   ],
   providers: [TransactionService, MappingErrorService, ProposalService, provideEnvironmentNgxMask(MASK_CONFIG)],

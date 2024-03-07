@@ -426,18 +426,23 @@
             <div class="txt-label">From</div>
             <div class="txt-address">
               <app-name-tag
-                [url]="(transactionDetail?.messages[0]?.inputs[0]?.address | isContract) ? 'contracts' : 'account'"
                 [value]="transactionDetail?.messages[0]?.inputs[0]?.address"
+                [linkRouter]="[
+                  (transactionDetail?.messages[0]?.inputs[0]?.address | isContract) ? '/contracts' : '/account',
+                  transactionDetail?.messages[0]?.inputs[0]?.address
+                ]"
                 [fullText]="true"
-                [fullTextMob]="true"></app-name-tag>
+                [fullTextMob]="true">
+              </app-name-tag>
             </div>
             <div class="txt-label">To</div>
             <div class="txt-address">
               <app-name-tag
-                [url]="(item?.address | isContract) ? 'contracts' : 'account'"
+                [linkRouter]="[(item?.address | isContract) ? '/contracts' : '/account', item?.address]"
                 [fullText]="true"
                 [fullTextMob]="true"
-                [value]="item?.address"></app-name-tag>
+                [value]="item?.address">
+              </app-name-tag>
             </div>
             <div class="txt-amount">
               <i class="ph-currency-circle-dollar mx-auto h3 mr-2 mb-0 text--white"></i>
