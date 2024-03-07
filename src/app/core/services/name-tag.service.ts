@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
-import { UserService } from './user.service';
+import {EnvironmentService} from '../data-services/environment.service';
+import {CommonService} from './common.service';
+import {UserService} from './user.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class NameTagService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
   listNameTag = [];
@@ -85,30 +85,20 @@ export class NameTagService extends CommonService {
 
   isPublic(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
+    return !!nameTag?.name_tag;
 
-    if (nameTag?.name_tag) {
-      return true;
-    }
 
-    return false;
   }
 
   isPrivate(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
+    return !!(nameTag?.isPrivate && nameTag?.name_tag_private);
 
-    if (nameTag?.isPrivate && nameTag?.name_tag_private) {
-      return true;
-    }
 
-    return false;
   }
 
   checkDisplayTooltip(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-
-    if (!nameTag || nameTag?.name_tag === address) {
-      return true;
-    }
-    return false;
+    return !nameTag || nameTag?.name_tag === address;
   }
 }
