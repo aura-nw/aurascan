@@ -84,7 +84,7 @@ export class TransactionMessagesComponent implements OnInit {
 
   constructor(
     private datePipe: DatePipe,
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
     public commonService: CommonService,
     private transactionService: TransactionService,
     private proposalService: ProposalService,

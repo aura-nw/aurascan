@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
@@ -41,8 +40,6 @@ export class AuraTransactionComponent implements OnChanges {
   isDisplayMore = false;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private transactionService: TransactionService,
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,

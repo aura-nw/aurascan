@@ -121,7 +121,42 @@
     </ng-container>
   </div>
 
-  <div *ngIf="isTransactionTypeDefault">
+  <div *ngIf="transactionDetail?.messages[0]['@type'] === '/ethermint.evm.v1.MsgEthereumTx'">
+    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
+      <div class="card text--white">
+        <div class="card-body body">
+          <div class="d-flex flex-wrap mb-2">
+            <div class="col-12 col-lg-3 mb-2 text--gray-4 body">Type</div>
+            <div class="col-12 col-lg-9 mb-2">{{ transactionDetail?.messages[0]['@type'] }}</div>
+            <div class="col-12 col-lg-3 mb-lg-0 mb-2 text--gray-4 d-flex align-items-center body">EVM Txn hash</div>
+            <div class="col-12 col-lg-9">
+              <a
+                class="text--primary"
+                routerLink="/transaction/{{ transactionDetail?.messages[0]['hash'] }}"
+                [copyBtn]="transactionDetail?.messages[0]['hash']">
+                {{
+                  environmentService.isMobile
+                    ? (transactionDetail?.messages[0]['hash'] | ellipsis: 8 : 8)
+                    : transactionDetail?.messages[0]['hash']
+                }}
+              </a>
+            </div>
+            <div class="col-12 col-lg-3 my-2 text--gray-4 body">Message</div>
+            <div class="col-12 col-lg-9 my-2">
+              <pre id="json" class="raw-content text--white px-4" [innerHtml]="item | appJson"></pre>
+            </div>
+          </div>
+          <ng-container
+            [ngTemplateOutlet]="logEvent"
+            [ngTemplateOutletContext]="{ data: transactionDetail.tx?.logs, idx: i }">
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div
+    *ngIf="isTransactionTypeDefault && transactionDetail?.messages[0]['@type'] !== '/ethermint.evm.v1.MsgEthereumTx'">
     <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
       <div class="card text--white">
         <div class="card-body body">
