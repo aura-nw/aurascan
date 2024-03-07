@@ -1,7 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -43,6 +42,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
   displayFilter = false;
   EFeature = EFeature;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
@@ -51,6 +51,17 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
     { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 20 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
+  ];
+
+  templatesEvmExecute: Array<TableTemplate> = [
+    { matColumnDef: 'evm_hash', headerCellDef: 'EVM Txn hash', headerWidth: 18 },
+    { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 18 },
+    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 18 },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 18 },
+    { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 18 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 18 },
   ];
 
   templatesToken: Array<TableTemplate> = [
@@ -98,14 +109,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
-  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
     private environmentService: EnvironmentService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private datePipe: DatePipe,
     private router: Router,
     private layout: BreakpointObserver,
   ) {}
@@ -326,6 +335,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
         this.getListTxByAddress(payload);
         break;
+      case TabsAccountLink.EVMExecutedTxs:
+        payload.compositeKey = 'message.sender';
+        this.templates = this.templatesExecute;
+        this.displayedColumns = this.templatesEvmExecute.map((dta) => dta.matColumnDef);
+        this.getListEvmTxByAddress(payload);
+        break;
       case TabsAccountLink.NativeTxs:
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
@@ -405,6 +420,25 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  getListEvmTxByAddress(payload) {
+    this.userService.getListEvmTxByAddress(payload).subscribe({
+      next: (data) => {
+        this.handleGetData(data);
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.transactionLoading = false;
+      },
+      complete: () => {
+        this.transactionLoading = false;
+      },
+    });
+  }
+
   getListTxNativeByAddress(payload) {
     this.userService.getListNativeTransfer(payload).subscribe({
       next: (data) => {
@@ -463,6 +497,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   handleGetData(data) {
+    console.log(data);
+
     if (data?.transaction?.length > 0) {
       this.nextKey = null;
       if (data?.transaction?.length >= 100) {
@@ -473,8 +509,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       if (this.modeQuery !== TabsAccountLink.ExecutedTxs && this.currentType !== AccountTxType.Sent) {
         setReceive = true;
       }
-
-      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+      let txs = [];
+      if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
+        // txs = data.transaction
+      } else {
+        txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+      }
 
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
