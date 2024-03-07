@@ -1,11 +1,11 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import {EnvironmentService} from '../data-services/environment.service';
-import {CommonService} from './common.service';
-import {UserService} from './user.service';
+import { EnvironmentService } from '../data-services/environment.service';
+import { CommonService } from './common.service';
+import { UserService } from './user.service';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class NameTagService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
   listNameTag = [];
@@ -86,15 +86,11 @@ export class NameTagService extends CommonService {
   isPublic(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
     return !!nameTag?.name_tag;
-
-
   }
 
   isPrivate(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
     return !!(nameTag?.isPrivate && nameTag?.name_tag_private);
-
-
   }
 
   checkDisplayTooltip(address: string): boolean {

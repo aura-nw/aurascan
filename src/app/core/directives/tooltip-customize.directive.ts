@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import BigNumber from 'bignumber.js';
 
 @Directive({
@@ -18,7 +18,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.element || !this.appTooltip) {
-      this.element.parentNode.removeChild(this.element.nextSibling)
+      this.element.parentNode.removeChild(this.element.nextSibling);
       return;
     }
     // check show up conditional
@@ -44,7 +44,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
         const amountTemp = BigNumber(this.appTooltip.priceAmount).multipliedBy(this.appTooltip.multipliedBy ?? 1);
         const amountCondition = BigNumber(1).dividedBy(BigNumber(10).pow(this.decimalLengthTooltip)).toFixed();
 
-        // fixed if value less than 0.000001 
+        // fixed if value less than 0.000001
         if (amountTemp.toFixed() < amountCondition) {
           tooltipValue = amountTemp.toFixed().replace(/\.?0+$/, '');
         } else {
@@ -82,8 +82,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    this.element.removeEventListener('mouseenter', () => {
-    });
+    this.element.removeEventListener('mouseenter', () => {});
   }
 
   hoverAction(element, tooltipParent) {

@@ -1,9 +1,9 @@
-import {formatDate} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
-import {AURA_TOP_STATISTIC_RANGE} from 'src/app/core/constants/chart.constant';
-import {TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {StatisticService} from 'src/app/core/services/statistic.service';
+import { formatDate } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { AURA_TOP_STATISTIC_RANGE } from 'src/app/core/constants/chart.constant';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { StatisticService } from 'src/app/core/services/statistic.service';
 
 @Component({
   selector: 'app-top-statistic-overview',
@@ -25,8 +25,7 @@ export class TopStatisticOverviewComponent implements OnInit {
   constructor(
     private statisticService: StatisticService,
     public environmentService: EnvironmentService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.currentDay = formatDate(Date.now(), 'dd-MMM', 'en-US');
