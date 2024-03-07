@@ -61,6 +61,7 @@ export const LENGTH_CHARACTER = {
   ADDRESS: 43,
   CONTRACT: 63,
   TRANSACTION: 64,
+  EVM_TRANSACTION: 66
 };
 
 export const NULL_ADDRESS = 'Null address';

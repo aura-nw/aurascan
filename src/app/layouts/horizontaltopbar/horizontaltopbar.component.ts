@@ -122,6 +122,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
           }
         } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
           this.getTxhDetail(this.searchValue);
+        } else if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
+          this.getEvmTxnDetail(this.searchValue);
         } else if (isNumber) {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate(['blocks', this.searchValue]);
@@ -129,6 +131,27 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  getEvmTxnDetail(value): void {
+    const payload = {
+      limit: 1,
+      hash: decodeURI(value),
+    };
+    this.transactionService.queryTransactionByEvmHash(payload).subscribe({
+      next: (res) => {
+        if (res?.transaction?.length > 0) {
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['transaction', this.searchValue]);
+          });
+        } else {
+          this.searchValue = '';
+        }
+      },
+      error: (e) => {
+        this.searchValue = '';
+      },
+    });
   }
 
   getTxhDetail(value): void {
