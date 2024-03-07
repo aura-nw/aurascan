@@ -31,7 +31,7 @@
                           *ngIf="data[template.matColumnDef]"
                           [copyBtn]="data[template.matColumnDef]"
                           class="text--primary cursor-pointer"
-                          [routerLink]="['/transaction', data[template.matColumnDef]]">
+                          [routerLink]="['/account', data[template.matColumnDef]]">
                           {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                         </a>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
@@ -41,7 +41,7 @@
                           *ngIf="data[template.matColumnDef]"
                           [copyBtn]="data[template.matColumnDef]"
                           class="text--primary cursor-pointer"
-                          [routerLink]="['/transaction', data[template.matColumnDef]]">
+                          [routerLink]="['/account', data[template.matColumnDef]]">
                           {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                         </a>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
@@ -156,7 +156,7 @@
                     *ngIf="data?.from"
                     [copyBtn]="data?.from"
                     class="text--primary cursor-pointer"
-                    [routerLink]="['/transaction', data?.from]">
+                    [routerLink]="['/account', data?.from]">
                     {{ data?.from | ellipsis: 8 : 8 }}
                   </a>
                   <span *ngIf="!data?.from" class="text--white">-</span>
@@ -167,7 +167,7 @@
                     *ngIf="data?.to"
                     [copyBtn]="data?.to"
                     class="text--primary cursor-pointer"
-                    [routerLink]="['/transaction', data?.to]">
+                    [routerLink]="['/account', data?.to]">
                     {{ data?.to | ellipsis: 8 : 8 }}
                   </a>
                   <span *ngIf="!data.evm_transaction.to" class="text--white">-</span>
