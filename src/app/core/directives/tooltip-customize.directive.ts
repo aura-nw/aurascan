@@ -17,7 +17,10 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!this.element || !this.appTooltip) return;
+    if (!this.element || !this.appTooltip) {
+      this.element.parentNode.removeChild(this.element.nextSibling);
+      return;
+    }
     // check show up conditional
     let tooltipValue: any = '';
     if (typeof this.appTooltip === 'string') {
@@ -41,7 +44,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
         const amountTemp = BigNumber(this.appTooltip.priceAmount).multipliedBy(this.appTooltip.multipliedBy ?? 1);
         const amountCondition = BigNumber(1).dividedBy(BigNumber(10).pow(this.decimalLengthTooltip)).toFixed();
 
-        // fixed if value less than 0.000001 
+        // fixed if value less than 0.000001
         if (amountTemp.toFixed() < amountCondition) {
           tooltipValue = amountTemp.toFixed().replace(/\.?0+$/, '');
         } else {
