@@ -15,6 +15,7 @@ import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/con
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { UserService } from 'src/app/core/services/user.service';
+import { toHexData } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
@@ -54,14 +55,14 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   ];
 
   templatesEvmExecute: Array<TableTemplate> = [
-    { matColumnDef: 'evm_hash', headerCellDef: 'EVM Txn hash', headerWidth: 18 },
-    { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 18 },
+    { matColumnDef: 'evm_hash', headerCellDef: 'EVM Txn hash', headerWidth: 12 },
+    { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 12 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
-    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 18 },
-    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 18 },
-    { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 18 },
-    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 18 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 12 },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 12 },
+    { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 12 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 10 },
   ];
 
   templatesToken: Array<TableTemplate> = [
@@ -337,7 +338,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         break;
       case TabsAccountLink.EVMExecutedTxs:
         payload.compositeKey = 'message.sender';
-        this.templates = this.templatesExecute;
+        this.templates = this.templatesEvmExecute;
         this.displayedColumns = this.templatesEvmExecute.map((dta) => dta.matColumnDef);
         this.getListEvmTxByAddress(payload);
         break;
@@ -511,7 +512,14 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       }
       let txs = [];
       if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
-        // txs = data.transaction
+        txs = data.transaction;
+        txs.forEach(element => {
+          const type = toHexData(_.get(element, 'evm_transaction.data'));
+          element.evm_hash =_.get(element, 'evm_transaction.hash');
+          element.type = type ? type : 'Transfer';
+          element.to = _.get(element, 'evm_transaction.to');
+          element.amount = _.get(element, 'transaction_messages[0].content.data.value');
+        });
       } else {
         txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
       }
