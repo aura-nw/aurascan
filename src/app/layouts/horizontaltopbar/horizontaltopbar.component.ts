@@ -68,12 +68,10 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
           let isEnabledMenu = false;
           item.subItems.forEach((subItem) => {
             const featureName = subItem.featureName;
-
             const foundIndex = features.findIndex((item) => item === featureName);
 
             // If have featureName, check disable
             subItem.disabled = featureName ? (foundIndex < 0 ? true : false) : false;
-
             isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
           });
         } else {
@@ -109,7 +107,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
       let isNumber = /^\d+$/.test(this.searchValue);
       if (regexRule.test(this.searchValue)) {
         //check is start with 'aura' and length >= normal address
-        if (this.searchValue.startsWith(this.prefixNormalAdd) && this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
+        // if (this.searchValue.startsWith(this.prefixNormalAdd) && this.searchValue.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
+        if (this.searchValue.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
           if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(['contracts', this.searchValue]);
