@@ -53,7 +53,18 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'amount'">
-                        {{ data[template.matColumnDef] | balance: decimal | mask: 'separator.6' }} {{ denom }}
+                        <span
+                          *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001"
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }">
+                          {{ (data[template.matColumnDef] | balance: decimal) == 0 ? 0 : '<0.001' }}
+                        </span>
+                        <span
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }"
+                          [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
+                          *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
+                          [appBigNumber]="data[template.matColumnDef]"
+                          [decimal]="decimal"></span>
+                        {{ denom }}
                       </div>
                       <div *ngSwitchCase="'hash'" class="text-center">
                         <a
