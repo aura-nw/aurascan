@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import BigNumber from 'bignumber.js';
 
 @Directive({
@@ -20,7 +20,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges, OnInit {
     if (!this.element || !this.appTooltip) {
       // remove app-tooltip-customize when data is null and component not reload
       if (this.element.parentNode?.children[1]?.className.includes('app-tooltip-customize')) {
-        this.element.parentNode.removeChild(this.element.parentNode.children[1])
+        this.element.parentNode.removeChild(this.element.parentNode.children[1]);
       }
     } else {
       // check show up conditional
@@ -85,8 +85,7 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.element.removeEventListener('mouseenter', () => {
-    });
+    this.element.removeEventListener('mouseenter', () => {});
   }
 
   hoverAction(element, tooltipParent) {
@@ -115,6 +114,5 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges, OnInit {
     }
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }
