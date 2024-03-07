@@ -77,3 +77,15 @@ export enum AccountTxType {
   Sent = 'Sent',
   Received = 'Received',
 }
+
+export enum ENameTag {
+  Normal = 'Normal',
+  Public = 'Public',
+  Private = 'Private',
+}
+
+export enum EScreen {
+  Contract = 'Contract',
+  Account = 'Account',
+  WatchList = 'WatchList',
+}

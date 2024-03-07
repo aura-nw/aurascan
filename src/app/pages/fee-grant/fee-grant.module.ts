@@ -16,7 +16,6 @@ import { MaterialModule } from 'src/app/material.module';
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FeeGrantRoutingModule } from './fee-grant-routing.module';
 import { FeeGrantComponent } from './fee-grant.component';
@@ -52,7 +51,6 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     NameTagModule,
     MaterialModule,
     CommonDirectiveModule,
-    TooltipCustomizeModule,
   ],
   providers: [
     UntypedFormBuilder,

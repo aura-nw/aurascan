@@ -6,18 +6,18 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
-import { MaterialModule } from 'src/app/material.module';
+import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
-import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
+import { MaterialModule } from 'src/app/material.module';
 import { ContractTableModule } from 'src/app/shared/components/contract-table/contract-table.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { PopupAddZeroModule } from 'src/app/shared/components/popup-add-zero/popup-add-zero.module';
 import { QrModule } from 'src/app/shared/components/qr/qr.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ContractService } from '../../core/services/contract.service';
 import { ContractInfoCardComponent } from './contracts-detail/contract-info-card/contract-info-card.component';
@@ -33,7 +33,6 @@ import { ContractsRoutingModule } from './contracts-routing.module';
 import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
 import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify-steps/contract-verify-steps.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
-import { MASK_CONFIG } from 'src/app/app.config';
 
 @NgModule({
   declarations: [
@@ -71,7 +70,6 @@ import { MASK_CONFIG } from 'src/app/app.config';
     PopupAddZeroModule,
     CustomPaginatorModule,
     NameTagModule,
-    TooltipCustomizeModule,
     ClipboardModule,
     CommonDirectiveModule,
   ],

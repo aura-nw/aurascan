@@ -113,10 +113,6 @@ export class EnvironmentService {
     return _.get(this.configValue, 'chainConfig.stakingTime');
   }
 
-  get coins() {
-    return _.get(this.configValue, 'chainConfig.coins');
-  }
-
   get imageUrl() {
     return _.get(this.configValue, 'image.assets');
   }

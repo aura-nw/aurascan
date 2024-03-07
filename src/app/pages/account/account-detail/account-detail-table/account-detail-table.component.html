@@ -29,31 +29,23 @@
                       </span>
                     </a>
                     <div *ngSwitchCase="'amount'" class="d-flex align-items-center">
-                      <div class="aura-tooltip-contain d-flex">
-                        <div
-                          class="aura-tooltip-object"
-                          [class.cursor-text]="data[template.matColumnDef] < 1000000"
-                          [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="0"></div>
-                        <app-tooltip-customize
-                          *ngIf="data[template.matColumnDef] >= 1000000"
-                          [content]="data[template.matColumnDef] | formatDigit: 2">
-                        </app-tooltip-customize>
-                      </div>
+                      <div
+                        [appTooltip]="
+                          data[template.matColumnDef] >= 1000000 ? (data[template.matColumnDef] | formatDigit: 2) : null
+                        "
+                        [class.cursor-text]="data[template.matColumnDef] < 1000000"
+                        [appBigNumber]="data[template.matColumnDef]"
+                        [decimal]="0"></div>
                       <span class="ml-1" appLinkDenom> {{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'reward'" class="d-flex align-items-center">
-                      <div class="aura-tooltip-contain d-flex">
-                        <div
-                          class="aura-tooltip-object"
-                          [class.cursor-text]="data[template.matColumnDef] < 1000000"
-                          [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="0"></div>
-                        <app-tooltip-customize
-                          *ngIf="data[template.matColumnDef] >= 1000000"
-                          [content]="data[template.matColumnDef] | formatDigit: 2">
-                        </app-tooltip-customize>
-                      </div>
+                      <div
+                        [appTooltip]="
+                          data[template.matColumnDef] >= 1000000 ? (data[template.matColumnDef] | formatDigit: 2) : null
+                        "
+                        [class.cursor-text]="data[template.matColumnDef] < 1000000"
+                        [appBigNumber]="data[template.matColumnDef]"
+                        [decimal]="0"></div>
                       <span class="ml-1" appLinkDenom> {{ denom }} </span>
                     </div>
                     <div *ngSwitchCase="'completion_time'">

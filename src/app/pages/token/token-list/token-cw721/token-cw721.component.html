@@ -57,9 +57,9 @@
                     <a
                       [routerLink]="['/tokens/token-nft', element.cw721_contract?.smart_contract?.address]"
                       class="text--primary text-nowrap">
-                      {{ element.cw721_contract?.name | ellipsis : 30 }}
+                      {{ element.cw721_contract?.name | ellipsis: 30 }}
                       <span *ngIf="element.cw721_contract?.symbol"
-                        >({{ element.cw721_contract?.symbol | ellipsis : 10 }})</span
+                        >({{ element.cw721_contract?.symbol | ellipsis: 10 }})</span
                       >
                     </a>
                     <div class="body-02 fw-normal caption-mob mb-0 text--gray-6 pr-5 desc">
@@ -74,7 +74,8 @@
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <app-name-tag
                   [value]="element.cw721_contract?.smart_contract?.address"
-                  [url]="'contracts'"></app-name-tag>
+                  [linkRouter]="['/contracts', element.cw721_contract?.smart_contract?.address]">
+                </app-name-tag>
               </td>
             </ng-container>
             <ng-container matColumnDef="total_activity">

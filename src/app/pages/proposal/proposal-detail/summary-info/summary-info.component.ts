@@ -22,6 +22,7 @@ import { CommonService } from '../../../../core/services/common.service';
 import { ProposalService } from '../../../../core/services/proposal.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
+
 const marked = require('marked');
 
 @Component({

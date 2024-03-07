@@ -135,7 +135,7 @@ export class TokenTableComponent implements OnChanges {
             let lstToken = _.get(res, 'data').map((element) => {
               data = element;
               if (data) {
-                data.change = data.price_change_percentage_24h;
+                data.change = data.priceChangePercentage24h;
                 data.isValueUp = true;
                 data['balance'] = data['balance'] || 0;
                 data.value = data.value;

@@ -64,16 +64,12 @@
         <div class="col-12 col-lg-6">
           <div class="d-flex position-relative">
             <h6 class="mb-0 text--gray-1">Operator Address</h6>
-            <div class="img-wrap aura-tooltip-contain ml-1">
+            <div class="d-flex ml-1">
               <img
-                class="img-question aura-tooltip-object"
+                [appTooltip]="'Validator operator address at which token holders delegate <br/>their voting powers to.'"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
                 *ngIf="!breakpoint.value.matches" />
-              <app-tooltip-customize
-                [content]="
-                  'Validator operator address at which token holders delegate <br/>their voting powers to.'
-                "></app-tooltip-customize>
             </div>
           </div>
           <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
@@ -82,7 +78,7 @@
           <h6 class="mb-0 text--gray-1">Address</h6>
           <app-name-tag
             [value]="currentValidatorDetail?.acc_address"
-            [url]="'account'"
+            [linkRouter]="['/account', currentValidatorDetail?.acc_address]"
             [fullText]="true"
             [widthAuto]="true"
             [fullTextMob]="true"></app-name-tag>
@@ -279,13 +275,12 @@
         <div class="card-header d-lg-flex align-items-center header-mob pb-0">
           <div class="flex-grow-1 d-flex align-items-center">
             <h3 class="h2-mob text--gray-1 mb-0">Uptime</h3>
-            <div class="img-wrap aura-tooltip-contain ml-1">
+            <div class="d-flex ml-1">
               <img
-                class="img-question aura-tooltip-object"
+                [appTooltip]="'Missed Blocks are displayed with an X'"
                 [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
                 *ngIf="!breakpoint.value.matches" />
-              <app-tooltip-customize [content]="'Missed Blocks are displayed with an X'"></app-tooltip-customize>
             </div>
           </div>
           <div class="body-01 text--gray-5 mt-1 mt-lg-0">Last {{ numberLastBlock }} Blocks</div>
@@ -296,20 +291,18 @@
               <app-loading-sprint *ngIf="lastBlockLoading" class="w-100"></app-loading-sprint>
               <ng-container *ngIf="!lastBlockLoading">
                 <ng-container *ngFor="let itemBlock of arrLastBlock">
-                  <div class="aura-tooltip-contain">
-                    <a
-                      class="block-uptime tool-tip aura-tooltip-object"
-                      [class.block-fail]="isBlockFail(itemBlock)"
-                      href="/blocks/{{ itemBlock?.height }}"
-                      currentitem="false">
-                      <div class="d-flex">
-                        <ng-container *ngIf="isBlockFail(itemBlock)">
-                          <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
-                        </ng-container>
-                      </div>
-                    </a>
-                    <app-tooltip-customize [content]="itemBlock?.height || 0"></app-tooltip-customize>
-                  </div>
+                  <a
+                    class="block-uptime tool-tip"
+                    [appTooltip]="(itemBlock?.height || 0).toString()"
+                    [class.block-fail]="isBlockFail(itemBlock)"
+                    href="/blocks/{{ itemBlock?.height }}"
+                    currentitem="false">
+                    <div class="d-flex">
+                      <ng-container *ngIf="isBlockFail(itemBlock)">
+                        <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
+                      </ng-container>
+                    </div>
+                  </a>
                 </ng-container>
               </ng-container>
             </div>
@@ -340,6 +333,7 @@
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <app-name-tag
                             *ngSwitchCase="'delegator_address'"
+                            [linkRouter]="['/account', data.delegator_address]"
                             [value]="data.delegator_address"
                             [tooltipPosition]="'tooltip--right'"></app-name-tag>
                           <div *ngSwitchCase="'amount'">

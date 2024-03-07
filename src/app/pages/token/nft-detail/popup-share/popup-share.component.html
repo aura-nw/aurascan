@@ -50,17 +50,20 @@
         [(ngModel)]="shareLink"
         autocomplete="off"
         disabled />
-      <div class="ml-4 aura-tooltip-contain">
-        <button
-          type="button"
-          #tooltip
-          class="button button--md button--xs-mob button-outline button-outline--gradient button-outline__in-card button-pill d-flex btn-copy aura-tooltip-object disabled-hover"
-          (click)="commonService.showToolTip(tooltip)"
-          [cdkCopyToClipboard]="shareLink">
-          <span>Copy link</span>
-        </button>
-        <app-tooltip-customize [content]="'Copied!'"> </app-tooltip-customize>
-      </div>
+      <div
+        class="ml-4"
+        [copyBtn]="shareLink"
+        [copyText]="'Copy link'"
+        [btnClass]="[
+          'button',
+          'button--md',
+          'button--xs-mob',
+          'button-outline',
+          'button-outline--gradient',
+          'button-outline__in-card',
+          'button-pill',
+          'text-nowrap'
+        ]"></div>
     </div>
   </div>
 </div>

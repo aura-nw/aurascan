@@ -25,9 +25,9 @@
           <a
             href="https://docs.aura.network/product/aurascan/getting-started/stake/choose-a-trust-validator"
             target="_blank"
-            class="text--primary ml-2"
-            >How to stake?</a
-          >
+            class="text--primary ml-2">
+            How to stake?
+          </a>
         </div>
       </div>
       <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches && !errTxt">
@@ -127,45 +127,37 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'uptime'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
-                      <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="
-                            'Validator\'s availability in the last ' + numBlock + ' blocks.'
-                          "></app-tooltip-customize>
-                      </div>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        [appTooltip]="'Validator\'s availability in the last ' + numBlock + ' blocks.'"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'power'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-power">
-                      <div class="aura-tooltip-contain">
-                        <div class="pl-5 aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="
-                            'The more AURA delegated to a validator, the higher the validator\'s voting power.'
-                          ">
-                        </app-tooltip-customize>
-                      </div>
+                      <div
+                        class="pl-8"
+                        [innerHTML]="template.headerCellDef | translate"
+                        [appTooltip]="
+                          'The more AURA delegated to a validator, the higher the validator\'s voting power.'
+                        "></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'commission'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="pr-5">
-                      <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="'The proportion of staking reward being taken by the validator as a commission.'">
-                        </app-tooltip-customize>
-                      </div>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        [appTooltip]="
+                          'The proportion of staking reward being taken by the validator as a commission.'
+                        "></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'participation'">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                      <div class="aura-tooltip-contain">
-                        <div class="aura-tooltip-object" [innerHTML]="template.headerCellDef | translate"></div>
-                        <app-tooltip-customize
-                          [content]="'Vote participation stat for the last ' + countProposal || 0 + 'proposals.'">
-                        </app-tooltip-customize>
-                      </div>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        [appTooltip]="
+                          'Vote participation stat for the last ' + countProposal || 0 + 'proposals.'
+                        "></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchDefault>
@@ -183,14 +175,13 @@
                           {{ data[template.matColumnDef] | percent: number2Digit }}
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4 d-flex align-items-center justify-content-start pr-20">
-                          <div [style.min-width]="'120px'" class="text-end aura-tooltip-contain">
+                          <div [style.min-width]="'120px'" class="text-end">
                             <span
-                              class="cursor-pointer aura-tooltip-object"
+                              class="cursor-pointer"
+                              [appTooltip]="data[template.matColumnDef] | number"
                               [votingPower]="true"
                               [appBigNumber]="data[template.matColumnDef]"
                               [decimal]="0"></span>
-                            <app-tooltip-customize [content]="data[template.matColumnDef] | number">
-                            </app-tooltip-customize>
                           </div>
                           <div
                             *ngIf="data['status'] === statusValidator.Active"
@@ -216,20 +207,16 @@
                           <span class="percent-vote fw-normal" *ngIf="data['status'] === statusValidator.Active">{{
                             data['percent_power'] + '%'
                           }}</span>
-                          <div class="aura-tooltip-contain">
-                            <i
-                              class="ph-warning-fill cursor-pointer ml-1 aura-tooltip-object"
-                              *ngIf="
-                                (data['status'] === statusValidator.Active ||
-                                  (data['status'] !== statusValidator.Active && !data['jailed'])) &&
-                                data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH
-                              "></i>
-                            <app-tooltip-customize
-                              [content]="
-                                'Validators with too much voting power will lessen the security and decentralization of the network.'
-                              ">
-                            </app-tooltip-customize>
-                          </div>
+                          <i
+                            class="ph-warning-fill cursor-pointer ml-1"
+                            [appTooltip]="
+                              'Validators with too much voting power will lessen the security and decentralization of the network.'
+                            "
+                            *ngIf="
+                              (data['status'] === statusValidator.Active ||
+                                (data['status'] !== statusValidator.Active && !data['jailed'])) &&
+                              data['voting_power_level'] === votingPowerStatus.VOTING_POWER_HIGH
+                            "></i>
                         </div>
                         <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] + '/' + countProposal }}
@@ -238,7 +225,7 @@
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
                             {{ calculatorUpTime(data['account_address']) | formatDigit: 2 }}%
                           </ng-container>
-                          <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
+                          <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00%</ng-container>
                         </div>
                         <a
                           *ngSwitchCase="'title'"
