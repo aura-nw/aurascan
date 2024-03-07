@@ -1,10 +1,10 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import BigNumber from 'bignumber.js';
 
 @Directive({
   selector: '[appTooltip]',
 })
-export class TooltipCustomizeDirective implements OnDestroy, OnChanges, OnInit {
+export class TooltipCustomizeDirective implements OnDestroy, OnChanges {
   @Input() appTooltip: string | { priceAmount: any; multipliedBy?: number; decimal?: number; lt?: number };
   @Input() classTooltip: string;
   @Input() decimalLengthTooltip: number = 6;
@@ -113,6 +113,4 @@ export class TooltipCustomizeDirective implements OnDestroy, OnChanges, OnInit {
         break;
     }
   }
-
-  ngOnInit(): void {}
 }
