@@ -25,6 +25,12 @@
       (click)="filterToken(ETokenCoinTypeBE.CW20)">
       {{ ETokenCoinType.CW20 }}
     </button>
+    <button
+      class="button button-pill button-flat body-02 caption-mob"
+      [class.active]="filterType.includes(ETokenCoinTypeBE.ERC20)"
+      (click)="filterToken(ETokenCoinTypeBE.ERC20)">
+      {{ ETokenCoinType.ERC20 }}
+    </button>
   </div>
   <form class="aura-form single-input-field search-form" #searchForm *ngIf="!environmentService.isMobile">
     <div class="input-group">
