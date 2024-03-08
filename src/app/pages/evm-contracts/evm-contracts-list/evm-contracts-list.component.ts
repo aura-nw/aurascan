@@ -17,13 +17,13 @@ import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant'
 })
 export class EvmContractsListComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts' },
-    { matColumnDef: 'name', headerCellDef: 'Contract Name' },
-    { matColumnDef: 'label', headerCellDef: 'Label' },
-    { matColumnDef: 'version', headerCellDef: 'Contract Ver' },
+    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/evm-contracts', headerWidth: 250 },
+    { matColumnDef: 'name', headerCellDef: 'Contract Name', headerWidth: 210 },
+    { matColumnDef: 'label', headerCellDef: 'Label', headerWidth: 190 },
+    { matColumnDef: 'version', headerCellDef: 'Contract Ver', headerWidth: 100 },
     { matColumnDef: 'type', headerCellDef: 'Type Contract', headerWidth: 150 },
-    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account' },
+    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 100 },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 250 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
