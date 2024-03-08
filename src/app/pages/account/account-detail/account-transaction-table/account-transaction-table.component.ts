@@ -55,8 +55,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   ];
 
   templatesEvmExecute: Array<TableTemplate> = [
-    { matColumnDef: 'evm_hash', headerCellDef: 'EVM Txn hash', headerWidth: 12 },
-    { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 12 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn hash', headerWidth: 12 },
+    { matColumnDef: 'type', headerCellDef: 'Method', headerWidth: 12 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
     { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 12 },
@@ -113,7 +113,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
@@ -498,8 +498,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   handleGetData(data) {
-    console.log(data);
-
     if (data?.transaction?.length > 0) {
       this.nextKey = null;
       if (data?.transaction?.length >= 100) {
@@ -513,10 +511,17 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       let txs = [];
       if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
         txs = data.transaction;
-        txs.forEach(element => {
-          const type = toHexData(_.get(element, 'evm_transaction.data'));
-          element.evm_hash =_.get(element, 'evm_transaction.hash');
+        txs.forEach((element) => {
+          const typeTemp =
+            _.get(element, 'transaction_messages[0].type') || toHexData(_.get(element, 'evm_transaction.data'));
+          let type = _.find(TYPE_TRANSACTION, { label: typeTemp })?.value || typeTemp.split('.').pop();
+          if (typeTemp.startsWith('Msg')) {
+            type = typeTemp?.replace('Msg', '');
+          }
+
+          element.tx_hash = _.get(element, 'evm_transaction.hash');
           element.type = type ? type : 'Transfer';
+          element.from = _.get(element, 'transaction_messages[0].sender');
           element.to = _.get(element, 'evm_transaction.to');
           element.amount = _.get(element, 'transaction_messages[0].content.data.value');
         });
