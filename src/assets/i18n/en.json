@@ -82,7 +82,7 @@
     }
   },
   "MENUITEMS": {
-    "CODE-LIST": "Code IDs",
+    "CODE-LIST": "AURA Code ID",
     "CHART-STATS": "Chart & Stats",
     "TOP-STATISTICS": "Top Statistics",
     "MULTI-SEND": "Multi-send",
@@ -90,7 +90,8 @@
     "RESOURCES": "Resources",
     "BLOCKCHAIN": "Blockchain",
     "TOKEN": "Assets",
-    "CONTRACT": "Contracts",
+    "CONTRACT": "AURA Contracts",
+    "EVM_CONTRACT": "EVM Contracts",
     "DASHBOARDS": "Dashboard",
     "VALIDATORS": "Validators",
     "BLOCKS": "Blocks",

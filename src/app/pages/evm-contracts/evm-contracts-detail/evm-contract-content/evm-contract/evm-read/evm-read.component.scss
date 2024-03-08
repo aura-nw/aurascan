@@ -1,0 +1,24 @@
+.overflow-scroll-x {
+  overflow-x: auto;
+
+  ::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+  }
+}
+
+.contract__title {
+  min-height: 32px;
+}
+
+.divider.divider-vertical {
+  height: 10px;
+}
+
+input.form-check-input {
+  color: var(--aura-gray-1);
+}
+
+.error-null {
+  border: 2px solid var(--aura-red-3) !important;
+}
