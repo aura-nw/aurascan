@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -14,6 +14,7 @@ import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transac
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { toHexData } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
@@ -48,21 +49,22 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
-    { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 12 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
-    { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 20 },
+    { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 10 },
+    { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 14 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
+    { matColumnDef: 'evmTx', headerCellDef: 'Evmos Tx', headerWidth: 15 },
   ];
 
   templatesEvmExecute: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn hash', headerWidth: 12 },
-    { matColumnDef: 'type', headerCellDef: 'Method', headerWidth: 12 },
-    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn hash', headerWidth: 13 },
+    { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 11 },
+    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
-    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 12 },
-    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 12 },
-    { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 12 },
-    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 10 },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 15 },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 15 },
+    { matColumnDef: 'evmAmount', headerCellDef: 'Amount', headerWidth: 11 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 8 },
   ];
 
   templatesToken: Array<TableTemplate> = [
@@ -111,9 +113,11 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
 
   constructor(
     public environmentService: EnvironmentService,
+    public commonService: CommonService,
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
@@ -512,18 +516,13 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
         txs = data.transaction;
         txs.forEach((element) => {
-          const typeTemp =
-            _.get(element, 'transaction_messages[0].type') || toHexData(_.get(element, 'evm_transaction.data'));
-          let type = _.find(TYPE_TRANSACTION, { label: typeTemp })?.value || typeTemp.split('.').pop();
-          if (typeTemp.startsWith('Msg')) {
-            type = typeTemp?.replace('Msg', '');
-          }
-
+          const type = toHexData(_.get(element, 'evm_transaction.data'));
           element.tx_hash = _.get(element, 'evm_transaction.hash');
-          element.type = type ? type : 'Transfer';
+          element.method = type ? type : 'Transfer';
+          element.type = 'Transfer';
           element.from = _.get(element, 'transaction_messages[0].sender');
           element.to = _.get(element, 'evm_transaction.to');
-          element.amount = _.get(element, 'transaction_messages[0].content.data.value');
+          element.evmAmount = _.get(element, 'transaction_messages[0].content.data.value');
         });
       } else {
         txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);

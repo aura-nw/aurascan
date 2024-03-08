@@ -112,6 +112,9 @@ export class UserService {
             type
             content
           }
+          evm_transaction{
+            hash
+          }
         }
       }
     }
@@ -136,22 +139,30 @@ export class UserService {
 
   getListEvmTxByAddress(payload) {
     const operationsDoc = `
-    query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderHeight: order_by = desc, $address: String = null) {
+    query QueryEvmTxOfAccount(
+      $startTime: timestamptz = null
+      $endTime: timestamptz = null
+      $limit: Int = null
+      $orderHeight: order_by = desc
+      $address: String = null
+    ) {
       ${this.envDB} {
-        transaction(where: {timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}, sender: {_eq: $address}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderHeight}) {
-          hash
-          height
-          timestamp
-          transaction_messages {
-            type
-            content
-            sender
-          }
-          evm_transaction {
-            hash
-            to
-            data
-          }
+        evm_transaction(
+          where: {
+            from: {_eq: $address}
+            transaction: {
+              timestamp: {
+                _gt: $startTime,
+                _lt: $endTime
+              }
+            }
+          },
+          limit:  $limit
+            order_by: {height: $orderHeight}){
+          data
+          gas
+          from
+          to
         }
       }
     }
@@ -163,9 +174,6 @@ export class UserService {
         variables: {
           limit: payload.limit || 40,
           address: payload.address,
-          heightLT: payload.heightLT,
-          listTxMsgType: payload.listTxMsgType,
-          listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
           startTime: payload.startTime,
           endTime: payload.endTime,
         },

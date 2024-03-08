@@ -4,7 +4,7 @@ import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
+import { DATEFORMAT, STORAGE_KEYS, TYPE_ADDRESS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
@@ -154,5 +154,9 @@ export class CommonService {
 
   getRawData(url): Observable<any> {
     return this._http.get<any>(url);
+  }
+
+  isNativeAddress(address: string) {
+    return isAddress(address, TYPE_ADDRESS.NATIVE);
   }
 }

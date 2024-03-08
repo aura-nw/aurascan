@@ -359,10 +359,12 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     let contractAddress;
     let action;
     let eventAttr;
+    let evmTx;
 
     switch (modeQuery) {
       case TabsAccountLink.ExecutedTxs:
         type = getTypeTx(element)?.type;
+        evmTx = _.get(element, 'evm_transaction.hash');
         break;
       case TabsAccountLink.NativeTxs:
         let arrTemp = [];
@@ -457,6 +459,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       action,
       eventAttr,
       lstTypeTemp,
+      evmTx 
     };
   });
   return txs;

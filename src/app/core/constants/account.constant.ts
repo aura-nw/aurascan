@@ -2,6 +2,7 @@ import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   TabsAccount,
+  TabsAccountEvm,
   TabsAccountLink,
   TypeAccount,
   WalletAcount,
@@ -30,4 +31,12 @@ export const TABS_TITLE_ACCOUNT = [
   { label: TabsAccount.NativeTxs, value: TabsAccountLink.NativeTxs },
   { label: TabsAccount.FtsTxs, value: TabsAccountLink.FtsTxs },
   { label: TabsAccount.NftTxs, value: TabsAccountLink.NftTxs },
+];
+
+export const TABS_TITLE_ACCOUNT_EVM = [
+  { label: TabsAccountEvm.ExecutedTxs, value: TabsAccountLink.ExecutedTxs },
+  { label: TabsAccountEvm.EVMExecutedTxs, value: TabsAccountLink.EVMExecutedTxs },
+  { label: TabsAccountEvm.NativeTxs, value: TabsAccountLink.NativeTxs },
+  { label: TabsAccountEvm.FtsTxs, value: TabsAccountLink.FtsTxs },
+  { label: TabsAccountEvm.NftTxs, value: TabsAccountLink.NftTxs },
 ];
