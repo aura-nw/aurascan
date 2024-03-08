@@ -9,7 +9,6 @@ import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EFeature } from 'src/app/core/models/common.model';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -76,7 +75,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
     private router: Router,
-    private nameTagService: NameTagService,
     private userService: UserService,
   ) {
     this.chartOptions = CHART_OPTION();

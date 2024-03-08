@@ -112,6 +112,9 @@ export class UserService {
             type
             content
           }
+          evm_transaction{
+            hash
+          }
         }
       }
     }
@@ -130,6 +133,43 @@ export class UserService {
           endTime: payload.endTime,
         },
         operationName: 'QueryTxOfAccount',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListEvmTxByAddress(payload) {
+    const operationsDoc = `
+    query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $orderHeight: order_by = desc, $address: String = null) {
+      ${this.envDB} {
+        evm_transaction(where: {from: {_eq: $address}, transaction: {timestamp: {_gt: $startTime, _lt: $endTime}}}, limit: $limit, order_by: {height: $orderHeight}) {
+          data
+          from
+          to
+          hash
+          height
+          transaction {
+            timestamp
+            hash
+            transaction_messages {
+              type
+              content
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 40,
+          address: payload.address,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+        },
+        operationName: 'QueryEvmTxOfAccount',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
