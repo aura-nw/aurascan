@@ -502,7 +502,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   handleGetData(data) {
-    if (data?.transaction?.length > 0) {
+    if (data?.transaction?.length > 0 || data?.evm_transaction?.length > 0) {
       this.nextKey = null;
       if (data?.transaction?.length >= 100) {
         this.nextKey = data?.transaction[data?.transaction?.length - 1]?.height;
@@ -514,15 +514,22 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       }
       let txs = [];
       if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
-        txs = data.transaction;
+        txs = data.evm_transaction;
         txs.forEach((element) => {
-          const type = toHexData(_.get(element, 'evm_transaction.data'));
-          element.tx_hash = _.get(element, 'evm_transaction.hash');
-          element.method = type ? type : 'Transfer';
-          element.type = 'Transfer';
-          element.from = _.get(element, 'transaction_messages[0].sender');
-          element.to = _.get(element, 'evm_transaction.to');
-          element.evmAmount = _.get(element, 'transaction_messages[0].content.data.value');
+          const typeTemp =
+            _.get(element, 'transaction.transaction_messages[0].type') || toHexData(_.get(element, 'data'));
+          let type = _.find(TYPE_TRANSACTION, { label: typeTemp })?.value || typeTemp.split('.').pop();
+          if (typeTemp.startsWith('Msg')) {
+            type = typeTemp?.replace('Msg', '');
+          }
+
+          element.tx_hash = _.get(element, 'hash');
+          element.hash = _.get(element, 'transaction.hash');
+          element.type = type ? type : 'Transfer';
+          element.from = _.get(element, 'from');
+          element.to = _.get(element, 'to');
+          element.timestamp = _.get(element, 'transaction.timestamp');
+          element.amount = _.get(element, 'transaction.transaction_messages[0].content.data.value');
         });
       } else {
         txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);

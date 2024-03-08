@@ -338,11 +338,7 @@
 <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
   <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
     <div class="table-responsive" *ngIf="!breakpoint.value.matches">
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        class="aura-table account-transaction-table"
-        [ngClass]="modeQuery !== tabsData.ExecutedTxs ? 'table-transfer' : ''">
+      <table mat-table [dataSource]="dataSource" class="aura-table account-transaction-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">

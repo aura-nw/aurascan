@@ -139,30 +139,22 @@ export class UserService {
 
   getListEvmTxByAddress(payload) {
     const operationsDoc = `
-    query QueryEvmTxOfAccount(
-      $startTime: timestamptz = null
-      $endTime: timestamptz = null
-      $limit: Int = null
-      $orderHeight: order_by = desc
-      $address: String = null
-    ) {
+    query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $orderHeight: order_by = desc, $address: String = null) {
       ${this.envDB} {
-        evm_transaction(
-          where: {
-            from: {_eq: $address}
-            transaction: {
-              timestamp: {
-                _gt: $startTime,
-                _lt: $endTime
-              }
-            }
-          },
-          limit:  $limit
-            order_by: {height: $orderHeight}){
+        evm_transaction(where: {from: {_eq: $address}, transaction: {timestamp: {_gt: $startTime, _lt: $endTime}}}, limit: $limit, order_by: {height: $orderHeight}) {
           data
-          gas
           from
           to
+          hash
+          height
+          transaction {
+            timestamp
+            hash
+            transaction_messages {
+              type
+              content
+            }
+          }
         }
       }
     }
