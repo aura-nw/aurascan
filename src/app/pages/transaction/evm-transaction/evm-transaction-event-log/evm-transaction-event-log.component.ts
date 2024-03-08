@@ -10,7 +10,7 @@ export class EvmTransactionEventLogComponent implements OnInit {
   @Input() eventLog: {
     id: number;
     contractName?: string;
-    contract?: string;
+    address?: string;
     topics?: {
       address: string;
       data: string;
@@ -20,5 +20,7 @@ export class EvmTransactionEventLogComponent implements OnInit {
       hexValue: string;
     };
   };
+  @Input() index;
+
   ngOnInit(): void {}
 }
