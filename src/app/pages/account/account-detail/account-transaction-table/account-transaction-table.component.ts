@@ -516,20 +516,14 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
         txs = data.evm_transaction;
         txs.forEach((element) => {
-          const typeTemp =
-            _.get(element, 'transaction.transaction_messages[0].type') || toHexData(_.get(element, 'data'));
-          let type = _.find(TYPE_TRANSACTION, { label: typeTemp })?.value || typeTemp.split('.').pop();
-          if (typeTemp.startsWith('Msg')) {
-            type = typeTemp?.replace('Msg', '');
-          }
-
+          const type = toHexData(_.get(element, 'data'));
           element.tx_hash = _.get(element, 'hash');
           element.hash = _.get(element, 'transaction.hash');
-          element.type = type ? type : 'Transfer';
+          element.method = type ? type : 'Transfer';
           element.from = _.get(element, 'from');
           element.to = _.get(element, 'to');
           element.timestamp = _.get(element, 'transaction.timestamp');
-          element.amount = _.get(element, 'transaction.transaction_messages[0].content.data.value');
+          element.evmAmount = _.get(element, 'transaction.transaction_messages[0].content.data.value');
         });
       } else {
         txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
