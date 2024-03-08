@@ -1,15 +1,15 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ContractType} from "src/app/core/constants/token.enum";
-import {ContractVerifyType} from "src/app/core/constants/contract.enum";
-import {ContractService} from "src/app/core/services/contract.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {mergeMap} from "rxjs/operators";
-import _ from "lodash";
+import { Component, Input, OnInit } from '@angular/core';
+import { ContractType } from 'src/app/core/constants/token.enum';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { mergeMap } from 'rxjs/operators';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-evm-contract',
   templateUrl: './evm-contract.component.html',
-  styleUrls: ['./evm-contract.component.scss']
+  styleUrls: ['./evm-contract.component.scss'],
 })
 export class EvmContractComponent implements OnInit {
   @Input() contractTypeData: string;
@@ -22,8 +22,11 @@ export class EvmContractComponent implements OnInit {
   contractDetail: any;
   isVerifying = false;
 
-  constructor(private contractService: ContractService, private route: ActivatedRoute, private router: Router) {
-  }
+  constructor(
+    private contractService: ContractService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -56,7 +59,7 @@ export class EvmContractComponent implements OnInit {
           return this.contractService.checkVerified(this.contractDetail?.code?.code_id);
         }),
       )
-      .subscribe(({data}) => {
+      .subscribe(({ data }) => {
         this.contractTypeData = data.status || this.contractTypeData;
         if (data?.status === 'verifying' && !notCheck) {
           this.isVerifying = true;

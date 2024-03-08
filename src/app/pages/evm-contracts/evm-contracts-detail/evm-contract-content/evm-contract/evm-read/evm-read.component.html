@@ -1,7 +1,7 @@
 <ng-container *ngIf="root; else noValues">
   <div class="d-flex justify-content-between contract__title">
     <div class="d-flex align-items-center">
-      <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px"/>
+      <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px" />
       <span class="body-02 text--gray-1 ml-2">Read Contract Information</span>
     </div>
     <div class="caption fw-normal-mob d-flex align-items-center">
@@ -36,7 +36,7 @@
               [type]="item.type"
               (keyup)="resetError(msg)"
               [(ngModel)]="item.value"
-              placeholder="{{ item.fieldName }} ({{ item.type }})"/>
+              placeholder="{{ item.fieldName }} ({{ item.type }})" />
 
             <mat-form-field
               contract
@@ -81,7 +81,7 @@
                 class="mr-2"
                 width="20"
                 height="20"
-                *ngIf="msg.isLoading"/>
+                *ngIf="msg.isLoading" />
               <span>Query</span>
             </button>
           </div>

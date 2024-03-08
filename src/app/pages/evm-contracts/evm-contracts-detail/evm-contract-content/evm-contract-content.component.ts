@@ -1,22 +1,22 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ContractTab, ContractVerifyType} from "src/app/core/constants/contract.enum";
-import {CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES} from "src/app/core/constants/contract.constant";
-import {TableTemplate} from "src/app/core/models/common.model";
-import {Subject} from "rxjs";
-import {CommonService} from "src/app/core/services/common.service";
-import {ContractService} from "src/app/core/services/contract.service";
-import {TransactionService} from "src/app/core/services/transaction.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {EnvironmentService} from "src/app/core/data-services/environment.service";
-import {Location} from "@angular/common";
-import {takeUntil} from "rxjs/operators";
-import {convertDataTransaction} from "src/app/global/global";
-import {TIMEOUT_ERROR} from "src/app/core/constants/common.constant";
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ContractTab, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { Subject } from 'rxjs';
+import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { Location } from '@angular/common';
+import { takeUntil } from 'rxjs/operators';
+import { convertDataTransaction } from 'src/app/global/global';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-evm-contract-content',
   templateUrl: './evm-contract-content.component.html',
-  styleUrls: ['./evm-contract-content.component.scss']
+  styleUrls: ['./evm-contract-content.component.scss'],
 })
 export class EvmContractContentComponent implements OnInit, OnDestroy {
   @Input() contractsAddress = '';
@@ -36,7 +36,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   contractVerifyType = ContractVerifyType;
   activeId = 0;
   limit = 25;
-  contractTransaction = {count: 0};
+  contractTransaction = { count: 0 };
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
   errTxt: string;
   contractInfo = {
@@ -64,10 +64,10 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   ) {
     const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
     valueColumn &&
-    ((v) => {
-      v.suffix =
-        `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
-    })(valueColumn);
+      ((v) => {
+        v.suffix =
+          `<span class="text--primary">` + this.environmentService.chainInfo.currencies[0].coinDenom + `</span>`;
+      })(valueColumn);
   }
 
   ngOnDestroy(): void {
@@ -82,7 +82,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.contractInfo.contractsAddress = this.contractsAddress;
     this.aRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
-      const {tabId} = params;
+      const { tabId } = params;
       if (tabId && Object.values(ContractTab).includes(tabId as ContractTab)) {
         this.currentTab = tabId as ContractTab;
         const _tabId = this.TABS.findIndex((tab) => tab.key === tabId);

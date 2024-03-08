@@ -1,20 +1,23 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {WalletAccount} from "@cosmos-kit/core";
-import {Schema, Validator} from "jsonschema";
-import {WalletService} from "src/app/core/services/wallet.service";
-import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
-import {TranslateService} from "@ngx-translate/core";
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from "@angular/material/legacy-dialog";
-import {getRef, getType, parseValue} from "src/app/core/helpers/contract-schema";
-import {MESSAGES_CODE_CONTRACT} from "src/app/core/constants/messages.constant";
-import {parseError} from "src/app/core/utils/cosmoskit/helpers/errors";
-import {PopupAddZeroComponent} from "src/app/shared/components/popup-add-zero/popup-add-zero.component";
-import _ from "lodash";
+import { Component, Input, OnInit } from '@angular/core';
+import { WalletAccount } from '@cosmos-kit/core';
+import { Schema, Validator } from 'jsonschema';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { TranslateService } from '@ngx-translate/core';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+} from '@angular/material/legacy-dialog';
+import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
+import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
+import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-evm-write',
   templateUrl: './evm-write.component.html',
-  styleUrls: ['./evm-write.component.scss']
+  styleUrls: ['./evm-write.component.scss'],
 })
 export class EvmWriteComponent implements OnInit {
   @Input() contractDetailData: any;
@@ -31,8 +34,7 @@ export class EvmWriteComponent implements OnInit {
     private toastr: NgxToastrService,
     private translate: TranslateService,
     private dialog: MatDialog,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.walletService.walletAccount$.subscribe((wallet) => {
@@ -51,8 +53,7 @@ export class EvmWriteComponent implements OnInit {
       if (this.jsValidator.schemas) {
         this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
       }
-    } catch {
-    }
+    } catch {}
   }
 
   expandMenu(closeAll = false): void {
@@ -94,7 +95,7 @@ export class EvmWriteComponent implements OnInit {
   getProperties(schema: Schema) {
     const fieldName = _.first(Object.keys(schema.properties));
 
-    const {$ref: ref} = schema.properties[fieldName];
+    const { $ref: ref } = schema.properties[fieldName];
 
     let props = ref ? getRef(this.jsValidator.schemas, ref) : schema.properties[fieldName];
 
@@ -111,7 +112,7 @@ export class EvmWriteComponent implements OnInit {
       }));
 
       // add fund for all item write contract
-      fieldList.push({fieldName: 'fund', isRequired: false, type: 'json'});
+      fieldList.push({ fieldName: 'fund', isRequired: false, type: 'json' });
     }
 
     return {
@@ -141,7 +142,7 @@ export class EvmWriteComponent implements OnInit {
     this.connectWallet();
     this.clearAllError();
     if (this.walletAccount && msg) {
-      const {fieldList, fieldName} = msg;
+      const { fieldList, fieldName } = msg;
 
       const msgExecute = {
         [fieldName]: {},
@@ -152,13 +153,13 @@ export class EvmWriteComponent implements OnInit {
 
         if (!isError) {
           item.value &&
-          _.assign(msgExecute[fieldName], {
-            [item.fieldName]: parseValue(item),
-          });
+            _.assign(msgExecute[fieldName], {
+              [item.fieldName]: parseValue(item),
+            });
           return;
         }
 
-        _.assign(item, {isError});
+        _.assign(item, { isError });
         msgExecute[fieldName] = null;
       });
 
@@ -198,18 +199,18 @@ export class EvmWriteComponent implements OnInit {
 
   resetError(msg, all = false) {
     if (msg) {
-      const {fieldList} = msg;
+      const { fieldList } = msg;
       fieldList.forEach((item) => {
         _.assign(
           item,
           all
             ? {
-              isError: false,
-              value: '',
-            }
+                isError: false,
+                value: '',
+              }
             : {
-              isError: false,
-            },
+                isError: false,
+              },
         );
       });
     }

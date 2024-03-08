@@ -1,14 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Schema, Validator} from "jsonschema";
-import {EnvironmentService} from "src/app/core/data-services/environment.service";
-import {SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
-import {getRef, getType, parseValue} from "src/app/core/helpers/contract-schema";
-import _ from "lodash";
+import { Component, Input, OnInit } from '@angular/core';
+import { Schema, Validator } from 'jsonschema';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-evm-read',
   templateUrl: './evm-read.component.html',
-  styleUrls: ['./evm-read.component.scss']
+  styleUrls: ['./evm-read.component.scss'],
 })
 export class EvmReadComponent implements OnInit {
   @Input() contractDetailData: any;
@@ -17,8 +17,7 @@ export class EvmReadComponent implements OnInit {
   jsValidator = new Validator();
   root: any[];
 
-  constructor(private environmentService: EnvironmentService) {
-  }
+  constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     try {
@@ -31,8 +30,7 @@ export class EvmReadComponent implements OnInit {
           this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
         }
       }
-    } catch {
-    }
+    } catch {}
   }
 
   expandMenu(closeAll = false): void {
@@ -86,7 +84,7 @@ export class EvmReadComponent implements OnInit {
   handleQueryContract(query): void {
     this.clearAllError();
     if (query) {
-      const {fieldList, fieldName} = query;
+      const { fieldList, fieldName } = query;
 
       const msgQuery = {
         [fieldName]: {},
@@ -97,13 +95,13 @@ export class EvmReadComponent implements OnInit {
 
         if (!isError) {
           item.value &&
-          _.assign(msgQuery[fieldName], {
-            [item.fieldName]: parseValue(item),
-          });
+            _.assign(msgQuery[fieldName], {
+              [item.fieldName]: parseValue(item),
+            });
           return;
         }
 
-        _.assign(item, {isError});
+        _.assign(item, { isError });
         msgQuery[fieldName] = null;
       });
 
@@ -116,7 +114,7 @@ export class EvmReadComponent implements OnInit {
   getProperties(schema: Schema) {
     const fieldName = _.first(Object.keys(schema.properties));
 
-    const {$ref: ref} = schema.properties[fieldName];
+    const { $ref: ref } = schema.properties[fieldName];
 
     let props = ref ? getRef(this.jsValidator.schemas, ref) : schema.properties[fieldName];
 
@@ -159,18 +157,18 @@ export class EvmReadComponent implements OnInit {
 
   resetError(msg, all = false) {
     if (msg) {
-      const {fieldList} = msg;
+      const { fieldList } = msg;
       fieldList.forEach((item) => {
         _.assign(
           item,
           all
             ? {
-              isError: false,
-              value: '',
-            }
+                isError: false,
+                value: '',
+              }
             : {
-              isError: false,
-            },
+                isError: false,
+              },
         );
       });
     }

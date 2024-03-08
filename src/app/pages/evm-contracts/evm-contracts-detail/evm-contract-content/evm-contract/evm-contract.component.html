@@ -3,7 +3,7 @@
     This contract was instantiated from Code ID
     <a [routerLink]="['/code-ids/detail', contractDetail?.code?.code_id]" class="text--primary">{{
       contractDetail?.code?.code_id
-      }}</a>
+    }}</a>
   </div>
 
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && !isVerifying">
@@ -13,7 +13,7 @@
         alt=""
         width="16"
         height="16"
-        class="mr-2"/>
+        class="mr-2" />
       <div>
         Are you the Code ID's owner?
         <span class="text--primary ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
@@ -32,7 +32,7 @@
         alt=""
         width="16"
         height="16"
-        class="mr-2 mt-1"/>
+        class="mr-2 mt-1" />
       <div>
         <div>
           The code ID source code that this smart contract was instantiated from is currently pending in Verify and
@@ -81,7 +81,7 @@
         alt=""
         width="16"
         height="16"
-        class="mr-2"/>
+        class="mr-2" />
       <div>
         Are you the Code ID's owner?
         <span class="text--primary ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail?.code?.code_id)">
@@ -98,12 +98,8 @@
 </div>
 <div class="mt-4 mt-lg-8">
   <ng-container *ngIf="contractDetail && contractTypeData === contractVerifyType.Verified">
-    <app-evm-code
-      *ngIf="currentTab === contractType.Code"
-      [contractDetailData]="contractDetail"></app-evm-code>
-    <app-evm-read
-      *ngIf="currentTab === contractType.ReadContract"
-      [contractDetailData]="contractDetail"></app-evm-read>
+    <app-evm-code *ngIf="currentTab === contractType.Code" [contractDetailData]="contractDetail"></app-evm-code>
+    <app-evm-read *ngIf="currentTab === contractType.ReadContract" [contractDetailData]="contractDetail"></app-evm-read>
     <app-evm-write
       *ngIf="currentTab === contractType.WriteContract"
       [contractDetailData]="contractDetail"></app-evm-write>
