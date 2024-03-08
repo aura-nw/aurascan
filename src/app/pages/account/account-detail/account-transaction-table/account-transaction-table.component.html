@@ -547,7 +547,7 @@
                     </app-name-tag>
                   </div>
                   <div *ngSwitchCase="'method'">
-                    {{ data.method | ellipsis: 15 }}
+                    {{ data.method | ellipsis: 10 : null : true }}
                   </div>
                   <div *ngSwitchCase="'evmAmount'">
                     <span
