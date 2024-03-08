@@ -58,6 +58,7 @@ export class EvmTransactionComponent implements OnChanges {
   loading = true;
   seeLess = false;
   isDisplayMore = false;
+  topicLength = 4;
 
   constructor(
     private transactionService: TransactionService,
@@ -121,6 +122,17 @@ export class EvmTransactionComponent implements OnChanges {
         }
       : null;
 
+    let evm_events = _.get(tx, 'evm_transaction.evm_events');
+    if (evm_events?.length > 0) {
+      evm_events.forEach((element) => {
+        let topics = [];
+        for (let i = 0; i < this.topicLength; i++) {
+          topics.push(element['topic' + i]);
+        }
+        element['topics'] = topics;
+      });
+    }
+
     return {
       evm_hash: _.get(tx, 'evm_transaction.hash'),
       hash: tx['hash'],
@@ -138,28 +150,7 @@ export class EvmTransactionComponent implements OnChanges {
       to: _.get(txMessage, 'content.data.to'),
       type: _.get(txMessage, 'content.@type'),
       inputData,
-      eventLog: [],
+      eventLog: evm_events,
     };
-
-    /* 
-      eventLog: [
-        {
-          id: 1,
-          contract: '0xa58963d4224fb4a9fcb6b254b6d62e4922f7f71121679bffdb6a7b0c1d5d8a9f',
-          contractName: 'Contract Name',
-          data: {
-            hexValue: '0xa58963d4224fb4a9fcb6b254b6d62e4922f7f71121679bffdb6a7b0c1d5d8a9f',
-            value: '0',
-          },
-          topics: [
-            {
-              address: '0xa58963d4224fb4a9fcb6b254b6d62e4922f7f71121679bffdb6a7b0c1d5d8a9f',
-              data: '0xa58963d4224fb4a9fcb6b254b6d62e4922f7f71121679bffdb6a7b0c1d5d8a9f',
-            },
-          ],
-        },
-      ],
-     
-    */
   }
 }
