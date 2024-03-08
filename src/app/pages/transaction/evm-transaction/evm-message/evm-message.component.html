@@ -5,7 +5,7 @@
     </div>
 
     <div class="col-12 col-lg-10">
-      {{ inputData?.hexSignature ? (inputData.hexSignature | ellipsis: 8) : 'Transfer' }}
+      {{ inputData?.hexSignature ? (inputData.hexSignature | ellipsis: 10 : null : true) : 'Transfer' }}
     </div>
   </div>
 
@@ -41,9 +41,10 @@
       <mat-slide-toggle (toggleChange)="showAll = !showAll"> Show all events </mat-slide-toggle>
 
       <div class="box-event-log mt-2" *ngIf="showAll">
-        <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog.length }})</div>
+        <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog?.length }})</div>
         <div class="">
-          <app-evm-transaction-event-log *ngFor="let log of eventLog" [eventLog]="log"> </app-evm-transaction-event-log>
+          <app-evm-transaction-event-log *ngFor="let log of eventLog; index as idx" [eventLog]="log" [index]="idx">
+          </app-evm-transaction-event-log>
         </div>
       </div>
     </div>

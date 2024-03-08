@@ -24,7 +24,7 @@
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                       <div *ngSwitchCase="'method'">
-                        {{ data.type | ellipsis: 15 }}
+                        {{ data.type | ellipsis: 10 : null : true }}
                       </div>
                       <ng-container *ngSwitchCase="'from'">
                         <a
