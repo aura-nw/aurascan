@@ -1,5 +1,5 @@
-import { EFeature } from 'src/app/core/models/common.model';
-import { MenuItem } from './menu.model';
+import {EFeature} from 'src/app/core/models/common.model';
+import {MenuItem} from './menu.model';
 
 export enum MenuName {
   Dashboard = 'Dashboard',
@@ -15,11 +15,12 @@ export enum MenuName {
   Statistic = 'Statistic',
   ChartStats = 'Chart & Stats',
   TopStatistics = 'Top Statistics',
-  Contract = 'Contract',
+  Contract = 'AURA Contracts',
+  EvmContract = 'EVM Contracts',
   Account = 'Account',
   BlockChain = 'Block chain',
   Resources = 'Resources',
-  CodeList = 'Code IDs',
+  CodeList = 'AURA Code ID',
   IBC = 'IBC Relayers',
   More = 'More',
 }
@@ -130,6 +131,13 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 2,
+        label: 'MENUITEMS.EVM_CONTRACT',
+        icon: 'newspaper',
+        link: '/evm-contracts',
+        name: MenuName.EvmContract,
+      },
+      {
+        id: 3,
         label: 'MENUITEMS.CODE-LIST',
         icon: 'code-simple',
         link: '/code-ids',
@@ -299,13 +307,20 @@ export const MENU_MOB: MenuItem[] = [
       },
       {
         id: 2,
+        label: 'MENUITEMS.EVM_CONTRACT',
+        icon: 'newspaper',
+        link: '/evm-contracts',
+        name: MenuName.EvmContract,
+      },
+      {
+        id: 3,
         label: 'MENUITEMS.CODE-LIST',
         icon: 'code-simple',
         link: '/code-ids',
         name: MenuName.CodeList,
       },
       {
-        id: 3,
+        id: 4,
         label: 'MENUITEMS.CHART-STATS',
         link: '/statistics/charts-stats',
         name: MenuName.ChartStats,
@@ -313,7 +328,7 @@ export const MENU_MOB: MenuItem[] = [
         featureName: EFeature.Statistics,
       },
       {
-        id: 4,
+        id: 5,
         label: 'MENUITEMS.TOP-STATISTICS',
         link: '/statistics/top-statistic',
         name: MenuName.TopStatistics,
