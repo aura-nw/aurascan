@@ -62,7 +62,7 @@ export const LENGTH_CHARACTER = {
   EVM_ADDRESS: 42,
   CONTRACT: 63,
   TRANSACTION: 64,
-  EVM_TRANSACTION: 66
+  EVM_TRANSACTION: 66,
 };
 
 export const NULL_ADDRESS = 'Null address';
@@ -77,6 +77,7 @@ export const COIN_TOKEN_TYPE = {
   NATIVE: 'native',
   IBC: 'ibc',
   CW20: 'cw20',
+  ERC20: 'erc20',
 };
 
 export enum MEDIA_TYPE {

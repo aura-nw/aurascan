@@ -54,6 +54,11 @@ export class TokenTableComponent implements OnChanges {
       value: COIN_TOKEN_TYPE.CW20,
       quantity: 0,
     },
+    {
+      label: ETokenCoinType.ERC20,
+      value: COIN_TOKEN_TYPE.ERC20,
+      quantity: 0,
+    },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {

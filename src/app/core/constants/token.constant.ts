@@ -42,3 +42,8 @@ export enum ETokenCoinTypeBE {
   CW20 = 'CW20_TOKEN',
   ERC20 = 'ERC20_TOKEN',
 }
+
+export enum ETokenNFTTypeBE {
+  CW721 = 'CW721_TOKEN',
+  ERC721 = 'ERC721_TOKEN',
+}
