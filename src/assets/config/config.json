@@ -59,10 +59,15 @@
       "bip44": {
         "coinType": 60
       },
-      "rpc": "https://tendermint.bd.evmos.dev:26657",
-      "rest": "https://rest.bd.evmos.dev:1317",
+      "rpc": "https://rpc-t.evmos.nodestake.top",
+      "rest": "https://api-t.evmos.nodestake.top",
       "beta": true,
-      "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
+      "features": [
+        "ibc-transfer",
+        "ibc-go",
+        "eth-address-gen",
+        "eth-key-sign"
+      ]
     }
   },
   "image": {
@@ -70,22 +75,24 @@
     "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
     "banner": [
       {
-        "src": "assets/images/pages/banner_aurascan.png",
+        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan.png",
         "url": "https://beta.seekhype.io/"
       },
       {
-        "src": "assets/images/pages/banner_aurascan-2.png",
+        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan-2.png",
         "url": "https://beta.seekhype.io/"
       }
     ]
   },
   "api": {
-    "backend": "https://explorer-api.dev.aura.network/api/v1",
-    "socket": "https://explorer-api.dev.aura.network",
+    "backend": "https://evmos-api.dev.aurascan.io/api/v1",
+    "socket": "https://evmos-api.dev.aurascan.io",
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": ["evmos"]
+      "ids": [
+        "evmos"
+      ]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -106,7 +113,9 @@
           "name": "Aurascan",
           "description": "Aura Network Explorer",
           "url": "https://explorer.dev.aurascan.io/",
-          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
+          "icons": [
+            "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
+          ]
         }
       }
     }

@@ -153,6 +153,108 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListEvmContract({
+    creator,
+    address,
+    name,
+    keyword,
+    limit,
+    offset,
+    // contractType,
+  }: {
+    creator?: string;
+    address?: string;
+    name?: string;
+    keyword?: string;
+    limit?: number;
+    offset?: number;
+    // contractType?: string[];
+  }) {
+    let updateQuery = '';
+    // const isIncludeCW4973 = contractType?.includes(ContractRegisterType.CW4973);
+
+    const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
+    if (addressNameTag?.length > 0) {
+      keyword = addressNameTag;
+    }
+
+    let filterName = '';
+    if (this.isValidContract(keyword)) {
+      address = keyword;
+    } else if (this.isValidAddress(keyword)) {
+      creator = keyword;
+    } else if (keyword?.length > 0) {
+      filterName = `_ilike: "%${keyword}%"`;
+    } else {
+      updateQuery = '';
+    }
+
+    // const FILTER_ALL = '';
+    // let typeQuery = 'code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}';
+    // if (isIncludeCW4973) {
+    //   if (contractType?.length >= 2) {
+    //     filterName = filterName?.length > 0 ? filterName : '_eq: "crates.io:cw4973"';
+    //     typeQuery = contractType?.includes(FILTER_ALL)
+    //       ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {${filterName}}}],`
+    //       : `_or: [{code: {type: {_in: $type}}}, {name: {${filterName}}}],`;
+    //   } else {
+    //     filterName = `, ${filterName}`;
+    //     typeQuery = contractType?.includes(FILTER_ALL)
+    //       ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {_eq: "crates.io:cw4973"}}],`
+    //       : (() => {
+    //           // CW4973 is CW721 Type
+    //           contractType = [ContractRegisterType.CW721];
+    //           return `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
+    //         })();
+    //   }
+    // } else if (
+    //   contractType?.includes(ContractRegisterType.CW721) ||
+    //   contractType?.includes(ContractRegisterType.CW20)
+    // ) {
+    //   filterName = `, ${filterName}`;
+    //   typeQuery = contractType?.includes(FILTER_ALL)
+    //     ? `code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}, name: {_neq: "crates.io:cw4973" ${filterName}}`
+    //     : `code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973" ${filterName}}`;
+    // } else if (filterName?.length > 0) {
+    //   typeQuery += `name: {${filterName}},`;
+    // }
+
+    const operationsDoc = `
+    query EvmSmartContractList($limit: Int = 100, $offset: Int = 0, $address: String = null, $creator: String =null) {
+      ${this.envDB} {
+        evm_smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {address: {_eq: $address}, creator: {_eq: $creator}}) {
+          address
+          created_at
+          created_hash
+          created_height
+          creator
+          id
+          type
+          updated_at
+        }
+        evm_smart_contract_aggregate {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: limit,
+          offset: offset,
+          // type: contractType,
+          creator: creator,
+          address: address,
+        },
+        operationName: 'EvmSmartContractList',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   loadContractDetail(contractAddress): Observable<any> {
     const contractDoc = `
     query queryContractDetail($contractAddress: String = null) {

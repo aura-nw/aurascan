@@ -1,13 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { Subject } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
-import { ContractService } from 'src/app/core/services/contract.service';
 import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EVMContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 
 @Component({
@@ -36,6 +37,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
   textSearch = '';
   isLoading = true;
   errTxt: string;
+  EvmContractRegisterType = EVMContractRegisterType;
 
   dataSource = new MatTableDataSource<any>();
   searchSubject = new Subject();
@@ -55,7 +57,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getListContract();
+    this.getListEvmContract();
 
     this.searchSubject
       .asObservable()
@@ -69,82 +71,39 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
     this.searchSubject.next(this.textSearch);
   }
 
-  getListContract() {
-    this.listContract = [
-      {
-        address: 'aura1w2hv4gw84mcu9qlp9qvg93cydvuxj548r9qjhyqlg82gasm5q9pq5u90t5',
-        contract_verification: true,
-        name: 'Aura (AURA)',
-        label: 'aura-usdc pool',
-        version: '0.15.0',
-        type: 'ERC20',
-        token_tracker: 'namthange',
-        creator: 'aura13t8ej6yvje8n9zl7hcvj8ks24tp5qvdsgfhnjx',
+  getListEvmContract() {
+    this.textSearch = this.textSearch?.trim();
+    let payload = {
+      limit: this.pageData.pageSize,
+      offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
+      keyword: this.textSearch,
+      // contractType: this.filterButtons?.length > 0 && this.filterButtons?.length < 4 ? this.filterButtons : null,
+    };
+
+    this.contractService.getListEvmContract(payload).subscribe({
+      next: (res) => {
+        if (res?.evm_smart_contract?.length) {
+          res?.evm_smart_contract.forEach((item) => {});
+          this.dataSource.data = res.evm_smart_contract;
+          this.pageData.length = res.evm_smart_contract_aggregate?.aggregate?.count;
+        } else {
+          this.dataSource.data = [];
+          this.listContract = [];
+          this.pageData.length = 0;
+        }
       },
-      {
-        address: 'aura1w2hv4gw84mcu9qlp9qvg93cydvuxj548r9qjhyqlg82gasm5q9pq5u90t5',
-        contract_verification: false,
-        name: 'Aura (AURA)',
-        label: 'aura-usdc pool',
-        version: '0.15.0',
-        type: 'ERC20',
-        token_tracker: 'namthange',
-        creator: 'aura13t8ej6yvje8n9zl7hcvj8ks24tp5qvdsgfhnjx',
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.isLoading = false;
       },
-      {
-        address: 'aura1w2hv4gw84mcu9qlp9qvg93cydvuxj548r9qjhyqlg82gasm5q9pq5u90t5',
-        contract_verification: true,
-        name: 'Aura (AURA)',
-        label: 'aura-usdc pool',
-        version: '0.15.0',
-        type: 'ERC20',
-        token_tracker: 'namthange',
-        creator: 'aura13t8ej6yvje8n9zl7hcvj8ks24tp5qvdsgfhnjx',
+      complete: () => {
+        this.isLoading = false;
       },
-      {
-        address: 'aura1w2hv4gw84mcu9qlp9qvg93cydvuxj548r9qjhyqlg82gasm5q9pq5u90t5',
-        contract_verification: true,
-        name: 'Aura (AURA)',
-        label: 'aura-usdc pool',
-        version: '0.15.0',
-        type: 'ERC20',
-        token_tracker: 'namthange',
-        creator: 'aura13t8ej6yvje8n9zl7hcvj8ks24tp5qvdsgfhnjx',
-      },
-      {
-        address: 'aura1w2hv4gw84mcu9qlp9qvg93cydvuxj548r9qjhyqlg82gasm5q9pq5u90t5',
-        contract_verification: false,
-        name: 'Aura (AURA)',
-        label: 'aura-usdc pool',
-        version: '0.15.0',
-        type: 'ERC20',
-        token_tracker: 'namthange',
-        creator: 'aura13t8ej6yvje8n9zl7hcvj8ks24tp5qvdsgfhnjx',
-      },
-      {
-        address: 'aura1w2hv4gw84mcu9qlp9qvg93cydvuxj548r9qjhyqlg82gasm5q9pq5u90t5',
-        contract_verification: false,
-        name: 'Aura (AURA)',
-        label: 'aura-usdc pool',
-        version: '0.15.0',
-        type: 'ERC20',
-        token_tracker: 'namthange',
-        creator: 'aura13t8ej6yvje8n9zl7hcvj8ks24tp5qvdsgfhnjx',
-      },
-      {
-        address: 'aura1w2hv4gw84mcu9qlp9qvg93cydvuxj548r9qjhyqlg82gasm5q9pq5u90t5',
-        contract_verification: false,
-        name: 'Aura (AURA)',
-        label: 'aura-usdc pool',
-        version: '0.15.0',
-        type: 'ERC20',
-        token_tracker: 'namthange',
-        creator: 'aura13t8ej6yvje8n9zl7hcvj8ks24tp5qvdsgfhnjx',
-      },
-    ];
-    this.dataSource.data = this.listContract;
-    this.pageData.length = this.listContract.length;
-    this.isLoading = false;
+    });
   }
 
   pageEvent(pageIndex: number): void {
@@ -152,7 +111,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
     if (pageIndex === 0) {
       this.pageData.pageIndex = 1;
     }
-    this.getListContract();
+    this.getListEvmContract();
   }
 
   resetFilterSearch() {
@@ -161,5 +120,24 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
     this.pageEvent(0);
   }
 
-  filterButton(val: string) {}
+  filterButton(val: string) {
+    const i = this.filterButtons.findIndex((i) => i === val);
+
+    switch (val) {
+      case 'All':
+        this.filterButtons = [];
+        break;
+      case EVMContractRegisterType.ERC20:
+      case EVMContractRegisterType.ERC721:
+      case EVMContractRegisterType.ERC1155:
+      case '': //Others
+      default:
+        if (i >= 0) {
+          this.filterButtons = this.filterButtons.filter((item) => item !== val);
+        } else {
+          this.filterButtons.push(val);
+        }
+    }
+    this.pageEvent(0);
+  }
 }
