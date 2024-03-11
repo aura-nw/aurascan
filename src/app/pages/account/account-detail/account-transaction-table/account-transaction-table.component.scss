@@ -55,27 +55,6 @@
 tr td {
   vertical-align: top;
   padding-top: var(--spacer-4);
-
-  &:nth-child(1) {
-    padding-top: var(--spacer-3);
-  }
-}
-
-tr:has(.tab-nft) td {
-  &:nth-child(2),
-  &:nth-child(3) {
-    padding-top: var(--spacer-4) !important;
-  }
-}
-
-::ng-deep {
-  .table-transfer tr td {
-    &:nth-child(4),
-    &:nth-child(5),
-    &:nth-child(6) {
-      padding-top: var(--spacer-0) !important;
-    }
-  }
 }
 
 .tnx-filter-box {
