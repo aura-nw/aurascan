@@ -12,6 +12,7 @@ import { EFeature } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -20,7 +21,6 @@ import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constant
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
-import { convertEthAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-account-detail',
@@ -126,7 +126,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   getAccountDetail(): void {
     this.isNoData = false;
     const halftime = 15000;
-    const convertAddress = this.currentAddress.startsWith('0x') ? convertEthAddressToBech32Address('evmos', this.currentAddress) : this.currentAddress;
+    const convertAddress = convertEvmAddressToBech32Address('evmos', this.currentAddress);
     this.accountService.getAccountDetail(convertAddress).subscribe(
       (res) => {
         if (res.data.code === 200 && !res.data?.data) {

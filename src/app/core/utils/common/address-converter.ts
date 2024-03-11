@@ -1,5 +1,5 @@
-import { ETH } from '@evmos/address-converter';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
+import { ETH } from '@evmos/address-converter';
 
 function makeBech32Encoder(prefix: string) {
   return (data: Buffer) => toBech32(prefix, data);
@@ -15,18 +15,16 @@ function makeBech32Decoder(currentPrefix: string) {
   };
 }
 
-export function convertBech32AddressToEthAddress(
-  prefix: string,
-  bech32Address: string
-): string {
+export function convertBech32AddressToEthAddress(prefix: string, bech32Address: string): string {
   const data = makeBech32Decoder(prefix)(bech32Address);
   return ETH.encoder(data);
 }
 
-export function convertEthAddressToBech32Address(
-  prefix: string,
-  ethAddress: string
-): string {
-  const data = ETH.decoder(ethAddress);
-  return makeBech32Encoder(prefix)(data);
+export function convertEvmAddressToBech32Address(prefix: string, ethAddress: string): string {
+  let result = ethAddress;
+  if (result.startsWith('0x')) {
+    const data = ETH.decoder(ethAddress);
+    result = makeBech32Encoder(prefix)(data);
+  }
+  return result;
 }
