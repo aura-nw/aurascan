@@ -9,7 +9,7 @@ export function isContract(adr: string, addressPrefix: string): boolean {
 }
 
 export function isAddress(adr: string, addressPrefix: string): boolean {
-  if (adr?.startsWith(addressPrefix) && adr?.length === LENGTH_CHARACTER.ADDRESS) {
+  if (adr?.startsWith(addressPrefix) && adr?.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
     return true;
   }
   return false;

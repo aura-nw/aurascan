@@ -31,7 +31,7 @@ export class EvmTransactionsComponent {
     { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214 },
     { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176 },
-    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 102 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 108 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();

@@ -5,18 +5,12 @@ import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.
 import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
 import { LoadingImageModule } from '../../loading-image/loading-image.module';
 import { NameTagModule } from '../../name-tag/name-tag.module';
-import { CardMobAccountComponent } from './card-mob-account.component';
+import { CardMobExecutedEvmComponent } from './card-mob-executed-evm.component';
+import { MaterialModule } from 'src/app/material.module';
 
 @NgModule({
-  declarations: [CardMobAccountComponent],
-  imports: [
-    CommonModule,
-    RouterModule,
-    CustomPipeModule,
-    LoadingImageModule,
-    CommonDirectiveModule,
-    NameTagModule,
-  ],
-  exports: [CardMobAccountComponent],
+  declarations: [CardMobExecutedEvmComponent],
+  imports: [CommonModule, RouterModule, CustomPipeModule, LoadingImageModule, CommonDirectiveModule, NameTagModule, MaterialModule],
+  exports: [CardMobExecutedEvmComponent],
 })
-export class CardMobAccountModule {}
+export class CardMobExecutedEvmModule {}
