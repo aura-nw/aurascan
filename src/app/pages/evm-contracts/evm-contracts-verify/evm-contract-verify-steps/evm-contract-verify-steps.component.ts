@@ -1,12 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ContractService} from "src/app/core/services/contract.service";
-import {WSService} from "src/app/core/services/ws.service";
-import {IResponsesTemplates} from "src/app/core/models/common.model";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { WSService } from 'src/app/core/services/ws.service';
+import { IResponsesTemplates } from 'src/app/core/models/common.model';
 
 @Component({
   selector: 'app-evm-contract-verify-steps',
   templateUrl: './evm-contract-verify-steps.component.html',
-  styleUrls: ['./evm-contract-verify-steps.component.scss']
+  styleUrls: ['./evm-contract-verify-steps.component.scss'],
 })
 export class EvmContractVerifyStepsComponent implements OnInit {
   @Input() codeID: any;
@@ -19,11 +19,9 @@ export class EvmContractVerifyStepsComponent implements OnInit {
   steps = [];
   currentCode = 0;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   getClassName(result) {
     switch (result) {

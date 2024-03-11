@@ -3,11 +3,11 @@
   <ng-container *ngIf="isExitCode">
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
     <div class="body-02 caption-mob fw-normal-mob text--gray-6">
-      Ensuring transparency for users engaging with smart contracts, source code verification involves uploading the code to Aurascan,
-      where it is processing with suitable compiled version on the blockchain.
-      Similar to traditional contracts, a "smart contract" should furnish end users with detailed insights into which they will interact with their
-      "digital signatures,"
-      allowing them the chance to scrutinize the code independently and confirm its intended functionality.
+      Ensuring transparency for users engaging with smart contracts, source code verification involves uploading the
+      code to Aurascan, where it is processing with suitable compiled version on the blockchain. Similar to traditional
+      contracts, a "smart contract" should furnish end users with detailed insights into which they will interact with
+      their "digital signatures," allowing them the chance to scrutinize the code independently and confirm its intended
+      functionality.
     </div>
     <div class="card mt-4">
       <div class="card-body">
@@ -24,7 +24,7 @@
                 <div class="col-12 col-lg-6">
                   <div class="form-group mb-4 mb-lg-6">
                     <label for="address" class="form-label text--gray-1 body-02">Contract to verify</label>
-                    <input formControlName="address" type="text" class="form-control" id="address"/>
+                    <input formControlName="address" type="text" class="form-control" id="address" />
                     <div class="error" *ngIf="formControls['address'].invalid">Address is required!</div>
                   </div>
                 </div>
@@ -153,8 +153,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="!isExitCode"
-  >
+  <ng-container *ngIf="!isExitCode">
     <div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
     <div class="py-lg-20"></div>
   </ng-container>

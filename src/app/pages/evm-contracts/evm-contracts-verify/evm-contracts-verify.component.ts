@@ -1,15 +1,15 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {CONTRACT_VERSIONS} from "src/app/core/constants/contract.constant";
-import {ActivatedRoute, Router} from "@angular/router";
-import {WSService} from "src/app/core/services/ws.service";
-import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
-import local from "src/app/core/utils/storage/local";
-import {STORAGE_KEYS} from "src/app/core/constants/common.constant";
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
+import { ActivatedRoute, Router } from '@angular/router';
+import { WSService } from 'src/app/core/services/ws.service';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import local from 'src/app/core/utils/storage/local';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-evm-contracts-verify',
   templateUrl: './evm-contracts-verify.component.html',
-  styleUrls: ['./evm-contracts-verify.component.scss']
+  styleUrls: ['./evm-contracts-verify.component.scss'],
 })
 export class EvmContractsVerifyComponent implements OnInit {
   contractAddress = '';
@@ -48,19 +48,18 @@ export class EvmContractsVerifyComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractForm = new UntypedFormGroup({
-      address: new UntypedFormControl({value: this.address, disabled: true}, {validators: [Validators.required]}),
-      compiler_type: new UntypedFormControl('', {validators: [Validators.required]}),
-      compiler_version: new UntypedFormControl('', {validators: [Validators.required]}),
-      license: new UntypedFormControl('', {validators: [Validators.required]}),
+      address: new UntypedFormControl({ value: this.address, disabled: true }, { validators: [Validators.required] }),
+      compiler_type: new UntypedFormControl('', { validators: [Validators.required] }),
+      compiler_version: new UntypedFormControl('', { validators: [Validators.required] }),
+      license: new UntypedFormControl('', { validators: [Validators.required] }),
     });
     // this.checkStatusVerify();
   }
 
-  onSubmit() {
-  }
+  onSubmit() {}
 
   handleReset() {
-    this.contractForm.reset({contract_address: this.contractAddress});
+    this.contractForm.reset({ contract_address: this.contractAddress });
     this.contractForm.controls['address'].setValue(this.address);
   }
 
@@ -80,8 +79,7 @@ export class EvmContractsVerifyComponent implements OnInit {
   //   );
   // }
 
-  checkStatusVerify() {
-  }
+  checkStatusVerify() {}
 
   @HostListener('window:scroll', ['$event']) // for window scroll events
   onScroll(event) {
@@ -101,7 +99,7 @@ export class EvmContractsVerifyComponent implements OnInit {
   }
 
   checkFormValid(): boolean {
-    this.formValid = this.contractForm.status === "INVALID";
+    this.formValid = this.contractForm.status === 'INVALID';
     return this.formValid;
   }
 }

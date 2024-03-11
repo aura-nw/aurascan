@@ -2,20 +2,18 @@
 // Forms.scss
 //
 
-[type="tel"],
-[type="url"],
-[type="email"],
-[type="number"] {
+[type='tel'],
+[type='url'],
+[type='email'],
+[type='number'] {
   &::placeholder {
-    text-align: left /*rtl: right*/
-  ;
+    text-align: left /*rtl: right*/;
   }
 }
 
 .form-check {
   position: relative;
-  text-align: left /*rtl: right*/
-;
+  text-align: left /*rtl: right*/;
 }
 
 // checkbox input right
@@ -50,14 +48,14 @@
     &:checked {
       background-color: $card-bg !important;
 
-      &[type="checkbox"] {
+      &[type='checkbox'] {
         background-image: none;
       }
 
       &:after {
         position: absolute;
-        content: "\F012C";
-        font-family: "Material Design Icons";
+        content: '\F012C';
+        font-family: 'Material Design Icons';
         top: -4px !important;
         left: 1px; /*rtl: -4px */
         font-size: 16px;
@@ -81,13 +79,13 @@
     &:checked {
       background-color: $card-bg !important;
 
-      &[type="checkbox"] {
+      &[type='checkbox'] {
         background-image: none;
       }
 
       &:after {
         position: absolute;
-        content: "";
+        content: '';
         top: 3px !important;
         left: 3px;
         width: 5px;
@@ -159,7 +157,7 @@
   margin-bottom: 0px;
 }
 
-body[data-layout-mode="dark"] {
+body[data-layout-mode='dark'] {
   // Form Control
   .form-control {
     color: $gray-dark-500;
@@ -168,14 +166,14 @@ body[data-layout-mode="dark"] {
   }
 }
 
-body[data-layout-mode="dark"] {
+body[data-layout-mode='dark'] {
   // form-select
   .form-select {
     color: $gray-dark-500;
     background-color: lighten($gray-dark-200, 2.5%);
     border: 1px solid $gray-dark-300;
     background-image: escape-svg(
-        url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{$gray-dark-800}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>")
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{$gray-dark-800}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>")
     );
   }
 
@@ -233,7 +231,6 @@ body[data-layout-mode="dark"] {
     }
   }
 }
-
 
 .form-check-input {
   margin-left: 0;
