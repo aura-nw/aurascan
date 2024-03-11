@@ -5,9 +5,9 @@
       <a
         [routerLink]="['/contracts/', currentAddress]"
         *ngIf="isContractAddress && breakpoint.value.matches"
-        class="contract-label text--primary ml-6 caption fw-normal"
-        >Contract</a
-      >
+        class="contract-label text--primary ml-6 body-04">
+        Contract
+      </a>
     </div>
     <div class="d-flex mb-2 mb-lg-0" [class.justify-content-between]="breakpoint.value.matches">
       <div class="d-none d-lg-flex align-items-center">
@@ -43,7 +43,7 @@
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
-            <div class="box-name-convert">
+            <div class="converted-address">
               <span [copyBtn]="addressConvert" [btnClass]="['px-0', 'ml-2']">{{ addressConvert }}</span>
             </div>
             <app-name-tag [value]="currentAddress" [mode]="ENameTag.Public" [fullText]="true"></app-name-tag>
