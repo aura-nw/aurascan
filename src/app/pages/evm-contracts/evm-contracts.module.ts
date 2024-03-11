@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { EvmContractsRoutingModule } from './evm-contracts-routing.module';
 import { EvmContractsListComponent } from './evm-contracts-list/evm-contracts-list.component';
 import { EvmContractsDetailComponent } from './evm-contracts-detail/evm-contracts-detail.component';

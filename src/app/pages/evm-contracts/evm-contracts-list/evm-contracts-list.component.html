@@ -8,9 +8,24 @@
       (click)="filterButton('All')">
       All types
     </button>
-    <button class="button button-pill button-flat body-02 caption-mob active">ERC20</button>
-    <button class="button button-pill button-flat body-02 caption-mob">ERC721</button>
-    <button class="button button-pill button-flat body-02 caption-mob">ERC1155</button>
+    <button
+      class="button button-pill button-flat body-02 caption-mob"
+      [class.active]="filterButtons.includes(EvmContractRegisterType.ERC20)"
+      (click)="filterButton(EvmContractRegisterType.ERC20)">
+      ERC20
+    </button>
+    <button
+      class="button button-pill button-flat body-02 caption-mob"
+      [class.active]="filterButtons.includes(EvmContractRegisterType.ERC721)"
+      (click)="filterButton(EvmContractRegisterType.ERC721)">
+      ERC721
+    </button>
+    <button
+      class="button button-pill button-flat body-02 caption-mob"
+      [class.active]="filterButtons.includes(EvmContractRegisterType.ERC1155)"
+      (click)="filterButton(EvmContractRegisterType.ERC1155)">
+      ERC1155
+    </button>
     <button class="button button-pill button-flat body-02 caption-mob">Others</button>
   </div>
   <form class="aura-form single-input-field search-form contract-search-form d-none d-lg-block">
