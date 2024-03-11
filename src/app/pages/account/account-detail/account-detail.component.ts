@@ -12,6 +12,7 @@ import { EFeature } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -64,6 +65,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   isWatchList = false;
   EFeature = EFeature;
   ENameTag = ENameTag;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     public commonService: CommonService,
@@ -125,7 +127,11 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   getAccountDetail(): void {
     this.isNoData = false;
     const halftime = 15000;
-    this.accountService.getAccountDetail(this.currentAddress).subscribe(
+    const convertAddress = convertEvmAddressToBech32Address(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      this.currentAddress,
+    );
+    this.accountService.getAccountDetail(convertAddress).subscribe(
       (res) => {
         if (res.data.code === 200 && !res.data?.data) {
           this.isNoData = true;

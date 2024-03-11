@@ -16,6 +16,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 import { toHexData } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -114,6 +115,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     public environmentService: EnvironmentService,
@@ -338,6 +340,10 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesExecute;
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
+        payload.address = convertEvmAddressToBech32Address(
+          this.chainInfo.bech32Config.bech32PrefixAccAddr,
+          payload.address,
+        );
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.EVMExecutedTxs:

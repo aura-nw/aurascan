@@ -54,7 +54,7 @@ export enum TabsAccount {
 }
 
 export enum TabsAccountEvm {
-  ExecutedTxs = 'Aura Executed Txn',
+  ExecutedTxs = 'Cosmos Executed Txn',
   EVMExecutedTxs = 'EVM Executed Txns',
   NativeTxs = 'Native + Ibc Transfer',
   FtsTxs = 'ERC20 Transfer',
