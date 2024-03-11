@@ -12,7 +12,10 @@ import { EFeature } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
+import {
+  convertBech32AddressToEvmAddress,
+  convertEvmAddressToBech32Address,
+} from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -65,6 +68,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   isWatchList = false;
   EFeature = EFeature;
   ENameTag = ENameTag;
+  addressConvert = '';
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -101,6 +105,18 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.loadDataTemp();
         this.getAccountDetail();
         this.checkWatchList();
+
+        if (this.commonService.isNativeAddress(this.currentAddress)) {
+          this.addressConvert = convertBech32AddressToEvmAddress(
+            this.chainInfo.bech32Config.bech32PrefixAccAddr,
+            this.currentAddress,
+          );
+        } else {
+          this.addressConvert = convertEvmAddressToBech32Address(
+            this.chainInfo.bech32Config.bech32PrefixAccAddr,
+            this.currentAddress,
+          );
+        }
       }
     });
   }

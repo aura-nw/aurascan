@@ -15,7 +15,7 @@ function makeBech32Decoder(currentPrefix: string) {
   };
 }
 
-export function convertBech32AddressToEthAddress(prefix: string, bech32Address: string): string {
+export function convertBech32AddressToEvmAddress(prefix: string, bech32Address: string): string {
   const data = makeBech32Decoder(prefix)(bech32Address);
   return ETH.encoder(data);
 }
