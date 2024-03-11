@@ -8,7 +8,7 @@ import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { LENGTH_CHARACTER, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { COIN_TOKEN_TYPE, LENGTH_CHARACTER, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
@@ -44,6 +44,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
   displayFilter = false;
   EFeature = EFeature;
+  COIN_TOKEN_TYPE = COIN_TOKEN_TYPE;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   templatesExecute: Array<TableTemplate> = [
@@ -370,6 +371,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'typeFT', headerCellDef: 'Type', headerWidth: 13 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListFTByAddress(payload);
         break;
@@ -385,6 +387,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18 });
+        this.templates.push({ matColumnDef: 'typeNFT', headerCellDef: 'Type', headerWidth: 13 });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListNFTByAddress(payload);
         break;

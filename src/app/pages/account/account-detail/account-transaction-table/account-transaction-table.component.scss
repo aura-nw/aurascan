@@ -156,6 +156,17 @@
       }
     }
   }
+  .item-type {
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px;
+    width: fit-content;
+    background: #9da1ac33;
+    color:  var(--aura-white);
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
 }
 
 .btn-select-type {

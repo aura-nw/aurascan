@@ -579,6 +579,18 @@
                       <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
                     </a>
                   </div>
+                  <div *ngSwitchCase="'typeFT'">
+                    <div class="item-type">
+                      <a *ngIf="true" [routerLink]="['/transaction', data['evmTx']]">{{ COIN_TOKEN_TYPE.ERC20 }}</a>
+                      <span *ngIf="false">{{ COIN_TOKEN_TYPE.CW20 }}</span>
+                    </div>
+                  </div>
+                  <div *ngSwitchCase="'typeNFT'">
+                    <div class="item-type">
+                      <a *ngIf="true" [routerLink]="['/transaction', data['evmTx']]">{{ COIN_TOKEN_TYPE.ERC721 }}</a>
+                      <span *ngIf="false">{{ COIN_TOKEN_TYPE.CW721 }}</span>
+                    </div>
+                  </div>
                   <div *ngSwitchCase="'nft'">
                     <ng-container *ngFor="let item of data.arrEvent; let index = index">
                       <div

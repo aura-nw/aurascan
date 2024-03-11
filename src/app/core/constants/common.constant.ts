@@ -78,6 +78,8 @@ export const COIN_TOKEN_TYPE = {
   IBC: 'ibc',
   CW20: 'cw20',
   ERC20: 'erc20',
+  CW721: 'cw721',
+  ERC721: 'erc721',
 };
 
 export enum MEDIA_TYPE {
