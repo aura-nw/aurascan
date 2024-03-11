@@ -21,6 +21,7 @@ import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constant
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { convertEthAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-account-detail',
@@ -96,7 +97,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
-        this.currentAddress = params?.address;
+        const address = params?.address.startsWith('0x') ? convertEthAddressToBech32Address('evmos', params?.address) : params?.address;
+        this.currentAddress = address;
         this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
