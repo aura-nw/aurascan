@@ -9,6 +9,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { convertEthAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
@@ -95,7 +96,7 @@ export class TokenTableComponent implements OnChanges {
 
   getListToken() {
     const payload = {
-      account_address: this.address,
+      account_address: this.address.startsWith('0x') ? convertEthAddressToBech32Address('evmos', this.address) : this.address,
       keyword: this.textSearch,
     };
     if (this.dataTable?.length > 0) {

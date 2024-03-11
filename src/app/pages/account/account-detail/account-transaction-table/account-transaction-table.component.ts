@@ -16,6 +16,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { convertEthAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 import { toHexData } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -338,6 +339,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesExecute;
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
+        payload.address = payload.address.startsWith('0x') ? convertEthAddressToBech32Address('evmos', payload.address) : payload.address;
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.EVMExecutedTxs:

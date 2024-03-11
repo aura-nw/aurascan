@@ -95,8 +95,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
-        const address = params?.address.startsWith('0x') ? convertEthAddressToBech32Address('evmos', params?.address) : params?.address;
-        this.currentAddress = address;
+        this.currentAddress = params?.address;
         this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
@@ -127,7 +126,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   getAccountDetail(): void {
     this.isNoData = false;
     const halftime = 15000;
-    this.accountService.getAccountDetail(this.currentAddress).subscribe(
+    const convertAddress = this.currentAddress.startsWith('0x') ? convertEthAddressToBech32Address('evmos', this.currentAddress) : this.currentAddress;
+    this.accountService.getAccountDetail(convertAddress).subscribe(
       (res) => {
         if (res.data.code === 200 && !res.data?.data) {
           this.isNoData = true;
