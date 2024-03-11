@@ -183,6 +183,8 @@ export class ContractService extends CommonService {
       address = keyword;
     } else if (this.isValidAddress(keyword)) {
       creator = keyword;
+    } else if (keyword.startsWith('0x') && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
+      address = keyword;
     } else if (keyword?.length > 0) {
       filterName = `_ilike: "%${keyword}%"`;
     } else {
@@ -232,7 +234,7 @@ export class ContractService extends CommonService {
           type
           updated_at
         }
-        evm_smart_contract_aggregate {
+        evm_smart_contract_aggregate(where: {address: {_eq: $address}, creator: {_eq: $creator}}) {
           aggregate {
             count
           }
