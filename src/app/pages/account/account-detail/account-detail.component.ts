@@ -69,6 +69,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   ENameTag = ENameTag;
   addressConvert = '';
+  addressTitle = '';
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -100,7 +101,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
-        this.currentAddress = params?.address;
+        this.addressTitle = this.currentAddress = params?.address;
         this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
         this.loadDataTemp();
         this.getAccountDetail();
@@ -112,7 +113,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
             this.currentAddress,
           );
         } else {
-          this.addressConvert = convertEvmAddressToBech32Address(
+          this.addressConvert = this.currentAddress;
+          this.addressTitle = convertEvmAddressToBech32Address(
             this.chainInfo.bech32Config.bech32PrefixAccAddr,
             this.currentAddress,
           );

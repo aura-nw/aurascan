@@ -11,13 +11,13 @@
     </div>
     <div class="d-flex mb-2 mb-lg-0" [class.justify-content-between]="breakpoint.value.matches">
       <div class="d-none d-lg-flex align-items-center">
-        <span class="body-01 text--gray-5 caption-mob fw-normal">{{ currentAddress }}</span>
+        <span class="body-01 text--gray-5 caption-mob fw-normal">{{ addressTitle }}</span>
       </div>
       <div class="d-lg-none mb-lg-2">
-        <span class="body-01 text--gray-5 caption-mob fw-normal break-word">{{ currentAddress }}</span>
+        <span class="body-01 text--gray-5 caption-mob fw-normal break-word">{{ addressTitle }}</span>
       </div>
       <div class="d-flex">
-        <div class="ml-lg-0 ml-4" [copyBtn]="currentAddress"></div>
+        <div class="ml-lg-0 ml-4" [copyBtn]="addressTitle"></div>
         <button
           class="ml-lg-4 button button--xxs p-lg-0"
           [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'"
@@ -28,7 +28,7 @@
           class="contract-label ml-8"
           [appTooltip]="'Go to Contract Details'"
           *ngIf="!breakpoint.value.matches && isContractAddress">
-          <a class="text--primary" [routerLink]="['/contracts/', currentAddress]">Contract</a>
+          <a class="text--primary" [routerLink]="['/contracts/', addressTitle]">Contract</a>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
     <div class="col-12 col-lg-3">
       <div class="card card-h-100">
         <div class="px-4 px-xl-0 py-4 py-lg-6 qr-code d-none d-lg-block">
-          <app-qr [address]="currentAddress || ''"></app-qr>
+          <app-qr [address]="addressTitle || ''"></app-qr>
         </div>
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
