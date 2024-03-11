@@ -3,8 +3,6 @@ import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import BigNumber from 'bignumber.js';
-import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-evm-overview',
@@ -13,13 +11,18 @@ import { filter, take } from 'rxjs/operators';
 })
 export class EvmOverviewComponent implements OnChanges {
   @Input() contractDetail: any;
-  contractBalance;
-  contractValue;
+
+  contractBalance = 0;
+  contractValue = 0;
   contractRegisterType = ContractRegisterType;
   linkNft = 'token-nft';
-  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
-  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+
+  currencies = this.environmentService.chainInfo.currencies[0];
+
+  denom = this.currencies?.coinDenom;
+  coinMinimalDenom = this.currencies?.coinMinimalDenom;
+  decimal = this.currencies?.coinDecimals;
+
   verifiedStatus = '';
   verifiedText = '';
   chainName = this.environmentService.chainName;

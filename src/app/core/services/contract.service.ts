@@ -183,6 +183,8 @@ export class ContractService extends CommonService {
       address = keyword;
     } else if (this.isValidAddress(keyword)) {
       creator = keyword;
+    } else if (keyword.startsWith('0x') && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
+      address = keyword;
     } else if (keyword?.length > 0) {
       filterName = `_ilike: "%${keyword}%"`;
     } else {
@@ -232,7 +234,7 @@ export class ContractService extends CommonService {
           type
           updated_at
         }
-        evm_smart_contract_aggregate {
+        evm_smart_contract_aggregate(where: {address: {_eq: $address}, creator: {_eq: $creator}}) {
           aggregate {
             count
           }
@@ -308,6 +310,34 @@ export class ContractService extends CommonService {
           contractAddress: contractAddress,
         },
         operationName: 'queryContractDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  queryEvmContractByAddress(address: string) {
+    const contractDoc = `query EVMContractDetail($address: String = "") {
+      ${this.envDB} {
+        evm_smart_contract(where: {address: {_eq: $address}}, limit: 1) {
+          address
+          created_at
+          created_hash
+          created_height
+          creator
+          id
+          type
+          updated_at
+        }
+      }
+    }
+    
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: contractDoc,
+        variables: {
+          address,
+        },
+        operationName: 'EVMContractDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

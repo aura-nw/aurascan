@@ -13,13 +13,12 @@
     </div>
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
     <div class="card__body body-02 body-mob collapse" id="title2">
-      <div>
+      <div class="text--gray-light">
         <div class="text--gray-4 caption fw-normal mb-1">Contract Name</div>
-        <div class="text--gray-light" *ngIf="contractDetail.name">
-          {{ contractDetail.name }} ({{ contractDetail.version }})
-        </div>
-        <div class="text--gray-light" *ngIf="!contractDetail.name">-</div>
+        <div *ngIf="contractDetail.name">{{ contractDetail.name }} ({{ contractDetail.version }})</div>
+        <div *ngIf="!contractDetail.name">-</div>
       </div>
+
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
         <app-name-tag
@@ -29,12 +28,11 @@
           [fullText]="true">
         </app-name-tag>
       </div>
+
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Private Name Tag</div>
-        <app-name-tag
-          [value]="contractDetail?.address"
-          [mode]="ENameTag.Private"
-          [screen]="EScreen.Contract"></app-name-tag>
+        <app-name-tag [value]="contractDetail?.address" [mode]="ENameTag.Private" [screen]="EScreen.Contract">
+        </app-name-tag>
       </div>
     </div>
   </div>
@@ -56,10 +54,12 @@
         <div class="text--gray-4 caption fw-normal mb-1">Contract Type</div>
         <div class="text--gray-light">{{ contractDetail.code?.type ?? '-' }}</div>
       </div>
+
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Label</div>
         <div class="text--gray-light">{{ contractDetail.label ?? '-' }}</div>
       </div>
+
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Contract Creator</div>
         <div class="text--gray-light">
@@ -75,11 +75,13 @@
           </span>
           at txn
           <a
+            *ngIf="contractDetail?.tx_hash"
             class="text--primary ml-1 ml-lg-2"
             [routerLink]="['/transaction', contractDetail?.tx_hash]"
             [copyBtn]="contractDetail?.tx_hash">
             {{ contractDetail?.tx_hash | ellipsis: 6 : 6 }}
           </a>
+          <span *ngIf="!contractDetail?.tx_hash">-</span>
         </div>
       </div>
     </div>
