@@ -24,6 +24,11 @@ import { EvmCodeComponent } from 'src/app/pages/evm-contracts/evm-contracts-deta
 import { EvmReadComponent } from 'src/app/pages/evm-contracts/evm-contracts-detail/evm-contract-content/evm-contract/evm-read/evm-read.component';
 import { EvmWriteComponent } from 'src/app/pages/evm-contracts/evm-contracts-detail/evm-contract-content/evm-contract/evm-write/evm-write.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contracts-verify.component';
+import { EvmContractVerifyStepsComponent } from './evm-contracts-verify/evm-contract-verify-steps/evm-contract-verify-steps.component';
+import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
+import { ContractVerifyStepsComponent } from 'src/app/pages/contracts/contracts-verify/contract-verify-steps/contract-verify-steps.component';
+import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 
 @NgModule({
   declarations: [
@@ -36,15 +41,19 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
     EvmReadComponent,
     EvmWriteComponent,
     EvmContractComponent,
+    EvmContractsVerifyComponent,
+    EvmContractVerifyStepsComponent,
   ],
   imports: [
     CommonModule,
     EvmContractsRoutingModule,
-    CustomPaginatorModule,
+    PaginatorModule,
     TableNoDataModule,
+    CustomPaginatorModule,
     FormsModule,
-    MaterialModule,
     ReactiveFormsModule,
+    MaterialModule,
+    DropdownModule,
     SharedModule,
     CustomPipeModule,
     NameTagModule,
@@ -57,5 +66,6 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
     NgbNavModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
+  exports: [EvmContractVerifyStepsComponent],
 })
 export class EvmContractsModule {}
