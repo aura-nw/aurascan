@@ -153,6 +153,43 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListEvmTxByAddress(payload) {
+    const operationsDoc = `
+    query QueryEvmTxOfContract( $limit: Int = null, $address: String = null) {
+      ${this.envDB} {
+        evm_transaction(where: {from: {_eq: $address}}, limit: $limit) {
+          data
+          from
+          to
+          hash
+          height
+          transaction {
+            timestamp
+            hash
+            transaction_messages {
+              type
+              content
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 40,
+          address: payload.address,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+        },
+        operationName: 'QueryEvmTxOfContract',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListTxDetail(payload) {
     const operationsDoc = `
     query queryTxDetail(
