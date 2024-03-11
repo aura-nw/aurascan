@@ -1,5 +1,5 @@
-import {EFeature} from 'src/app/core/models/common.model';
-import {MenuItem} from './menu.model';
+import { EFeature } from 'src/app/core/models/common.model';
+import { MenuItem } from './menu.model';
 
 export enum MenuName {
   Dashboard = 'Dashboard',
@@ -15,12 +15,12 @@ export enum MenuName {
   Statistic = 'Statistic',
   ChartStats = 'Chart & Stats',
   TopStatistics = 'Top Statistics',
-  Contract = 'AURA Contracts',
+  Contract = 'Cosmos Contracts',
   EvmContract = 'EVM Contracts',
   Account = 'Account',
   BlockChain = 'Block chain',
   Resources = 'Resources',
-  CodeList = 'AURA Code ID',
+  CodeList = 'Cosmos Code ID',
   IBC = 'IBC Relayers',
   More = 'More',
 }
