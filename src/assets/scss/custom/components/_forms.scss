@@ -7,13 +7,15 @@
 [type="email"],
 [type="number"] {
   &::placeholder {
-    text-align: left /*rtl: right*/;
+    text-align: left /*rtl: right*/
+  ;
   }
 }
 
 .form-check {
   position: relative;
-  text-align: left /*rtl: right*/;
+  text-align: left /*rtl: right*/
+;
 }
 
 // checkbox input right
@@ -22,6 +24,7 @@
   padding-left: 0;
   display: inline-block;
   padding-right: $form-check-padding-start;
+
   .form-check-input {
     float: right;
     margin-left: 0;
@@ -112,6 +115,7 @@
       &:checked {
         border-color: $value;
         background-color: $value;
+
         &:after {
           background-color: $value;
         }
@@ -144,6 +148,7 @@
   font-size: 26px;
   min-height: 36px;
   line-height: 36px;
+
   .form-check-label {
     font-size: $font-size-base;
     vertical-align: middle;
@@ -170,7 +175,7 @@ body[data-layout-mode="dark"] {
     background-color: lighten($gray-dark-200, 2.5%);
     border: 1px solid $gray-dark-300;
     background-image: escape-svg(
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{$gray-dark-800}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>")
+        url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{$gray-dark-800}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>")
     );
   }
 
@@ -179,9 +184,11 @@ body[data-layout-mode="dark"] {
   .form-check-input {
     background-color: $gray-dark-300;
     border-color: rgba($white, 0.25);
+
     &:focus {
       border-color: 1px solid var(--aura-white) !important;
     }
+
     &:checked {
       background-color: $form-check-input-checked-bg-color;
       border-color: $form-check-input-checked-border-color;
@@ -208,6 +215,7 @@ body[data-layout-mode="dark"] {
       background-color: $gray-dark-300;
       color: $gray-dark-600;
     }
+
     &:hover:not(:disabled):not([readonly])::-webkit-file-upload-button {
       background-color: $gray-dark-300;
     }
@@ -219,6 +227,7 @@ body[data-layout-mode="dark"] {
     &::-webkit-slider-runnable-track {
       background-color: $gray-dark-300 !important;
     }
+
     &::-moz-range-track {
       background-color: $gray-dark-300 !important;
     }
@@ -238,8 +247,9 @@ body[data-layout-mode="dark"] {
   cursor: text !important;
   padding: 0 var(--spacer-3);
   @media (min-width: 992px) {
-    height: 40px;    
+    height: 40px;
   }
+
   &::placeholder {
     color: var(--aura-gray-5);
   }
