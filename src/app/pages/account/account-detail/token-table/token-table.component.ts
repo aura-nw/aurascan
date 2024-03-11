@@ -78,6 +78,7 @@ export class TokenTableComponent implements OnChanges {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinMiniDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  chainInfo = this.environmentService.chainInfo;
   image_s3 = this.environmentService.imageUrl;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
 
@@ -96,7 +97,7 @@ export class TokenTableComponent implements OnChanges {
 
   getListToken() {
     const payload = {
-      account_address: convertEvmAddressToBech32Address('evmos', this.address),
+      account_address: convertEvmAddressToBech32Address(this.chainInfo.bech32Config.bech32PrefixAccAddr, this.address),
       keyword: this.textSearch,
     };
     if (this.dataTable?.length > 0) {

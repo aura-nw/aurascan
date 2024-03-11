@@ -65,6 +65,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   isWatchList = false;
   EFeature = EFeature;
   ENameTag = ENameTag;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     public commonService: CommonService,
@@ -126,7 +127,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   getAccountDetail(): void {
     this.isNoData = false;
     const halftime = 15000;
-    const convertAddress = convertEvmAddressToBech32Address('evmos', this.currentAddress);
+    const convertAddress = convertEvmAddressToBech32Address(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      this.currentAddress,
+    );
     this.accountService.getAccountDetail(convertAddress).subscribe(
       (res) => {
         if (res.data.code === 200 && !res.data?.data) {
