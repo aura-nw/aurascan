@@ -44,12 +44,12 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;
 
-  currentAddress: string;
+  accountAddress: string;
   currentAccountDetail: any;
   chartCustomOptions = chartCustomOptions;
 
   // loading param check
-  userAddress = '';
+  connectedAddress = '';
   modalReference: any;
   isNoData = false;
   userEmail = '';
@@ -68,8 +68,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   isWatchList = false;
   EFeature = EFeature;
   ENameTag = ENameTag;
-  addressConvert = '';
-  addressTitle = '';
+  accountEvmAddress = '';
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -99,26 +98,38 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       this.userEmail = currentUser ? currentUser.email : null;
     });
 
+    //get data from client for my account
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
+      if (wallet) {
+        this.connectedAddress = wallet.address;
+      }
+      this.getSBTPick();
+      this.getTotalSBT();
+    });
+
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
-        this.addressTitle = this.currentAddress = params?.address;
-        this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
-        this.loadDataTemp();
-        this.getAccountDetail();
-        this.checkWatchList();
-
-        if (this.commonService.isNativeAddress(this.currentAddress)) {
-          this.addressConvert = convertBech32AddressToEvmAddress(
+        if (this.commonService.isValidAddress(params?.address)) {
+          this.accountAddress = params?.address;
+          this.accountEvmAddress = convertBech32AddressToEvmAddress(
             this.chainInfo.bech32Config.bech32PrefixAccAddr,
-            this.currentAddress,
+            params?.address,
           );
         } else {
-          this.addressConvert = this.currentAddress;
-          this.addressTitle = convertEvmAddressToBech32Address(
+          this.accountEvmAddress = params?.address;
+          this.accountAddress = convertEvmAddressToBech32Address(
             this.chainInfo.bech32Config.bech32PrefixAccAddr,
-            this.currentAddress,
+            params?.address,
           );
         }
+
+        this.isContractAddress = this.commonService.isValidContract(this.accountAddress);
+
+        this.getSBTPick();
+        this.getTotalSBT();
+
+        this.getAccountDetail();
+        this.checkWatchList();
       }
     });
   }
@@ -131,25 +142,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  loadDataTemp(): void {
-    //get data from client for my account
-    this.walletService.walletAccount$.subscribe((wallet) => {
-      if (wallet) {
-        this.userAddress = wallet.address;
-      }
-      this.getSBTPick();
-      this.getTotalSBT();
-    });
-  }
-
   getAccountDetail(): void {
     this.isNoData = false;
     const halftime = 15000;
-    const convertAddress = convertEvmAddressToBech32Address(
-      this.chainInfo.bech32Config.bech32PrefixAccAddr,
-      this.currentAddress,
-    );
-    this.accountService.getAccountDetail(convertAddress).subscribe(
+    this.accountService.getAccountDetail(this.accountAddress).subscribe(
       (res) => {
         if (res.data.code === 200 && !res.data?.data) {
           this.isNoData = true;
@@ -228,7 +224,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     const payload = {
       limit: 100,
       offset: 0,
-      receiverAddress: this.currentAddress,
+      receiverAddress: this.accountAddress,
       isEquipToken: true,
     };
 
@@ -242,7 +238,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   getTotalSBT() {
-    this.soulboundService.countTotalABT(this.currentAddress).subscribe(
+    this.soulboundService.countTotalABT(this.accountAddress).subscribe(
       (res) => {
         this.totalSBT = res.data;
       },
@@ -254,7 +250,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   checkWatchList() {
     // get watch list form local storage
     const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
-    if (lstWatchList?.find((k) => k.address === this.currentAddress)) {
+    if (lstWatchList?.find((k) => k.address === this.accountAddress)) {
       this.isWatchList = true;
     }
   }
@@ -269,7 +265,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   editWatchList() {
     if (this.userEmail) {
-      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.currentAddress);
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.accountAddress);
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

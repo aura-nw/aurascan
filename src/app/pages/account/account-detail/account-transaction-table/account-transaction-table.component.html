@@ -12,7 +12,7 @@
       <span class="text-nowrap">Clear all</span>
     </button>
     <button
-      *ngIf="commonService.isNativeAddress(address)"
+      *ngIf="commonService.isValidAddress(address)"
       (click)="displayFilter = !displayFilter"
       class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4"
       type="button">
@@ -301,7 +301,7 @@
   </div>
   <div class="d-none d-lg-block">
     <button
-      *ngIf="commonService.isNativeAddress(address)"
+      *ngIf="commonService.isValidAddress(address)"
       (click)="displayFilter = !displayFilter"
       class="button button-pill button--sm button-outline button-outline__in-card button-filter"
       type="button">

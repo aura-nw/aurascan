@@ -155,8 +155,4 @@ export class CommonService {
   getRawData(url): Observable<any> {
     return this._http.get<any>(url);
   }
-
-  isNativeAddress(address: string) {
-    return isAddress(address, TYPE_ADDRESS.NATIVE);
-  }
 }
