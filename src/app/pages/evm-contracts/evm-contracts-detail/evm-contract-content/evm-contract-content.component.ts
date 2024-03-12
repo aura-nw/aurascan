@@ -104,7 +104,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
     });
 
     this.timerGetUpTime = setInterval(() => {
-      this.getTransaction(false);
+      this.getTransaction();
     }, 30000);
   }
 
@@ -121,11 +121,11 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
     }
   }
 
-  getTransaction(isInit = true): void {
+  getTransaction(): void {
     if (this.contractsAddress.startsWith('0x') && this.contractsAddress.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
       const payload = {
         limit: this.limit,
-        address: this.contractsAddress,
+        address: this.contractsAddress.toLowerCase(),
       };
 
       this.transactionService

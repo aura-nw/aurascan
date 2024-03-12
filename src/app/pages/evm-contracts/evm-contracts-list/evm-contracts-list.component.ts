@@ -9,7 +9,7 @@ import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constan
 import { EVMContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 
 @Component({
   selector: 'app-evm-contracts-list',
@@ -18,13 +18,11 @@ import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant'
 })
 export class EvmContractsListComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/evm-contracts', headerWidth: 250 },
-    { matColumnDef: 'name', headerCellDef: 'Contract Name', headerWidth: 210 },
-    { matColumnDef: 'label', headerCellDef: 'Label', headerWidth: 190 },
-    { matColumnDef: 'version', headerCellDef: 'Contract Ver', headerWidth: 100 },
-    { matColumnDef: 'type', headerCellDef: 'Type Contract', headerWidth: 150 },
-    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 100 },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 250 },
+    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/evm-contracts', headerWidth: 300 },
+    { matColumnDef: 'name', headerCellDef: 'Contract Name', headerWidth: 260 },
+    { matColumnDef: 'type', headerCellDef: 'Type Contract', headerWidth: 200 },
+    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 150 },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 300 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {

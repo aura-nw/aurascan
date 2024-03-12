@@ -164,11 +164,10 @@ export class TransactionService extends CommonService {
           height
           transaction {
             timestamp
-            hash
-            sender
             transaction_messages {
               type
               content
+              sender
             }
           }
         }

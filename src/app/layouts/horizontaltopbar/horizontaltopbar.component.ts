@@ -6,10 +6,11 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
+import { LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -39,6 +40,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     public router: Router,
     public translate: TranslateService,
     private transactionService: TransactionService,
+    private contractService: ContractService,
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
@@ -90,46 +92,64 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   }
 
   async handleSearch() {
+    if (!this.searchValue) return;
+    this.searchValue = this.searchValue.trim();
+    let urlLink = '';
     const VALIDATORS = {
       HASHRULE: /^[A-Za-z0-9]/,
     };
     const regexRule = VALIDATORS.HASHRULE;
-    if (this.searchValue) {
-      this.searchValue = this.searchValue.trim();
-      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
-      if (addressNameTag?.length > 0) {
-        let urlLink = addressNameTag.length === LENGTH_CHARACTER.CONTRACT ? 'contracts' : 'account';
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate([urlLink, addressNameTag]);
+    if (!regexRule.test(this.searchValue)) return;
+    const isNumber = /^\d+$/.test(this.searchValue);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
+    // case address is nameTag
+    if (addressNameTag?.length > 0) {
+      this.searchValue = addressNameTag;
+    }
+    // check is EVM address
+    if (this.searchValue.startsWith('0x')) {
+      if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
+        // case EVM transaction
+        this.getEvmTxnDetail(this.searchValue);
+      } else {
+        // check if address EVM contract or account
+        this.contractService.findEvmContract(this.searchValue).subscribe({
+          next: (res) => {
+            urlLink = res?.evm_smart_contract?.length > 0 ? 'evm-contracts' : 'account';
+            this.redirectPage(urlLink);
+          },
+          error: (e) => {
+            return;
+          },
         });
       }
-
-      let isNumber = /^\d+$/.test(this.searchValue);
-      if (regexRule.test(this.searchValue)) {
-        //check is start with 'aura' and length >= normal address
-        // if (this.searchValue.startsWith(this.prefixNormalAdd) && this.searchValue.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
-        if (this.searchValue.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
-          if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
-            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['contracts', this.searchValue]);
-            });
-          } else {
-            let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
-            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-              this.router.navigate([urlLink, this.searchValue]);
-            });
-          }
-        } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
-          this.getTxhDetail(this.searchValue);
-        } else if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
-          this.getEvmTxnDetail(this.searchValue);
-        } else if (isNumber) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['blocks', this.searchValue]);
-          });
+    } else {
+      // if address is not EVM -> validator/Aura account/ aura transaction/ block
+      if (isNumber) {
+        // case block
+        urlLink = 'blocks';
+        this.redirectPage(urlLink);
+      } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
+        // case Aura transaction
+        this.getTxhDetail(this.searchValue);
+      } else {
+        // case aura contract
+        if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
+          urlLink = 'contracts';
+          this.redirectPage(urlLink);
+        } else {
+          // case aura validators/ account
+          urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
+          this.redirectPage(urlLink);
         }
       }
     }
+  }
+
+  redirectPage(urlLink: string) {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([urlLink, this.searchValue]).then((r) => {});
+    });
   }
 
   getEvmTxnDetail(value): void {
@@ -140,9 +160,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.queryTransactionByEvmHash(payload).subscribe({
       next: (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['transaction', this.searchValue]);
-          });
+          this.redirectPage('transaction');
         } else {
           this.searchValue = '';
         }

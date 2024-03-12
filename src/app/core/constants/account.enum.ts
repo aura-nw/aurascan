@@ -53,14 +53,6 @@ export enum TabsAccount {
   NftTxs = 'NFT Transfer',
 }
 
-export enum TabsAccountEvm {
-  ExecutedTxs = 'Cosmos Executed Txn',
-  EVMExecutedTxs = 'EVM Executed Txns',
-  NativeTxs = 'Native + Ibc Transfer',
-  FtsTxs = 'ERC20 Transfer',
-  NftTxs = 'NFT Transfer',
-}
-
 export enum TabsAccountLink {
   ExecutedTxs = 'executed',
   EVMExecutedTxs = 'evm-executed',
