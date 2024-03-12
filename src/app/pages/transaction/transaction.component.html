@@ -1,6 +1,6 @@
 <ng-container *ngIf="{ tx: hash$ | async } as state">
   <ng-container *ngIf="state.tx.type == 'cosmos'">
-    <app-aura-transaction [txHash]="state.tx.hash"></app-aura-transaction>
+    <app-cosmos-transaction [txHash]="state.tx.hash"></app-cosmos-transaction>
   </ng-container>
 
   <ng-container *ngIf="state.tx.type == 'evm'">

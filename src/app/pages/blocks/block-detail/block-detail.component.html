@@ -130,13 +130,13 @@
         </ng-container>
       </div>
     </div>
-    <div *ngIf="loadingTxs">
+    <div *ngIf="loadingCosmosTxs">
       <app-loading-sprint></app-loading-sprint>
     </div>
-    <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
-      <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
+    <div class="card text--gray-1" *ngIf="!loadingCosmosTxs && !isRawData">
+      <h2 class="card-header mb-0 text--white pb-0">Cosmos Transactions</h2>
       <div class="card-body body">
-        <ng-container *ngIf="!loadingTxs && dataSource?.data?.length > 0; else noValue">
+        <ng-container *ngIf="!loadingCosmosTxs && dataSource?.data?.length > 0; else noValue">
           <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
             <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
               <ng-container *ngFor="let template of templates; index as i">
@@ -248,13 +248,133 @@
           </div>
         </ng-container>
         <ng-template #noValue>
-          <app-table-no-data *ngIf="!loadingTxs" [textNull]="errTxtTxs"></app-table-no-data>
+          <app-table-no-data *ngIf="!loadingCosmosTxs" [textNull]="errTxtTxs"></app-table-no-data>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="card text--gray-1" *ngIf="!loadingCosmosTxs && !isRawData">
+      <h2 class="card-header mb-0 text--white pb-0">EVM Transactions</h2>
+      <div class="card-body body">
+        <ng-container *ngIf="!loadingCosmosTxs && dataSource?.data?.length > 0; else noValue">
+          <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
+            <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
+              <ng-container *ngFor="let template of templates; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+
+                  <td mat-cell *matCellDef="let data">
+                    <div>
+                      <ng-container [ngSwitch]="template.matColumnDef">
+                        <div *ngSwitchCase="'timestamp'">
+                          {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
+                        </div>
+                        <a
+                          *ngSwitchCase="'tx_hash'"
+                          class="text--primary cursor-pointer hash-link"
+                          [copyBtn]="data['tx_hash']"
+                          [routerLink]="['/transaction', data['tx_hash']]">
+                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                        </a>
+                        <a
+                          *ngSwitchCase="'height'"
+                          class="text--primary cursor-pointer block-link"
+                          [routerLink]="['/blocks', data['height']]">
+                          {{ data[template.matColumnDef] }}
+                        </a>
+                        <div *ngSwitchCase="'type'" class="g-type aura-status">
+                          <div class="d-flex" [appTooltip]="data.lstType | combineTxsMsg">
+                            {{ data[template.matColumnDef] }}
+                            <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                              +{{ data.lstType?.length - 1 }}
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'status'">
+                          <div [ngSwitch]="data[template.matColumnDef]">
+                            <div *ngSwitchCase="'Success'" class="text--green-3">
+                              {{ data[template.matColumnDef] | uppercase }}
+                            </div>
+                            <div *ngSwitchCase="'Fail'" class="text--red-3">
+                              {{ data[template.matColumnDef] | uppercase }}
+                            </div>
+                            <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                              {{ data[template.matColumnDef] | uppercase }}
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'fee'">
+                          {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                          <span appLinkDenom>{{ denom }}</span>
+                        </div>
+                        <div *ngSwitchCase="'amount'">
+                          <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
+                            <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
+                            <span class="ml-1" [appLinkDenom]="data?.denom">{{ data?.denom | ibcDenom }}</span>
+                          </ng-container>
+                          <ng-template #displayNonNumber>
+                            <span *ngIf="!data[template.matColumnDef]"> - </span>
+                            <a
+                              *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
+                              class="text--primary cursor-pointer"
+                              [routerLink]="['/transaction', data['tx_hash']]">
+                              More
+                            </a>
+                          </ng-template>
+                        </div>
+                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{ 'NO DATA' | translate }}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="d-lg-none box-block-tx" *ngIf="dataSource?.data?.length > 0">
+            <app-card-mob-simple
+              *ngFor="let data of dataSource.data"
+              [dataCard]="data"
+              [title]="{
+                size: 'md',
+                label: data.tx_hash | ellipsis: 6 : 6,
+                subLabelContent: data.type,
+                subLabelClass: 'label__status',
+                status: data.code,
+                link: '/transaction/' + data.tx_hash
+              }"
+              [content]="[
+                {
+                  label: 'Fee',
+                  info:
+                    (+data.fee | mask: 'separator.6') +
+                    ' <a class=text--primary href=' +
+                    ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+                    '>' +
+                    denom +
+                    '</a>'
+                },
+                { label: 'Time', info: (data.timestamp | customDateTime: 'DateTime') }
+              ]"></app-card-mob-simple>
+          </div>
+        </ng-container>
+        <ng-template #noValue>
+          <app-table-no-data *ngIf="!loadingCosmosTxs" [textNull]="errTxtTxs"></app-table-no-data>
         </ng-template>
       </div>
     </div>
 
     <!-- Event Log -->
-    <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
+    <div class="card text--gray-1" *ngIf="!loadingCosmosTxs && !isRawData">
       <h2 class="card-header mb-0 text--white pb-0">Events</h2>
       <div class="card-body body">
         <div class="col-12 text--gray-1 box-event-log border-radius--sm">

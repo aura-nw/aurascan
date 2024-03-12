@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { map, of, switchMap } from 'rxjs';
+import { map, merge, of, switchMap } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
@@ -52,7 +52,7 @@ export class BlockDetailComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTxs: any[];
   loading = true;
-  loadingTxs = true;
+  loadingCosmosTxs = true;
   isRawData = false;
   errTxt: string;
   errTxtTxs: string;
@@ -121,21 +121,31 @@ export class BlockDetailComponent implements OnInit {
             height: this.blockHeight,
           };
 
-          return this.transactionService.getListTx(payload).pipe(
-            map((res) => {
-              if (res?.transaction?.length > 0) {
-                this.updateListTx(res?.transaction);
-              }
+          let test = merge(
+            this.transactionService.getListTx(payload).pipe(
+              map((res) => {
+                if (res?.transaction?.length > 0) {
+                  this.updateListTx(res?.transaction);
+                }
+                this.loadingCosmosTxs = false;
+                return true;
+              }),
+            ),
+            this.transactionService.queryTransactionByEvmHash(payload).pipe(
+              map((res) => {
+                if (res?.transaction?.length > 0) {
+                  // this.updateListTx(res?.transaction);
+                }
 
-              return true;
-            }),
+                return true;
+              }),
+            ),
           );
+          return test;
         }),
       )
       .subscribe({
-        next: () => {
-          this.loadingTxs = false;
-        },
+        next: () => {},
         error: (e) => {
           if (e === this.NOT_FOUND) {
             setTimeout(() => {
@@ -147,7 +157,7 @@ export class BlockDetailComponent implements OnInit {
             } else {
               this.errTxt = e.status + ' ' + e.statusText;
             }
-            this.loadingTxs = false;
+            this.loadingCosmosTxs = false;
             this.loading = false;
           }
         },
