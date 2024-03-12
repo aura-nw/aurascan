@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -21,7 +22,6 @@ export interface TableData {
   time: Date;
   from: string;
   to?: string;
-  // label: string;
   value?: number;
   fee: number;
   gas_used?: number;
@@ -76,6 +76,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   constructor(
     public translate: TranslateService,
     private environmentService: EnvironmentService,
+    private router: Router,
   ) {}
 
   ngOnChanges(): void {
@@ -209,6 +210,14 @@ export class ContractTableComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this.isLoading = false;
       }, 2000);
+    }
+  }
+
+  navigateToViewAll() {
+    if (this.templates === EVM_CONTRACT_TABLE_TEMPLATES) {
+      this.router.navigate([`/evm-contracts/transactions`, this.contractInfo.contractsAddress]);
+    } else {
+      this.router.navigate([`/contracts/transactions`, this.contractInfo.contractsAddress]);
     }
   }
 }

@@ -16,7 +16,7 @@
       <button
         class="button button--xs button--sm-mob button-pill button-outline button-outline__in-card mr-4"
         *ngIf="contractInfo.viewAll"
-        [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
+        (click)="navigateToViewAll()">
         <span>View all</span>
       </button>
       <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)" [currentLabel]="label"></app-dropdown>
@@ -112,7 +112,6 @@
                   </ng-container>
                   <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                 </ng-container>
-                <div class="d-inline" *ngIf="template?.suffix" [innerHTML]="template.suffix"></div>
               </td>
             </ng-container>
           </ng-container>
