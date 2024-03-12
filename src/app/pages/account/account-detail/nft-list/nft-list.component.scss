@@ -84,7 +84,10 @@
 
   .button-switch-stage {
     height: 32px;
-    width: 220px;
+    width: 195px;
+    @media (min-width: 992px) {
+      width: 220px;
+    }
   }
 }
 
@@ -107,7 +110,7 @@
     padding: var(--spacer-3) var(--spacer-2);
     background-color: var(--aura-gray-10);
 
-    &>* {
+    & > * {
       color: var(--aura-white);
     }
 
