@@ -459,7 +459,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       action,
       eventAttr,
       lstTypeTemp,
-      evmTx 
+      evmTx,
     };
   });
   return txs;
@@ -471,6 +471,7 @@ export function convertDataTransactionSimple(data, coinInfo) {
     const tx_hash = _.get(element, 'hash');
     const txMessages = _.get(element, 'transaction_messages');
     const txBodyMsgType = _.get(element, 'data[0][@type]');
+    const hash = _.get(element, 'evm_transaction.hash');
 
     let type = '';
     if (txMessages?.length > 0) {
@@ -512,6 +513,7 @@ export function convertDataTransactionSimple(data, coinInfo) {
       height,
       timestamp,
       tx,
+      hash,
       lstType: txMessages,
     };
   });

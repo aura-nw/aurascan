@@ -5,13 +5,12 @@ import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { CONTRACT_TAB, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { UserService } from 'src/app/core/services/user.service';
 import { toHexData } from 'src/app/core/utils/common/parsing';
 
 @Component({
@@ -38,7 +37,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   activeId = 0;
   limit = 25;
   contractTransaction = { count: 0 };
-  templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
+  templates: Array<TableTemplate> = EVM_CONTRACT_TABLE_TEMPLATES;
   errTxt: string;
   contractInfo = {
     contractsAddress: this.contractsAddress,
@@ -131,7 +130,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
       };
 
       this.transactionService
-        .getListEvmTxByAddress(payload)
+        .getListEvmContractTxByAddress(payload)
         .pipe(
           map((txsRes) => {
             if (txsRes?.evm_transaction?.length > 0) {

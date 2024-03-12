@@ -28,13 +28,22 @@
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                       <a
+                        *ngSwitchCase="'hash'"
+                        [copyBtn]="data[template.matColumnDef]"
+                        class="text--primary cursor-pointer hash-link"
+                        [routerLink]="['/transaction', data['hash']]">
+                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                      </a>
+                      <a
                         *ngSwitchCase="'height'"
                         class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks', data['height']]">
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'type'" class="aura-status">
-                        <div class="cursor-pointer d-flex align-items-center" [appTooltip]="data.lstType | combineTxsMsg">
+                        <div
+                          class="cursor-pointer d-flex align-items-center"
+                          [appTooltip]="data.lstType | combineTxsMsg">
                           {{ data[template.matColumnDef] | ellipsis: 35 }}
                           <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
                             +{{ data.lstType?.length - 1 }}
