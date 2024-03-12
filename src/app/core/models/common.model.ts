@@ -54,8 +54,7 @@ export class CommonDataDto {
   total_transactions: number;
   total_validator_active_num: number;
   total_validator_num: number;
-  bonded_tokens_format: number;
-  community_pool_format: number;
+  community_pool_format: any;
   total_aura: number;
 }
 
