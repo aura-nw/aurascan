@@ -41,21 +41,14 @@
 
       <div class="col-12 col-lg-4">
         <div class="contract__card-info">
-          <app-evm-contract-info
-            [type]="'moreInfo'"
-            [contractDetail]="contractDetail"
-            *ngIf="contractDetail"></app-evm-contract-info>
+          <app-evm-contract-info [type]="'moreInfo'" [contractDetail]="contractDetail" *ngIf="contractDetail">
+          </app-evm-contract-info>
         </div>
       </div>
     </div>
 
-    <app-evm-contract-content [contractsAddress]="contractAddress"> </app-evm-contract-content>
-    <!--  <app-evm-contract-content-->
-    <!--    *ngIf="contractDetail"-->
-    <!--    [contractsAddress]="contractAddress + ''"-->
-    <!--    [contractTypeData]="contractDetail.code.code_id_verifications[0]?.verification_status"-->
-    <!--    [contractId]="contractDetail.id">-->
-    <!--  </app-evm-contract-content>-->
+    <app-evm-contract-content [contractsAddress]="contractAddress" [contractTypeData]="contractDetail?.status">
+    </app-evm-contract-content>
 
     <div class="col-lg-3">
       <ng-template #modalManage let-modal>

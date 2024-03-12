@@ -18,7 +18,7 @@ export class EvmContractComponent implements OnInit {
   contractType = ContractType;
   currentTab = this.contractType.Code;
   contractVerifyType = ContractVerifyType;
-  contractAddress: string;
+
   contractDetail: any;
   isVerifying = false;
 
@@ -29,7 +29,6 @@ export class EvmContractComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.getContractDetail();
   }
 

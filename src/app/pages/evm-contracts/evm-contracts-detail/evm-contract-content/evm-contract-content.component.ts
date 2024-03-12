@@ -20,8 +20,7 @@ import { toHexData } from 'src/app/core/utils/common/parsing';
 })
 export class EvmContractContentComponent implements OnInit, OnDestroy {
   @Input() contractsAddress = '';
-  @Input() contractTypeData: ContractVerifyType;
-  @Input() contractId;
+  @Input() contractTypeData: ContractVerifyType = ContractVerifyType.Unverified;
 
   TABS = CONTRACT_TAB.filter((tab) => [ContractTab.Transactions, ContractTab.Contract].includes(tab.key)).map(
     (tab) => ({
@@ -109,10 +108,10 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
     }, 30000);
   }
 
-  changeTab(tabId): void {
-    tabId = tabId || 'transactions';
-    this.location.replaceState('/contracts/' + this.contractInfo.contractsAddress + '?tabId=' + tabId);
-    this.currentTab = tabId;
+  changeTab(tabId: string): void {
+    this.currentTab = tabId || 'transactions';
+
+    this.location.replaceState('/evm-contracts/' + this.contractInfo.contractsAddress + '?tabId=' + this.currentTab);
 
     //check fist load tab tx of contract
     if (this.isFirstLoad && this.currentTab === ContractTab.Transactions && !this.contractTransaction['count']) {

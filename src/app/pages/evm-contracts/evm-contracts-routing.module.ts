@@ -10,7 +10,7 @@ const routes: Routes = [
     component: EvmContractsListComponent,
   },
   {
-    path: 'evm-verify/:contractAddress',
+    path: ':contractAddress/verify',
     component: EvmContractsVerifyComponent,
   },
   {
