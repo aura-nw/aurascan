@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import * as _ from 'lodash';
+import { map, Subject } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { CONTRACT_TABLE_TEMPLATES, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { toHexData } from 'src/app/core/utils/common/parsing';
 import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
@@ -67,6 +69,7 @@ export class ContractsTransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
+
     this.payload['value'] = this.contractAddress;
     this.contractInfo.contractsAddress = this.contractAddress;
     this.getData();
@@ -108,29 +111,73 @@ export class ContractsTransactionsComponent implements OnInit {
       this.isLoadingTX = false;
       return;
     }
+
     this.payload['heightLT'] = nextKey;
-    this.transactionService.getListTxCondition(this.payload).subscribe({
-      next: (data) => {
-        if (data) {
-          this.getListData(data, isReload);
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.isLoadingTX = false;
-      },
-      complete: () => {
-        this.isLoadingTX = false;
-      },
-    });
+    if (this.contractAddress.startsWith('0x')) {
+      this.templates = EVM_CONTRACT_TABLE_TEMPLATES;
+      this.transactionService
+        .getListEvmContractTxByAddress(this.payload)
+        .pipe(
+          map((txsRes) => {
+            if (txsRes?.evm_transaction?.length > 0) {
+              return txsRes.evm_transaction.map((tx) => {
+                const type = toHexData(_.get(tx, 'data'));
+                return {
+                  ...tx,
+                  tx_hash: _.get(tx, 'hash'),
+                  hash: _.get(tx, 'transaction.hash'),
+                  method: type ? type : 'Transfer',
+                  from: _.get(tx, 'from'),
+                  to: _.get(tx, 'to'),
+                  timestamp: _.get(tx, 'transaction.timestamp'),
+                  evmAmount: _.get(tx, 'transaction.transaction_messages[0].content.data.value'),
+                };
+              });
+            }
+            return [];
+          }),
+        )
+        .subscribe({
+          next: (res) => {
+            this.contractTransaction['data'] = res;
+            this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
+          },
+          error: (e) => {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.status + ' ' + e.statusText;
+            }
+            this.isLoadingTX = false;
+          },
+          complete: () => {
+            this.isLoadingTX = false;
+          },
+        });
+    } else {
+      this.transactionService.getListTxCondition(this.payload).subscribe({
+        next: (data) => {
+          if (data) {
+            this.getListData(data, isReload);
+          }
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.isLoadingTX = false;
+        },
+        complete: () => {
+          this.isLoadingTX = false;
+        },
+      });
+    }
   }
 
   getListOutgoing(isReload = false) {
-    this.payload['actionEq'] = "execute";
+    this.payload['actionEq'] = 'execute';
     this.transactionService.getListOutgoing(this.payload).subscribe({
       next: (data) => {
         if (data) {
