@@ -20,6 +20,7 @@
             <span class="body-mob">Bonded: </span>
             <span
               class="body-mob breadcrumb__content fw-normal"
+              [appTooltip]="{ priceAmount: global?.dataHeader?.bonded_tokens }"
               [appBigNumber]="global?.dataHeader?.bonded_tokens"
               [decimal]="0"></span>
           </div>
@@ -29,7 +30,13 @@
           </div>
           <div class="mb-0 d-flex d-lg-block justify-content-between">
             <span class="body-mob">Community Pool: </span>
-            <span class="fw-normal">{{ global?.dataHeader?.community_pool_format }}</span>
+            <span
+              class="fw-normal"
+              [appTooltip]="{ priceAmount: global?.dataHeader?.community_pool }"
+              [appBigNumber]="global?.dataHeader?.community_pool"
+              [decimal]="0">
+              {{ global?.dataHeader?.community_pool_format }}
+            </span>
           </div>
         </div>
       </div>
