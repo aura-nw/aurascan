@@ -1,17 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import _ from 'lodash';
-import { mergeMap } from 'rxjs/operators';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ContractType } from 'src/app/core/constants/token.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { getEthersProvider } from 'src/app/core/utils/ethers';
 
 @Component({
   selector: 'app-evm-contract',
   templateUrl: './evm-contract.component.html',
   styleUrls: ['./evm-contract.component.scss'],
 })
-export class EvmContractComponent implements OnInit {
+export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
   @Input() contractTypeData: string;
   @Input() contractsAddress: string;
 
@@ -20,30 +21,46 @@ export class EvmContractComponent implements OnInit {
 
   currentTab = ContractType.Code;
   contractDetail: any;
+  contractCode = '';
+
+  destroyed$ = new Subject<void>();
 
   constructor(
     private contractService: ContractService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private env: EnvironmentService,
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['contractsAddress'].currentValue) {
+      this.getContractCode();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 
   ngOnInit(): void {
     this.loadContractDetail();
   }
 
   loadContractDetail() {
-    this.contractService.contractObservable
-      .pipe(
-        mergeMap((res) => {
-          if (res) {
-            this.contractDetail = res;
-          }
+    this.contractService.contractObservable.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+      this.contractDetail = res;
+    });
+  }
 
-          return this.contractService.checkVerified(this.contractDetail?.code?.code_id);
-        }),
-      )
-      .subscribe(({ data }) => {
-        this.contractTypeData = data.status || this.contractTypeData;
+  getContractCode() {
+    const provider = getEthersProvider(this.env.etherJsonRpc);
+
+    provider
+      ?.getCode(this.contractsAddress)
+      .then((contractCode) => {
+        this.contractCode = contractCode;
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }
 

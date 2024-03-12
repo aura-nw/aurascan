@@ -29,6 +29,7 @@ export interface IConfiguration {
     quotaSetPrivateName: number;
     quotaSetWatchList: number;
     quotaNotification: number;
+    etherJsonRpc: string;
     coins: {
       name: string;
       display: string;
@@ -95,6 +96,10 @@ export class EnvironmentService {
 
   get chainConfig() {
     return _.get(this.configValue, 'chainConfig');
+  }
+
+  get etherJsonRpc() {
+    return _.get(this.configValue, 'chainConfig.etherJsonRpc');
   }
 
   get chainInfo() {
