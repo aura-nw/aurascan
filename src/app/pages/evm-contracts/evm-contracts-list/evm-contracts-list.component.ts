@@ -9,7 +9,7 @@ import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constan
 import { EVMContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 
 @Component({
   selector: 'app-evm-contracts-list',

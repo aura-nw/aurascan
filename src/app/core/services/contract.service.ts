@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
@@ -253,6 +253,27 @@ export class ContractService extends CommonService {
           address: address,
         },
         operationName: 'EvmSmartContractList',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  findEvmContract(keyword: string) {
+    const operationsDoc = `
+    query FindEvmSmartContract($address: String = null) {
+      ${this.envDB} {
+        evm_smart_contract(limit: 1, where: {address: {_eq: $address}}) {
+          address
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: keyword,
+        },
+        operationName: 'FindEvmSmartContract',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
