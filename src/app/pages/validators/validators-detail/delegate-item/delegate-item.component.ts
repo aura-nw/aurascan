@@ -3,17 +3,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   MAX_NUMBER_INPUT,
   NUMBER_2_DIGIT,
-  NUMBER_CONVERT,
-  TIME_OUT_CALL_API,
+  TIME_OUT_CALL_API
 } from 'src/app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
-import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { AccountService } from 'src/app/core/services/account.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { getFee } from 'src/app/core/utils/signing/fee';
 
 @Component({
   selector: 'app-delegate-item',
@@ -139,11 +136,11 @@ export class DelegateItemComponent implements OnInit {
   getMaxToken(): void {
     //check amout for high fee
     this.resetCheck();
-    let amountCheck = (
-      Number(this.dataDelegate.availableToken) +
-      Number(this.dataDelegate.delegableVesting) -
-      (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT
-    ).toFixed(6);
+
+    let amountCheck = this.environmentService.getMaxAmount(
+      this.dataDelegate.availableToken,
+      this.dataDelegate.delegableVesting,
+    );
     if (Number(amountCheck) < 0) {
       this.isExceedAmount = true;
       this.errorExceedAmount = true;
@@ -191,12 +188,10 @@ export class DelegateItemComponent implements OnInit {
   }
 
   isValidAmount(): void {
-    let amountCheck;
-    amountCheck = (
-      +this.dataDelegate.availableToken +
-        +this.dataDelegate.delegableVesting -
-        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT || 0
-    ).toFixed(6);
+    let amountCheck = this.environmentService.getMaxAmount(
+      this.dataDelegate.availableToken,
+      this.dataDelegate.delegableVesting,
+    );
     this.isExceedAmount = false;
     this.isValidatorJail = false;
     if (this.currentValidatorDetail?.jailed !== 0) {

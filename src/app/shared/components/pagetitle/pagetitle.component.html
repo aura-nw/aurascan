@@ -15,7 +15,10 @@
             class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
             *ngIf="global?.dataHeader?.bonded_tokens">
             <span class="h4 body-mob breadcrumb__label">Bonded: </span>
-            <span class="h4 body-mob breadcrumb__content">{{ global?.dataHeader?.bonded_tokens }}</span>
+            <span
+              class="h4 body-mob breadcrumb__content"
+              [appBigNumber]="global?.dataHeader?.bonded_tokens"
+              [decimal]="0"></span>
           </div>
           <div
             class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
@@ -25,7 +28,10 @@
           </div>
           <div class="body-01 mb-0 d-flex d-lg-block justify-content-between">
             <span class="h4 body-mob breadcrumb__label">Community Pool: </span>
-            <span class="h4 body-mob breadcrumb__content">{{ global?.dataHeader?.community_pool_format || 0 }}</span>
+            <span
+              class="h4 body-mob breadcrumb__content"
+              [appBigNumber]="global?.dataHeader?.community_pool"
+              [decimal]="0"></span>
           </div>
         </div>
       </div>
