@@ -136,9 +136,9 @@
     <div class="card text--gray-1" *ngIf="!loadingCosmosTxs && !isRawData">
       <h2 class="card-header mb-0 text--white pb-0">Cosmos Transactions</h2>
       <div class="card-body body">
-        <ng-container *ngIf="!loadingCosmosTxs && dataSource?.data?.length > 0; else noValue">
+        <ng-container *ngIf="!loadingCosmosTxs && dataSourceCosmos?.data?.length > 0; else noValue">
           <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
-            <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
+            <table mat-table [dataSource]="dataSourceCosmos" class="aura-table keep-header">
               <ng-container *ngFor="let template of cosmosTemplates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
                   <th mat-header-cell *matHeaderCellDef>
@@ -230,9 +230,9 @@
               </tr>
             </table>
           </div>
-          <div class="d-lg-none box-block-tx" *ngIf="dataSource?.data?.length > 0">
+          <div class="d-lg-none box-block-tx" *ngIf="dataSourceCosmos?.data?.length > 0">
             <app-card-mob-simple
-              *ngFor="let data of dataSource.data"
+              *ngFor="let data of dataSourceCosmos.data"
               [dataCard]="data"
               [title]="{
                 size: 'md',
@@ -266,9 +266,9 @@
     <div class="card text--gray-1" *ngIf="!loadingEVMTxs && !isRawData">
       <h2 class="card-header mb-0 text--white pb-0">EVM Transactions</h2>
       <div class="card-body body">
-        <ng-container *ngIf="!loadingEVMTxs && dataSource?.data?.length > 0; else noValue">
+        <ng-container *ngIf="!loadingEVMTxs && dataSourceEvm?.data?.length > 0; else noValue">
           <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
-            <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
+            <table mat-table [dataSource]="dataSourceEvm" class="aura-table keep-header">
               <ng-container *ngFor="let template of evmTemplates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
                   <th mat-header-cell *matHeaderCellDef>
@@ -350,9 +350,9 @@
               </tr>
             </table>
           </div>
-          <div class="d-lg-none box-block-tx" *ngIf="dataSource?.data?.length > 0">
+          <div class="d-lg-none box-block-tx" *ngIf="dataSourceEvm?.data?.length > 0">
             <app-card-mob-simple
-              *ngFor="let data of dataSource.data"
+              *ngFor="let data of dataSourceEvm.data"
               [dataCard]="data"
               [title]="{
                 size: 'md',

@@ -62,7 +62,8 @@ export class BlockDetailComponent implements OnInit {
   ];
   displayedCosmosCol: string[] = this.cosmosTemplates.map((dta) => dta.matColumnDef);
   displayedEvmCol: string[] = this.evmTemplates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any> = new MatTableDataSource();
+  dataSourceCosmos: MatTableDataSource<any> = new MatTableDataSource();
+  dataSourceEvm: MatTableDataSource<any> = new MatTableDataSource();
   dataTxs: any[];
   loading = true;
   loadingCosmosTxs = true;
@@ -154,8 +155,6 @@ export class BlockDetailComponent implements OnInit {
   }
 
   getListCosmosTxn() {
-    console.log(this.blockHeight);
-
     const payload = {
       limit: 100,
       height: this.blockHeight,
@@ -163,7 +162,7 @@ export class BlockDetailComponent implements OnInit {
     return this.transactionService.getListTx(payload).pipe(
       map((res) => {
         if (res?.transaction?.length > 0) {
-          this.updateListTx(res?.transaction);
+          this.updateListCosmosTxn(res?.transaction);
         }
         this.loadingCosmosTxs = false;
         return true;
@@ -177,7 +176,6 @@ export class BlockDetailComponent implements OnInit {
   }
 
   getListEVMTxn() {
-    console.log(this.blockHeight);
     const payload = {
       limit: 100,
       height: this.blockHeight,
@@ -227,21 +225,7 @@ export class BlockDetailComponent implements OnInit {
     this.isRawData = type;
   }
 
-  handlePageEvent(e: any) {
-    this.pageData.pageIndex = e.pageIndex;
-    if (this.pageData) {
-      const { pageIndex, pageSize } = this.pageData;
-      const start = pageIndex * pageSize;
-      const end = start + pageSize;
-      this.dataTxs = this.dataSource.data.slice(start, end);
-    }
-  }
-
-  paginatorEmit(event): void {
-    this.dataSource.paginator = event;
-  }
-
-  updateListTx(txs) {
+  updateListCosmosTxn(txs) {
     let dataTempTx = {};
     dataTempTx['transaction'] = txs;
     if (txs.length > 0) {
@@ -250,7 +234,20 @@ export class BlockDetailComponent implements OnInit {
         this.blockDetail['gas_used'] += +k?.gas_used;
         this.blockDetail['gas_wanted'] += +k?.gas_wanted;
       });
-      this.dataSource.data = txs;
+      this.dataSourceCosmos.data = txs;
+    }
+  }
+
+  updateListEvmTxn(txs) {
+    let dataTempTx = {};
+    dataTempTx['transaction'] = txs;
+    if (txs.length > 0) {
+      txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
+      dataTempTx['transaction'].forEach((k) => {
+        this.blockDetail['gas_used'] += +k?.gas_used;
+        this.blockDetail['gas_wanted'] += +k?.gas_wanted;
+      });
+      this.dataSourceEvm.data = txs;
     }
   }
 }
