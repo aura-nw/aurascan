@@ -11,7 +11,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, ITableContract } from 'src/app/core/models/contract.model';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
-import { balanceOf, parseLabel, toHexData } from 'src/app/core/utils/common/parsing';
+import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
 
 export interface TableData {
@@ -214,7 +214,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   navigateToViewAll() {
-    if (this.templates === EVM_CONTRACT_TABLE_TEMPLATES) {
+    if (this.contractInfo.contractsAddress.startsWith('0x')) {
       this.router.navigate([`/evm-contracts/transactions`, this.contractInfo.contractsAddress]);
     } else {
       this.router.navigate([`/contracts/transactions`, this.contractInfo.contractsAddress]);
