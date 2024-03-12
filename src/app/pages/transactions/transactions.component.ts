@@ -5,6 +5,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from '../../core/models/common.model';
 import { TransactionService } from '../../core/services/transaction.service';
 import { convertDataTransactionSimple } from '../../global/global';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-transactions',
@@ -31,8 +32,10 @@ export class TransactionsComponent implements OnInit {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
+    private layout: BreakpointObserver,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
   ) {}
