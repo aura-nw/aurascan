@@ -348,6 +348,15 @@ export class ContractService extends CommonService {
           type
           updated_at
         }
+        evm_contract_verification(
+          where: {contract_address: {_eq: $address}, status: {_eq: "SUCCESS"}}
+        ) {
+          status
+          abi
+          code_hash
+          contract_address
+          creator_tx_hash
+        }
       }
     }
     
