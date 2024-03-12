@@ -1,22 +1,23 @@
 import * as _ from 'lodash';
-import { MEDIA_TYPE, NUMBER_CONVERT, STORAGE_KEYS } from '../../constants/common.constant';
+import { MEDIA_TYPE, STORAGE_KEYS } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import { ESigningType, WALLET_PROVIDER } from '../../constants/wallet.constant';
 import { WalletStorage } from '../../models/wallet';
 import local from '../storage/local';
+import BigNumber from 'bignumber.js';
+import { getBalance } from './parsing';
 
-export function getInfo(globals: any, data: any): void {
+export function getInfo(globals: any, data: any, coinDecimals: number): void {
   globals.dataHeader = data;
-  globals.dataHeader.bonded_tokens = formatNumber(globals.dataHeader.bonded_tokens / NUMBER_CONVERT) || 0;
-  globals.dataHeader.total_aura = formatNumber(+globals?.dataHeader?.total_aura / NUMBER_CONVERT);
-  globals.dataHeader.bonded_tokens_format = formatNumber(globals?.dataHeader?.bonded_tokens);
-  globals.dataHeader.community_pool = Math.round(globals?.dataHeader?.community_pool / NUMBER_CONVERT);
-  globals.dataHeader.community_pool_format = formatNumber(globals?.dataHeader?.community_pool);
+  globals.dataHeader.bonded_tokens = BigNumber(getBalance(globals.dataHeader.bonded_tokens, coinDecimals)).toFixed(0);
+  globals.dataHeader.total_aura = BigNumber(getBalance(globals.dataHeader.total_aura, coinDecimals)).toFixed(0);
+  globals.dataHeader.community_pool = BigNumber(getBalance(globals.dataHeader.community_pool, coinDecimals)).toFixed(0);
+  globals.dataHeader.community_pool_format = formatLargeNumber(globals.dataHeader.community_pool);
   globals.dataHeader.inflation = globals?.dataHeader?.inflation * 100 + '%';
 }
 
-export function formatNumber(number: number, args?: any): any {
+export function formatLargeNumber(number: number, args?: any): any {
   if (isNaN(number)) return null; // will only work value is a number
   if (number === null) return null;
   if (number === 0) return null;
@@ -145,7 +146,7 @@ export function getTypeTx(element) {
       let dataTemp =
         _.get(element, 'transaction_messages[0].content.msg') ||
         _.get(element, 'messages[0].msg') ||
-        _.get(element, "messages[0].content.msg");
+        _.get(element, 'messages[0].content.msg');
       if (typeof dataTemp === 'string') {
         try {
           dataTemp = JSON.parse(dataTemp);
