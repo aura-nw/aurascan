@@ -10,6 +10,7 @@ import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
 export class EvmContractInfoComponent {
   @Input() type: 'information' | 'moreInfo' = 'information';
   @Input() contractDetail: any;
+
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   ENameTag = ENameTag;
   EScreen = EScreen;
