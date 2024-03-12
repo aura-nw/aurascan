@@ -114,6 +114,7 @@ export class ContractsTransactionsComponent implements OnInit {
 
     this.payload['heightLT'] = nextKey;
     if (this.contractAddress.startsWith('0x')) {
+      this.payload['address'] = this.contractAddress.toLowerCase();
       this.templates = EVM_CONTRACT_TABLE_TEMPLATES;
       this.transactionService
         .getListEvmContractTxByAddress(this.payload)
