@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { map, merge, of, switchMap } from 'rxjs';
+import { catchError, map, merge, of, switchMap } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
@@ -40,22 +40,36 @@ export class BlockDetailComponent implements OnInit {
     },
   ];
 
-  templates: Array<TableTemplate> = [
+  cosmosTemplates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Message' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'hash', headerCellDef: 'EVM Transaction' },
   ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
+
+  evmTemplates: Array<TableTemplate> = [
+    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn Hash' },
+    { matColumnDef: 'method', headerCellDef: 'Method' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'from', headerCellDef: 'From' },
+    { matColumnDef: 'to', headerCellDef: 'To' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'hash', headerCellDef: 'Cosmos Txn' },
+  ];
+  displayedCosmosCol: string[] = this.cosmosTemplates.map((dta) => dta.matColumnDef);
+  displayedEvmCol: string[] = this.evmTemplates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTxs: any[];
   loading = true;
   loadingCosmosTxs = true;
+  loadingEVMTxs = true;
   isRawData = false;
-  errTxt: string;
-  errTxtTxs: string;
+  errTxt = null;
+  errTxtTxs = null;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe();
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -115,33 +129,8 @@ export class BlockDetailComponent implements OnInit {
         }),
         switchMap(() => {
           this.loading = false;
-
-          const payload = {
-            limit: 100,
-            height: this.blockHeight,
-          };
-
-          let test = merge(
-            this.transactionService.getListTx(payload).pipe(
-              map((res) => {
-                if (res?.transaction?.length > 0) {
-                  this.updateListTx(res?.transaction);
-                }
-                this.loadingCosmosTxs = false;
-                return true;
-              }),
-            ),
-            this.transactionService.queryTransactionByEvmHash(payload).pipe(
-              map((res) => {
-                if (res?.transaction?.length > 0) {
-                  // this.updateListTx(res?.transaction);
-                }
-
-                return true;
-              }),
-            ),
-          );
-          return test;
+          let result = merge(this.getListCosmosTxn(), this.getListEVMTxn());
+          return result;
         }),
       )
       .subscribe({
@@ -157,11 +146,56 @@ export class BlockDetailComponent implements OnInit {
             } else {
               this.errTxt = e.status + ' ' + e.statusText;
             }
-            this.loadingCosmosTxs = false;
             this.loading = false;
           }
         },
+        complete: () => {},
       });
+  }
+
+  getListCosmosTxn() {
+    console.log(this.blockHeight);
+
+    const payload = {
+      limit: 100,
+      height: this.blockHeight,
+    };
+    return this.transactionService.getListTx(payload).pipe(
+      map((res) => {
+        if (res?.transaction?.length > 0) {
+          this.updateListTx(res?.transaction);
+        }
+        this.loadingCosmosTxs = false;
+        return true;
+      }),
+      catchError(() => {
+        this.loadingCosmosTxs = false;
+
+        return of(null);
+      }),
+    );
+  }
+
+  getListEVMTxn() {
+    console.log(this.blockHeight);
+    const payload = {
+      limit: 100,
+      height: this.blockHeight,
+    };
+    return this.transactionService.queryTransactionByEvmHash(payload).pipe(
+      map((res) => {
+        if (res?.transaction?.length > 0) {
+          // this.updateListTx(res?.transaction);
+        }
+        this.loadingEVMTxs = false;
+        return true;
+      }),
+      catchError(() => {
+        this.loadingEVMTxs = false;
+
+        return of(null);
+      }),
+    );
   }
 
   mappingBlockData(res) {

@@ -139,7 +139,7 @@
         <ng-container *ngIf="!loadingCosmosTxs && dataSource?.data?.length > 0; else noValue">
           <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
             <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
-              <ng-container *ngFor="let template of templates; index as i">
+              <ng-container *ngFor="let template of cosmosTemplates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
                   <th mat-header-cell *matHeaderCellDef>
                     <div [innerHTML]="template.headerCellDef | translate"></div>
@@ -204,6 +204,16 @@
                             </a>
                           </ng-template>
                         </div>
+                        <div *ngSwitchCase="'hash'">
+                          <a
+                            *ngIf="data[template.matColumnDef]"
+                            [copyBtn]="data[template.matColumnDef].toString()"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/transaction', data[template.matColumnDef]]">
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                          </a>
+                          <span *ngIf="!data[template.matColumnDef]" class="text--white">-</span>
+                        </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                       </ng-container>
                     </div>
@@ -211,8 +221,8 @@
                 </ng-container>
               </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr mat-header-row *matHeaderRowDef="displayedCosmosCol"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedCosmosCol"></tr>
               <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell g-no-data" colspan="9999">
                   {{ 'NO DATA' | translate }}
@@ -253,13 +263,13 @@
       </div>
     </div>
 
-    <div class="card text--gray-1" *ngIf="!loadingCosmosTxs && !isRawData">
+    <div class="card text--gray-1" *ngIf="!loadingEVMTxs && !isRawData">
       <h2 class="card-header mb-0 text--white pb-0">EVM Transactions</h2>
       <div class="card-body body">
-        <ng-container *ngIf="!loadingCosmosTxs && dataSource?.data?.length > 0; else noValue">
+        <ng-container *ngIf="!loadingEVMTxs && dataSource?.data?.length > 0; else noValue">
           <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
             <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
-              <ng-container *ngFor="let template of templates; index as i">
+              <ng-container *ngFor="let template of evmTemplates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
                   <th mat-header-cell *matHeaderCellDef>
                     <div [innerHTML]="template.headerCellDef | translate"></div>
@@ -331,8 +341,8 @@
                 </ng-container>
               </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr mat-header-row *matHeaderRowDef="displayedEvmCol"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedEvmCol"></tr>
               <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell g-no-data" colspan="9999">
                   {{ 'NO DATA' | translate }}
@@ -368,7 +378,7 @@
           </div>
         </ng-container>
         <ng-template #noValue>
-          <app-table-no-data *ngIf="!loadingCosmosTxs" [textNull]="errTxtTxs"></app-table-no-data>
+          <app-table-no-data *ngIf="!loadingEVMTxs" [textNull]="errTxtTxs"></app-table-no-data>
         </ng-template>
       </div>
     </div>
@@ -411,5 +421,6 @@
 
 <ng-template #noValues>
   <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-  <app-table-no-data *ngIf="!loading" [textNull]="errTxt || errTxtTxs"></app-table-no-data>
+  <!-- <app-table-no-data *ngIf="!loading && (errTxt || errTxtTxs)" [textNull]="errTxt || errTxtTxs"></app-table-no-data> -->
+  <app-table-no-data *ngIf="!loading && errTxt === null"></app-table-no-data>
 </ng-template>
