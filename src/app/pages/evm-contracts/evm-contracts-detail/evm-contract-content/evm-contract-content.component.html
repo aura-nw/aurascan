@@ -5,7 +5,7 @@
       #customNav="ngbNav"
       [activeId]="activeId"
       class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
-      <ng-container *ngFor="let tab of TABS; index as index">
+      <!-- <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a
             ngbNavLink
@@ -21,6 +21,13 @@
               alt="contract_verification"
               width="16px"
               height="16px" />
+          </a>
+        </li>
+      </ng-container> -->
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a ngbNavLink (click)="changeTab(tab.key)">
+            <span class="tab-title h5 mb-0">{{ tab.value }}</span>
           </a>
         </li>
       </ng-container>
@@ -39,7 +46,7 @@
       [contractInfo]="contractInfo"
       (onViewSelected)="filterTransaction($event)"></app-contract-table>
   </div>
-  <div class="mt-5" [class.d-none]="currentTab === contractTab.Transactions">
+  <!-- <div class="mt-5" [class.d-none]="currentTab === contractTab.Transactions">
     <app-evm-contract [contractTypeData]="contractTypeData" [contractsAddress]="contractsAddress"></app-evm-contract>
-  </div>
+  </div> -->
 </section>
