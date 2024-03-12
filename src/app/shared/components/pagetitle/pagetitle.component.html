@@ -3,32 +3,32 @@
   <div class="col-12">
     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
       <h1 class="mb-0 text--white fw-semibold">{{ title }}</h1>
-      <div class="page-title-right d-none d-lg-block">
+      <div class="page-title-right d-none d-lg-block text--white">
         <ol class="breadcrumb m-0" *ngIf="!displayInfo">
           <ng-container *ngFor="let item of breadcrumbItems">
             <li class="breadcrumb-item" [ngClass]="{ active: item.active == true }">{{ item.label }}</li>
           </ng-container>
         </ol>
-        <div class="text--white d-flex align-items-center" *ngIf="displayInfo">
-          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.total_blocks">
-            <span class="h4 text--white">Height:</span> {{ global?.dataHeader?.total_blocks | number }}
+        <div class="d-flex align-items-center body-01 fw-semibold" *ngIf="displayInfo">
+          <div class="mb-0 mr-6" *ngIf="global?.dataHeader?.total_blocks">
+            <span>Height:</span> {{ global?.dataHeader?.total_blocks | number }}
           </div>
           <div
-            class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
+            class="mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
             *ngIf="global?.dataHeader?.bonded_tokens">
-            <span class="h4 body-mob breadcrumb__label">Bonded: </span>
+            <span class="body-mob breadcrumb__label">Bonded: </span>
             <span
-              class="h4 body-mob breadcrumb__content"
+              class="body-mob breadcrumb__content"
               [appBigNumber]="global?.dataHeader?.bonded_tokens"
               [decimal]="0"></span>
           </div>
-          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.inflation">
-            <span class="h4 text--white">Inflation:</span> {{ global?.dataHeader?.inflation }}
+          <div class="mb-0 mr-6" *ngIf="global?.dataHeader?.inflation">
+            <span>Inflation:</span> {{ global?.dataHeader?.inflation }}
           </div>
-          <div class="body-01 mb-0 d-flex d-lg-block justify-content-between">
-            <span class="h4 body-mob breadcrumb__label">Community Pool: </span>
+          <div class="mb-0 d-flex d-lg-block justify-content-between">
+            <span class="body-mob breadcrumb__label">Community Pool: </span>
             <span
-              class="h4 body-mob breadcrumb__content"
+              class="body-mob breadcrumb__content"
               [appBigNumber]="global?.dataHeader?.community_pool"
               [decimal]="0"></span>
           </div>
