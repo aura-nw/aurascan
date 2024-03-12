@@ -1,17 +1,17 @@
+import { Location } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ContractTab, ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
 import { Subject } from 'rxjs';
-import { CommonService } from 'src/app/core/services/common.service';
+import { map, takeUntil } from 'rxjs/operators';
+import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { CONTRACT_TAB, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { ContractTab, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { Location } from '@angular/common';
-import { takeUntil } from 'rxjs/operators';
-import { convertDataTransaction } from 'src/app/global/global';
-import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { toHexData } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-evm-contract-content',
@@ -37,7 +37,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   activeId = 0;
   limit = 25;
   contractTransaction = { count: 0 };
-  templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
+  templates: Array<TableTemplate> = EVM_CONTRACT_TABLE_TEMPLATES;
   errTxt: string;
   contractInfo = {
     contractsAddress: this.contractsAddress,
@@ -54,7 +54,6 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
-    private commonService: CommonService,
     private contractService: ContractService,
     private transactionService: TransactionService,
     private router: Router,
@@ -106,7 +105,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
     });
 
     this.timerGetUpTime = setInterval(() => {
-      this.getTransaction(false);
+      this.getTransaction();
     }, 30000);
   }
 
@@ -123,41 +122,53 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
     }
   }
 
-  getTransaction(isInit = true): void {
-    if (this.commonService.isValidContract(this.contractsAddress)) {
+  getTransaction(): void {
+    if (this.contractsAddress.startsWith('0x') && this.contractsAddress.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
       const payload = {
         limit: this.limit,
-        value: this.contractsAddress,
-        compositeKey: 'execute._contract_address',
+        address: this.contractsAddress,
       };
-      this.transactionService.getListTxCondition(payload).subscribe({
-        next: (res) => {
-          const data = res;
-          if (res?.transaction?.length > 0) {
-            const txsExecute = convertDataTransaction(data, this.coinInfo);
-            this.contractTransaction['data'] = txsExecute;
-            this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
 
-            if (!isInit && this.dataInstantiate?.length > 0) {
-              this.contractTransaction['data'] = [...this.contractTransaction['data'], this.dataInstantiate[0]];
-              this.contractTransaction['count'] = this.contractTransaction['count'] + this.dataInstantiate?.length;
+      this.transactionService
+        .getListEvmContractTxByAddress(payload)
+        .pipe(
+          map((txsRes) => {
+            if (txsRes?.evm_transaction?.length > 0) {
+              return txsRes.evm_transaction.map((tx) => {
+                const type = toHexData(_.get(tx, 'data'));
+                return {
+                  ...tx,
+                  tx_hash: _.get(tx, 'hash'),
+                  hash: _.get(tx, 'transaction.hash'),
+                  method: type ? type : 'Transfer',
+                  from: _.get(tx, 'from'),
+                  to: _.get(tx, 'to'),
+                  timestamp: _.get(tx, 'transaction.timestamp'),
+                  evmAmount: _.get(tx, 'transaction.transaction_messages[0].content.data.value'),
+                };
+              });
             }
-          } else {
-            this.contractTransaction.count = 0;
-          }
-        },
-        error: (e) => {
-          if (e.name === TIMEOUT_ERROR) {
-            this.errTxt = e.message;
-          } else {
-            this.errTxt = e.status + ' ' + e.statusText;
-          }
-          this.loadingContract = false;
-        },
-        complete: () => {
-          this.loadingContract = false;
-        },
-      });
+
+            return [];
+          }),
+        )
+        .subscribe({
+          next: (res) => {
+            this.contractTransaction['data'] = res;
+            this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
+          },
+          error: (e) => {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.status + ' ' + e.statusText;
+            }
+            this.loadingContract = false;
+          },
+          complete: () => {
+            this.loadingContract = false;
+          },
+        });
     } else {
       this.loadingContract = false;
     }
