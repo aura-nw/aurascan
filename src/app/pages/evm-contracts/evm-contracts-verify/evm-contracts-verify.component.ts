@@ -17,10 +17,11 @@ export class EvmContractsVerifyComponent implements OnInit {
   address = '';
   isCompilerComplete = false;
   loading = false;
-  isExitCode = true;
   isVerifyFail = false;
   isVerifySuccess = false;
   formValid = false;
+
+  contractSourceCode: File;
 
   @ViewChild('type') typeSelect: any;
   @ViewChild('version') versionSelect: any;
@@ -101,5 +102,12 @@ export class EvmContractsVerifyComponent implements OnInit {
   checkFormValid(): boolean {
     this.formValid = this.contractForm.status === 'INVALID';
     return this.formValid;
+  }
+
+  onFileDropped(files) {
+    console.log('🐛 files: ', files);
+    if (files[0]) {
+      this.contractSourceCode = files[0];
+    }
   }
 }
