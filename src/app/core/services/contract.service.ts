@@ -1,16 +1,16 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import axios from 'axios';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {LCD_COSMOS} from 'src/app/core/constants/url.constant';
-import {IResponsesTemplates} from 'src/app/core/models/common.model';
-import {SmartContractListReq} from 'src/app/core/models/contract.model';
-import {LENGTH_CHARACTER} from '../constants/common.constant';
-import {ContractRegisterType} from '../constants/contract.enum';
-import {EnvironmentService} from '../data-services/environment.service';
-import {CommonService} from './common.service';
-import {NameTagService} from './name-tag.service';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
+import { IResponsesTemplates } from 'src/app/core/models/common.model';
+import { SmartContractListReq } from 'src/app/core/models/contract.model';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
+import { ContractRegisterType } from '../constants/contract.enum';
+import { EnvironmentService } from '../data-services/environment.service';
+import { CommonService } from './common.service';
+import { NameTagService } from './name-tag.service';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -33,15 +33,15 @@ export class ContractService extends CommonService {
   }
 
   getListContract({
-                    codeId,
-                    creator,
-                    address,
-                    name,
-                    keyword,
-                    limit,
-                    offset,
-                    contractType,
-                  }: {
+    codeId,
+    creator,
+    address,
+    name,
+    keyword,
+    limit,
+    offset,
+    contractType,
+  }: {
     codeId?: number;
     creator?: string;
     address?: string;
@@ -87,10 +87,10 @@ export class ContractService extends CommonService {
         typeQuery = contractType?.includes(FILTER_ALL)
           ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {_eq: "crates.io:cw4973"}}],`
           : (() => {
-            // CW4973 is CW721 Type
-            contractType = [ContractRegisterType.CW721];
-            return `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
-          })();
+              // CW4973 is CW721 Type
+              contractType = [ContractRegisterType.CW721];
+              return `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
+            })();
       }
     } else if (
       contractType?.includes(ContractRegisterType.CW721) ||
@@ -154,14 +154,14 @@ export class ContractService extends CommonService {
   }
 
   getListEvmContract({
-                       creator,
-                       address,
-                       name,
-                       keyword,
-                       limit,
-                       offset,
-                       // contractType,
-                     }: {
+    creator,
+    address,
+    name,
+    keyword,
+    limit,
+    offset,
+    // contractType,
+  }: {
     creator?: string;
     address?: string;
     name?: string;
