@@ -248,6 +248,6 @@ export class ValidatorService extends CommonService {
           .multipliedBy(this.chainInfo.gasPriceStep.high)
           .dividedBy(BigNumber(10).pow(this.environmentService.coinDecimals)),
       )
-      .toFixed(6);
+      .toFixed(this.environmentService.coinDecimals);
   }
 }
