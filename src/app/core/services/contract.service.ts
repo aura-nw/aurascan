@@ -271,7 +271,6 @@ export class ContractService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: 1,
           address: keyword,
         },
         operationName: 'FindEvmSmartContract',
