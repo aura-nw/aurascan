@@ -2,15 +2,11 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { WalletConnectOptions } from '@cosmos-kit/core';
-import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
-import { SIGNING_MESSAGE_TYPES } from '../constants/wallet.constant';
 import { isMobileBrowser } from '../helpers/wallet';
-import { formatLargeNumber } from '../utils/common/info-common';
-import { getFee } from '../utils/signing/fee';
 
 export interface IConfiguration {
   environment: {
@@ -229,31 +225,5 @@ export class EnvironmentService {
         this.config.next(configuration);
       }
     });
-  }
-
-  getInfo(globals: any, data: any): void {
-    globals.dataHeader = data;
-    globals.dataHeader.bonded_tokens = BigNumber(globals.dataHeader.bonded_tokens).dividedBy(
-      BigNumber(10).pow(this.coinDecimals),
-    ).toFixed(0);
-    globals.dataHeader.total_aura = BigNumber(globals.dataHeader.total_aura).dividedBy(
-      BigNumber(10).pow(this.coinDecimals),
-    ).toFixed(0);
-    globals.dataHeader.community_pool = BigNumber(globals.dataHeader.community_pool).dividedBy(
-      BigNumber(10).pow(this.coinDecimals),
-    ).toFixed(0);
-    globals.dataHeader.community_pool_format = formatLargeNumber(globals.dataHeader.community_pool);
-    globals.dataHeader.inflation = globals?.dataHeader?.inflation * 100 + '%';
-  }
-
-  getMaxAmount(availableToken, delegableVesting) {
-    return BigNumber(availableToken)
-      .plus(delegableVesting)
-      .minus(
-        BigNumber(getFee(SIGNING_MESSAGE_TYPES.STAKE))
-          .multipliedBy(this.chainInfo.gasPriceStep.high)
-          .dividedBy(BigNumber(10).pow(this.coinDecimals)),
-      )
-      .toFixed(6);
   }
 }

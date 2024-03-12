@@ -29,7 +29,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { balanceOf, getBalance } from 'src/app/core/utils/common/parsing';
 import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 
 @Component({
@@ -657,7 +657,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getMaxAmountDelegate() {
-    let amount = this.environmentService.getMaxAmount(
+    let amount = this.validatorService.getMaxAmount(
       this.dataDelegate.availableToken,
       this.dataDelegate.delegableVesting,
     );
@@ -726,7 +726,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         data.entries.forEach((f) => {
           const validatorDetail = this.lstValidatorOrigin?.find((i) => i.operator_address === data.validator_address);
           let item = {
-            balance: BigNumber(f.balance).dividedBy(BigNumber(10).pow(this.environmentService.coinDecimals)),
+            balance: getBalance(f.balance, this.environmentService.coinDecimals),
             validator_address: data.validator_address,
             validator_name: validatorDetail?.title,
             jailed: validatorDetail?.jailed,

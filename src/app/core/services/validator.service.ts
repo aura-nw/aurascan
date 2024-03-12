@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import BigNumber from 'bignumber.js';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
 import { LCD_COSMOS } from '../constants/url.constant';
+import { SIGNING_MESSAGE_TYPES } from '../constants/wallet.constant';
+import { getFee } from '../utils/signing/fee';
 
 @Injectable({
   providedIn: 'root',
@@ -235,5 +238,16 @@ export class ValidatorService extends CommonService {
 
   getRewardLCD(address) {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.REWARD}/${address}/rewards`);
+  }
+
+  getMaxAmount(availableToken, delegableVesting) {
+    return BigNumber(availableToken)
+      .plus(delegableVesting)
+      .minus(
+        BigNumber(getFee(SIGNING_MESSAGE_TYPES.STAKE))
+          .multipliedBy(this.chainInfo.gasPriceStep.high)
+          .dividedBy(BigNumber(10).pow(this.environmentService.coinDecimals)),
+      )
+      .toFixed(6);
   }
 }

@@ -15,6 +15,7 @@ import { TokenService } from './core/services/token.service';
 import { UserService } from './core/services/user.service';
 import { ValidatorService } from './core/services/validator.service';
 import { WatchListService } from './core/services/watch-list.service';
+import { getInfo } from './core/utils/common/info-common';
 import local from './core/utils/storage/local';
 import { Globals } from './global/global';
 
@@ -96,7 +97,7 @@ export class AppComponent implements OnInit, OnDestroy {
   getInfoCommon(): void {
     this.commonService.status().subscribe({
       next: (res) => {
-        this.environmentService.getInfo(this.globals, res);
+        getInfo(this.globals, res, this.environmentService.coinDecimals);
         this.environmentService.setLatestBlockHeight(res?.total_blocks || null);
       },
       error: () => {

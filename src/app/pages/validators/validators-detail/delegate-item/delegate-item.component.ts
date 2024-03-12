@@ -10,6 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { AccountService } from 'src/app/core/services/account.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
@@ -51,6 +52,7 @@ export class DelegateItemComponent implements OnInit {
     private toastr: NgxToastrService,
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
+    private validatorService: ValidatorService
   ) {}
 
   ngOnInit(): void {
@@ -137,7 +139,7 @@ export class DelegateItemComponent implements OnInit {
     //check amout for high fee
     this.resetCheck();
 
-    let amountCheck = this.environmentService.getMaxAmount(
+    let amountCheck = this.validatorService.getMaxAmount(
       this.dataDelegate.availableToken,
       this.dataDelegate.delegableVesting,
     );
@@ -188,7 +190,7 @@ export class DelegateItemComponent implements OnInit {
   }
 
   isValidAmount(): void {
-    let amountCheck = this.environmentService.getMaxAmount(
+    let amountCheck = this.validatorService.getMaxAmount(
       this.dataDelegate.availableToken,
       this.dataDelegate.delegableVesting,
     );

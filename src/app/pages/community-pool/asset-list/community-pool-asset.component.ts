@@ -13,7 +13,7 @@ import { ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constant
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { balanceOf, getBalance } from 'src/app/core/utils/common/parsing';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
@@ -129,9 +129,7 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
               element.symbol = '';
               element.logo = '';
               element.name = this.environmentService.chainName;
-              element.amount = BigNumber(element.amount).dividedBy(
-                BigNumber(10).pow(this.environmentService.coinDecimals),
-              );
+              element.amount = getBalance(element.amount, this.environmentService.coinDecimals);
               element.isNative = true;
             }
           });
