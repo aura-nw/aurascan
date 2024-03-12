@@ -81,7 +81,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     if (this.dataList?.data) {
-      if (this.templates === EVM_CONTRACT_TABLE_TEMPLATES) {
+      if (this.contractInfo.contractsAddress.startsWith('0x')) {
         this.getListEVMContractTransaction();
       } else {
         this.getListContractTransaction();
