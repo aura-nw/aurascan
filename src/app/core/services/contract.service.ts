@@ -1,16 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import axios from 'axios';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
-import { IResponsesTemplates } from 'src/app/core/models/common.model';
-import { SmartContractListReq } from 'src/app/core/models/contract.model';
-import { LENGTH_CHARACTER } from '../constants/common.constant';
-import { ContractRegisterType } from '../constants/contract.enum';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
-import { NameTagService } from './name-tag.service';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {LCD_COSMOS} from 'src/app/core/constants/url.constant';
+import {IResponsesTemplates} from 'src/app/core/models/common.model';
+import {SmartContractListReq} from 'src/app/core/models/contract.model';
+import {LENGTH_CHARACTER} from '../constants/common.constant';
+import {ContractRegisterType} from '../constants/contract.enum';
+import {EnvironmentService} from '../data-services/environment.service';
+import {CommonService} from './common.service';
+import {NameTagService} from './name-tag.service';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -33,15 +33,15 @@ export class ContractService extends CommonService {
   }
 
   getListContract({
-    codeId,
-    creator,
-    address,
-    name,
-    keyword,
-    limit,
-    offset,
-    contractType,
-  }: {
+                    codeId,
+                    creator,
+                    address,
+                    name,
+                    keyword,
+                    limit,
+                    offset,
+                    contractType,
+                  }: {
     codeId?: number;
     creator?: string;
     address?: string;
@@ -87,10 +87,10 @@ export class ContractService extends CommonService {
         typeQuery = contractType?.includes(FILTER_ALL)
           ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {_eq: "crates.io:cw4973"}}],`
           : (() => {
-              // CW4973 is CW721 Type
-              contractType = [ContractRegisterType.CW721];
-              return `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
-            })();
+            // CW4973 is CW721 Type
+            contractType = [ContractRegisterType.CW721];
+            return `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
+          })();
       }
     } else if (
       contractType?.includes(ContractRegisterType.CW721) ||
@@ -154,14 +154,14 @@ export class ContractService extends CommonService {
   }
 
   getListEvmContract({
-    creator,
-    address,
-    name,
-    keyword,
-    limit,
-    offset,
-    // contractType,
-  }: {
+                       creator,
+                       address,
+                       name,
+                       keyword,
+                       limit,
+                       offset,
+                       // contractType,
+                     }: {
     creator?: string;
     address?: string;
     name?: string;
@@ -253,6 +253,49 @@ export class ContractService extends CommonService {
           address: address,
         },
         operationName: 'EvmSmartContractList',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  findEvmContract(keyword: string) {
+    let address = null;
+    let creator = null;
+    if (this.isValidContract(keyword)) {
+      address = keyword;
+    } else if (this.isValidAddress(keyword)) {
+      creator = keyword;
+    } else if (keyword.startsWith('0x') && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
+      address = keyword;
+    }
+    if (!address && !creator) {
+      return of<any[]>([]);
+    }
+
+    const operationsDoc = `
+    query FindEvmSmartContract($limit: Int = 1, $address: String = null, $creator: String =null) {
+      ${this.envDB} {
+        evm_smart_contract(limit: $limit, order_by: {updated_at: desc}, where: {address: {_eq: $address}, creator: {_eq: $creator}}) {
+          address
+          created_at
+          created_hash
+          created_height
+          creator
+          id
+          type
+          updated_at
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: 1,
+          creator: creator,
+          address: address,
+        },
+        operationName: 'FindEvmSmartContract',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
