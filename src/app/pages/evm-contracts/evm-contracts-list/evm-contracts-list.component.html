@@ -114,9 +114,6 @@
                     <div class="text-nowrap" *ngSwitchCase="'name'" [appTooltip]="data[template.matColumnDef]">
                       {{ (data[template.matColumnDef] | ellipsis: 28) || '-' }}
                     </div>
-                    <div class="text-nowrap" *ngSwitchCase="'label'" [appTooltip]="data[template.matColumnDef]">
-                      {{ (data[template.matColumnDef] | ellipsis: 22) || '-' }}
-                    </div>
                     <div *ngSwitchCase="'token_tracker'">
                       <a *ngIf="data['token_tracker']" [appTooltip]="data['token_tracker']" [routerLink]="data.url">
                         {{ data['token_tracker'] | ellipsis: 18 }}
