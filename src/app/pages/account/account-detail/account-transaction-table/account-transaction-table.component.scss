@@ -52,6 +52,11 @@
   height: 44px;
 }
 
+tr td {
+  vertical-align: top;
+  padding-top: var(--spacer-4);
+}
+
 .tnx-filter-box {
   max-height: 220px;
   overflow-y: auto;
@@ -115,10 +120,6 @@
       height: 56px !important;
       min-width: 190px;
     }
-  }
-
-  .tab-nft .item-show {
-    height: 64px;
   }
 
   .explain-data:not(:first-child) {
