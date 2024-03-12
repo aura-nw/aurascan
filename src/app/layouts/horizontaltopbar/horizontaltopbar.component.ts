@@ -1,16 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { UserService } from 'src/app/core/services/user.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import {Subject, takeUntil} from 'rxjs';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {UserService} from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import { LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../app/core/constants/common.constant';
-import { TransactionService } from '../../core/services/transaction.service';
-import { MENU, MenuName } from './menu';
-import { MenuItem } from './menu.model';
-import { ContractService } from 'src/app/core/services/contract.service';
+import {LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR} from '../../../app/core/constants/common.constant';
+import {TransactionService} from '../../core/services/transaction.service';
+import {MENU, MenuName} from './menu';
+import {MenuItem} from './menu.model';
+import {ContractService} from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -44,7 +44,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
@@ -92,62 +93,65 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   }
 
   async handleSearch() {
+    if (!this.searchValue) return;
+    this.searchValue = this.searchValue.trim();
+    let urlLink = '';
     const VALIDATORS = {
       HASHRULE: /^[A-Za-z0-9]/,
     };
     const regexRule = VALIDATORS.HASHRULE;
-    if (this.searchValue) {
-      this.searchValue = this.searchValue.trim();
-      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
-      // case address is nameTag
-      if (addressNameTag?.length > 0) {
-        this.searchValue = addressNameTag;
-      }
-
-      let isNumber = /^\d+$/.test(this.searchValue);
-      if (regexRule.test(this.searchValue)) {
-        // check is EVM contract
+    if (!regexRule.test(this.searchValue)) return;
+    const isNumber = /^\d+$/.test(this.searchValue);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
+    // case address is nameTag
+    if (addressNameTag?.length > 0) {
+      this.searchValue = addressNameTag;
+    }
+    // check is EVM address
+    if (this.searchValue.startsWith('0x')) {
+      if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
+        // case EVM transaction
+        this.getEvmTxnDetail(this.searchValue);
+      } else {
+        // check if address EVM contract or account
         this.contractService.findEvmContract(this.searchValue).subscribe({
           next: (res) => {
-            // if address is EVM contract
-            if (res.evm_smart_contract?.length > 0) {
-              this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                this.router.navigate(['evm-contracts', this.searchValue]);
-              });
-            } else {
-              if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
-                // case Aura transaction
-                this.getTxhDetail(this.searchValue);
-              } else if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
-                // case EVM transaction
-                this.getEvmTxnDetail(this.searchValue);
-              } else if (this.searchValue.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
-                //check is start with 'aura' and length >= normal address
-                // if (this.searchValue.startsWith(this.prefixNormalAdd) && this.searchValue.length >= LENGTH_CHARACTER.EVM_ADDRESS)
-                if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
-                  this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                    this.router.navigate(['contracts', this.searchValue]);
-                  });
-                } else {
-                  let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
-                  this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                    this.router.navigate([urlLink, this.searchValue]);
-                  });
-                }
-              } else if (isNumber) {
-                // case block
-                this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                  this.router.navigate(['blocks', this.searchValue]);
-                });
-              }
-            }
+            urlLink = res?.evm_smart_contract?.length > 0 ? 'evm-contracts' : 'account';
+            this.redirectPage(urlLink);
           },
           error: (e) => {
             return;
           },
         });
       }
+    } else {
+      // if address is not EVM -> validator/Aura account/ aura transaction/ block
+      if (isNumber) {
+        // case block
+        urlLink = 'blocks';
+        this.redirectPage(urlLink);
+      } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
+        // case Aura transaction
+        this.getTxhDetail(this.searchValue);
+      } else {
+        // case aura contract
+        if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
+          urlLink = 'contracts';
+          this.redirectPage(urlLink);
+        } else {
+          // case aura validators/ account
+          urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
+          this.redirectPage(urlLink);
+        }
+      }
     }
+  }
+
+  redirectPage(urlLink: string) {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([urlLink, this.searchValue]).then(r => {
+      });
+    });
   }
 
   getEvmTxnDetail(value): void {
@@ -158,9 +162,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.queryTransactionByEvmHash(payload).subscribe({
       next: (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['transaction', this.searchValue]);
-          });
+          this.redirectPage('transaction');
         } else {
           this.searchValue = '';
         }
@@ -179,7 +181,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['transaction', this.searchValue]);
           });
         } else {
