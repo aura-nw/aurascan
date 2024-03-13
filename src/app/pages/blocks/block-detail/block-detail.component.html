@@ -289,12 +289,19 @@
                           {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                         </a>
                         <a
+                          *ngSwitchCase="'hash'"
+                          class="text--primary cursor-pointer hash-link"
+                          [copyBtn]="data['hash']"
+                          [routerLink]="['/transaction', data['hash']]">
+                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                        </a>
+                        <a
                           *ngSwitchCase="'height'"
                           class="text--primary cursor-pointer block-link"
                           [routerLink]="['/blocks', data['height']]">
                           {{ data[template.matColumnDef] }}
                         </a>
-                        <div *ngSwitchCase="'type'" class="g-type aura-status">
+                        <div *ngSwitchCase="'method'" class="g-type aura-status">
                           <div class="d-flex" [appTooltip]="data.lstType | combineTxsMsg">
                             {{ data[template.matColumnDef] }}
                             <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
@@ -302,37 +309,39 @@
                             </div>
                           </div>
                         </div>
-                        <div *ngSwitchCase="'status'">
-                          <div [ngSwitch]="data[template.matColumnDef]">
-                            <div *ngSwitchCase="'Success'" class="text--green-3">
-                              {{ data[template.matColumnDef] | uppercase }}
-                            </div>
-                            <div *ngSwitchCase="'Fail'" class="text--red-3">
-                              {{ data[template.matColumnDef] | uppercase }}
-                            </div>
-                            <div *ngSwitchCase="'Pending'" class="text--yellow-3">
-                              {{ data[template.matColumnDef] | uppercase }}
-                            </div>
-                          </div>
-                        </div>
-                        <div *ngSwitchCase="'fee'">
-                          {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                          <span appLinkDenom>{{ denom }}</span>
-                        </div>
+                        <ng-container *ngSwitchCase="'from'">
+                          <a
+                            *ngIf="data[template.matColumnDef]"
+                            [copyBtn]="data[template.matColumnDef]"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/account', data[template.matColumnDef]]">
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                          </a>
+                          <span *ngIf="!data[template.matColumnDef]">-</span>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'to'">
+                          <a
+                            *ngIf="data[template.matColumnDef]"
+                            [copyBtn]="data[template.matColumnDef]"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/account', data[template.matColumnDef]]">
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                          </a>
+                          <span *ngIf="!data[template.matColumnDef]">-</span>
+                        </ng-container>
                         <div *ngSwitchCase="'amount'">
-                          <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                            <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                            <span class="ml-1" [appLinkDenom]="data?.denom">{{ data?.denom | ibcDenom }}</span>
-                          </ng-container>
-                          <ng-template #displayNonNumber>
-                            <span *ngIf="!data[template.matColumnDef]"> - </span>
-                            <a
-                              *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/transaction', data['tx_hash']]">
-                              More
-                            </a>
-                          </ng-template>
+                          <span
+                            *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001"
+                            [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }">
+                            {{ (data[template.matColumnDef] | balance: decimal) == 0 ? 0 : '<0.001' }}
+                          </span>
+                          <span
+                            [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }"
+                            [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
+                            *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
+                            [appBigNumber]="data[template.matColumnDef]"
+                            [decimal]="decimal"></span>
+                          {{ denom }}
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                       </ng-container>

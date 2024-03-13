@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { catchError, map, merge, of, switchMap } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { toHexData } from 'src/app/core/utils/common/parsing';
 import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
@@ -75,6 +76,7 @@ export class BlockDetailComponent implements OnInit {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
 
   constructor(
     private route: ActivatedRoute,
@@ -183,14 +185,13 @@ export class BlockDetailComponent implements OnInit {
     return this.transactionService.queryTransactionByEvmHash(payload).pipe(
       map((res) => {
         if (res?.transaction?.length > 0) {
-          // this.updateListTx(res?.transaction);
+          this.updateListEvmTxn(res?.transaction);
         }
         this.loadingEVMTxs = false;
         return true;
       }),
       catchError(() => {
         this.loadingEVMTxs = false;
-
         return of(null);
       }),
     );
@@ -239,15 +240,19 @@ export class BlockDetailComponent implements OnInit {
   }
 
   updateListEvmTxn(txs) {
-    let dataTempTx = {};
-    dataTempTx['transaction'] = txs;
     if (txs.length > 0) {
-      txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
-      dataTempTx['transaction'].forEach((k) => {
-        this.blockDetail['gas_used'] += +k?.gas_used;
-        this.blockDetail['gas_wanted'] += +k?.gas_wanted;
+      this.dataSourceEvm.data = txs.map((tx) => {
+        const type = toHexData(_.get(tx, 'evm_transaction.data'));
+
+        return {
+          ...tx,
+          tx_hash: _.get(tx, 'evm_transaction.hash'),
+          method: type ? type : 'Transfer',
+          from: _.get(tx, 'evm_transaction.from'),
+          to: _.get(tx, 'evm_transaction.to'),
+          amount: _.get(tx, 'transaction_messages[0].content.data.value'),
+        };
       });
-      this.dataSourceEvm.data = txs;
     }
   }
 }
