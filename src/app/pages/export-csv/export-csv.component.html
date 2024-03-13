@@ -43,15 +43,15 @@
                 <h5 class="dropdown-menu__title">Account transaction</h5>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
-                  [class.active]="dataType === TabsAccountLink.EVMExecutedTxs"
-                  (click)="changeTypeFilter(TabsAccountLink.EVMExecutedTxs)">
-                  <button type="button" class="button px-2">{{ TabsAccount.EVMExecutedTxs }}</button>
-                </li>
-                <li
-                  class="dropdown-item cursor-pointer py-2 body"
                   [class.active]="dataType === TabsAccountLink.ExecutedTxs"
                   (click)="changeTypeFilter(TabsAccountLink.ExecutedTxs)">
                   <button type="button" class="button px-2">{{ TabsAccount.ExecutedTxs }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === TabsAccountLink.EVMExecutedTxs"
+                  (click)="changeTypeFilter(TabsAccountLink.EVMExecutedTxs)">
+                  <button type="button" class="button px-2">{{ TabsAccount.EVMExecutedTxs }}</button>
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
