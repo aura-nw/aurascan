@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, ITableContract } from 'src/app/core/models/contract.model';
@@ -81,7 +82,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     if (this.dataList?.data) {
-      if (this.contractInfo.contractsAddress.startsWith('0x')) {
+      if (this.contractInfo.contractsAddress.startsWith(EWalletType.EVM)) {
         this.getListEVMContractTransaction();
       } else {
         this.getListContractTransaction();
@@ -214,7 +215,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   navigateToViewAll() {
-    if (this.contractInfo.contractsAddress.startsWith('0x')) {
+    if (this.contractInfo.contractsAddress.startsWith(EWalletType.EVM)) {
       this.router.navigate([`/evm-contracts/transactions`, this.contractInfo.contractsAddress]);
     } else {
       this.router.navigate([`/contracts/transactions`, this.contractInfo.contractsAddress]);

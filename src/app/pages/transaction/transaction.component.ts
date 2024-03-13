@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable } from 'rxjs';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-transaction',
@@ -15,7 +16,7 @@ export class TransactionComponent {
     map((data) => {
       const hash = data.get('id');
       return {
-        type: hash.startsWith('0x') ? 'evm' : 'cosmos',
+        type: hash.startsWith(EWalletType.EVM) ? 'evm' : 'cosmos',
         hash,
       };
     }),
