@@ -222,6 +222,22 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     }
 
     if (
+      menuLink === '/transactions' &&
+      this.router.url.includes('/transaction') &&
+      !this.router.url.split('/')[2]?.startsWith('0x')
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/evm-transactions' &&
+      this.router.url.includes('/transaction') &&
+      this.router.url.split('/')[2]?.startsWith('0x')
+    ) {
+      return true;
+    }
+
+    if (
       menuLink === '/tokens/tokens-nft' &&
       (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
     ) {

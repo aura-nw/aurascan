@@ -154,6 +154,22 @@ export class MenuBottomBarComponent implements OnInit {
     }
 
     if (
+      menuLink === '/transactions' &&
+      this.router.url.includes('/transaction') &&
+      !this.router.url.split('/')[2]?.startsWith('0x')
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/evm-transactions' &&
+      this.router.url.includes('/transaction') &&
+      this.router.url.split('/')[2]?.startsWith('0x')
+    ) {
+      return true;
+    }
+
+    if (
       menuLink === '/statistics/charts-stats' &&
       (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
     ) {

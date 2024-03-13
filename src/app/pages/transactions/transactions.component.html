@@ -103,7 +103,7 @@
                       <div class="d-flex align-items-center">
                         <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                         <span class="text--gray-light caption fw-normal">{{
-                          data?.timestamp | customDateTime: 'DateTime'
+                          data?.timestamp | customDateTime: 'Distance'
                         }}</span>
                       </div>
                       <div class="d-flex align-items-center ml-5">
@@ -116,7 +116,7 @@
                         >
                       </div>
                     </div>
-                    <div [ngSwitch]="data.status" class="text-uppercase mt-2">
+                    <div [ngSwitch]="data.status" class="text-uppercase mt-2 caption fw-semibold">
                       <div *ngSwitchCase="'Success'" class="text--green-3">
                         {{ data.status }}
                       </div>
