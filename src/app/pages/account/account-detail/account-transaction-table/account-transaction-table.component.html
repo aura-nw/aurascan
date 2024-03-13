@@ -561,7 +561,7 @@
                       *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                       [appBigNumber]="data[template.matColumnDef]"
                       [decimal]="decimal"></span>
-                    {{ denom }}
+                    <span appLinkDenom> {{ denom }}</span>
                   </div>
                   <div *ngSwitchCase="'evmTx'">
                     <a

@@ -83,6 +83,7 @@
   "api": {
     "backend": "https://evmos-api.dev.aurascan.io/api/v1",
     "socket": "https://evmos-api.dev.aurascan.io",
+    "verifyContract": "https://evmos-verify.dev.aurascan.io/verify-contract/v1",
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",

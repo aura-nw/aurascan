@@ -4,16 +4,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
 import { Subject, takeUntil } from 'rxjs';
-import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { ExportFileName, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
-import local from 'src/app/core/utils/storage/local';
-import { isValidBench32Address } from 'src/app/core/utils/common/validation';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
+import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
 
@@ -187,12 +186,31 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   }
 
   handleDownloadFile(buffer, payload) {
+    let nameTab;
+    switch (payload.dataType) {
+      case TabsAccountLink.EVMExecutedTxs:
+        nameTab = ExportFileName.EVMExecutedTxs;
+        break;
+      case TabsAccountLink.NativeTxs:
+        nameTab = ExportFileName.NativeTxs;
+        break;
+      case TabsAccountLink.FtsTxs:
+        nameTab = ExportFileName.FtsTxs;
+        break;
+      case TabsAccountLink.NftTxs:
+        nameTab = ExportFileName.NftTxs;
+        break;
+      default:
+        nameTab = ExportFileName.ExecutedTxs;
+        break;
+    }
     const data: Blob = new Blob([buffer], {
       type: 'text/csv;charset=utf-8',
     });
+
     const fileName =
       'export-account-' +
-      (payload.dataType === TabsAccountLink.NativeTxs ? 'native-ibc-transfer' : payload.dataType) +
+      (payload.dataType === TabsAccountLink.NativeTxs ? 'native-ibc-transfer' : nameTab) +
       '-' +
       payload.address +
       '.csv';

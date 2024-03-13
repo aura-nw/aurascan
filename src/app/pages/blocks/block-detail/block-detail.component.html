@@ -291,7 +291,7 @@
                         <div class="text--gray-4">Fee</div>
                         <div class="text--white d-flex align-items-center">
                           <span class="mr-1">{{ +data.fee | mask: 'separator.6' }}</span>
-                          <a appLinkDenom>{{ denom }}</a>
+                          <a appLinkDenom> {{ denom }}</a>
                         </div>
                       </div>
                       <div class="d-flex justify-content-between mt-2">
@@ -401,7 +401,7 @@
                               *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                               [appBigNumber]="data[template.matColumnDef]"
                               [decimal]="decimal"></span>
-                            <a appLinkDenom>{{ denom }}</a>
+                            <a appLinkDenom> {{ denom }}</a>
                           </div>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                         </ng-container>
@@ -477,7 +477,7 @@
                             *ngIf="data.amount | balance: decimal | gte: 0.001"
                             [appBigNumber]="data.amount"
                             [decimal]="decimal"></span>
-                          <a appLinkDenom>{{ denom }}</a>
+                          <a appLinkDenom> {{ denom }}</a>
                         </div>
                       </div>
                       <div class="d-flex justify-content-between mt-2">
@@ -503,7 +503,7 @@
                         <span *ngIf="!data.evm_transaction.to" class="text--white">-</span>
                       </div>
                       <div class="d-flex justify-content-between mt-2">
-                        <div class="text--gray-4">AURA Txn</div>
+                        <div class="text--gray-4">Cosmos Txn</div>
                         <a
                           *ngIf="data?.hash"
                           [copyBtn]="data.hash"
