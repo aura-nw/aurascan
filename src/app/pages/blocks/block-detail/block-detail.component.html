@@ -252,7 +252,7 @@
                             <div class="d-flex align-items-center">
                               <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                               <span class="text--gray-light caption fw-normal">{{
-                                data?.timestamp | customDateTime: 'DateTime'
+                                data?.timestamp | customDateTime: 'Distance'
                               }}</span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
@@ -265,7 +265,7 @@
                               >
                             </div>
                           </div>
-                          <div [ngSwitch]="data.status" class="text-uppercase mt-2">
+                          <div [ngSwitch]="data.status" class="text-uppercase mt-2 caption">
                             <div *ngSwitchCase="'Success'" class="text--green-3">
                               {{ data.status }}
                             </div>
@@ -401,7 +401,7 @@
                               *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                               [appBigNumber]="data[template.matColumnDef]"
                               [decimal]="decimal"></span>
-                            {{ denom }}
+                            <a appLinkDenom>{{ denom }}</a>
                           </div>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                         </ng-container>
@@ -436,7 +436,7 @@
                             <div class="d-flex align-items-center">
                               <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                               <span class="text--gray-light caption fw-normal">{{
-                                data?.timestamp | customDateTime: 'DateTime'
+                                data?.timestamp | customDateTime: 'Distance'
                               }}</span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
@@ -477,7 +477,7 @@
                             *ngIf="data.amount | balance: decimal | gte: 0.001"
                             [appBigNumber]="data.amount"
                             [decimal]="decimal"></span>
-                          {{ denom }}
+                          <a appLinkDenom>{{ denom }}</a>
                         </div>
                       </div>
                       <div class="d-flex justify-content-between mt-2">
