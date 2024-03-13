@@ -48,7 +48,7 @@ export enum WalletAcount {
 export enum TabsAccount {
   ExecutedTxs = 'Cosmos Executed Txn',
   EVMExecutedTxs = 'EVM Executed Txn',
-  NativeTxs = 'Native + ibc Transfer',
+  NativeTxs = 'Native/Ibc Transfer',
   FtsTxs = 'Fungible Token Transfer',
   NftTxs = 'NFT Transfer',
 }
@@ -58,6 +58,14 @@ export enum TabsAccountLink {
   EVMExecutedTxs = 'evm-executed',
   NativeTxs = 'native-transfer',
   FtsTxs = 'cw20-transfer',
+  NftTxs = 'nft-transfer',
+}
+
+export enum ExportFileName {
+  ExecutedTxs = 'cosmos-executed',
+  EVMExecutedTxs = 'evm-executed',
+  NativeTxs = 'native-ibc-transfer',
+  FtsTxs = 'fungible-token-transfer',
   NftTxs = 'nft-transfer',
 }
 
