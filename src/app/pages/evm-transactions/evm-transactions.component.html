@@ -64,7 +64,7 @@
                           *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                           [appBigNumber]="data[template.matColumnDef]"
                           [decimal]="decimal"></span>
-                        <a appLinkDenom>{{ denom }}</a>
+                        <a appLinkDenom> {{ denom }}</a>
                       </div>
                       <div *ngSwitchCase="'hash'" class="text-center">
                         <a
@@ -147,7 +147,7 @@
                       *ngIf="data.amount | balance: decimal | gte: 0.001"
                       [appBigNumber]="data.amount"
                       [decimal]="decimal"></span>
-                    <a appLinkDenom>{{ denom }}</a>
+                    <a appLinkDenom> {{ denom }}</a>
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
