@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { ContractRegisterType } from '../constants/contract.enum';
+import { EWalletType } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { NameTagService } from './name-tag.service';
-import { EWalletType } from '../constants/wallet.constant';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -590,6 +590,33 @@ export class ContractService extends CommonService {
         query: query,
         variables: {},
         operationName: 'queryContractCodeDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  verifyEvmContract(formData: FormData) {
+    return this.http.post(`${this.environmentService.verifyContractUrl}/evm/file`, formData);
+  }
+
+  checkVerifyEvmContractStatus(address: string, id: number) {
+    const query = `query VerifyEvmContractStatus($address: String = "", $id: Int = 10) {
+      ${this.envDB} {
+        evm_contract_verification(where: {contract_address: {_eq: $address}, id: {_eq: $id}}) {
+          status         
+          contract_address
+        
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {
+          address,
+          id,
+        },
+        operationName: 'VerifyEvmContractStatus',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
