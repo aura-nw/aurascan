@@ -191,7 +191,7 @@
                             </div>
                           </div>
                           <div *ngSwitchCase="'fee'">
-                          {{ data[template.matColumnDef] }}
+                            {{ data[template.matColumnDef] }}
                             <span appLinkDenom>{{ denom }}</span>
                           </div>
                           <div *ngSwitchCase="'amount'">
@@ -252,7 +252,7 @@
                             <div class="d-flex align-items-center">
                               <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                               <span class="text--gray-light caption fw-normal">{{
-                                data?.timestamp | customDateTime: 'DateTime'
+                                data?.timestamp | customDateTime: 'Distance'
                               }}</span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
@@ -265,7 +265,7 @@
                               >
                             </div>
                           </div>
-                          <div [ngSwitch]="data.status" class="text-uppercase mt-2">
+                          <div [ngSwitch]="data.status" class="text-uppercase mt-2 caption">
                             <div *ngSwitchCase="'Success'" class="text--green-3">
                               {{ data.status }}
                             </div>
@@ -318,7 +318,7 @@
             </div>
           </ng-container>
           <ng-template #noValue>
-            <app-table-no-data *ngIf="!loadingCosmosTxs" [textNull]="errTxtTxs"></app-table-no-data>
+            <app-table-no-data *ngIf="!loadingCosmosTxs" [textNull]="errTxtCosmosTxs"></app-table-no-data>
           </ng-template>
         </div>
       </div>
@@ -363,7 +363,7 @@
                           </a>
                           <div *ngSwitchCase="'method'" class="g-type aura-status">
                             <div class="d-flex" [appTooltip]="data.lstType | combineTxsMsg">
-                              {{ data[template.matColumnDef] }}
+                              {{ data[template.matColumnDef] | ellipsis: 10 : null : true }}
                               <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
                                 +{{ data.lstType?.length - 1 }}
                               </div>
@@ -401,7 +401,7 @@
                               *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                               [appBigNumber]="data[template.matColumnDef]"
                               [decimal]="decimal"></span>
-                            {{ denom }}
+                            <a appLinkDenom>{{ denom }}</a>
                           </div>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                         </ng-container>
@@ -436,13 +436,13 @@
                             <div class="d-flex align-items-center">
                               <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                               <span class="text--gray-light caption fw-normal">{{
-                                data?.timestamp | customDateTime: 'DateTime'
+                                data?.timestamp | customDateTime: 'Distance'
                               }}</span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
                               <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
                               <span class="line-claim text--gray-light caption fw-normal"
-                                >{{ data?.type | ellipsis: 12 }}
+                                >{{ data?.method | ellipsis: 10 : null : true }}
                               </span>
                             </div>
                           </div>
@@ -477,7 +477,7 @@
                             *ngIf="data.amount | balance: decimal | gte: 0.001"
                             [appBigNumber]="data.amount"
                             [decimal]="decimal"></span>
-                          {{ denom }}
+                          <a appLinkDenom>{{ denom }}</a>
                         </div>
                       </div>
                       <div class="d-flex justify-content-between mt-2">
@@ -520,7 +520,7 @@
             </div>
           </ng-container>
           <ng-template #noValue>
-            <app-table-no-data *ngIf="!loadingEVMTxs" [textNull]="errTxtTxs"></app-table-no-data>
+            <app-table-no-data *ngIf="!loadingEVMTxs" [textNull]="errTxtEvmTxs"></app-table-no-data>
           </ng-template>
         </div>
       </div>
@@ -561,7 +561,7 @@
   </ng-container>
   <ng-template #noValues>
     <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-    <!-- <app-table-no-data *ngIf="!loading && (errTxt || errTxtTxs)" [textNull]="errTxt || errTxtTxs"></app-table-no-data> -->
+    <app-table-no-data *ngIf="!loading && errTxt" [textNull]="errTxt"></app-table-no-data>
     <app-table-no-data *ngIf="!loading && errTxt === null"></app-table-no-data>
   </ng-template>
 </ng-container>

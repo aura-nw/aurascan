@@ -71,7 +71,8 @@ export class BlockDetailComponent implements OnInit {
   loadingEVMTxs = true;
   isRawData = false;
   errTxt = null;
-  errTxtTxs = null;
+  errTxtCosmosTxs = null;
+  errTxtEvmTxs = null;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe();
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -139,10 +140,12 @@ export class BlockDetailComponent implements OnInit {
       .subscribe({
         next: () => {},
         error: (e) => {
-          if (e === this.NOT_FOUND) {
+          if (e.message === this.NOT_FOUND) {
             setTimeout(() => {
               this.getDetailByHeight();
             }, 10000);
+            this.errTxt = null;
+            this.loading = false;
           } else {
             if (e.name === TIMEOUT_ERROR) {
               this.errTxt = e.message;
@@ -164,14 +167,18 @@ export class BlockDetailComponent implements OnInit {
     return this.transactionService.getListTx(payload).pipe(
       map((res) => {
         if (res?.transaction?.length > 0) {
-          this.updateListCosmosTxn(res?.transaction);
+          this.parseDataListCosmosTxn(res?.transaction);
         }
         this.loadingCosmosTxs = false;
         return true;
       }),
-      catchError(() => {
+      catchError((e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtCosmosTxs = e.message;
+        } else {
+          this.errTxtCosmosTxs = e.status + ' ' + e.statusText;
+        }
         this.loadingCosmosTxs = false;
-
         return of(null);
       }),
     );
@@ -185,12 +192,17 @@ export class BlockDetailComponent implements OnInit {
     return this.transactionService.queryTransactionByEvmHash(payload).pipe(
       map((res) => {
         if (res?.transaction?.length > 0) {
-          this.updateListEvmTxn(res?.transaction);
+          this.parseDataListEvmTxn(res?.transaction);
         }
         this.loadingEVMTxs = false;
         return true;
       }),
-      catchError(() => {
+      catchError((e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtEvmTxs = e.message;
+        } else {
+          this.errTxtEvmTxs = e.status + ' ' + e.statusText;
+        }
         this.loadingEVMTxs = false;
         return of(null);
       }),
@@ -226,7 +238,7 @@ export class BlockDetailComponent implements OnInit {
     this.isRawData = type;
   }
 
-  updateListCosmosTxn(txs) {
+  parseDataListCosmosTxn(txs) {
     let dataTempTx = {};
     dataTempTx['transaction'] = txs;
     if (txs.length > 0) {
@@ -239,11 +251,10 @@ export class BlockDetailComponent implements OnInit {
     }
   }
 
-  updateListEvmTxn(txs) {
+  parseDataListEvmTxn(txs) {
     if (txs.length > 0) {
       this.dataSourceEvm.data = txs.map((tx) => {
         const type = toHexData(_.get(tx, 'evm_transaction.data'));
-
         return {
           ...tx,
           tx_hash: _.get(tx, 'evm_transaction.hash'),
