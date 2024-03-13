@@ -12,6 +12,7 @@ import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
 import {UserService} from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import {isValidBench32Address} from "src/app/core/utils/common/validation";
+import {EWalletType} from "src/app/core/constants/wallet.constant";
 
 declare var grecaptcha: any;
 
@@ -39,6 +40,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  evmPrefix = EWalletType;
 
   destroyed$ = new Subject<void>();
 
@@ -230,7 +232,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
     this.isValidBlock = true;
 
-    if (this.commonService.isBech32Address(address)) {
+    if (this.commonService.isBech32Address(address) || address.startsWith(this.evmPrefix.EVM)) {
       this.isValidAddress = true;
     } else {
       this.isValidAddress = false;
