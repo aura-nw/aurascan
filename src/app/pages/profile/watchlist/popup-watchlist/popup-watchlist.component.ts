@@ -1,17 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
 import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { isAddress, isSafari } from 'src/app/core/utils/common/validation';
+import {TranslateService} from '@ngx-translate/core';
+import {LENGTH_CHARACTER} from 'src/app/core/constants/common.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {WatchListService} from 'src/app/core/services/watch-list.service';
+import {isAddress, isSafari} from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -27,7 +27,6 @@ export class PopupWatchlistComponent implements OnInit {
   maxLengthNote = 200;
   publicNameTag = '-';
   privateNameTag = '-';
-  isValidAddress = true;
   isError = false;
   isEditMode = false;
   reStakeSent = true;
@@ -98,7 +97,8 @@ export class PopupWatchlistComponent implements OnInit {
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
     private nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.isSafari = isSafari();
@@ -147,7 +147,6 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   setDataFrom(data, isEditMode = false) {
-    this.isValidAddress = true;
     this.isEditMode = isEditMode;
     const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
 
@@ -191,25 +190,13 @@ export class PopupWatchlistComponent implements OnInit {
       return false;
     }
 
-    if (this.getAddress.value?.length > 0) {
-      this.isValidAddress = false;
-      if (this.commonService.isBech32Address(this.getAddress?.value)) {
-        this.isValidAddress =
-          (this.commonService.isValidAddress(this.getAddress.value) && this.isAccount) ||
-          (this.commonService.isValidContract(this.getAddress.value) && this.isContract);
-      }
-    }
-
-    if (!this.isValidAddress) {
-      return false;
-    }
-
     //check setting noti
     try {
       if (!JSON.stringify(this.settingObj)?.includes('true') && this.isTracking) {
         return false;
       }
-    } catch {}
+    } catch {
+    }
 
     this.formValid = true;
     return true;
@@ -217,7 +204,7 @@ export class PopupWatchlistComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { favorite, address, note, id } = this.watchlistForm.value;
+    const {favorite, address, note, id} = this.watchlistForm.value;
 
     let payload = {
       address: address,
@@ -299,7 +286,6 @@ export class PopupWatchlistComponent implements OnInit {
   changeType(type) {
     this.isAccount = type;
     this.isContract = !this.isAccount;
-    this.isValidAddress = false;
     this.isError = false;
     this.watchlistForm.value.isAccount = type;
     this.checkFormValid();

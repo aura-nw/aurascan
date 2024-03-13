@@ -33,7 +33,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="isAccount"
                   [disabled]="isEditMode"
-                  (change)="changeType(true)" />
+                  (change)="changeType(true)"/>
                 <label for="account" class="ml-2 mb-0 text-justify">Account</label>
               </div>
               <div class="form-group d-flex align-items-center ml-8">
@@ -44,7 +44,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="isContract"
                   [disabled]="isEditMode"
-                  (change)="changeType(false)" />
+                  (change)="changeType(false)"/>
                 <label for="contract" class="ml-2 mb-0 text-justify">Contract</label>
               </div>
             </div>
@@ -75,18 +75,13 @@
               <input
                 type="text"
                 formControlName="address"
-                placeholder="{{ chainName }}..."
+                placeholder="{{ chainName }}.../ 0x..."
                 class="input-address"
                 (change)="checkPublicNameTag()"
-                (input)="checkFormValid(); isError = false"
-                autocomplete="off" />
+                (input)="isError = false"
+                autocomplete="off"/>
             </div>
             <span *ngIf="isEditMode">{{ getAddress.value }}</span>
-            <div
-              *ngIf="getAddress?.value?.length > 0 && !isValidAddress && (isAccount || isContract)"
-              class="text--danger mt-2 caption fw-normal">
-              Invalid {{ chainName }} address format
-            </div>
           </div>
         </div>
 
@@ -104,13 +99,13 @@
                 formControlName="name"
                 (blur)="isError = false"
                 (keypress)="checkValidNameTag($event)"
-                placeholder="Enter private name tag" />
+                placeholder="Enter private name tag"/>
             </div>
           </div>
         </div>
         <div class="d-flex offset-lg-3 text--gray-4 mt-1 caption fw-normal font-italic">
           <div class="ml-lg-1">
-            Character limit: {{ privateNameForm.value?.name?.length || 0 }}/{{ maxLengthNameTag }} <br />
+            Character limit: {{ privateNameForm.value?.name?.length || 0 }}/{{ maxLengthNameTag }} <br/>
             Set private name tag to easily identify this address in Aurascan only from your view
           </div>
         </div>
@@ -134,7 +129,7 @@
         </div>
         <div class="d-flex offset-lg-3 text--gray-4 mt-2 caption fw-normal font-italic">
           <div class="ml-lg-1">
-            Character limit: {{ privateNameForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br />
+            Character limit: {{ privateNameForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br/>
             A personal note of this address. Kindly note that DO NOT input any passwords or private key here
           </div>
         </div>
@@ -153,7 +148,6 @@
           (click)="onSubmit()"
           [disabled]="
             privateNameForm.status === 'INVALID' ||
-            !isValidAddress ||
             isError ||
             (isAccount === false && isContract === false)
           ">
