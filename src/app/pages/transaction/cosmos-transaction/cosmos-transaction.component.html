@@ -89,7 +89,7 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Fee</div>
             <div class="col-auto col-lg-10 text--gray-1">
-              {{ +transaction?.fee | mask: 'separator.6' }}
+              {{ transaction?.fee }}
               <span appLinkDenom>{{ denom }}</span>
             </div>
           </div>

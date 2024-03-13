@@ -1,80 +1,70 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ContractType } from 'src/app/core/constants/token.enum';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractType } from 'src/app/core/constants/token.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { mergeMap } from 'rxjs/operators';
-import _ from 'lodash';
+import { getEthersProvider } from 'src/app/core/utils/ethers';
 
 @Component({
   selector: 'app-evm-contract',
   templateUrl: './evm-contract.component.html',
   styleUrls: ['./evm-contract.component.scss'],
 })
-export class EvmContractComponent implements OnInit {
+export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
   @Input() contractTypeData: string;
   @Input() contractsAddress: string;
 
-  contractType = ContractType;
-  currentTab = this.contractType.Code;
-  contractVerifyType = ContractVerifyType;
-  contractAddress: string;
+  ContractType = ContractType;
+  ContractVerifyType = ContractVerifyType;
+
+  currentTab = ContractType.Code;
   contractDetail: any;
-  isVerifying = false;
+  contractCode = '';
+
+  destroyed$ = new Subject<void>();
 
   constructor(
     private contractService: ContractService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private env: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {
-    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-    this.getContractDetail();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['contractsAddress'].currentValue) {
+      this.getContractCode();
+    }
   }
 
-  getContractDetail(notCheck = false) {
-    this.contractService.contractObservable
-      .pipe(
-        mergeMap((res) => {
-          if (res) {
-            res.tx_hash = res.instantiate_hash;
-            res.execute_msg_schema = _.get(res, 'code.code_id_verifications[0].execute_msg_schema');
-            res.instantiate_msg_schema = _.get(res, 'code.code_id_verifications[0].instantiate_msg_schema');
-            res.query_msg_schema = _.get(res, 'code.code_id_verifications[0].query_msg_schema');
-            res.contract_hash = _.get(res, 'code.code_id_verifications[0].data_hash');
-            if (res?.cw20_contract) {
-              res.contract_name = _.get(res, 'cw20_contract.name');
-            } else {
-              res.contract_name = _.get(res, 'cw721_contract.name');
-            }
-            res.compiler_version = _.get(res, 'code.code_id_verifications[0].compiler_version');
-            this.contractDetail = res;
-          }
-          if (res?.code?.code_id_verifications[0]?.verification_status === 'verifying' && !notCheck) {
-            this.isVerifying = true;
-          } else {
-            this.isVerifying = false;
-          }
-          return this.contractService.checkVerified(this.contractDetail?.code?.code_id);
-        }),
-      )
-      .subscribe(({ data }) => {
-        this.contractTypeData = data.status || this.contractTypeData;
-        if (data?.status === 'verifying' && !notCheck) {
-          this.isVerifying = true;
-        } else {
-          this.isVerifying = false;
-        }
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  ngOnInit(): void {
+    this.loadContractDetail();
+  }
+
+  loadContractDetail() {
+    this.contractService.contractObservable.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+      this.contractDetail = res;
+    });
+  }
+
+  getContractCode() {
+    const provider = getEthersProvider(this.env.etherJsonRpc);
+
+    provider
+      ?.getCode(this.contractsAddress)
+      .then((contractCode) => {
+        this.contractCode = contractCode;
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }
 
-  changeTab(tabId): void {
+  changeTab(tabId: ContractType): void {
     this.currentTab = tabId;
-  }
-
-  navigateToVerify(codeId: string) {
-    sessionStorage.setItem('codeIdPrePage', this.router.url);
-    this.router.navigate(['/code-ids/verify', codeId]);
   }
 }

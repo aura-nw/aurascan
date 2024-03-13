@@ -7,6 +7,7 @@ import { map, takeUntil } from 'rxjs/operators';
 import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CONTRACT_TAB, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -20,8 +21,7 @@ import { toHexData } from 'src/app/core/utils/common/parsing';
 })
 export class EvmContractContentComponent implements OnInit, OnDestroy {
   @Input() contractsAddress = '';
-  @Input() contractTypeData: ContractVerifyType;
-  @Input() contractId;
+  @Input() contractTypeData: ContractVerifyType = ContractVerifyType.Unverified;
 
   TABS = CONTRACT_TAB.filter((tab) => [ContractTab.Transactions, ContractTab.Contract].includes(tab.key)).map(
     (tab) => ({
@@ -109,10 +109,10 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
     }, 30000);
   }
 
-  changeTab(tabId): void {
-    tabId = tabId || 'transactions';
-    this.location.replaceState('/contracts/' + this.contractInfo.contractsAddress + '?tabId=' + tabId);
-    this.currentTab = tabId;
+  changeTab(tabId: string): void {
+    this.currentTab = tabId || 'transactions';
+
+    this.location.replaceState('/evm-contracts/' + this.contractInfo.contractsAddress + '?tabId=' + this.currentTab);
 
     //check fist load tab tx of contract
     if (this.isFirstLoad && this.currentTab === ContractTab.Transactions && !this.contractTransaction['count']) {
@@ -123,7 +123,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   }
 
   getTransaction(): void {
-    if (this.contractsAddress.startsWith('0x') && this.contractsAddress.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
+    if (this.contractsAddress.startsWith(EWalletType.EVM) && this.contractsAddress.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
       const payload = {
         limit: this.limit,
         address: this.contractsAddress.toLowerCase(),

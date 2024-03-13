@@ -1,6 +1,6 @@
 .code-contract {
   pre.content-info {
-    min-height: 124px;
+    // min-height: 124px;
     align-items: flex-start;
     font-size: 1.2rem;
     font-weight: 400;
@@ -14,11 +14,13 @@
 
   .content-info {
     background: var(--aura-gray-9);
-    padding: 0 var(--spacer-4);
+    padding: 8px var(--spacer-4);
     min-height: 34px;
+
     @media (min-width: 992px) {
       min-height: 32px;
     }
+
     border-radius: 8px;
     color: var(--aura-gray-1);
     max-height: 203px;
@@ -26,6 +28,7 @@
     white-space: pre-wrap;
     display: flex;
     align-items: center;
+    overflow-y: auto;
 
     &.show {
       max-height: 9999px;
@@ -66,6 +69,10 @@
     tr,
     td {
       color: var(--aura-gray-1);
+
+      &:last-of-type {
+        width: 65%;
+      }
     }
   }
 }

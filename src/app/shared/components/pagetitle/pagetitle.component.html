@@ -5,33 +5,32 @@
       <h1 class="mb-0 text--white fw-semibold mr-2">{{ title }}</h1>
       <div class="page-title-right d-lg-block mt-4 mt-lg-0" [class.d-none]="!mobileDisplay">
         <div class="text--white d-lg-flex align-items-center" *ngIf="displayInfo">
-          <div
-            class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
-            *ngIf="global?.dataHeader?.total_blocks">
-            <span class="h4 body-mob breadcrumb__label">Height: </span>
-            <span class="h4 body-mob breadcrumb__content">{{ global?.dataHeader?.total_blocks | number }}</span>
+          <div class="mb-0 mr-6" *ngIf="global?.dataHeader?.total_blocks">
+            <span class="body-mob">Height:</span>
+            <span class="fw-normal ml-1">{{ global?.dataHeader?.total_blocks | number }}</span>
           </div>
           <div
-            class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
+            class="mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
             *ngIf="global?.dataHeader?.bonded_tokens">
-            <span class="h4 body-mob breadcrumb__label">Bonded: </span>
+            <span class="body-mob">Bonded: </span>
             <span
-              class="h4 body-mob breadcrumb__content"
+              class="body-mob breadcrumb__content fw-normal"
+              [appTooltip]="{ priceAmount: global?.dataHeader?.bonded_tokens }"
               [appBigNumber]="global?.dataHeader?.bonded_tokens"
               [decimal]="0"></span>
           </div>
-          <div
-            class="body-01 mb-0 mr-lg-6 d-flex d-lg-block justify-content-between mb-1 mb-lg-0"
-            *ngIf="global?.dataHeader?.inflation">
-            <span class="h4 body-mob breadcrumb__label">Inflation: </span>
-            <span class="h4 body-mob breadcrumb__content">{{ global?.dataHeader?.inflation }}</span>
+          <div class="mb-0 mr-6" *ngIf="global?.dataHeader?.inflation">
+            <span class="body-mob">Inflation:</span>
+            <span class="fw-normal ml-1">{{ global?.dataHeader?.inflation }}</span>
           </div>
-          <div class="body-01 mb-0 d-flex d-lg-block justify-content-between">
-            <span class="h4 body-mob breadcrumb__label">Community Pool: </span>
+          <div class="mb-0 d-flex d-lg-block justify-content-between">
+            <span class="body-mob">Community Pool: </span>
             <span
-              class="h4 body-mob breadcrumb__content"
+              class="fw-normal"
+              [appTooltip]="{ priceAmount: global?.dataHeader?.community_pool }"
               [appBigNumber]="global?.dataHeader?.community_pool"
-              [decimal]="0"></span>
+              [decimal]="0">
+            </span>
           </div>
         </div>
       </div>

@@ -56,9 +56,27 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
         this.isLoading = false;
 
         if (res) {
-          this.contractDetail = _.get(res, 'evm_smart_contract[0]');
+          const evm_contract_verification = _.get(res, 'evm_contract_verification[0]') || {};
+          const evm_smart_contract = _.get(res, 'evm_smart_contract[0]') || {};
+
+          const contractDetail = {
+            ...evm_smart_contract,
+            ...evm_contract_verification,
+          };
+
+          this.contractService.setContract(contractDetail);
         }
       });
+
+    this.contractService.contractObservable.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: (res) => {
+        this.contractDetail = {
+          ...res,
+          tx_hash: res.created_hash,
+          contract_hash: res.code_hash,
+        };
+      },
+    });
   }
 
   viewQrAddress(staticDataModal: any): void {

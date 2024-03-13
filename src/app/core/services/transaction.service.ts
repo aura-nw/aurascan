@@ -622,6 +622,7 @@ export class TransactionService extends CommonService {
               event: { tx_msg_index: { _is_null: false } }
               block_height: { _lte: $heightLTE, _gte: $heightGTE }
             }
+            order_by: [{event_id: asc}, {index: asc}]
           ) {
             composite_key
             value

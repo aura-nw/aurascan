@@ -11,6 +11,7 @@ import { ContractRegisterType } from '../constants/contract.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { NameTagService } from './name-tag.service';
+import { EWalletType } from '../constants/wallet.constant';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -183,7 +184,7 @@ export class ContractService extends CommonService {
       address = keyword;
     } else if (this.isValidAddress(keyword)) {
       creator = keyword;
-    } else if (keyword.startsWith('0x') && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
+    } else if (keyword.startsWith(EWalletType.EVM) && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
       address = keyword;
     } else if (keyword?.length > 0) {
       filterName = `_ilike: "%${keyword}%"`;
@@ -347,6 +348,15 @@ export class ContractService extends CommonService {
           id
           type
           updated_at
+        }
+        evm_contract_verification(
+          where: {contract_address: {_eq: $address}, status: {_eq: "SUCCESS"}}
+        ) {
+          status
+          abi
+          code_hash
+          contract_address
+          creator_tx_hash
         }
       }
     }

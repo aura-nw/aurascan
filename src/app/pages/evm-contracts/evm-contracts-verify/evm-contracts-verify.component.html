@@ -1,160 +1,55 @@
-<section class="contract-verify">
+<section class="contract-verify col-12 col-lg-6">
   <h1 class="text--white mb-2 mb-lg-0">Verify & Publish EVM Contract source code</h1>
-  <ng-container *ngIf="isExitCode">
-    <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
-    <div class="body-02 caption-mob fw-normal-mob text--gray-6">
-      Ensuring transparency for users engaging with smart contracts, source code verification involves uploading the
-      code to Aurascan, where it is processing with suitable compiled version on the blockchain. Similar to traditional
-      contracts, a "smart contract" should furnish end users with detailed insights into which they will interact with
-      their "digital signatures," allowing them the chance to scrutinize the code independently and confirm its intended
-      functionality.
-    </div>
-    <div class="card mt-4">
-      <div class="card-body">
-        <div *ngIf="loading">
-          <app-loading-sprint></app-loading-sprint>
-        </div>
-        <div *ngIf="!loading">
-          <!-- Contract Source Code -->
-          <div *ngIf="currentStep === 'verify'">
-            <h2 class="h3-mob fw-semibold text--white mb-0">EVM Smart Contract source code</h2>
-            <div class="divider divider-horizontal divider-lighter my-4 mb-lg-6"></div>
-            <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form" autocomplete="off">
-              <div class="row">
-                <div class="col-12 col-lg-6">
-                  <div class="form-group mb-4 mb-lg-6">
-                    <label for="address" class="form-label text--gray-1 body-02">Contract to verify</label>
-                    <input formControlName="address" type="text" class="form-control" id="address" />
-                    <div class="error" *ngIf="formControls['address'].invalid">Address is required!</div>
-                  </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                  <div class="form-group mb-4 mb-lg-6">
-                    <label for="type" class="form-label text--gray-1 body-02">Compiler Type</label>
-                    <mat-select
-                      #type
-                      id="type"
-                      formControlName="compiler_type"
-                      class="form-control select-input-field select-input--flat"
-                      panelClass="aura-optional-panel aura-optional-panel--flat"
-                      [disableOptionCentering]="true"
-                      (change)="checkFormValid()"
-                      placeholder="Select">
-                      <mat-option *ngFor="let item of versionList" [value]="item.value">
-                        {{ item.label }}
-                      </mat-option>
-                    </mat-select>
 
-                    <ng-container *ngIf="formControls['compiler_type'].touched">
-                      <div class="error" *ngIf="formControls['compiler_type'].errors?.required">Required</div>
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12 col-lg-6">
-                  <div class="form-group mb-4 mb-lg-6">
-                    <label for="type" class="form-label text--gray-1 body-02">Open Source License Type</label>
-                    <mat-select
-                      #license
-                      id="license"
-                      formControlName="license"
-                      class="form-control select-input-field select-input--flat"
-                      panelClass="aura-optional-panel aura-optional-panel--flat"
-                      [disableOptionCentering]="true"
-                      (change)="checkFormValid()"
-                      placeholder="Select">
-                      <mat-option *ngFor="let item of versionList" [value]="item.value">
-                        {{ item.label }}
-                      </mat-option>
-                    </mat-select>
+  <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
+  <div class="body-02 caption-mob fw-normal-mob text--gray-6">
+    Add the Solidity source (.zip) files and metadata of contract you want to verify.
+  </div>
 
-                    <ng-container *ngIf="formControls['license'].touched">
-                      <div class="error" *ngIf="formControls['license'].errors?.required">Required</div>
-                    </ng-container>
-                  </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                  <div class="form-group mb-4 mb-lg-6">
-                    <label for="version" class="form-label text--gray-1 body-02">Compiler Version</label>
-                    <mat-select
-                      #version
-                      id="version"
-                      formControlName="compiler_version"
-                      class="form-control select-input-field select-input--flat"
-                      panelClass="aura-optional-panel aura-optional-panel--flat"
-                      [disableOptionCentering]="true"
-                      (change)="checkFormValid()"
-                      placeholder="Select">
-                      <mat-option *ngFor="let item of versionList" [value]="item.value">
-                        {{ item.label }}
-                      </mat-option>
-                    </mat-select>
-
-                    <ng-container *ngIf="formControls['compiler_version'].touched">
-                      <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required</div>
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-
-              <div class="d-flex justify-content-center justify-content-lg-end align-items-center pt-2 pt-lg-0">
-                <button
-                  class="button button--md button-pill button-outline button-fixed"
-                  type="button"
-                  (click)="handleReset()">
-                  <span>Reset</span>
-                </button>
-                <button
-                  class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4 px-1 px-sm-6"
-                  type="submit"
-                  [disabled]="contractForm.status === 'INVALID'">
-                  <span>Verify & Publish</span>
-                </button>
-              </div>
-            </form>
+  <div class="py-6">
+    <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form" autocomplete="off">
+      <div class="row mb-6">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="address" class="form-label text--gray-1 body-02">Contract to verify</label>
+            <input formControlName="address" type="text" class="form-control" id="address" />
+            <div class="error" *ngIf="formControls['address'].invalid">Address is required!</div>
           </div>
-          <!-- Contract Verify step -->
-          <div *ngIf="currentStep === 'compiler'">
-            <h2 class="h3-mob fw-semibold text--white mb-0">Compiler Output</h2>
-            <div class="divider divider-horizontal divider-lighter my-4 mb-lg-6"></div>
-            <app-evm-contract-verify-steps
-              [codeID]="address"
-              (isCompilerComplete)="isCompilerComplete = $event"
-              (isVerifyFail)="isVerifyFail = $event"
-              (isVerifySuccess)="isVerifySuccess = $event"></app-evm-contract-verify-steps>
-            <div class="d-flex justify-content-end align-items-center pt-lg-6">
-              <ng-container *ngIf="!isVerifySuccess">
-                <button
-                  class="button button--md button-pill button-outline"
-                  (click)="redirectToPreviousPage()"
-                  type="button">
-                  <span>Back</span>
-                </button>
-                <button
-                  [disabled]="!isCompilerComplete || !isVerifyFail"
-                  class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card ml-4"
-                  (click)="startOver()"
-                  type="button">
-                  <span>Start over</span>
-                </button>
-              </ng-container>
-              <button
-                *ngIf="isVerifySuccess"
-                class="button button--md button-pill button-flat ml-4"
-                type="button"
-                (click)="redirectToPreviousPage()">
-                <span>Confirm</span>
-              </button>
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <div class="col-12">
+          <h4 class="text--white mb-4">Add (.zip) file</h4>
+          <div class="drop-zone" appDragDrop (onFileDropped)="onFileDropped($event)">
+            <div class="drop-content" *ngIf="!contractSourceCode">
+              <div class="add-icon">
+                <i class="ph-plus-fill text--gray-4"></i>
+              </div>
+
+              <div class="body-01 text--gray-4">Drag and drop here or <span class="text--primary">browse</span></div>
+            </div>
+
+            <div class="drop-content" *ngIf="contractSourceCode">
+              <div class="w-100">
+                {{ contractSourceCode.name }}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </ng-container>
 
-  <ng-container *ngIf="!isExitCode">
-    <div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
-    <div class="py-lg-20"></div>
-  </ng-container>
+      <div class="d-flex justify-content-center justify-content-lg-end align-items-center pt-2 pt-lg-0">
+        <button class="button button--md button-pill button-outline button-fixed" type="button" (click)="handleReset()">
+          <span>Reset</span>
+        </button>
+        <button
+          class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4 px-1 px-sm-6"
+          type="submit"
+          [disabled]="contractForm.status === 'INVALID'">
+          <span>Verify & Publish</span>
+        </button>
+      </div>
+    </form>
+  </div>
 </section>

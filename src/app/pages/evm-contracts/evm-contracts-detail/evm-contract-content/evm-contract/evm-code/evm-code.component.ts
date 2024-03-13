@@ -26,6 +26,10 @@ export class EvmCodeComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  get abi() {
+    return this.contractDetailData?.abi ? JSON.stringify(this.contractDetailData?.abi) : '-';
+  }
+
   expandMenu(): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
       let element: HTMLElement = document.getElementsByClassName('content-contract')[i] as HTMLElement;
