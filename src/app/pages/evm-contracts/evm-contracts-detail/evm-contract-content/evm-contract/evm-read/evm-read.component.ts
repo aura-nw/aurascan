@@ -15,7 +15,11 @@ export class EvmReadComponent {
   chainInfo = this.environmentService.chainInfo;
 
   get readAbi() {
-    return this.abi?.filter((abi: JsonAbi) => READ_STATE_MUTABILITY.includes(abi.stateMutability)) || [];
+    return (
+      this.abi?.filter(
+        (abi: JsonAbi) => READ_STATE_MUTABILITY.includes(abi.stateMutability) && abi.type == 'function',
+      ) || []
+    );
   }
 
   constructor(private environmentService: EnvironmentService) {}

@@ -51,7 +51,6 @@
   <ng-container *ngIf="contractDetail && contractTypeData === ContractVerifyType.Verified">
     <app-evm-code *ngIf="currentTab === ContractType.Code" [contractDetailData]="contractDetail"></app-evm-code>
     <app-evm-read *ngIf="currentTab === ContractType.ReadContract" [abi]="contractDetail.abi"></app-evm-read>
-    <app-evm-write *ngIf="currentTab === ContractType.WriteContract" [contractDetailData]="contractDetail">
-    </app-evm-write>
+    <app-evm-write *ngIf="currentTab === ContractType.WriteContract" [abi]="contractDetail.abi"> </app-evm-write>
   </ng-container>
 </div>
