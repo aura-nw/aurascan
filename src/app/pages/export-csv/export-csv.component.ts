@@ -1,19 +1,19 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {saveAs} from 'file-saver';
+import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { saveAs } from 'file-saver';
 import * as moment from 'moment';
-import {Subject, takeUntil} from 'rxjs';
-import {TabsAccount, TabsAccountLink} from 'src/app/core/constants/account.enum';
-import {DATEFORMAT, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
-import {UserService} from 'src/app/core/services/user.service';
+import { Subject, takeUntil } from 'rxjs';
+import { TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import {isValidBench32Address} from 'src/app/core/utils/common/validation';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
-import {convertEvmAddressToBech32Address} from 'src/app/core/utils/common/address-converter';
+import { isValidBench32Address } from 'src/app/core/utils/common/validation';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 
 declare var grecaptcha: any;
 
@@ -52,8 +52,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
     private userService: UserService,
-  ) {
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -126,7 +125,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let {address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock} = this.csvForm.value;
+    let { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
 
     if (startDate || endDate) {
       startDate = moment(startDate).startOf('day').toISOString();
@@ -134,10 +133,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     // convert to evmAddress if dataType = cosmos executed
     if (this.dataType === this.TabsAccountLink.ExecutedTxs) {
-      address = convertEvmAddressToBech32Address(
-        this.prefix,
-        address
-      );
+      address = convertEvmAddressToBech32Address(this.prefix, address);
     }
     let payload = {
       dataType: dataType,
@@ -235,7 +231,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   checkFormValid(): boolean {
     this.getAddress.setValue(this.getAddress?.value?.trim());
-    const {address, endDate, fromBlock, startDate, toBlock} = this.csvForm.value;
+    const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
 
     this.isValidBlock = true;
 
