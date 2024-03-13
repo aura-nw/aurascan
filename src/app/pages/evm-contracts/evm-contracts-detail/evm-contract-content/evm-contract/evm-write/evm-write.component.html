@@ -1,4 +1,4 @@
-<ng-container *ngIf="root; else noValues">
+<ng-container *ngIf="abi; else noValues">
   <div class="d-flex justify-content-between align-items-center">
     <div class="my-t mb-1 mb-lg-3 small-text">
       <button
@@ -27,52 +27,40 @@
   </div>
 
   <div class="box-content text--white mt-3">
-    <ng-container *ngFor="let msg of root; index as index">
-      <mat-expansion-panel hideToggle *ngIf="msg.fieldName" class="custom-expansion-panel outline">
+    <ng-container *ngFor="let msg of writeAbi; index as index">
+      <mat-expansion-panel hideToggle *ngIf="msg.name" class="custom-expansion-panel outline">
         <mat-expansion-panel-header class="content-contract txt-header">
-          <mat-panel-title class="item-content body-02 text--gray-1">
-            {{ index + 1 }}. {{ msg.fieldName }}
-          </mat-panel-title>
+          <mat-panel-title class="item-content body-02 text--gray-1"> {{ index + 1 }}. {{ msg.name }} </mat-panel-title>
         </mat-expansion-panel-header>
 
         <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
-          <ng-container *ngFor="let item of msg.fieldList">
-            <div [class.d-none]="item.fieldName === 'fund'" class="d-lg-block">
+          <ng-container *ngFor="let item of msg.inputs">
+            <div class="d-lg-block">
               <div class="d-flex align-items-center mb-2">
-                <span class="px-0 text--gray-1 body-02" [class.input-require]="item.isRequired">
-                  {{ item.fieldName }} ({{ item.type }})
-                </span>
-                <button
+                <span class="px-0 text--gray-1 body-02 input-require"> {{ item.name }} ({{ item.type }}) </span>
+                <!-- <button
                   class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
                   *ngIf="item.isAddButtonZero"
                   (click)="showAddZero(msg)">
                   <i class="ph ph-gear icon-add-zero"></i>
-                </button>
+                </button> -->
               </div>
               <textarea
                 *ngIf="!item.type?.includes('boolean')"
                 rows="3"
                 matInput
-                [(ngModel)]="item.value"
-                [class.input-require]="item.isRequired"
                 (keyup)="resetError(msg)"
-                [class.error-null]="item.isError"
-                placeholder="{{ item.fieldName }} ({{ item.type }})"
-                class="form-check-input {{ item.isRequired }} {{ item.fieldName }} col-12 mb-4"
-                style="height: auto"></textarea>
+                placeholder="{{ item.name }} ({{ item.type }})"
+                class="form-check-input input-require col-12 mb-4"
+                style="height: auto">
+              </textarea>
 
-              <mat-form-field
-                contract
-                appearance="fill"
-                *ngIf="item.type?.includes('boolean')"
-                [class.error-null]="item.isError"
-                class="col-12 mb-4">
+              <mat-form-field contract appearance="fill" *ngIf="item.type?.includes('boolean')" class="col-12 mb-4">
                 <mat-select
-                  [(ngModel)]="item.value"
                   panelClass="contractPanel"
                   (selectionChange)="resetError(msg)"
                   [disableOptionCentering]="true"
-                  placeholder="{{ item.fieldName }} ({{ item.type }})">
+                  placeholder="{{ item.name }} ({{ item.type }})">
                   <mat-option [value]="true">
                     <div class="d-flex option-contain">
                       <div class="option-lable">
@@ -96,15 +84,7 @@
             <button
               class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
               type="button"
-              [disabled]="msg.isLoading"
               (click)="handleExecute(msg)">
-              <img
-                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                alt=""
-                class="mr-2"
-                width="20"
-                height="20"
-                *ngIf="msg.isLoading" />
               <span>Write</span>
             </button>
           </div>
