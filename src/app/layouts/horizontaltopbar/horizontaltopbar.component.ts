@@ -11,6 +11,7 @@ import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -107,7 +108,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
       this.searchValue = addressNameTag;
     }
     // check is EVM address
-    if (this.searchValue.startsWith('0x')) {
+    if (this.searchValue.startsWith(EWalletType.EVM)) {
       if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
         // case EVM transaction
         this.getEvmTxnDetail(this.searchValue);
@@ -218,6 +219,22 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     }
 
     if (menuLink === '/tokens' && (this.router.url == '/tokens' || this.router.url.includes('/tokens/token/'))) {
+      return true;
+    }
+
+    if (
+      menuLink === '/transactions' &&
+      this.router.url.includes('/transaction') &&
+      !this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/evm-transactions' &&
+      this.router.url.includes('/transaction') &&
+      this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
+    ) {
       return true;
     }
 

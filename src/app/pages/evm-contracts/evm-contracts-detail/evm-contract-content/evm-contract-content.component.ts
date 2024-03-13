@@ -7,6 +7,7 @@ import { map, takeUntil } from 'rxjs/operators';
 import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CONTRACT_TAB, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -122,7 +123,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   }
 
   getTransaction(): void {
-    if (this.contractsAddress.startsWith('0x') && this.contractsAddress.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
+    if (this.contractsAddress.startsWith(EWalletType.EVM) && this.contractsAddress.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
       const payload = {
         limit: this.limit,
         address: this.contractsAddress.toLowerCase(),
