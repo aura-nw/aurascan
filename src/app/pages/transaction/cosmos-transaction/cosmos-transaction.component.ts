@@ -9,11 +9,11 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
-  selector: 'app-aura-transaction',
-  templateUrl: './aura-transaction.component.html',
-  styleUrls: ['./aura-transaction.component.scss'],
+  selector: 'app-cosmos-transaction',
+  templateUrl: './cosmos-transaction.component.html',
+  styleUrls: ['./cosmos-transaction.component.scss'],
 })
-export class AuraTransactionComponent implements OnChanges {
+export class CosmosTransactionComponent implements OnChanges {
   @Input() txHash = '';
 
   transaction = null;

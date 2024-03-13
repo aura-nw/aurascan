@@ -256,11 +256,11 @@
       </ng-container>
     </div>
     <ng-template #noValues>
-      <div class="card mt-14" *ngIf="!assetsLoading">
+      <div class="card mt-lg-14 mt-8" *ngIf="!assetsLoading">
         <app-table-no-data [textNull]="errTxt || 'No coins & tokens'"></app-table-no-data>
       </div>
     </ng-template>
-    <div *ngIf="assetsLoading" class="mt-14">
+    <div *ngIf="assetsLoading" class="mt-lg-14 mt-8">
       <app-loading-sprint></app-loading-sprint>
     </div>
   </div>

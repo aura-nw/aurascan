@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { map, Subject } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CONTRACT_TABLE_TEMPLATES, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
@@ -49,6 +50,7 @@ export class ContractsTransactionsComponent implements OnInit {
     limit: 100,
   };
   errTxt: string;
+  EWalletType = EWalletType;
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
@@ -113,7 +115,7 @@ export class ContractsTransactionsComponent implements OnInit {
     }
 
     this.payload['heightLT'] = nextKey;
-    if (this.contractAddress.startsWith('0x')) {
+    if (this.contractAddress.startsWith(EWalletType.EVM)) {
       this.payload['address'] = this.contractAddress.toLowerCase();
       this.templates = EVM_CONTRACT_TABLE_TEMPLATES;
       this.transactionService

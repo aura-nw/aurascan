@@ -1,5 +1,6 @@
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import { stripHexPrefix, toChecksumAddress } from 'crypto-addr-codec';
+import { EWalletType } from '../../constants/wallet.constant';
 
 /**
  * Creates a Bech32 encoder function with the given prefix.
@@ -73,7 +74,7 @@ export function convertBech32AddressToEvmAddress(prefix: string, bech32Address: 
  */
 export function convertEvmAddressToBech32Address(prefix: string, ethAddress: string): string {
   let result = ethAddress;
-  if (result.startsWith('0x')) {
+  if (result.startsWith(EWalletType.EVM)) {
     try {
       const data = makeChecksummedHexDecoder()(ethAddress);
       result = makeBech32Encoder(prefix)(data);

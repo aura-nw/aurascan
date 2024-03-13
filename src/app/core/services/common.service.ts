@@ -4,12 +4,12 @@ import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { DATEFORMAT, STORAGE_KEYS, TYPE_ADDRESS } from '../constants/common.constant';
+import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
 import local from '../utils/storage/local';
-import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({ providedIn: 'root' })
 export class CommonService {

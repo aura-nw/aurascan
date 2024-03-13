@@ -5,7 +5,7 @@
 <ng-container *ngIf="!loading">
   <ng-container *ngIf="transaction; else noValues">
     <div class="d-lg-flex justify-content-between align-items-center mb-4 mb-lg-6">
-      <h1 class="text--white mb-0">Transaction Details</h1>
+      <h1 class="text--white mb-0">COSMOS Transaction Details</h1>
       <div class="button-switch-stage button-fixed mt-4 mt-lg-0">
         <button class="button" [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
         <button class="button" [class.active]="isRawData" (click)="changeType(true)">JSON</button>
@@ -89,7 +89,7 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Fee</div>
             <div class="col-auto col-lg-10 text--gray-1">
-              {{ +transaction?.fee | mask: 'separator.6' }}
+              {{ transaction?.fee }}
               <span appLinkDenom>{{ denom }}</span>
             </div>
           </div>
