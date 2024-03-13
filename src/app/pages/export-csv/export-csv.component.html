@@ -1,5 +1,5 @@
 <h1 class="text--white fw-700">
-  Export Data <br class="d-lg-none" />
+  Export Data <br class="d-lg-none"/>
   (Download CSV file)
 </h1>
 <div class="text--gray-2 mb-6 d-flex">
@@ -41,6 +41,12 @@
               <!-- Group 1-->
               <div>
                 <h5 class="dropdown-menu__title">Account transaction</h5>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === TabsAccountLink.EVMExecutedTxs"
+                  (click)="changeTypeFilter(TabsAccountLink.EVMExecutedTxs)">
+                  <button type="button" class="button px-2">{{ TabsAccount.EVMExecutedTxs }}</button>
+                </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
                   [class.active]="dataType === TabsAccountLink.ExecutedTxs"
@@ -86,7 +92,7 @@
               placeholder="{{ prefix }}..."
               name="inputAddress"
               (input)="checkFormValid(); isError = false"
-              autocomplete="off" />
+              autocomplete="off"/>
           </div>
           <div *ngIf="getAddress?.value?.length > 0 && !isValidAddress" class="text--danger mt-2 caption fw-normal">
             Invalid aura address format
@@ -109,7 +115,7 @@
               id="date"
               class="radio-box radio-box--dark"
               [checked]="isFilterDate"
-              (change)="changeType(true)" />
+              (change)="changeType(true)"/>
             <label for="date" class="ml-2 pl-1 mb-0 text-justify">Date</label>
           </div>
           <div class="form-group d-flex align-items-center ml-8">
@@ -117,10 +123,10 @@
               type="radio"
               value="filterRange"
               id="block"
-              [disabled]="!(!dataType || dataType === this.TabsAccountLink.ExecutedTxs)"
+              [disabled]="!(!dataType || dataType === this.TabsAccountLink.ExecutedTxs || dataType === this.TabsAccountLink.EVMExecutedTxs)"
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
-              (change)="changeType()" />
+              (change)="changeType()"/>
             <label for="block" class="ml-2 pl-1 mb-0 text-justify">Block Height</label>
           </div>
         </div>
@@ -141,7 +147,7 @@
               [max]="maxDate"
               (ngModelChange)="setDateRange()"
               class="cursor-pointer pl-4"
-              placeholder="Start date" />
+              placeholder="Start date"/>
             <div class="mr-3 h6 mb-0 position-relative mt-1">
               <i class="ph-thin ph-calendar-blank h3 text--white"></i>
               <mat-datepicker #pickerStart></mat-datepicker>
@@ -159,7 +165,7 @@
               [max]="maxDateEnd"
               (ngModelChange)="setDateRange()"
               class="cursor-pointer pl-4"
-              placeholder="End date" />
+              placeholder="End date"/>
             <div class="mr-3 h6 mb-0 position-relative mt-1">
               <i class="ph-thin ph-calendar-blank h3 text--white"></i>
               <mat-datepicker #pickerEnd></mat-datepicker>
@@ -177,7 +183,7 @@
               (blur)="isError = false"
               mask="000000000000"
               (ngModelChange)="checkFormValid()"
-              autocomplete="off" />
+              autocomplete="off"/>
           </div>
         </div>
         <div class="filter-last-item col-6 pl-3">
@@ -188,7 +194,7 @@
               (blur)="isError = false"
               mask="000000000000"
               (ngModelChange)="checkFormValid()"
-              autocomplete="off" />
+              autocomplete="off"/>
           </div>
         </div>
       </ng-container>
@@ -203,7 +209,7 @@
     </div>
 
     <div id="box_recaptcha" class="mt-6"></div>
-    <br />
+    <br/>
     <div class="d-flex mb-6 justify-content-center justify-content-lg-end mt-3 mt-lg-0 button-group">
       <button class="button button--md button-pill button-outline" type="button" (click)="resetData()">
         <span>Reset</span>
@@ -218,7 +224,7 @@
           alt=""
           width="20"
           height="20"
-          *ngIf="isDownload" />
+          *ngIf="isDownload"/>
         <span class="text--white"> Download </span>
       </button>
     </div>
