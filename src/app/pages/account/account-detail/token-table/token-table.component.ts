@@ -191,7 +191,7 @@ export class TokenTableComponent implements OnChanges {
             if (e.error?.error?.statusCode) {
               this.errTxt = e.error?.error?.statusCode + ' ' + e.error?.error?.message;
             } else {
-              this.errTxt = e.error?.message;
+              this.errTxt = e.error?.message || e.message;
             }
           }
           this.assetsLoading = false;
