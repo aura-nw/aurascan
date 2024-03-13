@@ -1,37 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Schema, Validator } from 'jsonschema';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
+import { Component, Input } from '@angular/core';
 import _ from 'lodash';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { JsonAbi, READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 
 @Component({
   selector: 'app-evm-read',
   templateUrl: './evm-read.component.html',
   styleUrls: ['./evm-read.component.scss'],
 })
-export class EvmReadComponent implements OnInit {
-  @Input() contractDetailData: any;
+export class EvmReadComponent {
+  @Input() abi: JsonAbi[];
+
   isExpand = false;
   chainInfo = this.environmentService.chainInfo;
-  jsValidator = new Validator();
-  root: any[];
+
+  get readAbi() {
+    return this.abi?.filter((abi: JsonAbi) => READ_STATE_MUTABILITY.includes(abi.stateMutability)) || [];
+  }
 
   constructor(private environmentService: EnvironmentService) {}
-
-  ngOnInit(): void {
-    try {
-      const jsonReadContract = JSON.parse(this.contractDetailData?.query_msg_schema);
-
-      if (jsonReadContract) {
-        this.jsValidator.addSchema(jsonReadContract);
-
-        if (this.jsValidator.schemas) {
-          this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
-        }
-      }
-    } catch {}
-  }
 
   expandMenu(closeAll = false): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
@@ -52,6 +39,10 @@ export class EvmReadComponent implements OnInit {
     }
   }
 
+  handleQueryContract(msg) {
+    console.log('🐛 msg: ', msg);
+  }
+
   reloadData() {
     this.expandMenu(true);
     this.clearAllError(true);
@@ -59,100 +50,10 @@ export class EvmReadComponent implements OnInit {
   }
 
   clearAllError(all = false) {
-    this.root?.forEach((msg) => {
-      this.resetError(msg, all);
-      if (msg.fieldList && msg.fieldList.length && all) msg.dataResponse = '';
-    });
-  }
-
-  query(query, msg) {
-    msg.isLoading = true;
-    SigningCosmWasmClient.connect(this.chainInfo.rpc)
-      .then((client) => client.queryContractSmart(this.contractDetailData.address, query))
-      .then((config) => {
-        if (config) {
-          msg.dataResponse = config;
-        }
-        msg.isLoading = false;
-      })
-      .catch((err) => {
-        msg.dataResponse = 'No Data';
-        msg.isLoading = false;
-      });
-  }
-
-  handleQueryContract(query): void {
-    this.clearAllError();
-    if (query) {
-      const { fieldList, fieldName } = query;
-
-      const msgQuery = {
-        [fieldName]: {},
-      };
-
-      fieldList.forEach((item) => {
-        const isError = item.isRequired && !item.value;
-
-        if (!isError) {
-          item.value &&
-            _.assign(msgQuery[fieldName], {
-              [item.fieldName]: parseValue(item),
-            });
-          return;
-        }
-
-        _.assign(item, { isError });
-        msgQuery[fieldName] = null;
-      });
-
-      if (msgQuery[fieldName]) {
-        this.query(msgQuery, query);
-      }
-    }
-  }
-
-  getProperties(schema: Schema) {
-    const fieldName = _.first(Object.keys(schema.properties));
-
-    const { $ref: ref } = schema.properties[fieldName];
-
-    let props = ref ? getRef(this.jsValidator.schemas, ref) : schema.properties[fieldName];
-
-    const childProps = props?.properties;
-
-    let fieldList = [];
-
-    if (childProps) {
-      fieldList = Object.keys(childProps).map((e) => ({
-        fieldName: e,
-        isRequired: (props.required as string[])?.includes(e),
-        ...getType(this.jsValidator.schemas, childProps[e]),
-      }));
-    }
-
-    return {
-      resType: schema.type,
-      fieldName,
-      properties: props,
-      fieldList,
-    };
-  }
-
-  makeSchemaInput(schemas: Schema[]): any[] {
-    return schemas
-      .map((msg) => {
-        try {
-          const properties = this.getProperties(msg);
-          if (properties.fieldList && !properties.fieldList.length) {
-            this.handleQueryContract(properties);
-          }
-
-          return properties;
-        } catch (e) {
-          return null;
-        }
-      })
-      .filter((list) => list && list?.fieldName !== 'download_logo'); // ignore case download_logo - CW20
+    // this.root?.forEach((msg) => {
+    //   this.resetError(msg, all);
+    //   if (msg.fieldList && msg.fieldList.length && all) msg.dataResponse = '';
+    // });
   }
 
   resetError(msg, all = false) {
