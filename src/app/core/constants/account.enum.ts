@@ -47,7 +47,7 @@ export enum WalletAcount {
 
 export enum TabsAccount {
   ExecutedTxs = 'Cosmos Executed Txn',
-  EVMExecutedTxs = 'EVM Executed Txns',
+  EVMExecutedTxs = 'EVM Executed Txn',
   NativeTxs = 'Native + ibc Transfer',
   FtsTxs = 'Fungible Token Transfer',
   NftTxs = 'NFT Transfer',

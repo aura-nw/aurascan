@@ -11,8 +11,12 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
+import { isValidBench32Address } from 'src/app/core/utils/common/validation';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 
 declare var grecaptcha: any;
+
 @Component({
   selector: 'app-export-csv',
   templateUrl: './export-csv.component.html',
@@ -37,8 +41,10 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  evmPrefix = EWalletType;
 
   destroyed$ = new Subject<void>();
+
   constructor(
     private formBuilder: FormBuilder,
     private commonService: CommonService,
@@ -99,6 +105,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   mappingDataExport(dataType) {
     switch (dataType) {
+      case TabsAccountLink.EVMExecutedTxs:
+        return this.TabsAccount.EVMExecutedTxs;
       case TabsAccountLink.NativeTxs:
         return this.TabsAccount.NativeTxs;
       case TabsAccountLink.FtsTxs:
@@ -123,7 +131,10 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       startDate = moment(startDate).startOf('day').toISOString();
       endDate = moment(endDate).endOf('day').toISOString();
     }
-
+    // convert to evmAddress if dataType = cosmos executed
+    if (this.dataType === this.TabsAccountLink.ExecutedTxs) {
+      address = convertEvmAddressToBech32Address(this.prefix, address);
+    }
     let payload = {
       dataType: dataType,
       address: address,
@@ -224,7 +235,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
     this.isValidBlock = true;
 
-    if (this.commonService.isBech32Address(address)) {
+    if (this.commonService.isBech32Address(address) || address.startsWith(this.evmPrefix.EVM)) {
       this.isValidAddress = true;
     } else {
       this.isValidAddress = false;
