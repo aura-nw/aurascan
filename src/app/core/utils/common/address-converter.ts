@@ -1,5 +1,6 @@
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import { ETH } from '@evmos/address-converter';
+import { EWalletType } from '../../constants/wallet.constant';
 
 function makeBech32Encoder(prefix: string) {
   return (data: Buffer) => toBech32(prefix, data);
@@ -22,7 +23,7 @@ export function convertBech32AddressToEvmAddress(prefix: string, bech32Address: 
 
 export function convertEvmAddressToBech32Address(prefix: string, ethAddress: string): string {
   let result = ethAddress;
-  if (result.startsWith('0x')) {
+  if (result.startsWith(EWalletType.EVM)) {
     const data = ETH.decoder(ethAddress);
     result = makeBech32Encoder(prefix)(data);
   }

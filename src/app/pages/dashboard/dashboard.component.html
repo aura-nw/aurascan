@@ -156,7 +156,11 @@
               </div>
             </div>
             <div class="h4 mb-0 fw-semibold text--white">
-              <span>{{ global?.dataHeader?.community_pool_format }}</span>
+              <span
+                [appTooltip]="{ priceAmount: global?.dataHeader?.community_pool }"
+                [appBigNumber]="global?.dataHeader?.community_pool"
+                [decimal]="0">
+              </span>
             </div>
           </div>
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
