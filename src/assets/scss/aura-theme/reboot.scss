@@ -104,3 +104,8 @@ app-paginator {
 .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
   background: unset !important;
 }
+
+.card-explain mat-expansion-panel .mat-expansion-panel-body {
+  padding: 0;
+}
+
