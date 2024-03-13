@@ -1,13 +1,13 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
-import {from} from 'rxjs';
-import {delay, mergeMap} from 'rxjs/operators';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {NotificationsService} from 'src/app/core/services/notifications.service';
-import {WalletService} from 'src/app/core/services/wallet.service';
-import {MENU_MOB, MenuName} from 'src/app/layouts/horizontaltopbar/menu';
-import {MenuItem} from 'src/app/layouts/horizontaltopbar/menu.model';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { from } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
+import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
 
 @Component({
   selector: 'app-menu-bottom-bar',
@@ -28,8 +28,7 @@ export class MenuBottomBarComponent implements OnInit {
     private walletService: WalletService,
     private notificationsService: NotificationsService,
     private environmentService: EnvironmentService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.notificationsService.hiddenFooterSubject.subscribe((res) => {
@@ -154,11 +153,19 @@ export class MenuBottomBarComponent implements OnInit {
       return true;
     }
 
-    if (menuLink === '/transactions' && this.router.url.includes('/transaction') && !this.router.url.split('/')[2]?.startsWith('0x')) {
+    if (
+      menuLink === '/transactions' &&
+      this.router.url.includes('/transaction') &&
+      !this.router.url.split('/')[2]?.startsWith('0x')
+    ) {
       return true;
     }
 
-    if (menuLink === '/evm-transactions' && this.router.url.includes('/transaction') && this.router.url.split('/')[2]?.startsWith('0x')) {
+    if (
+      menuLink === '/evm-transactions' &&
+      this.router.url.includes('/transaction') &&
+      this.router.url.split('/')[2]?.startsWith('0x')
+    ) {
       return true;
     }
 
