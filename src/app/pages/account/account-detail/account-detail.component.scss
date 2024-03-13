@@ -35,6 +35,7 @@ section.account-detail {
       padding: 5px var(--spacer-5) 5px var(--spacer-2);
       color: var(--aura-gray-light);
       position: relative;
+
       &:after {
         content: '';
         position: absolute;
@@ -51,7 +52,11 @@ section.account-detail {
   }
 
   .box-summary-info {
-    height: 540px;
+    @media (max-width: 992px) {
+      min-height: 585px;
+    }
+
+    min-height: 540px;
   }
 }
 
