@@ -32,6 +32,7 @@ export class EvmTransactionComponent implements OnChanges {
     memo: string;
     type: string;
     inputData: { [key: string]: string };
+    evm_data: string;
     eventLog: {
       id: number;
       contractName?: string;
@@ -115,13 +116,6 @@ export class EvmTransactionComponent implements OnChanges {
 
   parseEvmTx(tx: unknown): typeof this.transaction {
     const txMessage: unknown[] = _.get(tx, 'transaction_messages[0]');
-
-    const inputData = toHexData(_.get(tx, 'evm_transaction.data'))
-      ? {
-          hexSignature: toHexData(_.get(tx, 'evm_transaction.data')),
-        }
-      : null;
-
     let evm_events = _.get(tx, 'evm_transaction.evm_events');
     if (evm_events?.length > 0) {
       evm_events.forEach((element) => {
@@ -149,8 +143,9 @@ export class EvmTransactionComponent implements OnChanges {
       from: _.get(txMessage, 'sender'),
       to: _.get(txMessage, 'content.data.to'),
       type: _.get(txMessage, 'content.@type'),
-      inputData,
+      inputData: _.get(tx, 'evm_transaction.data'),
       eventLog: evm_events,
+      evm_data: _.get(tx, 'evm_transaction.data')
     };
   }
 }
