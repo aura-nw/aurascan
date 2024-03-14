@@ -8,10 +8,10 @@ import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { ContractRegisterType } from '../constants/contract.enum';
+import { EWalletType } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { NameTagService } from './name-tag.service';
-import { EWalletType } from '../constants/wallet.constant';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -154,73 +154,24 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListEvmContract({
-    creator,
-    address,
-    name,
-    keyword,
-    limit,
-    offset,
-    // contractType,
-  }: {
-    creator?: string;
-    address?: string;
-    name?: string;
-    keyword?: string;
-    limit?: number;
-    offset?: number;
-    // contractType?: string[];
-  }) {
-    let updateQuery = '';
-    // const isIncludeCW4973 = contractType?.includes(ContractRegisterType.CW4973);
-
+  getListEvmContract({ keyword, limit, offset }: { name?: string; keyword?: string; limit?: number; offset?: number }) {
     const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
     if (addressNameTag?.length > 0) {
       keyword = addressNameTag;
     }
 
-    let filterName = '';
+    let address;
+    let creator;
     if (this.isValidContract(keyword)) {
       address = keyword;
     } else if (this.isValidAddress(keyword)) {
       creator = keyword;
     } else if (keyword.startsWith(EWalletType.EVM) && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
+      // check 0x
       address = keyword;
     } else if (keyword?.length > 0) {
-      filterName = `_ilike: "%${keyword}%"`;
-    } else {
-      updateQuery = '';
+      return of(null);
     }
-
-    // const FILTER_ALL = '';
-    // let typeQuery = 'code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}';
-    // if (isIncludeCW4973) {
-    //   if (contractType?.length >= 2) {
-    //     filterName = filterName?.length > 0 ? filterName : '_eq: "crates.io:cw4973"';
-    //     typeQuery = contractType?.includes(FILTER_ALL)
-    //       ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {${filterName}}}],`
-    //       : `_or: [{code: {type: {_in: $type}}}, {name: {${filterName}}}],`;
-    //   } else {
-    //     filterName = `, ${filterName}`;
-    //     typeQuery = contractType?.includes(FILTER_ALL)
-    //       ? `_or: [{code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}}, {name: {_eq: "crates.io:cw4973"}}],`
-    //       : (() => {
-    //           // CW4973 is CW721 Type
-    //           contractType = [ContractRegisterType.CW721];
-    //           return `_and: [{code: {type: {_in: $type}}}, {name: {_eq: "crates.io:cw4973"}}],`;
-    //         })();
-    //   }
-    // } else if (
-    //   contractType?.includes(ContractRegisterType.CW721) ||
-    //   contractType?.includes(ContractRegisterType.CW20)
-    // ) {
-    //   filterName = `, ${filterName}`;
-    //   typeQuery = contractType?.includes(FILTER_ALL)
-    //     ? `code: {_or: [{type: {_in: $type}}, {_and: {type: {_is_null: true}}}]}, name: {_neq: "crates.io:cw4973" ${filterName}}`
-    //     : `code: {type: {_in: $type}}, name: {_neq: "crates.io:cw4973" ${filterName}}`;
-    // } else if (filterName?.length > 0) {
-    //   typeQuery += `name: {${filterName}},`;
-    // }
 
     const operationsDoc = `
     query EvmSmartContractList($limit: Int = 100, $offset: Int = 0, $address: String = null, $creator: String =null) {
@@ -234,6 +185,9 @@ export class ContractService extends CommonService {
           id
           type
           updated_at
+          evm_contract_verifications(limit: 1, where: {status: {_eq:"SUCCESS"}}){
+            status
+          }
         }
         evm_smart_contract_aggregate(where: {address: {_eq: $address}, creator: {_eq: $creator}}) {
           aggregate {
@@ -249,7 +203,6 @@ export class ContractService extends CommonService {
         variables: {
           limit: limit,
           offset: offset,
-          // type: contractType,
           creator: creator,
           address: address,
         },
@@ -590,6 +543,33 @@ export class ContractService extends CommonService {
         query: query,
         variables: {},
         operationName: 'queryContractCodeDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  verifyEvmContract(formData: FormData) {
+    return this.http.post(`${this.environmentService.verifyContractUrl}/evm/file`, formData);
+  }
+
+  checkVerifyEvmContractStatus(address: string, id: number) {
+    const query = `query VerifyEvmContractStatus($address: String = "", $id: Int = 10) {
+      ${this.envDB} {
+        evm_contract_verification(where: {contract_address: {_eq: $address}, id: {_eq: $id}}) {
+          status         
+          contract_address
+        
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {
+          address,
+          id,
+        },
+        operationName: 'VerifyEvmContractStatus',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

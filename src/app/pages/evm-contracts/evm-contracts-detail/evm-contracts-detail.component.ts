@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { map, of, Subject, Subscription, switchMap, takeUntil } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { ContractService } from 'src/app/core/services/contract.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CommonService } from 'src/app/core/services/common.service';
 import * as _ from 'lodash';
+import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { UserService } from 'src/app/core/services/user.service';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-evm-contracts-detail',
@@ -32,6 +35,8 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
     private contractService: ContractService,
     private modalService: NgbModal,
     public commonService: CommonService,
+    private router: Router,
+    private userService: UserService,
   ) {}
 
   ngOnDestroy(): void {
@@ -92,9 +97,29 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
     this.modalReference.close();
   }
 
-  checkWatchList() {}
+  checkWatchList() {
+    // get watch list form local storage
+    const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
+    if (lstWatchList?.find((k) => k.address === this.contractAddress)) {
+      this.isWatchList = true;
+    }
+  }
 
-  handleWatchList() {}
+  handleWatchList() {
+    if (this.isWatchList) {
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+    } else {
+      this.editWatchList();
+    }
+  }
 
-  editWatchList() {}
+  editWatchList() {
+    const userEmail = this.userService.getCurrentUser()?.email;
+    if (userEmail) {
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.contractAddress);
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
 }

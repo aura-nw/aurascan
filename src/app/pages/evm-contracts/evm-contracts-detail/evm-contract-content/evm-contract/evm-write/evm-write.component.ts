@@ -1,18 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { WalletAccount } from '@cosmos-kit/core';
-import { Schema, Validator } from 'jsonschema';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { TranslateService } from '@ngx-translate/core';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
-import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
-import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
-import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
-import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
+import { WalletAccount } from '@cosmos-kit/core';
+import { TranslateService } from '@ngx-translate/core';
 import _ from 'lodash';
+import { JsonAbi, WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
 
 @Component({
   selector: 'app-evm-write',
@@ -20,14 +17,19 @@ import _ from 'lodash';
   styleUrls: ['./evm-write.component.scss'],
 })
 export class EvmWriteComponent implements OnInit {
-  @Input() contractDetailData: any;
+  @Input() abi: JsonAbi[];
 
   isExpand = false;
   userAddress = '';
   walletAccount: WalletAccount;
 
-  jsValidator = new Validator();
-  root: any[];
+  get writeAbi() {
+    return (
+      this.abi?.filter(
+        (abi: JsonAbi) => WRITE_STATE_MUTABILITY.includes(abi.stateMutability) && abi.type == 'function',
+      ) || []
+    );
+  }
 
   constructor(
     private walletService: WalletService,
@@ -45,15 +47,7 @@ export class EvmWriteComponent implements OnInit {
       }
     });
 
-    try {
-      const jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
-
-      this.jsValidator.addSchema(jsonWriteContract);
-
-      if (this.jsValidator.schemas) {
-        this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
-      }
-    } catch {}
+    console.log(this.writeAbi);
   }
 
   expandMenu(closeAll = false): void {
@@ -82,120 +76,19 @@ export class EvmWriteComponent implements OnInit {
   }
 
   clearAllError(all = false) {
-    this.root?.forEach((msg) => {
-      this.resetError(msg, all);
-      if (msg.fieldList && msg.fieldList.length && all) msg.dataResponse = '';
-    });
+    // this.root?.forEach((msg) => {
+    //   this.resetError(msg, all);
+    //   if (msg.fieldList && msg.fieldList.length && all) msg.dataResponse = '';
+    // });
   }
 
   connectWallet(): void {
     this.walletAccount = this.walletService.getAccount();
   }
 
-  getProperties(schema: Schema) {
-    const fieldName = _.first(Object.keys(schema.properties));
+  handleExecute(msg) {}
 
-    const { $ref: ref } = schema.properties[fieldName];
-
-    let props = ref ? getRef(this.jsValidator.schemas, ref) : schema.properties[fieldName];
-
-    const childProps = props?.properties;
-
-    let fieldList = [];
-
-    if (childProps) {
-      fieldList = Object.keys(childProps).map((e) => ({
-        isAddButtonZero: e === 'amount', // button add zero for amount field
-        fieldName: e,
-        isRequired: (props.required as string[])?.includes(e),
-        ...getType(this.jsValidator.schemas, childProps[e]),
-      }));
-
-      // add fund for all item write contract
-      fieldList.push({ fieldName: 'fund', isRequired: false, type: 'json' });
-    }
-
-    return {
-      fieldName,
-      properties: props,
-      fieldList,
-    };
-  }
-
-  makeSchemaInput(schemas: Schema[]): any[] {
-    const result = schemas
-      .map((msg) => {
-        try {
-          const properties = this.getProperties(msg);
-
-          return properties;
-        } catch (e) {
-          return null;
-        }
-      })
-      .filter((list) => list && list?.fieldName !== 'upload_logo'); // ignore case upload_logo - CW20
-
-    return result;
-  }
-
-  handleExecute(msg) {
-    this.connectWallet();
-    this.clearAllError();
-    if (this.walletAccount && msg) {
-      const { fieldList, fieldName } = msg;
-
-      const msgExecute = {
-        [fieldName]: {},
-      };
-
-      fieldList.forEach((item) => {
-        const isError = item.isRequired && !item.value;
-
-        if (!isError) {
-          item.value &&
-            _.assign(msgExecute[fieldName], {
-              [item.fieldName]: parseValue(item),
-            });
-          return;
-        }
-
-        _.assign(item, { isError });
-        msgExecute[fieldName] = null;
-      });
-
-      if (msgExecute[fieldName]) {
-        msg.isLoading = true;
-        this.execute(msgExecute, msg);
-      }
-    }
-  }
-
-  execute(data, msg) {
-    let msgError = MESSAGES_CODE_CONTRACT[5].Message;
-    msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
-
-    this.walletService
-      .executeContract(this.userAddress, this.contractDetailData.address, data)
-      .then((result) => {
-        msg.isLoading = false;
-
-        if (result?.transactionHash) {
-          this.toastr.loading(result.transactionHash);
-          setTimeout(() => {
-            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-          }, 4000);
-        }
-      })
-      .catch((error) => {
-        msg.isLoading = false;
-
-        const _error = parseError(error);
-        if (_error?.code !== undefined) {
-          msgError = error.toString().includes('out of gas') ? 'out of gas' : msgError;
-          this.toastr.error(error.toString().substring(0, 200) + '...' || msgError);
-        }
-      });
-  }
+  execute(data, msg) {}
 
   resetError(msg, all = false) {
     if (msg) {

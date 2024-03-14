@@ -54,6 +54,7 @@ export interface IConfiguration {
     socket: string;
     ipfsDomain: string;
     googleClientId: string;
+    verifyContract: string;
     coingecko: {
       url: string;
       ids: string[];
@@ -162,6 +163,10 @@ export class EnvironmentService {
 
   get walletConnect() {
     return _.get(this.configValue, 'api.walletConnect');
+  }
+
+  get verifyContractUrl() {
+    return _.get(this.configValue, 'api.verifyContract');
   }
 
   setLatestBlockHeight(value: string | number) {

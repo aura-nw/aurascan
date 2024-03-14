@@ -33,7 +33,7 @@
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Contract name, contract address/name tag, creator address/name tag"
+        placeholder="Search for contract address/name tag, creator address/name tag"
         [(ngModel)]="textSearch"
         [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
         (keyup)="onKeyUp()"
@@ -62,7 +62,7 @@
               <input
                 type="text"
                 class="form-control pl-0"
-                placeholder="Search for Contract name, contract address/name tag, creator address/name tag"
+                placeholder="Search for contract address/name tag, creator address/name tag"
                 [(ngModel)]="textSearch"
                 [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
                 (keyup)="onKeyUp()"
@@ -97,20 +97,22 @@
                 </th>
                 <td mat-cell *matCellDef="let data">
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                    <app-name-tag
-                      *ngSwitchCase="'address'"
-                      [value]="data[template.matColumnDef]"
-                      [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
-                      [maxCharacter]="12"
-                      [tooltipPosition]="'tooltip--right'"></app-name-tag>
-                    <div *ngSwitchCase="'contract_verification'">
-                      <div class="d-flex align-items-center ml-1" *ngIf="data[template.matColumnDef]">
-                        <span>{{ data['verified_at'] | customDateTime: 'DateOnly' }}</span>
-                        <div class="divider divider-vertical divider-lighter mx-2"></div>
-                        <span>{{ data['verified_at'] | customDateTime: 'TimeOnly' }}</span>
+                    <div *ngSwitchCase="'address'" class="d-flex">
+                      <div class="mr-2" [style.width]="'16px'">
+                        <img
+                          [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
+                          alt="contract_verification"
+                          width="16px"
+                          height="16px"
+                          *ngIf="data['contract_verification'] === ContractVerifyType.Verified" />
                       </div>
-                      <div *ngIf="!data[template.matColumnDef]">-</div>
+                      <app-name-tag
+                        [value]="data[template.matColumnDef]"
+                        [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
+                        [maxCharacter]="12"
+                        [tooltipPosition]="'tooltip--right'"></app-name-tag>
                     </div>
+
                     <div class="text-nowrap" *ngSwitchCase="'name'" [appTooltip]="data[template.matColumnDef]">
                       {{ (data[template.matColumnDef] | ellipsis: 28) || '-' }}
                     </div>
@@ -120,12 +122,15 @@
                       </a>
                       <span *ngIf="!data['token_tracker']">-</span>
                     </div>
-                    <app-name-tag
-                      *ngSwitchCase="'creator'"
-                      [value]="data[template.matColumnDef]"
-                      [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
-                      [maxCharacter]="12"
-                      [tooltipPosition]="'tooltip--right'"></app-name-tag>
+                    <ng-container *ngSwitchCase="'creator'">
+                      <app-name-tag
+                        *ngIf="data[template.matColumnDef]"
+                        [value]="data[template.matColumnDef]"
+                        [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
+                        [maxCharacter]="12"
+                        [tooltipPosition]="'tooltip--right'"></app-name-tag>
+                      <span *ngIf="!data[template.matColumnDef]">-</span>
+                    </ng-container>
                     <ng-container *ngSwitchDefault>
                       {{
                         (template.isShort

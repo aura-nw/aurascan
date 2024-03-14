@@ -62,7 +62,9 @@
                   {{ totalValue.eq(0) ? '$0' : '< $0.01' }}
                 </span>
                 <span
-                  [appTooltip]="totalValue.toFixed() | mask: 'separator.6'"
+                  [appTooltip]="
+                    totalValue.gte(0.01) && totalValue.lt(1000000) ? null : (totalValue.toFixed() | mask: 'separator.6')
+                  "
                   [class.cursor-text]="totalValue.gte(0.01) && totalValue.lt(1000000)"
                   *ngIf="!isNoData && totalValue.gte(0.01)">
                   $<span [decimal]="0" [appBigNumber]="totalValue.toFixed() || 0"></span>
@@ -153,7 +155,7 @@
     [currentAccountDetail]="currentAccountDetail"></app-account-stake>
 
   <!-- Transaction List-->
-  <app-account-transaction [address]="accountAddress"></app-account-transaction>
+  <app-account-transaction [address]="currentUrlAddress"></app-account-transaction>
 </section>
 
 <ng-template #reloadTemplate>

@@ -1,44 +1,46 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
-import { ActivatedRoute, Router } from '@angular/router';
-import { WSService } from 'src/app/core/services/ws.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import local from 'src/app/core/utils/storage/local';
-import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
+import { interval, Subject, switchMap, takeUntil } from 'rxjs';
+import { EFileType } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
 @Component({
   selector: 'app-evm-contracts-verify',
   templateUrl: './evm-contracts-verify.component.html',
   styleUrls: ['./evm-contracts-verify.component.scss'],
 })
-export class EvmContractsVerifyComponent implements OnInit {
+export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
+  EFileType = EFileType;
+
   contractAddress = '';
-  currentStep: 'verify' | 'compiler' = 'verify';
-  address = '';
-  isCompilerComplete = false;
-  loading = false;
-  isVerifyFail = false;
-  isVerifySuccess = false;
-  formValid = false;
-
   contractSourceCode: File;
+  inputFileValue = null;
 
-  @ViewChild('type') typeSelect: any;
-  @ViewChild('version') versionSelect: any;
-  @ViewChild('license') licenseSelect: any;
+  loading = false;
 
-  versionList = CONTRACT_VERSIONS;
+  interupt$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private wSService: WSService,
+    private env: EnvironmentService,
+    private contractService: ContractService,
+    private toatr: NgxToastrService,
   ) {
-    this.address = this.route.snapshot.paramMap.get('contractAddress');
+    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
 
-    if (this.address.trim().length === 0) {
+    if (this.contractAddress.trim().length === 0) {
       this.router.navigate(['evm-contracts']);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.interupt$.next();
+    this.interupt$.complete();
   }
 
   contractForm: UntypedFormGroup;
@@ -49,65 +51,91 @@ export class EvmContractsVerifyComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractForm = new UntypedFormGroup({
-      address: new UntypedFormControl({ value: this.address, disabled: true }, { validators: [Validators.required] }),
-      compiler_type: new UntypedFormControl('', { validators: [Validators.required] }),
-      compiler_version: new UntypedFormControl('', { validators: [Validators.required] }),
-      license: new UntypedFormControl('', { validators: [Validators.required] }),
+      address: new UntypedFormControl(
+        { value: this.contractAddress, disabled: true },
+        { validators: [Validators.required] },
+      ),
     });
-    // this.checkStatusVerify();
   }
 
-  onSubmit() {}
-
-  handleReset() {
-    this.contractForm.reset({ contract_address: this.contractAddress });
-    this.contractForm.controls['address'].setValue(this.address);
+  onSubmit() {
+    this.verifyEvmContract();
   }
 
-  startOver(): void {
-    this.currentStep = 'verify';
-    this.isCompilerComplete = false;
-    this.isVerifyFail = false;
+  checkStatusVerify() {
+    this.contractService;
   }
 
-  // startWS(): void {
-  //   this.wSService.subscribeVerifyContract(
-  //     Number(this.code_id),
-  //     () => {
-  //     },
-  //     () => {
-  //     },
-  //   );
-  // }
+  onFileDropped(files: File[]) {
+    const file: File = files[0];
 
-  checkStatusVerify() {}
+    const SUPPORTED_FILE_TYPE = [EFileType.Zip, EFileType.Json];
 
-  @HostListener('window:scroll', ['$event']) // for window scroll events
-  onScroll(event) {
-    this.versionSelect.close();
-    this.typeSelect.close();
-    this.licenseSelect.close();
-  }
+    const MAX_FILE_SIZE = 1024 * 1000;
 
-  redirectToPreviousPage() {
-    const preUrl = sessionStorage.getItem('codeIdPrePage');
-    local.setItem(STORAGE_KEYS.IS_VERIFY_TAB, 'true');
-    if (preUrl) {
-      window.location.href = preUrl;
-    } else {
-      this.router.navigate(['contracts']);
+    if (SUPPORTED_FILE_TYPE.includes(file?.type as EFileType) && file?.size <= MAX_FILE_SIZE) {
+      this.contractSourceCode = file;
+      this.inputFileValue = null;
     }
   }
 
-  checkFormValid(): boolean {
-    this.formValid = this.contractForm.status === 'INVALID';
-    return this.formValid;
+  verifyEvmContract() {
+    if (!this.contractSourceCode) {
+      return;
+    }
+
+    this.loading = true;
+
+    const formdata: FormData = new FormData();
+
+    formdata.append('file', this.contractSourceCode, this.contractSourceCode.name);
+    formdata.append('contract_address', this.contractAddress.toLowerCase());
+    formdata.append('chainid', this.env.chainId);
+
+    this.contractService.verifyEvmContract(formdata).subscribe({
+      next: (res) => {
+        this.checkVerifyEvmContractStatus(res?.['id']);
+      },
+      error: (e) => {
+        this.loading = false;
+      },
+    });
   }
 
-  onFileDropped(files) {
-    console.log('🐛 files: ', files);
-    if (files[0]) {
-      this.contractSourceCode = files[0];
-    }
+  checkVerifyEvmContractStatus(id: number) {
+    this.interupt$ = new Subject();
+    interval(5000)
+      .pipe(
+        switchMap(() => {
+          return this.contractService.checkVerifyEvmContractStatus(this.contractAddress, id);
+        }),
+        takeUntil(this.interupt$),
+      )
+      .subscribe({
+        next: (result) => {
+          console.log(result);
+          if (result) {
+            const status = _.get(result, 'evm_contract_verification[0].status');
+
+            if (status != 'PENDING') {
+              this.interupt$.next();
+
+              if (status == 'SUCCESS') {
+                this.router.navigate(['evm-contracts', this.contractAddress]);
+              } else {
+                this.toatr.error('Verify contract fail');
+              }
+            }
+          }
+        },
+        error: () => {
+          this.toatr.error('Verify contract fail');
+          this.interupt$.next();
+        },
+        complete: () => {
+          this.loading = false;
+          this.interupt$.complete();
+        },
+      });
   }
 }

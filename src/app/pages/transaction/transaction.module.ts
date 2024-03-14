@@ -16,7 +16,7 @@ import { MaterialModule } from '../../material.module';
 import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../shared/shared.module';
-import { AuraTransactionComponent } from './aura-transaction/aura-transaction.component';
+import { CosmosTransactionComponent } from './cosmos-transaction/cosmos-transaction.component';
 import { EvmMessageComponent } from './evm-transaction/evm-message/evm-message.component';
 import { EvmTransactionEventLogComponent } from './evm-transaction/evm-transaction-event-log/evm-transaction-event-log.component';
 import { EvmTransactionComponent } from './evm-transaction/evm-transaction.component';
@@ -32,7 +32,7 @@ import { TransactionComponent } from './transaction.component';
     TransactionMessagesComponent,
     MessagesItemComponent,
     TokenTransferComponent,
-    AuraTransactionComponent,
+    CosmosTransactionComponent,
     EvmTransactionComponent,
     EvmMessageComponent,
     EvmTransactionEventLogComponent,

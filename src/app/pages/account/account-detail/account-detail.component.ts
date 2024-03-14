@@ -15,6 +15,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import {
   convertBech32AddressToEvmAddress,
   convertEvmAddressToBech32Address,
+  transferAddress,
 } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
@@ -44,6 +45,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;
 
+  currentUrlAddress: string;
   accountAddress: string;
   currentAccountDetail: any;
   chartCustomOptions = chartCustomOptions;
@@ -109,19 +111,13 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
-        if (this.commonService.isValidAddress(params?.address)) {
-          this.accountAddress = params?.address;
-          this.accountEvmAddress = convertBech32AddressToEvmAddress(
-            this.chainInfo.bech32Config.bech32PrefixAccAddr,
-            params?.address,
-          );
-        } else {
-          this.accountEvmAddress = params?.address;
-          this.accountAddress = convertEvmAddressToBech32Address(
-            this.chainInfo.bech32Config.bech32PrefixAccAddr,
-            params?.address,
-          );
-        }
+        const { accountAddress, accountEvmAddress } = transferAddress(
+          this.chainInfo.bech32Config.bech32PrefixAccAddr,
+          params?.address,
+        );
+        this.currentUrlAddress = params?.address;
+        this.accountAddress = accountAddress;
+        this.accountEvmAddress = accountEvmAddress;     
 
         this.isContractAddress = this.commonService.isValidContract(this.accountAddress);
 

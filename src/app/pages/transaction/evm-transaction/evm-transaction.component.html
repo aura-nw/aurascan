@@ -93,12 +93,16 @@
 
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Amount</div>
-            <div class="col-auto col-lg-10 text--gray-1">{{ transaction?.amount }} {{ denom }}</div>
+            <div class="col-auto col-lg-10 text--gray-1">
+              {{ transaction?.amount }} <a appLinkDenom>{{ denom }}</a>
+            </div>
           </div>
 
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Transaction Fee</div>
-            <div class="col-auto col-lg-10 text--gray-1">{{ transaction?.fee }} {{ denom }}</div>
+            <div class="col-auto col-lg-10 text--gray-1">
+              {{ transaction?.fee }} <a appLinkDenom>{{ denom }}</a>
+            </div>
           </div>
 
           <div class="row body justify-content-between justify-content-lg-start">
