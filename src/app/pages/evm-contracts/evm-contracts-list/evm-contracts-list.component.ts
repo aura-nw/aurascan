@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { TranslateService } from '@ngx-translate/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {TranslateService} from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { ContractVerifyType, EVMContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { ContractService } from 'src/app/core/services/contract.service';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
+import {ContractVerifyType, EVMContractRegisterType} from 'src/app/core/constants/contract.enum';
+import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
+import {TableTemplate} from 'src/app/core/models/common.model';
+import {ContractService} from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-evm-contracts-list',
@@ -46,7 +46,8 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
   constructor(
     public translate: TranslateService,
     private contractService: ContractService,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -76,7 +77,6 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
       keyword: this.textSearch,
       // contractType: this.filterButtons?.length > 0 && this.filterButtons?.length < 4 ? this.filterButtons : null,
     };
-    console.log(payload)
     this.contractService.getListEvmContract(payload).subscribe({
       next: (res) => {
         if (res?.evm_smart_contract?.length) {

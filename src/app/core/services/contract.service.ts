@@ -168,7 +168,6 @@ export class ContractService extends CommonService {
     limit?: number;
     offset?: number;
   }) {
-    let updateQuery = '';
     const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
     if (addressNameTag?.length > 0) {
       keyword = addressNameTag;
@@ -182,9 +181,7 @@ export class ContractService extends CommonService {
     } else if (keyword.startsWith(EWalletType.EVM) && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
       address = keyword;
     } else if (keyword?.length > 0) {
-      filterName = `_ilike: "%${keyword}%"`;
-    } else {
-      updateQuery = '';
+      address = keyword;
     }
 
     const operationsDoc = `
