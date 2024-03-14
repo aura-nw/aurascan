@@ -11,6 +11,7 @@ import { CombineTxsMsgPipe, EllipsisPipe } from './string.pipe';
 import { NameTagTooltipPipe } from './tooltip.pipe';
 import { IsContractPipe } from './address.pipe';
 import { ObjectKeysPipe } from './object-keys.pipe';
+import { CapacityPipe } from './capacity.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -36,6 +37,7 @@ import { ObjectKeysPipe } from './object-keys.pipe';
     DecodeDataPipe,
     IsContractPipe,
     ObjectKeysPipe,
+    CapacityPipe,
   ],
   exports: [
     JsonPipe,
@@ -59,6 +61,7 @@ import { ObjectKeysPipe } from './object-keys.pipe';
     DecodeDataPipe,
     IsContractPipe,
     ObjectKeysPipe,
+    CapacityPipe,
   ],
   providers: [],
 })

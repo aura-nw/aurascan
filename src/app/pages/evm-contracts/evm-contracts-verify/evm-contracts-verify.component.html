@@ -53,11 +53,16 @@
 
             <div class="drop-content flex-row align-items-start" *ngIf="contractSourceCode">
               <div class="icon-wrapper">
-                <img src="../../../../assets/icons/icons-svg/basic/FileZip.svg" width="24px" height="24px" class="" />
+                <img
+                  src="{{
+                    contractSourceCode.type == EFileType.Zip
+                      ? '../../../../assets/icons/icons-svg/basic/FileZip.svg'
+                      : '../../../../assets/icons/icons-svg/basic/FileJSON.svg'
+                  }}" />
               </div>
               <div class="body-02 text-white">
                 {{ contractSourceCode.name }}
-                <div class="body-04 text--gray-6">{{ contractSourceCode.size }}</div>
+                <div class="body-04 text--gray-6">{{ contractSourceCode.size | appCapacity }}</div>
               </div>
             </div>
           </div>

@@ -26,7 +26,6 @@ import { EvmContractsDetailComponent } from './evm-contracts-detail/evm-contract
 import { EvmOverviewComponent } from './evm-contracts-detail/evm-overview/evm-overview.component';
 import { EvmContractsListComponent } from './evm-contracts-list/evm-contracts-list.component';
 import { EvmContractsRoutingModule } from './evm-contracts-routing.module';
-import { EvmContractVerifyStepsComponent } from './evm-contracts-verify/evm-contract-verify-steps/evm-contract-verify-steps.component';
 import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contracts-verify.component';
 
 @NgModule({
@@ -41,7 +40,6 @@ import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contract
     EvmWriteComponent,
     EvmContractComponent,
     EvmContractsVerifyComponent,
-    EvmContractVerifyStepsComponent,
   ],
   imports: [
     CommonModule,
@@ -65,6 +63,5 @@ import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contract
     NgbNavModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
-  exports: [EvmContractVerifyStepsComponent],
 })
 export class EvmContractsModule {}
