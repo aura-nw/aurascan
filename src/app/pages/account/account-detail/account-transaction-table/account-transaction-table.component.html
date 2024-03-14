@@ -534,17 +534,19 @@
                       template.matColumnDef === 'from' || template.matColumnDef === 'to' ? template.matColumnDef : ''
                     ">
                     <app-name-tag
-                      [value]="data[template.matColumnDef] || currentAddress"
+                      *ngIf="data[template.matColumnDef]"
+                      [value]="data[template.matColumnDef]"
                       [linkRouter]="[
-                        (data[template.matColumnDef] || currentAddress | isContract) ? '/contracts' : '/account',
-                        data[template.matColumnDef] || currentAddress
+                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                        data[template.matColumnDef]
                       ]"
-                      [iconContract]="data[template.matColumnDef] || currentAddress | isContract"
+                      [iconContract]="data[template.matColumnDef] | isContract"
                       [isEnableRouter]="
-                        !(data[template.matColumnDef]?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                        !data[template.matColumnDef]?.startsWith('Null') &&
                         data[template.matColumnDef] !== currentAddress
                       ">
                     </app-name-tag>
+                    <span *ngIf="!data[template.matColumnDef]">-</span>
                   </div>
                   <div *ngSwitchCase="'method'">
                     {{ data.method | ellipsis: 10 : null : true }}
