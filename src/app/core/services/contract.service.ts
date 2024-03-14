@@ -234,6 +234,9 @@ export class ContractService extends CommonService {
           id
           type
           updated_at
+          evm_contract_verifications(limit: 1, where: {status: {_eq:"SUCCESS"}}){
+            status
+          }
         }
         evm_smart_contract_aggregate(where: {address: {_eq: $address}, creator: {_eq: $creator}}) {
           aggregate {

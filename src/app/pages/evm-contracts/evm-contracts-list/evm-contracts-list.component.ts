@@ -1,15 +1,15 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { EVMContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { ContractVerifyType, EVMContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 
 @Component({
   selector: 'app-evm-contracts-list',
@@ -36,6 +36,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
   isLoading = true;
   errTxt: string;
   EvmContractRegisterType = EVMContractRegisterType;
+  ContractVerifyType = ContractVerifyType;
 
   dataSource = new MatTableDataSource<any>();
   searchSubject = new Subject();
@@ -46,7 +47,6 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
   constructor(
     public translate: TranslateService,
     private contractService: ContractService,
-    private datePipe: DatePipe,
   ) {}
 
   ngOnDestroy(): void {
@@ -81,7 +81,9 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
     this.contractService.getListEvmContract(payload).subscribe({
       next: (res) => {
         if (res?.evm_smart_contract?.length) {
-          res?.evm_smart_contract.forEach((item) => {});
+          res?.evm_smart_contract.forEach((item) => {
+            item.contract_verification = _.get(item, 'evm_contract_verifications[0].status');
+          });
           this.dataSource.data = res.evm_smart_contract;
           this.pageData.length = res.evm_smart_contract_aggregate?.aggregate?.count;
         } else {
