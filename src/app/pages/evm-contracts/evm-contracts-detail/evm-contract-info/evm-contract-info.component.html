@@ -15,7 +15,7 @@
     <div class="card__body body-02 body-mob collapse" id="title2">
       <div class="text--gray-light">
         <div class="text--gray-4 caption fw-normal mb-1">Contract Name</div>
-        <div *ngIf="contractDetail.name">{{ contractDetail.name || '-'}}</div>
+        {{ contractDetail.name || '-' }}
       </div>
 
       <div class="mt-3">
@@ -53,7 +53,6 @@
         <div class="text--gray-4 caption fw-normal mb-1">Contract Type</div>
         <div class="text--gray-light">{{ contractDetail.code?.type ?? '-' }}</div>
       </div>
-
 
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Contract Creator</div>
