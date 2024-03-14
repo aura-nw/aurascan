@@ -135,9 +135,9 @@
                 routerLink="/transaction/{{ transactionDetail?.messages[0]['hash'] }}"
                 [copyBtn]="transactionDetail?.messages[0]['hash']">
                 {{
-                environmentService.isMobile
-                  ? (transactionDetail?.messages[0]['hash'] | ellipsis: 8 : 8)
-                  : transactionDetail?.messages[0]['hash']
+                  environmentService.isMobile
+                    ? (transactionDetail?.messages[0]['hash'] | ellipsis: 8 : 8)
+                    : transactionDetail?.messages[0]['hash']
                 }}
               </a>
             </div>
@@ -452,7 +452,7 @@
   <ng-template #multiSend>
     <div class="card-info box-multisend">
       <div class="card-text header-title d-flex align-items-center">
-        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2"/>
+        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
         Multisend
       </div>
       <div class="body-multisend">
@@ -519,8 +519,7 @@
                   [expanded]="isFirst">
                   <mat-expansion-panel-header class="content-contract">
                     <mat-panel-title class="item-content body-02 text--gray-1">
-                      <div class="caption fw-normal text--white"
-                           [class.txt-header]="item.attributes?.length > 0">
+                      <div class="caption fw-normal text--white" [class.txt-header]="item.attributes?.length > 0">
                         {{ item.type }}
                       </div>
                     </mat-panel-title>
@@ -550,7 +549,7 @@
     <div class="mb-3 d-flex box-header">
       <div class="col-12 col-lg-3">
         <div class="card-text header-title d-flex align-items-center">
-          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2"/>
+          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
           {{ data.label || displayTitleTX() }}
         </div>
       </div>
