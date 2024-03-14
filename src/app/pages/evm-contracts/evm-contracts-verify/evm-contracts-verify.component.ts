@@ -3,6 +3,7 @@ import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { interval, Subject, switchMap, takeUntil } from 'rxjs';
+import { EFileType } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -13,17 +14,13 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
   styleUrls: ['./evm-contracts-verify.component.scss'],
 })
 export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
-  currentStep: 'verify' | 'compiler' = 'verify';
+  EFileType = EFileType;
+
   contractAddress = '';
-  isCompilerComplete = false;
-  loading = false;
-  isVerifyFail = false;
-  isVerifySuccess = false;
-  formValid = false;
-
   contractSourceCode: File;
-
   inputFileValue = null;
+
+  loading = false;
 
   interupt$ = new Subject<void>();
 
@@ -69,16 +66,14 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
     this.contractService;
   }
 
-  onFileDropped(files) {
-    console.log('🐛 files: ', files);
-
+  onFileDropped(files: File[]) {
     const file: File = files[0];
 
-    const SUPPORTED_FILE_TYPE = ['application/x-zip-compressed', 'application/json'];
+    const SUPPORTED_FILE_TYPE = [EFileType.Zip, EFileType.Json];
 
     const MAX_FILE_SIZE = 1024 * 1000;
 
-    if (SUPPORTED_FILE_TYPE.includes(file?.type) && file?.size <= MAX_FILE_SIZE) {
+    if (SUPPORTED_FILE_TYPE.includes(file?.type as EFileType) && file?.size <= MAX_FILE_SIZE) {
       this.contractSourceCode = file;
       this.inputFileValue = null;
     }
@@ -99,13 +94,10 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
 
     this.contractService.verifyEvmContract(formdata).subscribe({
       next: (res) => {
-        console.log('🐛 res: ', res);
         this.checkVerifyEvmContractStatus(res?.['id']);
       },
       error: (e) => {
         this.loading = false;
-
-        console.log('🐛 e: ', e);
       },
     });
   }
