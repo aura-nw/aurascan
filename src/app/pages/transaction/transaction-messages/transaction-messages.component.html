@@ -512,20 +512,21 @@
               <div class="item-event-log" *ngIf="index === idx">
                 <span class="caption fw-normal">{{ element.events.type }}</span>
                 <mat-expansion-panel
+                  [disabled]="!item.attributes || item.attributes?.length === 0"
                   class="custom-expansion-panel"
-                  hideToggle
+                  [hideToggle]="true"
                   *ngFor="let item of element.events; first as isFirst; let i = index"
                   [expanded]="isFirst">
                   <mat-expansion-panel-header class="content-contract">
                     <mat-panel-title class="item-content body-02 text--gray-1">
-                      <div class="txt-header caption fw-normal text--white">
+                      <div class="caption fw-normal text--white" [class.txt-header]="item.attributes?.length > 0">
                         {{ item.type }}
                       </div>
                     </mat-panel-title>
                     <mat-panel-description></mat-panel-description>
                   </mat-expansion-panel-header>
 
-                  <div class="content-log">
+                  <div [class.content-log]="item.attributes?.length > 0">
                     <ng-container *ngFor="let data of item.attributes; let idx = index">
                       <div class="ml-5 mb-2 row">
                         <span class="col-12 col-lg-3 txt-event-key body-02 fw-normal">{{ data.key }}</span>
@@ -557,4 +558,4 @@
   </ng-template>
 </div>
 
-<ng-template #noValues> - </ng-template>
+<ng-template #noValues> -</ng-template>

@@ -19,7 +19,6 @@ import { ContractService } from 'src/app/core/services/contract.service';
 export class EvmContractsListComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/evm-contracts', headerWidth: 300 },
-    { matColumnDef: 'name', headerCellDef: 'Contract Name', headerWidth: 260 },
     { matColumnDef: 'type', headerCellDef: 'Type Contract', headerWidth: 200 },
     { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 150 },
     { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 300 },
@@ -77,7 +76,6 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
       keyword: this.textSearch,
       // contractType: this.filterButtons?.length > 0 && this.filterButtons?.length < 4 ? this.filterButtons : null,
     };
-
     this.contractService.getListEvmContract(payload).subscribe({
       next: (res) => {
         if (res?.evm_smart_contract?.length) {

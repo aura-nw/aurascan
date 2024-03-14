@@ -397,8 +397,20 @@
                     </div>
                   </div>
                   <div *ngSwitchCase="'fee'">
-                    {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                    <span appLinkDenom>{{ denom }}</span>
+                    <ng-container *ngIf="+data[template.matColumnDef] > 0">
+                      <span
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                        *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
+                        {{ '<0.001' }}
+                      </span>
+                      <span
+                        *ngIf="data[template.matColumnDef] | balance: 0 | gte: 0.001"
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                        [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
+                        [appBigNumber]="data[template.matColumnDef]"
+                        [decimal]="decimal"></span>
+                      <span class="ml-1" appLinkDenom>{{ denom }}</span>
+                    </ng-container>
                   </div>
                   <div *ngSwitchCase="'amount'">
                     <ng-container *ngFor="let item of data.arrEvent; let index = index">
@@ -649,7 +661,7 @@
               label: 'Fee',
               class: 'text--gray-1 body-02-mob',
               info:
-                (+data.fee | mask: 'separator.6') +
+                (data.fee | balance) +
                 ' <a class=text--primary href=' +
                 ('/tokens/token/' + coinInfo.coinMinimalDenom) +
                 '>' +

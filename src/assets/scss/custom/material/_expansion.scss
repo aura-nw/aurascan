@@ -47,6 +47,7 @@
       width: 2px;
       border-right: 2.5px dashed gray;
     }
+
     &::after {
       left: -5px;
       bottom: -1px;
@@ -62,9 +63,6 @@
   &:last-child .mat-expansion-panel-content .content-log {
     &::before {
       bottom: 4px;
-    }
-    &::after {
-      content: unset;
     }
   }
 }
