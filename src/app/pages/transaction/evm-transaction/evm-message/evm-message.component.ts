@@ -65,7 +65,7 @@ export class EvmMessageComponent {
 
   getDataDecoded() {
     this.transactionService.getAbiContract(this.transaction?.to?.toLowerCase()).subscribe((res) => {
-      if (res?.evm_contract_verification?.length > 0 && res.evm_contract_verification[0].abi) {
+      if (res?.evm_contract_verification?.length > 0 && res.evm_contract_verification[0]?.abi) {
         this.isDecoded = true;
         this.method = this.inputDataRaw['methodId'];
         const interfaceCoder = new Interface(res.evm_contract_verification[0].abi);
