@@ -114,8 +114,7 @@
     </div>
 
     <div class="row body justify-content-between justify-content-lg-start">
-      <app-evm-message [type]="transaction.type" [inputData]="transaction.inputData" [eventLog]="transaction.eventLog">
-      </app-evm-message>
+      <app-evm-message [transaction]="transaction" [eventLog]="transaction.eventLog"> </app-evm-message>
     </div>
   </ng-container>
 </ng-container>

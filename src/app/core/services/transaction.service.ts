@@ -646,4 +646,32 @@ export class TransactionService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
+
+  getAbiContract(address: string) {
+    const operationsDoc = `
+    query QueryAbiContract($address: String = null) {
+      ${this.envDB} {
+        evm_contract_verification(where: {contract_address: {_eq: $address}, status: {_eq: "SUCCESS"}}, limit: 1, order_by: {id: desc}) {
+          contract_address
+          created_at
+          creator_tx_hash
+          id
+          status
+          updated_at
+          abi
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: address,
+        },
+        operationName: 'QueryAbiContract',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 }
