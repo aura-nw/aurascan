@@ -1,14 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {SoulboundService} from 'src/app/core/services/soulbound.service';
+import {WalletService} from 'src/app/core/services/wallet.service';
+import {EWalletType} from "src/app/core/constants/wallet.constant";
 
 @Component({
   selector: 'app-soulbound-token-create-popup',
@@ -23,6 +24,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
 
   network = this.environmentService.chainInfo;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  eWalletType = EWalletType;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -32,7 +34,8 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     private soulboundService: SoulboundService,
     private toastr: NgxToastrService,
     private commonService: CommonService,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.formInit();
@@ -57,7 +60,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
 
   async onSubmit() {
     const minter = this.walletService.walletAccount?.address;
-    let { soulboundTokenURI, receiverAddress } = this.createSBTokenForm.value;
+    let {soulboundTokenURI, receiverAddress} = this.createSBTokenForm.value;
     soulboundTokenURI = soulboundTokenURI.trim();
     receiverAddress = receiverAddress.trim();
 
