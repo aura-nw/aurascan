@@ -7,11 +7,12 @@ import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
-import { ContractRegisterType } from '../constants/contract.enum';
+import { ContractRegisterType, EVMContractRegisterType } from '../constants/contract.enum';
 import { EWalletType } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { NameTagService } from './name-tag.service';
+import _ from 'lodash';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -154,7 +155,18 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListEvmContract({ keyword, limit, offset }: { name?: string; keyword?: string; limit?: number; offset?: number }) {
+  getListEvmContract({
+    keyword,
+    limit,
+    offset,
+    contractType,
+  }: {
+    name?: string;
+    keyword?: string;
+    limit?: number;
+    offset?: number;
+    contractType?: string[];
+  }) {
     const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
     if (addressNameTag?.length > 0) {
       keyword = addressNameTag;
@@ -173,10 +185,20 @@ export class ContractService extends CommonService {
       return of(null);
     }
 
+    let typeQuery = '';
+    if (contractType?.length > 0) {
+      if (contractType?.includes('Others')) {
+        contractType = contractType.filter(k => k != 'Others');
+        typeQuery = '_or: [{type: {_is_null:true}}, {type: {_in :[' + contractType + ']}}] ,';
+      } else {
+        typeQuery = 'type: {_in: [' + contractType + ']},';
+      }
+    }
+
     const operationsDoc = `
     query EvmSmartContractList($limit: Int = 100, $offset: Int = 0, $address: String = null, $creator: String =null) {
       ${this.envDB} {
-        evm_smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {address: {_eq: $address}, creator: {_eq: $creator}}) {
+        evm_smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
           address
           created_at
           created_hash
@@ -189,7 +211,7 @@ export class ContractService extends CommonService {
             status
           }
         }
-        evm_smart_contract_aggregate(where: {address: {_eq: $address}, creator: {_eq: $creator}}) {
+        evm_smart_contract_aggregate(where: {${typeQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
           aggregate {
             count
           }
