@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TableTemplate} from '../../core/models/common.model';
-import {TransactionService} from '../../core/services/transaction.service';
-import {convertDataTransactionSimple} from '../../global/global';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from '../../core/models/common.model';
+import { TransactionService } from '../../core/services/transaction.service';
+import { convertDataTransactionSimple } from '../../global/global';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-transactions',
@@ -14,13 +14,13 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 })
 export class TransactionsComponent implements OnInit {
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash'},
-    {matColumnDef: 'type', headerCellDef: 'Type'},
-    {matColumnDef: 'status', headerCellDef: 'Result'},
-    {matColumnDef: 'fee', headerCellDef: 'Fee'},
-    {matColumnDef: 'height', headerCellDef: 'Height'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
-    {matColumnDef: 'hash', headerCellDef: `EVM Transaction`},
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'fee', headerCellDef: 'Fee' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'hash', headerCellDef: `EVM Transaction` },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -39,8 +39,7 @@ export class TransactionsComponent implements OnInit {
     private layout: BreakpointObserver,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getListTx();
