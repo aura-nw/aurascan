@@ -661,7 +661,7 @@
               label: 'Fee',
               class: 'text--gray-1 body-02-mob',
               info:
-                (data.fee | balance) +
+                (data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0)) +
                 ' <a class=text--primary href=' +
                 ('/tokens/token/' + coinInfo.coinMinimalDenom) +
                 '>' +

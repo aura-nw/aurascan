@@ -51,8 +51,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
     { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 10 },
-    { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 14 },
-    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
+    { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 17 },
+    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
     { matColumnDef: 'evmTx', headerCellDef: 'Evmos Tx', headerWidth: 15 },
   ];

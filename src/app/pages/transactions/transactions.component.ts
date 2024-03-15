@@ -33,6 +33,7 @@ export class TransactionsComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
 
   constructor(
     private layout: BreakpointObserver,
