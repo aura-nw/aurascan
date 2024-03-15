@@ -6,7 +6,7 @@ import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/trans
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { getBalance, toHexData } from 'src/app/core/utils/common/parsing';
+import { getBalance } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-evm-transaction',

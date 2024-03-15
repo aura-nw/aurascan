@@ -57,7 +57,9 @@ export class EvmTransactionsComponent {
         map((txsRes) => {
           if (txsRes?.transaction?.length > 0) {
             return txsRes.transaction.map((tx) => {
-              const type = toHexData(_.get(tx, 'evm_transaction.data'));
+              const type = _.get(tx, 'evm_transaction.data')
+                ? _.get(tx, 'evm_transaction.data')
+                : toHexData(_.get(tx, 'evm_transaction.data'));
 
               return {
                 ...tx,
