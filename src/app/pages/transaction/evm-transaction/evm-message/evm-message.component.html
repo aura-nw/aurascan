@@ -23,9 +23,10 @@
           {{ inputDataType.RAW }}
         </button>
         <button
-          class="button body-04"
+          class="button body-04 {{!isContractVerified ? 'text--gray-7 pe-none' : ''}}"
           (click)="changeType(inputDataType.DECODED)"
-          [class.active]="typeInput === inputDataType.DECODED">
+          [class.active]="typeInput === inputDataType.DECODED"
+          [disabled]="!isContractVerified">
           {{ inputDataType.DECODED }}
         </button>
         <button
@@ -87,9 +88,9 @@
         <div
           class="log-data body-02 break-word"
           *ngIf="typeInput === inputDataType.ORIGINAL"
-          [appExpandable]="transaction?.inputData.inputDataOrigin"
-          [maxCharVisible]="220">
-          {{ inputDataOrigin }}
+          [appExpandable]="transaction?.inputData"
+          [maxCharVisible]="500">
+          {{ transaction?.inputData }}
         </div>
       </div>
     </div>
