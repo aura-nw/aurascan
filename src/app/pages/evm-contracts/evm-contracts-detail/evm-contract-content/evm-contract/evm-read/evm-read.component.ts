@@ -1,10 +1,17 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Contract, JsonFragment } from 'ethers';
-import _ from 'lodash';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { getEthersProvider } from 'src/app/core/utils/ethers';
+import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
+
+type JsonFragmentExtends = JsonFragment & {
+  formGroup?: FormGroup;
+  isValidate?: boolean;
+  result?: string;
+  isLoading?: boolean;
+};
 
 @Component({
   selector: 'app-evm-read',
@@ -18,12 +25,11 @@ export class EvmReadComponent implements OnChanges {
   isExpand = false;
   chainInfo = this.environmentService.chainInfo;
 
-  extendedAbi: (JsonFragment & {
-    isError?: boolean;
-    isRequied?: boolean;
-  })[];
+  extendedAbi: JsonFragmentExtends[];
 
   contract: Contract;
+
+  formArray: FormGroup[] = [];
 
   constructor(
     private environmentService: EnvironmentService,
@@ -32,10 +38,25 @@ export class EvmReadComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['abi']) {
-      this.extendedAbi =
+      const extendedAbi: JsonFragmentExtends[] =
         this.abi?.filter(
           (abi: JsonFragment) => READ_STATE_MUTABILITY.includes(abi.stateMutability) && abi.type == 'function',
         ) || [];
+
+      extendedAbi.forEach((abi) => {
+        const group = abi.inputs.reduce((prevValue, curValue) => {
+          const control = this.fb.control('', Validators.required);
+
+          return {
+            ...prevValue,
+            [curValue.name]: control,
+          };
+        }, {});
+
+        abi['formGroup'] = this.fb.group(group);
+      });
+
+      this.extendedAbi = extendedAbi;
     }
   }
 
@@ -81,44 +102,57 @@ export class EvmReadComponent implements OnChanges {
     return null;
   }
 
-  handleQueryContract(jsonFragment: JsonFragment) {
+  handleQueryContract(jsonFragment: JsonFragmentExtends) {
+    if (!jsonFragment) {
+      return;
+    }
+
+    jsonFragment.isValidate = true;
+
+    const { formGroup, inputs, name } = jsonFragment;
+
+    if (formGroup.invalid) {
+      return;
+    }
+
+    const formControls = formGroup.controls;
+
+    const params = inputs?.map((i) => {
+      const value = formControls[i.name].value;
+      return validateAndParsingInput(i, value); // TODO
+    });
+
     const contract = this.createContract();
 
-    const { name, inputs } = jsonFragment;
+    if (!contract) {
+      return;
+    }
 
-    contract[name]?.()
+    jsonFragment.isLoading = true;
+
+    contract[name]?.(...params)
       .then((res) => {
-        console.log('🐛 res: ', res);
+        jsonFragment.result = res;
+        jsonFragment.isLoading = false;
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
+        jsonFragment.isLoading = false;
+        jsonFragment.result = 'No Data';
       });
   }
 
   reloadData() {
     this.expandMenu(true);
-    this.clearAllError(true);
     this.isExpand = false;
+
+    this.resetForm();
   }
 
-  clearAllError(all = false) {}
-
-  resetError(msg, all = false) {
-    if (msg) {
-      const { fieldList } = msg;
-      fieldList.forEach((item) => {
-        _.assign(
-          item,
-          all
-            ? {
-                isError: false,
-                value: '',
-              }
-            : {
-                isError: false,
-              },
-        );
-      });
-    }
+  resetForm() {
+    this.extendedAbi.forEach((ea) => {
+      ea.formGroup.reset();
+      ea.isValidate = false;
+      ea.result = undefined;
+    });
   }
 }
