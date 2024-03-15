@@ -191,8 +191,20 @@
                             </div>
                           </div>
                           <div *ngSwitchCase="'fee'">
-                            {{ data[template.matColumnDef] }}
-                            <span appLinkDenom>{{ denom }}</span>
+                            <ng-container *ngIf="+data[template.matColumnDef] > 0">
+                      <span
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                        *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
+                        {{ '<0.001' }}
+                      </span>
+                              <span
+                                *ngIf="data[template.matColumnDef] | balance: 0 | gte: 0.001"
+                                [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                                [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
+                                [appBigNumber]="data[template.matColumnDef]"
+                                [decimal]="decimal"></span>
+                              <span class="ml-1" appLinkDenom>{{ denom }}</span>
+                            </ng-container>
                           </div>
                           <div *ngSwitchCase="'amount'">
                             <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
@@ -253,15 +265,15 @@
                               <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                               <span class="text--gray-light caption fw-normal">{{
                                 data?.timestamp | customDateTime: 'Distance'
-                              }}</span>
+                                }}</span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
-                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
                               <span class="line-claim text--gray-light caption fw-normal">{{
                                 data?.type | ellipsis: 12
-                              }}</span>
+                                }}</span>
                               <span *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4"
-                                >+{{ data.lstType?.length - 1 }}</span
+                              >+{{ data.lstType?.length - 1 }}</span
                               >
                             </div>
                           </div>
@@ -290,7 +302,7 @@
                       <div class="d-flex justify-content-between">
                         <div class="text--gray-4">Fee</div>
                         <div class="text--white d-flex align-items-center">
-                          <span class="mr-1">{{ data.fee | balance: 0 }}</span>
+                          <span class="mr-1">{{ data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0)}}</span>
                           <a appLinkDenom> {{ denom }}</a>
                         </div>
                       </div>
@@ -437,12 +449,12 @@
                               <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                               <span class="text--gray-light caption fw-normal">{{
                                 data?.timestamp | customDateTime: 'Distance'
-                              }}</span>
+                                }}</span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
-                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
                               <span class="line-claim text--gray-light caption fw-normal"
-                                >{{ data?.method | ellipsis: 10 : null : true }}
+                              >{{ data?.method | ellipsis: 10 : null : true }}
                               </span>
                             </div>
                           </div>
