@@ -15,7 +15,11 @@
   </div>
   <div class="box-content text--white mt-4">
     <ng-container *ngFor="let jsonFragment of extendedAbi; index as index">
-      <mat-expansion-panel hideToggle *ngIf="jsonFragment.name" class="custom-expansion-panel outline">
+      <mat-expansion-panel
+        hideToggle
+        *ngIf="jsonFragment.name"
+        class="custom-expansion-panel outline"
+        (afterExpand)="afterExpand(jsonFragment)">
         <mat-expansion-panel-header class="content-contract txt-header">
           <mat-panel-title class="item-content body-02 text--gray-1">
             {{ index + 1 }}. {{ jsonFragment.name }}
@@ -64,7 +68,8 @@
 
           <div class="w-100 mb-2 px-0">
             <button
-              class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
+              *ngIf="jsonFragment.inputs?.length > 0"
+              class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card text--white"
               type="submit"
               (click)="handleQueryContract(jsonFragment)"
               [disabled]="jsonFragment.isLoading">
@@ -78,6 +83,14 @@
 
               Query
             </button>
+
+            <img
+              [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+              alt=""
+              class="mr-2"
+              width="20"
+              height="20"
+              *ngIf="jsonFragment.isLoading && jsonFragment.inputs?.length == 0" />
           </div>
 
           <div class="px-0">

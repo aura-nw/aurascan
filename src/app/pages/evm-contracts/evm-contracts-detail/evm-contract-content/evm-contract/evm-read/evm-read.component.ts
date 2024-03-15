@@ -102,6 +102,12 @@ export class EvmReadComponent implements OnChanges {
     return null;
   }
 
+  afterExpand(jsonFragment: JsonFragmentExtends) {
+    if (jsonFragment.inputs?.length == 0 && !jsonFragment.result) {
+      this.handleQueryContract(jsonFragment);
+    }
+  }
+
   handleQueryContract(jsonFragment: JsonFragmentExtends) {
     if (!jsonFragment) {
       return;
