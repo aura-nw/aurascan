@@ -1,4 +1,4 @@
-<ng-container *ngIf="readAbi; else noValues">
+<ng-container *ngIf="extendedAbi; else noValues">
   <div class="d-flex justify-content-between contract__title">
     <div class="d-flex align-items-center">
       <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px" />
@@ -14,14 +14,16 @@
     </div>
   </div>
   <div class="box-content text--white mt-4">
-    <ng-container *ngFor="let msg of readAbi; index as index">
-      <mat-expansion-panel hideToggle *ngIf="msg.name" class="custom-expansion-panel outline">
+    <ng-container *ngFor="let jsonFragment of extendedAbi; index as index">
+      <mat-expansion-panel hideToggle *ngIf="jsonFragment.name" class="custom-expansion-panel outline">
         <mat-expansion-panel-header class="content-contract txt-header">
-          <mat-panel-title class="item-content body-02 text--gray-1"> {{ index + 1 }}. {{ msg.name }} </mat-panel-title>
+          <mat-panel-title class="item-content body-02 text--gray-1">
+            {{ index + 1 }}. {{ jsonFragment.name }}
+          </mat-panel-title>
         </mat-expansion-panel-header>
 
         <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
-          <ng-container *ngFor="let item of msg.inputs">
+          <ng-container *ngFor="let item of jsonFragment.inputs">
             <p class="px-0 mb-2 body-02" [class.input-require]="true">{{ item.name }} ({{ item.type }})</p>
 
             <input
@@ -29,13 +31,13 @@
               [class.input-require]="true"
               class="form-check-input col-12 mb-4"
               [type]="item.type"
-              (keyup)="resetError(msg)"
+              (keyup)="resetError(jsonFragment)"
               placeholder="{{ item.name }} ({{ item.type }})" />
 
             <mat-form-field contract appearance="fill" *ngIf="item.type?.includes('boolean')" class="col-12 mb-4 p-0">
               <mat-select
                 panelClass="contractPanel"
-                (selectionChange)="resetError(msg)"
+                (selectionChange)="resetError(jsonFragment)"
                 [disableOptionCentering]="true"
                 placeholder="{{ item.name }} ({{ item.type }})">
                 <mat-option [value]="true">
@@ -59,7 +61,7 @@
           <div class="w-100 mb-2 px-0">
             <button
               class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
-              (click)="handleQueryContract(msg)"
+              (click)="handleQueryContract(jsonFragment)"
               type="button">
               <span>Query</span>
             </button>
@@ -68,7 +70,7 @@
           <!--     <div class="px-0">
             <ng-container *ngIf="true">
               <div class="mb-0">
-                {{ msg.fieldName }}
+                {{ jsonFragment.fieldName }}
                 <span class="ml-1 font-italic text--gray-light small-body">
                   {{ msg.resType }}
                 </span>

@@ -1,10 +1,13 @@
+import { JsonFragment } from 'ethers';
+
 export type JsonAbiType = 'constructor' | 'function' | 'event' | 'fallback';
 export type StateMutabilityType = 'pure' | 'view' | 'nonpayable' | 'payable'; // pure (specified to not read blockchain state), view (same as constant above), nonpayable and payable (same as payable above);
 
-export const READ_STATE_MUTABILITY: StateMutabilityType[] = ['view'];
-export const WRITE_STATE_MUTABILITY: StateMutabilityType[] = ['nonpayable', 'payable'];
+export const READ_STATE_MUTABILITY: string[] = ['view'];
+export const WRITE_STATE_MUTABILITY: string[] = ['nonpayable', 'payable'];
 
-export interface JsonAbi {
+export interface JsonAbi extends JsonFragment {
+  /*   
   type: JsonAbiType;
   stateMutability: StateMutabilityType;
   name: string;
@@ -19,5 +22,6 @@ export interface JsonAbi {
     name: string;
     type: string;
   }[];
-  anonymous?: boolean; // true if the event was declared as anonymous.
+  anonymous?: boolean; // true if the event was declared as anonymous. 
+  */
 }

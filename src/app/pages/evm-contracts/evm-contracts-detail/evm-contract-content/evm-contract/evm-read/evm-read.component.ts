@@ -1,28 +1,43 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Contract, JsonFragment } from 'ethers';
 import _ from 'lodash';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { JsonAbi, READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
+import { READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
+import { getEthersProvider } from 'src/app/core/utils/ethers';
 
 @Component({
   selector: 'app-evm-read',
   templateUrl: './evm-read.component.html',
   styleUrls: ['./evm-read.component.scss'],
 })
-export class EvmReadComponent {
-  @Input() abi: JsonAbi[];
+export class EvmReadComponent implements OnChanges {
+  @Input() contractAddress: string;
+  @Input() abi: JsonFragment[];
 
   isExpand = false;
   chainInfo = this.environmentService.chainInfo;
 
-  get readAbi() {
-    return (
-      this.abi?.filter(
-        (abi: JsonAbi) => READ_STATE_MUTABILITY.includes(abi.stateMutability) && abi.type == 'function',
-      ) || []
-    );
-  }
+  extendedAbi: (JsonFragment & {
+    isError?: boolean;
+    isRequied?: boolean;
+  })[];
 
-  constructor(private environmentService: EnvironmentService) {}
+  contract: Contract;
+
+  constructor(
+    private environmentService: EnvironmentService,
+    private fb: FormBuilder,
+  ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['abi']) {
+      this.extendedAbi =
+        this.abi?.filter(
+          (abi: JsonFragment) => READ_STATE_MUTABILITY.includes(abi.stateMutability) && abi.type == 'function',
+        ) || [];
+    }
+  }
 
   expandMenu(closeAll = false): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
@@ -38,13 +53,46 @@ export class EvmReadComponent {
         }
       }
     }
+
     if (!closeAll) {
       this.isExpand = !this.isExpand;
     }
   }
 
-  handleQueryContract(msg) {
-    console.log('🐛 msg: ', msg);
+  createContract() {
+    if (this.contract) {
+      return this.contract;
+    }
+
+    try {
+      const provider = getEthersProvider(this.environmentService.etherJsonRpc);
+
+      let contract = new Contract(this.contractAddress, this.abi, provider);
+
+      if (contract) {
+        this.contract = contract;
+
+        return this.contract;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
+  }
+
+  handleQueryContract(jsonFragment: JsonFragment) {
+    const contract = this.createContract();
+
+    const { name, inputs } = jsonFragment;
+
+    contract[name]?.()
+      .then((res) => {
+        console.log('🐛 res: ', res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   reloadData() {
@@ -53,12 +101,7 @@ export class EvmReadComponent {
     this.isExpand = false;
   }
 
-  clearAllError(all = false) {
-    // this.root?.forEach((msg) => {
-    //   this.resetError(msg, all);
-    //   if (msg.fieldList && msg.fieldList.length && all) msg.dataResponse = '';
-    // });
-  }
+  clearAllError(all = false) {}
 
   resetError(msg, all = false) {
     if (msg) {
