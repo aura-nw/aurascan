@@ -5,21 +5,21 @@ import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { forkJoin, map, of, switchMap } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { TableTemplate } from '../../../../../core/models/common.model';
 
 @Component({
-  selector: 'app-evm-token-holders-tab',
-  templateUrl: './evm-token-holders-tab.component.html',
-  styleUrls: ['./evm-token-holders-tab.component.scss'],
+  selector: 'app-token-holders-tab',
+  templateUrl: './token-holders-tab.component.html',
+  styleUrls: ['./token-holders-tab.component.scss'],
 })
-export class EvmTokenHoldersTabComponent implements OnInit {
+export class TokenHoldersTabComponent implements OnInit {
   @Input() keyWord = '';
   @Input() contractAddress: string;
   @Input() typeContract: string;

@@ -5,20 +5,20 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB, ETokenCoinType } from 'src/app/core/constants/token.constant';
+import { TokenTab, EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import local from 'src/app/core/utils/storage/local';
-import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../core/constants/token.constant';
-import { EModeToken, TokenTab } from '../../../core/constants/token.enum';
 
 @Component({
-  selector: 'app-token-content',
-  templateUrl: './token-content.component.html',
-  styleUrls: ['./token-content.component.scss'],
+  selector: 'app-evm-token-content',
+  templateUrl: './evm-token-content.component.html',
+  styleUrls: ['./evm-token-content.component.scss'],
 })
-export class TokenContentComponent implements OnInit {
+export class EvmTokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
   @Output() hasMore = new EventEmitter<any>();

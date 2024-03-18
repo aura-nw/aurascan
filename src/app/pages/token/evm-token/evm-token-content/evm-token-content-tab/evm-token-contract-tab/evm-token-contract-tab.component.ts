@@ -3,15 +3,15 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { TokenContractType } from 'src/app/core/constants/token.enum';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { TokenContractType } from '../../../../../core/constants/token.enum';
 
 @Component({
-  selector: 'app-token-contract-tab',
-  templateUrl: './token-contract-tab.component.html',
-  styleUrls: ['./token-contract-tab.component.scss'],
+  selector: 'app-evm-token-contract-tab',
+  templateUrl: './evm-token-contract-tab.component.html',
+  styleUrls: ['./evm-token-contract-tab.component.scss'],
 })
-export class TokenContractTabComponent implements OnInit {
+export class EvmTokenContractTabComponent implements OnInit {
   @Input() contractAddress: string;
   @Input() typeContract: string;
 

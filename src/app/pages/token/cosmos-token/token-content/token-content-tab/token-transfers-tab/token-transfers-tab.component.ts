@@ -7,23 +7,15 @@ import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import {
-  LENGTH_CHARACTER,
-  NULL_ADDRESS,
-  PAGE_EVENT,
-  TIMEOUT_ERROR,
-} from '../../../../../core/constants/common.constant';
-import { TYPE_TRANSACTION } from '../../../../../core/constants/transaction.constant';
-import {
-  CodeTransaction,
-  ModeExecuteTransaction,
-  StatusTransaction,
-} from '../../../../../core/constants/transaction.enum';
-import { TableTemplate } from '../../../../../core/models/common.model';
-import { shortenAddress } from '../../../../../core/utils/common/shorten';
-import { convertTxIBC } from '../../../../../global/global';
-import { getTypeTx } from 'src/app/core/utils/common/info-common';
+
 import { Subject, takeUntil } from 'rxjs';
+import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { getTypeTx } from 'src/app/core/utils/common/info-common';
+import { shortenAddress } from 'src/app/core/utils/common/shorten';
+import { convertTxIBC } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
