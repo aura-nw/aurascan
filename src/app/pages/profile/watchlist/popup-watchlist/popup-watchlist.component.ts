@@ -12,6 +12,7 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { isAddress, isSafari } from 'src/app/core/utils/common/validation';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -27,7 +28,6 @@ export class PopupWatchlistComponent implements OnInit {
   maxLengthNote = 200;
   publicNameTag = '-';
   privateNameTag = '-';
-  isValidAddress = true;
   isError = false;
   isEditMode = false;
   reStakeSent = true;
@@ -42,6 +42,7 @@ export class PopupWatchlistComponent implements OnInit {
     nativeCoinReceived: 'nativeCoinReceived',
   };
   isTracking = true;
+  eWalletType = EWalletType;
 
   listTracking = [
     {
@@ -147,7 +148,6 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   setDataFrom(data, isEditMode = false) {
-    this.isValidAddress = true;
     this.isEditMode = isEditMode;
     const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
 
@@ -191,19 +191,6 @@ export class PopupWatchlistComponent implements OnInit {
       return false;
     }
 
-    if (this.getAddress.value?.length > 0) {
-      this.isValidAddress = false;
-      if (this.commonService.isBech32Address(this.getAddress?.value)) {
-        this.isValidAddress =
-          (this.commonService.isValidAddress(this.getAddress.value) && this.isAccount) ||
-          (this.commonService.isValidContract(this.getAddress.value) && this.isContract);
-      }
-    }
-
-    if (!this.isValidAddress) {
-      return false;
-    }
-
     //check setting noti
     try {
       if (!JSON.stringify(this.settingObj)?.includes('true') && this.isTracking) {
@@ -221,7 +208,7 @@ export class PopupWatchlistComponent implements OnInit {
 
     let payload = {
       address: address,
-      type: isAddress(address, this.commonService.addressPrefix) ? 'account' : 'contract',
+      type: this.isAccount ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,
       note: note,
@@ -299,7 +286,6 @@ export class PopupWatchlistComponent implements OnInit {
   changeType(type) {
     this.isAccount = type;
     this.isContract = !this.isAccount;
-    this.isValidAddress = false;
     this.isError = false;
     this.watchlistForm.value.isAccount = type;
     this.checkFormValid();

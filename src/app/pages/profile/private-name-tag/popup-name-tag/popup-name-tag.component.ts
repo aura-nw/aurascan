@@ -1,15 +1,16 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {UntypedFormBuilder, Validators} from '@angular/forms';
 import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER, MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import {TranslateService} from '@ngx-translate/core';
+import {LENGTH_CHARACTER, MAX_LENGTH_NAME_TAG} from 'src/app/core/constants/common.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {EWalletType} from "src/app/core/constants/wallet.constant";
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -25,10 +26,10 @@ export class PopupNameTagComponent implements OnInit {
   maxLengthNameTag = MAX_LENGTH_NAME_TAG;
   maxLengthNote = 200;
   publicNameTag = '-';
-  isValidAddress = true;
   isError = false;
   isEditMode = false;
   idEdit = null;
+  eWalletType = EWalletType;
 
   nameTagType = {
     Account: 'account',
@@ -46,7 +47,8 @@ export class PopupNameTagComponent implements OnInit {
     private commonService: CommonService,
     private nameTagService: NameTagService,
     private toastr: NgxToastrService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.formInit();
@@ -78,7 +80,6 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   setDataFrom(data) {
-    this.isValidAddress = true;
     if (data.nameTag || data.name_tag_private) {
       this.isEditMode = true;
       this.idEdit = this.data.id || data.id;
@@ -100,24 +101,12 @@ export class PopupNameTagComponent implements OnInit {
     this.dialogRef.close(status);
   }
 
-  checkFormValid() {
-    this.getAddress['value'] = this.getAddress?.value.trim();
-
-    if (this.commonService.isBech32Address(this.getAddress?.value)) {
-      this.isValidAddress =
-        (this.commonService.isValidAddress(this.getAddress.value) && this.isAccount) ||
-        (this.commonService.isValidContract(this.getAddress.value) && this.isContract);
-    } else {
-      this.isValidAddress = false;
-    }
-  }
-
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, address, name, note } = this.privateNameForm.value;
+    const {isFavorite, address, name, note} = this.privateNameForm.value;
     let payload = {
       isFavorite: isFavorite == 1,
-      type: this.commonService.isValidAddress(address) ? 'account' : 'contract',
+      type: this.isAccount ? 'account' : 'contract',
       address: address,
       nameTag: name,
       note: note,
@@ -181,10 +170,8 @@ export class PopupNameTagComponent implements OnInit {
   changeType(type) {
     this.isAccount = type;
     this.isContract = !this.isAccount;
-    this.isValidAddress = false;
     this.isError = false;
     this.privateNameForm.value.isAccount = type;
-    this.checkFormValid();
   }
 
   checkValidNameTag(event) {
