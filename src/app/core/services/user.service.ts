@@ -165,7 +165,7 @@ export class UserService {
         query: operationsDoc,
         variables: {
           limit: payload.limit || 40,
-          address: ["evmos1q00uue892l62km4uacnjjj573vurhmlqvalvzu", "0x03DFCe64E557f4AB6EBCEE27294A9E8B383BefE0"], //payload.address,
+          address: payload.address,
           startTime: payload.startTime,
           endTime: payload.endTime,
         },
