@@ -12,11 +12,11 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
 import { TableTemplate } from '../../../core/models/common.model';
 
 @Component({
-  selector: 'app-token-cw4973',
-  templateUrl: './token-cw4973.component.html',
-  styleUrls: ['./token-cw4973.component.scss'],
+  selector: 'app-account-bound-tokens',
+  templateUrl: './account-bound-tokens.component.html',
+  styleUrls: ['./account-bound-tokens.component.scss'],
 })
-export class TokenCw4973Component implements OnInit {
+export class AccountBoundTokensComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   searchSubject = new Subject();
   destroy$ = new Subject<void>();

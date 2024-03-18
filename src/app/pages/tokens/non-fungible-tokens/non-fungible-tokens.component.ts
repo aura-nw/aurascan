@@ -14,11 +14,11 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
 import { TableTemplate } from '../../../core/models/common.model';
 
 @Component({
-  selector: 'app-token-cw721',
-  templateUrl: './token-cw721.component.html',
-  styleUrls: ['./token-cw721.component.scss'],
+  selector: 'app-non-fungible-tokens',
+  templateUrl: './non-fungible-tokens.component.html',
+  styleUrls: ['./non-fungible-tokens.component.scss'],
 })
-export class TokenCw721Component implements OnInit {
+export class NonFungibleTokensComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [

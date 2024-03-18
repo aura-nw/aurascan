@@ -15,11 +15,11 @@ import { ETokenCoinType, ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from '../..
 import { TableTemplate } from '../../../core/models/common.model';
 
 @Component({
-  selector: 'app-token-cw20',
-  templateUrl: './token-cw20.component.html',
-  styleUrls: ['./token-cw20.component.scss'],
+  selector: 'app-fungible-tokens',
+  templateUrl: './fungible-tokens.component.html',
+  styleUrls: ['./fungible-tokens.component.scss'],
 })
-export class TokenCw20Component implements OnInit, OnDestroy {
+export class FungibleTokensComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [

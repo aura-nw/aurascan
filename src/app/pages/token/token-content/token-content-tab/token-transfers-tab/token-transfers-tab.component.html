@@ -147,7 +147,7 @@
                         [iconContract]="data[template.matColumnDef] | isContract"
                         [maxCharacter]="15"
                         [isEnableRouter]="!data[template.matColumnDef]?.startsWith('Null')"
-                        [linkRouter]="[linkToken, linkAddress]"
+                        [linkRouter]="['/', linkToken, linkAddress]"
                         [linkParams]="{ a: data[template.matColumnDef] }">
                       </app-name-tag>
                       <span *ngIf="!data[template.matColumnDef]"> - </span>

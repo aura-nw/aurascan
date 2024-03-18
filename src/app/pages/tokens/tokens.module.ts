@@ -1,30 +1,24 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-
-import {TokensRoutingModule} from './tokens-routing.module';
-import {TokenCw20Component} from "./token-cw20/token-cw20.component";
-import {TokenCw721Component} from "./token-cw721/token-cw721.component";
-import {TokenCw4973Component} from "./token-cw4973/token-cw4973.component";
-import {TranslateModule} from "@ngx-translate/core";
-import {CustomPipeModule} from "src/app/core/pipes/custom-pipe.module";
-import {CommonDirectiveModule} from "src/app/core/directives/common-directive.module";
-import {PaginatorModule} from "src/app/shared/components/paginator/paginator.module";
-import {SharedModule} from "src/app/shared/shared.module";
-import {TableNoDataModule} from "src/app/shared/components/table-no-data/table-no-data.module";
-import {CustomPaginatorModule} from "src/app/shared/components/custom-paginator/custom-paginator.module";
-import {FormsModule} from "@angular/forms";
-import {MaterialModule} from "src/app/material.module";
-import {NameTagModule} from "src/app/shared/components/name-tag/name-tag.module";
-import {NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask} from "ngx-mask";
-import {MASK_CONFIG} from "src/app/app.config";
-
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+import { MASK_CONFIG } from 'src/app/app.config';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
+import { CustomPipeModule } from 'src/app/core/pipes/custom-pipe.module';
+import { MaterialModule } from 'src/app/material.module';
+import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
+import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
+import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { AccountBoundTokensComponent } from './account-bound-tokens/account-bound-tokens.component';
+import { FungibleTokensComponent } from './fungible-tokens/fungible-tokens.component';
+import { NonFungibleTokensComponent } from './non-fungible-tokens/non-fungible-tokens.component';
+import { TokensRoutingModule } from './tokens-routing.module';
 
 @NgModule({
-  declarations: [
-    TokenCw20Component,
-    TokenCw721Component,
-    TokenCw4973Component
-  ],
+  declarations: [FungibleTokensComponent, NonFungibleTokensComponent, AccountBoundTokensComponent],
   imports: [
     CommonModule,
     TokensRoutingModule,
@@ -39,9 +33,8 @@ import {MASK_CONFIG} from "src/app/app.config";
     CustomPaginatorModule,
     NgxMaskDirective,
     NgxMaskPipe,
-    NameTagModule
+    NameTagModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
-export class TokensModule {
-}
+export class TokensModule {}
