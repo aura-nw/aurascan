@@ -39,6 +39,7 @@ export interface IConfiguration {
     }[];
     features: string[];
     chain_info: any;
+    evmChainInfo: any;
     cosmos_sdk_version?: string;
   };
   image: {
@@ -101,6 +102,10 @@ export class EnvironmentService {
 
   get etherJsonRpc() {
     return _.get(this.configValue, 'chainConfig.etherJsonRpc');
+  }
+
+  get evmChainInfo() {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo');
   }
 
   get chainInfo() {

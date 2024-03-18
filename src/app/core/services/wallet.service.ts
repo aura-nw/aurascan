@@ -19,7 +19,13 @@ import {
   WalletName,
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { EnvironmentService } from '../data-services/environment.service';
+import { IMultichainWalletAccount } from '../models/wallet';
+import { convertEvmAddressToBech32Address } from '../utils/common/address-converter';
 import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
+import { getSigner } from '../utils/ethers/ethers';
+import { addNetwork, checkNetwork } from '../utils/ethers/utils';
+import local from '../utils/storage/local';
 
 @Injectable({
   providedIn: 'root',
@@ -33,10 +39,10 @@ export class WalletService implements OnDestroy {
   private testnets = ['aura-testnet-2', 'serenity-testnet-001'];
 
   // account subject config
-  private _walletAccountSubject$: BehaviorSubject<WalletAccount>;
-  walletAccount$: Observable<WalletAccount>;
+  private _walletAccountSubject$: BehaviorSubject<IMultichainWalletAccount>;
+  walletAccount$: Observable<IMultichainWalletAccount>;
 
-  set walletAccount(walletAccount: WalletAccount) {
+  set walletAccount(walletAccount: IMultichainWalletAccount) {
     this._walletAccountSubject$.next(walletAccount);
   }
 
@@ -52,8 +58,8 @@ export class WalletService implements OnDestroy {
     return this._chain;
   }
 
-  constructor() {
-    this._walletAccountSubject$ = new BehaviorSubject<WalletAccount>(null);
+  constructor(private env: EnvironmentService) {
+    this._walletAccountSubject$ = new BehaviorSubject<IMultichainWalletAccount>(null);
     this.walletAccount$ = this._walletAccountSubject$.asObservable();
   }
 
@@ -107,6 +113,10 @@ export class WalletService implements OnDestroy {
       throw new Error('Chain is required');
     }
 
+    if (this._walletManager) {
+      throw new Error('Wallet manager existed');
+    }
+
     this._chain = chain;
 
     this._logger = new Logger(this.testnets.includes(chain.chain_id) ? 'DEBUG' : 'INFO');
@@ -140,6 +150,14 @@ export class WalletService implements OnDestroy {
   }
 
   disconnect() {
+    if (this.walletAccount.evmAccount) {
+      this.walletAccount = null;
+
+      local.removeItem(STORAGE_KEY.CURRENT_EVM_WALLET);
+
+      return;
+    }
+
     this.getChainWallet()
       ?.disconnect(true, { walletconnect: { removeAllPairings: true } })
       .then(() => {
@@ -172,7 +190,9 @@ export class WalletService implements OnDestroy {
         return currentChainWallet.client.getAccount(currentChainWallet.chainId);
       })
       .then((account) => {
-        this.walletAccount = account;
+        this.walletAccount = {
+          cosmosAccount: account,
+        };
         callback?.success?.();
       })
       .catch((e) => {
@@ -183,11 +203,25 @@ export class WalletService implements OnDestroy {
     return currentChainWallet;
   }
 
+  restoreEvmAccounts() {
+    let account = local.getItem(STORAGE_KEY.CURRENT_EVM_WALLET);
+
+    if (account) {
+      this.connectEvmWallet().then().catch();
+    }
+  }
+
   restoreAccounts() {
     const account = this.getChainWallet()?.data as WalletAccount;
+
+    const evmAccount = this.restoreEvmAccounts();
+
     if (account) {
       this._logger.info('Restore accounts: ', account);
-      this.walletAccount = account;
+      this.walletAccount = {
+        cosmosAccount: account,
+        address: account.address,
+      };
     }
   }
 
@@ -197,7 +231,10 @@ export class WalletService implements OnDestroy {
         ?.client?.getAccount(this._chain.chain_id)
         .then((account) => {
           if (this.walletAccount && account.address != this.walletAccount.address) {
-            this.walletAccount = account;
+            this.walletAccount = {
+              cosmosAccount: account,
+              address: account.address,
+            };
           }
         });
     });
@@ -256,6 +293,19 @@ export class WalletService implements OnDestroy {
     return null;
   }
 
+  getEvmAccount() {
+    const account = this.walletAccount;
+
+    if (account?.evmAccount) {
+      return account;
+    }
+
+    const repo = this._walletManager.getWalletRepo(this._chain?.chain_name);
+
+    repo?.openView();
+    return null;
+  }
+
   async delegateTokens(
     delegatorAddress: string,
     validatorAddress: string,
@@ -294,5 +344,28 @@ export class WalletService implements OnDestroy {
     return this._getSigningStargateClient().then((client) =>
       client.signAndBroadcast(signerAddress, messages, fee, memo, timeoutHeight),
     );
+  }
+
+  async connectEvmWallet() {
+    const network = await checkNetwork(this.env.evmChainInfo.chainId);
+
+    if (!network) {
+      await addNetwork(this.env.evmChainInfo);
+    }
+
+    getSigner(this.env.etherJsonRpc).then((signer) => {
+      if (signer) {
+        this.walletAccount = {
+          evmAddress: signer.address,
+          evmAccount: signer,
+          address: convertEvmAddressToBech32Address(
+            this.env.chainInfo.bech32Config.bech32PrefixAccAddr,
+            signer.address,
+          ),
+        };
+
+        local.setItem(STORAGE_KEY.CURRENT_EVM_WALLET, this.walletAccount);
+      }
+    });
   }
 }
