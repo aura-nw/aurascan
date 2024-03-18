@@ -24,7 +24,6 @@
     .log-content {
       display: flex;
       gap: 24px;
-
       .log {
         &-label {
           width: 110px;
@@ -38,6 +37,14 @@
       @media (max-width: 991.99px) {
         flex-direction: column;
         gap: 4px;
+      }
+    }
+
+    .box-raw {
+      display: flex;
+      font-family: monospace;
+      .index-raw-item {
+        width: 45px;
       }
     }
   }

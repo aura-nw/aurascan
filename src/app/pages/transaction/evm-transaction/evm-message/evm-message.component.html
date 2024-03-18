@@ -5,7 +5,7 @@
     </div>
 
     <div class="col-12 col-lg-10">
-      {{ method ? method : (method | ellipsis: 10 : null : true) }}
+      {{ method | ellipsis: 10 : null : true }}
     </div>
   </div>
 
@@ -17,16 +17,17 @@
     <div class="col-12 col-lg-10">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
         <button
-          class="button body-04"
+          class="button body-04 {{ isCreateContract ? 'text--gray-7 pe-none' : '' }}"
           (click)="changeType(inputDataType.RAW)"
-          [class.active]="typeInput === inputDataType.RAW">
+          [class.active]="typeInput === inputDataType.RAW"
+          [disabled]="isCreateContract">
           {{ inputDataType.RAW }}
         </button>
         <button
-          class="button body-04 {{!isContractVerified ? 'text--gray-7 pe-none' : ''}}"
+          class="button body-04 {{ !isContractVerified || isCreateContract ? 'text--gray-7 pe-none' : '' }}"
           (click)="changeType(inputDataType.DECODED)"
           [class.active]="typeInput === inputDataType.DECODED"
-          [disabled]="!isContractVerified">
+          [disabled]="!isContractVerified || isCreateContract">
           {{ inputDataType.DECODED }}
         </button>
         <button
@@ -42,8 +43,9 @@
           <p *ngIf="inputDataRaw['methodId']">MethodId: {{ inputDataRaw['methodId'] }}</p>
           <ng-container *ngIf="inputDataRaw['arrList']?.length > 0">
             <ng-container *ngFor="let item of inputDataRaw['arrList']; index as index">
-              <div class="mb-1">
-                <span class="mr-2">[{{ index }}]:</span>{{ item }}
+              <div class="mb-1 box-raw">
+                <div class="index-raw-item">[{{ index }}]:</div>
+                {{ item }}
               </div>
             </ng-container>
           </ng-container>
