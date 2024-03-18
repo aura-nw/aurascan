@@ -11,7 +11,10 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
+import {
+  convertBech32AddressToEvmAddress,
+  convertEvmAddressToBech32Address,
+} from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
@@ -40,6 +43,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
 
   destroyed$ = new Subject<void>();
@@ -130,10 +134,17 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       startDate = moment(startDate).startOf('day').toISOString();
       endDate = moment(endDate).endOf('day').toISOString();
     }
-    // convert to evmAddress if dataType = cosmos executed
-    if (this.dataType === this.TabsAccountLink.ExecutedTxs) {
-      address = convertEvmAddressToBech32Address(this.prefix, address);
+
+    // send both evm + native address for execute + evm execute
+    if (this.dataType === this.TabsAccountLink.ExecutedTxs || this.dataType === this.TabsAccountLink.EVMExecutedTxs) {
+      const addressNative = convertEvmAddressToBech32Address(this.chainInfo.bech32Config.bech32PrefixAccAddr, address);
+      const addressEvm = convertBech32AddressToEvmAddress(
+        this.chainInfo.bech32Config.bech32PrefixAccAddr,
+        addressNative,
+      );
+      address = `${addressNative},${addressEvm}`;
     }
+
     let payload = {
       dataType: dataType,
       address: address,
