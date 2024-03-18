@@ -61,6 +61,10 @@
       [contractAddress]="contractsAddress">
     </app-evm-read>
 
-    <app-evm-write *ngIf="currentTab === ContractType.WriteContract" [abi]="contractDetail.abi"> </app-evm-write>
+    <app-evm-write
+      *ngIf="currentTab === ContractType.WriteContract"
+      [abi]="contractDetail.abi"
+      [contractAddress]="contractsAddress">
+    </app-evm-write>
   </ng-container>
 </div>

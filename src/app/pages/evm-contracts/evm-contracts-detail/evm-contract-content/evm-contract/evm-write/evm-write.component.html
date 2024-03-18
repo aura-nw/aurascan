@@ -53,56 +53,58 @@
   </div>
 
   <div class="box-content text--white mt-3">
-    <ng-container *ngFor="let msg of writeAbi; index as index">
-      <mat-expansion-panel hideToggle *ngIf="msg.name" class="custom-expansion-panel outline">
+    <ng-container *ngFor="let jsonFragment of extendedAbi; index as index">
+      <mat-expansion-panel hideToggle *ngIf="jsonFragment.name" class="custom-expansion-panel outline">
         <mat-expansion-panel-header class="content-contract txt-header">
-          <mat-panel-title class="item-content body-02 text--gray-1"> {{ index + 1 }}. {{ msg.name }} </mat-panel-title>
+          <mat-panel-title class="item-content body-02 text--gray-1">
+            {{ index + 1 }}. {{ jsonFragment.name }}
+          </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
-          <ng-container *ngFor="let item of msg.inputs">
+        <form [formGroup]="jsonFragment.formGroup" class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
+          <ng-container *ngFor="let item of jsonFragment.inputs">
             <div class="d-lg-block">
               <div class="d-flex align-items-center mb-2">
                 <span class="px-0 text--gray-1 body-02 input-require"> {{ item.name }} ({{ item.type }}) </span>
-                <!-- <button
-                  class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
-                  *ngIf="item.isAddButtonZero"
-                  (click)="showAddZero(msg)">
-                  <i class="ph ph-gear icon-add-zero"></i>
-                </button> -->
               </div>
-              <textarea
-                *ngIf="!item.type?.includes('boolean')"
-                rows="3"
-                matInput
-                (keyup)="resetError(msg)"
-                placeholder="{{ item.name }} ({{ item.type }})"
-                class="form-check-input input-require col-12 mb-4"
-                style="height: auto">
-              </textarea>
+              <ng-container *ngIf="jsonFragment.formGroup.controls[item.name] as control">
+                <textarea
+                  *ngIf="!item.type?.includes('boolean')"
+                  matInput
+                  rows="3"
+                  [formControlName]="item.name"
+                  style="height: auto"
+                  placeholder="{{ item.name }} ({{ item.type }})"
+                  class="form-check-input input-require col-12 mb-4"
+                  [ngClass]="{
+                    'input-require': true,
+                    'error-null': control.invalid && jsonFragment.isValidate
+                  }">
+                </textarea>
 
-              <mat-form-field contract appearance="fill" *ngIf="item.type?.includes('boolean')" class="col-12 mb-4">
-                <mat-select
-                  panelClass="contractPanel"
-                  (selectionChange)="resetError(msg)"
-                  [disableOptionCentering]="true"
-                  placeholder="{{ item.name }} ({{ item.type }})">
-                  <mat-option [value]="true">
-                    <div class="d-flex option-contain">
-                      <div class="option-lable">
-                        <span>true</span>
+                <!-- <mat-form-field contract appearance="fill" *ngIf="item.type?.includes('boolean')" class="col-12 mb-4">
+                  <mat-select
+                    panelClass="contractPanel"
+                    (selectionChange)="resetError(jsonFragment)"
+                    [disableOptionCentering]="true"
+                    placeholder="{{ item.name }} ({{ item.type }})">
+                    <mat-option [value]="true">
+                      <div class="d-flex option-contain">
+                        <div class="option-lable">
+                          <span>true</span>
+                        </div>
                       </div>
-                    </div>
-                  </mat-option>
-                  <mat-option [value]="false">
-                    <div class="d-flex option-contain">
-                      <div class="option-lable">
-                        <span>false</span>
+                    </mat-option>
+                    <mat-option [value]="false">
+                      <div class="d-flex option-contain">
+                        <div class="option-lable">
+                          <span>false</span>
+                        </div>
                       </div>
-                    </div>
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+              </ng-container>
             </div>
           </ng-container>
 
@@ -110,11 +112,29 @@
             <button
               class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
               type="button"
-              (click)="handleExecute(msg)">
+              [disabled]="jsonFragment.isLoading"
+              (click)="handleExecute(jsonFragment)">
+              <img
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                class="mr-2"
+                width="20"
+                height="20"
+                *ngIf="jsonFragment.isLoading" />
+
               <span>Write</span>
             </button>
           </div>
-        </div>
+
+          <div class="px-0">
+            <div class="d-flex" *ngIf="jsonFragment.result !== undefined">
+              <div>Response:</div>
+              <div class="overflow-scroll-x">
+                <pre id="json" class="raw-content text--white pl-2" [innerHtml]="jsonFragment.result | appJson"></pre>
+              </div>
+            </div>
+          </div>
+        </form>
       </mat-expansion-panel>
     </ng-container>
   </div>
