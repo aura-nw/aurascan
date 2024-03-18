@@ -180,7 +180,7 @@ export class ContractService extends CommonService {
       creator = keyword;
     } else if (keyword.startsWith(EWalletType.EVM) && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
       // check 0x
-      address = keyword;
+      address = keyword?.toLowerCase();
     } else if (keyword?.length > 0) {
       return of(null);
     }
@@ -188,8 +188,16 @@ export class ContractService extends CommonService {
     let typeQuery = '';
     if (contractType?.length > 0) {
       if (contractType?.includes('Others')) {
-        contractType = contractType.filter(k => k != 'Others');
+        contractType = contractType.filter((k) => k != 'Others');
         typeQuery = '_or: [{type: {_is_null:true}}, {type: {_in :[' + contractType + ']}}] ,';
+        contractType = contractType.filter((k) => k != 'Others');
+        const listDefault = [
+          EVMContractRegisterType.ERC20,
+          EVMContractRegisterType.ERC721,
+          EVMContractRegisterType.ERC1155,
+        ];
+        const listNotIn = _.pull([...listDefault.map((item) => item)], ...contractType);
+        typeQuery = '_or: [{type: {_is_null:true}}, {type: {_nin :[' + listNotIn + ']}}] ,';
       } else {
         typeQuery = 'type: {_in: [' + contractType + ']},';
       }
