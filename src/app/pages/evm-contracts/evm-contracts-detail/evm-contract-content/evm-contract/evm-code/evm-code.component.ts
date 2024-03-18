@@ -1,18 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { CommonService } from 'src/app/core/services/common.service';
 import local from 'src/app/core/utils/storage/local';
-import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-evm-code',
   templateUrl: './evm-code.component.html',
   styleUrls: ['./evm-code.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EvmCodeComponent implements OnInit {
+export class EvmCodeComponent {
   @Input() contractDetailData: any;
+  @Input() abiString: string;
 
   contractVerifyType = ContractVerifyType;
   isExpand = false;
@@ -23,12 +25,6 @@ export class EvmCodeComponent implements OnInit {
     private layout: BreakpointObserver,
     public commonService: CommonService,
   ) {}
-
-  ngOnInit(): void {}
-
-  get abi() {
-    return this.contractDetailData?.abi ? JSON.stringify(this.contractDetailData?.abi) : '-';
-  }
 
   expandMenu(): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {

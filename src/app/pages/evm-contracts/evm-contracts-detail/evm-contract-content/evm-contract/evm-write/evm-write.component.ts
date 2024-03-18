@@ -46,8 +46,6 @@ export class EvmWriteComponent implements OnInit {
         this.userAddress = null;
       }
     });
-
-    console.log(this.writeAbi);
   }
 
   expandMenu(closeAll = false): void {
