@@ -21,12 +21,12 @@
                 [(ngModel)]="textSearch"
                 (keyup)="onKeyUp()"
                 name="search"
-                autocomplete="off"/>
+                autocomplete="off" />
               <button
                 type="submit"
                 class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
                 (click)="getTokenData()">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
                 type="reset"
@@ -34,7 +34,7 @@
                   !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
                 }}"
                 (click)="resetSearch()">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
           </form>
@@ -59,7 +59,7 @@
                       class="text--primary text-nowrap">
                       {{ element.cw721_contract?.name | ellipsis: 30 }}
                       <span *ngIf="element.cw721_contract?.symbol"
-                      >({{ element.cw721_contract?.symbol | ellipsis: 10 }})</span
+                        >({{ element.cw721_contract?.symbol | ellipsis: 10 }})</span
                       >
                     </a>
                     <div class="body-02 fw-normal caption-mob mb-0 text--gray-6 pr-5 desc">

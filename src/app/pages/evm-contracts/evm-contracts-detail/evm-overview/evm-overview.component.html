@@ -67,9 +67,7 @@
               contractDetail?.cw20_contract?.name &&
               contractDetail?.cw20_contract?.symbol
             ">
-            <a
-              class="text--primary break-word line-claim-v--des"
-              [routerLink]="['/token/', contractDetail?.address]">
+            <a class="text--primary break-word line-claim-v--des" [routerLink]="['/token/', contractDetail?.address]">
               {{ contractDetail | marketInfo: 'name' }} ({{ contractDetail | marketInfo: 'symbol' }})
             </a>
             <div class="cursor-pointer">
@@ -80,7 +78,7 @@
                 height="18"
                 class="ml-1 mb-1"
                 [appTooltip]="verifiedText || 'Verified by Aura Network'"
-                *ngIf="verifiedStatus === 'VERIFIED'"/>
+                *ngIf="verifiedStatus === 'VERIFIED'" />
             </div>
           </div>
           <a

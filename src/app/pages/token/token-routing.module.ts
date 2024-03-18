@@ -1,9 +1,9 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {isEnabled} from 'src/app/app-routing.module';
-import {EFeature} from 'src/app/core/models/common.model';
-import {NFTDetailComponent} from './nft-detail/nft-detail.component';
-import {TokenDetailComponent} from './token-detail/token-detail.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { isEnabled } from 'src/app/app-routing.module';
+import { EFeature } from 'src/app/core/models/common.model';
+import { NFTDetailComponent } from './nft-detail/nft-detail.component';
+import { TokenDetailComponent } from './token-detail/token-detail.component';
 
 const routes: Routes = [
   {
@@ -42,5 +42,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TokenRoutingModule {
-}
+export class TokenRoutingModule {}

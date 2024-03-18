@@ -12,7 +12,7 @@
         </ng-container>
         <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
         <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
-          <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40"/>
+          <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
         </button>
         <span class="burnt-tag caption" *ngIf="nftDetail?.burned">Burnt</span>
       </h1>
@@ -20,7 +20,7 @@
         <a
           class="text--primary h6 mb-0 mt-2 break-word"
           [routerLink]="['/token/' + linkToken, nftDetail?.contract_address]"
-        >{{ nftDetail?.name || nftDetail?.token_name }}</a
+          >{{ nftDetail?.name || nftDetail?.token_name }}</a
         >
       </div>
     </div>
@@ -38,7 +38,7 @@
                     !nftDetail?.media_info?.onchain?.metadata?.image) ||
                   isError
                 "
-                [src]="defaultImgToken"/>
+                [src]="defaultImgToken" />
               <img
                 (click)="expandMedia()"
                 *ngIf="
@@ -46,7 +46,7 @@
                   isError === false
                 "
                 (error)="error()"
-                [src]="imageUrl && animationUrl ? animationUrl : imageUrl"/>
+                [src]="imageUrl && animationUrl ? animationUrl : imageUrl" />
               <video
                 (click)="expandMedia()"
                 [src]="animationUrl"
@@ -82,7 +82,7 @@
                 <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
               </h1>
               <button class="button btn-share" *ngIf="!nftDetail?.burned" (click)="shareNFT()">
-                <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40"/>
+                <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
               </button>
               <span class="burnt-tag" *ngIf="nftDetail?.burned">Burnt</span>
             </div>
@@ -96,11 +96,9 @@
             </ng-container>
           </div>
           <div class="mt-1 mt-lg-2 mb-4 d-lg-flex d-none">
-            <a
-              class="body-01 text--primary break-word"
-              [routerLink]="['/' + linkToken, nftDetail?.contract_address]"
-            >{{ nftDetail?.name || nftDetail?.token_name }}</a
-            >
+            <a class="body-01 text--primary break-word" [routerLink]="['/' + linkToken, nftDetail?.contract_address]">{{
+              nftDetail?.name || nftDetail?.token_name
+            }}</a>
           </div>
           <!-- Desktop card info -->
           <!--          <div class="d-none d-lg-block card py-3 px-6" *ngIf="!isSoulBound">-->
@@ -256,7 +254,7 @@
               </div>
             </ng-container>
             <span *ngIf="!isObject(nftDetail?.media_info?.onchain?.metadata?.attributes)" class="pl-4 pl-lg-6 pt-2"
-            >-</span
+              >-</span
             >
           </ng-container>
           <span *ngIf="!nftDetail?.media_info?.onchain?.metadata?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
@@ -355,7 +353,7 @@
                     [src]="'assets/images/icons/arrow-right.png' | imageS3"
                     width="14"
                     height="9"
-                    class="ml-10 ml-lg-15"/>
+                    class="ml-10 ml-lg-15" />
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
                   <ng-container

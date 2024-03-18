@@ -1,17 +1,17 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {SigningCosmWasmClient} from '@cosmjs/cosmwasm-stargate';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
-import {LENGTH_CHARACTER, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
-import {ContractRegisterType, ContractVerifyType} from 'src/app/core/constants/contract.enum';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {ContractService} from 'src/app/core/services/contract.service';
-import {NameTagService} from 'src/app/core/services/name-tag.service';
-import {TokenService} from 'src/app/core/services/token.service';
+import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import local from 'src/app/core/utils/storage/local';
-import {ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB} from '../../../core/constants/token.constant';
-import {EModeToken, TokenTab} from '../../../core/constants/token.enum';
+import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../core/constants/token.constant';
+import { EModeToken, TokenTab } from '../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-token-content',
@@ -62,8 +62,7 @@ export class TokenContentComponent implements OnInit {
     private tokenService: TokenService,
     private nameTagService: NameTagService,
     private contractService: ContractService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -148,9 +147,7 @@ export class TokenContentComponent implements OnInit {
         if (!params?.a) {
           if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
             this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
-            window.location.href = `/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(
-              this.paramQuery,
-            )}`;
+            window.location.href = `/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
             window.location.href = `/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }
@@ -164,7 +161,7 @@ export class TokenContentComponent implements OnInit {
   resetSearch() {
     this.searchTemp = '';
     if (this.paramQuery) {
-      const params = {...this.route.snapshot.params};
+      const params = { ...this.route.snapshot.params };
       if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
         this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
         window.location.href = `/${this.linkToken}/${params.contractAddress}`;
@@ -178,11 +175,11 @@ export class TokenContentComponent implements OnInit {
     let queryData = {};
     if (this.tokenDetail.isNFTContract) {
       queryData = {
-        tokens: {limit: 1000, owner: address},
+        tokens: { limit: 1000, owner: address },
       };
     } else {
       queryData = {
-        balance: {address: address},
+        balance: { address: address },
       };
     }
     const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
