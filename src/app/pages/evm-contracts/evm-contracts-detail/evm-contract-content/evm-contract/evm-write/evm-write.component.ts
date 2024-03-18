@@ -5,6 +5,7 @@ import {
 } from '@angular/material/legacy-dialog';
 import { JsonRpcSigner } from 'ethers';
 import _ from 'lodash';
+import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { JsonAbi, WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
@@ -21,8 +22,7 @@ export class EvmWriteComponent implements OnInit {
   @Input() abi: JsonAbi[];
 
   isExpand = false;
-  userAddress = '';
-  walletAccount: IMultichainWalletAccount;
+  wallet$: Observable<IMultichainWalletAccount> = this.walletService.walletAccount$;
 
   get writeAbi() {
     return (
@@ -38,26 +38,11 @@ export class EvmWriteComponent implements OnInit {
     private env: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {
-    this.walletService.walletAccount$.subscribe((wallet) => {
-      if (wallet) {
-        this.userAddress = wallet.address;
-      } else {
-        this.userAddress = null;
-      }
-    });
-  }
+  ngOnInit(): void {}
 
-  getSigner() {
-    getSigner(this.env.etherJsonRpc).then((provider) => {
-      console.log('🐛 provider: ', provider);
+  disconnect() {}
 
-      if (provider instanceof JsonRpcSigner) {
-        console.log('🐛 Singer');
-      } else {
-      }
-    });
-  }
+  getSigner() {}
 
   expandMenu(closeAll = false): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
@@ -92,8 +77,7 @@ export class EvmWriteComponent implements OnInit {
   }
 
   connectWallet(): void {
-    // this.walletAccount = this.walletService.getAccount();
-    this.getSigner();
+    this.walletService.getEvmAccount();
   }
 
   handleExecute(msg) {}

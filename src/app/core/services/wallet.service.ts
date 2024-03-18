@@ -112,6 +112,10 @@ export class WalletService implements OnDestroy {
       throw new Error('Chain is required');
     }
 
+    if (this._walletManager) {
+      throw new Error('Wallet manager existed');
+    }
+
     this._chain = chain;
 
     this._logger = new Logger(this.testnets.includes(chain.chain_id) ? 'DEBUG' : 'INFO');
@@ -266,6 +270,19 @@ export class WalletService implements OnDestroy {
     const account = this.walletAccount;
 
     if (account) {
+      return account;
+    }
+
+    const repo = this._walletManager.getWalletRepo(this._chain?.chain_name);
+
+    repo?.openView();
+    return null;
+  }
+
+  getEvmAccount() {
+    const account = this.walletAccount;
+
+    if (account?.evmAccount) {
       return account;
     }
 

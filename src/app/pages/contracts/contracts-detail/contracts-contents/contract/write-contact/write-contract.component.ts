@@ -88,7 +88,9 @@ export class WriteContractComponent implements OnInit {
     });
   }
 
-  connectWallet(): void {}
+  connectWallet(): void {
+    this.walletAccount = this.walletService.getAccount();
+  }
 
   getProperties(schema: Schema) {
     const fieldName = _.first(Object.keys(schema.properties));

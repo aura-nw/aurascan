@@ -1,20 +1,46 @@
 <ng-container *ngIf="abi; else noValues">
   <div class="d-flex justify-content-between align-items-center">
     <div class="my-t mb-1 mb-lg-3 small-text">
-      <button
-        (click)="connectWallet()"
-        class="button button-pill button--xs button-outline button-outline__in-card"
-        *ngIf="!userAddress">
-        <span class="icon-connect"></span>
-        <span class="fw-semibold fw-normal-mob">Connect to Web3</span>
-      </button>
-      <button
-        [routerLink]="['/account/', userAddress]"
-        class="button button-pill button--xs button-outline button-outline__in-card"
-        *ngIf="userAddress">
-        <span class="icon-connect connected"></span>
-        <span class="fw-semibold fw-normal-mob text--gray-1">Connected to Web3</span>
-      </button>
+      <ng-container *ngIf="{ wallet: wallet$ | async } as ng">
+        <button
+          (click)="connectWallet()"
+          *ngIf="!ng.wallet"
+          type="button"
+          class="button button-pill button-outline caption fw-normal cursor-pointer">
+          <span class="icon-connect"></span>
+          <span class="text--white">Connect Wallet</span>
+        </button>
+
+        <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
+          <div class="button button-pill button-outline button--xs caption fw-normal">
+            <span class="icon-connect connected"></span>
+            <span
+              class="fw-semibold fw-normal-mob text--gray-1 d-flex align-items-center"
+              [copyBtn]="ng.wallet?.address">
+              <span class="txt-wallet cursor-pointer" [routerLink]="['/account/', ng.wallet?.address]">
+                Connected [<ng-container *ngIf="ng.wallet?.cosmosAccount?.username">
+                  {{ ng.wallet?.cosmosAccount?.username | ellipsis: 16 }}
+                </ng-container>
+                <ng-container *ngIf="!ng.wallet?.cosmosAccount?.username">
+                  {{ ng.wallet?.address | ellipsis: 8 : 8 }} </ng-container
+                >]
+              </span>
+            </span>
+          </div>
+          <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
+          <div
+            class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center"
+            (click)="disconnect()">
+            <span class="txt-disconnect">Disconnect</span>
+            <img
+              [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
+              alt=""
+              width="18px"
+              height="18px"
+              class="ml-1" />
+          </div>
+        </div>
+      </ng-container>
     </div>
     <div class="caption fw-normal-mob d-flex align-items-center">
       <span class="cursor-pointer text--primary" (click)="expandMenu()">
