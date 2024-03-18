@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import * as _ from 'lodash';
-import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { ContractService } from 'src/app/core/services/contract.service';
-import { TokenContractType } from '../../../../../../core/constants/token.enum';
+import {TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
+import {ContractVerifyType} from 'src/app/core/constants/contract.enum';
+import {ContractService} from 'src/app/core/services/contract.service';
+import {TokenContractType} from '../../../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-token-contract-tab',
@@ -22,7 +22,8 @@ export class TokenContractTabComponent implements OnInit {
   isLoading = true;
   errTxt: string;
 
-  constructor(private router: Router, private contractService: ContractService) {}
+  constructor(private router: Router, private contractService: ContractService) {
+  }
 
   ngOnInit(): void {
     this.getContractDetail();
@@ -43,7 +44,7 @@ export class TokenContractTabComponent implements OnInit {
           let tx_hash = data.instantiate_hash;
           let code_id = _.get(data, 'code.code_id');
           let address = data.address;
-          this.tokenDetail = { contract_verification, execute_msg_schema, query_msg_schema, tx_hash, code_id, address };
+          this.tokenDetail = {contract_verification, execute_msg_schema, query_msg_schema, tx_hash, code_id, address};
         }
       },
       error: (e) => {

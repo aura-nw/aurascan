@@ -1,18 +1,18 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { TranslateService } from '@ngx-translate/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {TranslateService} from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
-import { Subject } from 'rxjs';
-import { debounceTime, map, takeUntil } from 'rxjs/operators';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../core/constants/common.constant';
-import { ETokenCoinType, ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
-import { TableTemplate } from '../../../../core/models/common.model';
+import {Subject} from 'rxjs';
+import {debounceTime, map, takeUntil} from 'rxjs/operators';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TokenService} from 'src/app/core/services/token.service';
+import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
+import {PAGE_EVENT, TIMEOUT_ERROR} from '../../../core/constants/common.constant';
+import {ETokenCoinType, ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN} from '../../../core/constants/token.constant';
+import {TableTemplate} from '../../../core/models/common.model';
 
 @Component({
   selector: 'app-token-cw20',
@@ -23,13 +23,13 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
-    { matColumnDef: 'token', headerCellDef: 'name' },
-    { matColumnDef: 'type', headerCellDef: 'type' },
-    { matColumnDef: 'price', headerCellDef: 'price' },
-    { matColumnDef: 'totalSupply', headerCellDef: 'In-Chain Supply Amount' },
-    { matColumnDef: 'inChainValue', headerCellDef: 'In-Chain Supply' },
-    { matColumnDef: 'holder', headerCellDef: 'Holder' },
+    {matColumnDef: 'id', headerCellDef: 'id'},
+    {matColumnDef: 'token', headerCellDef: 'name'},
+    {matColumnDef: 'type', headerCellDef: 'type'},
+    {matColumnDef: 'price', headerCellDef: 'price'},
+    {matColumnDef: 'totalSupply', headerCellDef: 'In-Chain Supply Amount'},
+    {matColumnDef: 'inChainValue', headerCellDef: 'In-Chain Supply'},
+    {matColumnDef: 'holder', headerCellDef: 'Holder'},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
@@ -64,7 +64,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     private tokenService: TokenService,
     public environmentService: EnvironmentService,
     private breakpointObserver: BreakpointObserver,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');

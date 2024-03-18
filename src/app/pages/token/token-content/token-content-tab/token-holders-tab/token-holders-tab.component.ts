@@ -1,18 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { ActivatedRoute } from '@angular/router';
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import {Component, Input, OnInit} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {ActivatedRoute} from '@angular/router';
+import {SigningCosmWasmClient} from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { forkJoin, map, of, switchMap } from 'rxjs';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { EModeToken } from 'src/app/core/constants/token.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { TableTemplate } from '../../../../../../core/models/common.model';
+import {forkJoin, map, of, switchMap} from 'rxjs';
+import {PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
+import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
+import {EModeToken} from 'src/app/core/constants/token.enum';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CommonService} from 'src/app/core/services/common.service';
+import {TokenService} from 'src/app/core/services/token.service';
+import {TableTemplate} from '../../../../../core/models/common.model';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -27,18 +27,18 @@ export class TokenHoldersTabComponent implements OnInit {
   @Input() decimalValue: number;
 
   CW20Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
-    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
-    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12 },
-    { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12 },
-    { matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12 },
+    {matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5},
+    {matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30},
+    {matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12},
+    {matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12},
+    {matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12},
   ];
 
   CW721Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
-    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 40 },
-    { matColumnDef: 'quantity', headerCellDef: 'amount', headerWidth: 12 },
-    { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 15 },
+    {matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5},
+    {matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 40},
+    {matColumnDef: 'quantity', headerCellDef: 'amount', headerWidth: 12},
+    {matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 15},
   ];
 
   template: Array<TableTemplate> = [];
@@ -67,7 +67,8 @@ export class TokenHoldersTabComponent implements OnInit {
     private environmentService: EnvironmentService,
     public commonService: CommonService,
     private route: ActivatedRoute,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -217,7 +218,8 @@ export class TokenHoldersTabComponent implements OnInit {
       const config = await client.queryContractSmart(this.contractAddress, queryData);
       this.totalQuantity = config?.count || 0;
       this.getHolderNFT();
-    } catch (error) {}
+    } catch (error) {
+    }
   }
 
   getDenomHolder() {

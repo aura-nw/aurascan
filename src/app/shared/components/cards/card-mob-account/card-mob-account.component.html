@@ -90,11 +90,11 @@
             <div class="d-flex align-items-center">
               <div>
                 <ng-container *ngIf="item['address'] === item['toAddress']">
-                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
+                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14"/>
                   <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
                 </ng-container>
                 <ng-container *ngIf="item['address'] !== item['toAddress']">
-                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
+                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14"/>
                   <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
                 </ng-container>
               </div>
@@ -117,10 +117,10 @@
               </div>
 
               <div class="ml-1 text--primary">
-                <a [routerLink]="['/tokens/token', item.linkDenom]" *ngIf="modeQuery !== tabsData.FtsTxs">
+                <a [routerLink]="['/token', item.linkDenom]" *ngIf="modeQuery !== tabsData.FtsTxs">
                   {{ item.denom || coinInfo.coinDenom | ellipsis: 19 }}
                 </a>
-                <a [routerLink]="['/tokens/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
+                <a [routerLink]="['/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
                   {{ item.denom | ellipsis: 19 }}
                 </a>
               </div>
@@ -138,7 +138,7 @@
               <i
                 [style]="'margin-top: 2px'"
                 class="ph-arrow-square-out-fill body-01-mob cursor-pointer mr-1 ml-2"
-                [routerLink]="['/tokens/token-nft/', item.contractAddress, item.tokenId]"></i>
+                [routerLink]="['/token-nft/', item.contractAddress, item.tokenId]"></i>
             </div>
           </div>
         </div>

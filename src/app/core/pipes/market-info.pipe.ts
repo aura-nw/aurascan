@@ -1,11 +1,11 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 import BigNumber from 'bignumber.js';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { CommonService } from '../services/common.service';
-import { getBalance } from '../utils/common/parsing';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TokenService} from 'src/app/core/services/token.service';
+import {CommonService} from '../services/common.service';
+import {getBalance} from '../utils/common/parsing';
 
-@Pipe({ name: 'marketInfo' })
+@Pipe({name: 'marketInfo'})
 export class MarketInfoPipe implements PipeTransform {
   image_s3 = this.env.imageUrl;
   defaultLogoToken = `${this.image_s3}images/icons/aura.svg`;
@@ -13,7 +13,8 @@ export class MarketInfoPipe implements PipeTransform {
   constructor(
     private env: EnvironmentService,
     private token: TokenService,
-  ) {}
+  ) {
+  }
 
   transform(value: any, key?: 'logo' | 'name' | 'symbol'): any {
     let marketInfo = {
@@ -27,7 +28,7 @@ export class MarketInfoPipe implements PipeTransform {
     }
 
     const tokenMarket = this.token.tokensMarket || [];
-    const { cw20_contract } = value;
+    const {cw20_contract} = value;
     if (cw20_contract) {
       marketInfo = {
         logo: cw20_contract?.marketing_info?.logo?.url || this.defaultLogoToken,
@@ -63,10 +64,12 @@ export class MarketInfoPipe implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'ibcDenom' })
+@Pipe({name: 'ibcDenom'})
 export class IbcDenomPipe implements PipeTransform {
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
-  constructor(private commonService: CommonService, private environmentService: EnvironmentService) {}
+
+  constructor(private commonService: CommonService, private environmentService: EnvironmentService) {
+  }
 
   transform(value: string, amount?: string): string {
     if (!value) return '';
@@ -82,6 +85,6 @@ export class IbcDenomPipe implements PipeTransform {
 
     return balance.lte(0)
       ? '-'
-      : balance.toFormat() + `<a class="text--primary ml-1" href='/tokens/token/${linkToken}'>${data['display']}</a>`;
+      : balance.toFormat() + `<a class="text--primary ml-1" href='/token/${linkToken}'>${data['display']}</a>`;
   }
 }

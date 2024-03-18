@@ -1,6 +1,6 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
-import { Router } from '@angular/router';
-import { EnvironmentService } from '../data-services/environment.service';
+import {Directive, ElementRef, HostListener, Input} from '@angular/core';
+import {Router} from '@angular/router';
+import {EnvironmentService} from '../data-services/environment.service';
 
 @Directive({
   selector: 'appLinkDenom, [appLinkDenom]',
@@ -23,7 +23,8 @@ export class LinkDenomDirective {
     private environmentService: EnvironmentService,
     public router: Router,
     private elRef: ElementRef,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     if (!this.isDisable) {
@@ -35,7 +36,7 @@ export class LinkDenomDirective {
     this.appLinkDenom = this.appLinkDenom || this.coinInfo.coinMinimalDenom;
     // check link of denom
     const linkToken = this.appLinkDenom.replace('ibc/', '');
-    this.linkItem = `/tokens/token/${linkToken}`;
+    this.linkItem = `/token/${linkToken}`;
 
     //create parent a with link
     const element: HTMLElement = this.elRef.nativeElement;

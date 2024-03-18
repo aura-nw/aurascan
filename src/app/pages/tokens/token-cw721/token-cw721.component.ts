@@ -1,17 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { MatSort, Sort } from '@angular/material/sort';
-import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { TableTemplate } from '../../../../core/models/common.model';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatSort, Sort} from '@angular/material/sort';
+import {TranslateService} from '@ngx-translate/core';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
+import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {TokenService} from 'src/app/core/services/token.service';
+import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
+import {TableTemplate} from '../../../core/models/common.model';
 
 @Component({
   selector: 'app-token-cw721',
@@ -22,11 +22,11 @@ export class TokenCw721Component implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
-    { matColumnDef: 'token', headerCellDef: 'name' },
-    { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
-    { matColumnDef: 'total_activity', headerCellDef: 'total_activity' },
-    { matColumnDef: 'transfer_24h', headerCellDef: 'transfer' },
+    {matColumnDef: 'id', headerCellDef: 'id'},
+    {matColumnDef: 'token', headerCellDef: 'name'},
+    {matColumnDef: 'tokenContract', headerCellDef: 'tokenContract'},
+    {matColumnDef: 'total_activity', headerCellDef: 'total_activity'},
+    {matColumnDef: 'transfer_24h', headerCellDef: 'transfer'},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -49,7 +49,8 @@ export class TokenCw721Component implements OnInit {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getTokenData();

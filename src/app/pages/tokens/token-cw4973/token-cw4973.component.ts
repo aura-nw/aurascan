@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { TableTemplate } from '../../../../core/models/common.model';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {TranslateService} from '@ngx-translate/core';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
+import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {SoulboundService} from 'src/app/core/services/soulbound.service';
+import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
+import {TableTemplate} from '../../../core/models/common.model';
 
 @Component({
   selector: 'app-token-cw4973',
@@ -22,10 +22,10 @@ export class TokenCw4973Component implements OnInit {
   destroy$ = new Subject<void>();
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
-    { matColumnDef: 'token', headerCellDef: 'name' },
-    { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
-    { matColumnDef: 'attestor', headerCellDef: 'attestor' },
+    {matColumnDef: 'id', headerCellDef: 'id'},
+    {matColumnDef: 'token', headerCellDef: 'name'},
+    {matColumnDef: 'tokenContract', headerCellDef: 'tokenContract'},
+    {matColumnDef: 'attestor', headerCellDef: 'attestor'},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -42,7 +42,8 @@ export class TokenCw4973Component implements OnInit {
     public translate: TranslateService,
     private soulboundService: SoulboundService,
     private nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getTokenData();

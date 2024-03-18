@@ -19,12 +19,12 @@
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
               name="search"
-              autocomplete="off" />
+              autocomplete="off"/>
             <button
               type="submit"
               class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}"
               (click)="searchToken()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
             <button
               type="reset"
@@ -32,7 +32,7 @@
                 !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
           </div>
         </form>
@@ -51,7 +51,7 @@
               <div class="nft-cards__item nft-cards__item--unclaimed">
                 <div class="token-cards__img">
                   <app-nft-card
-                    [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
+                    [nftLink]="'/token-abt/' + token?.contract_address + '/' + token?.token_id"
                     [nftItem]="token"
                     [disableLink]="true"
                     nftId="{{ 'nft#' + i }}"
