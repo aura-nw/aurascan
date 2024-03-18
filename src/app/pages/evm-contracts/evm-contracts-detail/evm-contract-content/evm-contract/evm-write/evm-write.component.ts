@@ -3,12 +3,13 @@ import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
-import { WalletAccount } from '@cosmos-kit/core';
-import { TranslateService } from '@ngx-translate/core';
+import { JsonRpcSigner } from 'ethers';
 import _ from 'lodash';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { JsonAbi, WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { getSigner } from 'src/app/core/utils/ethers/ethers';
 import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
 
 @Component({
@@ -21,7 +22,7 @@ export class EvmWriteComponent implements OnInit {
 
   isExpand = false;
   userAddress = '';
-  walletAccount: WalletAccount;
+  walletAccount: IMultichainWalletAccount;
 
   get writeAbi() {
     return (
@@ -33,9 +34,8 @@ export class EvmWriteComponent implements OnInit {
 
   constructor(
     private walletService: WalletService,
-    private toastr: NgxToastrService,
-    private translate: TranslateService,
     private dialog: MatDialog,
+    private env: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +44,17 @@ export class EvmWriteComponent implements OnInit {
         this.userAddress = wallet.address;
       } else {
         this.userAddress = null;
+      }
+    });
+  }
+
+  getSigner() {
+    getSigner(this.env.etherJsonRpc).then((provider) => {
+      console.log('🐛 provider: ', provider);
+
+      if (provider instanceof JsonRpcSigner) {
+        console.log('🐛 Singer');
+      } else {
       }
     });
   }
@@ -81,7 +92,8 @@ export class EvmWriteComponent implements OnInit {
   }
 
   connectWallet(): void {
-    this.walletAccount = this.walletService.getAccount();
+    // this.walletAccount = this.walletService.getAccount();
+    this.getSigner();
   }
 
   handleExecute(msg) {}

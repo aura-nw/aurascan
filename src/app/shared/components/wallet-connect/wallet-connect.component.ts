@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Chain } from '@chain-registry/types';
-import { WalletAccount } from '@cosmos-kit/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -28,7 +28,7 @@ export class WalletConnectComponent implements OnInit {
     preferredSignType: (_: Chain) => 'direct',
   };
 
-  wallet$: Observable<WalletAccount> = this.walletsService.walletAccount$;
+  wallet$: Observable<IMultichainWalletAccount> = this.walletsService.walletAccount$.pipe(tap(console.log));
 
   constructor(
     public commonService: CommonService,
