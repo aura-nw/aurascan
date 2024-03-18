@@ -122,3 +122,7 @@ export enum EFileType {
   Json = 'application/json',
   Zip = 'application/x-zip-compressed',
 }
+
+export enum EMethodContract{
+  Creation = '60806040'
+}
