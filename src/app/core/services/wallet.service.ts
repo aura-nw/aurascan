@@ -25,6 +25,7 @@ import { convertEvmAddressToBech32Address } from '../utils/common/address-conver
 import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 import { getSigner } from '../utils/ethers/ethers';
 import { addNetwork, checkNetwork } from '../utils/ethers/utils';
+import local from '../utils/storage/local';
 
 @Injectable({
   providedIn: 'root',
@@ -152,6 +153,8 @@ export class WalletService implements OnDestroy {
     if (this.walletAccount.evmAccount) {
       this.walletAccount = null;
 
+      local.removeItem(STORAGE_KEY.CURRENT_EVM_WALLET);
+
       return;
     }
 
@@ -200,8 +203,19 @@ export class WalletService implements OnDestroy {
     return currentChainWallet;
   }
 
+  restoreEvmAccounts() {
+    let account = local.getItem(STORAGE_KEY.CURRENT_EVM_WALLET);
+
+    if (account) {
+      this.connectEvmWallet().then().catch();
+    }
+  }
+
   restoreAccounts() {
     const account = this.getChainWallet()?.data as WalletAccount;
+
+    const evmAccount = this.restoreEvmAccounts();
+
     if (account) {
       this._logger.info('Restore accounts: ', account);
       this.walletAccount = {
@@ -349,6 +363,8 @@ export class WalletService implements OnDestroy {
             signer.address,
           ),
         };
+
+        local.setItem(STORAGE_KEY.CURRENT_EVM_WALLET, this.walletAccount);
       }
     });
   }
