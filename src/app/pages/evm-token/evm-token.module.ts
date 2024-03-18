@@ -21,11 +21,11 @@ import { ReadContractModule } from '../contracts/contracts-detail/contracts-cont
 import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
 import { ContractsModule } from '../contracts/contracts.module';
 import { EvmTokenContentComponent } from './evm-token-content/evm-token-content.component';
-import { EvmTokenContractTabComponent } from './evm-token-content/token-content-tab/evm-token-contract-tab/evm-token-contract-tab.component';
-import { EvmTokenHoldersTabComponent } from './evm-token-content/token-content-tab/evm-token-holders-tab/evm-token-holders-tab.component';
-import { EvmTokenInfoTabComponent } from './evm-token-content/token-content-tab/evm-token-info-tab/evm-token-info-tab.component';
-import { EvmTokenInventoryComponent } from './evm-token-content/token-content-tab/evm-token-inventory-tab/evm-token-inventory-tab.component';
-import { EvmTokenTransfersTabComponent } from './evm-token-content/token-content-tab/evm-token-transfers-tab/evm-token-transfers-tab.component';
+import { EvmTokenContractTabComponent } from './evm-token-content/evm-token-content-tab/evm-token-contract-tab/evm-token-contract-tab.component';
+import { EvmTokenHoldersTabComponent } from './evm-token-content/evm-token-content-tab/evm-token-holders-tab/evm-token-holders-tab.component';
+import { EvmTokenInfoTabComponent } from './evm-token-content/evm-token-content-tab/evm-token-info-tab/evm-token-info-tab.component';
+import { EvmTokenInventoryComponent } from './evm-token-content/evm-token-content-tab/evm-token-inventory-tab/evm-token-inventory-tab.component';
+import { EvmTokenTransfersTabComponent } from './evm-token-content/evm-token-content-tab/evm-token-transfers-tab/evm-token-transfers-tab.component';
 import { EvmTokenDetailComponent } from './evm-token-detail/emv-token-detail.component';
 import { EvmTokenOverviewComponent } from './evm-token-overview/evm-token-overview.component';
 import { TokenRoutingModule } from './evm-token-routing.module';
@@ -74,4 +74,4 @@ import { PopupShareComponent } from './nft-detail/popup-share/popup-share.compon
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
-export class TokenModule {}
+export class EvmTokenModule {}
