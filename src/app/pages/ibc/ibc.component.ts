@@ -1,21 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {PageEvent} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 import * as _ from 'lodash';
-import { PAGE_EVENT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
-import { IBCService } from 'src/app/core/services/ibc.service';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
+import {PAGE_EVENT, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
+import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
+import {TableTemplate} from 'src/app/core/models/common.model';
+import {CommonService} from 'src/app/core/services/common.service';
+import {IBCService} from 'src/app/core/services/ibc.service';
+import {NotificationsService} from 'src/app/core/services/notifications.service';
 import local from 'src/app/core/utils/storage/local';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { PopupIBCDetailComponent } from './popup-ibc-detail/popup-ibc-detail.component';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
+import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
+import {PopupIBCDetailComponent} from './popup-ibc-detail/popup-ibc-detail.component';
+import {Subject, debounceTime, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-ibc',
@@ -47,13 +47,13 @@ export class IBCComponent implements OnInit {
   destroy$ = new Subject<void>();
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'no', headerCellDef: 'No', headerWidth: 8 },
-    { matColumnDef: 'chain', headerCellDef: 'Chain', headerWidth: 28 },
-    { matColumnDef: 'total_asset_transfer', headerCellDef: 'Total', headerWidth: 16 },
-    { matColumnDef: 'receive_asset_transfer', headerCellDef: 'Receive', headerWidth: 16 },
-    { matColumnDef: 'send_asset_transfer', headerCellDef: 'Send', headerWidth: 16 },
-    { matColumnDef: 'status', headerCellDef: 'Status', headerWidth: 15 },
-    { matColumnDef: 'channels', headerCellDef: 'Channels', headerWidth: 28 },
+    {matColumnDef: 'no', headerCellDef: 'No', headerWidth: 8},
+    {matColumnDef: 'chain', headerCellDef: 'Chain', headerWidth: 28},
+    {matColumnDef: 'total_asset_transfer', headerCellDef: 'Total', headerWidth: 16},
+    {matColumnDef: 'receive_asset_transfer', headerCellDef: 'Receive', headerWidth: 16},
+    {matColumnDef: 'send_asset_transfer', headerCellDef: 'Send', headerWidth: 16},
+    {matColumnDef: 'status', headerCellDef: 'Status', headerWidth: 15},
+    {matColumnDef: 'channels', headerCellDef: 'Channels', headerWidth: 28},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
@@ -62,7 +62,8 @@ export class IBCComponent implements OnInit {
     private dialog: MatDialog,
     private notificationsService: NotificationsService,
     public commonService: CommonService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.searchSubject
@@ -98,8 +99,8 @@ export class IBCComponent implements OnInit {
           connectedChain: _.get(res, 'total_connected_chain.aggregate.count') || 0,
           totalOpen:
             (_.get(res, 'total_opening_channels.aggregate.sum.open_channel') || 0) +
-              '/' +
-              _.get(res, 'total_channels.aggregate.sum.total_channel') || 0,
+            '/' +
+            (_.get(res, 'total_channels.aggregate.sum.total_channel') > 0 ? _.get(res, 'total_channels.aggregate.sum.total_channel') : 0),
           totalSend: _.get(res, 'total_send.aggregate.sum.send_asset_transfer') || 0,
           totalReceive: _.get(res, 'total_receive.aggregate.sum.receive_asset_transfer') || 0,
         };
