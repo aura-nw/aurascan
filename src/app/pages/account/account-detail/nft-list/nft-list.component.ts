@@ -153,16 +153,11 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
               address: item.smart_contract.address,
             });
           });
-          this.accountService.countListCollectionByOwner(payload).subscribe(
-            (countData) => {
-              this.listCollection[0].quantity = countData?.cw721_token_aggregate?.aggregate?.count;
-              this.setNFTFilter(this.listCollection[0]);
-            },
-            () => {},
-            () => {
-              this.setNFTFilter(0);
-            },
-          );
+
+          this.accountService.countListCollectionByOwner(payload).subscribe((countData) => {
+            this.listCollection[0].quantity = countData?.cw721_token_aggregate?.aggregate?.count;
+            this.setNFTFilter(this.listCollection[0]);
+          });
         }
       },
       error: (e) => {
