@@ -1,14 +1,13 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { Contract, JsonFragment } from 'ethers';
-import _ from 'lodash';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { JsonAbi, WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
+import { WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
@@ -44,7 +43,7 @@ export class EvmWriteComponent implements OnChanges {
   get writeAbi() {
     return (
       this.abi?.filter(
-        (abi: JsonAbi) => WRITE_STATE_MUTABILITY.includes(abi.stateMutability) && abi.type == 'function',
+        (abi: JsonFragment) => WRITE_STATE_MUTABILITY.includes(abi.stateMutability) && abi.type == 'function',
       ) || []
     );
   }
@@ -80,7 +79,9 @@ export class EvmWriteComponent implements OnChanges {
     }
   }
 
-  disconnect() {}
+  disconnect() {
+    this.walletService.disconnect();
+  }
 
   expandMenu(closeAll = false): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
@@ -117,7 +118,7 @@ export class EvmWriteComponent implements OnChanges {
   }
 
   connectWallet(): void {
-    this.walletService.getEvmAccount();
+    this.walletService.getAccount();
   }
 
   handleExecute(jsonFragment: JsonFragmentExtends) {

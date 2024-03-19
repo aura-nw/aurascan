@@ -40,6 +40,10 @@
               class="ml-1" />
           </div>
         </div>
+        <div class="warning-wrapper" *ngIf="ng.wallet?.cosmosAccount">
+          <img src="./../../../../../../../assets/icons/icons-svg/color/warning.svg" alt="warning" />
+          <span>Need to connect by EVM address to interact with EVM contract</span>
+        </div>
       </ng-container>
     </div>
     <div class="caption fw-normal-mob d-flex align-items-center">
