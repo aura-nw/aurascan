@@ -22,8 +22,7 @@ export interface IResponsesError {
   };
 }
 
-export interface IResponsesTemplates<T> extends IResponsesSuccess<T>, IResponsesError {
-}
+export interface IResponsesTemplates<T> extends IResponsesSuccess<T>, IResponsesError {}
 
 export class TableTemplate {
   matColumnDef: string;
