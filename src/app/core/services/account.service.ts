@@ -72,6 +72,39 @@ export class AccountService extends CommonService {
             }
           }
         }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload?.limit || 20,
+          offset: payload.offset,
+          contract_address: payload?.contractAddress || payload?.address,
+          nextKeyLastUpdatedHeight: payload?.nextKey,
+          nextKeyId: payload?.nextKeyId,
+          tokenId: payload?.token_id,
+          owner: payload?.owner,
+        },
+        operationName: 'queryAssetCW721',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  countAssetCW721ByOwner(payload): Observable<any> {
+    if (payload.keyword?.length >= LENGTH_CHARACTER.ADDRESS) {
+      payload.contractAddress = payload.keyword;
+    } else if (payload.keyword?.length > 0) {
+      payload.token_id = payload.keyword;
+    }
+    const operationsDoc = `
+    query queryAssetCW721(
+      $contract_address: String
+      $tokenId: String = null
+      $owner: String = null
+    ) {
+      ${this.envDB} {
         cw721_token_aggregate(where: {cw721_contract: {smart_contract: {address: {_eq: $contract_address}, name: {_neq: "${TYPE_CW4973}"}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner}, burned: {_eq: false}}, order_by: [{last_updated_height: desc}, {id: desc}]) {
           aggregate {
             count
@@ -84,8 +117,6 @@ export class AccountService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          limit: payload?.limit || 20,
-          offset: payload.offset,
           contract_address: payload?.contractAddress || payload?.address,
           nextKeyLastUpdatedHeight: payload?.nextKey,
           nextKeyId: payload?.nextKeyId,
@@ -113,6 +144,24 @@ export class AccountService extends CommonService {
             address
           }
         }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          owner: payload?.owner,
+        },
+        operationName: 'queryListCollection',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  countListCollectionByOwner(payload): Observable<any> {
+    const operationsDoc = `
+    query queryListCollection($owner: String = null)  {
+      ${this.envDB} {
         cw721_token_aggregate(where: {cw721_contract: {smart_contract: {name: {_neq: "crates.io:cw4973"}}}, owner: {_eq: $owner}, burned: {_eq: false}}) {
           aggregate {
             count
