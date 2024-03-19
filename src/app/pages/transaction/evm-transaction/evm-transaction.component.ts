@@ -84,6 +84,8 @@ export class EvmTransactionComponent implements OnChanges {
         .queryTransactionByEvmHash(payload)
         .pipe(
           switchMap((response) => {
+            console.log(response);
+
             const txData = _.get(response, 'transaction[0]');
 
             return of(txData);
@@ -93,6 +95,7 @@ export class EvmTransactionComponent implements OnChanges {
           next: (res) => {
             if (res) {
               this.transaction = this.parseEvmTx(res);
+              console.log(this.transaction);
             }
           },
           error: (e) => {
@@ -117,13 +120,25 @@ export class EvmTransactionComponent implements OnChanges {
   parseEvmTx(tx: unknown): typeof this.transaction {
     const txMessage: unknown[] = _.get(tx, 'transaction_messages[0]');
     let evm_events = _.get(tx, 'evm_transaction.evm_events');
+
     if (evm_events?.length > 0) {
       evm_events.forEach((element) => {
         let topics = [];
+        let evm_signature_mapping_topic = [];
         for (let i = 0; i < this.topicLength; i++) {
           topics.push(element['topic' + i]);
+          if (element[`evm_signature_mapping_topic${[i]}`]) {
+            console.log(element[`evm_signature_mapping_topic${[i]}`]);
+            if (element[`evm_signature_mapping_topic${[i]}`]['human_readable_topic']) {
+              let human_readable_topic = element[`evm_signature_mapping_topic${[i]}`]['human_readable_topic']
+                ?.toString()
+                .replace('event', '>');
+              evm_signature_mapping_topic.push(human_readable_topic);
+            }
+          }
         }
         element['topics'] = topics;
+        element['evm_signature_mapping_topic'] = evm_signature_mapping_topic;
       });
     }
 
@@ -145,7 +160,7 @@ export class EvmTransactionComponent implements OnChanges {
       type: _.get(txMessage, 'content.@type'),
       inputData: _.get(tx, 'evm_transaction.data'),
       eventLog: evm_events,
-      evm_data: _.get(tx, 'evm_transaction.data')
+      evm_data: _.get(tx, 'evm_transaction.data'),
     };
   }
 }
