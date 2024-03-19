@@ -534,7 +534,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
         txs = data.evm_transaction;
         txs.forEach((element) => {
-          const type = toHexData(_.get(element, 'data'));
+          const type = _.get(element, 'data')?.substring(8);
           element.tx_hash = _.get(element, 'hash');
           element.hash = _.get(element, 'transaction.hash');
           element.method = type ? type : 'Transfer';
