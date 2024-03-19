@@ -1,7 +1,7 @@
 <div class="card box-nft">
   <div class="card-body">
     <!-- Filter -->
-    <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
+    <div class="d-xl-flex justify-content-between align-items-center mb-4">
       <span class="mb-0 fw-semibold text--gray-light-2 mr-lg-6 h3">
         NFTs <span *ngIf="listCollection[0]?.quantity">({{ listCollection[0]?.quantity || 0 }})</span>
       </span>
@@ -79,7 +79,7 @@
       </div>
     </div>
     <!-- Table -->
-    <ng-container *ngIf="nftList?.length > 0; else noValues">
+    <ng-container *ngIf="nftList?.length > 0 && !loading; else noValues">
       <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
         <div
           class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"

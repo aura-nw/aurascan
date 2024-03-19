@@ -75,6 +75,7 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getNftData() {
+    this.loading = true;
     const payload = {
       owner: this.address,
       limit: this.pageData.pageSize,
@@ -99,6 +100,7 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
             this.searchNotFound = true;
           }
           this.pageData.length = 0;
+          this.nftList = [];
           return;
         }
 
