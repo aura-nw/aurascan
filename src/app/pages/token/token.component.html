@@ -1,9 +1,0 @@
-<ng-container *ngIf="{ tx: hash$ | async } as state">
-  <ng-container *ngIf="state.tx.type == 'cosmos'">
-    <app-token-detail></app-token-detail>
-  </ng-container>
-
-  <ng-container *ngIf="state.tx.type == 'evm'">
-    <app-evm-token-detail></app-evm-token-detail>
-  </ng-container>
-</ng-container>

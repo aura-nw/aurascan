@@ -47,11 +47,9 @@ import {EvmTokenDetailComponent} from './evm-token/evm-token-detail/emv-token-de
 import {EvmTokenOverviewComponent} from './evm-token/evm-token-overview/evm-token-overview.component';
 import {EvmTokenSummaryComponent} from './evm-token/evm-token-summary/evm-token-summary.component';
 import {TokenRoutingModule} from './token-routing.module';
-import {TokenComponent} from "src/app/pages/token/token.component";
 
 @NgModule({
   declarations: [
-    TokenComponent,
     TokenDetailComponent,
     TokenOverviewComponent,
     TokenSummaryComponent,
