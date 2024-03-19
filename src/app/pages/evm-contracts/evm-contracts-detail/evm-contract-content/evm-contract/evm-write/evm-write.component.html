@@ -41,7 +41,7 @@
           </div>
         </div>
         <div class="warning-wrapper" *ngIf="ng.wallet?.cosmosAccount">
-          <img src="./../../../../../../../assets/icons/icons-svg/color/warning.svg" alt="warning" />
+          <img src="assets/icons/icons-svg/color/warning.svg" alt="warning" />
           <span>Need to connect by EVM address to interact with EVM contract</span>
         </div>
       </ng-container>
@@ -70,6 +70,12 @@
             <div class="d-lg-block">
               <div class="d-flex align-items-center mb-2">
                 <span class="px-0 text--gray-1 body-02 input-require"> {{ item.name }} ({{ item.type }}) </span>
+                <button
+                  class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
+                  *ngIf="item.name == 'amount'"
+                  (click)="addZero(jsonFragment, item.name)">
+                  <i class="ph ph-gear icon-add-zero"></i>
+                </button>
               </div>
               <ng-container *ngIf="jsonFragment.formGroup.controls[item.name] as control">
                 <textarea
@@ -81,7 +87,6 @@
                   placeholder="{{ item.name }} ({{ item.type }})"
                   class="form-check-input input-require col-12 mb-4"
                   [ngClass]="{
-                    'input-require': true,
                     'error-null': control.invalid && jsonFragment.isValidate
                   }">
                 </textarea>
