@@ -1,7 +1,7 @@
 <div class="card box-nft">
   <div class="card-body">
     <!-- Filter -->
-    <div class="d-xl-flex justify-content-between align-items-center mb-4">
+    <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
       <span class="mb-0 fw-semibold text--gray-light-2 mr-lg-6 h3">
         NFTs <span *ngIf="listCollection[0]?.quantity">({{ listCollection[0]?.quantity || 0 }})</span>
       </span>
