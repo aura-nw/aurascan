@@ -1,15 +1,16 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
+import BigNumber from 'bignumber.js';
 import { Contract, JsonFragment } from 'ethers';
-import _ from 'lodash';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { JsonAbi, WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
+import { WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
 import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
@@ -34,26 +35,15 @@ export class EvmWriteComponent implements OnChanges {
   chainInfo = this.env.chainInfo;
 
   extendedAbi: JsonFragmentExtends[];
-
   contract: Contract;
-
-  formArray: FormGroup[] = [];
-
   wallet$: Observable<IMultichainWalletAccount> = this.walletService.walletAccount$;
-
-  get writeAbi() {
-    return (
-      this.abi?.filter(
-        (abi: JsonAbi) => WRITE_STATE_MUTABILITY.includes(abi.stateMutability) && abi.type == 'function',
-      ) || []
-    );
-  }
 
   constructor(
     private walletService: WalletService,
     private dialog: MatDialog,
     private env: EnvironmentService,
     private fb: FormBuilder,
+    private toastr: NgxToastrService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -80,7 +70,9 @@ export class EvmWriteComponent implements OnChanges {
     }
   }
 
-  disconnect() {}
+  disconnect() {
+    this.walletService.disconnect();
+  }
 
   expandMenu(closeAll = false): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
@@ -117,7 +109,7 @@ export class EvmWriteComponent implements OnChanges {
   }
 
   connectWallet(): void {
-    this.walletService.getEvmAccount();
+    this.walletService.getAccount();
   }
 
   handleExecute(jsonFragment: JsonFragmentExtends) {
@@ -149,12 +141,12 @@ export class EvmWriteComponent implements OnChanges {
 
     contract[name]?.(...params)
       .then((res) => {
-        console.log('🐛 res: ', res);
         jsonFragment.result = res;
         jsonFragment.isLoading = false;
       })
       .catch((e) => {
-        console.log('🐛 e: ', e);
+        this.toastr.error(e);
+
         jsonFragment.isLoading = false;
         jsonFragment.result = 'No Data';
       });
@@ -186,7 +178,7 @@ export class EvmWriteComponent implements OnChanges {
     return null;
   }
 
-  showAddZero(msg) {
+  addZero(jsonFragment: JsonFragmentExtends, controlName: string) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'grant-overlay-panel';
     dialogConfig.data = {};
@@ -194,14 +186,13 @@ export class EvmWriteComponent implements OnChanges {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        result = result === 'custom' ? 0 : result;
-        let amount = msg['fieldList']?.find((k) => k.fieldName === 'amount')?.value || '';
-        //check amount is exit
-        const numPow = amount.toString()
-          ? Math.pow(10, result)?.toString().substring(1)
-          : Math.pow(10, result)?.toString();
-        amount = amount?.toString() + numPow;
-        msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
+        const control = jsonFragment.formGroup.controls[controlName];
+
+        const multiplier = Number(result) > 0 ? Number(result) : result.length;
+        const zeroString = BigNumber(1).toFormat(multiplier).replace('1.', '');
+
+        control.setValue(`${control.value || 1}${zeroString}`);
+        control.updateValueAndValidity();
       }
     });
   }

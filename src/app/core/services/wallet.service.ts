@@ -21,7 +21,11 @@ import {
 import { BehaviorSubject, Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IMultichainWalletAccount } from '../models/wallet';
-import { convertEvmAddressToBech32Address } from '../utils/common/address-converter';
+import {
+  convertBech32AddressToEvmAddress,
+  convertEvmAddressToBech32Address,
+  transferAddress,
+} from '../utils/common/address-converter';
 import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 import { getSigner } from '../utils/ethers/ethers';
 import { addNetwork, checkNetwork } from '../utils/ethers/utils';
@@ -113,10 +117,6 @@ export class WalletService implements OnDestroy {
       throw new Error('Chain is required');
     }
 
-    if (this._walletManager) {
-      throw new Error('Wallet manager existed');
-    }
-
     this._chain = chain;
 
     this._logger = new Logger(this.testnets.includes(chain.chain_id) ? 'DEBUG' : 'INFO');
@@ -190,8 +190,11 @@ export class WalletService implements OnDestroy {
         return currentChainWallet.client.getAccount(currentChainWallet.chainId);
       })
       .then((account) => {
+        const address = this.parseAddress(account.address);
         this.walletAccount = {
           cosmosAccount: account,
+          address: address.accountAddress,
+          evmAddress: address.accountEvmAddress,
         };
         callback?.success?.();
       })
@@ -214,7 +217,7 @@ export class WalletService implements OnDestroy {
   restoreAccounts() {
     const account = this.getChainWallet()?.data as WalletAccount;
 
-    const evmAccount = this.restoreEvmAccounts();
+    this.restoreEvmAccounts();
 
     if (account) {
       this._logger.info('Restore accounts: ', account);
@@ -367,5 +370,9 @@ export class WalletService implements OnDestroy {
         local.setItem(STORAGE_KEY.CURRENT_EVM_WALLET, this.walletAccount);
       }
     });
+  }
+
+  parseAddress(address: string) {
+    return transferAddress(this.env.chainInfo.bech32Config.bech32PrefixAccAddr, address);
   }
 }
