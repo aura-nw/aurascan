@@ -16,7 +16,7 @@ import {
   NUMBER_2_DIGIT,
   NUM_BLOCK,
   TIMEOUT_ERROR,
-  TIME_OUT_CALL_API
+  TIME_OUT_CALL_API,
 } from 'src/app/core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
@@ -671,11 +671,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   checkTxStatusOnchain({ success, error }: { success?: any; error?: { message: string; code: number } | string }) {
     if (error) {
       const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : parseError(error);
-
-      if (code) {
-        let errorMessage = this.mappingErrorService.checkMappingError(message, code);
-        this.toastr.error(errorMessage);
+      let errorMessage = message;
+      if (code > 0) {
+        errorMessage = this.mappingErrorService.checkMappingError(message, code);
       }
+      this.toastr.error(errorMessage ?? message ?? 'Unknown Error');
       this.resetData();
     } else {
       const hash = success?.transactionHash;
