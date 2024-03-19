@@ -103,7 +103,7 @@
       </div>
     </div>
     <!-- Table -->
-    <ng-container *ngIf="nftList?.length > 0; else noValues">
+    <ng-container *ngIf="nftList?.length > 0 && !loading; else noValues">
       <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
         <div
           class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
