@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { EModeToken } from 'src/app/core/constants/token.enum';
+import { EModeEVMToken, EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 
@@ -15,7 +15,7 @@ export class EvmTokenOverviewComponent implements OnInit {
   @Input() tokenDetail: any;
   params = '';
   contractType = ContractRegisterType;
-  EModeToken = EModeToken;
+  EModeEVMToken = EModeEVMToken;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 

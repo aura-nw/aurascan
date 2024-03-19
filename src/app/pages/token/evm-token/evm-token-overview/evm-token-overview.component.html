@@ -5,11 +5,12 @@
         <td class="h4 mb-0">
           <span class="text--white">Overview</span>
           <span class="text--gray-light-3 ml-1">
-            <ng-container *ngIf="tokenDetail.modeToken === EModeToken.CWToken; else defaultMode">
-              <ng-container *ngIf="tokenDetail.type === contractType.CW20">[CW-20]</ng-container>
+            [ERC20]
+            <!-- <ng-container *ngIf="tokenDetail.modeToken === EModeEVMToken.CWToken; else defaultMode">
+              <ng-container *ngIf="tokenDetail.type === contractType.">[CW-20]</ng-container>
               <ng-container *ngIf="tokenDetail.type === contractType.CW721">[CW-721]</ng-container>
               <ng-container *ngIf="tokenDetail.type === contractType.CW4973">[CW-4973]</ng-container>
-            </ng-container>
+            </ng-container> -->
             <ng-template #defaultMode>[{{ tokenDetail.modeToken }}]</ng-template>
           </span>
         </td>
@@ -34,10 +35,10 @@
             <div class="d-flex align-items-center">
               <div class="flex-item">
                 <span class="text--gray-5 caption fw-normal fixed-col">
-                  {{ tokenDetail.modeToken === EModeToken.CWToken ? 'Symbol' : 'Denom' }}
+                  {{ 'Symbol' }}
                 </span>
                 <div class="body-02 text--gray-11">
-                  {{ tokenDetail.modeToken === EModeToken.Native ? tokenDetail.denom : tokenDetail.symbol }}
+                  {{ tokenDetail.symbol }}
                 </div>
               </div>
               <div class="divider divider-item"></div>
@@ -128,7 +129,7 @@
           <div class="d-flex align-items-center">
             <div
               class="{{
-                !tokenDetail.isNFTContract && tokenDetail.modeToken !== EModeToken.Native ? 'flex-item' : 'd-flex'
+                !tokenDetail.isNFTContract && tokenDetail.modeToken !== EModeEVMToken.ERC20 ? 'flex-item' : 'd-flex'
               }}">
               <div class="body-02 text--gray-5 fixed-col">Holders:</div>
               <div class="body-02 text--gray-1">
@@ -144,8 +145,8 @@
               </div>
             </div>
             <ng-container *ngIf="!tokenDetail.isNFTContract">
-              <div class="divider divider-item" *ngIf="tokenDetail.modeToken !== EModeToken.Native && !params"></div>
-              <div class="pl-4" *ngIf="tokenDetail.modeToken !== EModeToken.Native && !params">
+              <div class="divider divider-item" *ngIf="tokenDetail.modeToken !== EModeEVMToken.ERC20 && !params"></div>
+              <div class="pl-4" *ngIf="tokenDetail.modeToken !== EModeEVMToken.ERC20 && !params">
                 <div class="body-02 text--gray-5">Transfers:</div>
                 <div class="body-02 text--gray-11">
                   <span *ngIf="tokenDetail?.hasMoreTx">More than </span>{{ tokenService.totalTransfer || 0 }}

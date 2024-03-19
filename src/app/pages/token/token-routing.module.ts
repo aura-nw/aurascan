@@ -9,7 +9,7 @@ import { EvmTokenDetailComponent } from 'src/app/pages/token/evm-token/evm-token
 
 const isEvm = (childRoute: ActivatedRouteSnapshot, state: UrlSegment[]) => {
   const router = inject(Router);
-  if (state[0].path.startsWith(EWalletType.EVM) || state[1].path.startsWith(EWalletType.EVM)) {
+  if (state[0].path.startsWith(EWalletType.EVM)) {
     // evm
     let url: any = window.location.pathname.split('/');
     const index = url.length - 1;
