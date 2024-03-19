@@ -84,8 +84,6 @@ export class EvmTransactionComponent implements OnChanges {
         .queryTransactionByEvmHash(payload)
         .pipe(
           switchMap((response) => {
-            console.log(response);
-
             const txData = _.get(response, 'transaction[0]');
 
             return of(txData);
@@ -95,7 +93,6 @@ export class EvmTransactionComponent implements OnChanges {
           next: (res) => {
             if (res) {
               this.transaction = this.parseEvmTx(res);
-              console.log(this.transaction);
             }
           },
           error: (e) => {
@@ -128,7 +125,6 @@ export class EvmTransactionComponent implements OnChanges {
         for (let i = 0; i < this.topicLength; i++) {
           topics.push(element['topic' + i]);
           if (element[`evm_signature_mapping_topic${[i]}`]) {
-            console.log(element[`evm_signature_mapping_topic${[i]}`]);
             if (element[`evm_signature_mapping_topic${[i]}`]['human_readable_topic']) {
               let human_readable_topic = element[`evm_signature_mapping_topic${[i]}`]['human_readable_topic']
                 ?.toString()
