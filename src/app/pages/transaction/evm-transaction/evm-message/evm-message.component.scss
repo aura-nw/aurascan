@@ -42,9 +42,11 @@
 
     .box-raw {
       display: flex;
-      font-family: monospace;
       .index-raw-item {
         width: 45px;
+      }
+      .font-mono {
+        font-family: monospace;
       }
     }
   }

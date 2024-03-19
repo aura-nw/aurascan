@@ -5,7 +5,7 @@
     </div>
 
     <div class="col-12 col-lg-10">
-      {{ method | ellipsis: 10 : null : true }}
+      {{ isContractVerified ? method : (method | ellipsis: 10 : null : true) }}
     </div>
   </div>
 
@@ -44,8 +44,15 @@
           <ng-container *ngIf="inputDataRaw['arrList']?.length > 0">
             <ng-container *ngFor="let item of inputDataRaw['arrList']; index as index">
               <div class="mb-1 box-raw">
-                <div class="index-raw-item">[{{ index }}]:</div>
-                {{ item }}
+                <div class="d-flex">
+                  <div class="index-raw-item font-mono">[{{ index }}]:</div>
+                  <div class="font-mono">
+                    {{ item }}
+                    <div *ngIf="transaction?.eventLog[0]?.evm_signature_mapping_topic[index]">
+                      {{ transaction?.eventLog[0]?.evm_signature_mapping_topic[index] }}
+                    </div>
+                  </div>
+                </div>
               </div>
             </ng-container>
           </ng-container>
