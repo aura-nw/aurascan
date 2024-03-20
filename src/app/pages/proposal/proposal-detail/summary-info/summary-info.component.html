@@ -56,7 +56,10 @@
           <div class="col-8 col-md-10 text-end text-lg-start">
             <ng-container *ngIf="proDetail?.proposer_address">
               <a class="text--primary h6 line-claim">
-                <div *ngIf="proDetail?.proposer" [copyBtn]="proDetail?.proposer_address">
+                <div
+                  *ngIf="proDetail?.proposer"
+                  [copyBtn]="proDetail?.proposer_address"
+                  [routerLink]="['/account', proDetail?.proposer_address]">
                   {{ proDetail?.proposer?.description?.moniker }}
                 </div>
                 <ng-container *ngIf="!proDetail?.proposer">
