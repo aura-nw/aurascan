@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -402,8 +402,9 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18, cssClass: 'pt-1' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
+        payload['limit'] = 100;
         this.getListNFTByAddress(payload);
         break;
       default:
