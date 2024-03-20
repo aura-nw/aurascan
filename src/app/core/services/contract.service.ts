@@ -215,6 +215,10 @@ export class ContractService extends CommonService {
           id
           type
           updated_at
+          erc20_contract {
+            symbol
+            name
+          }
           evm_contract_verifications(limit: 1, where: {status: {_eq:"SUCCESS"}}){
             status
           }
@@ -331,6 +335,10 @@ export class ContractService extends CommonService {
           id
           type
           updated_at
+          erc20_contract {
+            symbol
+            name
+          }
         }
         evm_contract_verification(
           where: {contract_address: {_eq: $address}, status: {_eq: "SUCCESS"}}
