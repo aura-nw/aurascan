@@ -5,6 +5,7 @@ import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { getBalance } from 'src/app/core/utils/common/parsing';
 
@@ -60,11 +61,13 @@ export class EvmTransactionComponent implements OnChanges {
   seeLess = false;
   isDisplayMore = false;
   topicLength = 4;
+  isEvmContract = false;
 
   constructor(
     private transactionService: TransactionService,
     public commonService: CommonService,
     public environmentService: EnvironmentService,
+    private contractService: ContractService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -93,6 +96,7 @@ export class EvmTransactionComponent implements OnChanges {
           next: (res) => {
             if (res) {
               this.transaction = this.parseEvmTx(res);
+              this.checkEvmContract();
             }
           },
           error: (e) => {
@@ -112,6 +116,16 @@ export class EvmTransactionComponent implements OnChanges {
     } else {
       this.loading = false;
     }
+  }
+
+  checkEvmContract() {
+    this.contractService.findEvmContract(this.transaction.to).subscribe({
+      next: (res) => {
+        if (res) {
+          this.isEvmContract = true;
+        }
+      },
+    });
   }
 
   parseEvmTx(tx: unknown): typeof this.transaction {

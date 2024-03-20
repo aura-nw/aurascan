@@ -40,7 +40,8 @@
 
       <div class="box-event-log log-content mb-3">
         <div class="log-data body-02 break-word" *ngIf="typeInput === inputDataType.RAW">
-          <p *ngIf="inputDataRaw['methodId']">MethodId: {{ inputDataRaw['methodId'] }}</p>
+          <div *ngIf="inputDataRaw['methodId']">MethodId: {{ inputDataRaw['methodId'] }}</div>
+          <p *ngIf="inputDataRaw['name']">Method name: {{ inputDataRaw['name'] }}</p>
           <ng-container *ngIf="inputDataRaw['arrList']?.length > 0">
             <ng-container *ngFor="let item of inputDataRaw['arrList']; index as index">
               <div class="mb-1 box-raw">
@@ -48,9 +49,6 @@
                   <div class="index-raw-item font-mono">[{{ index }}]:</div>
                   <div class="font-mono">
                     {{ item }}
-                    <div *ngIf="transaction?.eventLog[0]?.evm_signature_mapping_topic[index]">
-                      {{ transaction?.eventLog[0]?.evm_signature_mapping_topic[index] }}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -115,7 +113,11 @@
       <div class="box-event-log mt-2" *ngIf="showAll">
         <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog?.length }})</div>
         <div class="">
-          <app-evm-transaction-event-log *ngFor="let log of eventLog; index as idx" [eventLog]="log" [index]="idx">
+          <app-evm-transaction-event-log
+            *ngFor="let log of eventLog; index as idx"
+            [eventLog]="log"
+            [arrTopicDecode]="arrTopicDecode"
+            [index]="idx">
           </app-evm-transaction-event-log>
         </div>
       </div>
