@@ -193,11 +193,11 @@
               </div>
             </div>
             <div *ngIf="global?.dataHeader?.bonded_tokens" class="h4 mb-0 fw-semibold text--white d-flex">
-              <div [appTooltip]="{priceAmount: global?.dataHeader?.bonded_tokens}">
+              <div [appTooltip]="{ priceAmount: global?.dataHeader?.bonded_tokens }">
                 <span [appBigNumber]="global?.dataHeader?.bonded_tokens" [decimal]="0"></span>
               </div>
               <span class="mx-1">/</span>
-              <div [appTooltip]="{priceAmount: global?.dataHeader?.total_aura}">
+              <div [appTooltip]="{ priceAmount: global?.dataHeader?.total_aura }">
                 <span [appBigNumber]="global?.dataHeader?.total_aura" [decimal]="0"></span>
               </div>
             </div>

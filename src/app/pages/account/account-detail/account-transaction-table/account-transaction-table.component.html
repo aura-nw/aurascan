@@ -345,7 +345,11 @@
               <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
 
-            <td mat-cell *matCellDef="let data; let idx = index" [class.tab-nft]="modeQuery === tabsData.NftTxs">
+            <td
+              mat-cell
+              *matCellDef="let data; let idx = index"
+              class="{{ template?.cssClass }}"
+              [class.tab-nft]="modeQuery === tabsData.NftTxs">
               <div>
                 <ng-container [ngSwitch]="template.matColumnDef">
                   <div *ngSwitchCase="'timestamp'">

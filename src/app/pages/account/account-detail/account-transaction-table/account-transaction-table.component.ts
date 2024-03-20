@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -16,7 +16,10 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { convertBech32AddressToEvmAddress, convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
+import {
+  convertBech32AddressToEvmAddress,
+  convertEvmAddressToBech32Address,
+} from 'src/app/core/utils/common/address-converter';
 import { toHexData } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -48,13 +51,13 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   templatesExecute: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
     { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 10 },
     { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 17 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
-    { matColumnDef: 'evmTx', headerCellDef: 'Evmos Tx', headerWidth: 15 },
+    { matColumnDef: 'evmTx', headerCellDef: 'Evmos Tx', headerWidth: 15, cssClass: 'pt-3' },
   ];
 
   templatesEvmExecute: Array<TableTemplate> = [
@@ -65,15 +68,15 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 15 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 15 },
     { matColumnDef: 'evmAmount', headerCellDef: 'Amount', headerWidth: 11 },
-    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 8 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 8, cssClass: 'pt-3' },
   ];
 
   templatesToken: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 25 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 22 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18, cssClass: 'pt-4' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 25, cssClass: 'pt-0' },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 22, cssClass: 'pt-0' },
   ];
 
   displayedColumns: string[];
@@ -371,7 +374,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListTxNativeByAddress(payload);
         break;
@@ -385,7 +388,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListFTByAddress(payload);
         break;
@@ -400,8 +403,9 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18, cssClass: 'pt-1' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
+        payload['limit'] = 100;
         this.getListNFTByAddress(payload);
         break;
       default:

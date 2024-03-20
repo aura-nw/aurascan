@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { AbiCoder, Interface, parseEther } from 'ethers';
+import { Interface, parseEther } from 'ethers';
 import { EMethodContract } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { toHexData } from 'src/app/core/utils/common/parsing';
-let abiCoder: AbiCoder;
+
 @Component({
   selector: 'app-evm-message',
   templateUrl: './evm-message.component.html',
@@ -41,6 +40,8 @@ export class EvmMessageComponent {
   isDecoded = false;
   isContractVerified = false;
   isCreateContract = false;
+  arrTopicDecode = [];
+  interfaceCoder: Interface;
 
   constructor(
     private transactionService: TransactionService,
@@ -67,12 +68,15 @@ export class EvmMessageComponent {
       if (res?.evm_contract_verification?.length > 0 && res.evm_contract_verification[0]?.abi) {
         this.isContractVerified = true;
         this.isDecoded = true;
-        const interfaceCoder = new Interface(res.evm_contract_verification[0].abi);
+        this.interfaceCoder = new Interface(res.evm_contract_verification[0].abi);
+
         const value = parseEther('1.0');
-        const rawData = interfaceCoder.parseTransaction({ data: '0x' + this.transaction?.inputData, value })
+        const rawData = this.interfaceCoder.parseTransaction({ data: '0x' + this.transaction?.inputData, value });
         if (rawData?.fragment?.inputs?.length > 0) {
+          this.getListTopicDecode();
           this.method = rawData?.fragment?.name;
           this.inputDataDecoded['name'] = rawData.name;
+          this.inputDataRaw['name'] = rawData.name;
           this.inputDataDecoded['params'] = rawData?.fragment?.inputs.map((item, index) => {
             return {
               name: item.name,
@@ -82,6 +86,21 @@ export class EvmMessageComponent {
           });
         }
       }
+    });
+  }
+
+  getListTopicDecode() {
+    this.transaction.eventLog.forEach((element, index) => {
+      let arrTopicTemp = element?.evm_signature_mapping_topic || [];
+      try {
+        const arrTemp =
+          this.interfaceCoder
+            .decodeEventLog(element.topic0, `0x${this.transaction?.inputData}`, element.topics)
+            .toArray() || [];
+        arrTopicTemp = [...this.arrTopicDecode[index], ...arrTemp];
+      } catch (e) {}
+
+      this.arrTopicDecode[index] = arrTopicTemp;
     });
   }
 }

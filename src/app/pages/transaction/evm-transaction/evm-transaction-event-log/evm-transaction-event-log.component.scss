@@ -8,6 +8,13 @@
     gap: 8px;
   }
 
+  .item-topic {
+    min-height: 40px;
+    &:last-child {
+      min-height: 20px;
+    }
+  }
+
   .event-number {
     width: 44px;
     max-width: 20%;
@@ -16,9 +23,7 @@
     background: #222f3d;
     color: var(--aura-primary);
     border: 1px solid var(--aura-blue-4);
-
     padding: 8px 16px;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,7 +33,6 @@
       color: var(--while);
       border: 1px solid var(--aura-gray-6);
       background: var(--aura-gray-9);
-
       width: 32px;
       height: 24px;
     }
@@ -47,7 +51,6 @@
     max-width: 100%;
     padding: 4px 8px;
     border-radius: 4px;
-
     background-color: var(--aura-gray-10);
   }
 }
