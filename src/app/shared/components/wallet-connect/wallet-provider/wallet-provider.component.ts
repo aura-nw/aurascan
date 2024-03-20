@@ -1,9 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChainWalletBase, MainWalletBase, State, Wallet } from '@cosmos-kit/core';
-import { isAddress, resolveAddress } from 'ethers';
 import * as _ from 'lodash';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { EvmWalletService } from 'src/app/core/services/evm-wallet.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import {
@@ -13,7 +11,6 @@ import {
 } from 'src/app/core/utils/cosmoskit';
 import { Errors } from 'src/app/core/utils/cosmoskit/constant';
 import { checkDesktopWallets } from 'src/app/core/utils/cosmoskit/wallets';
-import { getEthersProvider } from 'src/app/core/utils/ethers';
 import { getMetamask } from 'src/app/core/utils/ethers/utils';
 import { EVM_WALLETS } from 'src/app/core/utils/ethers/wallets';
 
