@@ -11,7 +11,7 @@
         <div class="col-12">
           <div class="form-group">
             <label for="address" class="form-label text--gray-1 body-02">Contract to verify</label>
-            <input formControlName="address" type="text" class="form-control" id="address"/>
+            <input formControlName="address" type="text" class="form-control" id="address" />
             <div class="error" *ngIf="formControls['address'].invalid">Address is required!</div>
           </div>
         </div>
@@ -22,9 +22,10 @@
           <h4 class="text--white mb-1">Add file</h4>
           <div class="d-flex justify-content-between w-100 mb-4">
             <div class="body-02 caption-mob fw-normal-mob text--gray-6">Format: Zip/Json. Maximum size: 1MB</div>
-            <div *ngIf="contractSourceCode"
-                 class="body-02 caption-mob fw-normal-mob text--primary cursor-pointer"
-                 (click)="contractSourceCode = null">
+            <div
+              *ngIf="contractSourceCode"
+              class="body-02 caption-mob fw-normal-mob text--primary cursor-pointer"
+              (click)="contractSourceCode = null">
               Clear Files
             </div>
           </div>
@@ -48,7 +49,7 @@
                 class="d-none"
                 #fileInput
                 (change)="onFileDropped($event?.target['files'])"
-                [(ngModel)]="inputFileValue"/>
+                [(ngModel)]="inputFileValue" />
             </div>
 
             <div class="drop-content flex-row align-items-start" *ngIf="contractSourceCode">
@@ -58,7 +59,7 @@
                     contractSourceCode.type == EFileType.Zip
                       ? '../../../../assets/icons/icons-svg/basic/FileZip.svg'
                       : '../../../../assets/icons/icons-svg/basic/FileJSON.svg'
-                  }}"/>
+                  }}" />
               </div>
               <div class="body-02 text-white">
                 {{ contractSourceCode.name }}
@@ -80,7 +81,7 @@
             class="mr-2"
             width="20"
             height="20"
-            *ngIf="loading"/>
+            *ngIf="loading" />
           <span>Verify & Publish</span>
         </button>
       </div>
