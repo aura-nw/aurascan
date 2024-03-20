@@ -128,7 +128,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let { address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
+    let { addressDefault, address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
+    addressDefault = address;
 
     if (startDate || endDate) {
       startDate = moment(startDate).startOf('day').toISOString();
@@ -146,6 +147,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
 
     let payload = {
+      addressDefault,
       dataType: dataType,
       address: address,
       dataRangeType: this.isFilterDate ? 'date' : 'height',
@@ -223,7 +225,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       'export-account-' +
       (payload.dataType === TabsAccountLink.NativeTxs ? 'native-ibc-transfer' : nameTab) +
       '-' +
-      payload.address +
+      payload.addressDefault +
       '.csv';
     saveAs(data, fileName);
     this.isDownload = false;

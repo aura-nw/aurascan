@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { Component, Input } from '@angular/core';
+import { EVMContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -9,12 +9,12 @@ import { TokenService } from 'src/app/core/services/token.service';
   templateUrl: './evm-overview.component.html',
   styleUrls: ['./evm-overview.component.scss'],
 })
-export class EvmOverviewComponent implements OnChanges {
+export class EvmOverviewComponent {
   @Input() contractDetail: any;
 
   contractBalance = 0;
   contractValue = 0;
-  contractRegisterType = ContractRegisterType;
+  contractRegisterType = EVMContractRegisterType;
   linkNft = 'token-nft';
 
   currencies = this.environmentService.chainInfo.currencies[0];
@@ -32,6 +32,4 @@ export class EvmOverviewComponent implements OnChanges {
     private contractService: ContractService,
     public tokenService: TokenService,
   ) {}
-
-  async ngOnChanges() {}
 }

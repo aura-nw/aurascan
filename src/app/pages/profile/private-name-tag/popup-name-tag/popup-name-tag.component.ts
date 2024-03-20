@@ -85,8 +85,7 @@ export class PopupNameTagComponent implements OnInit {
       this.idEdit = this.data.id || data.id;
     }
 
-    const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
-
+    const isAccount = data.type === 'account';
     this.privateNameForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
     this.isContract = !this.isAccount;
