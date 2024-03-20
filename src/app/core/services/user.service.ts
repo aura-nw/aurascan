@@ -307,9 +307,32 @@ export class UserService {
 
   getListNFTByAddress(payload) {
     const operationsDoc = `
-    query QueryCW721ListTX($receiver: String = null, $sender: String = null, $startTime: timestamptz = null, $endTime: timestamptz = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $limit: Int = null, $neqCw4973: String, $actionIn: [String!] = null, $actionNotIn: [String!] = null) {
+    query QueryCW721ListTX(
+      $receiver: String = null
+      $sender: String = null
+      $startTime: timestamptz = null
+      $endTime: timestamptz = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $limit: Int = null
+      $neqCw4973: String
+      $actionIn: [String!] = null
+      $actionNotIn: [String!] = null
+    ) {
       ${this.envDB} {
-        transaction(where: {cw721_activities: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], action: {_in: $actionIn, _nin: $actionNotIn}, cw721_contract: {smart_contract: {name: {_neq: $neqCw4973}}}}, timestamp: {_gte: $startTime, _lte: $endTime}, _and: {height: {_gt: $heightGT, _lt: $heightLT}}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}}}, order_by: {height: desc}, limit: $limit) {
+        transaction(
+          where: {
+            cw721_activities: {
+              _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }]
+              action: { _in: $actionIn, _nin: $actionNotIn }
+              cw721_contract: { smart_contract: { name: { _neq: $neqCw4973 } } }
+            }
+            timestamp: { _gte: $startTime, _lte: $endTime }
+            _and: { height: { _gt: $heightGT, _lt: $heightLT } }
+          }
+          order_by: [{ id: desc }, {height: desc}]
+          limit: $limit
+        ) {
           gas_used
           hash
           height
@@ -319,7 +342,9 @@ export class UserService {
             content
             type
           }
-          cw721_activities(where: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}]}) {
+          cw721_activities(
+            where: { _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }] }
+          ) {
             action
             from
             to
@@ -343,12 +368,12 @@ export class UserService {
         variables: {
           sender: payload.sender,
           receiver: payload.receiver,
-          listTxMsgType: payload.listTxMsgType,
           startTime: payload.startTime,
           endTime: payload.endTime,
           heightLT: payload.heightLT,
           actionIn: payload.isNFTDetail ? null : !payload.isTransferTab ? CW721_TRACKING : null,
           actionNotIn: payload.isNFTDetail ? null : payload.isTransferTab ? ['approve', 'instantiate', 'revoke'] : null,
+          limit: payload.limit,
           neqCw4973: 'crates.io:cw4973',
         },
         operationName: 'QueryCW721ListTX',
