@@ -16,7 +16,10 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { convertBech32AddressToEvmAddress, convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
+import {
+  convertBech32AddressToEvmAddress,
+  convertEvmAddressToBech32Address,
+} from 'src/app/core/utils/common/address-converter';
 import { toHexData } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -54,7 +57,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 17 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
-    { matColumnDef: 'evmTx', headerCellDef: 'Evmos Tx', headerWidth: 15 },
+    { matColumnDef: 'evmTx', headerCellDef: 'Evmos Tx', headerWidth: 15, cssClass: 'pt-3' },
   ];
 
   templatesEvmExecute: Array<TableTemplate> = [
@@ -65,7 +68,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 15 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 15 },
     { matColumnDef: 'evmAmount', headerCellDef: 'Amount', headerWidth: 11 },
-    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 8 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 8, cssClass: 'pt-3' },
   ];
 
   templatesToken: Array<TableTemplate> = [
