@@ -30,12 +30,14 @@
                   <div class="d-flex mb-2">
                     <div class="content-body">Proposer</div>
                     <ng-container *ngIf="lastedItem?.proposer_address">
-                      <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary h6 mb-0">
-                        <ng-container *ngIf="lastedItem?.proposer">
+                      <a class="text--primary h6 mb-0">
+                        <div *ngIf="lastedItem?.proposer" [copyBtn]="lastedItem?.proposer_address">
                           {{ lastedItem?.proposer?.description?.moniker }}
-                        </ng-container>
+                        </div>
                         <ng-container *ngIf="!lastedItem?.proposer">
-                          <app-name-tag [value]="lastedItem?.proposer_address"></app-name-tag>
+                          <app-name-tag
+                            [value]="lastedItem?.proposer_address"
+                            [linkRouter]="['/account', lastedItem?.proposer_address]"></app-name-tag>
                         </ng-container>
                       </a>
                     </ng-container>
