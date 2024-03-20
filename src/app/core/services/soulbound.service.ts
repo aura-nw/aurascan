@@ -64,13 +64,14 @@ export class SoulboundService extends CommonService {
 
   getListABT(payload): Observable<any> {
     let queryUpdate = '';
+    let queryName = '';
     if (this.commonService.isValidContract(payload.keyword)) {
       queryUpdate = 'address: {_eq:' + payload.keyword + '}';
     } else if (this.commonService.isValidAddress(payload.keyword)) {
       queryUpdate = 'creator: {_eq: ' + payload.keyword + '}';
     } else if (payload.keyword?.length > 0) {
       payload.keyword = `"%` + payload.keyword + `%"`;
-      queryUpdate = 'name: {_ilike: ' + payload.keyword + '}';
+      queryName = 'name: {_ilike: ' + payload.keyword + '}';
     }
     const operationsDoc = `
     query queryCW4973ListToken(
@@ -85,6 +86,7 @@ export class SoulboundService extends CommonService {
               name: {_eq: "crates.io:cw4973"},
               ${queryUpdate}
             }, 
+            ${queryName}
           },
           offset: $offset,
           order_by: {updated_at: desc}
@@ -103,6 +105,7 @@ export class SoulboundService extends CommonService {
               name: {_eq: "crates.io:cw4973"},
               ${queryUpdate}
             }, 
+            ${queryName}
           }) {
             aggregate {
               count 
