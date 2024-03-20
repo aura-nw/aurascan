@@ -46,7 +46,7 @@
     <div class="card__body body-02 body-mob collapse" id="title3">
       <div>
         <div class="text--gray-4 caption fw-normal mb-1">Contract Type</div>
-        <div class="text--gray-light">{{ contractDetail.code?.type ?? '-' }}</div>
+        <div class="text--gray-light">{{ contractDetail.code?.type || contractDetail?.type || '-' }}</div>
       </div>
 
       <div class="mt-3">
