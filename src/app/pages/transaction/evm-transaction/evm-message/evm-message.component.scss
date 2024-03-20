@@ -18,13 +18,12 @@
     max-height: 558px;
     overflow: auto;
     @media (min-width: 992px) {
-      max-height: 324px;
+      max-height: 330px;
     }
 
     .log-content {
       display: flex;
       gap: 24px;
-
       .log {
         &-label {
           width: 110px;
@@ -38,6 +37,16 @@
       @media (max-width: 991.99px) {
         flex-direction: column;
         gap: 4px;
+      }
+    }
+
+    .box-raw {
+      display: flex;
+      .index-raw-item {
+        width: 45px;
+      }
+      .font-mono {
+        font-family: monospace;
       }
     }
   }

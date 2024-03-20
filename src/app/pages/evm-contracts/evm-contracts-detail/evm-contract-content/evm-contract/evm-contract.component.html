@@ -49,7 +49,11 @@
 </div>
 <div class="mt-4 mt-lg-8">
   <ng-container *ngIf="contractDetail && contractTypeData === ContractVerifyType.Verified">
-    <app-evm-code *ngIf="currentTab === ContractType.Code" [contractDetailData]="contractDetail"> </app-evm-code>
+    <app-evm-code
+      *ngIf="currentTab === ContractType.Code"
+      [contractDetailData]="contractDetail"
+      [abiString]="contractAbiString">
+    </app-evm-code>
 
     <app-evm-read
       *ngIf="currentTab === ContractType.ReadContract"
@@ -57,6 +61,10 @@
       [contractAddress]="contractsAddress">
     </app-evm-read>
 
-    <app-evm-write *ngIf="currentTab === ContractType.WriteContract" [abi]="contractDetail.abi"> </app-evm-write>
+    <app-evm-write
+      *ngIf="currentTab === ContractType.WriteContract"
+      [abi]="contractDetail.abi"
+      [contractAddress]="contractsAddress">
+    </app-evm-write>
   </ng-container>
 </div>

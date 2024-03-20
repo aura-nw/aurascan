@@ -16,7 +16,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
+import { convertBech32AddressToEvmAddress, convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 import { toHexData } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -110,9 +110,11 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   };
   isSearchOther = false;
   countFilter = 0;
+  addressNative = '';
+  addressEvm = '';
+
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-
   coinInfo = this.environmentService.chainInfo.currencies[0];
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
   chainInfo = this.environmentService.chainInfo;
@@ -145,6 +147,14 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
+        this.addressNative = convertEvmAddressToBech32Address(
+          this.chainInfo.bech32Config.bech32PrefixAccAddr,
+          this.currentAddress,
+        );
+        this.addressEvm = convertBech32AddressToEvmAddress(
+          this.chainInfo.bech32Config.bech32PrefixAccAddr,
+          this.addressNative,
+        );
         this.transactionLoading = true;
 
         this.dataSource = new MatTableDataSource();
@@ -413,6 +423,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListTxByAddress(payload) {
+    payload['address'] = [this.addressNative, this.addressEvm];
     this.userService.getListTxByAddress(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
@@ -432,6 +443,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListEvmTxByAddress(payload) {
+    payload['address'] = [this.addressNative, this.addressEvm];
     this.userService.getListEvmTxByAddress(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
@@ -522,7 +534,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
         txs = data.evm_transaction;
         txs.forEach((element) => {
-          const type = toHexData(_.get(element, 'data'));
+          const type = _.get(element, 'data')?.substring(8);
           element.tx_hash = _.get(element, 'hash');
           element.hash = _.get(element, 'transaction.hash');
           element.method = type ? type : 'Transfer';

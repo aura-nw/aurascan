@@ -26,10 +26,7 @@ export class EvmReadComponent implements OnChanges {
   chainInfo = this.environmentService.chainInfo;
 
   extendedAbi: JsonFragmentExtends[];
-
   contract: Contract;
-
-  formArray: FormGroup[] = [];
 
   constructor(
     private environmentService: EnvironmentService,
@@ -58,6 +55,7 @@ export class EvmReadComponent implements OnChanges {
 
       this.extendedAbi = extendedAbi;
     }
+    this.resetForm();
   }
 
   expandMenu(closeAll = false): void {

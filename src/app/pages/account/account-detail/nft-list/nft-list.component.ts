@@ -101,6 +101,7 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
             this.searchNotFound = true;
           }
           this.pageData.length = 0;
+          this.nftList = [];
           return;
         }
 
@@ -113,7 +114,9 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
           }
         });
         this.totalValueNft.emit(this.totalValue);
-        this.pageData.length = res.cw721_token_aggregate?.aggregate?.count || 0;
+        this.accountService.countAssetCW721ByOwner(payload).subscribe((countData) => {
+          this.pageData.length = countData?.cw721_token_aggregate?.aggregate?.count || 0;
+        });
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
@@ -151,8 +154,11 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
               address: item.smart_contract.address,
             });
           });
-          this.listCollection[0].quantity = res?.cw721_token_aggregate?.aggregate?.count;
-          this.setNFTFilter(this.listCollection[0]);
+
+          this.accountService.countListCollectionByOwner(payload).subscribe((countData) => {
+            this.listCollection[0].quantity = countData?.cw721_token_aggregate?.aggregate?.count;
+            this.setNFTFilter(this.listCollection[0]);
+          });
         }
       },
       error: (e) => {

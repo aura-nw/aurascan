@@ -21,6 +21,7 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
 
   currentTab = ContractType.Code;
   contractDetail: any;
+  contractAbiString: string; // Need to optimize loading large object
   contractCode = '';
 
   destroyed$ = new Subject<void>();
@@ -48,6 +49,8 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
   loadContractDetail() {
     this.contractService.contractObservable.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       this.contractDetail = res;
+
+      this.contractAbiString = this.contractDetail?.abi ? JSON.stringify(this.contractDetail?.abi) : '-';
     });
   }
 

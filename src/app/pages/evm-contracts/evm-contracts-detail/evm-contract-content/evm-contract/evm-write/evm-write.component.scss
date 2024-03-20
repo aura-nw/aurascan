@@ -37,3 +37,20 @@ textarea {
   padding: 8px 12px;
   resize: none;
 }
+
+.warning-wrapper {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+
+  border-radius: 8px;
+  background: rgba(255, 200, 0, 0.16);
+  color: var(--aura-white);
+
+  img {
+    width: 20px;
+  }
+}

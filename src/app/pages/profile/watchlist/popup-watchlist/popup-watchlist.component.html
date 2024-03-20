@@ -63,18 +63,13 @@
               <input
                 type="text"
                 formControlName="address"
-                placeholder="{{ chainName }}..."
+                placeholder="{{ chainName }}.../ {{ eWalletType.EVM }}..."
                 class="input-address"
                 (change)="checkNameTag()"
                 (input)="checkFormValid(); isError = false"
                 autocomplete="off" />
             </div>
             <span *ngIf="isEditMode">{{ getAddress.value }}</span>
-            <div
-              *ngIf="getAddress?.value?.length > 0 && !isValidAddress && (isAccount || isContract)"
-              class="text--danger mt-2 caption fw-normal">
-              Invalid {{ chainName }} address format
-            </div>
           </div>
         </div>
 
