@@ -1,51 +1,8 @@
 <app-loading-sprint class="mt-10" *ngIf="isLoading"></app-loading-sprint>
-<app-table-no-data class="mt-10" *ngIf="!isLoading && errTxt" [textNull]="errTxt"></app-table-no-data>
-<div class="box-contract text-white" *ngIf="tokenDetail">
-  <!-- Unverified -->
-  <ng-container
-    *ngIf="!tokenDetail?.contract_verification || tokenDetail?.contract_verification === contractVerifyType.Unverified">
-    <div class="d-flex break-word body-02">
-      <img
-        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-        alt=""
-        width="16"
-        height="16"
-        class="mr-2" />
-      <div>
-        Are you the Code ID's owner?
-        <a class="text--primary" [routerLink]="['/code-ids/verify', this.tokenDetail.code_id]"> Verify and Publish </a>
-        your Code ID source code today!
-      </div>
-    </div>
-    <div class="mt-3 small-text content-info">{{ tokenDetail.tx_hash }}</div>
-  </ng-container>
-
-  <!-- Verifying -->
-  <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Verifying">
-    <div class="d-flex break-word body-02">
-      <img
-        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-        alt=""
-        width="16"
-        height="16"
-        class="mr-2 mt-1" />
-      <div>
-        <div>
-          The code ID source code that this smart contract was instantiated from is currently pending in Verify and
-          Publish process.
-        </div>
-        <div>
-          Kindly click
-          <a class="text--primary cursor-pointer" (click)="navigateToVerify()"> here </a>
-          for more detail
-        </div>
-      </div>
-    </div>
-  </ng-container>
-
+<div class="box-contract text-white" *ngIf="!isLoading">
   <!-- Verify Fail -->
-  <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.VerifiedFail">
-    <div class="d-flex break-word body-02">
+  <ng-container *ngIf="contractCode">
+    <div class="d-flex break-word align-items-center">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
         alt=""
@@ -53,19 +10,22 @@
         height="16"
         class="mr-2" />
       <div>
-        Are you the Code ID's owner?
-        <a class="text--primary" (click)="navigateToVerify()"> Verify and Publish </a>
-        your Code ID source code today!
+        Are you the contract creator?
+        <a class="text--primary" [routerLink]="['verify']"> Verify and Publish </a>
+        your contract source code today!
       </div>
     </div>
-    <div class="mt-4 mt-lg-6">
-      Let check the status of the last time this Code ID source code was unable to Verify and Publish
+    <div
+      class="mt-3 content-info caption fw-normal"
+      *ngIf="contractCode"
+      [appExpandable]="contractCode"
+      [maxCharVisible]="900">
+      {{ contractCode }}
     </div>
-    <app-contract-verify-steps [codeID]="tokenDetail.code_id"></app-contract-verify-steps>
   </ng-container>
 
   <!-- Verify Successfull -->
-  <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Verified">
+  <ng-container *ngIf="contractDetail && !contractCode">
     <div class="button-tab-group mb-4 mt-lg-3">
       <button
         class="button-tab"
@@ -82,13 +42,18 @@
     </div>
 
     <div class="mt-3">
-      <ng-container *ngIf="tokenDetail">
-        <app-read-contract
+      <ng-container>
+        <app-evm-read
           *ngIf="currentTab === contractType.ReadContract"
-          [contractDetailData]="tokenDetail"></app-read-contract>
-        <app-write-contract
+          [abi]="contractDetail.abi"
+          [contractAddress]="contractAddress">
+        </app-evm-read>
+
+        <app-evm-write
           *ngIf="currentTab === contractType.WriteContract"
-          [contractDetailData]="tokenDetail"></app-write-contract>
+          [abi]="contractDetail.abi"
+          [contractAddress]="contractAddress">
+        </app-evm-write>
       </ng-container>
     </div>
   </ng-container>

@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
-import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { TokenContractType } from 'src/app/core/constants/token.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { getEthersProvider } from 'src/app/core/utils/ethers';
 
 @Component({
   selector: 'app-evm-token-contract-tab',
@@ -17,14 +18,16 @@ export class EvmTokenContractTabComponent implements OnInit {
 
   contractType = TokenContractType;
   currentTab = this.contractType.ReadContract;
-  tokenDetail: any;
   contractVerifyType = ContractVerifyType;
   isLoading = true;
-  errTxt: string;
+
+  contractDetail;
+  contractCode;
 
   constructor(
     private router: Router,
     private contractService: ContractService,
+    private env: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -35,36 +38,44 @@ export class EvmTokenContractTabComponent implements OnInit {
     this.currentTab = tabId;
   }
 
-  getContractDetail() {
-    this.contractService.loadContractDetail(this.contractAddress).subscribe({
-      next: (res) => {
-        if (res['smart_contract']?.length > 0) {
-          let data = res['smart_contract'][0];
-          let contract_verification = data?.code?.code_id_verifications[0]?.verification_status;
-          let execute_msg_schema = _.get(data, 'code.code_id_verifications[0].execute_msg_schema');
-          let query_msg_schema = _.get(data, 'code.code_id_verifications[0].query_msg_schema');
-          let tx_hash = data.instantiate_hash;
-          let code_id = _.get(data, 'code.code_id');
-          let address = data.address;
-          this.tokenDetail = { contract_verification, execute_msg_schema, query_msg_schema, tx_hash, code_id, address };
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
+  getContractCode() {
+    const provider = getEthersProvider(this.env.etherJsonRpc);
+
+    provider
+      ?.getCode(this.contractAddress)
+      .then((contractCode) => {
+        this.contractCode = contractCode;
+
         this.isLoading = false;
+      })
+      .catch((error) => {
+        console.error(error);
+        this.isLoading = false;
+      });
+  }
+
+  getContractDetail() {
+    this.contractService.queryEvmContractByAddress(this.contractAddress).subscribe({
+      next: (res) => {
+        if (res) {
+          const evm_contract_verification = _.get(res, 'evm_contract_verification[0]');
+          const evm_smart_contract = _.get(res, 'evm_smart_contract[0]') || {};
+
+          if (!evm_contract_verification) {
+            this.getContractCode();
+          } else {
+            this.contractDetail = {
+              ...evm_smart_contract,
+              ...evm_contract_verification,
+            };
+
+            this.isLoading = false;
+          }
+        }
       },
-      complete: () => {
+      error: () => {
         this.isLoading = false;
       },
     });
-  }
-
-  navigateToVerify() {
-    sessionStorage.setItem('codeIdPrePage', this.router.url);
-    this.router.navigate(['/code-ids/verify', this.tokenDetail.code_id]);
   }
 }

@@ -20,6 +20,7 @@ import { SharedModule } from '../../../app/shared/shared.module';
 import { ReadContractModule } from '../contracts/contracts-detail/contracts-contents/contract/read-contract/read-contract.module';
 import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
 import { ContractsModule } from '../contracts/contracts.module';
+import { EvmContractsModule } from '../evm-contracts/evm-contracts.module';
 import { NFTDetailComponent } from './cosmos-token/nft-detail/nft-detail.component';
 import { PopupShareComponent } from './cosmos-token/nft-detail/popup-share/popup-share.component';
 import { TokenContractTabComponent } from './cosmos-token/token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
@@ -90,6 +91,7 @@ import { TokenRoutingModule } from './token-routing.module';
     CustomPaginatorModule,
     NameTagModule,
     ClipboardModule,
+    EvmContractsModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
