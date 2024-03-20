@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Contract, JsonFragment } from 'ethers';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
-import { getEthersProvider } from 'src/app/core/utils/ethers';
-import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Contract, JsonFragment} from 'ethers';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {READ_STATE_MUTABILITY} from 'src/app/core/models/evm-contract.model';
+import {getEthersProvider} from 'src/app/core/utils/ethers';
+import {validateAndParsingInput} from 'src/app/core/utils/ethers/validate';
+import _ from "lodash";
 
 type JsonFragmentExtends = JsonFragment & {
   formGroup?: FormGroup;
@@ -31,7 +32,8 @@ export class EvmReadComponent implements OnChanges {
   constructor(
     private environmentService: EnvironmentService,
     private fb: FormBuilder,
-  ) {}
+  ) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['abi']) {
@@ -55,6 +57,7 @@ export class EvmReadComponent implements OnChanges {
 
       this.extendedAbi = extendedAbi;
     }
+    this.resetForm();
   }
 
   expandMenu(closeAll = false): void {
@@ -112,7 +115,7 @@ export class EvmReadComponent implements OnChanges {
 
     jsonFragment.isValidate = true;
 
-    const { formGroup, inputs, name } = jsonFragment;
+    const {formGroup, inputs, name} = jsonFragment;
 
     if (formGroup.invalid) {
       return;
