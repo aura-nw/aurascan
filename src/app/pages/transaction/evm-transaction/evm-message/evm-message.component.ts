@@ -73,8 +73,8 @@ export class EvmMessageComponent {
         const value = parseEther('1.0');
         const rawData = this.interfaceCoder.parseTransaction({ data: '0x' + this.transaction?.inputData, value });
         if (rawData?.fragment?.inputs?.length > 0) {
-          this.method = rawData?.fragment?.name;
           this.getListTopicDecode();
+          this.method = rawData?.fragment?.name;
           this.inputDataDecoded['name'] = rawData.name;
           this.inputDataRaw['name'] = rawData.name;
           this.inputDataDecoded['params'] = rawData?.fragment?.inputs.map((item, index) => {
@@ -84,8 +84,6 @@ export class EvmMessageComponent {
               value: rawData.args[index],
             };
           });
-        } else {
-          this.getListTopicDecode();
         }
       }
     });
@@ -93,15 +91,16 @@ export class EvmMessageComponent {
 
   getListTopicDecode() {
     this.transaction.eventLog.forEach((element, index) => {
-      this.arrTopicDecode[index] = element?.evm_signature_mapping_topic || [];
+      let arrTopicTemp = element?.evm_signature_mapping_topic || [];
       try {
-        const arrTemp = this.interfaceCoder.decodeEventLog(
-          element.evm_signature_mapping_topic[0]?.replace('> ', ''),
-          `0x${this.transaction?.inputData}`,
-          element.topics,
-        );
-        this.arrTopicDecode[index] = [...this.arrTopicDecode[index], ...arrTemp?.toArray()];
+        const arrTemp =
+          this.interfaceCoder
+            .decodeEventLog(element.topic0, `0x${this.transaction?.inputData}`, element.topics)
+            .toArray() || [];
+        arrTopicTemp = [...this.arrTopicDecode[index], ...arrTemp];
       } catch (e) {}
+
+      this.arrTopicDecode[index] = arrTopicTemp;
     });
   }
 }

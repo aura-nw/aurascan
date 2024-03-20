@@ -24,7 +24,7 @@
       <div class="col-12 col-lg-11 d-flex flex-column gap-2">
         <ng-container *ngFor="let top of eventLog.topics; index as idx">
           <div class="d-flex gap-2 item-topic" *ngIf="top">
-            <div class="event-number secondary flex-shrink-0">{{ index }}</div>
+            <div class="event-number secondary flex-shrink-0">{{ idx }}</div>
             <div class="flex-grow-1 topic align-items-center">
               <div class="{{ arrTopicDecode[index]?.length > 0 && arrTopicDecode[index][idx] ? '' : 'mt-1' }}">
                 {{ top }}
