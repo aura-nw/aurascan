@@ -5,7 +5,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { getEthersProvider } from 'src/app/core/utils/ethers';
 import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
-import _ from 'lodash';
 
 type JsonFragmentExtends = JsonFragment & {
   formGroup?: FormGroup;
