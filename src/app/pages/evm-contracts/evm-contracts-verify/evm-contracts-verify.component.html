@@ -23,6 +23,7 @@
           <div class="d-flex justify-content-between w-100 mb-4">
             <div class="body-02 caption-mob fw-normal-mob text--gray-6">Format: Zip/Json. Maximum size: 1MB</div>
             <div
+              *ngIf="contractSourceCode"
               class="body-02 caption-mob fw-normal-mob text--primary cursor-pointer"
               (click)="contractSourceCode = null">
               Clear Files
@@ -35,9 +36,9 @@
             appDragDrop
             (onFileDropped)="onFileDropped($event)">
             <div class="drop-content" *ngIf="!contractSourceCode">
-              <div class="add-icon">
+              <button class="button add-icon" (click)="fileInput.click()">
                 <i class="ph-plus-fill text--gray-4"></i>
-              </div>
+              </button>
 
               <div class="body-01 text--gray-4">
                 Drag and drop here or
