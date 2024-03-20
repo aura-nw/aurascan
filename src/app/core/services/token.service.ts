@@ -41,7 +41,7 @@ export class TokenService extends CommonService {
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
-    public commonService: CommonService,
+    private commonService: CommonService,
   ) {
     super(http, environmentService);
   }
@@ -100,15 +100,16 @@ export class TokenService extends CommonService {
   getListCW721Token(payload, textSearch: string = null): Observable<any> {
     let queryUpdate = '';
     if (this.commonService.isValidContract(textSearch)) {
-      queryUpdate = '{cw721_contract: {smart_contract: {address: {_eq: $contract_address}}}},';
+      queryUpdate = 'cw721_contract: {smart_contract: {address: {_eq:' + textSearch + '}}}';
     } else if (textSearch?.length > 0) {
-      textSearch = '%' + textSearch + '%';
+      textSearch = `"%` + textSearch + `%"`;
+      queryUpdate = 'cw721_contract: {name: {_ilike:' + textSearch + '}}';
     }
     let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
     const operationsDoc = `
-    query queryListCW721($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
+    query queryListCW721($limit: Int = 10, $offset: Int = 0) {
       ${this.envDB} {
-        list_token: cw721_contract_stats(limit: $limit, offset: $offset ${querySort}, where: {_or:[ ${queryUpdate} { cw721_contract: {name: {_ilike: $name}}} ]}) {
+        list_token: cw721_contract_stats(limit: $limit, offset: $offset ${querySort}, where: { ${queryUpdate} }) {
           transfer_24h
           total_activity
           cw721_contract {
@@ -119,7 +120,7 @@ export class TokenService extends CommonService {
             }
           }
         }
-        total_token: cw721_contract_stats_aggregate (where: {_or:[ {cw721_contract: {smart_contract: {address: {_: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
+        total_token: cw721_contract_stats_aggregate (where: { ${queryUpdate} }) {
           aggregate {
             count
           }
@@ -133,8 +134,6 @@ export class TokenService extends CommonService {
         variables: {
           limit: payload.limit || 20,
           offset: payload.offset || 0,
-          contract_address: textSearch || null,
-          name: textSearch || null,
         },
         operationName: 'queryListCW721',
       })
