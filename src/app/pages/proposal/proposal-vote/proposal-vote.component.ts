@@ -83,7 +83,7 @@ export class ProposalVoteComponent {
           const { code, message } = parseError(error);
 
           let errorMessage = message;
-          if (code) {
+          if (code > 0) {
             errorMessage = this.mappingErrorService.checkMappingError(message, code);
           }
 

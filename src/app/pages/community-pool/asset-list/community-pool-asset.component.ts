@@ -1,18 +1,19 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TranslateService } from '@ngx-translate/core';
+import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { NUMBER_CONVERT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { PROPOSAL_STATUS } from 'src/app/core/constants/proposal.constant';
 import { ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { balanceOf, getBalance } from 'src/app/core/utils/common/parsing';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
@@ -122,15 +123,13 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
               element.symbol = findItem.display || findItem.symbol;
               element.logo = findItem.logo || findItem.image;
               element.name =
-                findItem.type === ETokenCoinTypeBE?.NATIVE
-                  ? this.environmentService.chainName
-                  : findItem.name;
+                findItem.type === ETokenCoinTypeBE?.NATIVE ? this.environmentService.chainName : findItem.name;
             } else {
               element.decimal = 6;
               element.symbol = '';
               element.logo = '';
               element.name = this.environmentService.chainName;
-              element.amount = element.amount / NUMBER_CONVERT;
+              element.amount = getBalance(element.amount, this.environmentService.coinDecimals);
               element.isNative = true;
             }
           });

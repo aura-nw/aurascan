@@ -31,8 +31,6 @@ export const DATEFORMAT = {
   TIME_ONLY: 'HH:mm:ss',
 };
 
-export const NUMBER_CONVERT = 1000000; //10^6 satoshi unit
-
 export const PAGE_EVENT = {
   LENGTH: 0,
   PAGE_SIZE: 5,
