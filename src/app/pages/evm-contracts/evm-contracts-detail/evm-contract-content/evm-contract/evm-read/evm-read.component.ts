@@ -55,6 +55,7 @@ export class EvmReadComponent implements OnChanges {
 
       this.extendedAbi = extendedAbi;
     }
+    this.resetForm();
   }
 
   expandMenu(closeAll = false): void {
