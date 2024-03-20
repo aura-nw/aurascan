@@ -68,6 +68,7 @@ export class EvmWriteComponent implements OnChanges {
 
       this.extendedAbi = extendedAbi;
     }
+    this.resetForm();
   }
 
   disconnect() {
