@@ -1,10 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  MAX_NUMBER_INPUT,
-  NUMBER_2_DIGIT,
-  TIME_OUT_CALL_API
-} from 'src/app/core/constants/common.constant';
+import { MAX_NUMBER_INPUT, NUMBER_2_DIGIT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { AccountService } from 'src/app/core/services/account.service';
@@ -12,6 +8,7 @@ import { MappingErrorService } from 'src/app/core/services/mapping-error.service
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 
 @Component({
   selector: 'app-delegate-item',
@@ -52,7 +49,7 @@ export class DelegateItemComponent implements OnInit {
     private toastr: NgxToastrService,
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
-    private validatorService: ValidatorService
+    private validatorService: ValidatorService,
   ) {}
 
   ngOnInit(): void {
@@ -212,13 +209,12 @@ export class DelegateItemComponent implements OnInit {
     this.dialogOpen = false;
 
     if (error) {
-      const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : error;
-
-      if (code) {
-        let errorMessage = this.mappingErrorService.checkMappingError('', code);
-        this.toastr.error(errorMessage);
+      const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : parseError(error);
+      let errorMessage = message;
+      if (code > 0) {
+        errorMessage = this.mappingErrorService.checkMappingError(message, code);
       }
-
+      this.toastr.error(errorMessage ?? message ?? 'Unknown Error');
       this.resetData();
     } else {
       const hash = success?.transactionHash;
