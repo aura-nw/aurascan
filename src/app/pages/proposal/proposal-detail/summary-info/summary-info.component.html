@@ -55,15 +55,15 @@
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
             <ng-container *ngIf="proDetail?.proposer_address">
-              <a
-                class="text--primary h6 line-claim"
-                [routerLink]="['/account', proDetail?.proposer_address]"
-                [copyBtn]="proDetail?.proposer_address">
-                <ng-container *ngIf="proDetail?.proposer">
+              <a class="text--primary h6 line-claim">
+                <div *ngIf="proDetail?.proposer" [copyBtn]="proDetail?.proposer_address">
                   {{ proDetail?.proposer?.description?.moniker }}
-                </ng-container>
+                </div>
                 <ng-container *ngIf="!proDetail?.proposer">
-                  <app-name-tag [value]="proDetail?.proposer_address" [fullText]="true"></app-name-tag>
+                  <app-name-tag
+                    [value]="proDetail?.proposer_address"
+                    [fullText]="true"
+                    [linkRouter]="['/account', proDetail?.proposer_address]"></app-name-tag>
                 </ng-container>
               </a>
             </ng-container>
