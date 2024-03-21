@@ -1,150 +1,144 @@
-<section class="d-inline-flex name-tag-content">
-  <ng-container *ngIf="isLink; else displayText">
-    <div class="aura-tooltip-contain d-flex align-items-center">
-      <a
-        *ngIf="!isHref"
-        [routerLink]="['/' + url, paramUrl || value]"
-        class="text--primary break-all d-flex"
-        [ngClass]="[
-          isBox && !(paramUrl || value | nameTagTooltipPipe) ? 'box-name-tag' : '',
-          widthAuto ? 'w-auto' : '',
-          (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
-        ]"
-        [class.aura-tooltip-object]="!(paramUrl || value | nameTagTooltipPipe)">
-        <ng-container [ngTemplateOutlet]="contentData"></ng-container>
-      </a>
-      <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
-      </app-tooltip-customize>
-    </div>
-    <div class="aura-tooltip-contain d-flex align-items-center">
-      <a
-        *ngIf="isHref"
-        [href]="url + value"
-        class="text--primary break-all d-flex"
-        [ngClass]="[
-          isBox && !(paramUrl || value | nameTagTooltipPipe) ? 'box-name-tag' : '',
-          widthAuto ? 'w-auto' : '',
-          (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
-        ]"
-        [class.aura-tooltip-object]="!(paramUrl || value | nameTagTooltipPipe)">
-        <ng-container [ngTemplateOutlet]="contentData"></ng-container>
-      </a>
-      <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
-      </app-tooltip-customize>
-    </div>
-    <div class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex align-items-center"
-         [class.align-items-center]="isBox && !(paramUrl || value | nameTagTooltipPipe)">
-      <button
-        class="button button--xxs px-1 aura-tooltip-object disabled-hover"
-        #tooltip
-        (click)="commonService.showToolTip(tooltip)"
-        [cdkCopyToClipboard]="paramUrl || value">
-        <i class="ph ph-copy text--white body-01"></i>
-      </button>
-      <app-tooltip-customize [content]="'Copied!'" [className]="'custom-position'"></app-tooltip-customize>
-    </div>
+<section class="d-inline-flex name-tag-content" *ngIf="mode == ENameTag.Normal">
+  <ng-container *ngIf="isEnableRouter; else displayText">
+    <a
+      [routerLink]="routerLinks"
+      [queryParams]="linkParams"
+      class="text--primary break-all d-flex align-items-center"
+      [appTooltip]="!(addressOnly || value | nameTagTooltipPipe) ? displayContent(addressOnly || value) : null"
+      [classTooltip]="tooltipPosition"
+      [ngClass]="{
+        'box-name-tag': !(addressOnly || value | nameTagTooltipPipe),
+        'w-auto': widthAuto,
+        'private-name-tag': (addressOnly || value | isPrivateNameTag)
+      }">
+      <ng-container [ngTemplateOutlet]="contentData"></ng-container>
+    </a>
+    <div class="ml-lg-2 ml-1" [copyBtn]="addressOnly || value"></div>
   </ng-container>
 
   <ng-template #displayText>
-    <div class="aura-tooltip-contain">
-      <span
-        class="break-all"
-        [ngClass]="[
-          isBox && !(paramUrl || value | nameTagTooltipPipe) ? 'box-name-tag' : '',
-          widthAuto ? 'w-auto' : '',
-          (paramUrl || value | isPrivateNameTag) ? 'private-name-tag' : ''
-        ]"
-        [class.aura-tooltip-object]="!(paramUrl || value | nameTagTooltipPipe)">
-        <ng-container *ngIf="!fullText">
-          <img
-            [src]="'assets/images/icons/token-contract.svg' | imageS3"
-            [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
-            width="16px"
-            height="16px"
-            *ngIf="iconContract"/>
+    <span
+      class="break-all"
+      [appTooltip]="!(addressOnly || value | nameTagTooltipPipe) ? displayContent(addressOnly || value) : null"
+      [classTooltip]="tooltipPosition"
+      [ngClass]="{
+        'box-name-tag': !(addressOnly || value | nameTagTooltipPipe),
+        'w-auto': widthAuto,
+        'private-name-tag': (addressOnly || value | isPrivateNameTag)
+      }">
+      <ng-container *ngIf="!fullText">
+        <img
+          [src]="'assets/images/icons/token-contract.svg' | imageS3"
+          [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
+          width="16px"
+          height="16px"
+          *ngIf="iconContract" />
+        <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
+      </ng-container>
+      <ng-container *ngIf="fullText">
+        <span class="d-none d-lg-flex">{{ (value || addressOnly | nameTag) || '-' }}</span>
+        <span class="d-flex d-lg-none justify-content-center">
           <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
-        </ng-container>
-        <ng-container *ngIf="fullText">
-          <span class="d-none d-lg-flex">{{ (value || paramUrl | nameTag) || '-' }}</span>
-          <span class="d-flex d-lg-none justify-content-center">
-            <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
-          </span>
-        </ng-container>
-        <ng-container *ngIf="extendUrl && extendUrlLink">
-          <a target="_blank" [href]="extendLink(extendUrlLink)">
-            <i class="ph-arrow-square-out-fill text--white body-01 h4-mob ml-1 cursor-pointer"></i>
-          </a>
-        </ng-container>
-      </span>
-      <app-tooltip-customize [className]="tooltipPosition" [content]="displayContent(paramUrl || value)">
-      </app-tooltip-customize>
-    </div>
+        </span>
+      </ng-container>
+    </span>
 
-    <div class="aura-tooltip-contain btn-mobile ml-lg-2 ml-1 d-flex"
-         *ngIf="(paramUrl || value) !== nullAddress"
-         [class.align-items-center]="isBox && !(paramUrl || value | nameTagTooltipPipe)">
-      <button
-        class="button button--xxs px-1 aura-tooltip-object disabled-hover"
-        #tooltip
-        (click)="commonService.showToolTip(tooltip)"
-        [cdkCopyToClipboard]="paramUrl || value">
-        <i class="ph ph-copy text--white body-01"></i>
-      </button>
-      <app-tooltip-customize [content]="'Copied!'" [className]="'custom-position'"></app-tooltip-customize>
-    </div>
+    <div
+      [copyBtn]="addressOnly || value"
+      *ngIf="(addressOnly || value) !== nullAddress"
+      [class.align-items-center]="!(addressOnly || value | nameTagTooltipPipe)"></div>
   </ng-template>
 
   <ng-template #contentData>
     <img
+      *ngIf="iconContract"
       [src]="'assets/images/icons/token-contract.svg' | imageS3"
-      *ngIf="isTokenDetail && (value | isContract)"
-      alt=""
-      [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
+      alt="token-contract"
+      [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
-      height="16px"/>
-    <img
-      [src]="'assets/images/icons/token-contract.svg' | imageS3"
-      [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
-      width="16px"
-      height="16px"
-      *ngIf="iconContract"/>
+      height="16px" />
     <img
       [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-      [ngClass]="(paramUrl || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
+      [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       alt="contract_verification"
       width="16px"
       height="16px"
-      *ngIf="iconVerify"/>
+      *ngIf="isVerified" />
     <ng-container *ngIf="!fullText">
       <ng-container [ngTemplateOutlet]="displayNameTag"></ng-container>
     </ng-container>
     <ng-container *ngIf="fullText">
       <ng-container *ngIf="!fullTextMob">
-        <span class="d-none d-lg-flex">{{ (value || paramUrl | nameTag) || '-' }}</span>
+        <span class="d-none d-lg-flex">{{ (value || addressOnly | nameTag) || '-' }}</span>
         <span class="d-flex d-lg-none justify-content-center">
           <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
         </span>
       </ng-container>
       <ng-container *ngIf="fullTextMob">
-        <span>{{ (value || paramUrl | nameTag) || '-' }}</span>
+        <span>{{ (value || addressOnly | nameTag) || '-' }}</span>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="extendUrl && extendUrlLink">
-      <a target="_blank" [href]="extendLink(extendUrlLink)">
-        <i class="ph-arrow-square-out-fill text--white body-01 h4-mob ml-1"></i>
-      </a>
     </ng-container>
   </ng-template>
 
   <ng-template #displayNameTag>
-    <ng-container *ngIf="!(paramUrl || value | nameTagTooltipPipe)">
+    <ng-container *ngIf="!(addressOnly || value | nameTagTooltipPipe)">
       {{ (value | nameTag | ellipsis: maxCharacter) || '-' }}
     </ng-container>
 
-    <ng-container *ngIf="paramUrl || value | nameTagTooltipPipe">
-      <ng-container *ngIf="isShorterText && (paramUrl || value) === nullAddress">{{ (value | nameTag | ellipsis: 6 : 6) || '-' }}</ng-container>
-      <ng-container *ngIf="isShorterText && (paramUrl || value) !== nullAddress">{{ (value | nameTag | ellipsis: 5 : 5) || '-' }}</ng-container>
+    <ng-container *ngIf="addressOnly || value | nameTagTooltipPipe">
+      <ng-container *ngIf="isShorterText && (addressOnly || value) === nullAddress">
+        {{ (value | nameTag | ellipsis: 6 : 6) || '-' }}
+      </ng-container>
+      <ng-container *ngIf="isShorterText && (addressOnly || value) !== nullAddress">
+        {{ (value | nameTag | ellipsis: 5 : 5) || '-' }}
+      </ng-container>
       <ng-container *ngIf="!isShorterText">{{ (value | nameTag | ellipsis: 8 : 8) || '-' }}</ng-container>
+    </ng-container>
+  </ng-template>
+</section>
+
+<section *ngIf="mode != ENameTag.Normal">
+  <div
+    class="d-flex align-items-center text--white after-gray"
+    *ngIf="
+      (mode === ENameTag.Private && value | isPrivateNameTag) || (mode === ENameTag.Public && value | isPublicNameTag);
+      else noValue
+    ">
+    <div
+      class="box-name-tag text--white {{ mode === ENameTag.Private ? 'private-name-tag' : '' }}"
+      [appTooltip]="
+        screen !== EScreen.Contract
+          ? (screen === EScreen.Account ? mode + ' name: ' : '') + (value | nameTag: mode === ENameTag.Private)
+          : null
+      ">
+      {{
+        (value
+          | nameTag: mode === ENameTag.Private
+          | ellipsis: (maxCharacter && !fullText ? maxCharacter : maxLengthNameTag)) || '-'
+      }}
+      <a
+        target="_blank"
+        [href]="extendLink(value | nameTag: null : 'url')"
+        *ngIf="(value | nameTag: null : 'url') && mode === ENameTag.Public && screen != EScreen.WatchList">
+        <i class="ph-arrow-square-out-fill body-01 h4-mob ml-1 cursor-pointer"></i>
+      </a>
+    </div>
+    <i
+      *ngIf="mode === ENameTag.Private && screen !== EScreen.WatchList"
+      class="ph ph-note-pencil ml-2 body-01 cursor-pointer"
+      (click)="editPrivateName()">
+    </i>
+  </div>
+  <ng-template #noValue>
+    <ng-container *ngIf="screen === EScreen.WatchList">-</ng-container>
+    <ng-container *ngIf="screen !== EScreen.WatchList">
+      <span class="text--white" *ngIf="mode === ENameTag.Public && screen === EScreen.Contract">-</span>
+      <button
+        class="button button-outline button-outline__in-card button-pill mt-1 btn-private"
+        *ngIf="mode === ENameTag.Private"
+        (click)="editPrivateName()">
+        <span class="caption fw-normal"> Set Private Name Tag </span>
+      </button>
     </ng-container>
   </ng-template>
 </section>

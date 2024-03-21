@@ -31,8 +31,6 @@ export const DATEFORMAT = {
   TIME_ONLY: 'HH:mm:ss',
 };
 
-export const NUMBER_CONVERT = 1000000; //10^6 satoshi unit
-
 export const PAGE_EVENT = {
   LENGTH: 0,
   PAGE_SIZE: 5,
@@ -114,4 +112,5 @@ export const STORAGE_KEYS = {
   DATA_NATIVE: 'nativeData',
 };
 
-export const TITLE_LOGO = 'images/logo/title-logo.png';
+export const TITLE_LOGO = 'assets/images/logo/title-logo.png';
+export const MAX_LENGTH_NAME_TAG = 35;

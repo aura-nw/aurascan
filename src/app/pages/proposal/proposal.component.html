@@ -30,12 +30,17 @@
                   <div class="d-flex mb-2">
                     <div class="content-body">Proposer</div>
                     <ng-container *ngIf="lastedItem?.proposer_address">
-                      <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary h6 mb-0">
-                        <ng-container *ngIf="lastedItem?.proposer">
+                      <a class="text--primary h6 mb-0">
+                        <div
+                          *ngIf="lastedItem?.proposer"
+                          [routerLink]="['/account', lastedItem?.proposer_address]"
+                          [copyBtn]="lastedItem?.proposer_address">
                           {{ lastedItem?.proposer?.description?.moniker }}
-                        </ng-container>
+                        </div>
                         <ng-container *ngIf="!lastedItem?.proposer">
-                          <app-name-tag [value]="lastedItem?.proposer_address"> </app-name-tag>
+                          <app-name-tag
+                            [value]="lastedItem?.proposer_address"
+                            [linkRouter]="['/account', lastedItem?.proposer_address]"></app-name-tag>
                         </ng-container>
                       </a>
                     </ng-container>
@@ -78,36 +83,31 @@
               <div class="mt-3 d-flex">
                 <div class="vote-bar flex-grow-1">
                   <ul>
-                    <li class="primary aura-tooltip-contain" [style.width]="lastedItem.tally?.yes + '%'">
-                      <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize [content]="'Yes ' + (lastedItem.tally?.yes | formatDigit: 2) + '%'">
-                      </app-tooltip-customize>
+                    <li class="primary" *ngIf="lastedItem.tally?.yes" [style.width]="lastedItem.tally?.yes + '%'">
+                      <div
+                        class="w-100 h-100"
+                        [appTooltip]="'Yes ' + (lastedItem.tally?.yes | formatDigit: 2) + '%'"></div>
+                    </li>
+                    <li class="danger" *ngIf="lastedItem.tally?.no" [style.width]="lastedItem.tally?.no + '%'">
+                      <div
+                        class="w-100 h-100"
+                        [appTooltip]="'No ' + (lastedItem.tally?.no | formatDigit: 2) + '%'"></div>
                     </li>
                     <li
-                      class="danger aura-tooltip-contain"
-                      *ngIf="lastedItem.tally?.no"
-                      [style.width]="lastedItem.tally?.no + '%'">
-                      <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize [content]="'No ' + (lastedItem.tally?.no | formatDigit: 2) + '%'">
-                      </app-tooltip-customize>
-                    </li>
-                    <li
-                      class="info aura-tooltip-contain"
+                      class="info"
                       *ngIf="lastedItem.tally?.no_with_veto"
                       [style.width]="lastedItem.tally?.no_with_veto + '%'">
-                      <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize
-                        [content]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit: 2) + '%'">
-                      </app-tooltip-customize>
+                      <div
+                        class="w-100 h-100"
+                        [appTooltip]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit: 2) + '%'"></div>
                     </li>
                     <li
-                      class="secondary aura-tooltip-contain"
+                      class="secondary"
                       *ngIf="lastedItem.tally?.abstain"
                       [style.width]="lastedItem.tally?.abstain + '%'">
-                      <div class="aura-tooltip-object w-100 h-100"></div>
-                      <app-tooltip-customize
-                        [content]="'Abstain ' + (lastedItem.tally?.abstain | formatDigit: 2) + '%'">
-                      </app-tooltip-customize>
+                      <div
+                        class="w-100 h-100"
+                        [appTooltip]="'Abstain ' + (lastedItem.tally?.abstain | formatDigit: 2) + '%'"></div>
                     </li>
                   </ul>
                 </div>
@@ -208,12 +208,17 @@
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Proposer</div>
                     <ng-container *ngIf="lastedItem?.proposer_address">
-                      <a [routerLink]="['/account', lastedItem?.proposer_address]" class="text--primary line-claim">
-                        <ng-container *ngIf="lastedItem?.proposer">
+                      <a class="text--primary h6 mb-0">
+                        <div
+                          *ngIf="lastedItem?.proposer"
+                          [routerLink]="['/account', lastedItem?.proposer_address]"
+                          [copyBtn]="lastedItem?.proposer_address">
                           {{ lastedItem?.proposer?.description?.moniker }}
-                        </ng-container>
+                        </div>
                         <ng-container *ngIf="!lastedItem?.proposer">
-                          <app-name-tag [value]="lastedItem?.proposer_address"> </app-name-tag>
+                          <app-name-tag
+                            [value]="lastedItem?.proposer_address"
+                            [linkRouter]="['/account', lastedItem?.proposer_address]"></app-name-tag>
                         </ng-container>
                       </a>
                     </ng-container>
@@ -259,36 +264,27 @@
                 <div class="mt-6 d-flex justify-content-between border-bottom-mobile pb-3">
                   <div class="vote-bar flex-grow-1 mr-0">
                     <ul class="mt-4 ul-mobile">
-                      <li class="primary aura-tooltip-contain" [style.width]="lastedItem.tally?.yes + '%'">
-                        <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize [content]="'Yes ' + (lastedItem.tally?.yes | formatDigit: 2) + '%'">
-                        </app-tooltip-customize>
+                      <li class="primary" *ngIf="lastedItem.tally?.yes" [style.width]="lastedItem.tally?.yes + '%'">
+                        <div class="w-100" [appTooltip]="'Yes ' + (lastedItem.tally?.yes | formatDigit: 2) + '%'"></div>
+                      </li>
+                      <li class="danger" *ngIf="lastedItem.tally?.no" [style.width]="lastedItem.tally?.no + '%'">
+                        <div class="w-100" [appTooltip]="'No ' + (lastedItem.tally?.no | formatDigit: 2) + '%'"></div>
                       </li>
                       <li
-                        class="danger aura-tooltip-contain"
-                        *ngIf="lastedItem.tally?.no"
-                        [style.width]="lastedItem.tally?.no + '%'">
-                        <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize [content]="'No ' + (lastedItem.tally?.no | formatDigit: 2) + '%'">
-                        </app-tooltip-customize>
-                      </li>
-                      <li
-                        class="info aura-tooltip-contain"
+                        class="info"
                         *ngIf="lastedItem.tally?.no_with_veto"
                         [style.width]="lastedItem.tally?.no_with_veto + '%'">
-                        <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize
-                          [content]="'No with veto ' + (lastedItem.tally?.no_with_veto | formatDigit: 2) + '%'">
-                        </app-tooltip-customize>
+                        <div
+                          class="w-100"
+                          [appTooltip]="'No with veto' + (lastedItem.tally?.no_with_veto | formatDigit: 2) + '%'"></div>
                       </li>
                       <li
-                        class="secondary aura-tooltip-contain"
+                        class="secondary"
                         *ngIf="lastedItem.tally.abstain"
                         [style.width]="lastedItem.tally.abstain + '%'">
-                        <div class="aura-tooltip-object w-100"></div>
-                        <app-tooltip-customize
-                          [content]="'Abstain ' + (lastedItem.tally.abstain | formatDigit: 2) + '%'">
-                        </app-tooltip-customize>
+                        <div
+                          class="w-100"
+                          [appTooltip]="'Abstain' + (lastedItem.tally?.abstain | formatDigit: 2) + '%'"></div>
                       </li>
                     </ul>
                   </div>

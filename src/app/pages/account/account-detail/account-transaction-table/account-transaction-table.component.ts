@@ -1,15 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -53,7 +44,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
 
   templatesExecute: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
     { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 12 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
@@ -62,11 +53,11 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   ];
 
   templatesToken: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18 },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 25 },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 22 },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18, cssClass: 'pt-4' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 25, cssClass: 'pt-0' },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 22, cssClass: 'pt-0' },
   ];
 
   displayedColumns: string[];
@@ -113,7 +104,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private datePipe: DatePipe,
     private router: Router,
     private layout: BreakpointObserver,
   ) {}
@@ -343,7 +333,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListTxNativeByAddress(payload);
         break;
@@ -357,7 +347,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17 });
+        this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListFTByAddress(payload);
         break;
@@ -372,8 +362,9 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         this.templates = [...this.templatesToken];
-        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18 });
+        this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18, cssClass: 'pt-1' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
+        payload['limit'] = 100;
         this.getListNFTByAddress(payload);
         break;
       default:

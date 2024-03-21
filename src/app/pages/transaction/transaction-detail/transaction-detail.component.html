@@ -24,19 +24,14 @@
         </div>
       </div>
       <div class="d-flex align-items-baseline">
-        <h2 id="popupCopy" class="mb-0 text--white pb-0 pr-0">
-          {{ !isRawData ? 'Information' : 'Raw Data' }}
-        </h2>
-        <div class="aura-tooltip-contain">
-          <button
-            class="button button--xxs button--sm-mob button-circle ml-2 aura-tooltip-object disabled-hover"
-            *ngIf="isRawData"
-            #tooltip
-            [cdkCopyToClipboard]="transaction.tx | json"
-            (click)="commonService.showToolTip(tooltip)">
-            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3" alt="" />
-          </button>
-          <app-tooltip-customize [content]="'Copied!'"></app-tooltip-customize>
+        <h2 *ngIf="!isRawData" class="mb-0 text--white pb-0 pr-0">Information</h2>
+        <div *ngIf="isRawData">
+          <h2
+            class="mb-0 text--white pb-0 pr-0"
+            [copyBtn]="transaction.tx | json"
+            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2']">
+            Raw Data
+          </h2>
         </div>
       </div>
       <div class="body py-4">

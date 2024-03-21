@@ -36,7 +36,7 @@
                   <ng-container *ngIf="template.isNameTag">
                     <app-name-tag
                       [value]="data[template.matColumnDef]"
-                      [url]="template.isUrl"
+                      [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                       [tooltipPosition]="'tooltip--right'"></app-name-tag>
                   </ng-container>
                   <ng-container *ngIf="!template.isNameTag">
@@ -51,20 +51,18 @@
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
-                      <div class="aura-tooltip-contain d-flex">
-                        <div class="aura-tooltip-object" *ngIf="data[template.matColumnDef] < 0.001"><0.001</div>
-                        <div
-                          [class.aura-tooltip-object]="data[template.matColumnDef] !== 0"
-                          [class.cursor-text]="data[template.matColumnDef] < 1000000"
-                          *ngIf="data[template.matColumnDef] >= 0.001"
-                          [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="0"></div>
-                        <span class="ml-1" appLinkDenom>{{ coinInfo.coinDenom }}</span>
-                        <app-tooltip-customize
-                          *ngIf="data[template.matColumnDef] < 0.001 || data[template.matColumnDef] >= 1000000"
-                          [content]="data[template.matColumnDef]">
-                        </app-tooltip-customize>
+                      <div
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef] }"
+                        *ngIf="data[template.matColumnDef] < 0.001">
+                        <0.001
                       </div>
+                      <div
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef] }"
+                        [class.cursor-text]="data[template.matColumnDef] < 1000000"
+                        *ngIf="data[template.matColumnDef] >= 0.001"
+                        [appBigNumber]="data[template.matColumnDef]"
+                        [decimal]="0"></div>
+                      <span class="ml-1" appLinkDenom>{{ coinInfo.coinDenom }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'vote_option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}

@@ -33,6 +33,7 @@ export function parseError(error: any) {
         ? error
         : {
             ...error,
+            message: error?.message || error,
             code: -1,
           };
   }
