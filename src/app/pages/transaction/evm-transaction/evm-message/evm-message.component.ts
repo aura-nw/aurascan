@@ -20,10 +20,7 @@ export class EvmMessageComponent {
       address: string;
       data: string;
     }[];
-    data?: {
-      value: string;
-      hexValue: string;
-    };
+    data: string;
   }[];
 
   inputDataType = {

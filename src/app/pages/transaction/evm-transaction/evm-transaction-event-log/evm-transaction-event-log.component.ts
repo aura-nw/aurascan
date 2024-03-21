@@ -15,12 +15,13 @@ export class EvmTransactionEventLogComponent implements OnInit {
       address: string;
       data: string;
     }[];
-    data?: {
-      value: string;
-      hexValue: string;
-    };
+    data: string;
   };
   @Input() index;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.eventLog?.data) {
+      this.eventLog['data'] = this.eventLog?.data.replace('\\x', '');
+    }
+  }
 }
