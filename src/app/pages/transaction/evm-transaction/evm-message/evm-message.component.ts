@@ -72,8 +72,8 @@ export class EvmMessageComponent {
         if (rawData?.fragment?.inputs?.length > 0) {
           this.getListTopicDecode();
           this.method = rawData?.fragment?.name;
+          this.inputDataRaw['name'] = this.interfaceCoder.getFunction(this.method)?.format() || rawData.name;
           this.inputDataDecoded['name'] = rawData.name;
-          this.inputDataRaw['name'] = rawData.name;
           this.inputDataDecoded['params'] = rawData?.fragment?.inputs.map((item, index) => {
             return {
               name: item.name,
