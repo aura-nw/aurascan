@@ -146,7 +146,7 @@ export class EvmTokenContentComponent implements OnInit {
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
           if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
-            this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'nft' : 'abt';
+            this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token/nft' : 'token/abt';
             window.location.href = `/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
             window.location.href = `/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
@@ -163,7 +163,7 @@ export class EvmTokenContentComponent implements OnInit {
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
       if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
-        this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'nft' : 'abt';
+        this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token/nft' : 'token/abt';
         window.location.href = `/${this.linkToken}/${params.contractAddress}`;
       } else {
         window.location.href = `/token/${params.contractAddress}`;
