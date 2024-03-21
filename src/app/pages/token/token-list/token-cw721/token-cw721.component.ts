@@ -8,6 +8,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
@@ -47,8 +48,8 @@ export class TokenCw721Component implements OnInit {
   constructor(
     public translate: TranslateService,
     private tokenService: TokenService,
-    private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
