@@ -62,6 +62,7 @@ import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contract
     ContractTableModule,
     NgbNavModule,
   ],
+  exports: [EvmReadComponent, EvmWriteComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class EvmContractsModule {}

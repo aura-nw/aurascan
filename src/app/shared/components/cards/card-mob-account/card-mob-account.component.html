@@ -117,10 +117,10 @@
               </div>
 
               <div class="ml-1 text--primary">
-                <a [routerLink]="['/tokens/token', item.linkDenom]" *ngIf="modeQuery !== tabsData.FtsTxs">
+                <a [routerLink]="['/token', item.linkDenom]" *ngIf="modeQuery !== tabsData.FtsTxs">
                   {{ item.denom || coinInfo.coinDenom | ellipsis: 19 }}
                 </a>
-                <a [routerLink]="['/tokens/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
+                <a [routerLink]="['/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
                   {{ item.denom | ellipsis: 19 }}
                 </a>
               </div>
@@ -138,7 +138,7 @@
               <i
                 [style]="'margin-top: 2px'"
                 class="ph-arrow-square-out-fill body-01-mob cursor-pointer mr-1 ml-2"
-                [routerLink]="['/tokens/token-nft/', item.contractAddress, item.tokenId]"></i>
+                [routerLink]="['/token/nft/', item.contractAddress, item.tokenId]"></i>
             </div>
           </div>
         </div>

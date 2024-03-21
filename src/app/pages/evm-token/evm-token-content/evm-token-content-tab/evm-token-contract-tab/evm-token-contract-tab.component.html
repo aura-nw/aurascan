@@ -1,0 +1,60 @@
+<app-loading-sprint class="mt-10" *ngIf="isLoading"></app-loading-sprint>
+<div class="box-contract text-white" *ngIf="!isLoading">
+  <!-- Verify Fail -->
+  <ng-container *ngIf="contractCode">
+    <div class="d-flex break-word align-items-center">
+      <img
+        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+        alt=""
+        width="16"
+        height="16"
+        class="mr-2" />
+      <div>
+        Are you the contract creator?
+        <a class="text--primary" [routerLink]="['verify']"> Verify and Publish </a>
+        your contract source code today!
+      </div>
+    </div>
+    <div
+      class="mt-3 content-info caption fw-normal"
+      *ngIf="contractCode"
+      [appExpandable]="contractCode"
+      [maxCharVisible]="900">
+      {{ contractCode }}
+    </div>
+  </ng-container>
+
+  <!-- Verify Successfull -->
+  <ng-container *ngIf="contractDetail && !contractCode">
+    <div class="button-tab-group mb-4 mt-lg-3">
+      <button
+        class="button-tab"
+        [class.active]="currentTab === contractType.ReadContract"
+        (click)="changeTab(contractType.ReadContract)">
+        <span>Read Contract</span>
+      </button>
+      <button
+        class="button-tab"
+        [class.active]="currentTab === contractType.WriteContract"
+        (click)="changeTab(contractType.WriteContract)">
+        <span>Write Contract</span>
+      </button>
+    </div>
+
+    <div class="mt-3">
+      <ng-container>
+        <app-evm-read
+          *ngIf="currentTab === contractType.ReadContract"
+          [abi]="contractDetail.abi"
+          [contractAddress]="contractAddress">
+        </app-evm-read>
+
+        <app-evm-write
+          *ngIf="currentTab === contractType.WriteContract"
+          [abi]="contractDetail.abi"
+          [contractAddress]="contractAddress">
+        </app-evm-write>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

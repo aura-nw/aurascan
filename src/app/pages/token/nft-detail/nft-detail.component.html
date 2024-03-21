@@ -19,7 +19,7 @@
       <div class="mt-2">
         <a
           class="text--primary h6 mb-0 mt-2 break-word"
-          [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]"
+          [routerLink]="['/' + linkToken, nftDetail?.contract_address]"
           >{{ nftDetail?.name || nftDetail?.token_name }}</a
         >
       </div>
@@ -96,11 +96,9 @@
             </ng-container>
           </div>
           <div class="mt-1 mt-lg-2 mb-4 d-lg-flex d-none">
-            <a
-              class="body-01 text--primary break-word"
-              [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]"
-              >{{ nftDetail?.name || nftDetail?.token_name }}</a
-            >
+            <a class="body-01 text--primary break-word" [routerLink]="['/' + linkToken, nftDetail?.contract_address]">{{
+              nftDetail?.name || nftDetail?.token_name
+            }}</a>
           </div>
           <!-- Desktop card info -->
           <!--          <div class="d-none d-lg-block card py-3 px-6" *ngIf="!isSoulBound">-->

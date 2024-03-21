@@ -20,27 +20,23 @@ import { SharedModule } from '../../../app/shared/shared.module';
 import { ReadContractModule } from '../contracts/contracts-detail/contracts-contents/contract/read-contract/read-contract.module';
 import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
 import { ContractsModule } from '../contracts/contracts.module';
+import { EvmContractsModule } from '../evm-contracts/evm-contracts.module';
 import { NFTDetailComponent } from './nft-detail/nft-detail.component';
 import { PopupShareComponent } from './nft-detail/popup-share/popup-share.component';
-import { TokenContractTabComponent } from './token-detail/token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
-import { TokenHoldersTabComponent } from './token-detail/token-content/token-content-tab/token-holders-tab/token-holders-tab.component';
-import { TokenInfoTabComponent } from './token-detail/token-content/token-content-tab/token-info-tab/token-info-tab.component';
-import { TokenInventoryComponent } from './token-detail/token-content/token-content-tab/token-inventory-tab/token-inventory-tab.component';
-import { TokenTransfersTabComponent } from './token-detail/token-content/token-content-tab/token-transfers-tab/token-transfers-tab.component';
-import { TokenContentComponent } from './token-detail/token-content/token-content.component';
+import { TokenContractTabComponent } from './token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
+import { TokenHoldersTabComponent } from './token-content/token-content-tab/token-holders-tab/token-holders-tab.component';
+import { TokenInfoTabComponent } from './token-content/token-content-tab/token-info-tab/token-info-tab.component';
+import { TokenInventoryComponent } from './token-content/token-content-tab/token-inventory-tab/token-inventory-tab.component';
+import { TokenTransfersTabComponent } from './token-content/token-content-tab/token-transfers-tab/token-transfers-tab.component';
+import { TokenContentComponent } from './token-content/token-content.component';
 import { TokenDetailComponent } from './token-detail/token-detail.component';
-import { TokenOverviewComponent } from './token-detail/token-overview/token-overview.component';
-import { TokenSummaryComponent } from './token-detail/token-summary/token-summary.component';
-import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component';
-import { TokenCw4973Component } from './token-list/token-cw4973/token-cw4973.component';
-import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
+import { TokenOverviewComponent } from './token-overview/token-overview.component';
 import { TokenRoutingModule } from './token-routing.module';
+import { TokenSummaryComponent } from './token-summary/token-summary.component';
 
 @NgModule({
   declarations: [
     TokenDetailComponent,
-    TokenCw20Component,
-    TokenCw721Component,
     TokenOverviewComponent,
     TokenSummaryComponent,
     TokenContentComponent,
@@ -51,7 +47,6 @@ import { TokenRoutingModule } from './token-routing.module';
     TokenInventoryComponent,
     NFTDetailComponent,
     PopupShareComponent,
-    TokenCw4973Component,
   ],
   imports: [
     CommonModule,
@@ -77,6 +72,7 @@ import { TokenRoutingModule } from './token-routing.module';
     CustomPaginatorModule,
     NameTagModule,
     ClipboardModule,
+    EvmContractsModule,
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })

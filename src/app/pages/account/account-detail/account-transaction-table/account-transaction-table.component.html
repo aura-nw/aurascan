@@ -446,7 +446,7 @@
                             </div>
                             <a
                               class=""
-                              [routerLink]="['/tokens/token', item.contractAddress]"
+                              [routerLink]="['/token', item.contractAddress]"
                               *ngIf="modeQuery === tabsData.FtsTxs">
                               {{ item.denom | ellipsis: 19 }}
                             </a>
@@ -607,7 +607,7 @@
                           <div class="justify-content-between tokenId">
                             <a
                               *ngIf="item.tokenId"
-                              [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
+                              [routerLink]="['/token/nft', data.contractAddress, encodeData(item.tokenId)]"
                               [copyBtn]="item.tokenId"
                               class="text--primary cursor-pointer">
                               #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
@@ -667,7 +667,7 @@
               info:
                 (data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0)) +
                 ' <a class=text--primary href=' +
-                ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+                ('/token/' + coinInfo.coinMinimalDenom) +
                 '>' +
                 denom +
                 '</a>'
