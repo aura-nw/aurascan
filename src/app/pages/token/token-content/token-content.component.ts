@@ -163,7 +163,7 @@ export class TokenContentComponent implements OnInit {
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
       if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
-        this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'nft' : 'abt';
+        this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token/nft' : 'token/abt';
         window.location.href = `/${this.linkToken}/${params.contractAddress}`;
       } else {
         window.location.href = `/token/${params.contractAddress}`;
