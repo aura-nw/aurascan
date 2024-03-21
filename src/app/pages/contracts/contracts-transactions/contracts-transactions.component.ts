@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { map, Subject } from 'rxjs';
+import { Subject, map } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CONTRACT_TABLE_TEMPLATES, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
@@ -10,7 +10,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { toHexData } from 'src/app/core/utils/common/parsing';
 import { convertDataTransaction } from 'src/app/global/global';
 
 @Component({
@@ -124,7 +123,7 @@ export class ContractsTransactionsComponent implements OnInit {
           map((txsRes) => {
             if (txsRes?.evm_transaction?.length > 0) {
               return txsRes.evm_transaction.map((tx) => {
-                const type = toHexData(_.get(tx, 'data'));
+                const type = _.get(tx, 'data');
                 return {
                   ...tx,
                   tx_hash: _.get(tx, 'hash'),

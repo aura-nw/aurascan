@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-evm-contract-info',

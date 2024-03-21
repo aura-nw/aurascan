@@ -12,7 +12,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { toHexData } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-evm-contract-content',
@@ -135,7 +134,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
           map((txsRes) => {
             if (txsRes?.evm_transaction?.length > 0) {
               return txsRes.evm_transaction.map((tx) => {
-                const type = toHexData(_.get(tx, 'data'));
+                const type = _.get(tx, 'data');
                 return {
                   ...tx,
                   tx_hash: _.get(tx, 'hash'),
