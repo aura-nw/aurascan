@@ -21,27 +21,18 @@ import { ReadContractModule } from '../contracts/contracts-detail/contracts-cont
 import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
 import { ContractsModule } from '../contracts/contracts.module';
 import { EvmContractsModule } from '../evm-contracts/evm-contracts.module';
-import { NFTDetailComponent } from './cosmos-token/nft-detail/nft-detail.component';
-import { PopupShareComponent } from './cosmos-token/nft-detail/popup-share/popup-share.component';
-import { TokenContractTabComponent } from './cosmos-token/token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
-import { TokenHoldersTabComponent } from './cosmos-token/token-content/token-content-tab/token-holders-tab/token-holders-tab.component';
-import { TokenInfoTabComponent } from './cosmos-token/token-content/token-content-tab/token-info-tab/token-info-tab.component';
-import { TokenInventoryComponent } from './cosmos-token/token-content/token-content-tab/token-inventory-tab/token-inventory-tab.component';
-import { TokenTransfersTabComponent } from './cosmos-token/token-content/token-content-tab/token-transfers-tab/token-transfers-tab.component';
-import { TokenContentComponent } from './cosmos-token/token-content/token-content.component';
-import { TokenDetailComponent } from './cosmos-token/token-detail/token-detail.component';
-import { TokenOverviewComponent } from './cosmos-token/token-overview/token-overview.component';
-import { TokenSummaryComponent } from './cosmos-token/token-summary/token-summary.component';
-import { EvmTokenContractTabComponent } from './evm-token/evm-token-content/evm-token-content-tab/evm-token-contract-tab/evm-token-contract-tab.component';
-import { EvmTokenHoldersTabComponent } from './evm-token/evm-token-content/evm-token-content-tab/evm-token-holders-tab/evm-token-holders-tab.component';
-import { EvmTokenInfoTabComponent } from './evm-token/evm-token-content/evm-token-content-tab/evm-token-info-tab/evm-token-info-tab.component';
-import { EvmTokenInventoryComponent } from './evm-token/evm-token-content/evm-token-content-tab/evm-token-inventory-tab/evm-token-inventory-tab.component';
-import { EvmTokenTransfersTabComponent } from './evm-token/evm-token-content/evm-token-content-tab/evm-token-transfers-tab/evm-token-transfers-tab.component';
-import { EvmTokenContentComponent } from './evm-token/evm-token-content/evm-token-content.component';
-import { EvmTokenDetailComponent } from './evm-token/evm-token-detail/emv-token-detail.component';
-import { EvmTokenOverviewComponent } from './evm-token/evm-token-overview/evm-token-overview.component';
-import { EvmTokenSummaryComponent } from './evm-token/evm-token-summary/evm-token-summary.component';
+import { NFTDetailComponent } from './nft-detail/nft-detail.component';
+import { PopupShareComponent } from './nft-detail/popup-share/popup-share.component';
+import { TokenContractTabComponent } from './token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
+import { TokenHoldersTabComponent } from './token-content/token-content-tab/token-holders-tab/token-holders-tab.component';
+import { TokenInfoTabComponent } from './token-content/token-content-tab/token-info-tab/token-info-tab.component';
+import { TokenInventoryComponent } from './token-content/token-content-tab/token-inventory-tab/token-inventory-tab.component';
+import { TokenTransfersTabComponent } from './token-content/token-content-tab/token-transfers-tab/token-transfers-tab.component';
+import { TokenContentComponent } from './token-content/token-content.component';
+import { TokenDetailComponent } from './token-detail/token-detail.component';
+import { TokenOverviewComponent } from './token-overview/token-overview.component';
 import { TokenRoutingModule } from './token-routing.module';
+import { TokenSummaryComponent } from './token-summary/token-summary.component';
 
 @NgModule({
   declarations: [
@@ -56,16 +47,6 @@ import { TokenRoutingModule } from './token-routing.module';
     TokenInventoryComponent,
     NFTDetailComponent,
     PopupShareComponent,
-
-    EvmTokenDetailComponent,
-    EvmTokenOverviewComponent,
-    EvmTokenSummaryComponent,
-    EvmTokenContentComponent,
-    EvmTokenHoldersTabComponent,
-    EvmTokenTransfersTabComponent,
-    EvmTokenInfoTabComponent,
-    EvmTokenContractTabComponent,
-    EvmTokenInventoryComponent,
   ],
   imports: [
     CommonModule,
