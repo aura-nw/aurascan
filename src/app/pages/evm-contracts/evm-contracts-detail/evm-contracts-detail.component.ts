@@ -52,6 +52,7 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
             return of(null);
           }
           this.contractAddress = ca;
+          this.checkWatchList();
 
           return this.contractService.queryEvmContractByAddress(ca);
         }),

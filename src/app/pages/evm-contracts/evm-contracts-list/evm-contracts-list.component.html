@@ -122,7 +122,10 @@
                       {{ (data[template.matColumnDef] | ellipsis: 28) || '-' }}
                     </div>
                     <div *ngSwitchCase="'token_tracker'">
-                      <a *ngIf="data['token_tracker']" [appTooltip]="data['token_tracker']" [routerLink]="data.url">
+                      <a
+                        *ngIf="data['token_tracker']"
+                        [appTooltip]="data['token_tracker']"
+                        [routerLink]="['/tokens/token/', data['address']]">
                         {{ data['token_tracker'] | ellipsis: 18 }}
                       </a>
                       <span *ngIf="!data['token_tracker']">-</span>
