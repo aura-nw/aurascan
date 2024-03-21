@@ -87,7 +87,7 @@
             <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
               <ng-container *ngIf="transaction.to; else dash">
                 <app-name-tag
-                  [value]="transaction.to"
+                  [value]="transaction.to?.toLowerCase()"
                   [fullText]="true"
                   [linkRouter]="[isEvmContract ? '/evm-contracts' : '/account', transaction.to]"
                   [iconContract]="isEvmContract"></app-name-tag>
