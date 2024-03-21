@@ -20,7 +20,6 @@ import {
   convertBech32AddressToEvmAddress,
   convertEvmAddressToBech32Address,
 } from 'src/app/core/utils/common/address-converter';
-import { toHexData } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';

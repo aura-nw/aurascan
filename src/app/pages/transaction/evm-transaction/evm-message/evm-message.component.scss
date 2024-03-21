@@ -43,7 +43,10 @@
     .box-raw {
       display: flex;
       .index-raw-item {
-        width: 45px;
+        width: 90px;
+        @media (min-width: 992px) {
+          width: 50px;
+        }
       }
       .font-mono {
         font-family: monospace;

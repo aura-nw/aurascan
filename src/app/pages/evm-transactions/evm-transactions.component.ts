@@ -1,13 +1,12 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import * as _ from 'lodash';
+import { map } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import * as _ from 'lodash';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { map } from 'rxjs';
-import { toHexData } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-evm-transactions',
@@ -57,9 +56,7 @@ export class EvmTransactionsComponent {
         map((txsRes) => {
           if (txsRes?.transaction?.length > 0) {
             return txsRes.transaction.map((tx) => {
-              const type = _.get(tx, 'evm_transaction.data')
-                ? _.get(tx, 'evm_transaction.data')
-                : toHexData(_.get(tx, 'evm_transaction.data'));
+              const type = _.get(tx, 'evm_transaction.data');
 
               return {
                 ...tx,

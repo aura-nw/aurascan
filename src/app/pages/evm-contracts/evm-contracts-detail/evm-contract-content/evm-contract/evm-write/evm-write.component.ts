@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
@@ -6,7 +7,7 @@ import {
 } from '@angular/material/legacy-dialog';
 import BigNumber from 'bignumber.js';
 import { Contract, JsonFragment } from 'ethers';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
@@ -37,6 +38,8 @@ export class EvmWriteComponent implements OnChanges {
   extendedAbi: JsonFragmentExtends[];
   contract: Contract;
   wallet$: Observable<IMultichainWalletAccount> = this.walletService.walletAccount$;
+  destroyed$ = new Subject<void>();
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   constructor(
     private walletService: WalletService,
@@ -44,6 +47,7 @@ export class EvmWriteComponent implements OnChanges {
     private env: EnvironmentService,
     private fb: FormBuilder,
     private toastr: NgxToastrService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {

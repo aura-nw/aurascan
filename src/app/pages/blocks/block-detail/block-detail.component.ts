@@ -7,7 +7,6 @@ import * as _ from 'lodash';
 import { catchError, map, merge, of, switchMap } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { toHexData } from 'src/app/core/utils/common/parsing';
 import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
@@ -254,7 +253,7 @@ export class BlockDetailComponent implements OnInit {
   parseDataListEvmTxn(txs) {
     if (txs.length > 0) {
       this.dataSourceEvm.data = txs.map((tx) => {
-        const type = toHexData(_.get(tx, 'evm_transaction.data'));
+        const type = _.get(tx, 'evm_transaction.data');
         return {
           ...tx,
           tx_hash: _.get(tx, 'evm_transaction.hash'),

@@ -69,7 +69,7 @@ export class WalletProviderComponent implements AfterViewInit {
   async ngAfterViewInit() {
     if (this.mode == 'MOBILE') {
       this.wallets = this.mobileWallets.map((w) => w.walletInfo);
-      this.evmWallets = [];
+      this.evmWallets = EVM_WALLETS;
     } else {
       const wallets = this.walletService.getWalletRepo().wallets;
 
