@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
-import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { CommonService } from 'src/app/core/services/common.service';
-import { ContractService } from 'src/app/core/services/contract.service';
-import { UserService } from 'src/app/core/services/user.service';
+import {map, of, Subject, switchMap, takeUntil} from 'rxjs';
+import {STORAGE_KEYS} from 'src/app/core/constants/common.constant';
+import {CommonService} from 'src/app/core/services/common.service';
+import {ContractService} from 'src/app/core/services/contract.service';
+import {UserService} from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -37,7 +37,8 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
     public commonService: CommonService,
     private router: Router,
     private userService: UserService,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -52,6 +53,7 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
             return of(null);
           }
           this.contractAddress = ca;
+          this.checkWatchList();
 
           return this.contractService.queryEvmContractByAddress(ca);
         }),
@@ -107,7 +109,7 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
 
   handleWatchList() {
     if (this.isWatchList) {
-      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+      this.router.navigate(['/profile'], {queryParams: {tab: 'watchList'}});
     } else {
       this.editWatchList();
     }
@@ -117,7 +119,7 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
     const userEmail = this.userService.getCurrentUser()?.email;
     if (userEmail) {
       local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.contractAddress);
-      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+      this.router.navigate(['/profile'], {queryParams: {tab: 'watchList'}});
     } else {
       this.router.navigate(['/login']);
     }

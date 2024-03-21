@@ -11,6 +11,7 @@ import {CommonService} from 'src/app/core/services/common.service';
 import {NameTagService} from 'src/app/core/services/name-tag.service';
 import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
 import {EWalletType} from "src/app/core/constants/wallet.constant";
+import {isValidBench32Address} from "src/app/core/utils/common/validation";
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -85,7 +86,7 @@ export class PopupNameTagComponent implements OnInit {
       this.idEdit = this.data.id || data.id;
     }
 
-    const isAccount = data.type === 'account';
+    const isAccount = data.type === 'account' || this.commonService.isValidAddress(data.address);
     this.privateNameForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
     this.isContract = !this.isAccount;

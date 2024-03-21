@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { MAX_LENGTH_NAME_TAG, NULL_ADDRESS, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
-import { UserService } from 'src/app/core/services/user.service';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {MAX_LENGTH_NAME_TAG, NULL_ADDRESS, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
+import {ENameTag, EScreen} from 'src/app/core/constants/account.enum';
+import {UserService} from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import { Params, Router } from '@angular/router';
+import {Params, Router} from '@angular/router';
 
 @Component({
   selector: 'app-name-tag',
@@ -45,7 +45,8 @@ export class NameTagComponent implements OnInit {
     public nameTagService: NameTagService,
     private userService: UserService,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     if (this.isShorterText) {
@@ -71,14 +72,14 @@ export class NameTagComponent implements OnInit {
 
   editPrivateName() {
     const userEmail = this.userService.getCurrentUser()?.email;
-    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.value);
+    const dataNameTag = this.nameTagService.findNameTag(this.value);
     if (userEmail) {
       if (dataNameTag) {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.value });
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, {address: this.value});
       }
-      this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
+      this.router.navigate(['/profile'], {queryParams: {tab: 'private'}});
     } else {
       this.router.navigate(['/login']);
     }
