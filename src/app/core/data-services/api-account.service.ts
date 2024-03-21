@@ -75,10 +75,6 @@ export class ApiAccountService {
       map((res) => {
         const [accountAndValidator, delegationsData, unbondingData, redelegationsData, accountData] = res;
 
-        if (!accountData) {
-          throw new Error(`account ${address} not found`);
-        }
-
         const delegations: any[] = this.parseDelegations(delegationsData, accountAndValidator.validator);
 
         const delegated = delegations.reduce((previousValue, currentValue) => currentValue?.amount + previousValue, 0);

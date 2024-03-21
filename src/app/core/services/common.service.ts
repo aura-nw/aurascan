@@ -8,7 +8,7 @@ import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
-import { isAddress, isContract, isValidBench32Address } from '../utils/common/validation';
+import { isAddress, isAddressEvm, isContract, isValidBench32Address } from '../utils/common/validation';
 import local from '../utils/storage/local';
 
 @Injectable({ providedIn: 'root' })
@@ -146,6 +146,10 @@ export class CommonService {
 
   isValidAddress(address: string) {
     return isAddress(address, this.chainInfo.bech32Config.bech32PrefixAccAddr);
+  }
+
+  isValidAddressEvm(address: string) {
+    return isAddressEvm(address);
   }
 
   isBech32Address(address: string) {
