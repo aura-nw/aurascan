@@ -78,10 +78,10 @@
       </div>
     </div>
 
-    <!-- Address -->
+    <!-- Cosmos Address -->
     <div class="row mb-6 align-items-center">
       <div class="col-12 col-lg-3 mb-4 mb-lg-0">
-        <span class="form-label body-02 text--gray-4 input-require">Address</span>
+        <span class="form-label body-02 text--gray-4 input-require">Cosmos Address</span>
       </div>
       <div class="col-12 col-lg-9">
         <div class="form-group">
@@ -89,14 +89,44 @@
             <input
               type="text"
               formControlName="address"
-              placeholder="{{ prefix }}... / 0x..."
+              placeholder="{{ prefix }}..."
               name="inputAddress"
-              (input)="checkFormValid(); isError = false"
-              autocomplete="off" />
+              (blur)="setAddressOther(getAddress?.value)"
+              autocomplete="off"
+              [disabled]="getAddress?.value?.length > 0 && !isDisableEvm" />
+            <i
+              class="ph-fill ph-x-circle text--white cursor-pointer h3"
+              (click)="clearAddress()"
+              *ngIf="getAddress?.value?.length > 0 && isDisableEvm"></i>
           </div>
-          <div *ngIf="getAddress?.value?.length > 0 && !isValidAddress" class="text--danger mt-2 caption fw-normal">
-            Invalid address format
+          <div *ngIf="!isValidAddress" class="text--danger mt-2 caption fw-normal">Invalid address format</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVM Address -->
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
+        <span class="form-label body-02 text--gray-4 input-require">EVM Address</span>
+      </div>
+      <div class="col-12 col-lg-9">
+        <div class="form-group">
+          <div class="input-group" [class.form-control--error]="false">
+            <input
+              type="text"
+              class="disabled"
+              formControlName="addressEvm"
+              placeholder="0x..."
+              name="inputAddressEvm"
+              (blur)="setAddressOther(getAddressEvm?.value)"
+              autocomplete="off"
+              [disabled]="getAddressEvm?.value?.length > 0 && isDisableEvm" />
+            <i
+              class="ph-fill ph-x-circle text--white cursor-pointer h3"
+              (click)="clearAddress()"
+              *ngIf="getAddressEvm?.value?.length > 0 && !isDisableEvm"></i>
           </div>
+          <div *ngIf="!isValidEvmAddress" class="text--danger mt-2 caption fw-normal">Invalid address Evm format</div>
         </div>
       </div>
     </div>
