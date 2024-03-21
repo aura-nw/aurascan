@@ -14,8 +14,7 @@ export class EvmOverviewComponent {
 
   contractBalance = 0;
   contractValue = 0;
-  contractRegisterType = EVMContractRegisterType;
-  linkNft = 'token-nft';
+  contractRegisterType = EVMContractRegisterType;  
 
   currencies = this.environmentService.chainInfo.currencies[0];
 

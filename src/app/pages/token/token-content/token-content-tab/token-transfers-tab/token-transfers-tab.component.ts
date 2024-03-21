@@ -100,7 +100,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
     if (this.typeContract && this.typeContract !== this.contractType.CW20) {
-      this.linkToken = this.typeContract === this.contractType.CW721 ? 'token-nft' : 'token-abt';
+      this.linkToken = this.typeContract === this.contractType.CW721 ? 'token/nft' : 'token/abt';
     }
     this.getListData();
     this.timerGetUpTime = setInterval(() => {

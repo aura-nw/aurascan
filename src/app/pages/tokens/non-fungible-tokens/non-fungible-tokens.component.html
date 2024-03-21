@@ -55,7 +55,7 @@
                 <div class="d-flex">
                   <div>
                     <a
-                      [routerLink]="['/token-nft', element.cw721_contract?.smart_contract?.address]"
+                      [routerLink]="['/token/nft', element.cw721_contract?.smart_contract?.address]"
                       class="text--primary text-nowrap">
                       {{ element.cw721_contract?.name | ellipsis: 30 }}
                       <span *ngIf="element.cw721_contract?.symbol"

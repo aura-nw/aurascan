@@ -98,14 +98,14 @@ export class ContractsListComponent implements OnInit, OnDestroy {
               item?.name !== this.typeCW4973 &&
               item['cw721_contract']?.name
             ) {
-              item.url = '/token-nft/' + item.address;
+              item.url = '/token/nft/' + item.address;
               item.token_tracker = item['cw721_contract']?.name;
             } else if (
               item['code'].type === ContractRegisterType.CW721 &&
               item['name'] === this.typeCW4973 &&
               item['cw721_contract']?.name
             ) {
-              item.url = '/token-abt/' + item.address;
+              item.url = '/token/abt/' + item.address;
               item.token_tracker = item['cw721_contract']?.name;
             }
 

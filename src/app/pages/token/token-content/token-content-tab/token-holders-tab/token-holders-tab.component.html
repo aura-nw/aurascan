@@ -45,7 +45,7 @@
                       [fullTextMob]="true"
                       [tooltipPosition]="'tooltip--right'"
                       [linkRouter]="[
-                        this.typeContract && this.typeContract !== contractType.CW20 ? 'token-nft' : 'token',
+                        this.typeContract && this.typeContract !== contractType.CW20 ? 'nft' : '',
                         linkAddress
                       ]"
                       [linkParams]="{ a: data[template.matColumnDef] }">

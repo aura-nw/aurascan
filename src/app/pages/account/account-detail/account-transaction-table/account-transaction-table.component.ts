@@ -103,7 +103,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   isSearch = false;
   minDate;
   maxDate;
-  linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
   modeFilter = {
     date: 'date',
