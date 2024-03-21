@@ -19,7 +19,7 @@
       <div class="mt-2">
         <a
           class="text--primary h6 mb-0 mt-2 break-word"
-          [routerLink]="['/token/' + linkToken, nftDetail?.contract_address]"
+          [routerLink]="['/' + linkToken, nftDetail?.contract_address]"
           >{{ nftDetail?.name || nftDetail?.token_name }}</a
         >
       </div>

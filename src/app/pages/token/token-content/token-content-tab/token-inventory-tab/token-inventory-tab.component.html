@@ -41,7 +41,7 @@
                   [btnClass]="['pl-1', 'mt-1']"
                   class="small-text text--primary d-lg-none hover-link"
                   [ngClass]="(item.owner | isPrivateNameTag) ? 'private-name-tag' : ''"
-                  href="{{ linkToken }}/{{ item.contract_address }}?a={{ item.owner }}">
+                  href="./{{ linkToken }}/{{ item.contract_address }}?a={{ item.owner }}">
                   <ng-container *ngIf="!(item.owner | nameTagTooltipPipe)">
                     {{ item.owner | nameTag | ellipsis: 6 }}
                   </ng-container>
