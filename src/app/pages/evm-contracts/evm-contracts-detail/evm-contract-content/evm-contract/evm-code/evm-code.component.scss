@@ -4,6 +4,7 @@
     align-items: flex-start;
     font-size: 1.2rem;
     font-weight: 400;
+
     @media (max-width: 991.98px) {
       &::-webkit-scrollbar {
         height: 4px;
@@ -66,12 +67,13 @@
   }
 
   .aura-basic-table {
+
     tr,
     td {
       color: var(--aura-gray-1);
 
       &:last-of-type {
-        width: 65%;
+        width: 50%;
       }
     }
   }
@@ -81,20 +83,25 @@
   .content-info {
     max-height: 162px;
   }
+
   pre.content-info {
     white-space: break-spaces;
   }
+
   .aura-basic-table {
+
     tr,
     td {
       width: 50%;
     }
   }
+
   .btn-export-mob {
     width: 100%;
     justify-content: flex-end;
     margin-top: 8px;
   }
+
   .box-note {
     word-break: break-all;
   }
