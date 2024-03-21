@@ -1,17 +1,17 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormBuilder, Validators} from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import {TranslateService} from '@ngx-translate/core';
-import {LENGTH_CHARACTER, MAX_LENGTH_NAME_TAG} from 'src/app/core/constants/common.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NameTagService} from 'src/app/core/services/name-tag.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
-import {EWalletType} from "src/app/core/constants/wallet.constant";
-import {isValidBench32Address} from "src/app/core/utils/common/validation";
+import { TranslateService } from '@ngx-translate/core';
+import { LENGTH_CHARACTER, MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -48,8 +48,7 @@ export class PopupNameTagComponent implements OnInit {
     private commonService: CommonService,
     private nameTagService: NameTagService,
     private toastr: NgxToastrService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.formInit();
@@ -103,7 +102,7 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const {isFavorite, address, name, note} = this.privateNameForm.value;
+    const { isFavorite, address, name, note } = this.privateNameForm.value;
     let payload = {
       isFavorite: isFavorite == 1,
       type: this.isAccount ? 'account' : 'contract',
