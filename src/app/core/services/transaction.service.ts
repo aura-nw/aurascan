@@ -83,6 +83,7 @@ export class TransactionService extends CommonService {
               topic1
               topic2
               topic3
+              data
               evm_signature_mapping_topic0 {
                 human_readable_topic
               }

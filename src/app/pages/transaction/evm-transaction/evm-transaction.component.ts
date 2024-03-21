@@ -42,10 +42,7 @@ export class EvmTransactionComponent implements OnChanges {
         address: string;
         data: string;
       }[];
-      data?: {
-        value: string;
-        hexValue: string;
-      };
+      data: string;
     }[];
   };
 
