@@ -10,7 +10,11 @@ import { map } from 'rxjs/operators';
 export class SoulboundService extends CommonService {
   apiUrl = `${this.environmentService.backend}`;
 
-  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService,
+    private commonService: CommonService,
+  ) {
     super(http, environmentService);
   }
 
@@ -59,9 +63,18 @@ export class SoulboundService extends CommonService {
   }
 
   getListABT(payload): Observable<any> {
+    let queryUpdate = '';
+    let queryName = '';
+    if (this.commonService.isValidContract(payload.keyword)) {
+      queryUpdate = 'address: {_eq:' + payload.keyword + '}';
+    } else if (this.commonService.isValidAddress(payload.keyword)) {
+      queryUpdate = 'creator: {_eq: ' + payload.keyword + '}';
+    } else if (payload.keyword?.length > 0) {
+      payload.keyword = `"%` + payload.keyword + `%"`;
+      queryName = 'name: {_ilike: ' + payload.keyword + '}';
+    }
     const operationsDoc = `
     query queryCW4973ListToken(
-      $keyword: String,
       $limit: Int, 
       $offset: Int
     ) {
@@ -70,9 +83,10 @@ export class SoulboundService extends CommonService {
           limit: $limit, 
           where: {
             smart_contract: {
-              name: {_eq: "crates.io:cw4973"}
+              name: {_eq: "crates.io:cw4973"},
+              ${queryUpdate}
             }, 
-            _or: [{name: {_ilike: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
+            ${queryName}
           },
           offset: $offset,
           order_by: {updated_at: desc}
@@ -88,9 +102,10 @@ export class SoulboundService extends CommonService {
         cw721_contract_aggregate(
           where: {
             smart_contract: {
-              name: {_eq: "crates.io:cw4973"}
+              name: {_eq: "crates.io:cw4973"},
+              ${queryUpdate}
             }, 
-            _or: [{name: {_ilike: $keyword}}, {smart_contract: {_or:[{address: {_like: $keyword}}, {creator: {_like: $keyword}}]}}]
+            ${queryName}
           }) {
             aggregate {
               count 
@@ -105,7 +120,6 @@ export class SoulboundService extends CommonService {
         variables: {
           limit: payload.limit,
           offset: payload.offset,
-          keyword: payload.keyword ? `%${payload.keyword}%` : null,
         },
         operationName: 'queryCW4973ListToken',
       })
