@@ -63,6 +63,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
       },
       {
+        path: 'evm-token',
+        loadChildren: () => import('./pages/evm-token/evm-token.module').then((m) => m.EvmTokenModule),
+      },
+      {
         path: 'tokens',
         loadChildren: () => import('./pages/tokens/tokens.module').then((m) => m.TokensModule),
       },
