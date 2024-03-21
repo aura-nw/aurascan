@@ -2,14 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
-import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
-import { CoingeckoService } from '../data-services/coingecko.service';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { ETokenCoinTypeBE } from '../constants/token.constant';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -43,7 +41,7 @@ export class TokenService extends CommonService {
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
-    private coingeckoService: CoingeckoService,
+    private commonService: CommonService,
   ) {
     super(http, environmentService);
   }
@@ -100,14 +98,18 @@ export class TokenService extends CommonService {
   }
 
   getListCW721Token(payload, textSearch: string = null): Observable<any> {
-    if (textSearch?.length > 0) {
-      textSearch = '%' + textSearch + '%';
+    let queryUpdate = '';
+    if (this.commonService.isValidContract(textSearch)) {
+      queryUpdate = 'cw721_contract: {smart_contract: {address: {_eq:' + textSearch + '}}}';
+    } else if (textSearch?.length > 0) {
+      textSearch = `"%` + textSearch + `%"`;
+      queryUpdate = 'cw721_contract: {name: {_ilike:' + textSearch + '}}';
     }
     let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
     const operationsDoc = `
-    query queryListCW721($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
+    query queryListCW721($limit: Int = 10, $offset: Int = 0) {
       ${this.envDB} {
-        list_token: cw721_contract_stats(limit: $limit, offset: $offset ${querySort}, where: {_or:[ {cw721_contract: {smart_contract: {address: {_like: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
+        list_token: cw721_contract_stats(limit: $limit, offset: $offset ${querySort}, where: { ${queryUpdate} }) {
           transfer_24h
           total_activity
           cw721_contract {
@@ -118,7 +120,7 @@ export class TokenService extends CommonService {
             }
           }
         }
-        total_token: cw721_contract_stats_aggregate (where: {_or:[ {cw721_contract: {smart_contract: {address: {_like: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
+        total_token: cw721_contract_stats_aggregate (where: { ${queryUpdate} }) {
           aggregate {
             count
           }
@@ -132,8 +134,6 @@ export class TokenService extends CommonService {
         variables: {
           limit: payload.limit || 20,
           offset: payload.offset || 0,
-          contract_address: textSearch || null,
-          name: textSearch || null,
         },
         operationName: 'queryListCW721',
       })

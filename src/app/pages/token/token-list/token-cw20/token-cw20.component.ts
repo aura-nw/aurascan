@@ -78,6 +78,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => {
+        this.textSearch = this.textSearch?.trim();
         this.pageChange.selectPage(0);
       });
   }
