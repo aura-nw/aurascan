@@ -71,7 +71,7 @@ export class NameTagComponent implements OnInit {
 
   editPrivateName() {
     const userEmail = this.userService.getCurrentUser()?.email;
-    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.value);
+    const dataNameTag = this.nameTagService.findNameTag(this.value);
     if (userEmail) {
       if (dataNameTag) {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
