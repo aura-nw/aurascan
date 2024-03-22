@@ -35,7 +35,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="isAccount"
                   [disabled]="isEditMode"
-                  (change)="changeType(true)" />
+                  (change)="changeType(true)"/>
                 <label for="account" class="ml-2 mb-0 text-justify">Account</label>
               </div>
               <div class="form-group d-flex align-items-center ml-8">
@@ -46,30 +46,74 @@
                   class="radio-box radio-box--dark"
                   [checked]="isContract"
                   [disabled]="isEditMode"
-                  (change)="changeType(false)" />
+                  (change)="changeType(false)"/>
                 <label for="contract" class="ml-2 mb-0 text-justify">Contract</label>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Address -->
-        <div class="row mt-4">
-          <div class="col-lg-3 col-12" [ngClass]="!isEditMode ? 'mt-3' : ''">
-            <label class="form-label">Address</label>
+        <!-- Cosmos Address -->
+        <div class="row mt-4 align-items-center">
+          <div class="col-lg-3 col-12">
+            <label class="form-label">Cosmos Address</label>
           </div>
           <div class="col-lg-9 col-12">
-            <div class="input-group form-check-input pr-0" *ngIf="!isEditMode">
+            <div
+              class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0"
+              *ngIf="!isEditMode">
               <input
                 type="text"
-                formControlName="address"
-                placeholder="{{ chainName }}.../ {{ eWalletType.EVM }}..."
-                class="input-address"
-                (change)="checkNameTag()"
-                (input)="checkFormValid(); isError = false"
-                autocomplete="off" />
+                formControlName="cosmosAddress"
+                placeholder="{{ chainName }}..."
+                class="input-address px-4"
+                (blur)="changeAddress('cosmosAddress')"
+                (input)="isError = false"
+                autocomplete="off"/>
+              <button
+                class="button button-xxs p-0 mr-4"
+                *ngIf="
+                  this.watchlistForm.get('cosmosAddress').value.length > 0 &&
+                  this.watchlistForm.get('cosmosAddress').enabled
+                "
+                type="button"
+                (click)="resetAddress('cosmosAddress')">
+                <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+              </button>
             </div>
-            <span *ngIf="isEditMode">{{ getAddress.value }}</span>
+            <span *ngIf="isEditMode">{{ watchlistForm.get('cosmosAddress').value }}</span>
+          </div>
+        </div>
+
+        <!-- EVM Address -->
+        <div class="row mt-4 align-items-center">
+          <div class="col-lg-3 col-12">
+            <label class="form-label">EVM Address</label>
+          </div>
+          <div class="col-lg-9 col-12">
+            <div
+              class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0"
+              *ngIf="!isEditMode">
+              <input
+                type="text"
+                formControlName="evmAddress"
+                placeholder="{{ eWalletType.EVM }}..."
+                class="input-address px-4"
+                (input)="isError = false"
+                (blur)="changeAddress('evmAddress')"
+                autocomplete="off"/>
+              <button
+                class="button button-xxs p-0 mr-4"
+                *ngIf="
+                  this.watchlistForm.get('evmAddress').value.length > 0 &&
+                  this.watchlistForm.get('evmAddress').enabled
+                "
+                type="button"
+                (click)="resetAddress('evmAddress')">
+                <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+              </button>
+            </div>
+            <span *ngIf="isEditMode">{{ watchlistForm.get('evmAddress').value }}</span>
           </div>
         </div>
 
@@ -120,7 +164,7 @@
         </div>
         <div class="d-flex offset-lg-3 text--gray-4 mt-2 caption fw-normal font-italic">
           <div class="ml-lg-1">
-            Character limit: {{ watchlistForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br />
+            Character limit: {{ watchlistForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br/>
             A personal note of this address. Kindly note that DO NOT input any passwords or private key here
           </div>
         </div>
@@ -157,7 +201,7 @@
                   [ngClass]="isTracking ? 'check-box--dark' : 'check-box--disable'"
                   [disabled]="!isTracking"
                   [checked]="settingObj[itemTracking.key]"
-                  (change)="onChangeTnxFilterType($event, itemTracking.key)" />
+                  (change)="onChangeTnxFilterType($event, itemTracking.key)"/>
                 <label for="{{ itemTracking.key }}" class="ml-2 mb-0 text-justify pl-1">
                   {{ itemTracking.value }}
                 </label>

@@ -1,18 +1,19 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
 import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { isAddress, isSafari } from 'src/app/core/utils/common/validation';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import {TranslateService} from '@ngx-translate/core';
+import {LENGTH_CHARACTER} from 'src/app/core/constants/common.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {WatchListService} from 'src/app/core/services/watch-list.service';
+import {isSafari} from 'src/app/core/utils/common/validation';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {transferAddress} from "src/app/core/utils/common/address-converter";
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -88,6 +89,7 @@ export class PopupWatchlistComponent implements OnInit {
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
   chainName = this.environmentService.chainName.toLowerCase();
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -99,7 +101,8 @@ export class PopupWatchlistComponent implements OnInit {
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
     private nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.isSafari = isSafari();
@@ -125,7 +128,7 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   get getAddress() {
-    return this.watchlistForm.get('address');
+    return this.watchlistForm.get('cosmosAddress');
   }
 
   get getFavorite() {
@@ -142,12 +145,15 @@ export class PopupWatchlistComponent implements OnInit {
       tracking: true,
       isAccount: [false, [Validators.required]],
       address: ['', [Validators.required]],
+      cosmosAddress: ['', [Validators.required]],
+      evmAddress: ['', [Validators.required]],
       note: ['', [Validators.maxLength(200)]],
       id: '',
     });
   }
 
   setDataFrom(data, isEditMode = false) {
+    console.log(data)
     this.isEditMode = isEditMode;
     const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
 
@@ -158,6 +164,8 @@ export class PopupWatchlistComponent implements OnInit {
     this.isTracking = isEditMode ? data.tracking : true;
     this.watchlistForm.controls['tracking'].setValue(isEditMode ? data.tracking : true);
     this.watchlistForm.controls['address'].setValue(data.address);
+    this.watchlistForm.controls['cosmosAddress'].setValue(data.cosmosAddress);
+    this.watchlistForm.controls['evmAddress'].setValue(data.evmAddress);
     this.watchlistForm.controls['note'].setValue(data.note);
     this.watchlistForm.controls['id'].setValue(data.id || '');
 
@@ -196,7 +204,8 @@ export class PopupWatchlistComponent implements OnInit {
       if (!JSON.stringify(this.settingObj)?.includes('true') && this.isTracking) {
         return false;
       }
-    } catch {}
+    } catch {
+    }
 
     this.formValid = true;
     return true;
@@ -204,10 +213,12 @@ export class PopupWatchlistComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { favorite, address, note, id } = this.watchlistForm.value;
+    const {favorite, address, cosmosAddress, evmAddress, note, id} = this.watchlistForm.value;
 
     let payload = {
       address: address,
+      cosmosAddress,
+      evmAddress,
       type: this.isAccount ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,
@@ -322,5 +333,38 @@ export class PopupWatchlistComponent implements OnInit {
     this.settingObj[type] = event.target.checked;
 
     this.checkFormValid();
+  }
+
+  changeAddress(controlName: string) {
+    const address = this.watchlistForm.get(controlName).value;
+    if (address.length === 0) return;
+    if (controlName === 'cosmosAddress' && address.length > 0) {
+      this.watchlistForm.get('evmAddress').disable();
+    } else {
+      this.watchlistForm.get('cosmosAddress').disable();
+    }
+    if (!this.commonService.isValidContract(address)) {
+      const {accountAddress, accountEvmAddress} = transferAddress(
+        this.chainInfo.bech32Config.bech32PrefixAccAddr,
+        address,
+      );
+      this.watchlistForm.get('cosmosAddress').setValue(accountAddress);
+      this.watchlistForm.get('evmAddress').setValue(accountEvmAddress);
+
+      if (address.trim() == accountEvmAddress.trim()) {
+        this.watchlistForm.get('evmAddress').enable();
+      }
+    }
+    this.checkNameTag();
+  }
+
+  resetAddress(controlName: string) {
+    this.watchlistForm.get('cosmosAddress').setValue('');
+    this.watchlistForm.get('evmAddress').setValue('');
+    if (controlName === 'cosmosAddress') {
+      this.watchlistForm.get('evmAddress').enable();
+    } else {
+      this.watchlistForm.get('cosmosAddress').enable();
+    }
   }
 }
