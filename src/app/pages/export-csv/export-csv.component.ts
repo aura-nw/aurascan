@@ -47,7 +47,6 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
-  isDisableEvm = true;
 
   destroyed$ = new Subject<void>();
 
@@ -118,7 +117,6 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       this.csvForm.get('evmAddress').disable();
     } else {
       this.csvForm.get('address').disable();
-      this.isDisableEvm = false;
     }
 
     this.dataType = data['exportType'];
@@ -379,10 +377,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     if (address.length > 0) {
       if (this.commonService.isValidAddress(address)) {
         this.csvForm.get('evmAddress').disable();
-        this.isDisableEvm = true;
       } else {
         this.csvForm.get('address').disable();
-        this.isDisableEvm = false;
       }
     }
 
