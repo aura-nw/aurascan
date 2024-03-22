@@ -56,7 +56,7 @@ export class EvmTransactionsComponent {
         map((txsRes) => {
           if (txsRes?.transaction?.length > 0) {
             return txsRes.transaction.map((tx) => {
-              const type = _.get(tx, 'evm_transaction.data');
+              const type = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
 
               return {
                 ...tx,
