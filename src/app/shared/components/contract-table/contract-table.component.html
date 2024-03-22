@@ -102,7 +102,7 @@
                       *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                       [appBigNumber]="data[template.matColumnDef]"
                       [decimal]="decimal"></span>
-                    {{ denom }}
+                    <span class="ml-1" appLinkDenom> {{ denom }}</span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'numb'">
                     {{ data[template.matColumnDef] | mask: 'separator.6' }}
