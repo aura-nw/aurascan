@@ -134,7 +134,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
           map((txsRes) => {
             if (txsRes?.evm_transaction?.length > 0) {
               return txsRes.evm_transaction.map((tx) => {
-                const type = _.get(tx, 'data');
+                const type = _.get(tx, 'data')?.substring(0, 8);
                 return {
                   ...tx,
                   tx_hash: _.get(tx, 'hash'),

@@ -166,6 +166,7 @@ export class TransactionService extends CommonService {
           to
           hash
           height
+          data
           transaction {
             timestamp
             transaction_messages {

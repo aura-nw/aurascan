@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { ContractVerifyType, EVMContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { ContractVerifyType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -34,7 +34,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
   textSearch = '';
   isLoading = true;
   errTxt: string;
-  EvmContractRegisterType = EVMContractRegisterType;
+  EvmContractRegisterType = EvmContractRegisterType;
   ContractVerifyType = ContractVerifyType;
 
   dataSource = new MatTableDataSource<any>();
@@ -126,9 +126,9 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
       case 'All':
         this.filterButtons = [];
         break;
-      case EVMContractRegisterType.ERC20:
-      case EVMContractRegisterType.ERC721:
-      case EVMContractRegisterType.ERC1155:
+      case EvmContractRegisterType.ERC20:
+      case EvmContractRegisterType.ERC721:
+      case EvmContractRegisterType.ERC1155:
       case '': //Others
       default:
         if (i >= 0) {

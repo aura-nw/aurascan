@@ -3,19 +3,16 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { EModeToken } from 'src/app/core/constants/token.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TokenService } from 'src/app/core/services/token.service';
-
 import { Subject, takeUntil } from 'rxjs';
 import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { TokenService } from 'src/app/core/services/token.service';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
-import { convertTxIBC } from 'src/app/global/global';
 
 @Component({
   selector: 'app-evm-token-transfers-tab',
@@ -67,12 +64,11 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   linkToken = 'token';
   nextKey = null;
   currentKey = null;
-  contractType = ContractRegisterType;
+  contractType = EvmContractRegisterType;
   timerGetUpTime: any;
   errTxt: string;
   typeContract: string;
   contractAddress: string;
-  EModeToken = EModeToken;
   destroyed$ = new Subject<void>();
   linkAddress: string;
 
@@ -99,8 +95,8 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
-      this.linkToken = this.typeContract === this.contractType.CW721 ? 'nft' : 'abt';
+    if (this.typeContract && this.typeContract !== this.contractType.ERC20) {
+      this.linkToken = this.typeContract === this.contractType.ERC721 ? 'nft' : 'abt';
     }
     this.getListData();
     this.timerGetUpTime = setInterval(() => {
@@ -121,29 +117,19 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getListData(nextKey = null, isReload = false) {
-    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
-      if (this.typeContract !== this.contractType.CW20) {
-        this.getListTransactionTokenCW721(nextKey, isReload);
-      } else {
-        this.getListTransactionTokenCW20(nextKey, isReload);
-      }
+    if (this.typeContract === this.contractType.ERC20) {
+      this.getListTransactionTokenERC20(nextKey, isReload);
     } else {
-      setTimeout(() => {
-        this.getListTransactionTokenIBC(nextKey);
-      }, 500);
+      this.getListTransactionTokenERC721(nextKey, isReload);
     }
   }
 
-  async getListTransactionTokenCW721(nextKey = null, isReload = false) {
+  async getListTransactionTokenERC721(nextKey = null, isReload = false) {
     let payload = {
       address: this.keyWord,
       contractAddr: this.contractAddress,
       idLte: nextKey,
     };
-
-    if (this.typeContract === this.contractType.CW4973) {
-      payload['isCW4973'] = true;
-    }
 
     if (this.keyWord) {
       if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
@@ -206,7 +192,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async getListTransactionTokenCW20(nextKey = null, isReload = false) {
+  async getListTransactionTokenERC20(nextKey = null, isReload = false) {
     let payload = {
       limit: 100,
       address: this.keyWord,
@@ -269,64 +255,13 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getListTransactionTokenIBC(nextKey = null) {
-    const denomFilter = this.tokenDetail.channelPath?.path + '/' + this.tokenDetail.channelPath?.base_denom;
-    let payload = {
-      limit: this.pageData.pageSize,
-      heightLT: nextKey,
-      denom: denomFilter,
-      offset: this.pageData.pageIndex * this.pageData.pageSize,
-      address: null,
-    };
-
-    if (this.keyWord) {
-      if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
-        payload['txHash'] = this.keyWord;
-      } else {
-        payload['address'] = this.keyWord;
-      }
-    }
-
-    this.tokenService.getListTransactionTokenIBC(payload).subscribe({
-      next: (res) => {
-        if (res) {
-          this.nextKey = null;
-          if (res.ibc_ics20?.length >= this.pageData.pageSize) {
-            this.nextKey = res?.ibc_ics20[res.ibc_ics20.length - 1]?.height;
-          }
-
-          const txs = convertTxIBC(res, this.coinInfo);
-          txs.forEach((element) => {
-            element['amount'] = element.amountTemp || 0;
-            element['decimal'] = this.tokenDetail?.decimals || this.tokenDetail?.decimal;
-          });
-
-          this.dataSource = new MatTableDataSource(txs);
-          this.pageData.length = res.ibc_ics20_aggregate?.aggregate?.count;
-          this.tokenService.totalTransfer$.next(this.pageData.length);
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
-  }
-
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   getTemplate(): Array<TableTemplate> {
     let result = this.noneNFTTemplates;
-    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
+    if (this.typeContract && this.typeContract !== this.contractType.ERC20) {
       result = this.NFTTemplates;
     }
     return result;
@@ -340,17 +275,12 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   pageEvent(e: PageEvent): void {
-    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
-      const { length, pageIndex, pageSize } = e;
-      const next = length <= (pageIndex + 2) * pageSize;
-      this.pageData = e;
-      if (next && this.nextKey && this.currentKey !== this.nextKey) {
-        this.getListData(this.nextKey);
-        this.currentKey = this.nextKey;
-      }
-    } else {
-      this.pageData.pageIndex = e.pageIndex;
-      this.getListData();
+    const { length, pageIndex, pageSize } = e;
+    const next = length <= (pageIndex + 2) * pageSize;
+    this.pageData = e;
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
+      this.getListData(this.nextKey);
+      this.currentKey = this.nextKey;
     }
   }
 

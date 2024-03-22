@@ -36,6 +36,6 @@ export enum EModeToken {
   CWToken = 'CW20 Token',
 }
 
-export enum EModeEVMToken {
-  ERC20 = 'ERC20',
+export enum EModeEvmToken {
+  ERCToken = 'ERC20 Token',
 }
