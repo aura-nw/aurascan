@@ -74,20 +74,20 @@
             <div class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0" *ngIf="!isEditMode">
               <input
                 type="text"
-                formControlName="address"
+                formControlName="cosmosAddress"
                 placeholder="{{ chainName }}..."
                 class="input-address px-4"
-                (ngModelChange)="changeAddress('address')"
+                (blur)="changeAddress('cosmosAddress')"
                 (input)="isError = false"
                 autocomplete="off"/>
               <button class="button button-xxs p-0 mr-4"
-                      *ngIf="this.privateNameForm.get('address').value.length > 0 && this.privateNameForm.get('address').enabled"
+                      *ngIf="this.privateNameForm.get('cosmosAddress').value.length > 0 && this.privateNameForm.get('cosmosAddress').enabled"
                       type="button"
-                      (click)="resetAddress('address')">
+                      (click)="resetAddress('cosmosAddress')">
                 <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
               </button>
             </div>
-            <span *ngIf="isEditMode">{{ getAddress.value }}</span>
+            <span *ngIf="isEditMode">{{ privateNameForm.get('cosmosAddress').value }}</span>
           </div>
         </div>
 
@@ -104,7 +104,7 @@
                 placeholder="{{ eWalletType.EVM }}..."
                 class="input-address px-4"
                 (input)="isError = false"
-                (ngModelChange)="changeAddress('evmAddress')"
+                (blur)="changeAddress('evmAddress')"
                 autocomplete="off"/>
               <button class="button button-xxs p-0 mr-4"
                       *ngIf="this.privateNameForm.get('evmAddress').value.length > 0 && this.privateNameForm.get('evmAddress').enabled"
