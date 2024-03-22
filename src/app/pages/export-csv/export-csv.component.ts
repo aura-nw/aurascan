@@ -112,6 +112,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       data['address'],
     );
 
+    this.nativeAddress = accountAddress;
     this.csvForm.controls.address.setValue(accountAddress);
     this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
     if (this.commonService.isValidAddress(data['address'])) {
@@ -396,7 +397,5 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       this.nativeAddress = accountAddress;
       this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
     }
-
-    console.log(this.csvForm.controls);
   }
 }
