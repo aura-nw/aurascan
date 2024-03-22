@@ -1,16 +1,16 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {saveAs} from 'file-saver';
+import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { saveAs } from 'file-saver';
 import * as moment from 'moment';
-import {Subject, takeUntil} from 'rxjs';
-import {ExportFileName, TabsAccount, TabsAccountLink} from 'src/app/core/constants/account.enum';
-import {DATEFORMAT, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
-import {UserService} from 'src/app/core/services/user.service';
+import { Subject, takeUntil } from 'rxjs';
+import { ExportFileName, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { UserService } from 'src/app/core/services/user.service';
 import {
   convertBech32AddressToEvmAddress,
   convertEvmAddressToBech32Address,
@@ -58,8 +58,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
     private userService: UserService,
-  ) {
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -107,7 +106,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   setDataConfig(dataConfig) {
     const data = JSON.parse(dataConfig);
-    const {accountAddress, accountEvmAddress} = transferAddress(
+    const { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       data['address'],
     );
@@ -146,7 +145,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let {addressDefault, address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock} =
+    let { addressDefault, address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } =
       this.csvForm.getRawValue();
     addressDefault = address;
 
@@ -285,7 +284,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   checkFormValid(): boolean {
     this.getAddress.setValue(this.getAddress?.value?.trim());
-    const {address, endDate, fromBlock, startDate, toBlock} = this.csvForm.value;
+    const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
 
     this.isValidBlock = true;
 
@@ -387,7 +386,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
 
     if (!this.commonService.isValidContract(address)) {
-      const {accountAddress, accountEvmAddress} = transferAddress(
+      const { accountAddress, accountEvmAddress } = transferAddress(
         this.chainInfo.bech32Config.bech32PrefixAccAddr,
         address,
       );
