@@ -44,6 +44,20 @@
         <span class="d-none d-lg-block">Write Contract</span>
         <span class="d-lg-none">Write</span>
       </button>
+      <button
+        class="button-tab"
+        [class.active]="currentTab === ContractType.ReadContractProxy"
+        (click)="changeTab(ContractType.ReadContractProxy)">
+        <span class="d-none d-lg-block">Read as Proxy</span>
+        <span class="d-lg-none">Read as Proxy</span>
+      </button>
+      <button
+        class="button-tab"
+        [class.active]="currentTab === ContractType.WriteContractProxy"
+        (click)="changeTab(ContractType.WriteContractProxy)">
+        <span class="d-none d-lg-block">Write as Proxy</span>
+        <span class="d-lg-none">Write as Proxy</span>
+      </button>
     </div>
   </ng-container>
 </div>
@@ -66,5 +80,17 @@
       [abi]="contractDetail.abi"
       [contractAddress]="contractsAddress">
     </app-evm-write>
+
+    <app-evm-read-as-proxy
+      *ngIf="currentTab === ContractType.ReadContractProxy"
+      [abi]="contractDetail.abi"
+      [contractAddress]="contractsAddress">
+    </app-evm-read-as-proxy>
+
+    <app-evm-write-as-proxy
+      *ngIf="currentTab === ContractType.WriteContractProxy"
+      [abi]="contractDetail.abi"
+      [contractAddress]="contractsAddress">
+    </app-evm-write-as-proxy>
   </ng-container>
 </div>
