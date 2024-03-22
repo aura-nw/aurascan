@@ -58,6 +58,7 @@ export class EvmTokenDetailComponent implements OnInit {
           modeToken: EModeEVMToken.ERC20,
           contract_address: this.contractAddress,
           decimals: token.decimal,
+          contract_verification: token.evm_smart_contract?.evm_contract_verifications[0]?.status,
           price: 0,
         };
       },
