@@ -7,7 +7,7 @@ import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
-import { ContractRegisterType, EVMContractRegisterType } from '../constants/contract.enum';
+import { ContractRegisterType, EvmContractRegisterType } from '../constants/contract.enum';
 import { EWalletType } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -192,9 +192,9 @@ export class ContractService extends CommonService {
         typeQuery = '_or: [{type: {_is_null:true}}, {type: {_in :[' + contractType + ']}}] ,';
         contractType = contractType.filter((k) => k != 'Others');
         const listDefault = [
-          EVMContractRegisterType.ERC20,
-          EVMContractRegisterType.ERC721,
-          EVMContractRegisterType.ERC1155,
+          EvmContractRegisterType.ERC20,
+          EvmContractRegisterType.ERC721,
+          EvmContractRegisterType.ERC1155,
         ];
         const listNotIn = _.pull([...listDefault.map((item) => item)], ...contractType);
         typeQuery = '_or: [{type: {_is_null:true}}, {type: {_nin :[' + listNotIn + ']}}] ,';

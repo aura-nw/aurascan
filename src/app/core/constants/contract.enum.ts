@@ -25,7 +25,7 @@ export enum ContractRegisterType {
   CW4973 = 'CW4973',
 }
 
-export enum EVMContractRegisterType {
+export enum EvmContractRegisterType {
   ERC20 = 'ERC20',
   ERC721 = 'ERC721',
   ERC1155 = 'ERC1155',

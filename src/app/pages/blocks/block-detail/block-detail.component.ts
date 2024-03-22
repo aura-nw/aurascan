@@ -253,7 +253,7 @@ export class BlockDetailComponent implements OnInit {
   parseDataListEvmTxn(txs) {
     if (txs.length > 0) {
       this.dataSourceEvm.data = txs.map((tx) => {
-        const type = _.get(tx, 'evm_transaction.data');
+        const type = _.get(tx, 'evm_transaction.data')?.substring(0, 8);;
         return {
           ...tx,
           tx_hash: _.get(tx, 'evm_transaction.hash'),
