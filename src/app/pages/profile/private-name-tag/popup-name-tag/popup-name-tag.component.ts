@@ -240,10 +240,7 @@ export class PopupNameTagComponent implements OnInit {
   resetAddress(controlName: string) {
     this.privateNameForm.get('cosmosAddress').setValue('');
     this.privateNameForm.get('evmAddress').setValue('');
-    if (controlName === 'cosmosAddress') {
-      this.privateNameForm.get('evmAddress').enable();
-    } else {
-      this.privateNameForm.get('cosmosAddress').enable();
-    }
+    this.privateNameForm.get('evmAddress').enable();
+    this.privateNameForm.get('cosmosAddress').enable();
   }
 }

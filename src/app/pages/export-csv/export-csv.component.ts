@@ -48,6 +48,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
   isDisableEvm = true;
+  nativeAddress = '';
 
   destroyed$ = new Subject<void>();
 
@@ -89,7 +90,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     this.csvForm = this.formBuilder.group({
       dataType: null,
       address: ['', [Validators.required]],
-      addressEvm: ['', [Validators.required]],
+      evmAddress: ['', [Validators.required]],
       isFilterDate: true,
       startDate: null,
       endDate: null,
@@ -112,7 +113,14 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     );
 
     this.csvForm.controls.address.setValue(accountAddress);
-    this.csvForm.controls.addressEvm.setValue(accountEvmAddress);
+    this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
+    if (this.commonService.isValidAddress(data['address'])) {
+      this.csvForm.get('evmAddress').disable();
+    } else {
+      this.csvForm.get('address').disable();
+      this.isDisableEvm = false;
+    }
+
     this.dataType = data['exportType'];
   }
 
@@ -140,6 +148,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     this.csvForm.value.isFilterDate = this.isFilterDate;
     let { addressDefault, address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } =
       this.csvForm.value;
+    address = address || this.nativeAddress;
     addressDefault = address;
 
     if (startDate || endDate) {
@@ -150,11 +159,11 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     // send both evm + native address for execute + evm execute
     if (this.dataType === this.TabsAccountLink.ExecutedTxs || this.dataType === this.TabsAccountLink.EVMExecutedTxs) {
       const addressNative = convertEvmAddressToBech32Address(this.chainInfo.bech32Config.bech32PrefixAccAddr, address);
-      const addressEvm = convertBech32AddressToEvmAddress(
+      const evmAddress = convertBech32AddressToEvmAddress(
         this.chainInfo.bech32Config.bech32PrefixAccAddr,
         addressNative,
       );
-      address = `${addressNative},${addressEvm}`;
+      address = `${addressNative},${evmAddress}`;
     }
 
     let payload = {
@@ -248,8 +257,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     return this.csvForm?.get('address');
   }
 
-  get getAddressEvm() {
-    return this.csvForm?.get('addressEvm');
+  get getEvmAddress() {
+    return this.csvForm?.get('evmAddress');
   }
 
   setDateRange() {
@@ -349,21 +358,33 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   clearAddress() {
     this.csvForm.controls.address.setValue('');
-    this.csvForm.controls.addressEvm.setValue('');
+    this.csvForm.controls.evmAddress.setValue('');
+    this.csvForm.get('address').enable();
+    this.csvForm.get('evmAddress').enable();
   }
 
   setAddressOther(address) {
     this.isValidAddress = true;
     this.isValidEvmAddress = true;
 
-    if (address.startsWith(EWalletType.EVM) && !this.commonService.isValidAddressEvm(address)) {
+    if (address.startsWith(EWalletType.EVM) && !this.commonService.isValidEvmAddress(address)) {
       this.csvForm.controls.address.setValue('');
       this.isValidEvmAddress = false;
       return;
     } else if (address.startsWith(this.prefix) && !this.commonService.isValidAddress(address)) {
-      this.csvForm.controls.addressEvm.setValue('');
+      this.csvForm.controls.evmAddress.setValue('');
       this.isValidAddress = false;
       return;
+    }
+
+    if (address.length > 0) {
+      if (this.commonService.isValidAddress(address)) {
+        this.csvForm.get('evmAddress').disable();
+        this.isDisableEvm = true;
+      } else {
+        this.csvForm.get('address').disable();
+        this.isDisableEvm = false;
+      }
     }
 
     if (!this.commonService.isValidContract(address)) {
@@ -372,11 +393,10 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
         address,
       );
       this.csvForm.controls.address.setValue(accountAddress);
-      this.csvForm.controls.addressEvm.setValue(accountEvmAddress);
-
-      if (address.trim() == accountEvmAddress.trim()) {
-        this.isDisableEvm = false;
-      }
+      this.nativeAddress = accountAddress;
+      this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
     }
+
+    console.log(this.csvForm.controls);
   }
 }

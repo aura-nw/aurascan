@@ -16,7 +16,7 @@ export function isAddress(adr: string, addressPrefix: string): boolean {
   return false;
 }
 
-export function isAddressEvm(adr: string): boolean {
+export function isEvmAddress(adr: string): boolean {
   if (adr?.startsWith(EWalletType.EVM) && adr?.length === LENGTH_CHARACTER.EVM_ADDRESS) {
     return true;
   }
