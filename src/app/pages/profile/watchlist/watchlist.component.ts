@@ -1,28 +1,31 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
-import {STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING} from 'src/app/core/constants/common.constant';
-import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NameTagService} from 'src/app/core/services/name-tag.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
-import {WatchListService} from 'src/app/core/services/watch-list.service';
-import {isContract} from 'src/app/core/utils/common/validation';
-import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
-import {PopupCommonComponent} from 'src/app/shared/components/popup-common/popup-common.component';
-import {PopupWatchlistComponent} from './popup-watchlist/popup-watchlist.component';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR, TOTAL_GROUP_TRACKING } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { WatchListService } from 'src/app/core/services/watch-list.service';
+import { isContract } from 'src/app/core/utils/common/validation';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
+import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
+import { PopupWatchlistComponent } from './popup-watchlist/popup-watchlist.component';
 import local from 'src/app/core/utils/storage/local';
-import {ENameTag, EScreen} from 'src/app/core/constants/account.enum';
-import {EWalletType} from "src/app/core/constants/wallet.constant";
-import {convertBech32AddressToEvmAddress, convertEvmAddressToBech32Address} from "src/app/core/utils/common/address-converter";
+import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import {
+  convertBech32AddressToEvmAddress,
+  convertEvmAddressToBech32Address,
+} from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-watchlist',
@@ -33,15 +36,15 @@ export class WatchListComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
 
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 65},
-    {matColumnDef: 'cosmosAddress', headerCellDef: 'Cosmos Add', headerWidth: 120},
-    {matColumnDef: 'evmAddress', headerCellDef: 'EVM Add', headerWidth: 120},
-    {matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 80},
-    {matColumnDef: 'public_name_tag', headerCellDef: 'Public Name Tag', headerWidth: 150},
-    {matColumnDef: 'private_name_tag', headerCellDef: 'Private Name Tag', headerWidth: 150},
-    {matColumnDef: 'group', headerCellDef: 'Group Tracking', headerWidth: 140},
-    {matColumnDef: 'updated_at', headerCellDef: 'Updated Time', headerWidth: 120},
-    {matColumnDef: 'action', headerCellDef: '', headerWidth: 100},
+    { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 65 },
+    { matColumnDef: 'cosmosAddress', headerCellDef: 'Cosmos Add', headerWidth: 120 },
+    { matColumnDef: 'evmAddress', headerCellDef: 'EVM Add', headerWidth: 120 },
+    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 80 },
+    { matColumnDef: 'public_name_tag', headerCellDef: 'Public Name Tag', headerWidth: 150 },
+    { matColumnDef: 'private_name_tag', headerCellDef: 'Private Name Tag', headerWidth: 150 },
+    { matColumnDef: 'group', headerCellDef: 'Group Tracking', headerWidth: 140 },
+    { matColumnDef: 'updated_at', headerCellDef: 'Updated Time', headerWidth: 120 },
+    { matColumnDef: 'action', headerCellDef: '', headerWidth: 100 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -72,15 +75,14 @@ export class WatchListComponent implements OnInit, OnDestroy {
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
     private watchListService: WatchListService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     const dataWatchList = local.getItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST);
     if (dataWatchList && dataWatchList !== 'undefined') {
       local.removeItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST);
       setTimeout(() => {
-        this.openPopup({address: dataWatchList});
+        this.openPopup({ address: dataWatchList });
       }, 500);
     }
 
@@ -176,7 +178,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
     if (data) {
       dialogConfig.data = data;
     }
-    dialogConfig.data = {...dialogConfig.data, ...{currentLength: this.pageData?.length}};
+    dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: this.pageData?.length } };
     let dialogRef = this.dialog.open(PopupWatchlistComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
