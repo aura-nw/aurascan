@@ -575,9 +575,7 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/assets/${denom}`);
   }
 
-  getEvmTokenDetail(payload: {
-    address?: string;
-  }): Observable<any> {
+  getEvmTokenDetail(payload: { address?: string }): Observable<any> {
     const operationsDoc = `
     query getEvmTokenDetail($address: String = null) {
       ${this.envDB} {
@@ -590,7 +588,11 @@ export class TokenService extends CommonService {
           name
           symbol
           total_supply
-          track
+          evm_smart_contract {
+            evm_contract_verifications {
+              status
+            }
+          }
         }
       }
     }
