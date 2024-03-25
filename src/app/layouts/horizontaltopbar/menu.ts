@@ -1,5 +1,5 @@
-import { EFeature } from 'src/app/core/models/common.model';
-import { MenuItem } from './menu.model';
+import {EFeature} from 'src/app/core/models/common.model';
+import {MenuItem} from './menu.model';
 
 export enum MenuName {
   Dashboard = 'Dashboard',
@@ -94,6 +94,7 @@ export const MENU: MenuItem[] = [
         id: 1,
         label: 'Fungible Tokens',
         link: '/tokens',
+        activeLink: 'token',
         name: MenuName.TokenCW20,
         icon: 'coins',
         featureName: EFeature.Cw20,
@@ -102,6 +103,7 @@ export const MENU: MenuItem[] = [
         id: 2,
         label: 'Non-fungible Tokens',
         link: '/tokens/tokens-nft',
+        activeLink: 'nft',
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
         featureName: EFeature.Cw721,
@@ -110,6 +112,7 @@ export const MENU: MenuItem[] = [
         id: 3,
         label: 'Account Bound Tokens',
         link: '/tokens/token-abt',
+        activeLink: 'abt',
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
         featureName: EFeature.Cw4973,
@@ -270,6 +273,7 @@ export const MENU_MOB: MenuItem[] = [
         id: 1,
         label: 'Fungible Tokens',
         link: '/tokens',
+        activeLink: 'token',
         name: MenuName.TokenCW20,
         icon: 'coins',
         featureName: EFeature.Cw20,
@@ -278,6 +282,7 @@ export const MENU_MOB: MenuItem[] = [
         id: 2,
         label: 'Non-fungible Tokens',
         link: '/tokens/tokens-nft',
+        activeLink: 'nft',
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
         featureName: EFeature.Cw721,
@@ -286,6 +291,7 @@ export const MENU_MOB: MenuItem[] = [
         id: 3,
         label: 'Account Bound Tokens',
         link: '/tokens/token-abt',
+        activeLink: 'abt',
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
         featureName: EFeature.Cw4973,

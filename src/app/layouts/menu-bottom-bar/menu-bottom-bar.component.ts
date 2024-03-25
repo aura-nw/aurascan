@@ -1,14 +1,14 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
-import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
+import {from} from 'rxjs';
+import {delay, mergeMap} from 'rxjs/operators';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {NotificationsService} from 'src/app/core/services/notifications.service';
+import {WalletService} from 'src/app/core/services/wallet.service';
+import {MENU_MOB, MenuName} from 'src/app/layouts/horizontaltopbar/menu';
+import {MenuItem} from 'src/app/layouts/horizontaltopbar/menu.model';
 
 @Component({
   selector: 'app-menu-bottom-bar',
@@ -29,7 +29,8 @@ export class MenuBottomBarComponent implements OnInit {
     private walletService: WalletService,
     private notificationsService: NotificationsService,
     private environmentService: EnvironmentService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.notificationsService.hiddenFooterSubject.subscribe((res) => {
@@ -125,32 +126,32 @@ export class MenuBottomBarComponent implements OnInit {
     this.overlayPanel = false;
   }
 
-  checkMenuActive(menuLink: string) {
+  checkMenuActive(menuLink: string, activeLink?: string) {
     if ((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
       return true;
     }
 
-    if (!menuLink.includes('/tokens')) {
-      if (menuLink === '/' + this.router.url.split('/')[1] && this.router.url.includes(menuLink)) {
-        return true;
-      }
-    }
-
-    if (menuLink === '/tokens' && (this.router.url == '/tokens' || this.router.url.includes('/tokens/token/'))) {
+    if (activeLink === 'token' && this.router.url === '/tokens') {
       return true;
     }
 
-    if (
-      menuLink === '/tokens/tokens-nft' &&
-      (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
-    ) {
+    if (activeLink === 'token' && this.router.url.includes('/token/') && this.router.url.split('/').length === 3) {
       return true;
     }
 
-    if (
-      menuLink === '/tokens/token-abt' &&
-      (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
-    ) {
+    if (activeLink === 'nft' && this.router.url === '/tokens/tokens-nft') {
+      return true;
+    }
+
+    if (activeLink === 'nft' && this.router.url.includes('/token/nft') && this.router.url.split('/').length === 4) {
+      return true;
+    }
+
+    if (activeLink === 'abt' && this.router.url === '/tokens/token-abt') {
+      return true;
+    }
+
+    if (activeLink === 'abt' && this.router.url.includes('/token/abt') && this.router.url.split('/').length === 4) {
       return true;
     }
 

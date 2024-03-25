@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { UserService } from 'src/app/core/services/user.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import {Subject, takeUntil} from 'rxjs';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {UserService} from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import { LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../app/core/constants/common.constant';
-import { TransactionService } from '../../core/services/transaction.service';
-import { MENU, MenuName } from './menu';
-import { MenuItem } from './menu.model';
-import { ContractService } from 'src/app/core/services/contract.service';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import {LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR} from '../../../app/core/constants/common.constant';
+import {TransactionService} from '../../core/services/transaction.service';
+import {MENU, MenuName} from './menu';
+import {MenuItem} from './menu.model';
+import {ContractService} from 'src/app/core/services/contract.service';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -45,7 +45,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
@@ -148,8 +149,9 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   }
 
   redirectPage(urlLink: string) {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([urlLink, this.searchValue]).then((r) => {});
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([urlLink, this.searchValue]).then((r) => {
+      });
     });
   }
 
@@ -180,7 +182,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['transaction', this.searchValue]);
           });
         } else {
@@ -207,18 +209,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkMenuActive(menuLink: string) {
+  checkMenuActive(menuLink: string, activeLink?: string) {
     if ((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
-      return true;
-    }
-
-    if (!menuLink.includes('/tokens')) {
-      if (menuLink === '/' + this.router.url.split('/')[1] && this.router.url.includes(menuLink)) {
-        return true;
-      }
-    }
-
-    if (menuLink === '/tokens' && (this.router.url == '/tokens' || this.router.url.includes('/tokens/token/'))) {
       return true;
     }
 
@@ -238,19 +230,30 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    if (
-      menuLink === '/tokens/tokens-nft' &&
-      (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
-    ) {
+    if (activeLink === 'token' && this.router.url === '/tokens') {
       return true;
     }
 
-    if (
-      menuLink === '/tokens/token-abt' &&
-      (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
-    ) {
+    if (activeLink === 'token' && this.router.url.includes('/token/') && this.router.url.split('/').length === 3) {
       return true;
     }
+
+    if (activeLink === 'nft' && this.router.url === '/tokens/tokens-nft') {
+      return true;
+    }
+
+    if (activeLink === 'nft' && this.router.url.includes('/token/nft') && this.router.url.split('/').length === 4) {
+      return true;
+    }
+
+    if (activeLink === 'abt' && this.router.url === '/tokens/token-abt') {
+      return true;
+    }
+
+    if (activeLink === 'abt' && this.router.url.includes('/token/abt') && this.router.url.split('/').length === 4) {
+      return true;
+    }
+
 
     if (
       menuLink === '/statistics/charts-stats' &&
