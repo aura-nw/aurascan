@@ -83,12 +83,7 @@
                     {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'type'">
-                    <div class="aura-status status text-nowrap" [appTooltip]="data.lstTypeTemp | combineTxsMsg">
-                      <span>{{ data[template.matColumnDef] | ellipsis: 22 }}</span>
-                      <span *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
-                        +{{ data.lstTypeTemp?.length - 1 }}
-                      </span>
-                    </div>
+                    <span> {{ data[template.matColumnDef] | ellipsis: 10 : null : true }}</span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'tx_hash'">
                     <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]" [copyBtn]="data.tx_hash">
