@@ -1,5 +1,4 @@
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from './transaction.enum';
-import { id as keccak256Str } from 'ethers';
 
 export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.IBCTransfer, value: TypeTransaction.IBCTransfer },
