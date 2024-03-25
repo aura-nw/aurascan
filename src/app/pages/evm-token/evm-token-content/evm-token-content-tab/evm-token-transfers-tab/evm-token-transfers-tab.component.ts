@@ -61,7 +61,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   codeTransaction = CodeTransaction;
   modeExecuteTransaction = ModeExecuteTransaction;
   nftDetail: any;
-  linkToken = 'token';
+  linkToken = 'evm-token';
   nextKey = null;
   currentKey = null;
   contractType = EvmContractRegisterType;
@@ -209,27 +209,29 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.tokenService.getCW20Transfer(payload).subscribe({
+    this.tokenService.getERC20Transfer(payload).subscribe({
       next: (res) => {
         if (res) {
           this.nextKey = null;
-          if (res.cw20_activity.length >= 100) {
-            this.nextKey = res?.cw20_activity[res.cw20_activity.length - 1].height;
+          if (res.erc20_activity.length >= 100) {
+            this.nextKey = res?.erc20_activity[res.erc20_activity.length - 1].height;
             this.hasMore.emit(true);
           } else {
             this.hasMore.emit(false);
           }
-          let txs = res.cw20_activity;
+          let txs = res.erc20_activity;
           txs.forEach((element) => {
-            element['tx_hash'] = element.tx.hash;
-            element['from_address'] = element.from || NULL_ADDRESS;
-            element['to_address'] = element.to || NULL_ADDRESS;
-            element['timestamp'] = element.tx.timestamp;
+            element['tx_hash'] = element.tx_hash;
+            element['from_address'] = element.from?.toLowerCase() || NULL_ADDRESS;
+            element['to_address'] = element.to?.toLowerCase() || NULL_ADDRESS;
+            element['timestamp'] = _.get(element, 'evm_transaction.transaction.timestamp');
             element['status'] =
-              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx)?.type;
-            element['decimal'] = element.cw20_contract.decimal;
-            element['lstTypeTemp'] = _.get(element, 'tx.transaction_messages');
+              _.get(element, 'evm_transaction.transaction.code') == CodeTransaction.Success
+                ? StatusTransaction.Success
+                : StatusTransaction.Fail;
+            element['type'] = _.get(element, 'evm_transaction.data')?.substring(0, 8) || 'Transfer';
+            element['decimal'] = _.get(element, 'erc20_contract.decimal');
+            element['lstTypeTemp'] = _.get(element, 'evm_transaction.transaction_message');
           });
           if (this.dataSource.data.length > 0 && !isReload) {
             this.dataSource.data = [...this.dataSource.data, ...txs];

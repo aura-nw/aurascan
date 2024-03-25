@@ -607,4 +607,62 @@ export class TokenService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
+
+  getERC20Transfer(payload): Observable<any> {
+    const operationsDoc = `query queryListTxsERC20(
+      $receiver: String = null
+      $sender: String = null
+      $contractAddr: String = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $limit: Int = 100
+      $txHash: String = null
+      $actionIn: [String!] = null
+      $actionNotIn: [String!] = null) {
+      ${this.envDB} {
+        erc20_activity(where: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], erc20_contract_address: {_eq: $contractAddr}, action: {_in: $actionIn, _nin: $actionNotIn}, height: {_gt: $heightGT, _lt: $heightLT}, tx_hash: {_eq: $txHash}}, order_by: {height: desc}, limit: $limit) {
+          action
+          amount
+          from
+          to
+          sender
+          height
+          erc20_contract_address
+          erc20_contract {
+            decimal
+            symbol
+          }
+          tx_hash
+          evm_transaction {
+            data
+            transaction {
+              timestamp
+              code
+            }
+            transaction_message {
+              type
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          sender: payload.sender,
+          receiver: payload.receiver,
+          listTxMsgType: payload.listTxMsgType,
+          contractAddr: payload.contractAddr,
+          heightLT: payload.heightLT,
+          txHash: payload.txHash,
+          actionIn: CW20_TRACKING,
+          actionNotIn: null,
+        },
+        operationName: 'queryListTxsERC20',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 }
