@@ -2,11 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
-import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
-import { CoingeckoService } from '../data-services/coingecko.service';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -42,105 +41,20 @@ export class TokenService extends CommonService {
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
-    private coingeckoService: CoingeckoService,
+    private commonService: CommonService,
   ) {
     super(http, environmentService);
-  }
-
-  getListToken(payload): Observable<any> {
-    const operationsDoc = `query queryCW20ListToken($name: String, $address: String, $limit: Int, $offset: Int, $date: date) { 
-      ${this.envDB} { 
-        cw20_contract(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}, limit: $limit, offset: $offset) {
-          marketing_info
-          name
-          symbol
-          total_supply
-          decimal
-          smart_contract {
-            address
-          }
-          cw20_holders_aggregate(where: {amount: {_gt: "0"}}) {
-            aggregate {
-              count
-            }
-          }
-          cw20_total_holder_stats(where: {date: {_gte: $date}}) {
-            date
-            total_holder
-          }
-        }
-        cw20_contract_aggregate(where: {_or: [{name: {_ilike: $name}}, {smart_contract: {address: {_eq: $address}}}]}) {
-          aggregate {
-            count
-          }
-        }
-      }
-    }`;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          name: payload?.keyword ? `%${payload?.keyword}%` : null,
-          address: payload?.keyword ? payload?.keyword : null,
-          limit: payload?.limit,
-          offset: payload?.offset,
-          date: payload?.date,
-        },
-        operationName: 'queryCW20ListToken',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
   getTokenMarketData(payload = {}): Observable<any> {
     const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
 
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/token-market`, {
+    return this.http.get<any>(`${this.apiUrl}/assets/token-market`, {
       params,
     });
   }
 
-  getListCW721Token(payload, textSearch: string = null): Observable<any> {
-    if (textSearch?.length > 0) {
-      textSearch = '%' + textSearch + '%';
-    }
-    let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
-    const operationsDoc = `
-    query queryListCW721($limit: Int = 10, $offset: Int = 0, $contract_address: String = null, $name: String = null) {
-      ${this.envDB} {
-        list_token: cw721_contract_stats(limit: $limit, offset: $offset ${querySort}, where: {_or:[ {cw721_contract: {smart_contract: {address: {_like: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
-          transfer_24h
-          total_activity
-          cw721_contract {
-            name
-            symbol
-            smart_contract {
-              address
-            }
-          }
-        }
-        total_token: cw721_contract_stats_aggregate (where: {_or:[ {cw721_contract: {smart_contract: {address: {_like: $contract_address}}}},  { cw721_contract: {name: {_ilike: $name}}} ]}) {
-          aggregate {
-            count
-          }
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          limit: payload.limit || 20,
-          offset: payload.offset || 0,
-          contract_address: textSearch || null,
-          name: textSearch || null,
-        },
-        operationName: 'queryListCW721',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
-  getTokenDetail(address: string, date): Observable<any> {
+  getCW20Detail(address: string, date): Observable<any> {
     const operationsDoc = `query queryCW20Detail($address: String, $date: date) { 
       ${this.envDB} { smart_contract(where: {address: {_eq: $address}}) {
           address
@@ -179,6 +93,49 @@ export class TokenService extends CommonService {
           date: date,
         },
         operationName: 'queryCW20Detail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListCW721Token(payload, textSearch: string = null): Observable<any> {
+    let queryUpdate = '';
+    if (this.commonService.isValidContract(textSearch)) {
+      queryUpdate = 'cw721_contract: {smart_contract: {address: {_eq:' + textSearch + '}}}';
+    } else if (textSearch?.length > 0) {
+      textSearch = `"%` + textSearch + `%"`;
+      queryUpdate = 'cw721_contract: {name: {_ilike:' + textSearch + '}}';
+    }
+    let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
+    const operationsDoc = `
+    query queryListCW721($limit: Int = 10, $offset: Int = 0) {
+      ${this.envDB} {
+        list_token: cw721_contract_stats(limit: $limit, offset: $offset ${querySort}, where: { ${queryUpdate} }) {
+          transfer_24h
+          total_activity
+          cw721_contract {
+            name
+            symbol
+            smart_contract {
+              address
+            }
+          }
+        }
+        total_token: cw721_contract_stats_aggregate (where: { ${queryUpdate} }) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 20,
+          offset: payload.offset || 0,
+        },
+        operationName: 'queryListCW721',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -498,76 +455,11 @@ export class TokenService extends CommonService {
   }
 
   getCoinData() {
-    this.http
-      .get<any>(`${this.apiUrl}/cw20-tokens/token-market`)
-      .pipe(
-        switchMap((res: any[]) => {
-          if (res?.length === 0) {
-            return of(null);
-          }
-
-          const tokensFiltered = res.filter((token) => token.coin_id);
-
-          // get price native token
-          const nativeToken = tokensFiltered?.find((k) => k.coin_id === this.environmentService.coingecko?.ids[0]);
-          this.nativePrice$.next(nativeToken?.current_price);
-
-          const coinsId = tokensFiltered.map((coin: { coin_id: string }) => coin.coin_id);
-
-          const nativeTokenId = this.environmentService.coingecko.ids[0];
-
-          if (!coinsId.includes(nativeTokenId)) {
-            coinsId.push(nativeTokenId);
-          }
-
-          if (coinsId?.length > 0) {
-            return forkJoin({
-              tokensMarket: of(tokensFiltered),
-              coinMarkets: this.getCoinMarkets(coinsId),
-            });
-          }
-
-          return forkJoin({
-            tokensMarket: of(tokensFiltered),
-            coinMarkets: of(null),
-          });
-        }),
-        map((data) => {
-          if (data) {
-            const { coinMarkets, tokensMarket } = data;
-
-            return tokensMarket.map((token) => {
-              if (!token.coin_id) {
-                return token;
-              }
-
-              const coin = coinMarkets.find((item) => item.id === token.coin_id);
-
-              if (!coin) {
-                return token;
-              }
-
-              return {
-                ...token,
-                max_supply: coin.max_supply,
-                current_price: coin.current_price,
-                price_change_percentage_24h: coin.price_change_percentage_24h,
-                total_volume: coin.total_volume,
-                circulating_supply: coin.circulating_supply,
-                fully_diluted_valuation: coin.fully_diluted_valuation,
-              };
-            });
-          }
-          return [];
-        }),
-      )
-      .subscribe((res) => {
-        this.tokensMarket$.next(res);
-      });
-  }
-
-  getCoinMarkets(coinsId: string[]): Observable<any[]> {
-    return this.coingeckoService.getCoinMarkets(coinsId).pipe(catchError((_) => of([])));
+    this.http.get<any>(`${this.apiUrl}/assets/token-market`).subscribe((res) => {
+      let nativeToken = res?.find((k) => k.coinId === this.environmentService.coingecko?.ids[0]);
+      this.nativePrice$.next(nativeToken?.currentPrice);
+      this.tokensMarket$.next(res);
+    });
   }
 
   getListTransactionTokenIBC(payload: {
@@ -613,7 +505,7 @@ export class TokenService extends CommonService {
           limit: payload.limit,
           offset: payload.offset,
           address: payload.address,
-          hash: payload.txHash
+          hash: payload.txHash,
         },
         operationName: 'queryListTxIBC',
       })
@@ -669,5 +561,17 @@ export class TokenService extends CommonService {
 
   getListAmountNative(address: string[]): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/account/list/${address}`).pipe(catchError((_) => of([])));
+  }
+
+  getListToken(payload): Observable<any> {
+    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+
+    return this.http.get<any>(`${this.apiUrl}/assets`, {
+      params,
+    });
+  }
+
+  getTokenDetail(denom): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/assets/${denom}`);
   }
 }

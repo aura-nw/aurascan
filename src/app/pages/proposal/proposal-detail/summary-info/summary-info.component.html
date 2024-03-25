@@ -55,15 +55,18 @@
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
             <ng-container *ngIf="proDetail?.proposer_address">
-              <a
-                class="text--primary h6 line-claim"
-                [routerLink]="['/account', proDetail?.proposer_address]"
-                [copyBtn]="proDetail?.proposer_address">
-                <ng-container *ngIf="proDetail?.proposer">
+              <a class="text--primary h6 line-claim">
+                <div
+                  *ngIf="proDetail?.proposer"
+                  [copyBtn]="proDetail?.proposer_address"
+                  [routerLink]="['/account', proDetail?.proposer_address]">
                   {{ proDetail?.proposer?.description?.moniker }}
-                </ng-container>
+                </div>
                 <ng-container *ngIf="!proDetail?.proposer">
-                  <app-name-tag [value]="proDetail?.proposer_address" [fullText]="true"></app-name-tag>
+                  <app-name-tag
+                    [value]="proDetail?.proposer_address"
+                    [fullText]="true"
+                    [linkRouter]="['/account', proDetail?.proposer_address]"></app-name-tag>
                 </ng-container>
               </a>
             </ng-container>
@@ -116,23 +119,18 @@
         </div>
         <div class="row mb-3 mb-md-4 body-02 body-01-mob" *ngIf="specialDataArr.length > 0">
           <div class="col-auto col-md-2 text--gray-4">
-            <ng-container *ngIf="proDetail?.plan"> Plan </ng-container>
-            <ng-container *ngIf="proDetail?.changes"> Changes </ng-container>
+            <ng-container *ngIf="proDetail?.plan"> Plan</ng-container>
+            <ng-container *ngIf="proDetail?.changes"> Changes</ng-container>
           </div>
           <div class="col-12 col-md-10 mt-0">
-            <ul
-              ngbNav
-              #customNav="ngbNav"
-              [activeId]="activeId"
-              class="aura-nav-tabs nav-tabs nav-tabs-custom nav-tabs-proposal nav-justified flex-nowrap overflow-scroll-x--md mb-4">
-              <ng-container *ngFor="let tab of specialDataArr; index as index">
-                <li [ngbNavItem]="index">
-                  <a ngbNavLink (click)="changeTab(tab.key)">
-                    <span class="tab-title mb-0 text-capitalize">{{ tab.value }}</span>
-                  </a>
-                </li>
-              </ng-container>
-            </ul>
+            <div class="mb-4">
+              <mat-tab-group (selectedTabChange)="changeTab($event.index)">
+                <mat-tab
+                  [label]="tab.value"
+                  *ngFor="let tab of specialDataArr; index as index"
+                  (click)="changeTab(tab.key)"></mat-tab>
+              </mat-tab-group>
+            </div>
             <ng-container *ngIf="proDetail?.plan">
               <div *ngFor="let key of getObjectKey(proDetail?.plan)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">
@@ -217,25 +215,21 @@
         </div>
         <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
           <ul class="vote-bar-ul">
-            <li class="bg--primary aura-tooltip-contain" [style.width]="proDetail.yesPercent + '%'">
-              <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'Yes ' + (proDetail.yesPercent | formatDigit: 2) + '%'">
-              </app-tooltip-customize>
+            <li class="bg--primary" [style.width]="proDetail.yesPercent + '%'">
+              <div class="w-100 h-100" [appTooltip]="'Yes ' + (proDetail.yesPercent | formatDigit: 2) + '%'"></div>
             </li>
-            <li class="bg--danger aura-tooltip-contain" [style.width]="proDetail.noPercent + '%'">
-              <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'No ' + (proDetail.noPercent | formatDigit: 2) + '%'">
-              </app-tooltip-customize>
+            <li class="bg--danger" [style.width]="proDetail.noPercent + '%'">
+              <div class="w-100 h-100" [appTooltip]="'No ' + (proDetail.noPercent | formatDigit: 2) + '%'"></div>
             </li>
-            <li class="bg--info aura-tooltip-contain" [style.width]="proDetail.noWithVetoPercent + '%'">
-              <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'No with veto ' + (proDetail.noWithVetoPercent | formatDigit: 2) + '%'">
-              </app-tooltip-customize>
+            <li class="bg--inf" [style.width]="proDetail.noWithVetoPercent + '%'">
+              <div
+                class="w-100 h-100"
+                [appTooltip]="'No with veto ' + (proDetail.noWithVetoPercent | formatDigit: 2) + '%'"></div>
             </li>
-            <li class="bg--secondary aura-tooltip-contain" [style.width]="proDetail.abstainPercent + '%'">
-              <div class="aura-tooltip-object w-100 h-100"></div>
-              <app-tooltip-customize [content]="'Abstain ' + (proDetail.abstainPercent | formatDigit: 2) + '%'">
-              </app-tooltip-customize>
+            <li class="bg--secondary" [style.width]="proDetail.abstainPercent + '%'">
+              <div
+                class="w-100 h-100"
+                [appTooltip]="'Abstain ' + (proDetail.abstainPercent | formatDigit: 2) + '%'"></div>
             </li>
           </ul>
         </div>

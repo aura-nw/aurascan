@@ -85,30 +85,16 @@ export class NameTagService extends CommonService {
 
   isPublic(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-
-    if (nameTag?.name_tag) {
-      return true;
-    }
-
-    return false;
+    return !!nameTag?.name_tag;
   }
 
   isPrivate(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-
-    if (nameTag?.isPrivate && nameTag?.name_tag_private) {
-      return true;
-    }
-
-    return false;
+    return !!(nameTag?.isPrivate && nameTag?.name_tag_private);
   }
 
   checkDisplayTooltip(address: string): boolean {
     const nameTag = this.listNameTag?.find((k) => k.address === address);
-
-    if (!nameTag || nameTag?.name_tag === address) {
-      return true;
-    }
-    return false;
+    return !nameTag || nameTag?.name_tag === address;
   }
 }

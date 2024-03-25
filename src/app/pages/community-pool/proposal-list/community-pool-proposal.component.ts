@@ -51,7 +51,6 @@ export class CommunityPoolProposalComponent implements OnInit {
   length: number;
   dataSource: MatTableDataSource<any>;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  listCoin = this.environmentService.coins;
   statusConstant = PROPOSAL_STATUS;
   distributionAcc = '';
   isLoading = true;
@@ -66,7 +65,7 @@ export class CommunityPoolProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAddressDistribution();
+    this.getAddressDistribution().then((r) => {});
   }
 
   async getAddressDistribution() {

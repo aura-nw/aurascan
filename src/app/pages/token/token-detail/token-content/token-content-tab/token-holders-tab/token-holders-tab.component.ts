@@ -222,12 +222,16 @@ export class TokenHoldersTabComponent implements OnInit {
 
   getDenomHolder() {
     const payload = {
-      denomHash: this.tokenDetail?.denomHash,
+      denomHash: this.tokenDetail?.denomHash || this.tokenDetail?.denom,
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       address: this.keyWord || null,
       isExcludedAddresses: this.tokenDetail.modeToken === this.EModeToken.Native,
     };
+
+    const tokenSupplyOrigin = BigNumber(this.tokenDetail?.totalSupply).multipliedBy(
+      BigNumber(10).pow(this.tokenDetail.decimal),
+    );
 
     this.tokenService
       .getDenomHolder(payload)
@@ -244,9 +248,7 @@ export class TokenHoldersTabComponent implements OnInit {
             accountBalance?.forEach((item) => {
               item.balance = item.amount;
               item.owner = item.account?.address;
-              item.percent_hold = BigNumber(item.amount)
-                .dividedBy(this.tokenDetail?.totalSupply)
-                .multipliedBy(100);
+              item.percent_hold = BigNumber(item.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
               item.value =
                 BigNumber(item.amount)
                   .multipliedBy(this.tokenDetail?.price || 0)
@@ -260,14 +262,12 @@ export class TokenHoldersTabComponent implements OnInit {
             return k.account?.address;
           });
 
-          return this.getListNativeBalance(addressList).pipe(
+          return this.tokenService.getListAmountNative(addressList).pipe(
             map((res) => {
               accountBalance?.forEach((item, index) => {
-                item.amount = item.balance = _.get(res[index], 'data.amount');
+                item.amount = item.balance = _.get(res.data[index], 'amount');
                 item.owner = item.account?.address;
-                item.percent_hold = BigNumber(item.amount)
-                  .dividedBy(this.tokenDetail?.totalSupply)
-                  .multipliedBy(100);
+                item.percent_hold = BigNumber(item.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
                 item.value =
                   BigNumber(item.amount)
                     .multipliedBy(this.tokenDetail?.price || 0)
@@ -302,13 +302,5 @@ export class TokenHoldersTabComponent implements OnInit {
           this.loading = false;
         },
       });
-  }
-
-  getNativeBalance(address) {
-    return this.tokenService.getAmountNative(address);
-  }
-
-  getListNativeBalance(address: Array<any>) {
-    return forkJoin(address.map((a) => this.getNativeBalance(a)));
   }
 }

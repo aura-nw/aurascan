@@ -53,8 +53,9 @@
                   *ngIf="!breakpoint.value.matches"
                   class="small-text text--primary hover-link mt-1"
                   [value]="item.owner"
-                  [isHref]="true"
-                  [url]="'/tokens/' + linkToken + '/' + item.contract_address + '?a='"></app-name-tag>
+                  [linkRouter]="['/tokens', linkToken, item.contract_address]"
+                  [linkParams]="{ a: item.owner }">
+                </app-name-tag>
               </div>
             </div>
           </div>

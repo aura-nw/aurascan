@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TabsAccountLink } from '../core/constants/account.enum';
-import { LENGTH_CHARACTER, NULL_ADDRESS, NUMBER_CONVERT, STORAGE_KEYS } from '../core/constants/common.constant';
+import { LENGTH_CHARACTER, NULL_ADDRESS, STORAGE_KEYS } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -19,73 +19,6 @@ Injectable();
 
 export class Globals {
   dataHeader = new CommonDataDto();
-}
-
-export function getAmount(arrayMsg, type) {
-  let amount = 0;
-  let amountFormat;
-  let eTransType = TRANSACTION_TYPE_ENUM;
-
-  //check is ibc
-  if (type.indexOf('ibc') > -1) {
-    arrayMsg.forEach((element) => {
-      if (element['@type'] != eTransType.IBCUpdateClient) {
-        switch (element['@type']) {
-          case eTransType.IBCReceived:
-            amountFormat = 'More';
-            break;
-          case eTransType.IBCTransfer:
-            amountFormat = balanceOf(element.token.amount);
-            break;
-          default:
-            return amountFormat;
-        }
-      }
-    });
-    return amountFormat;
-  }
-
-  let itemMessage = arrayMsg[0];
-
-  try {
-    if (
-      itemMessage?.amount &&
-      (type === eTransType.Undelegate || type === eTransType.Delegate || type === eTransType.Redelegate)
-    ) {
-      amount = itemMessage?.amount.amount;
-    } else if (itemMessage?.amount) {
-      amount = itemMessage?.amount[0].amount;
-    } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
-      amount = itemMessage?.funds[0].amount;
-    } else if (type === eTransType.SubmitProposalTx || type === eTransType.SubmitProposalTxV2) {
-      amount =
-        itemMessage?.initial_deposit[0]?.amount ||
-        itemMessage?.content?.amount[0]?.amount ||
-        itemMessage?.amount[0]?.amount ||
-        0;
-    } else if (type === eTransType.CreateValidator) {
-      amount = itemMessage?.value?.amount || 0;
-    } else if (type === eTransType.ExecuteAuthz) {
-      itemMessage?.msgs.forEach((element) => {
-        amount += +element?.amount?.amount;
-      });
-    }
-  } catch {}
-
-  if (itemMessage && amount >= 0) {
-    amount = amount / NUMBER_CONVERT || 0;
-    amountFormat = amount;
-    if (
-      ((type === TRANSACTION_TYPE_ENUM.GetReward || type === TRANSACTION_TYPE_ENUM.Undelegate) &&
-        arrayMsg?.length > 1) ||
-      type === TRANSACTION_TYPE_ENUM.MultiSend ||
-      type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount
-    ) {
-      amountFormat = 'More';
-    }
-  }
-
-  return amountFormat;
 }
 
 export function getDataInfo(arrayMsg, addressContract, rawLog = '') {

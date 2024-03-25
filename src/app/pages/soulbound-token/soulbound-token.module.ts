@@ -17,7 +17,6 @@ import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.m
 import { QrModule } from 'src/app/shared/components/qr/qr.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
-import { TooltipCustomizeModule } from 'src/app/shared/components/tooltip-customize/tooltip-customize.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AbtRejectPopupComponent } from './abt-reject-popup/abt-reject-popup.component';
 import { SoulboundAccountTokenListComponent } from './soulbound-account-token-list/soulbound-account-token-list.component';
@@ -60,7 +59,6 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     AudioPlayerModule,
     NgClickOutsideDirective,
     NameTagModule,
-    TooltipCustomizeModule,
     ClipboardModule,
     CommonDirectiveModule,
   ],

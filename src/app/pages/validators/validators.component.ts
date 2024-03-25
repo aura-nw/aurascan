@@ -5,6 +5,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import BigNumber from 'bignumber.js';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { MsgBeginRedelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import * as _ from 'lodash';
@@ -13,7 +14,6 @@ import { takeUntil } from 'rxjs/operators';
 import {
   MAX_NUMBER_INPUT,
   NUMBER_2_DIGIT,
-  NUMBER_CONVERT,
   NUM_BLOCK,
   TIMEOUT_ERROR,
   TIME_OUT_CALL_API,
@@ -21,7 +21,6 @@ import {
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR, VOTING_POWER_LEVEL } from 'src/app/core/constants/validator.enum';
-import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DataDelegateDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
@@ -30,9 +29,8 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { balanceOf, getBalance } from 'src/app/core/utils/common/parsing';
 import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
-import { getFee } from 'src/app/core/utils/signing/fee';
 
 @Component({
   selector: 'app-validators',
@@ -659,11 +657,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getMaxAmountDelegate() {
-    let amount = (
-      Number(this.dataDelegate.availableToken) +
-      Number(this.dataDelegate.delegableVesting) -
-      (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT
-    ).toFixed(6);
+    let amount = this.validatorService.getMaxAmount(
+      this.dataDelegate.availableToken,
+      this.dataDelegate.delegableVesting,
+    );
     return amount;
   }
 
@@ -674,11 +671,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   checkTxStatusOnchain({ success, error }: { success?: any; error?: { message: string; code: number } | string }) {
     if (error) {
       const { message, code } = typeof error == 'string' ? { message: error, code: undefined } : parseError(error);
-
-      if (code) {
-        let errorMessage = this.mappingErrorService.checkMappingError(message, code);
-        this.toastr.error(errorMessage);
+      let errorMessage = message;
+      if (code > 0) {
+        errorMessage = this.mappingErrorService.checkMappingError(message, code);
       }
+      this.toastr.error(errorMessage ?? message ?? 'Unknown Error');
       this.resetData();
     } else {
       const hash = success?.transactionHash;
@@ -729,7 +726,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         data.entries.forEach((f) => {
           const validatorDetail = this.lstValidatorOrigin?.find((i) => i.operator_address === data.validator_address);
           let item = {
-            balance: f.balance / NUMBER_CONVERT,
+            balance: getBalance(f.balance, this.environmentService.coinDecimals),
             validator_address: data.validator_address,
             validator_name: validatorDetail?.title,
             jailed: validatorDetail?.jailed,

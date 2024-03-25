@@ -58,6 +58,11 @@ body {
       }
     }
   }
+
+  .aura-tooltip-contain {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .proposal-status {
@@ -257,8 +262,10 @@ body {
   right: 8px;
   bottom: 8px;
   z-index: 5;
+
   @media (min-width: 992px) {
     opacity: 0.8;
+
     &:hover {
       opacity: 1;
     }

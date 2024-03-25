@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { WalletConnectOptions } from '@cosmos-kit/core';
 import * as _ from 'lodash';
-import { BehaviorSubject, lastValueFrom, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 import { isMobileBrowser } from '../helpers/wallet';
@@ -111,10 +111,6 @@ export class EnvironmentService {
 
   get stakingTime() {
     return _.get(this.configValue, 'chainConfig.stakingTime');
-  }
-
-  get coins() {
-    return _.get(this.configValue, 'chainConfig.coins');
   }
 
   get imageUrl() {
