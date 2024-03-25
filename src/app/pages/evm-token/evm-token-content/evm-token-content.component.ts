@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractVerifyType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token.constant';
 import { EModeToken, TokenTab } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -145,11 +145,12 @@ export class EvmTokenContentComponent implements OnInit {
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
-          if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
-            this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token/nft' : 'token/abt';
+          if (this.tokenDetail.type && this.tokenDetail.type !== EvmContractRegisterType.ERC20) {
+            this.linkToken =
+              this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token/nft' : 'evm-token/abt';
             window.location.href = `/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
-            window.location.href = `/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
+            window.location.href = `/evm-token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }
         }
       });
@@ -162,11 +163,11 @@ export class EvmTokenContentComponent implements OnInit {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
-        this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token/nft' : 'token/abt';
+      if (this.tokenDetail.type && this.tokenDetail.type !== EvmContractRegisterType.ERC20) {
+        this.linkToken = this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token/nft' : 'evm-token/abt';
         window.location.href = `/${this.linkToken}/${params.contractAddress}`;
       } else {
-        window.location.href = `/token/${params.contractAddress}`;
+        window.location.href = `/evm-token/${params.contractAddress}`;
       }
     }
   }
