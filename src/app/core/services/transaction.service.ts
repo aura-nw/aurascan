@@ -19,6 +19,179 @@ export class TransactionService extends CommonService {
     super(http, environmentService);
   }
 
+  queryTransactionByEvmHash(payload) {
+    const operationsDoc = `
+    query QueryTransactionByEvmHash(
+      $limit: Int = 100
+      $order: order_by = desc
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $indexGT: Int = null
+      $indexLT: Int = null
+      $hash: String = null
+      $height: Int = null
+    ) {
+      ${this.envDB} {
+        transaction(
+          limit: $limit
+          where: {
+            evm_transaction: {hash: {_eq: $hash}}
+            height: { _eq: $height }
+            _and: [
+              { height: { _gt: $heightGT } }
+              { index: { _gt: $indexGT } }
+              { height: { _lt: $heightLT } }
+              { index: { _lt: $indexLT } }
+            ]
+          }
+          order_by: [{ height: $order}, {index: $order }]
+        ) {
+          id
+          height
+          hash
+          timestamp
+          code
+          gas_used
+          gas_wanted
+          data
+          fee
+          memo
+          codespace
+          gas_limit    
+          transaction_messages {
+            content
+            sender
+          }
+          evm_transaction {
+            hash
+            from
+            gas
+            data
+            gas_fee_cap
+            gas_tip_cap
+            height
+            id
+            nonce
+            size
+            to
+            tx_id
+            tx_msg_id
+            value
+            evm_events {
+              address
+              topic0
+              topic1
+              topic2
+              topic3
+              data
+              evm_signature_mapping_topic0 {
+                human_readable_topic
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+          hash: payload.hash,
+          value: payload.value,
+          key: payload.key,
+          heightGT: null,
+          heightLT: payload.heightLT,
+          indexGT: null,
+          indexLT: null,
+          height: payload.height,
+        },
+        operationName: 'QueryTransactionByEvmHash',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  queryEvmTransactionList(payload) {
+    const operationsDoc = `
+    query QueryEvmTransactionList(
+      $limit: Int = 20
+      $order: order_by = desc
+    ) {
+      ${this.envDB} {
+        transaction(
+          limit: $limit
+          order_by: [{ height: $order}],
+          where: {evm_transaction: {hash: {_is_null: false}}}
+        ) {
+          id
+          hash
+          height
+          timestamp
+          transaction_messages {
+            type
+            content
+            sender
+          }
+          evm_transaction {
+            hash
+            to
+            data
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit,
+          order: 'desc',
+        },
+        operationName: 'QueryEvmTransactionList',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListEvmContractTxByAddress(payload) {
+    const operationsDoc = `
+    query QueryEvmTxOfContract( $limit: Int = null, $address: String = null) {
+      ${this.envDB} {
+        evm_transaction(where: {evm_events: {address: {_eq: $address}}}, limit: $limit, order_by: {id: desc}) {
+          from
+          to
+          hash
+          height
+          data
+          transaction {
+            timestamp
+            transaction_messages {
+              type
+              content
+              sender
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 40,
+          address: payload.address,
+        },
+        operationName: 'QueryEvmTxOfContract',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListTxDetail(payload) {
     const operationsDoc = `
     query queryTxDetail(
@@ -120,6 +293,9 @@ export class TransactionService extends CommonService {
           transaction_messages {
             type
             content
+          }
+          evm_transaction {
+            hash
           }
         }
       }
@@ -451,6 +627,7 @@ export class TransactionService extends CommonService {
               event: { tx_msg_index: { _is_null: false } }
               block_height: { _lte: $heightLTE, _gte: $heightGTE }
             }
+            order_by: [{event_id: asc}, {index: asc}]
           ) {
             composite_key
             value
@@ -471,6 +648,34 @@ export class TransactionService extends CommonService {
           heightGTE: height,
         },
         operationName: 'TxTransferDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getAbiContract(address: string) {
+    const operationsDoc = `
+    query QueryAbiContract($address: String = null) {
+      ${this.envDB} {
+        evm_contract_verification(where: {contract_address: {_eq: $address}, status: {_eq: "SUCCESS"}}, limit: 1, order_by: {id: desc}) {
+          contract_address
+          created_at
+          creator_tx_hash
+          id
+          status
+          updated_at
+          abi
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: address,
+        },
+        operationName: 'QueryAbiContract',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

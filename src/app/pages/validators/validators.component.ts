@@ -16,7 +16,7 @@ import {
   NUMBER_2_DIGIT,
   NUM_BLOCK,
   TIMEOUT_ERROR,
-  TIME_OUT_CALL_API,
+  TIME_OUT_CALL_API
 } from 'src/app/core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';

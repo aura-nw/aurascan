@@ -70,6 +70,7 @@ a {
 .navbar-header {
   padding-right: var(--bs-gutter-x, 6px) !important;
   padding-left: var(--bs-gutter-x, 6px) !important;
+
   @media (min-width: 992px) {
     padding-right: var(--bs-gutter-x, 30px) !important;
     padding-left: var(--bs-gutter-x, 30px) !important;
@@ -99,4 +100,12 @@ app-paginator {
 
 .mat-button-focus-overlay {
   background-color: transparent !important;
+}
+
+// .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled='true']):hover {
+//   background: unset !important;
+// }
+
+.card-explain mat-expansion-panel .mat-expansion-panel-body {
+  padding: 0;
 }

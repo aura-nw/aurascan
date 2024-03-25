@@ -51,6 +51,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
   dataSourceMobile = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   isLoading = true;
   errTxt: string;
 
@@ -113,9 +114,6 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
             this.countFav = 1;
           }
         }
-        res.data?.forEach((element) => {
-          element['type'] = this.commonService.isValidContract(element.address) ? 'contract' : 'account';
-        });
         this.dataSource.data = res.data;
         this.pageData.length = res?.meta?.count || 0;
 
@@ -224,8 +222,12 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
     this.getListPrivateName();
   }
 
-  urlType(address) {
-    return this.commonService.isValidContract(address) ? '/contracts' : '/account';
+  urlType(data) {
+    let result = '/account';
+    if (data.type === 'contract') {
+      result = data.address?.startsWith(this.prefixAdd) ? '/contracts' : '/evm-contracts';
+    }
+    return result;
   }
 
   async storeListNameTag() {

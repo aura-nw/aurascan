@@ -1,0 +1,44 @@
+<section class="card main-tab px-4 py-4 py-lg-6 px-lg-6">
+  <div class="d-flex justify-content-between tab-wrapper tab-contract">
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="activeId"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a ngbNavLink (click)="changeTab(tab.key)">
+            <span class="tab-title h5 mb-0">{{ tab.value }}</span>
+            <img
+              class="ml-2"
+              *ngIf="tab.key === contractTab.Contract && contractTypeData === 'SUCCESS'"
+              [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
+              alt="contract_verification"
+              width="16px"
+              height="16px" />
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <div class="mt-5" [class.d-none]="currentTab !== contractTab.Transactions">
+    <app-loading-sprint *ngIf="loadingContract"></app-loading-sprint>
+
+    <app-table-no-data *ngIf="!loadingContract && (contractTransaction.count == 0 || errTxt)" [textNull]="errTxt">
+    </app-table-no-data>
+
+    <app-contract-table
+      [length]="limit"
+      *ngIf="!loadingContract && contractTransaction.count > 0 && !errTxt"
+      [dataList]="contractTransaction"
+      [templates]="templates"
+      [contractInfo]="contractInfo"
+      (onViewSelected)="filterTransaction($event)">
+    </app-contract-table>
+  </div>
+
+  <div class="mt-5" [class.d-none]="currentTab === contractTab.Transactions">
+    <app-evm-contract [contractTypeData]="contractTypeData || 'UNVERIFIED'" [contractsAddress]="contractsAddress">
+    </app-evm-contract>
+  </div>
+</section>

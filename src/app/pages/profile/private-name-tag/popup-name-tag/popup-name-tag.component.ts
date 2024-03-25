@@ -10,6 +10,8 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { isValidBench32Address } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -25,10 +27,10 @@ export class PopupNameTagComponent implements OnInit {
   maxLengthNameTag = MAX_LENGTH_NAME_TAG;
   maxLengthNote = 200;
   publicNameTag = '-';
-  isValidAddress = true;
   isError = false;
   isEditMode = false;
   idEdit = null;
+  eWalletType = EWalletType;
 
   nameTagType = {
     Account: 'account',
@@ -78,14 +80,12 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   setDataFrom(data) {
-    this.isValidAddress = true;
     if (data.nameTag || data.name_tag_private) {
       this.isEditMode = true;
       this.idEdit = this.data.id || data.id;
     }
 
-    const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
-
+    const isAccount = data.type === 'account' || this.commonService.isValidAddress(data.address);
     this.privateNameForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
     this.isContract = !this.isAccount;
@@ -100,24 +100,12 @@ export class PopupNameTagComponent implements OnInit {
     this.dialogRef.close(status);
   }
 
-  checkFormValid() {
-    this.getAddress['value'] = this.getAddress?.value.trim();
-
-    if (this.commonService.isBech32Address(this.getAddress?.value)) {
-      this.isValidAddress =
-        (this.commonService.isValidAddress(this.getAddress.value) && this.isAccount) ||
-        (this.commonService.isValidContract(this.getAddress.value) && this.isContract);
-    } else {
-      this.isValidAddress = false;
-    }
-  }
-
   onSubmit() {
     this.isSubmit = true;
     const { isFavorite, address, name, note } = this.privateNameForm.value;
     let payload = {
       isFavorite: isFavorite == 1,
-      type: this.commonService.isValidAddress(address) ? 'account' : 'contract',
+      type: this.isAccount ? 'account' : 'contract',
       address: address,
       nameTag: name,
       note: note,
@@ -181,10 +169,8 @@ export class PopupNameTagComponent implements OnInit {
   changeType(type) {
     this.isAccount = type;
     this.isContract = !this.isAccount;
-    this.isValidAddress = false;
     this.isError = false;
     this.privateNameForm.value.isAccount = type;
-    this.checkFormValid();
   }
 
   checkValidNameTag(event) {

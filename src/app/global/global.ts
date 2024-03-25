@@ -14,6 +14,7 @@ import { CommonDataDto } from '../core/models/common.model';
 import { convertTxNative, getTypeTx } from '../core/utils/common/info-common';
 import { balanceOf } from '../core/utils/common/parsing';
 import local from '../core/utils/storage/local';
+import BigNumber from 'bignumber.js';
 
 Injectable();
 
@@ -177,9 +178,12 @@ export function convertDataTransaction(data, coinInfo) {
       });
     }
 
-    const fee = balanceOf(
-      _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
-    ).toFixed(coinInfo.coinDecimals);
+    const fee = BigNumber(
+      balanceOf(
+        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
+        coinInfo.coinDecimals,
+      ),
+    ).toFixed();
 
     const typeOrigin = _type;
     let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
@@ -281,7 +285,13 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    const fee = balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals);
+    const fee = BigNumber(
+      balanceOf(
+        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
+        coinInfo.coinDecimals,
+      ),
+    ).toFixed();
+    
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
     let limit = 5;
@@ -292,10 +302,12 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     let contractAddress;
     let action;
     let eventAttr;
+    let evmTx;
 
     switch (modeQuery) {
       case TabsAccountLink.ExecutedTxs:
         type = getTypeTx(element)?.type;
+        evmTx = _.get(element, 'evm_transaction.hash');
         break;
       case TabsAccountLink.NativeTxs:
         let arrTemp = [];
@@ -390,6 +402,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       action,
       eventAttr,
       lstTypeTemp,
+      evmTx,
     };
   });
   return txs;
@@ -401,6 +414,7 @@ export function convertDataTransactionSimple(data, coinInfo) {
     const tx_hash = _.get(element, 'hash');
     const txMessages = _.get(element, 'transaction_messages');
     const txBodyMsgType = _.get(element, 'data[0][@type]');
+    const hash = _.get(element, 'evm_transaction.hash');
 
     let type = '';
     if (txMessages?.length > 0) {
@@ -425,7 +439,13 @@ export function convertDataTransactionSimple(data, coinInfo) {
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    const fee = balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals);
+    const fee = BigNumber(
+      balanceOf(
+        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
+        coinInfo.coinDecimals,
+      ),
+    ).toFixed();
+
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
     let tx = _.get(element, 'data.tx_response');
@@ -442,6 +462,7 @@ export function convertDataTransactionSimple(data, coinInfo) {
       height,
       timestamp,
       tx,
+      hash,
       lstType: txMessages,
     };
   });
@@ -470,7 +491,7 @@ export function convertTxIBC(data, coinInfo) {
       status,
       from_address: _.get(data, 'sender'),
       to_address: _.get(data, 'receiver'),
-      fee: balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals),
+      fee: BigNumber(balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals)).toFixed(),
       height: _.get(element, 'height'),
       timestamp: _.get(element, 'timestamp'),
       amount,

@@ -35,7 +35,7 @@ export class LinkDenomDirective {
     this.appLinkDenom = this.appLinkDenom || this.coinInfo.coinMinimalDenom;
     // check link of denom
     const linkToken = this.appLinkDenom.replace('ibc/', '');
-    this.linkItem = `/tokens/token/${linkToken}`;
+    this.linkItem = `/token/${linkToken}`;
 
     //create parent a with link
     const element: HTMLElement = this.elRef.nativeElement;

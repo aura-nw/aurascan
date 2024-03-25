@@ -12,6 +12,7 @@
       <span class="text-nowrap">Clear all</span>
     </button>
     <button
+      *ngIf="commonService.isValidAddress(address)"
       (click)="displayFilter = !displayFilter"
       class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4"
       type="button">
@@ -300,6 +301,7 @@
   </div>
   <div class="d-none d-lg-block">
     <button
+      *ngIf="commonService.isValidAddress(address)"
       (click)="displayFilter = !displayFilter"
       class="button button-pill button--sm button-outline button-outline__in-card button-filter"
       type="button">
@@ -336,11 +338,7 @@
 <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
   <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
     <div class="table-responsive" *ngIf="!breakpoint.value.matches">
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        class="aura-table account-transaction-table"
-        [ngClass]="modeQuery !== tabsData.ExecutedTxs ? 'table-transfer' : ''">
+      <table mat-table [dataSource]="dataSource" class="aura-table account-transaction-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
@@ -360,7 +358,7 @@
                   <a
                     *ngSwitchCase="'tx_hash'"
                     class="text--primary cursor-pointer hash-link"
-                    [routerLink]="['/transaction', data['tx_hash']]"
+                    [routerLink]="['/transaction', data[template.matColumnDef]]"
                     [copyBtn]="data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                   </a>
@@ -403,8 +401,20 @@
                     </div>
                   </div>
                   <div *ngSwitchCase="'fee'">
-                    {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                    <span appLinkDenom>{{ denom }}</span>
+                    <ng-container *ngIf="+data[template.matColumnDef] > 0">
+                      <span
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                        *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
+                        {{ '<0.001' }}
+                      </span>
+                      <span
+                        *ngIf="data[template.matColumnDef] | balance: 0 | gte: 0.001"
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                        [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
+                        [appBigNumber]="data[template.matColumnDef]"
+                        [decimal]="decimal"></span>
+                      <span class="ml-1" appLinkDenom>{{ denom }}</span>
+                    </ng-container>
                   </div>
                   <div *ngSwitchCase="'amount'">
                     <ng-container *ngFor="let item of data.arrEvent; let index = index">
@@ -436,7 +446,7 @@
                             </div>
                             <a
                               class=""
-                              [routerLink]="['/tokens/token', item.contractAddress]"
+                              [routerLink]="['/token', item.contractAddress]"
                               *ngIf="modeQuery === tabsData.FtsTxs">
                               {{ item.denom | ellipsis: 19 }}
                             </a>
@@ -535,6 +545,58 @@
                       </div>
                     </ng-container>
                   </div>
+                  <div
+                    *ngSwitchCase="
+                      template.matColumnDef === 'from' || template.matColumnDef === 'to' ? template.matColumnDef : ''
+                    ">
+                    <app-name-tag
+                      *ngIf="data[template.matColumnDef]"
+                      [value]="data[template.matColumnDef]"
+                      [linkRouter]="[
+                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                        data[template.matColumnDef]
+                      ]"
+                      [iconContract]="data[template.matColumnDef] | isContract"
+                      [isEnableRouter]="
+                        !data[template.matColumnDef]?.startsWith('Null') &&
+                        data[template.matColumnDef] !== currentAddress
+                      ">
+                    </app-name-tag>
+                    <span *ngIf="!data[template.matColumnDef]">-</span>
+                  </div>
+                  <div *ngSwitchCase="'method'">
+                    {{ data.method | ellipsis: 10 : null : true }}
+                  </div>
+                  <div *ngSwitchCase="'evmAmount'">
+                    <span
+                      *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001"
+                      [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }">
+                      {{ (data[template.matColumnDef] | balance: decimal) == 0 ? 0 : '<0.001' }}
+                    </span>
+                    <span
+                      [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }"
+                      [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
+                      *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
+                      [appBigNumber]="data[template.matColumnDef]"
+                      [decimal]="decimal"></span>
+                    <span appLinkDenom> {{ denom }}</span>
+                  </div>
+                  <div *ngSwitchCase="'evmTx'">
+                    <a
+                      [routerLink]="['/transaction', data[template.matColumnDef]]"
+                      [copyBtn]="data[template.matColumnDef]"
+                      class="ml-2 p-0 button button--ssm d-inline-flex">
+                      {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                    </a>
+                  </div>
+                  <div *ngSwitchCase="'hash'">
+                    <a
+                      [routerLink]="['/transaction', data[template.matColumnDef]]"
+                      target="_blank"
+                      class="ml-2 p-0 button button--ssm button-ghost d-inline-flex">
+                      <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
+                    </a>
+                  </div>
                   <div *ngSwitchCase="'nft'">
                     <ng-container *ngFor="let item of data.arrEvent; let index = index">
                       <div
@@ -545,7 +607,7 @@
                           <div class="justify-content-between tokenId">
                             <a
                               *ngIf="item.tokenId"
-                              [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
+                              [routerLink]="['/token/nft', data.contractAddress, encodeData(item.tokenId)]"
                               [copyBtn]="item.tokenId"
                               class="text--primary cursor-pointer">
                               #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
@@ -581,40 +643,55 @@
       </table>
     </div>
     <div *ngIf="breakpoint.value.matches">
-      <app-card-mob-account
-        *ngFor="let data of dataSourceMobile; first as isFirst"
-        [link]="'/transaction/' + data.tx_hash"
-        [dataCard]="data"
-        [modeQuery]="modeQuery"
-        [currentAddress]="currentAddress"
-        [currentType]="currentType"
-        [expand]="isFirst"
-        [title]="{
-          size: 'md',
-          titleClass: 'body-02-mob',
-          label: data.tx_hash | ellipsis: 8 : 8,
-          subLabelContent: data.type,
-          subLabelClass: 'btn-mob',
-          status: data.code
-        }"
-        [content]="[
-          {
-            label: 'Height',
-            class: 'text--gray-1 body-02-mob fw-semibold',
-            info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
-          },
-          {
-            label: 'Fee',
-            class: 'text--gray-1 body-02-mob',
-            info:
-              (+data.fee | mask: 'separator.6') +
-              ' <a class=text--primary href=' +
-              ('/tokens/token/' + coinInfo.coinMinimalDenom) +
-              '>' +
-              denom +
-              '</a>'
-          }
-        ]"></app-card-mob-account>
+      <ng-container *ngIf="modeQuery != tabsData.EVMExecutedTxs">
+        <app-card-mob-account
+          *ngFor="let data of dataSourceMobile; first as isFirst"
+          [link]="'/transaction/' + data.tx_hash"
+          [dataCard]="data"
+          [modeQuery]="modeQuery"
+          [currentAddress]="currentAddress"
+          [currentType]="currentType"
+          [expand]="isFirst"
+          [title]="{
+            size: 'md',
+            titleClass: 'body-02-mob',
+            label: data.tx_hash || data.evm_hash | ellipsis: 8 : 8,
+            subLabelContent: data.type,
+            subLabelClass: 'btn-mob',
+            status: data.code
+          }"
+          [content]="[
+            {
+              label: 'Fee',
+              class: 'text--gray-1 body-02-mob',
+              info:
+                (data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0)) +
+                ' <a class=text--primary href=' +
+                ('/token/' + coinInfo.coinMinimalDenom) +
+                '>' +
+                denom +
+                '</a>'
+            },
+            {
+              label: 'Height',
+              class: 'text--gray-1 body-02-mob',
+              info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+            },
+            {
+              label: 'EVM Transaction',
+              class: 'text--gray-1 body-02-mob',
+              info:
+                '<a class=text--primary href=' +
+                ('/transaction/' + data.tx_hash) +
+                '>' +
+                (data.tx_hash | ellipsis: 8 : 8) +
+                '</a>'
+            }
+          ]"></app-card-mob-account>
+      </ng-container>
+      <ng-container *ngIf="modeQuery == tabsData.EVMExecutedTxs">
+        <app-card-mob-executed-evm [dataSource]="dataSourceMobile"></app-card-mob-executed-evm>
+      </ng-container>
     </div>
     <app-paginator
       [length]="pageData.length"

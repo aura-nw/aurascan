@@ -3,7 +3,6 @@ import { MEDIA_TYPE, STORAGE_KEYS } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import { ESigningType, WALLET_PROVIDER } from '../../constants/wallet.constant';
-import { WalletStorage } from '../../models/wallet';
 import local from '../storage/local';
 import BigNumber from 'bignumber.js';
 import { getBalance } from './parsing';
@@ -116,12 +115,6 @@ export function convertTxNative(value: string, decimal = 6) {
   }
   result['denom'] = result['denom'] || display;
   return result;
-}
-
-export function getLastProvider() {
-  const lastProvider = local.getItem<WalletStorage>(STORAGE_KEYS.LAST_USED_PROVIDER);
-
-  return lastProvider.provider ? lastProvider.provider : WALLET_PROVIDER.KEPLR;
 }
 
 export function getSigningType(provider: WALLET_PROVIDER) {

@@ -35,3 +35,7 @@ export enum EModeToken {
   IBCCoin = 'IBC Token',
   CWToken = 'CW20 Token',
 }
+
+export enum EModeEvmToken {
+  ERCToken = 'ERC20 Token',
+}

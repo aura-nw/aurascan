@@ -9,6 +9,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
@@ -54,6 +55,11 @@ export class TokenTableComponent implements OnChanges {
       value: COIN_TOKEN_TYPE.CW20,
       quantity: 0,
     },
+    {
+      label: ETokenCoinType.ERC20,
+      value: COIN_TOKEN_TYPE.ERC20,
+      quantity: 0,
+    },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -72,6 +78,7 @@ export class TokenTableComponent implements OnChanges {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinMiniDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  chainInfo = this.environmentService.chainInfo;
   image_s3 = this.environmentService.imageUrl;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
 
@@ -90,7 +97,7 @@ export class TokenTableComponent implements OnChanges {
 
   getListToken() {
     const payload = {
-      account_address: this.address,
+      account_address: convertEvmAddressToBech32Address(this.chainInfo.bech32Config.bech32PrefixAccAddr, this.address),
       keyword: this.textSearch,
     };
     if (this.dataTable?.length > 0) {
@@ -184,7 +191,7 @@ export class TokenTableComponent implements OnChanges {
             if (e.error?.error?.statusCode) {
               this.errTxt = e.error?.error?.statusCode + ' ' + e.error?.error?.message;
             } else {
-              this.errTxt = e.error?.message;
+              this.errTxt = e.error?.message || e.message;
             }
           }
           this.assetsLoading = false;

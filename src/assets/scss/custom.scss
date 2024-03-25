@@ -446,3 +446,16 @@ input:-webkit-autofill:active {
   font-weight: 600;
   color: var(--aura-gray-11);
 }
+
+.expandable-button {
+  font-weight: 600;
+  cursor: pointer;
+  display: inline;
+  color: var(--aura-primary);
+  margin-left: 2px;
+
+  &.expanded {
+    display: block;
+    margin-left: 0;
+  }
+}

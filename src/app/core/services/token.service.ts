@@ -574,4 +574,37 @@ export class TokenService extends CommonService {
   getTokenDetail(denom): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/assets/${denom}`);
   }
+
+  getEvmTokenDetail(payload: { address?: string }): Observable<any> {
+    const operationsDoc = `
+    query getEvmTokenDetail($address: String = null) {
+      ${this.envDB} {
+        erc20_contract(limit: 1, where: {address: {_eq: $address}}) {
+          id
+          decimal
+          address
+          evm_smart_contract_id
+          last_updated_height
+          name
+          symbol
+          total_supply
+          evm_smart_contract {
+            evm_contract_verifications {
+              status
+            }
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: payload.address,
+        },
+        operationName: 'getEvmTokenDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
 }
