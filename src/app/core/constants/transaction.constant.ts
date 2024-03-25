@@ -1,4 +1,5 @@
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from './transaction.enum';
+import { id as keccak256Str } from 'ethers';
 
 export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.IBCTransfer, value: TypeTransaction.IBCTransfer },
@@ -56,4 +57,19 @@ export const TYPE_MULTI_VER = [
   TRANSACTION_TYPE_ENUM.Vote,
   TRANSACTION_TYPE_ENUM.Deposit,
   TRANSACTION_TYPE_ENUM.SubmitProposalTx,
+];
+
+export const ABI_CHECK_INTERFACE = [
+  'safeTransferFrom(address,address,uint256)',
+  'transferFrom(address,address,uint256)',
+  'approve(address,uint256)',
+  'setApprovalForAll(address,bool)',
+  'isApprovedForAll(address,address)',
+  'safeTransferFrom(address,address,uint256,bytes)',
+  'transfer(address,uint256)',
+  'approve(address,uint256)',
+  'transferFrom(address,address,uint256)',
+  'safeTransferFrom(address,address,uint256,uint256,bytes)',
+  'safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)',
+  'setApprovalForAll(address,bool)',
 ];

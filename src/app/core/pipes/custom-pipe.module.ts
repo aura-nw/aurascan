@@ -12,6 +12,7 @@ import { NameTagTooltipPipe } from './tooltip.pipe';
 import { IsContractPipe } from './address.pipe';
 import { ObjectKeysPipe } from './object-keys.pipe';
 import { CapacityPipe } from './capacity.pipe';
+import { ConvertEvmTxPipe } from './evm.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -38,6 +39,7 @@ import { CapacityPipe } from './capacity.pipe';
     IsContractPipe,
     ObjectKeysPipe,
     CapacityPipe,
+    ConvertEvmTxPipe
   ],
   exports: [
     JsonPipe,
@@ -62,6 +64,7 @@ import { CapacityPipe } from './capacity.pipe';
     IsContractPipe,
     ObjectKeysPipe,
     CapacityPipe,
+    ConvertEvmTxPipe
   ],
   providers: [],
 })

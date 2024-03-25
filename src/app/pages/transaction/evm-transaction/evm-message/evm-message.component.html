@@ -3,10 +3,7 @@
     <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4">
       {{ 'Method' }}
     </div>
-
-    <div class="col-12 col-lg-10">
-      {{ isContractVerified ? method : (method | ellipsis: 10 : null : true) }}
-    </div>
+    <div class="col-12 col-lg-10">{{ method | convertEvmTx }}</div>
   </div>
 
   <div class="d-flex flex-wrap mb-3" *ngIf="transaction?.inputData">
