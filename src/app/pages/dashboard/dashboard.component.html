@@ -5,7 +5,7 @@
         <ngb-carousel [showNavigationArrows]="bannerList.length > 1" [showNavigationIndicators]="bannerList.length > 1">
           <ng-template ngbSlide *ngFor="let item of bannerList">
             <a class="picsum-img-wrapper" target="_blank" [href]="item.url">
-              <img [src]="item.src" alt="Random first slide" class="carousel__img"/>
+              <img [src]="item.src" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -24,7 +24,7 @@
                 <div class="d-flex flex-column px-lg-4 flex-shrink-0 flex-grow-1">
                   <div class="d-flex flex-column align-items-start flex-shrink-0 flex-grow-1">
                     <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
-                      <img [appImg]="chainLogo" alt="chain-logo" height="36"/>
+                      <img [appImg]="chainLogo" alt="chain-logo" height="36" />
                       <div class="h1 h2-mob mb-0 ml-4 text--white fw-700 fw-semibold-mob">
                         {{ nativeName | uppercase }}
                       </div>
@@ -48,12 +48,12 @@
                             class="ml-1 body
                       {{ tokenInfo.priceChangePercentage24h > 0 ? 'text--green-3' : 'text--red-3' }}">
                             {{
-                            tokenInfo.priceChangePercentage24h
-                              ? '(' +
-                              (tokenInfo.priceChangePercentage24h > 0 ? '+' : '') +
-                              (tokenInfo.priceChangePercentage24h | number: '1.2-2') +
-                              '%)'
-                              : ''
+                              tokenInfo.priceChangePercentage24h
+                                ? '(' +
+                                  (tokenInfo.priceChangePercentage24h > 0 ? '+' : '') +
+                                  (tokenInfo.priceChangePercentage24h | number: '1.2-2') +
+                                  '%)'
+                                : ''
                             }}
                           </span>
                         </div>
@@ -187,7 +187,7 @@
                 alt=""
                 class="icon-brand"
                 width="32px"
-                height="32px"/>
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Bonded Token</div>
               </div>
@@ -210,7 +210,7 @@
                 alt=""
                 class="icon-brand"
                 width="32px"
-                height="32px"/>
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Inflation rate</div>
               </div>
@@ -227,7 +227,7 @@
                 alt=""
                 class="icon-brand"
                 width="32px"
-                height="32px"/>
+                height="32px" />
               <div class="ml-4">
                 <div class="body text--gray-1">Staking APR</div>
               </div>
@@ -245,7 +245,7 @@
         <ngb-carousel [showNavigationArrows]="bannerList.length > 1" [showNavigationIndicators]="bannerList.length > 1">
           <ng-template ngbSlide *ngFor="let item of bannerList">
             <a class="picsum-img-wrapper" target="_blank" [href]="item.url">
-              <img [src]="item.src" alt="Random first slide" class="carousel__img"/>
+              <img [src]="item.src" alt="Random first slide" class="carousel__img" />
             </a>
           </ng-template>
         </ngb-carousel>
@@ -269,7 +269,7 @@
                     aria-expanded="false">
                     <span class="body text-start line-claim">{{
                       curr_voting_Period ? curr_voting_Period.title : voting_Period_arr[0].title
-                      }}</span>
+                    }}</span>
                   </button>
                   <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light py-2 px-2">
                     <ng-container *ngFor="let item of voting_Period_arr">
@@ -332,7 +332,7 @@
           <div
             class="d-flex flex-column align-items-center justify-content-center h-100"
             *ngIf="voting_Period_arr.length === 0 && !errTxtVoting && !isLoadingVoting">
-            <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt=""/>
+            <img [src]="'assets/images/icons/empty_state_illus.svg' | imageS3" alt="" />
             <div class="text--gray-3">No proposal within the voting period</div>
           </div>
           <app-table-no-data

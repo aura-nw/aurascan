@@ -36,9 +36,9 @@
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               name="search"
-              autocomplete="off"/>
+              autocomplete="off" />
             <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
@@ -46,7 +46,7 @@
                 !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetFilterSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -100,9 +100,9 @@
                         <div *ngSwitchCase="'expiration'">
                           <span class="{{ data['reason'] === 'Expired' && isActive ? 'text--red-3' : '' }}">
                             {{
-                            data[template.matColumnDef]
-                              ? (data[template.matColumnDef] | customDateTime: 'DateOnly')
-                              : '-'
+                              data[template.matColumnDef]
+                                ? (data[template.matColumnDef] | customDateTime: 'DateOnly')
+                                : '-'
                             }}
                           </span>
                         </div>

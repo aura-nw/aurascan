@@ -1,6 +1,6 @@
-import {AfterViewInit, Directive, ElementRef, Input} from '@angular/core';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
-import {Router} from '@angular/router';
+import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { Router } from '@angular/router';
 
 @Directive({
   selector: '[activeMenuItem]',

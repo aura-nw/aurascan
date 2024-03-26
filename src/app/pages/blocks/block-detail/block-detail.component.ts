@@ -1,17 +1,17 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Component, OnInit} from '@angular/core';
-import {PageEvent} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {catchError, map, merge, of, switchMap} from 'rxjs';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TransactionService} from 'src/app/core/services/transaction.service';
-import {PAGE_EVENT, TIMEOUT_ERROR} from '../../../../app/core/constants/common.constant';
-import {TableTemplate} from '../../../../app/core/models/common.model';
-import {BlockService} from '../../../../app/core/services/block.service';
-import {CommonService} from '../../../../app/core/services/common.service';
-import {convertDataBlock, convertDataTransactionSimple} from '../../../../app/global/global';
+import { catchError, map, merge, of, switchMap } from 'rxjs';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
+import { TableTemplate } from '../../../../app/core/models/common.model';
+import { BlockService } from '../../../../app/core/services/block.service';
+import { CommonService } from '../../../../app/core/services/common.service';
+import { convertDataBlock, convertDataTransactionSimple } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -41,24 +41,24 @@ export class BlockDetailComponent implements OnInit {
   ];
 
   cosmosTemplates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash'},
-    {matColumnDef: 'type', headerCellDef: 'Message'},
-    {matColumnDef: 'status', headerCellDef: 'Result'},
-    {matColumnDef: 'fee', headerCellDef: 'Fee'},
-    {matColumnDef: 'height', headerCellDef: 'Height'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
-    {matColumnDef: 'hash', headerCellDef: 'EVM Transaction'},
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'type', headerCellDef: 'Message' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'fee', headerCellDef: 'Fee' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'hash', headerCellDef: 'EVM Transaction' },
   ];
 
   evmTemplates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn Hash'},
-    {matColumnDef: 'method', headerCellDef: 'Method'},
-    {matColumnDef: 'height', headerCellDef: 'Height'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
-    {matColumnDef: 'from', headerCellDef: 'From'},
-    {matColumnDef: 'to', headerCellDef: 'To'},
-    {matColumnDef: 'amount', headerCellDef: 'Amount'},
-    {matColumnDef: 'hash', headerCellDef: 'Cosmos Txn'},
+    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn Hash' },
+    { matColumnDef: 'method', headerCellDef: 'Method' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'from', headerCellDef: 'From' },
+    { matColumnDef: 'to', headerCellDef: 'To' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'hash', headerCellDef: 'Cosmos Txn' },
   ];
   displayedCosmosCol: string[] = this.cosmosTemplates.map((dta) => dta.matColumnDef);
   displayedEvmCol: string[] = this.evmTemplates.map((dta) => dta.matColumnDef);
@@ -86,8 +86,7 @@ export class BlockDetailComponent implements OnInit {
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private transactionService: TransactionService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.blockHeight = this.route.snapshot.paramMap.get('height');
@@ -138,8 +137,7 @@ export class BlockDetailComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: () => {
-        },
+        next: () => {},
         error: (e) => {
           if (e.message === this.NOT_FOUND) {
             setTimeout(() => {
@@ -156,8 +154,7 @@ export class BlockDetailComponent implements OnInit {
             this.loading = false;
           }
         },
-        complete: () => {
-        },
+        complete: () => {},
       });
   }
 
@@ -257,7 +254,6 @@ export class BlockDetailComponent implements OnInit {
     if (txs.length > 0) {
       this.dataSourceEvm.data = txs.map((tx) => {
         const type = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
-        ;
         return {
           ...tx,
           tx_hash: _.get(tx, 'evm_transaction.hash'),
