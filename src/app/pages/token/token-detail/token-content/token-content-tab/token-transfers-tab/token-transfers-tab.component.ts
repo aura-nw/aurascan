@@ -276,8 +276,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getListTransactionTokenIBC(nextKey = null) {
-    if (!this.tokenDetail?.channelPath) {
-    }
     const denomFilter = this.tokenDetail?.channelPath?.path + '/' + this.tokenDetail?.channelPath?.base_denom;
     let payload = {
       limit: this.pageData.pageSize,
