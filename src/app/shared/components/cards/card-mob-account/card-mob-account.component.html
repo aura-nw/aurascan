@@ -74,6 +74,10 @@
                 <app-name-tag
                   [value]="item['address']"
                   [isEnableRouter]="!item['address']?.startsWith('Null')"
+                  [linkRouter]="[
+                    (item['address'] || item['toAddress'] | isContract) ? '/contracts' : '/account',
+                    item['address'] || item['toAddress']
+                  ]"
                   [maxCharacter]="10"></app-name-tag>
               </ng-container>
               <div [copyBtn]="item['address']" [btnClass]="['pl-2']" *ngIf="item['address'] | nameTagTooltipPipe">

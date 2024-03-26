@@ -264,10 +264,11 @@ export class TokenHoldersTabComponent implements OnInit {
 
           return this.tokenService.getListAmountNative(addressList).pipe(
             map((res) => {
-              accountBalance?.forEach((item, index) => {
-                item.amount = item.balance = _.get(res.data[index], 'amount');
-                item.owner = item.account?.address;
-                item.percent_hold = BigNumber(item.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
+              accountBalance?.forEach((item) => {
+                const element = res?.data?.find((k) => k.address === item?.account?.address);
+                item.amount = item.balance = _.get(element, 'amount');
+                item.owner = element?.address;
+                item.percent_hold = BigNumber(element.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
                 item.value =
                   BigNumber(item.amount)
                     .multipliedBy(this.tokenDetail?.price || 0)
