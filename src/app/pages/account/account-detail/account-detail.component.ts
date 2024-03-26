@@ -13,9 +13,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import {
-  convertBech32AddressToEvmAddress,
-  convertEvmAddressToBech32Address,
-  transferAddress,
+  transferAddress
 } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';

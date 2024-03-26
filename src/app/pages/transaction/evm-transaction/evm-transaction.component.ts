@@ -32,8 +32,8 @@ export class EvmTransactionComponent implements OnChanges {
     fee: string;
     memo: string;
     type: string;
+    contractAddress?: string;
     inputData: { [key: string]: string };
-    evm_data: string;
     eventLog: {
       id: number;
       contractName?: string;
@@ -162,12 +162,12 @@ export class EvmTransactionComponent implements OnChanges {
       memo: _.get(tx, 'memo'),
       amount: getBalance(_.get(tx, 'evm_transaction.value'), this.coinInfo.coinDecimals),
       fee: getBalance(_.get(tx, 'fee[0].amount'), this.coinInfo.coinDecimals),
-      from: _.get(txMessage, 'sender'),
+      from: _.get(tx, 'evm_transaction.from'),
       to: _.get(txMessage, 'content.data.to'),
       type: _.get(txMessage, 'content.@type'),
       inputData: _.get(tx, 'evm_transaction.data'),
       eventLog: evm_events,
-      evm_data: _.get(tx, 'evm_transaction.data'),
+      contractAddress: _.get(tx, 'evm_transaction.contract_address'),
     };
   }
 }
