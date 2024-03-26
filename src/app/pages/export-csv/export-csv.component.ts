@@ -137,7 +137,6 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   }
 
   downloadCSV(responseCaptcha) {
-    console.log(this.dataType);
     //return if downloading
     if (this.isDownload) {
       return;
@@ -284,16 +283,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   checkFormValid(): boolean {
     this.getAddress.setValue(this.getAddress?.value?.trim());
     const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
-
     this.isValidBlock = true;
-
-    // if (this.commonService.isBech32Address(address) || address.startsWith(this.evmPrefix.EVM)) {
-    //   this.isValidAddress = true;
-    // } else {
-    //   this.isValidAddress = false;
-    //   return false;
-    // }
-
     //check null/invalid block
     if (!this.isFilterDate) {
       if (!fromBlock || !toBlock) {
