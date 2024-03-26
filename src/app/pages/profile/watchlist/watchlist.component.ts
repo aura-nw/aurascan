@@ -21,6 +21,11 @@ import { PopupCommonComponent } from 'src/app/shared/components/popup-common/pop
 import { PopupWatchlistComponent } from './popup-watchlist/popup-watchlist.component';
 import local from 'src/app/core/utils/storage/local';
 import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import {
+  convertBech32AddressToEvmAddress,
+  convertEvmAddressToBech32Address,
+} from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-watchlist',
@@ -31,14 +36,15 @@ export class WatchListComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 8 },
-    { matColumnDef: 'address', headerCellDef: 'Address', headerWidth: 12 },
-    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 6 },
-    { matColumnDef: 'public_name_tag', headerCellDef: 'Public Name Tag', headerWidth: 12 },
-    { matColumnDef: 'private_name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12 },
-    { matColumnDef: 'group', headerCellDef: 'Group Tracking', headerWidth: 10 },
-    { matColumnDef: 'updated_at', headerCellDef: 'Updated Time', headerWidth: 10 },
-    { matColumnDef: 'action', headerCellDef: '', headerWidth: 8 },
+    { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 65 },
+    { matColumnDef: 'cosmosAddress', headerCellDef: 'Cosmos Add', headerWidth: 120 },
+    { matColumnDef: 'evmAddress', headerCellDef: 'EVM Add', headerWidth: 120 },
+    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 80 },
+    { matColumnDef: 'public_name_tag', headerCellDef: 'Public Name Tag', headerWidth: 150 },
+    { matColumnDef: 'private_name_tag', headerCellDef: 'Private Name Tag', headerWidth: 150 },
+    { matColumnDef: 'group', headerCellDef: 'Group Tracking', headerWidth: 140 },
+    { matColumnDef: 'updated_at', headerCellDef: 'Updated Time', headerWidth: 120 },
+    { matColumnDef: 'action', headerCellDef: '', headerWidth: 100 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -59,6 +65,8 @@ export class WatchListComponent implements OnInit, OnDestroy {
   EScreen = EScreen;
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     public commonService: CommonService,
@@ -113,6 +121,24 @@ export class WatchListComponent implements OnInit, OnDestroy {
     this.watchListService.getListWatchList(payload).subscribe(
       (res) => {
         local.setItem(STORAGE_KEYS.LIST_WATCH_LIST, res?.data);
+        if (res.data.length > 0) {
+          res.data.forEach((data) => {
+            if (data.address.startsWith(EWalletType.EVM)) {
+              data.evmAddress = data.address;
+              data.cosmosAddress = convertEvmAddressToBech32Address(
+                this.chainInfo.bech32Config.bech32PrefixAccAddr,
+                data.address,
+              );
+            }
+            if (this.commonService.isBech32Address(data.address)) {
+              data.cosmosAddress = data.address;
+              data.evmAddress = convertBech32AddressToEvmAddress(
+                this.chainInfo.bech32Config.bech32PrefixAccAddr,
+                data.address,
+              );
+            }
+          });
+        }
         this.dataSource.data = res.data;
         this.pageData.length = res?.meta?.count || 0;
 
@@ -218,9 +244,11 @@ export class WatchListComponent implements OnInit, OnDestroy {
     this.getWatchlist();
   }
 
-  urlType(address) {
-    return isContract(address, this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr)
-      ? '/contracts'
-      : '/address';
+  urlType(data) {
+    let result = '/address';
+    if (data.type === 'contract') {
+      result = data.address?.startsWith(this.prefixAdd) ? '/contracts' : '/evm-contracts';
+    }
+    return result;
   }
 }

@@ -17,30 +17,6 @@
   }
 }
 
-.private-name-table {
-  th.mat-header-cell:nth-child(1) {
-    width: 80px;
-  }
-  th.mat-header-cell:nth-child(2) {
-    width: 210px;
-  }
-  th.mat-header-cell:nth-child(3) {
-    width: 90px;
-  }
-  th.mat-header-cell:nth-child(4) {
-    width: 270px;
-  }
-  th.mat-header-cell:nth-child(5) {
-    width: 140px;
-  }
-  th.mat-header-cell:nth-child(6) {
-    width: 160px;
-  }
-  th.mat-header-cell:nth-child(7) {
-    width: 100px;
-  }
-}
-
 .profile-private-name-tag {
   height: 24px;
   width: fit-content;
@@ -53,7 +29,6 @@
   align-items: center;
 }
 
-
 ::ng-deep {
   .txt-note {
     div {
@@ -61,6 +36,7 @@
       word-break: break-all;
       margin-bottom: 0;
     }
+
     &:before {
       top: 100% !important;
       transform: translate(-50%, 0) !important;
@@ -73,21 +49,26 @@
     }
   }
 }
+
 // Mobile card
 .card-name-tag {
   border: 1px solid var(--aura-gray-9);
   border-radius: 8px;
   padding: 12px;
+
   &:not(:last-child) {
     margin-bottom: var(--spacer-4);
   }
 }
+
 .card__title {
   max-width: calc(100% - 80px);
 }
+
 .label__content {
   min-width: 120px;
 }
+
 .action-mob {
   height: 44px;
 }

@@ -5,13 +5,13 @@ import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER, MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { isValidBench32Address } from 'src/app/core/utils/common/validation';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -38,6 +38,7 @@ export class PopupNameTagComponent implements OnInit {
   };
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
   chainName = this.environmentService.chainName.toLowerCase();
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -62,7 +63,7 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   get getAddress() {
-    return this.privateNameForm.get('address');
+    return this.privateNameForm.get('cosmosAddress');
   }
 
   get getFavorite() {
@@ -73,7 +74,9 @@ export class PopupNameTagComponent implements OnInit {
     this.privateNameForm = this.fb.group({
       isFavorite: [0],
       isAccount: [false, [Validators.required]],
-      address: ['', [Validators.required]],
+      address: [''],
+      cosmosAddress: ['', [Validators.required]],
+      evmAddress: ['', [Validators.required]],
       name: ['', [Validators.required, Validators.maxLength(this.maxLengthNameTag)]],
       note: ['', [Validators.maxLength(200)]],
     });
@@ -91,6 +94,8 @@ export class PopupNameTagComponent implements OnInit {
     this.isContract = !this.isAccount;
     this.privateNameForm.controls['isFavorite'].setValue(data.isFavorite || false);
     this.privateNameForm.controls['address'].setValue(data.address);
+    this.privateNameForm.controls['cosmosAddress'].setValue(data.cosmosAddress);
+    this.privateNameForm.controls['evmAddress'].setValue(data.evmAddress);
     this.privateNameForm.controls['name'].setValue(data.nameTag || data.name_tag_private);
     this.privateNameForm.controls['note'].setValue(data.note);
     this.checkPublicNameTag();
@@ -102,11 +107,12 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, address, name, note } = this.privateNameForm.value;
+    const { isFavorite, address, cosmosAddress, evmAddress, name, note } = this.privateNameForm.getRawValue();
     let payload = {
       isFavorite: isFavorite == 1,
       type: this.isAccount ? 'account' : 'contract',
-      address: address,
+      address: cosmosAddress,
+      evmAddress,
       nameTag: name,
       note: note,
       id: this.idEdit,
@@ -204,5 +210,35 @@ export class PopupNameTagComponent implements OnInit {
     this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
       this.setDataFrom(res?.data[0] || this.data);
     });
+  }
+
+  changeAddress(controlName: string) {
+    const address = this.privateNameForm.get(controlName).value;
+    if (address.length === 0) return;
+    if (!this.commonService.isValidContract(address)) {
+      const { accountAddress, accountEvmAddress } = transferAddress(
+        this.chainInfo.bech32Config.bech32PrefixAccAddr,
+        address,
+      );
+      this.privateNameForm.get('cosmosAddress').setValue(accountAddress);
+      this.privateNameForm.get('evmAddress').setValue(accountEvmAddress);
+
+      if (address.trim() == accountEvmAddress.trim()) {
+        this.privateNameForm.get('evmAddress').enable();
+      }
+    }
+    if (controlName === 'cosmosAddress' && address.length > 0) {
+      this.privateNameForm.get('evmAddress').disable();
+    } else {
+      this.privateNameForm.get('cosmosAddress').disable();
+    }
+    this.checkPublicNameTag();
+  }
+
+  resetAddress() {
+    this.privateNameForm.get('cosmosAddress').setValue('');
+    this.privateNameForm.get('evmAddress').setValue('');
+    this.privateNameForm.get('evmAddress').enable();
+    this.privateNameForm.get('cosmosAddress').enable();
   }
 }
