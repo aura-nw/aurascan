@@ -75,8 +75,8 @@
                   [value]="item['address']"
                   [isEnableRouter]="!item['address']?.startsWith('Null')"
                   [linkRouter]="[
-                    (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/account',
-                    item.fromAddress || currentAddress
+                    (item['address'] || item['toAddress'] | isContract) ? '/contracts' : '/account',
+                    item['address'] || item['toAddress']
                   ]"
                   [maxCharacter]="10"></app-name-tag>
               </ng-container>
