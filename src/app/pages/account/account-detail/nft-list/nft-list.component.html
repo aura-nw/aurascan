@@ -2,9 +2,7 @@
   <div class="card-body">
     <!-- Filter -->
     <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
-      <span class="mb-0 fw-semibold text--gray-light-2 mr-lg-6 h3">
-        NFTs <span *ngIf="listCollection[0]?.quantity">({{ listCollection[0]?.quantity || 0 }})</span>
-      </span>
+      <span class="mb-0 fw-semibold text--gray-light-2 mr-lg-6 h3">NFTs ({{ listCollection[0]?.quantity || 0 }})</span>
       <div class="d-flex flex-column flex-lg-row align-items-end justify-content-end gap-2">
         <ng-container *ngIf="!errTxt">
           <div class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100">
