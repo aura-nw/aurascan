@@ -1,9 +1,5 @@
 <div class="card card-watchlist">
-  <form
-    [formGroup]="watchlistForm"
-    (ngSubmit)="onSubmit()"
-    *ngIf="watchlistForm"
-    autocomplete="off">
+  <form [formGroup]="watchlistForm" (ngSubmit)="onSubmit()" *ngIf="watchlistForm" autocomplete="off">
     <div class="card-header card-header--no-radius">
       <div class="d-flex justify-content-between align-items-center">
         <div class="h2 h3-mob mb-0 text--white w-100 fw-700 fw-semibold-mob">
@@ -35,7 +31,7 @@
                     class="radio-box radio-box--dark"
                     [checked]="isAccount"
                     [disabled]="isEditMode"
-                    (change)="changeType(true)"/>
+                    (change)="changeType(true)" />
                   <label for="account" class="ml-2 mb-0 text-justify">Account</label>
                 </div>
                 <div class="form-group d-flex align-items-center ml-8">
@@ -46,7 +42,7 @@
                     class="radio-box radio-box--dark"
                     [checked]="isContract"
                     [disabled]="isEditMode"
-                    (change)="changeType(false)"/>
+                    (change)="changeType(false)" />
                   <label for="contract" class="ml-2 mb-0 text-justify">Contract</label>
                 </div>
               </div>
@@ -69,13 +65,12 @@
                   class="input-address px-4"
                   (blur)="changeAddress('address')"
                   (input)="isError = false"
-                  autocomplete="off"/>
+                  autocomplete="off" />
                 <button
                   class="button button-xxs p-0 mr-4"
                   *ngIf="
-                  this.watchlistForm.get('address').value.length > 0 &&
-                  this.watchlistForm.get('address').enabled
-                "
+                    this.watchlistForm.get('address').value.length > 0 && this.watchlistForm.get('address').enabled
+                  "
                   type="button"
                   (click)="resetAddress()">
                   <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
@@ -101,12 +96,13 @@
                   class="input-address px-4"
                   (input)="isError = false"
                   (blur)="changeAddress('evmAddress')"
-                  autocomplete="off"/>
+                  autocomplete="off" />
                 <button
                   class="button button-xxs p-0 mr-4"
                   *ngIf="
-                  this.watchlistForm.get('evmAddress').value.length > 0 && this.watchlistForm.get('evmAddress').enabled
-                "
+                    this.watchlistForm.get('evmAddress').value.length > 0 &&
+                    this.watchlistForm.get('evmAddress').enabled
+                  "
                   type="button"
                   (click)="resetAddress()">
                   <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
@@ -124,9 +120,9 @@
             <div
               class="col-auto"
               [ngClass]="publicNameTag?.length > 0 && publicNameTag != '-' ? 'box-name-tag ml-2' : ''">
-            <span class="line-claim w-100">
-              {{ publicNameTag }}
-            </span>
+              <span class="line-claim w-100">
+                {{ publicNameTag }}
+              </span>
             </div>
           </div>
 
@@ -138,9 +134,9 @@
             <div
               class="col-auto"
               [ngClass]="privateNameTag?.length > 0 && privateNameTag != '-' ? 'private-name-tag ml-2' : ''">
-            <span class="line-claim w-100">
-              {{ privateNameTag }}
-            </span>
+              <span class="line-claim w-100">
+                {{ privateNameTag }}
+              </span>
             </div>
           </div>
 
@@ -150,20 +146,20 @@
               <label class="form-label">Personal Note (Optional)</label>
             </div>
             <div class="col-lg-9 col-12">
-            <textarea
-              rows="5"
-              matInput
-              formControlName="note"
-              (blur)="checkFormValid(); isError = false"
-              [maxLength]="maxLengthNote"
-              placeholder="Enter note"
-              class="form-check-input col-12 text-area txt-note"
-              style="height: auto"></textarea>
+              <textarea
+                rows="5"
+                matInput
+                formControlName="note"
+                (blur)="checkFormValid(); isError = false"
+                [maxLength]="maxLengthNote"
+                placeholder="Enter note"
+                class="form-check-input col-12 text-area txt-note"
+                style="height: auto"></textarea>
             </div>
           </div>
           <div class="d-flex offset-lg-3 text--gray-4 mt-2 caption fw-normal font-italic">
             <div class="ml-lg-1">
-              Character limit: {{ watchlistForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br/>
+              Character limit: {{ watchlistForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br />
               A personal note of this address. Kindly note that DO NOT input any passwords or private key here
             </div>
           </div>
@@ -173,8 +169,8 @@
           <div class="row">
             <span class="h5 text--white mb-1">Notification</span>
             <span class="caption fw-normal text--gray-4 mb-2">
-            Kindly note that we only support to save notifications for 1 month.
-          </span>
+              Kindly note that we only support to save notifications for 1 month.
+            </span>
             <mat-slide-toggle [checked]="getTracking.value" (change)="changeTracking()">
               <span>Notification Mode</span>
             </mat-slide-toggle>
@@ -182,7 +178,7 @@
           <div class="box-noti-toggle d-flex mt-2" *ngIf="!isTracking">
             <i class="ph ph-info mr-1 body-01"></i>
             <span class="text--gray-2 caption fw-normal">
-            Turn on the Notification Mode to adjust the Tracking activity group.</span
+              Turn on the Notification Mode to adjust the Tracking activity group.</span
             >
           </div>
           <!-- Activities group -->
@@ -200,7 +196,7 @@
                     [ngClass]="isTracking ? 'check-box--dark' : 'check-box--disable'"
                     [disabled]="!isTracking"
                     [checked]="settingObj[itemTracking.key]"
-                    (change)="onChangeTnxFilterType($event, itemTracking.key)"/>
+                    (change)="onChangeTnxFilterType($event, itemTracking.key)" />
                   <label for="{{ itemTracking.key }}" class="ml-2 mb-0 text-justify pl-1">
                     {{ itemTracking.value }}
                   </label>
@@ -209,13 +205,13 @@
                   [checked]="reStakeSent"
                   (change)="reStakeSent = !reStakeSent; checkFormValid()"
                   [disabled]="
-                  (itemTracking.key === lstTrackingName.nativeCoinSent && !settingObj.nativeCoinSent) || !isTracking
-                "
+                    (itemTracking.key === lstTrackingName.nativeCoinSent && !settingObj.nativeCoinSent) || !isTracking
+                  "
                   [ngClass]="
-                  (itemTracking.key === lstTrackingName.nativeCoinSent && !settingObj.nativeCoinSent) || !isTracking
-                    ? 'mode-disable'
-                    : ''
-                "
+                    (itemTracking.key === lstTrackingName.nativeCoinSent && !settingObj.nativeCoinSent) || !isTracking
+                      ? 'mode-disable'
+                      : ''
+                  "
                   class="ml-4 mb-2"
                   *ngIf="itemTracking.key === lstTrackingName.nativeCoinSent">
                   <span class="txt-disable">Inactive noti with Auto restake messages</span>
@@ -224,15 +220,15 @@
                   [checked]="reStakeReceiver"
                   (change)="reStakeReceiver = !reStakeReceiver; checkFormValid()"
                   [ngClass]="
-                  (itemTracking.key === lstTrackingName.nativeCoinReceived && !settingObj.nativeCoinReceived) ||
-                  !isTracking
-                    ? 'mode-disable'
-                    : ''
-                "
+                    (itemTracking.key === lstTrackingName.nativeCoinReceived && !settingObj.nativeCoinReceived) ||
+                    !isTracking
+                      ? 'mode-disable'
+                      : ''
+                  "
                   [disabled]="
-                  (itemTracking.key === lstTrackingName.nativeCoinReceived && !settingObj.nativeCoinReceived) ||
-                  !isTracking
-                "
+                    (itemTracking.key === lstTrackingName.nativeCoinReceived && !settingObj.nativeCoinReceived) ||
+                    !isTracking
+                  "
                   class="ml-4 mb-2"
                   *ngIf="itemTracking.key === lstTrackingName.nativeCoinReceived">
                   <span class="txt-disable">Inactive noti with Auto restake messages</span>
