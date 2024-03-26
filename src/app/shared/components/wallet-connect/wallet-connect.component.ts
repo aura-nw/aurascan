@@ -55,9 +55,11 @@ export class WalletConnectComponent implements OnInit {
           disableIframe: true,
           signerOptions: this.signerOptions as any,
         })
-        .then(() => {
-          this.configActions();
-          this.walletService.restoreAccounts();
+        .then((code) => {
+          if (code == 'SUCCESS') {
+            this.configActions();
+            this.walletService.restoreAccounts();
+          }
         })
         .catch((error) => {
           console.error('InitWalletManager Error: ', error);
