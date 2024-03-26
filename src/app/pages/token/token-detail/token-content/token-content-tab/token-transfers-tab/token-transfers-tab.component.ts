@@ -136,9 +136,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         this.getListTransactionTokenCW20(nextKey, isReload);
       }
     } else {
-      setTimeout(() => {
-        this.getListTransactionTokenIBC(nextKey);
-      }, 500);
+      this.tokenService.pathDenom$.subscribe(() => this.getListTransactionTokenIBC(nextKey));
     }
   }
 
@@ -278,7 +276,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getListTransactionTokenIBC(nextKey = null) {
-    const denomFilter = this.tokenDetail.channelPath?.path + '/' + this.tokenDetail.channelPath?.base_denom;
+    if (!this.tokenDetail?.channelPath) {
+    }
+    const denomFilter = this.tokenDetail?.channelPath?.path + '/' + this.tokenDetail?.channelPath?.base_denom;
     let payload = {
       limit: this.pageData.pageSize,
       heightLT: nextKey,
