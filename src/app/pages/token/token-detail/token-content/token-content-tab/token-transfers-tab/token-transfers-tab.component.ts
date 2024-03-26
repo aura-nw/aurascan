@@ -3,10 +3,12 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { Subject, takeUntil } from 'rxjs';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import {
   LENGTH_CHARACTER,
   NULL_ADDRESS,
@@ -22,8 +24,6 @@ import {
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
 import { convertTxIBC } from '../../../../../../global/global';
-import { getTypeTx } from 'src/app/core/utils/common/info-common';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -83,6 +83,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   EModeToken = EModeToken;
   destroyed$ = new Subject<void>();
   linkAddress: string;
+  isExistDenom = false;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -122,7 +123,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-
     if (this.timerGetUpTime) {
       clearInterval(this.timerGetUpTime);
     }
@@ -136,7 +136,14 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         this.getListTransactionTokenCW20(nextKey, isReload);
       }
     } else {
-      this.tokenService.pathDenom$.subscribe(() => this.getListTransactionTokenIBC(nextKey));
+      if (this.isExistDenom) {
+        this.getListTransactionTokenIBC(nextKey);
+      } else {
+        this.tokenService.pathDenom$
+          .pipe(takeUntil(this.destroyed$))
+          .subscribe(() => this.getListTransactionTokenIBC(nextKey));
+        this.isExistDenom = true;
+      }
     }
   }
 
