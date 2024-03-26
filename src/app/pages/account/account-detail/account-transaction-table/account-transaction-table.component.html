@@ -565,7 +565,7 @@
                     <span *ngIf="!data[template.matColumnDef]">-</span>
                   </div>
                   <div *ngSwitchCase="'method'">
-                    {{ data.method | ellipsis: 10 : null : true }}
+                    {{ data.method | convertEvmTx }}
                   </div>
                   <div *ngSwitchCase="'evmAmount'">
                     <span
