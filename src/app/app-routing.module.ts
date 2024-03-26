@@ -1,9 +1,9 @@
-import { inject, NgModule } from '@angular/core';
-import { Router, RouterModule, Routes, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import { EnvironmentService } from './core/data-services/environment.service';
-import { EFeature } from './core/models/common.model';
-import { LayoutComponent } from './layouts/layout.component';
+import {inject, NgModule} from '@angular/core';
+import {Router, RouterModule, Routes, UrlTree} from '@angular/router';
+import {Observable} from 'rxjs';
+import {EnvironmentService} from './core/data-services/environment.service';
+import {EFeature} from './core/models/common.model';
+import {LayoutComponent} from './layouts/layout.component';
 
 export const isEnabled = (
   functionNames: string,
@@ -38,6 +38,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/validators/validators.module').then((m) => m.ValidatorsModule),
       },
       {
+        path: 'block',
+        loadChildren: () => import('./pages/blocks/blocks.module').then((m) => m.BlocksModule),
+      },
+      {
         path: 'blocks',
         loadChildren: () => import('./pages/blocks/blocks.module').then((m) => m.BlocksModule),
       },
@@ -46,7 +50,7 @@ const routes: Routes = [
         loadChildren: () => import('./pages/transactions/transactions.module').then((m) => m.TransactionsModule),
       },
       {
-        path: 'transaction',
+        path: 'txs',
         loadChildren: () => import('./pages/transaction/transaction.module').then((m) => m.TransactionModule),
       },
       {
@@ -145,11 +149,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/schema-viewer/schema-viewer.module').then((m) => m.SchemaViewerModule),
     pathMatch: 'full',
   },
-  { path: '**', redirectTo: '' },
+  {path: '**', redirectTo: ''},
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
+  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

@@ -36,9 +36,9 @@
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               name="search"
-              autocomplete="off" />
+              autocomplete="off"/>
             <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
             <button
               type="reset"
@@ -46,7 +46,7 @@
                 !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetFilterSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
             </button>
           </div>
         </form>
@@ -69,7 +69,7 @@
                         <a
                           *ngSwitchCase="'tx_hash'"
                           class="text--primary cursor-pointer"
-                          [routerLink]="['/transaction', data[template.matColumnDef]]"
+                          [routerLink]="['/txs', data[template.matColumnDef]]"
                           [copyBtn]="data[template.matColumnDef]">
                           <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                         </a>
@@ -100,9 +100,9 @@
                         <div *ngSwitchCase="'expiration'">
                           <span class="{{ data['reason'] === 'Expired' && isActive ? 'text--red-3' : '' }}">
                             {{
-                              data[template.matColumnDef]
-                                ? (data[template.matColumnDef] | customDateTime: 'DateOnly')
-                                : '-'
+                            data[template.matColumnDef]
+                              ? (data[template.matColumnDef] | customDateTime: 'DateOnly')
+                              : '-'
                             }}
                           </span>
                         </div>
@@ -144,7 +144,7 @@
                         <div *ngSwitchCase="'reason'" class="d-flex justify-content-between align-items-center">
                           <span>{{ data[template.matColumnDef] }}</span>
                           <a
-                            [routerLink]="['/transaction', data['origin_revoke_txhash']]"
+                            [routerLink]="['/txs', data['origin_revoke_txhash']]"
                             *ngIf="data['reason'] === 'Revoked'"
                             class="button body-01 text--primary">
                             <i class="ph-arrow-square-out"></i>

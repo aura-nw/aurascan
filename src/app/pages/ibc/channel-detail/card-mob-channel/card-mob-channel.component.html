@@ -7,7 +7,7 @@
       <span
         [copyBtn]="dataCard['tx_hash']"
         class="{{ title.titleClass ? title.titleClass : '' }}"
-        [routerLink]="['/transaction', dataCard['tx_hash']]"
+        [routerLink]="['/txs', dataCard['tx_hash']]"
       >{{ title.label }}</span
       >
     </div>

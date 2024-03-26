@@ -5,7 +5,7 @@
       <div class="box-connect d-lg-flex justify-content-between align-items-center">
         <div class="box-connect-chain d-flex align-items-center">
           <div class="d-flex justify-content-lg-center align-items-center">
-            <img [appImg]="TITLE_LOGO" alt="" class="img-chain" />
+            <img [appImg]="TITLE_LOGO" alt="" class="img-chain"/>
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div
                 class="body-01 body-02-mob fw-semibold text--white mb-1"
@@ -21,7 +21,7 @@
         </div>
         <div class="box-connect-chain mt-6 mt-lg-0 d-flex align-items-center pl-lg-9">
           <div class="d-flex justify-content-lg-center align-items-center">
-            <img [appImg]="counterInfo?.chainImage" alt="" class="img-chain" />
+            <img [appImg]="counterInfo?.chainImage" alt="" class="img-chain"/>
             <div class="ml-2 ml-lg-4 body text--gray-11 caption-mob fw-normal">
               <div
                 class="body-01 body-02-mob fw-semibold text--white mb-1"
@@ -99,13 +99,13 @@
                       *ngSwitchCase="'tx_hash'"
                       [copyBtn]="data[template.matColumnDef]"
                       class="text--primary cursor-pointer hash-link"
-                      [routerLink]="['/transaction', data['tx_hash']]">
+                      [routerLink]="['/txs', data['tx_hash']]">
                       {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                     </a>
                     <a
                       *ngSwitchCase="'height'"
                       class="text--primary cursor-pointer block-link"
-                      [routerLink]="['/blocks', data['height']]">
+                      [routerLink]="['/block', data['height']]">
                       {{ data[template.matColumnDef] }}
                     </a>
                     <div *ngSwitchCase="'type'" class="aura-status">
@@ -178,7 +178,7 @@
       <div *ngIf="breakpoint.value.matches">
         <app-card-mob-channel
           *ngFor="let data of dataSource?.data; first as isFirst"
-          [link]="'/transaction/' + data.tx_hash"
+          [link]="'/txs/' + data.tx_hash"
           [dataCard]="data"
           [title]="{
             size: 'md',
@@ -197,7 +197,7 @@
             {
               label: 'Height',
               class: 'text--gray-1 body-02-mob',
-              info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+              info: '<a class=text--primary href=' + ('/block/' + data.height) + '>' + data.height + '</a>'
             },
             {
               label: 'Fee',

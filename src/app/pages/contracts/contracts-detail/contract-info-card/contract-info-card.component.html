@@ -76,7 +76,7 @@
           at txn
           <a
             class="text--primary ml-1 ml-lg-2"
-            [routerLink]="['/transaction', contractDetail?.tx_hash]"
+            [routerLink]="['/txs', contractDetail?.tx_hash]"
             [copyBtn]="contractDetail?.tx_hash">
             {{ contractDetail?.tx_hash | ellipsis: 6 : 6 }}
           </a>

@@ -20,7 +20,7 @@
                         *ngSwitchCase="'evm_hash'"
                         [copyBtn]="data[template.matColumnDef]"
                         class="text--primary cursor-pointer"
-                        [routerLink]="['/transaction', data[template.matColumnDef]]">
+                        [routerLink]="['/txs', data[template.matColumnDef]]">
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                       <div *ngSwitchCase="'method'">
@@ -49,7 +49,7 @@
                       <a
                         *ngSwitchCase="'height'"
                         class="text--primary cursor-pointer block-link"
-                        [routerLink]="['/blocks', data['height']]">
+                        [routerLink]="['/block', data['height']]">
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'amount'">
@@ -112,7 +112,7 @@
                         </span>
                       </div>
                       <div class="d-flex align-items-center ml-5">
-                        <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                        <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
                         <span class="line-claim text--gray-light caption fw-normal">
                           {{ data?.type | ellipsis: 12 }}
                         </span>
@@ -129,7 +129,7 @@
                 <div class="divider divider-horizontal divider-lighter my-2"></div>
                 <div class="d-flex justify-content-between">
                   <div class="text--gray-4">Height</div>
-                  <a class="text--primary cursor-pointer block-link" [routerLink]="['/blocks', data['height']]">
+                  <a class="text--primary cursor-pointer block-link" [routerLink]="['/block', data['height']]">
                     {{ data?.height }}
                   </a>
                 </div>

@@ -1,10 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { isSafari } from 'src/app/core/utils/common/validation';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NotificationsService} from 'src/app/core/services/notifications.service';
+import {UserService} from 'src/app/core/services/user.service';
+import {isSafari} from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-notification',
@@ -55,7 +55,8 @@ export class NotificationComponent {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
-  ) {}
+  ) {
+  }
 
   onScroll(event): void {
     const scrollItem = document.getElementById('scrollBox');
@@ -244,13 +245,14 @@ export class NotificationComponent {
 
   readNoti(item = {}) {
     if (item['linkWatchList']) {
-      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
+      this.router.navigate(['/profile'], {queryParams: {tab: 'watchList'}});
       return;
     }
 
     if (!item['is_read']) {
       this.notificationsService.readNoti(item['id']).subscribe(
-        (res) => {},
+        (res) => {
+        },
         () => {
           this.executeLinkTX(item);
         },
@@ -265,7 +267,7 @@ export class NotificationComponent {
 
   executeLinkTX(item) {
     if (item['id']) {
-      this.router.navigate(['/transaction', item['tx_hash']]);
+      this.router.navigate(['/txs', item['tx_hash']]);
     }
     this.updateReadStatus(item['id']);
   }

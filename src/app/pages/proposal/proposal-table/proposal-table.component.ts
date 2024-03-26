@@ -1,4 +1,4 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,12 +9,12 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from '../../../../app/core/models/common.model';
-import { shortenAddress } from '../../../../app/core/utils/common/shorten';
-import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TableTemplate} from '../../../../app/core/models/common.model';
+import {shortenAddress} from '../../../../app/core/utils/common/shorten';
+import {PROPOSAL_TABLE_MODE, PROPOSAL_VOTE} from '../../../core/constants/proposal.constant';
 
 interface CustomPageEvent {
   next?: number;
@@ -42,14 +42,14 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Output() pageEventChange = new EventEmitter<CustomPageEvent>();
 
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true, isNameTag: true },
-    { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
+    {matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true, isNameTag: true},
+    {matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/txs', isShort: true, desktopOnly: true},
+    {matColumnDef: 'vote_option', headerCellDef: 'Answer'},
+    {matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true},
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank' },
+    {matColumnDef: 'rank', headerCellDef: 'Rank'},
     {
       matColumnDef: 'validator_name',
       headerCellDef: 'Validator',
@@ -57,9 +57,9 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       paramField: 'operator_address',
       prefix: 'operator_address',
     },
-    { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'vote_option', headerCellDef: 'Answer' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
+    {matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/txs', isShort: true, desktopOnly: true},
+    {matColumnDef: 'vote_option', headerCellDef: 'Answer'},
+    {matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true},
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
@@ -71,9 +71,9 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       desktopOnly: true,
       isNameTag: true,
     },
-    { matColumnDef: 'hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    {matColumnDef: 'hash', headerCellDef: 'TxHash', isUrl: '/txs', isShort: true},
+    {matColumnDef: 'amount', headerCellDef: 'Amount'},
+    {matColumnDef: 'timestamp', headerCellDef: 'Time'},
   ];
 
   displayedColumns: string[];
@@ -95,7 +95,8 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   constructor(
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
-  ) {}
+  ) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.data.forEach((element) => {
@@ -142,7 +143,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   }
 
   pageEvent(_index: number) {
-    const { pageIndex, pageSize } = this.pageData;
+    const {pageIndex, pageSize} = this.pageData;
 
     this.pageEventChange.emit({
       type: this.type,
