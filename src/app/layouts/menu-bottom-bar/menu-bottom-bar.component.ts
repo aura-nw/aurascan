@@ -1,14 +1,14 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { from } from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
-import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
+import {from} from 'rxjs';
+import {delay, mergeMap} from 'rxjs/operators';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {NotificationsService} from 'src/app/core/services/notifications.service';
+import {WalletService} from 'src/app/core/services/wallet.service';
+import {MENU_MOB, MenuName} from 'src/app/layouts/horizontaltopbar/menu';
+import {MenuItem} from 'src/app/layouts/horizontaltopbar/menu.model';
 
 @Component({
   selector: 'app-menu-bottom-bar',
@@ -29,7 +29,8 @@ export class MenuBottomBarComponent implements OnInit {
     private walletService: WalletService,
     private notificationsService: NotificationsService,
     private environmentService: EnvironmentService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.notificationsService.hiddenFooterSubject.subscribe((res) => {
@@ -49,6 +50,7 @@ export class MenuBottomBarComponent implements OnInit {
         this.menuLink.push(arr);
       }
     }
+    this.menuLink[1] += '/txs'
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
@@ -108,14 +110,14 @@ export class MenuBottomBarComponent implements OnInit {
             const foundIndex = features.findIndex((item) => item === featureName);
 
             // If have featureName, check disable
-            subItem.disabled = featureName ? (foundIndex < 0 ? true : false) : false;
+            subItem.disabled = featureName ? (foundIndex < 0) : false;
 
             isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
           });
         } else {
           const featureName = item.featureName;
           const foundIndex = features.findIndex((item) => item === featureName);
-          item.disabled = foundIndex < 0 ? true : false;
+          item.disabled = foundIndex < 0;
         }
       });
     }
@@ -123,72 +125,5 @@ export class MenuBottomBarComponent implements OnInit {
 
   overLayClickEvent() {
     this.overlayPanel = false;
-  }
-
-  checkMenuActive(menuLink: string, activeLink?: string) {
-    if ((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
-      return true;
-    }
-
-    if (activeLink === 'token' && this.router.url === '/tokens') {
-      return true;
-    }
-
-    if (activeLink === 'token' && this.router.url.includes('/token/') && this.router.url.split('/').length === 3) {
-      return true;
-    }
-
-    if (activeLink === 'nft' && this.router.url === '/tokens/tokens-nft') {
-      return true;
-    }
-
-    if (activeLink === 'nft' && this.router.url.includes('/token/nft') && this.router.url.split('/').length === 4) {
-      return true;
-    }
-
-    if (activeLink === 'abt' && this.router.url === '/tokens/token-abt') {
-      return true;
-    }
-
-    if (activeLink === 'abt' && this.router.url.includes('/token/abt') && this.router.url.split('/').length === 4) {
-      return true;
-    }
-
-    if (
-      menuLink === '/transactions' &&
-      this.router.url.includes('/transaction') &&
-      !this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
-    ) {
-      return true;
-    }
-
-    if (
-      menuLink === '/evm-transactions' &&
-      this.router.url.includes('/transaction') &&
-      this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
-    ) {
-      return true;
-    }
-
-    if (
-      menuLink === '/statistics/charts-stats' &&
-      (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
-    ) {
-      return true;
-    }
-
-    if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
-      return true;
-    }
-
-    if (
-      menuLink === '/code-ids' &&
-      (this.router.url == '/code-ids' ||
-        this.router.url.includes('/code-ids/detail/') ||
-        this.router.url.includes('/code-ids/verify/'))
-    ) {
-      return true;
-    }
-    return false;
   }
 }

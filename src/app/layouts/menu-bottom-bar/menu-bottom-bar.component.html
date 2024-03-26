@@ -96,7 +96,7 @@
       <ng-container *ngFor="let item of menu[1].subItems">
         <ng-container *ngIf="!item.disabled">
           <ng-container
-            *ngTemplateOutlet="menuItem; context: { data: { link: item.link, icon: item.icon, label: item.label } }">
+            *ngTemplateOutlet="menuItem; context: { data: { link: item.link, activeLink: item.activeLink, icon: item.icon, label: item.label } }">
           </ng-container>
         </ng-container>
       </ng-container>
@@ -171,6 +171,7 @@
     [class.active]="
       popover.isOpen() ||
       (menuLink[data.idx].includes('/' + router.url.split('/')[1]) && '/' + router.url.split('/')[1] !== '/')
+      
     ">
     <i class="ph-{{ data.icon }} mx-auto h3 mb-0" id="{{ data.iconId }}"></i>
     <div class="caption d-block mt-1" id="{{ data.textId }}">{{ data.label | translate }}</div>
@@ -179,7 +180,8 @@
 <!-- menu link template-->
 <ng-template #menuItem let-data="data">
   <li class="menu-item" (click)="popover.close()">
-    <a class="menu-link" [class.active]="checkMenuActive(data.link, data.activeLink)" [routerLink]="data.link">
+    <a class="menu-link"
+       [activeMenuItem]="{menuLink: data.link, menuDetailLink: data.activeLink}" [routerLink]="data.link">
       <i
         class="ph-{{ data.icon }} h3 mr-2 mb-0"
         *ngIf="data.name !== menuName.TokenCW721 && data.name !== menuName.TokenCW4973"></i>

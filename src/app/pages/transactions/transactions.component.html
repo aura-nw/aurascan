@@ -109,7 +109,7 @@
                     <a
                       [copyBtn]="data?.tx_hash"
                       class="text--primary cursor-pointer body-02"
-                      [routerLink]="['/transaction', data?.tx_hash]">
+                      [routerLink]="['/txs', data?.tx_hash]">
                       {{ data?.tx_hash | ellipsis: 8 : 8 }}
                     </a>
                     <div class="align-items-center d-flex mt-1">

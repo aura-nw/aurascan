@@ -1,5 +1,5 @@
-import { EFeature } from 'src/app/core/models/common.model';
-import { MenuItem } from './menu.model';
+import {EFeature} from 'src/app/core/models/common.model';
+import {MenuItem} from './menu.model';
 
 export enum MenuName {
   Dashboard = 'Dashboard',
@@ -44,6 +44,7 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.TRANSACTION',
         icon: 'credit-card',
         link: '/transactions',
+        activeLink: 'transaction',
         name: MenuName.Transaction,
       },
       {
@@ -51,6 +52,7 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.EVM_TRANSACTION',
         icon: 'file-text',
         link: '/evm-transactions',
+        activeLink: 'evm-transaction',
         name: MenuName.EvmTransaction,
       },
       {
@@ -223,6 +225,7 @@ export const MENU_MOB: MenuItem[] = [
         label: 'MENUITEMS.TRANSACTION',
         icon: 'credit-card',
         link: '/transactions',
+        activeLink: 'transaction',
         name: MenuName.Transaction,
       },
       {
@@ -230,6 +233,7 @@ export const MENU_MOB: MenuItem[] = [
         label: 'MENUITEMS.EVM_TRANSACTION',
         icon: 'file-text',
         link: '/evm-transactions',
+        activeLink: 'evm-transaction',
         name: MenuName.EvmTransaction,
       },
       {

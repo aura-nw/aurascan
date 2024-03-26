@@ -101,7 +101,7 @@
                     <a
                       [copyBtn]="data?.evm_hash"
                       class="text--primary cursor-pointer body-02"
-                      [routerLink]="['/transaction', data?.evm_hash]">
+                      [routerLink]="['/txs', data?.evm_hash]">
                       {{ data?.evm_hash | ellipsis: 8 : 8 }}
                     </a>
                     <div class="align-items-center d-flex mt-1">
