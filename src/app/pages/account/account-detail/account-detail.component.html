@@ -1,9 +1,9 @@
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="mb-1 mb-md-6">
-    <div class="d-flex d-block align-items-center {{ environmentService.isMobile ? 'justify-content-between' : '' }}">
+    <div class="d-flex d-block align-items-center {{ breakpoint.value.matches ? 'justify-content-between' : '' }}">
       <span class="h2 fw-700 text--white mr-lg-5 mr-2">Account</span>
       <a
-        [routerLink]="[isContractAddress && accountEvmAddress ? '/evm-contracts/' : '/contracts/', accountAddress]"
+        [routerLink]="[isContractAddress && accountEvmAddress ? '/evm-contracts' : '/contracts', accountAddress]"
         *ngIf="isContractAddress"
         class="contract-label text--primary body-04 mr-5">
         Contract
@@ -15,7 +15,7 @@
         <span class="text--white caption-mob fw-normal">Add to watch list</span>
         <i
           class="ph ph-star body-01 ml-2"
-          *ngIf="!environmentService.isMobile"
+          *ngIf="!breakpoint.value.matches"
           [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
       </button>
     </div>

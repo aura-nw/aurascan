@@ -78,7 +78,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
-    public environmentService: EnvironmentService,
+    private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
     private router: Router,
     private userService: UserService,
