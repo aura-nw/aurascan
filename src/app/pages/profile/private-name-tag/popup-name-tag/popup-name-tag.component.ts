@@ -5,13 +5,12 @@ import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER, MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { isValidBench32Address } from 'src/app/core/utils/common/validation';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 
 @Component({
@@ -32,7 +31,6 @@ export class PopupNameTagComponent implements OnInit {
   isEditMode = false;
   idEdit = null;
   eWalletType = EWalletType;
-  nativeAddress = '';
 
   nameTagType = {
     Account: 'account',
