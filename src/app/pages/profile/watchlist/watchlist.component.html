@@ -45,11 +45,11 @@
     <table mat-table [dataSource]="dataSource" class="aura-table watchlist-table d-none d-lg-block">
       <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell *matHeaderCellDef [style.min-width.px]="template?.headerWidth">
             <div *ngIf="template.headerCellDef === 'Fav'" class="d-flex ml-lg-3 ml-2">
               <i
                 class="ph ph-info body-01"
-                [appTooltip]="'Click the star icon to mark your favorite address <br> on the top of the list'"></i>
+                [appTooltip]="'Click the pin icon to mark your favorite address <br> on the top of the list'"></i>
             </div>
             <div [innerHTML]="template.headerCellDef | translate" *ngIf="template.headerCellDef !== 'Fav'"></div>
           </th>
@@ -70,16 +70,21 @@
                     (click)="updateFavorite(data)"
                     *ngIf="data.favorite" />
                 </div>
-                <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
-                  <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
-                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
+                <div *ngSwitchCase="'cosmosAddress'" class="d-flex flex-column mt-1">
+                  <a class="text--primary cursor-pointer" [routerLink]="[urlType(data), data.cosmosAddress]">
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 }}</span>
                   </a>
                   <div
                     class="text--gray-5 line-claim"
                     [appTooltip]="data.note ? '<div>' + data.note + '</div>' : ''"
-                    style="max-width: 160px; width: fit-content">
+                    style="max-width: 150px; width: fit-content">
                     {{ data.note || 'Note:-' }}
                   </div>
+                </div>
+                <div *ngSwitchCase="'evmAddress'" class="d-flex flex-column mt-1">
+                  <a class="text--primary cursor-pointer" [routerLink]="[urlType(data), data.evmAddress]">
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 }}</span>
+                  </a>
                 </div>
                 <div *ngSwitchCase="'type'" class="text-capitalize">
                   {{ data[template.matColumnDef] }}
@@ -104,7 +109,7 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'updated_at'">
-                  {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
+                  {{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}
                 </div>
                 <div *ngSwitchCase="'action'">
                   <div class="d-flex align-items-center justify-content-end">
