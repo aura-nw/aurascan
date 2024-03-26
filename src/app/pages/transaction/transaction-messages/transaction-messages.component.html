@@ -132,12 +132,12 @@
             <div class="col-12 col-lg-9">
               <a
                 class="text--primary"
-                routerLink="/txs/{{ transactionDetail?.messages[0]['hash'] }}"
+                routerLink="/tx/{{ transactionDetail?.messages[0]['hash'] }}"
                 [copyBtn]="transactionDetail?.messages[0]['hash']">
                 {{
-                  environmentService.isMobile
-                    ? (transactionDetail?.messages[0]['hash'] | ellipsis: 8 : 8)
-                    : transactionDetail?.messages[0]['hash']
+                environmentService.isMobile
+                  ? (transactionDetail?.messages[0]['hash'] | ellipsis: 8 : 8)
+                  : transactionDetail?.messages[0]['hash']
                 }}
               </a>
             </div>
@@ -420,7 +420,7 @@
                 </div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
-                    <a *ngIf="item.denom === denom" class="text--primary" href="/txs/{{ item.tx_hash }}">
+                    <a *ngIf="item.denom === denom" class="text--primary" href="/tx/{{ item.tx_hash }}">
                       <span class="d-lg-none">{{ item.tx_hash | ellipsis: 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </a>
@@ -452,7 +452,7 @@
   <ng-template #multiSend>
     <div class="card-info box-multisend">
       <div class="card-text header-title d-flex align-items-center">
-        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
+        <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2"/>
         Multisend
       </div>
       <div class="body-multisend">
@@ -549,7 +549,7 @@
     <div class="mb-3 d-flex box-header">
       <div class="col-12 col-lg-3">
         <div class="card-text header-title d-flex align-items-center">
-          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2" />
+          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="mb-0 mt-0 msg-image mr-2"/>
           {{ data.label || displayTitleTX() }}
         </div>
       </div>

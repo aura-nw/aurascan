@@ -267,7 +267,7 @@ export class NotificationComponent {
 
   executeLinkTX(item) {
     if (item['id']) {
-      this.router.navigate(['/txs', item['tx_hash']]);
+      this.router.navigate(['/tx', item['tx_hash']]);
     }
     this.updateReadStatus(item['id']);
   }

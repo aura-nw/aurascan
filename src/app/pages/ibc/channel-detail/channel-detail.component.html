@@ -99,7 +99,7 @@
                       *ngSwitchCase="'tx_hash'"
                       [copyBtn]="data[template.matColumnDef]"
                       class="text--primary cursor-pointer hash-link"
-                      [routerLink]="['/txs', data['tx_hash']]">
+                      [routerLink]="['/tx', data['tx_hash']]">
                       {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                     </a>
                     <a
@@ -178,7 +178,7 @@
       <div *ngIf="breakpoint.value.matches">
         <app-card-mob-channel
           *ngFor="let data of dataSource?.data; first as isFirst"
-          [link]="'/txs/' + data.tx_hash"
+          [link]="'/tx/' + data.tx_hash"
           [dataCard]="data"
           [title]="{
             size: 'md',

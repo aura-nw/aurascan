@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
-import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { ContractService } from 'src/app/core/services/contract.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { shortenAddress } from '../../../core/utils/common/shorten';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
+import {TYPE_CW4973} from 'src/app/core/constants/contract.constant';
+import {ContractRegisterType, ContractVerifyType} from 'src/app/core/constants/contract.enum';
+import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
+import {TableTemplate} from 'src/app/core/models/common.model';
+import {ContractService} from 'src/app/core/services/contract.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
+import {shortenAddress} from '../../../core/utils/common/shorten';
 
 @Component({
   selector: 'app-code-id-list',
@@ -34,13 +34,13 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail', headerWidth: 120 },
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', isUrl: '/txs', headerWidth: 250 },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', headerWidth: 250 },
-    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 120 },
-    { matColumnDef: 'instantiates', headerCellDef: 'Instantiates', headerWidth: 160 },
-    { matColumnDef: 'created_at', headerCellDef: 'created at', headerWidth: 200 },
-    { matColumnDef: 'verified_at', headerCellDef: 'Verified at', headerWidth: 200 },
+    {matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail', headerWidth: 120},
+    {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', isUrl: '/tx', headerWidth: 250},
+    {matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', headerWidth: 250},
+    {matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 120},
+    {matColumnDef: 'instantiates', headerCellDef: 'Instantiates', headerWidth: 160},
+    {matColumnDef: 'created_at', headerCellDef: 'created at', headerWidth: 200},
+    {matColumnDef: 'verified_at', headerCellDef: 'Verified at', headerWidth: 200},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractVerifyType = ContractVerifyType;
@@ -48,7 +48,8 @@ export class CodeIdListComponent implements OnInit, OnDestroy {
   constructor(
     private contractService: ContractService,
     private nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getListCodeIds();

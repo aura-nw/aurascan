@@ -1,6 +1,6 @@
-import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { Router } from '@angular/router';
+import {AfterViewInit, Directive, ElementRef, Input} from '@angular/core';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {Router} from '@angular/router';
 
 @Directive({
   selector: '[activeMenuItem]',
@@ -38,7 +38,7 @@ export class MenuActiveDirective implements AfterViewInit {
 
     if (
       this.activeMenuItem.menuDetailLink === 'evm-transaction' &&
-      this.router.url.includes('/txs') &&
+      this.router.url.includes('/tx') &&
       this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
     ) {
       menuClass = 'active';

@@ -232,7 +232,7 @@ export class BlockDetailComponent implements OnInit {
     if (amount === 0) {
       return '-';
     } else {
-      return `<a class="text--primary" [routerLink]="['/txs', ` + txHash + `]">More</a>`;
+      return `<a class="text--primary" [routerLink]="['/tx', ` + txHash + `]">More</a>`;
     }
   }
 

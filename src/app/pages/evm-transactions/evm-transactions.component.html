@@ -20,7 +20,7 @@
                         *ngSwitchCase="'evm_hash'"
                         [copyBtn]="data[template.matColumnDef]"
                         class="text--primary cursor-pointer"
-                        [routerLink]="['/txs', data[template.matColumnDef]]">
+                        [routerLink]="['/tx', data[template.matColumnDef]]">
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
                       <div *ngSwitchCase="'method'">
@@ -101,7 +101,7 @@
                     <a
                       [copyBtn]="data?.evm_hash"
                       class="text--primary cursor-pointer body-02"
-                      [routerLink]="['/txs', data?.evm_hash]">
+                      [routerLink]="['/tx', data?.evm_hash]">
                       {{ data?.evm_hash | ellipsis: 8 : 8 }}
                     </a>
                     <div class="align-items-center d-flex mt-1">
@@ -112,7 +112,7 @@
                         </span>
                       </div>
                       <div class="d-flex align-items-center ml-5">
-                        <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                        <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
                         <span class="line-claim text--gray-light caption fw-normal">
                           {{ data?.type | ellipsis: 12 }}
                         </span>

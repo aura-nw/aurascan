@@ -25,14 +25,14 @@
                           *ngSwitchCase="'tx_hash'"
                           [copyBtn]="data[template.matColumnDef]"
                           class="text--primary cursor-pointer hash-link"
-                          [routerLink]="['/txs', data['tx_hash']]">
+                          [routerLink]="['/tx', data['tx_hash']]">
                           {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                         </a>
                         <a
                           *ngSwitchCase="'hash'"
                           [copyBtn]="data[template.matColumnDef]"
                           class="text--primary cursor-pointer hash-link"
-                          [routerLink]="['/txs', data['hash']]">
+                          [routerLink]="['/tx', data['hash']]">
                           {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                         </a>
                         <a
@@ -109,7 +109,7 @@
                     <a
                       [copyBtn]="data?.tx_hash"
                       class="text--primary cursor-pointer body-02"
-                      [routerLink]="['/txs', data?.tx_hash]">
+                      [routerLink]="['/tx', data?.tx_hash]">
                       {{ data?.tx_hash | ellipsis: 8 : 8 }}
                     </a>
                     <div class="align-items-center d-flex mt-1">
@@ -120,7 +120,7 @@
                         </span>
                       </div>
                       <div class="d-flex align-items-center ml-5">
-                        <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                        <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
                         <span class="line-claim text--gray-light caption fw-normal">
                           {{ data?.type | ellipsis: 12 }}
                         </span>
