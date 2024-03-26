@@ -6,7 +6,7 @@
     <div class="col-12 col-lg-10">{{ method | convertEvmTx }}</div>
   </div>
 
-  <div class="d-flex flex-wrap mb-3 body" *ngIf="transaction?.contractAddress > 0 && isCreateContract">
+  <div class="d-flex flex-wrap mb-3 body" *ngIf="transaction?.contractAddress > 0">
     <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4">Contract Address</div>
     <div class="col-12 col-lg-10">
       <app-name-tag [value]="transaction?.contractAddress" [fullText]="true"></app-name-tag>
