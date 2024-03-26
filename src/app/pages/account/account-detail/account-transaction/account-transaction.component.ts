@@ -1,11 +1,11 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Location} from '@angular/common';
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {TABS_TITLE_ACCOUNT} from 'src/app/core/constants/account.constant';
-import {TabsAccountLink} from 'src/app/core/constants/account.enum';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Location } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { TABS_TITLE_ACCOUNT } from 'src/app/core/constants/account.constant';
+import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 
 @Component({
   selector: 'app-account-transaction',
@@ -27,8 +27,7 @@ export class AccountTransactionComponent implements OnInit {
     private layout: BreakpointObserver,
     private route: ActivatedRoute,
     private location: Location,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {

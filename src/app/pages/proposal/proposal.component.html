@@ -123,21 +123,21 @@
                       ).class
                     }}">
                     {{
-                    getHighestVote(
-                      lastedItem.tally?.yes,
-                      lastedItem.tally?.no,
-                      lastedItem.tally?.no_with_veto,
-                      lastedItem.tally?.abstain
-                    ).name
-                    }}
-                    <span class="h4 mb-0 text--gray-1 ml-4">
-                      {{
                       getHighestVote(
                         lastedItem.tally?.yes,
                         lastedItem.tally?.no,
                         lastedItem.tally?.no_with_veto,
                         lastedItem.tally?.abstain
-                      ).value | formatDigit: 2
+                      ).name
+                    }}
+                    <span class="h4 mb-0 text--gray-1 ml-4">
+                      {{
+                        getHighestVote(
+                          lastedItem.tally?.yes,
+                          lastedItem.tally?.no,
+                          lastedItem.tally?.no_with_veto,
+                          lastedItem.tally?.abstain
+                        ).value | formatDigit: 2
                       }}% </span
                     >&nbsp;
                   </div>
@@ -150,7 +150,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="body-03 text--gray-3">
                     <span *ngIf="lastedItem.vote_option"
-                    >You voted "{{ lastedItem.vote_option }}" for this proposal</span
+                      >You voted "{{ lastedItem.vote_option }}" for this proposal</span
                     >
                   </div>
                   <div class="d-flex">
@@ -165,10 +165,10 @@
                       class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body">
                       <span>
                         {{
-                        lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                        lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                          ? 'Voting Ended'
-                          : 'Vote'
+                          lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                          lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                            ? 'Voting Ended'
+                            : 'Vote'
                         }}
                       </span>
                     </button>
@@ -233,11 +233,11 @@
                       *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
                       <span *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{
                         lastedItem.voting_start_time | customDateTime: 'DateOnly'
-                        }}</span>
+                      }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
                       <span *ngIf="lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{
                         lastedItem.voting_start_time | customDateTime: 'TimeOnly'
-                        }}</span>
+                      }}</span>
                     </div>
                     <div
                       class="text--white d-flex align-items-center"
@@ -300,21 +300,21 @@
                         ).class
                       }}">
                       {{
-                      getHighestVote(
-                        lastedItem.tally?.yes,
-                        lastedItem.tally?.no,
-                        lastedItem.tally?.no_with_veto,
-                        lastedItem.tally.abstain
-                      ).name
-                      }}
-                      <span class="h4 h6-mob mb-0 text--white ml-2">
-                        {{
                         getHighestVote(
                           lastedItem.tally?.yes,
                           lastedItem.tally?.no,
                           lastedItem.tally?.no_with_veto,
                           lastedItem.tally.abstain
-                        ).value | formatDigit: 2
+                        ).name
+                      }}
+                      <span class="h4 h6-mob mb-0 text--white ml-2">
+                        {{
+                          getHighestVote(
+                            lastedItem.tally?.yes,
+                            lastedItem.tally?.no,
+                            lastedItem.tally?.no_with_veto,
+                            lastedItem.tally.abstain
+                          ).value | formatDigit: 2
                         }}%
                       </span>
                     </div>
@@ -334,10 +334,10 @@
                 (click)="openVoteDialog(lastedItem, idex)">
                 <span>
                   {{
-                  lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                  lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                    ? 'Voting Ended'
-                    : 'Vote'
+                    lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                    lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                      ? 'Voting Ended'
+                      : 'Vote'
                   }}
                 </span>
               </button>

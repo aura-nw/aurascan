@@ -1,12 +1,12 @@
-import {AfterViewInit, Directive, ElementRef, Input} from "@angular/core";
-import {EWalletType} from "src/app/core/constants/wallet.constant";
-import {Router} from "@angular/router";
+import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { Router } from '@angular/router';
 
 @Directive({
   selector: '[activeMenuItem]',
 })
 export class MenuActiveDirective implements AfterViewInit {
-  @Input() activeMenuItem: { menuLink: string; menuDetailLink?: string }
+  @Input() activeMenuItem: { menuLink: string; menuDetailLink?: string };
   element: HTMLElement;
 
   constructor(
@@ -20,7 +20,7 @@ export class MenuActiveDirective implements AfterViewInit {
     if (!this.element || !this.activeMenuItem) return;
     let menuClass = '';
     // dash board
-    if ((this.router.url === '/' || this.router.url === '/dashboard') && (this.activeMenuItem.menuLink === '/')) {
+    if ((this.router.url === '/' || this.router.url === '/dashboard') && this.activeMenuItem.menuLink === '/') {
       menuClass = 'active';
     }
     // default
@@ -68,24 +68,15 @@ export class MenuActiveDirective implements AfterViewInit {
       menuClass = 'active';
     }
 
-    if (
-      this.activeMenuItem.menuLink === '/evm-contracts' &&
-      this.router.url.includes('/evm-contracts')
-    ) {
+    if (this.activeMenuItem.menuLink === '/evm-contracts' && this.router.url.includes('/evm-contracts')) {
       menuClass = 'active';
     }
 
-    if (
-      this.activeMenuItem.menuLink === '/validators' &&
-      this.router.url.includes('/validators')
-    ) {
+    if (this.activeMenuItem.menuLink === '/validators' && this.router.url.includes('/validators')) {
       menuClass = 'active';
     }
 
-    if (
-      this.activeMenuItem.menuLink === '/blocks' &&
-      this.router.url.includes('/block')
-    ) {
+    if (this.activeMenuItem.menuLink === '/blocks' && this.router.url.includes('/block')) {
       menuClass = 'active';
     }
 
@@ -97,7 +88,11 @@ export class MenuActiveDirective implements AfterViewInit {
       menuClass = 'active';
     }
 
-    if (this.activeMenuItem.menuDetailLink === 'token' && this.router.url.includes('/token/') && this.router.url.split('/').length === 3) {
+    if (
+      this.activeMenuItem.menuDetailLink === 'token' &&
+      this.router.url.includes('/token/') &&
+      this.router.url.split('/').length === 3
+    ) {
       menuClass = 'active';
     }
 
@@ -105,7 +100,11 @@ export class MenuActiveDirective implements AfterViewInit {
       menuClass = 'active';
     }
 
-    if (this.activeMenuItem.menuDetailLink === 'nft' && this.router.url.includes('/token/nft') && this.router.url.split('/').length === 4) {
+    if (
+      this.activeMenuItem.menuDetailLink === 'nft' &&
+      this.router.url.includes('/token/nft') &&
+      this.router.url.split('/').length === 4
+    ) {
       menuClass = 'active';
     }
 
@@ -113,7 +112,11 @@ export class MenuActiveDirective implements AfterViewInit {
       menuClass = 'active';
     }
 
-    if (this.activeMenuItem.menuDetailLink === 'abt' && this.router.url.includes('/token/abt') && this.router.url.split('/').length === 4) {
+    if (
+      this.activeMenuItem.menuDetailLink === 'abt' &&
+      this.router.url.includes('/token/abt') &&
+      this.router.url.split('/').length === 4
+    ) {
       menuClass = 'active';
     }
 
@@ -124,7 +127,10 @@ export class MenuActiveDirective implements AfterViewInit {
       menuClass = 'active';
     }
 
-    if (this.activeMenuItem.menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
+    if (
+      this.activeMenuItem.menuLink === '/statistics/top-statistic' &&
+      this.router.url == '/statistics/top-statistic'
+    ) {
       menuClass = 'active';
     }
 

@@ -90,11 +90,11 @@
             <div class="d-flex align-items-center">
               <div>
                 <ng-container *ngIf="item['address'] === item['toAddress']">
-                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14"/>
+                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
                   <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
                 </ng-container>
                 <ng-container *ngIf="item['address'] !== item['toAddress']">
-                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14"/>
+                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
                   <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
                 </ng-container>
               </div>

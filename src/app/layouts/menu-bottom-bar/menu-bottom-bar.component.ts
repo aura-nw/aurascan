@@ -1,14 +1,14 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {NgbPopover} from '@ng-bootstrap/ng-bootstrap';
-import {from} from 'rxjs';
-import {delay, mergeMap} from 'rxjs/operators';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {NotificationsService} from 'src/app/core/services/notifications.service';
-import {WalletService} from 'src/app/core/services/wallet.service';
-import {MENU_MOB, MenuName} from 'src/app/layouts/horizontaltopbar/menu';
-import {MenuItem} from 'src/app/layouts/horizontaltopbar/menu.model';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { from } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { NotificationsService } from 'src/app/core/services/notifications.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
+import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
 
 @Component({
   selector: 'app-menu-bottom-bar',
@@ -29,8 +29,7 @@ export class MenuBottomBarComponent implements OnInit {
     private walletService: WalletService,
     private notificationsService: NotificationsService,
     private environmentService: EnvironmentService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.notificationsService.hiddenFooterSubject.subscribe((res) => {
@@ -50,7 +49,7 @@ export class MenuBottomBarComponent implements OnInit {
         this.menuLink.push(arr);
       }
     }
-    this.menuLink[1] += '/txs'
+    this.menuLink[1] += '/txs';
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
@@ -110,7 +109,7 @@ export class MenuBottomBarComponent implements OnInit {
             const foundIndex = features.findIndex((item) => item === featureName);
 
             // If have featureName, check disable
-            subItem.disabled = featureName ? (foundIndex < 0) : false;
+            subItem.disabled = featureName ? foundIndex < 0 : false;
 
             isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
           });

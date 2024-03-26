@@ -123,6 +123,6 @@ export enum EFileType {
   Zip = 'application/x-zip-compressed',
 }
 
-export enum EMethodContract{
-  Creation = '60806040'
+export enum EMethodContract {
+  Creation = '60806040',
 }

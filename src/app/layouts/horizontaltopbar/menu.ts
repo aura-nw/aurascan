@@ -1,5 +1,5 @@
-import {EFeature} from 'src/app/core/models/common.model';
-import {MenuItem} from './menu.model';
+import { EFeature } from 'src/app/core/models/common.model';
+import { MenuItem } from './menu.model';
 
 export enum MenuName {
   Dashboard = 'Dashboard',

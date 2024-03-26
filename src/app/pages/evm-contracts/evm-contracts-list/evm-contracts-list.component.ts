@@ -1,15 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {TranslateService} from '@ngx-translate/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
-import {PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {ContractVerifyType, EvmContractRegisterType} from 'src/app/core/constants/contract.enum';
-import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {ContractService} from 'src/app/core/services/contract.service';
+import { Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { ContractVerifyType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-evm-contracts-list',
@@ -18,10 +18,10 @@ import {ContractService} from 'src/app/core/services/contract.service';
 })
 export class EvmContractsListComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
-    {matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/evm-contracts', headerWidth: 300},
-    {matColumnDef: 'type', headerCellDef: 'Type Contract', headerWidth: 200},
-    {matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 150},
-    {matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', headerWidth: 300},
+    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/evm-contracts', headerWidth: 300 },
+    { matColumnDef: 'type', headerCellDef: 'Type Contract', headerWidth: 200 },
+    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 150 },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', headerWidth: 300 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -46,8 +46,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
   constructor(
     public translate: TranslateService,
     private contractService: ContractService,
-  ) {
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroy$.next();

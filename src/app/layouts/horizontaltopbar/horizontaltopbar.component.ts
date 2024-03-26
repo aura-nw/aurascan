@@ -1,17 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
-import {Subject, takeUntil} from 'rxjs';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {NameTagService} from 'src/app/core/services/name-tag.service';
-import {UserService} from 'src/app/core/services/user.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import {LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR} from '../../../app/core/constants/common.constant';
-import {TransactionService} from '../../core/services/transaction.service';
-import {MENU, MenuName} from './menu';
-import {MenuItem} from './menu.model';
-import {ContractService} from 'src/app/core/services/contract.service';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import { LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../app/core/constants/common.constant';
+import { TransactionService } from '../../core/services/transaction.service';
+import { MENU, MenuName } from './menu';
+import { MenuItem } from './menu.model';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -45,8 +45,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
-  ) {
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
@@ -75,7 +74,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
             const foundIndex = features.findIndex((item) => item === featureName);
 
             // If have featureName, check disable
-            subItem.disabled = featureName ? (foundIndex < 0) : false;
+            subItem.disabled = featureName ? foundIndex < 0 : false;
             isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
           });
         } else {
@@ -149,9 +148,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   }
 
   redirectPage(urlLink: string) {
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate([urlLink, this.searchValue]).then((r) => {
-      });
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([urlLink, this.searchValue]).then((r) => {});
     });
   }
 
@@ -182,7 +180,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate(['transaction', this.searchValue]);
           });
         } else {
