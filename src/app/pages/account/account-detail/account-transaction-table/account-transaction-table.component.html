@@ -466,7 +466,7 @@
                             [value]="item.fromAddress || currentAddress"
                             [iconContract]="item.fromAddress || currentAddress | isContract"
                             [linkRouter]="[
-                              (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                              (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
                               item.fromAddress || currentAddress
                             ]"
                             [isEnableRouter]="
@@ -515,7 +515,7 @@
                             <app-name-tag
                               [value]="item.toAddress || currentAddress"
                               [linkRouter]="[
-                                (item.toAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                                (item.toAddress || currentAddress | isContract) ? '/contracts' : '/address',
                                 item.toAddress || currentAddress
                               ]"
                               [iconContract]="item.toAddress || currentAddress | isContract"
@@ -553,7 +553,7 @@
                       *ngIf="data[template.matColumnDef]"
                       [value]="data[template.matColumnDef]"
                       [linkRouter]="[
-                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
                         data[template.matColumnDef]
                       ]"
                       [iconContract]="data[template.matColumnDef] | isContract"

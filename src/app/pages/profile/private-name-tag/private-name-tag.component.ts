@@ -1,23 +1,23 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import * as _ from 'lodash';
-import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
-import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
-import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
+import {MAX_LENGTH_SEARCH_TOKEN} from 'src/app/core/constants/token.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TableTemplate} from 'src/app/core/models/common.model';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {PaginatorComponent} from 'src/app/shared/components/paginator/paginator.component';
+import {PopupCommonComponent} from 'src/app/shared/components/popup-common/popup-common.component';
+import {PopupNameTagComponent} from './popup-name-tag/popup-name-tag.component';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -29,13 +29,13 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 8 },
-    { matColumnDef: 'address', headerCellDef: 'Address', headerWidth: 12 },
-    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 6 },
-    { matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12 },
-    { matColumnDef: 'createdAt', headerCellDef: 'Added Time', headerWidth: 10 },
-    { matColumnDef: 'updatedAt', headerCellDef: 'Updated Time', headerWidth: 10 },
-    { matColumnDef: 'action', headerCellDef: '', headerWidth: 8 },
+    {matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 8},
+    {matColumnDef: 'address', headerCellDef: 'Address', headerWidth: 12},
+    {matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 6},
+    {matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12},
+    {matColumnDef: 'createdAt', headerCellDef: 'Added Time', headerWidth: 10},
+    {matColumnDef: 'updatedAt', headerCellDef: 'Updated Time', headerWidth: 10},
+    {matColumnDef: 'action', headerCellDef: '', headerWidth: 8},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   countFav = 0;
@@ -61,7 +61,9 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
     private dialog: MatDialog,
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
-  ) {}
+  ) {
+  }
+
   ngAfterViewInit(): void {
     const dataNameTag = local.getItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
     if (dataNameTag && dataNameTag !== 'undefined') {
@@ -154,7 +156,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
       data['isGetDetail'] = isGetDetail;
       dialogConfig.data = data;
     }
-    dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: this.pageData?.length } };
+    dialogConfig.data = {...dialogConfig.data, ...{currentLength: this.pageData?.length}};
     let dialogRef = this.dialog.open(PopupNameTagComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -223,7 +225,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   urlType(data) {
-    let result = '/account';
+    let result = '/address';
     if (data.type === 'contract') {
       result = data.address?.startsWith(this.prefixAdd) ? '/contracts' : '/evm-contracts';
     }
@@ -253,7 +255,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
           isPrivate = true;
           id = privateData.id;
         }
-        return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
+        return {address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id};
       });
 
       // get other data of private list

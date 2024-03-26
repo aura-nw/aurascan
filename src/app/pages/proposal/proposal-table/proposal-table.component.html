@@ -135,12 +135,12 @@
                       ? '-'
                       : !(data.voter | nameTagTooltipPipe)
                         ? '<a class=text--primary href=' +
-                          ('/account/' + data.voter) +
+                          ('/address/' + data.voter) +
                           '>' +
                           (data.voter | nameTag | ellipsis: 16) +
                           '</a>'
                         : '<a class=text--primary href=' +
-                          ('/account/' + data.voter) +
+                          ('/address/' + data.voter) +
                           '>' +
                           (data.voter | nameTag | ellipsis: 8 : 8) +
                           '</a>'
@@ -223,12 +223,12 @@
                       ? '-'
                       : !(data.depositors | nameTagTooltipPipe)
                         ? '<a class=text--primary href=' +
-                          ('/account/' + data.depositors) +
+                          ('/address/' + data.depositors) +
                           '>' +
                           (data.depositors | nameTag | ellipsis: 16) +
                           '</a>'
                         : '<a class=text--primary href=' +
-                          ('/account/' + data.depositors) +
+                          ('/address/' + data.depositors) +
                           '>' +
                           (data.depositors | nameTag | ellipsis: 8 : 8) +
                           '</a>'

@@ -42,7 +42,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Output() pageEventChange = new EventEmitter<CustomPageEvent>();
 
   votesTemplates: Array<TableTemplate> = [
-    {matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true, isNameTag: true},
+    {matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/address', isShort: true, isNameTag: true},
     {matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/txs', isShort: true, desktopOnly: true},
     {matColumnDef: 'vote_option', headerCellDef: 'Answer'},
     {matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true},
@@ -66,7 +66,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     {
       matColumnDef: 'depositors',
       headerCellDef: 'Depositors',
-      isUrl: '/account',
+      isUrl: '/address',
       isShort: true,
       desktopOnly: true,
       isNameTag: true,

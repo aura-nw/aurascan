@@ -126,7 +126,7 @@ const routes: Routes = [
         canMatch: [() => isEnabled(EFeature.ExportCsv)],
       },
       {
-        path: 'account',
+        path: 'address',
         loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule),
       },
       {

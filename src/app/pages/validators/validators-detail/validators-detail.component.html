@@ -78,7 +78,7 @@
           <h6 class="mb-0 text--gray-1">Address</h6>
           <app-name-tag
             [value]="currentValidatorDetail?.acc_address"
-            [linkRouter]="['/account', currentValidatorDetail?.acc_address]"
+            [linkRouter]="['/address', currentValidatorDetail?.acc_address]"
             [fullText]="true"
             [widthAuto]="true"
             [fullTextMob]="true"></app-name-tag>
@@ -333,7 +333,7 @@
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <app-name-tag
                             *ngSwitchCase="'delegator_address'"
-                            [linkRouter]="['/account', data.delegator_address]"
+                            [linkRouter]="['/address', data.delegator_address]"
                             [value]="data.delegator_address"
                             [tooltipPosition]="'tooltip--right'"></app-name-tag>
                           <div *ngSwitchCase="'amount'">
@@ -358,7 +358,7 @@
             <div *ngIf="breakpoint.value.matches">
               <div class="custom-card-mob-simple body-01 mb-2" *ngFor="let data of dataSourceDelegatorMob">
                 <a
-                  [routerLink]="['/account', data.delegator_address]"
+                  [routerLink]="['/address', data.delegator_address]"
                   class="{{
                     !(data.delegator_address | nameTagTooltipPipe)
                       ? (data.delegator_address | isPrivateNameTag)

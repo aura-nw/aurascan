@@ -29,7 +29,7 @@
             [decimal]="6"></div>
         </div>
         <span appLinkDenom>{{ denom }}</span>
-        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/account', contractDetail.address]">
+        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/address', contractDetail.address]">
           More info</a
         >
       </div>
@@ -74,7 +74,7 @@
                   height="18"
                   class="ml-1 mb-1"
                   [appTooltip]="verifiedText || 'Verified by Aura Network'"
-                  *ngIf="verifiedStatus === 'VERIFIED'" />
+                  *ngIf="verifiedStatus === 'VERIFIED'"/>
               </div>
             </div>
             <a

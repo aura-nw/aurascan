@@ -21,9 +21,9 @@
             class="button button--sm button-outline button-outline--gradient button-pill button-outline__in-card body flex-shrink-0 fw-semibold">
             <span>
               {{
-                proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                  ? 'Voting Ended'
-                  : 'Vote'
+              proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                ? 'Voting Ended'
+                : 'Vote'
               }}
             </span>
           </button>
@@ -59,14 +59,14 @@
                 <div
                   *ngIf="proDetail?.proposer"
                   [copyBtn]="proDetail?.proposer_address"
-                  [routerLink]="['/account', proDetail?.proposer_address]">
+                  [routerLink]="['/address', proDetail?.proposer_address]">
                   {{ proDetail?.proposer?.description?.moniker }}
                 </div>
                 <ng-container *ngIf="!proDetail?.proposer">
                   <app-name-tag
                     [value]="proDetail?.proposer_address"
                     [fullText]="true"
-                    [linkRouter]="['/account', proDetail?.proposer_address]"></app-name-tag>
+                    [linkRouter]="['/address', proDetail?.proposer_address]"></app-name-tag>
                 </ng-container>
               </a>
             </ng-container>
@@ -134,14 +134,14 @@
             <ng-container *ngIf="proDetail?.plan">
               <div *ngFor="let key of getObjectKey(proDetail?.plan)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">
-                  {{ proDetail?.plan[key] | appJson: { checkType: true } }}
+                  {{ proDetail?.plan[key] | appJson: {checkType: true} }}
                 </ng-container>
               </div>
             </ng-container>
             <ng-container *ngIf="proDetail?.changes">
               <div *ngFor="let key of getObjectKey(proDetail?.changes)">
                 <ng-container *ngIf="key === specialDataArr[activeId].value">
-                  {{ proDetail?.changes[key] | appJson: { checkType: true } }}
+                  {{ proDetail?.changes[key] | appJson: {checkType: true} }}
                 </ng-container>
               </div>
             </ng-container>
@@ -361,9 +361,9 @@
               class="button button--md button-fixed button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0 h5-mob">
               <span>
                 {{
-                  proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                    ? 'Voting Ended'
-                    : 'Vote'
+                proStatus.key != 'PROPOSAL_STATUS_VOTING_PERIOD' && proStatus.key != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  ? 'Voting Ended'
+                  : 'Vote'
                 }}
               </span>
             </button>

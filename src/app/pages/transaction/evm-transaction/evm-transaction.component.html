@@ -89,7 +89,7 @@
                 <app-name-tag
                   [value]="transaction.to?.toLowerCase()"
                   [fullText]="true"
-                  [linkRouter]="[isEvmContract ? '/evm-contracts' : '/account', transaction.to]"
+                  [linkRouter]="[isEvmContract ? '/evm-contracts' : '/address', transaction.to]"
                   [iconContract]="isEvmContract"></app-name-tag>
               </ng-container>
             </div>

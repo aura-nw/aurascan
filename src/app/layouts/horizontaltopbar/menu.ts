@@ -67,6 +67,7 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.PROPOSAL',
         icon: 'envelope-open',
         link: '/votings',
+        activeLink: 'voting',
         name: MenuName.Proposal,
       },
       {
@@ -248,6 +249,7 @@ export const MENU_MOB: MenuItem[] = [
         label: 'MENUITEMS.PROPOSAL',
         icon: 'envelope-open',
         link: '/votings',
+        activeLink: 'voting',
         name: MenuName.Proposal,
       },
       {

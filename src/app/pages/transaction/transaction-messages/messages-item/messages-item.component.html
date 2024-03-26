@@ -9,7 +9,7 @@
             <app-name-tag
               class="msg-item"
               [value]="value || dataLink?.data"
-              [linkRouter]="[dataLink?.url || '/account', dataLink?.data || value]"
+              [linkRouter]="[dataLink?.url || '/address', dataLink?.data || value]"
               [fullText]="true"
               [addressOnly]="dataLink?.data || value"
               [fullTextMob]="true"
@@ -20,7 +20,7 @@
             <a
               *ngIf="dataLink.url.indexOf('http') === -1"
               class="text--primary"
-              [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]">
+              [routerLink]="[dataLink?.url || '/address', dataLink?.data || value]">
               {{ value || dataLink?.data || '-' }}
             </a>
             <a class="text--primary" [href]="dataLink?.url" *ngIf="dataLink.url.indexOf('http') > -1" target="_blank">

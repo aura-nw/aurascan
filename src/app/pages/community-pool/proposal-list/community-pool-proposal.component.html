@@ -40,7 +40,7 @@
             <ng-container matColumnDef="sender">
               <th mat-header-cell *matHeaderCellDef>Sender</th>
               <td mat-cell *matCellDef="let element">
-                <app-name-tag [value]="distributionAcc" [linkRouter]="['/account', distributionAcc]"></app-name-tag>
+                <app-name-tag [value]="distributionAcc" [linkRouter]="['/address', distributionAcc]"></app-name-tag>
               </td>
             </ng-container>
 
@@ -48,7 +48,7 @@
             <ng-container matColumnDef="recipient">
               <th mat-header-cell *matHeaderCellDef>Recipient</th>
               <td mat-cell *matCellDef="let element">
-                <app-name-tag [value]="element.recipient" [linkRouter]="['/account', element.recipient]"></app-name-tag>
+                <app-name-tag [value]="element.recipient" [linkRouter]="['/address', element.recipient]"></app-name-tag>
               </td>
             </ng-container>
 
@@ -119,12 +119,12 @@
                   class: !(distributionAcc | nameTagTooltipPipe) ? 'name-tag' : '',
                   info: !(distributionAcc | nameTagTooltipPipe)
                     ? '<a class=text--primary href=' +
-                      ('/account/' + distributionAcc) +
+                      ('/address/' + distributionAcc) +
                       '>' +
                       (distributionAcc | nameTag | ellipsis: 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
-                      ('/account/' + distributionAcc) +
+                      ('/address/' + distributionAcc) +
                       '>' +
                       (distributionAcc | nameTag | ellipsis: 8 : 8) +
                       '</a>'
@@ -135,12 +135,12 @@
                   class: !(data.recipient | nameTagTooltipPipe) ? 'name-tag' : '',
                   info: !(data.recipient | nameTagTooltipPipe)
                     ? '<a class=text--primary href=' +
-                      ('/account/' + data.recipient) +
+                      ('/address/' + data.recipient) +
                       '>' +
                       (data.recipient | nameTag | ellipsis: 16) +
                       '</a>'
                     : '<a class=text--primary href=' +
-                      ('/account/' + data.recipient) +
+                      ('/address/' + data.recipient) +
                       '>' +
                       (data.recipient | nameTag | ellipsis: 8 : 8) +
                       '</a>'

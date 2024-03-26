@@ -68,7 +68,7 @@
               [value]="contractDetail?.creator"
               [widthAuto]="true"
               [linkRouter]="[
-                (contractDetail?.creator | isContract) ? '/contracts' : '/account',
+                (contractDetail?.creator | isContract) ? '/contracts' : '/address',
                 contractDetail?.creator
               ]">
             </app-name-tag>

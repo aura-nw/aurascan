@@ -18,9 +18,13 @@ export class MenuActiveDirective implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (!this.element || !this.activeMenuItem) return;
-    let menuClass = null;
-
-    if ((this.router.url === '/' || this.router.url === '/dashboard') && this.activeMenuItem.menuLink === '/dashboard') {
+    let menuClass = '';
+    // dash board
+    if ((this.router.url === '/' || this.router.url === '/dashboard') && (this.activeMenuItem.menuLink === '/')) {
+      menuClass = 'active';
+    }
+    // default
+    if (this.router.url === this.activeMenuItem.menuLink) {
       menuClass = 'active';
     }
 
@@ -57,9 +61,35 @@ export class MenuActiveDirective implements AfterViewInit {
     }
 
     if (
+      this.activeMenuItem.menuLink === '/contracts' &&
+      this.router.url.includes('/contracts') &&
+      !this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
+    ) {
+      menuClass = 'active';
+    }
+
+    if (
+      this.activeMenuItem.menuLink === '/evm-contracts' &&
+      this.router.url.includes('/evm-contracts')
+    ) {
+      menuClass = 'active';
+    }
+
+    if (
+      this.activeMenuItem.menuLink === '/validators' &&
+      this.router.url.includes('/validators')
+    ) {
+      menuClass = 'active';
+    }
+
+    if (
       this.activeMenuItem.menuLink === '/blocks' &&
       this.router.url.includes('/block')
     ) {
+      menuClass = 'active';
+    }
+
+    if (this.activeMenuItem.menuDetailLink === 'voting' && this.router.url.includes('/votings/')) {
       menuClass = 'active';
     }
 
@@ -106,7 +136,6 @@ export class MenuActiveDirective implements AfterViewInit {
     ) {
       menuClass = 'active';
     }
-
 
     this.element.classList.add(menuClass);
   }

@@ -26,7 +26,7 @@ export class CodeIdContractsTabComponent implements OnInit {
   templates: Array<TableTemplate> = [
     {matColumnDef: 'contract_address', headerCellDef: 'Contract Address', isUrl: '/contracts', headerWidth: 250},
     {matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', isUrl: '/txs', headerWidth: 230},
-    {matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 250},
+    {matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/address', headerWidth: 250},
     {matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 180},
     {matColumnDef: 'created_at', headerCellDef: 'Instantiated at', headerWidth: 200},
     {matColumnDef: 'verified_at', headerCellDef: 'Verified at', headerWidth: 200},
