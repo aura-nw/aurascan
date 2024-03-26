@@ -44,20 +44,22 @@
         <span class="d-none d-lg-block">Write Contract</span>
         <span class="d-lg-none">Write</span>
       </button>
-      <button
-        class="button-tab"
-        [class.active]="currentTab === ContractType.ReadContractProxy"
-        (click)="changeTab(ContractType.ReadContractProxy)">
-        <span class="d-none d-lg-block">Read as Proxy</span>
-        <span class="d-lg-none">Read as Proxy</span>
-      </button>
-      <button
-        class="button-tab"
-        [class.active]="currentTab === ContractType.WriteContractProxy"
-        (click)="changeTab(ContractType.WriteContractProxy)">
-        <span class="d-none d-lg-block">Write as Proxy</span>
-        <span class="d-lg-none">Write as Proxy</span>
-      </button>
+      <ng-container *ngIf="contractDetail?.type?.startsWith('PROXY_EIP_1967')">
+        <button
+          class="button-tab"
+          [class.active]="currentTab === ContractType.ReadContractProxy"
+          (click)="changeTab(ContractType.ReadContractProxy)">
+          <span class="d-none d-lg-block">Read as Proxy</span>
+          <span class="d-lg-none">Read as Proxy</span>
+        </button>
+        <button
+          class="button-tab"
+          [class.active]="currentTab === ContractType.WriteContractProxy"
+          (click)="changeTab(ContractType.WriteContractProxy)">
+          <span class="d-none d-lg-block">Write as Proxy</span>
+          <span class="d-lg-none">Write as Proxy</span>
+        </button>
+      </ng-container>
     </div>
   </ng-container>
 </div>
@@ -81,16 +83,34 @@
       [contractAddress]="contractsAddress">
     </app-evm-write>
 
-    <app-evm-read-as-proxy
-      *ngIf="currentTab === ContractType.ReadContractProxy"
-      [abi]="contractDetail.abi"
-      [contractAddress]="contractsAddress">
-    </app-evm-read-as-proxy>
+    <ng-container *ngIf="contractDetail?.type?.startsWith('PROXY_EIP_1967')">
+      <div>
+        <div class="body-02 text--gray-1 fw-semibold mb-2">
+          ABI for the implementation contract at
+          <span class="text--primary body-02 fw-semibold">
+            {{ implementationContractDetail.implementationContract }}
+          </span>
+        </div>
+        <div class="body-02 text--gray-1 mb-6">
+          Previously recorded to be on
+          <span class="text--primary body-02">
+            {{ implementationContractDetail.implementationContract }}
+          </span>
+        </div>
+      </div>
+      <app-evm-read
+        *ngIf="currentTab === ContractType.ReadContractProxy"
+        [abi]="implementationContractDetail.abi"
+        [contractAddress]="contractsAddress"
+        [isProxyContract]="true">
+      </app-evm-read>
 
-    <app-evm-write-as-proxy
-      *ngIf="currentTab === ContractType.WriteContractProxy"
-      [abi]="contractDetail.abi"
-      [contractAddress]="contractsAddress">
-    </app-evm-write-as-proxy>
+      <app-evm-write
+        *ngIf="currentTab === ContractType.WriteContractProxy"
+        [abi]="implementationContractDetail.abi"
+        [contractAddress]="contractsAddress"
+        [isProxyContract]="true">
+      </app-evm-write>
+    </ng-container>
   </ng-container>
 </div>

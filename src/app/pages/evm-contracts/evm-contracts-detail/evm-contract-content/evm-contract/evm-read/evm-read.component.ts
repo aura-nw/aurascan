@@ -21,6 +21,7 @@ type JsonFragmentExtends = JsonFragment & {
 export class EvmReadComponent implements OnChanges {
   @Input() contractAddress: string;
   @Input() abi: JsonFragment[];
+  @Input() isProxyContract = false;
 
   isExpand = false;
   chainInfo = this.environmentService.chainInfo;

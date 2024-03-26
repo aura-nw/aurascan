@@ -31,6 +31,7 @@ type JsonFragmentExtends = JsonFragment & {
 export class EvmWriteComponent implements OnChanges {
   @Input() contractAddress: string;
   @Input() abi: JsonFragment[];
+  @Input() isProxyContract = false;
 
   isExpand = false;
   chainInfo = this.env.chainInfo;
