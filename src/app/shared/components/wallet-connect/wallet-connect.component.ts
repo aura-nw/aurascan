@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Chain } from '@chain-registry/types';
-import { WalletAccount } from '@cosmos-kit/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -28,11 +28,11 @@ export class WalletConnectComponent implements OnInit {
     preferredSignType: (_: Chain) => 'direct',
   };
 
-  wallet$: Observable<WalletAccount> = this.walletsService.walletAccount$;
+  wallet$: Observable<IMultichainWalletAccount> = this.walletService.walletAccount$;
 
   constructor(
     public commonService: CommonService,
-    private walletsService: WalletService,
+    private walletService: WalletService,
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
     private notificationsService: NotificationsService,
@@ -46,7 +46,7 @@ export class WalletConnectComponent implements OnInit {
       const desktop = desktopWallets.filter((w) => checkDesktopWallets(w.walletName));
       const wallets = this.env.isMobile ? mobileWallets : [...desktop, ...wcWallets];
 
-      this.walletsService
+      this.walletService
         .initWalletManager({
           chain,
           wallets,
@@ -57,7 +57,7 @@ export class WalletConnectComponent implements OnInit {
         })
         .then(() => {
           this.configActions();
-          this.walletsService.restoreAccounts();
+          this.walletService.restoreAccounts();
         })
         .catch((error) => {
           console.error('InitWalletManager Error: ', error);
@@ -68,13 +68,13 @@ export class WalletConnectComponent implements OnInit {
   }
 
   configActions() {
-    this.walletsService.setWalletAction({
+    this.walletService.setWalletAction({
       viewOpen: this.openWalletPopup.bind(this),
     });
   }
 
   openWalletPopup() {
-    if (this.walletsService?.isMobile || this.env.isMobile) {
+    if (this.walletService?.isMobile || this.env.isMobile) {
       this.notificationsService.hiddenFooterSubject.next(true);
       this.bottomSheet.open(WalletBottomSheetComponent, {
         panelClass: 'wallet-popup--mob',
@@ -91,7 +91,7 @@ export class WalletConnectComponent implements OnInit {
   }
 
   disconnect(): void {
-    this.walletsService.disconnect();
+    this.walletService.disconnect();
   }
 
   copyMessage(text: string) {

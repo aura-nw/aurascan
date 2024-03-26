@@ -11,14 +11,9 @@ import { Globals } from '../../../global/global';
  * Page Title Component
  */
 export class PagetitleComponent {
-  @Input()
-  breadcrumbItems!: Array<{
-    active?: boolean;
-    label?: string;
-  }>;
-
   @Input() title: string | undefined;
   @Input() displayInfo: boolean = false;
+  @Input() mobileDisplay: boolean = false;
 
   constructor(public global: Globals) {}
 }

@@ -29,6 +29,7 @@ export interface IConfiguration {
     quotaSetPrivateName: number;
     quotaSetWatchList: number;
     quotaNotification: number;
+    etherJsonRpc: string;
     coins: {
       name: string;
       display: string;
@@ -38,6 +39,7 @@ export interface IConfiguration {
     }[];
     features: string[];
     chain_info: any;
+    evmChainInfo: any;
     cosmos_sdk_version?: string;
   };
   image: {
@@ -53,6 +55,7 @@ export interface IConfiguration {
     socket: string;
     ipfsDomain: string;
     googleClientId: string;
+    verifyContract: string;
     coingecko: {
       url: string;
       ids: string[];
@@ -95,6 +98,14 @@ export class EnvironmentService {
 
   get chainConfig() {
     return _.get(this.configValue, 'chainConfig');
+  }
+
+  get etherJsonRpc() {
+    return _.get(this.configValue, 'chainConfig.etherJsonRpc');
+  }
+
+  get evmChainInfo() {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo');
   }
 
   get chainInfo() {
@@ -157,6 +168,10 @@ export class EnvironmentService {
 
   get walletConnect() {
     return _.get(this.configValue, 'api.walletConnect');
+  }
+
+  get verifyContractUrl() {
+    return _.get(this.configValue, 'api.verifyContract');
   }
 
   setLatestBlockHeight(value: string | number) {

@@ -1,0 +1,37 @@
+.name-tag-mob a {
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 400;
+  word-break: break-word;
+  background-color: var(--aura-gray-8);
+  border-radius: 4px 0 0 4px;
+  padding-left: var(--spacer-1);
+  padding-right: var(--spacer-5);
+
+  &.private-name-tag {
+    padding: 0 var(--spacer-2);
+    padding-right: var(--spacer-2);
+    background-color: var(--aura-gray-10);
+    border-radius: 16px;
+    border: 1px solid var(--aura-gray-8);
+  }
+
+  &:not(.private-name-tag) {
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      right: -1px;
+      top: 0;
+      bottom: 0;
+      border-top: 13px solid transparent;
+      border-right: 15px solid var(--aura-black);
+      border-bottom: 13px solid transparent;
+    }
+  }
+}

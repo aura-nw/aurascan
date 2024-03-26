@@ -4,51 +4,68 @@
   font-weight: $font-weight !important;
   font-family: $font !important;
 }
+
 html,
 body {
   font-size: 10px;
 }
+
 .text-sm {
   font-size: 14px !important;
 }
+
 h1,
 .h1 {
   @include mono-font-size(2.4, 2.6, 600);
   display: inline-block;
 }
+
 h2,
 .h2 {
   @include mono-font-size(2.2, 2.6, 600);
   display: inline-block;
 }
+
 h3,
 .h3 {
   @include mono-font-size(2, 2.6, 400);
 }
+
 h4,
 .h4 {
   @include mono-font-size(1.6, 2, 600);
 }
+
 h5,
 .h5 {
   @include mono-font-size(1.6, 1.9, 600);
 }
+
 h6,
 .h6 {
   @include mono-font-size(1.6, 2.4, 400);
 }
+
 .body {
   @include mono-font-size(1.4, 1.6, 400);
 }
+
 .body-01 {
   @include mono-font-size(1.6, 2, 400);
 }
+
 .body-02 {
   @include mono-font-size(1.4, 1.8, 400);
 }
+
 .body-03 {
   @include mono-font-size(1.4, 1.6, 400);
 }
+
+.body-04 {
+  @include mono-font-size(1.2, 1.6, 400);
+}
+
 .caption {
   @include mono-font-size(1.2, 1.6, 600);
 }
@@ -58,38 +75,49 @@ h6,
     @include mono-font-size(2.4, 2.6, 600);
     display: inline-block;
   }
+
   .h2-mob {
     @include mono-font-size(2.2, 2.6, 600);
     display: inline-block;
   }
+
   .h3-mob {
     @include mono-font-size(2, 2.6, 400);
   }
+
   .h4-mob {
     @include mono-font-size(1.6, 2, 600);
   }
+
   .h5-mob {
     @include mono-font-size(1.6, 1.9, 600);
   }
+
   .h6-mob {
     @include mono-font-size(1.6, 2.4, 400);
   }
+
   .body-mob {
     @include mono-font-size(1.4, 1.6, 400);
   }
+
   .body-01-mob {
     @include mono-font-size(1.6, 2, 400);
   }
+
   .body-02-mob {
     @include mono-font-size(1.4, 1.6, 400);
   }
+
   .body-03-mob {
     @include mono-font-size(1.4, 1.6, 400);
   }
+
   .caption-mob {
     @include mono-font-size(1.2, 1.6, 600);
   }
 }
+
 $textColors: (
   'primary',
   'danger',
@@ -123,20 +151,25 @@ $textColors: (
   'gray-light-3',
   'orange-1'
 );
+
 @each $color in $textColors {
   .text--#{$color} {
     color: var(--aura-#{$color}) !important;
   }
 }
+
 .fw-700 {
   font-weight: 700 !important;
 }
+
 .fw-semibold {
   font-weight: 600 !important;
 }
+
 .fw-normal {
   font-weight: 400 !important;
 }
+
 .font-italic {
   font-style: italic;
 }
@@ -145,9 +178,11 @@ $textColors: (
   .fw-700-mob {
     font-weight: 700 !important;
   }
+
   .fw-semibold-mob {
     font-weight: 600 !important;
   }
+
   .fw-normal-mob {
     font-weight: 400 !important;
   }
@@ -156,6 +191,7 @@ $textColors: (
 .text-hover-gray {
   color: #9da2af;
 }
+
 .button-link {
   color: var(--aura-blue-3link);
 }
@@ -164,6 +200,7 @@ $textColors: (
 a.text--primary {
   cursor: pointer;
   transition: all 0.35s ease-in-out;
+
   &:hover {
     color: var(--aura-blue-shade-3) !important;
   }
@@ -201,15 +238,15 @@ a.text--primary {
 
 .json {
   &-key {
-    color: #569cd6;
+    color: #FD805F;
   }
 
   &-value {
-    color: #aac19e;
+    color: #FFFFFF;
   }
 
   &-string {
-    color: #ce9178;
+    color: #FFFFFF;
   }
 }
 

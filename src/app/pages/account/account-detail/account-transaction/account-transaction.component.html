@@ -31,6 +31,14 @@
         [tnxTypeOrigin]="lstTypeFilter"></app-account-transaction-table>
     </ng-container>
 
+    <!-- EVM Executed Transaction -->
+    <ng-container *ngIf="currentTab === tabsData.EVMExecutedTxs">
+      <app-account-transaction-table
+        [modeQuery]="currentTab"
+        (lstType)="lstTypeFilter = $event"
+        [tnxTypeOrigin]="lstTypeFilter"></app-account-transaction-table>
+    </ng-container>
+
     <!-- Aura Transfer -->
     <ng-container *ngIf="currentTab === tabsData.NativeTxs">
       <app-account-transaction-table

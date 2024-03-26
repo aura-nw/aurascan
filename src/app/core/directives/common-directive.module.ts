@@ -5,7 +5,9 @@ import { ImageDirective } from './image.directive';
 import { FeatureDirective } from './feature.directive';
 import { LinkDenomDirective } from './link-denom.directive';
 import { CopyButtonDirective } from './copy-button.directive';
+import { ExpandableContentDirective } from './expandable-content.directive';
 import { TooltipCustomizeDirective } from 'src/app/core/directives/tooltip-customize.directive';
+import { DragDropDirective } from './drag-drop.directive';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { TooltipCustomizeDirective } from 'src/app/core/directives/tooltip-custo
     FeatureDirective,
     LinkDenomDirective,
     CopyButtonDirective,
+    ExpandableContentDirective,
     TooltipCustomizeDirective,
+    DragDropDirective,
   ],
   imports: [],
   exports: [
@@ -25,7 +29,9 @@ import { TooltipCustomizeDirective } from 'src/app/core/directives/tooltip-custo
     FeatureDirective,
     LinkDenomDirective,
     CopyButtonDirective,
+    ExpandableContentDirective,
     TooltipCustomizeDirective,
+    DragDropDirective,
   ],
 })
 export class CommonDirectiveModule {}

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NotificationsService } from 'src/app/core/services/notifications.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -149,6 +150,22 @@ export class MenuBottomBarComponent implements OnInit {
     if (
       menuLink === '/tokens/token-abt' &&
       (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/transactions' &&
+      this.router.url.includes('/transaction') &&
+      !this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/evm-transactions' &&
+      this.router.url.includes('/transaction') &&
+      this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
     ) {
       return true;
     }

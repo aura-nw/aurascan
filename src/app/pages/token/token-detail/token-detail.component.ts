@@ -42,10 +42,10 @@ export class TokenDetailComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     if (this.contractAddress?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
-      if (this.router.snapshot.url[0]?.path === 'token') {
-        this.getCW20Detail();
-      } else {
+      if (this.router.snapshot.url[0]?.path === 'nft' || this.router.snapshot.url[0]?.path === 'abt') {
         this.getTokenDetailNFT();
+      } else {
+        this.getCW20Detail();
       }
     } else {
       this.getTokenDetail();

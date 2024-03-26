@@ -66,7 +66,11 @@ export class MarketInfoPipe implements PipeTransform {
 @Pipe({ name: 'ibcDenom' })
 export class IbcDenomPipe implements PipeTransform {
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
-  constructor(private commonService: CommonService, private environmentService: EnvironmentService) {}
+
+  constructor(
+    private commonService: CommonService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   transform(value: string, amount?: string): string {
     if (!value) return '';
@@ -82,6 +86,6 @@ export class IbcDenomPipe implements PipeTransform {
 
     return balance.lte(0)
       ? '-'
-      : balance.toFormat() + `<a class="text--primary ml-1" href='/tokens/token/${linkToken}'>${data['display']}</a>`;
+      : balance.toFormat() + `<a class="text--primary ml-1" href='/token/${linkToken}'>${data['display']}</a>`;
   }
 }

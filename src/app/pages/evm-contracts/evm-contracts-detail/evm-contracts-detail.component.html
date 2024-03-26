@@ -1,0 +1,68 @@
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<ng-container *ngIf="!isLoading">
+  <ng-container *ngIf="contractDetail; else noValues">
+    <div class="d-flex justify-content-between justify-content-lg-start mb-4 mb-lg-5 box-contract-info">
+      <div class="d-lg-flex align-items-center">
+        <h1 class="mb-0 text--white" id="ttiopa123">EVM Contract</h1>
+        <span class="text--gray-5 body-01 body-02-mob ml-sm-2 break-word mt-2 mt-lg-0">{{ contractAddress }}</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <div class="btn-mobile ml-4 ml-lg-2" [copyBtn]="contractAddress"></div>
+        <div
+          class="btn-mobile ml-4 ml-lg-2"
+          [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'">
+          <button class="button button--xxs px-1" (click)="handleWatchList()">
+            <i class="ph ph-star body-01" [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
+          </button>
+        </div>
+        <div class="btn-mobile ml-4 ml-lg-2">
+          <button class="button button--xxs px-1" *ngIf="contractAddress">
+            <i class="ph ph-qr-code text--white body-01" (click)="viewQrAddress(modalManage)"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row card-contain">
+      <div class="col-12 col-lg-4 mb-haft">
+        <div class="contract__card-info">
+          <app-evm-overview [contractDetail]="contractDetail" *ngIf="contractDetail"></app-evm-overview>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4 mb-haft">
+        <div class="contract__card-info">
+          <app-evm-contract-info
+            [type]="'information'"
+            [contractDetail]="contractDetail"
+            *ngIf="contractDetail"></app-evm-contract-info>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="contract__card-info">
+          <app-evm-contract-info [type]="'moreInfo'" [contractDetail]="contractDetail" *ngIf="contractDetail">
+          </app-evm-contract-info>
+        </div>
+      </div>
+    </div>
+
+    <app-evm-contract-content [contractsAddress]="contractAddress" [contractTypeData]="contractDetail?.status">
+    </app-evm-contract-content>
+
+    <div class="col-lg-3">
+      <ng-template #modalManage let-modal>
+        <div class="box-address">
+          <div class="text-end mb-4 cursor-pointer">
+            <i class="ph ph-x h3 cursor-pointer text--white" (click)="closePopup()"></i>
+          </div>
+          <app-qr [address]="contractAddress || ''"></app-qr>
+        </div>
+      </ng-template>
+    </div>
+  </ng-container>
+
+  <ng-template #noValues>
+    <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+  </ng-template>
+</ng-container>

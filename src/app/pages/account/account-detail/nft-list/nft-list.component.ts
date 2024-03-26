@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { ETokenNFTTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
@@ -33,6 +33,8 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   totalValue = 0;
   textSearch = '';
   searchNotFound = false;
+  typeToken = '';
+  typeTokeList = ETokenNFTTypeBE;
   listCollection = [
     {
       label: 'All',
@@ -205,5 +207,9 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
 
   encodeData(data) {
     return encodeURIComponent(data);
+  }
+
+  changeType(type: string): void {
+    this.typeToken = type;
   }
 }

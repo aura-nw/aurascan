@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { clearLocalData } from 'src/app/global/global';
 import { CW20_TRACKING, CW721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IUser } from '../models/auth.models';
 import local from '../utils/storage/local';
-import { CommonService } from './common.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -100,9 +99,9 @@ export class UserService {
 
   getListTxByAddress(payload) {
     const operationsDoc = `
-    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderId: order_by = desc, $address: String = null) {
+    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderId: order_by = desc, $address: [String!] = null) {
       ${this.envDB} {
-        transaction(where: {timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}, sender: {_eq: $address}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {id: $orderId}) {
+        transaction(where: {timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}, sender: {_in: $address}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderId}) {
           hash
           height
           fee
@@ -111,6 +110,9 @@ export class UserService {
           transaction_messages {
             type
             content
+          }
+          evm_transaction{
+            hash
           }
         }
       }
@@ -130,6 +132,43 @@ export class UserService {
           endTime: payload.endTime,
         },
         operationName: 'QueryTxOfAccount',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListEvmTxByAddress(payload) {
+    const operationsDoc = `
+    query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $orderId: order_by = desc, $address: [String!] = null) {
+      ${this.envDB} {
+        evm_transaction(where: {from: {_in: $address}, transaction: {timestamp: {_gt: $startTime, _lt: $endTime}}}, limit: $limit, order_by: {height: $orderId}) {
+          data
+          from
+          to
+          hash
+          height
+          transaction {
+            timestamp
+            hash
+            transaction_messages {
+              type
+              content
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 40,
+          address: payload.address,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+        },
+        operationName: 'QueryEvmTxOfAccount',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

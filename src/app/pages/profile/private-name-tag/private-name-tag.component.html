@@ -70,7 +70,7 @@
                     *ngIf="data.isFavorite" />
                 </div>
                 <div *ngSwitchCase="'address'" class="d-flex flex-column mt-1">
-                  <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
+                  <a class="text--primary cursor-pointer" [routerLink]="[urlType(data), data.address]">
                     <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                   </a>
                   <div
@@ -116,7 +116,7 @@
       <div *ngFor="let data of dataSourceMobile" class="card-name-tag">
         <div class="d-flex align-items-center justify-content-between">
           <div class="card__title">
-            <a class="text--primary cursor-pointer" [routerLink]="[urlType(data.address), data.address]">
+            <a class="text--primary cursor-pointer" [routerLink]="[urlType(data), data.address]">
               <span class="fw-semibold">{{ data.address | ellipsis: 8 : 8 }}</span>
             </a>
             <div class="text--gray-5 line-claim w-100">

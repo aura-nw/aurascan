@@ -49,6 +49,12 @@
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === TabsAccountLink.EVMExecutedTxs"
+                  (click)="changeTypeFilter(TabsAccountLink.EVMExecutedTxs)">
+                  <button type="button" class="button px-2">{{ TabsAccount.EVMExecutedTxs }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
                   [class.active]="dataType === TabsAccountLink.NativeTxs"
                   (click)="changeTypeFilter(TabsAccountLink.NativeTxs)">
                   <button type="button" class="button px-2">{{ TabsAccount.NativeTxs }}</button>
@@ -83,13 +89,13 @@
             <input
               type="text"
               formControlName="address"
-              placeholder="{{ prefix }}..."
+              placeholder="{{ prefix }}... / 0x..."
               name="inputAddress"
               (input)="checkFormValid(); isError = false"
               autocomplete="off" />
           </div>
           <div *ngIf="getAddress?.value?.length > 0 && !isValidAddress" class="text--danger mt-2 caption fw-normal">
-            Invalid aura address format
+            Invalid address format
           </div>
         </div>
       </div>
@@ -117,7 +123,13 @@
               type="radio"
               value="filterRange"
               id="block"
-              [disabled]="!(!dataType || dataType === this.TabsAccountLink.ExecutedTxs)"
+              [disabled]="
+                !(
+                  !dataType ||
+                  dataType === this.TabsAccountLink.ExecutedTxs ||
+                  dataType === this.TabsAccountLink.EVMExecutedTxs
+                )
+              "
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
               (change)="changeType()" />

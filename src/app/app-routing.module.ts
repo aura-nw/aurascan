@@ -42,16 +42,33 @@ const routes: Routes = [
         loadChildren: () => import('./pages/blocks/blocks.module').then((m) => m.BlocksModule),
       },
       {
+        path: 'transactions',
+        loadChildren: () => import('./pages/transactions/transactions.module').then((m) => m.TransactionsModule),
+      },
+      {
         path: 'transaction',
         loadChildren: () => import('./pages/transaction/transaction.module').then((m) => m.TransactionModule),
+      },
+      {
+        path: 'evm-transactions',
+        loadChildren: () =>
+          import('./pages/evm-transactions/evm-transactions.module').then((m) => m.EvmTransactionsModule),
       },
       {
         path: 'votings',
         loadChildren: () => import('./pages/proposal/proposal.module').then((m) => m.ProposalModule),
       },
       {
-        path: 'tokens',
+        path: 'token',
         loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
+      },
+      {
+        path: 'evm-token',
+        loadChildren: () => import('./pages/evm-token/evm-token.module').then((m) => m.EvmTokenModule),
+      },
+      {
+        path: 'tokens',
+        loadChildren: () => import('./pages/tokens/tokens.module').then((m) => m.TokensModule),
       },
       {
         path: 'statistics',
@@ -60,6 +77,10 @@ const routes: Routes = [
       {
         path: 'contracts',
         loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
+      },
+      {
+        path: 'evm-contracts',
+        loadChildren: () => import('./pages/evm-contracts/evm-contracts.module').then((m) => m.EvmContractsModule),
       },
       {
         path: 'code-ids',

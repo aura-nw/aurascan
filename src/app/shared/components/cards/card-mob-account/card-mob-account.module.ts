@@ -9,7 +9,14 @@ import { CardMobAccountComponent } from './card-mob-account.component';
 
 @NgModule({
   declarations: [CardMobAccountComponent],
-  imports: [CommonModule, RouterModule, CustomPipeModule, LoadingImageModule, CommonDirectiveModule, NameTagModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    CustomPipeModule,
+    LoadingImageModule,
+    CommonDirectiveModule,
+    NameTagModule,
+  ],
   exports: [CardMobAccountComponent],
 })
 export class CardMobAccountModule {}

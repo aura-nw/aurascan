@@ -74,7 +74,7 @@ export class NFTDetailComponent implements OnInit {
   isError = false;
   sbType = SB_TYPE;
   contractType = ContractRegisterType;
-  linkToken = 'token-nft';
+  linkToken = 'token/nft';
   animationUrl: string;
   imageUrl: string;
   isCW4973 = false;
@@ -143,11 +143,11 @@ export class NFTDetailComponent implements OnInit {
         }
 
         res['type'] = res['type'] || ContractRegisterType.CW721;
-        if (this.router.snapshot.url[0]?.path === 'token-abt') {
+        if (this.router.snapshot.url[0]?.path === 'abt') {
           if (res.name === TYPE_CW4973 && res.cw721_contract?.cw721_tokens[0]?.burned === false) {
             res['type'] = ContractRegisterType.CW4973;
             this.isSoulBound = true;
-            this.linkToken = 'token-abt';
+            this.linkToken = 'token/abt';
             this.isCW4973 = true;
           } else {
             this.toastr.error('Token invalid');

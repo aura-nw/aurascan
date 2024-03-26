@@ -10,26 +10,32 @@ import { MASK_CONFIG } from 'src/app/app.config';
 import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
-import { TransactionService } from '../../../app/core/services/transaction.service';
-import { MaterialModule } from '../../../app/material.module';
-import { SharedModule } from '../../../app/shared/shared.module';
+import { MappingErrorService } from '../../core/services/mapping-error.service';
+import { TransactionService } from '../../core/services/transaction.service';
+import { MaterialModule } from '../../material.module';
 import { CustomPipeModule } from '../../core/pipes/custom-pipe.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
-import { TokenTransferComponent } from './transaction-detail/token-transfer/token-transfer.component';
-import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
-import { MessagesItemComponent } from './transaction-detail/transaction-messages/messages-item/messages-item.component';
-import { TransactionMessagesComponent } from './transaction-detail/transaction-messages/transaction-messages.component';
+import { SharedModule } from '../../shared/shared.module';
+import { CosmosTransactionComponent } from './cosmos-transaction/cosmos-transaction.component';
+import { EvmMessageComponent } from './evm-transaction/evm-message/evm-message.component';
+import { EvmTransactionEventLogComponent } from './evm-transaction/evm-transaction-event-log/evm-transaction-event-log.component';
+import { EvmTransactionComponent } from './evm-transaction/evm-transaction.component';
+import { TokenTransferComponent } from './token-transfer/token-transfer.component';
+import { MessagesItemComponent } from './transaction-messages/messages-item/messages-item.component';
+import { TransactionMessagesComponent } from './transaction-messages/transaction-messages.component';
 import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
 
 @NgModule({
   declarations: [
     TransactionComponent,
-    TransactionDetailComponent,
     TransactionMessagesComponent,
     MessagesItemComponent,
     TokenTransferComponent,
+    CosmosTransactionComponent,
+    EvmTransactionComponent,
+    EvmMessageComponent,
+    EvmTransactionEventLogComponent,
   ],
   imports: [
     CommonModule,

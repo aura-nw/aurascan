@@ -36,7 +36,7 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
   { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 15 },
   { matColumnDef: 'status', headerCellDef: 'Result', type: 'result', headerWidth: 9 },
-  { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
+  { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8 },
   { matColumnDef: 'blockHeight', headerCellDef: 'Block', type: 'hash-url', headerWidth: 6, isUrl: '/blocks' },
   {
     matColumnDef: 'from',
@@ -47,6 +47,30 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
     isNameTag: true,
   },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
+];
+
+export const EVM_CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
+  { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
+  { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 8 },
+  { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 10 },
+  { matColumnDef: 'height', headerCellDef: 'Height', type: 'hash-url', headerWidth: 6, isUrl: '/blocks' },
+  {
+    matColumnDef: 'from',
+    headerCellDef: 'From',
+    type: 'hash-url',
+    headerWidth: 12,
+    isUrl: '/account',
+    isNameTag: true,
+  },
+  {
+    matColumnDef: 'to',
+    headerCellDef: 'To',
+    type: 'hash-url',
+    headerWidth: 12,
+    isUrl: '/account',
+    isNameTag: true,
+  },
+  { matColumnDef: 'amount', headerCellDef: 'Amount', type: 'amount', headerWidth: 10 },
 ];
 
 export const CONTRACT_VERSIONS = [

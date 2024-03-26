@@ -1,0 +1,56 @@
+.event-log-container {
+  width: 100%;
+  padding: 8px 0px;
+  display: flex;
+  gap: 24px;
+
+  @media (max-width: 992px) {
+    gap: 8px;
+  }
+
+  .item-topic {
+    min-height: 40px;
+    &:last-child {
+      min-height: 20px;
+    }
+  }
+
+  .event-number {
+    width: 44px;
+    max-width: 20%;
+    height: 34px;
+    border-radius: 8px;
+    background: #222f3d;
+    color: var(--aura-primary);
+    border: 1px solid var(--aura-blue-4);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &.secondary {
+      color: var(--while);
+      border: 1px solid var(--aura-gray-6);
+      background: var(--aura-gray-9);
+      width: 32px;
+      height: 24px;
+    }
+  }
+
+  .event-content {
+    max-width: calc(100% - 52px);
+  }
+
+  .topic {
+    max-width: calc(100% - 38px);
+  }
+
+  .highlight {
+    width: max-content;
+    max-width: 98%;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--aura-gray-10);
+  }
+}

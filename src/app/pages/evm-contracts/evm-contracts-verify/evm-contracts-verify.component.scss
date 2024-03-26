@@ -1,0 +1,73 @@
+.contract-verify {
+  @media (min-width: 992px) {
+    padding-top: 16px;
+    padding-bottom: 56px;
+  }
+
+  ul.aura-nav-tabs li {
+    min-width: 100px;
+    text-align: center;
+    @media (min-width: 992px) {
+      min-width: 200px;
+    }
+  }
+
+  .aura-form .form-group {
+    input.form-control,
+    .select-input--flat {
+      height: 40px;
+      margin-top: 0;
+    }
+  }
+
+  button.button {
+    height: 48px;
+    padding: 0 24px;
+  }
+
+  .drop-zone {
+    width: 100%;
+    height: 170px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px 0;
+    border-radius: 8px;
+    border: 1px dashed var(--aura-gray-3);
+    background: var(--aura-bg-form);
+
+    &.with-data {
+      padding: 24px;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .drop-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+
+      .add-icon {
+        display: flex;
+        padding: 14px;
+        font-size: 24px;
+        background: var(--aura-gray-8);
+        border-radius: 999px;
+      }
+
+      .icon-wrapper {
+        padding: 4px;
+        border-radius: 8px;
+        border: 1px solid var(--aura-gray-7);
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+}

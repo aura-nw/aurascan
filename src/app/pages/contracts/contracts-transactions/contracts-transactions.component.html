@@ -6,7 +6,7 @@
       <app-name-tag
         [tooltipPosition]="'tooltip--right'"
         [value]="contractAddress"
-        [linkRouter]="['/contracts', contractAddress]"
+        [linkRouter]="[contractAddress.startsWith(EWalletType.EVM) ? '/evm-contracts' : '/contracts', contractAddress]"
         [fullText]="true"
         [widthAuto]="true"
         [fullTextMob]="true"></app-name-tag>
