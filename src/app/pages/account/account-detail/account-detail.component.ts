@@ -13,9 +13,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import {
-  convertBech32AddressToEvmAddress,
-  convertEvmAddressToBech32Address,
-  transferAddress,
+  transferAddress
 } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
@@ -80,7 +78,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
     private router: Router,
     private userService: UserService,

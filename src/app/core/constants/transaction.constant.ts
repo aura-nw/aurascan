@@ -63,7 +63,6 @@ export const ABI_CHECK_INTERFACE = [
   'transferFrom(address,address,uint256)',
   'approve(address,uint256)',
   'setApprovalForAll(address,bool)',
-  'isApprovedForAll(address,address)',
   'safeTransferFrom(address,address,uint256,bytes)',
   'transfer(address,uint256)',
   'approve(address,uint256)',

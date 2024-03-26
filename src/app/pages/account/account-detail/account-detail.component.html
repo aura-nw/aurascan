@@ -1,36 +1,32 @@
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <div class="d-lg-flex mb-1 mb-md-6">
-    <div class="d-flex d-block align-items-center">
-      <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
+  <div class="mb-1 mb-md-6">
+    <div class="d-flex d-block align-items-center {{ environmentService.isMobile ? 'justify-content-between' : '' }}">
+      <span class="h2 fw-700 text--white mr-lg-5 mr-2">Account</span>
       <a
-        [routerLink]="['/contracts/', accountAddress]"
-        *ngIf="isContractAddress && breakpoint.value.matches"
-        class="contract-label text--primary ml-6 body-04">
+        [routerLink]="[isContractAddress && accountEvmAddress ? '/evm-contracts/' : '/contracts/', accountAddress]"
+        *ngIf="isContractAddress"
+        class="contract-label text--primary body-04 mr-5">
         Contract
       </a>
+      <button
+        class="button button-outline button-pill"
+        [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'"
+        (click)="handleWatchList()">
+        <span class="text--white caption-mob fw-normal">Add to watch list</span>
+        <i
+          class="ph ph-star body-01 ml-2"
+          *ngIf="!environmentService.isMobile"
+          [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
+      </button>
     </div>
-    <div class="d-flex mb-2 mb-lg-0" [class.justify-content-between]="breakpoint.value.matches">
-      <div class="d-none d-lg-flex align-items-center">
-        <span class="body-01 text--gray-5 caption-mob fw-normal">{{ accountAddress }}</span>
-      </div>
-      <div class="d-lg-none mb-lg-2">
-        <span class="body-01 text--gray-5 caption-mob fw-normal break-word">{{ accountAddress }}</span>
-      </div>
-      <div class="d-flex">
-        <div class="ml-lg-0 ml-4" [copyBtn]="accountAddress"></div>
-        <button
-          class="ml-lg-4 button button--xxs p-lg-0"
-          [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'"
-          (click)="handleWatchList()">
-          <i class="ph ph-star body-01" [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
-        </button>
-        <div
-          class="contract-label ml-8"
-          [appTooltip]="'Go to Contract Details'"
-          *ngIf="!breakpoint.value.matches && isContractAddress">
-          <a class="text--primary" [routerLink]="['/contracts/', accountAddress]">Contract</a>
-        </div>
-      </div>
+
+    <div class="d-lg-flex align-items-center mb-lg-2 mb-3 mt-3 body-01 body-mob">
+      <div class="text--gray-4 title-address mb-1 mb-lg-0">Cosmos Address:</div>
+      <span [copyBtn]="accountAddress" class="break-word">{{ accountAddress }} </span>
+    </div>
+    <div class="d-lg-flex align-items-center mb-4 body-01 body-mob" *ngIf="accountEvmAddress">
+      <div class="text--gray-4 title-address mb-1 mb-lg-0">EVM Address:</div>
+      <span [copyBtn]="accountEvmAddress" class="break-word">{{ accountEvmAddress }} </span>
     </div>
   </div>
   <!-- Summary info -->
@@ -43,15 +39,12 @@
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
-            <div class="converted-address {{ accountEvmAddress ? 'mb-3' : '' }}" *ngIf="accountEvmAddress">
-              <span [copyBtn]="accountEvmAddress" [btnClass]="['px-0', 'ml-2']">{{ accountEvmAddress }}</span>
-            </div>
             <app-name-tag [value]="accountAddress" [mode]="ENameTag.Public" [fullText]="true"></app-name-tag>
-
             <div class="mt-2">
               <app-name-tag [value]="accountAddress" [mode]="ENameTag.Private" [fullText]="true"></app-name-tag>
             </div>
           </div>
+
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
               <div class="body mb-1 text--white">Total Value</div>
