@@ -113,6 +113,10 @@ export class WalletService implements OnDestroy {
     sessionOptions?: SessionOptions;
     disableIframe?: boolean;
   }) {
+    if (this._walletManager) {
+      return 'EXISTED';
+    }
+
     if (!chain) {
       throw new Error('Chain is required');
     }
@@ -143,6 +147,8 @@ export class WalletService implements OnDestroy {
     await this._walletManager.onMounted();
 
     this.accountChangeEvent();
+
+    return 'SUCCESS';
   }
 
   get wallets() {
@@ -217,14 +223,14 @@ export class WalletService implements OnDestroy {
   restoreAccounts() {
     const account = this.getChainWallet()?.data as WalletAccount;
 
-    this.restoreEvmAccounts();
-
     if (account) {
       this._logger.info('Restore accounts: ', account);
       this.walletAccount = {
         cosmosAccount: account,
         address: account.address,
       };
+    } else {
+      this.restoreEvmAccounts();
     }
   }
 
