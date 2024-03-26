@@ -65,17 +65,20 @@
                   </ng-container>
 
                   <ng-container *ngSwitchCase="'status'">
-                    <div
-                      class="aura-status d-flex align-items-center"
-                      [appTooltip]="data.lst_type | combineTxsMsg"
-                      *ngIf="data[template.matColumnDef]">
-                      <div [ngClass]="'status-' + data[template.matColumnDef]?.toUpperCase()">
-                        {{ data[template.matColumnDef] }}
+                    <ng-container *ngIf="data[template.matColumnDef]">
+                      <div
+                        class="aura-status d-flex align-items-center"
+                        [appTooltip]="data.lst_type | combineTxsMsg"
+                        *ngIf="data.lst_type?.length > 0">
+                        <div [ngClass]="'status-' + data[template.matColumnDef]?.toUpperCase()">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngIf="data.lst_type?.length > 1" class="ml-1 text--gray-4">
+                          +{{ data.lst_type?.length - 1 }}
+                        </div>
                       </div>
-                      <div *ngIf="data.lst_type?.length > 1" class="ml-1 text--gray-4">
-                        +{{ data.lst_type?.length - 1 }}
-                      </div>
-                    </div>
+                      <div *ngIf="data.lst_type?.length == 0 || !data.lst_type">{{ data[template.matColumnDef] }}</div>
+                    </ng-container>
                   </ng-container>
                   <ng-container *ngSwitchCase="'result'">
                     <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
@@ -102,7 +105,7 @@
                       *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
                       [appBigNumber]="data[template.matColumnDef]"
                       [decimal]="decimal"></span>
-                    {{ denom }}
+                    <span class="ml-1" appLinkDenom> {{ denom }}</span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'numb'">
                     {{ data[template.matColumnDef] | mask: 'separator.6' }}

@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { map, of, switchMap } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { ContractRegisterType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -79,13 +79,11 @@ export class EvmTokenHoldersTabComponent implements OnInit {
 
   getListData() {
     if (this.typeContract) {
-      if (this.typeContract !== ContractRegisterType.CW20) {
+      if (this.typeContract !== EvmContractRegisterType.ERC20) {
         this.getQuantity();
       } else {
         this.getHolder();
       }
-    } else {
-      this.getDenomHolder();
     }
   }
 

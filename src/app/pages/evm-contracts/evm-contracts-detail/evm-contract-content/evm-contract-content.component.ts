@@ -9,6 +9,7 @@ import { CONTRACT_TAB, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constan
 import { ContractTab, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { getFunctionNameByMethodId } from 'src/app/core/helpers/chain';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
@@ -134,7 +135,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
           map((txsRes) => {
             if (txsRes?.evm_transaction?.length > 0) {
               return txsRes.evm_transaction.map((tx) => {
-                const type = _.get(tx, 'data');
+                const type = getFunctionNameByMethodId(_.get(tx, 'data')?.substring(0, 8));
                 return {
                   ...tx,
                   tx_hash: _.get(tx, 'hash'),

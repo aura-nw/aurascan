@@ -7,6 +7,7 @@ import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CONTRACT_TABLE_TEMPLATES, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { getFunctionNameByMethodId } from 'src/app/core/helpers/chain';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
@@ -123,7 +124,7 @@ export class ContractsTransactionsComponent implements OnInit {
           map((txsRes) => {
             if (txsRes?.evm_transaction?.length > 0) {
               return txsRes.evm_transaction.map((tx) => {
-                const type = _.get(tx, 'data');
+                const type = getFunctionNameByMethodId(_.get(tx, 'data')?.substring(0, 8));
                 return {
                   ...tx,
                   tx_hash: _.get(tx, 'hash'),

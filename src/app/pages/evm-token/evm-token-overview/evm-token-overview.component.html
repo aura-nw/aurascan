@@ -5,12 +5,11 @@
         <td class="h4 mb-0">
           <span class="text--white">Overview</span>
           <span class="text--gray-light-3 ml-1">
-            [ERC20]
-            <!-- <ng-container *ngIf="tokenDetail.modeToken === EModeEVMToken.CWToken; else defaultMode">
-              <ng-container *ngIf="tokenDetail.type === contractType.">[CW-20]</ng-container>
-              <ng-container *ngIf="tokenDetail.type === contractType.CW721">[CW-721]</ng-container>
-              <ng-container *ngIf="tokenDetail.type === contractType.CW4973">[CW-4973]</ng-container>
-            </ng-container> -->
+            <ng-container *ngIf="tokenDetail.modeToken === EModeEvmToken.ERCToken; else defaultMode">
+              <ng-container *ngIf="tokenDetail.type === contractType.ERC20">[ERC-20]</ng-container>
+              <ng-container *ngIf="tokenDetail.type === contractType.ERC721">[ERC-721]</ng-container>
+              <ng-container *ngIf="tokenDetail.type === contractType.ERC1155">[ERC-4973]</ng-container>
+            </ng-container>
             <ng-template #defaultMode>[{{ tokenDetail.modeToken }}]</ng-template>
           </span>
         </td>
@@ -129,7 +128,7 @@
           <div class="d-flex align-items-center">
             <div
               class="{{
-                !tokenDetail.isNFTContract && tokenDetail.modeToken !== EModeEVMToken.ERC20 ? 'flex-item' : 'd-flex'
+                !tokenDetail.isNFTContract && tokenDetail.modeToken !== EModeEvmToken.ERCToken ? 'flex-item' : 'd-flex'
               }}">
               <div class="body-02 text--gray-5 fixed-col">Holders:</div>
               <div class="body-02 text--gray-1">
@@ -145,8 +144,10 @@
               </div>
             </div>
             <ng-container *ngIf="!tokenDetail.isNFTContract">
-              <div class="divider divider-item" *ngIf="tokenDetail.modeToken !== EModeEVMToken.ERC20 && !params"></div>
-              <div class="pl-4" *ngIf="tokenDetail.modeToken !== EModeEVMToken.ERC20 && !params">
+              <div
+                class="divider divider-item"
+                *ngIf="tokenDetail.modeToken !== EModeEvmToken.ERCToken && !params"></div>
+              <div class="pl-4" *ngIf="tokenDetail.modeToken !== EModeEvmToken.ERCToken && !params">
                 <div class="body-02 text--gray-5">Transfers:</div>
                 <div class="body-02 text--gray-11">
                   <span *ngIf="tokenDetail?.hasMoreTx">More than </span>{{ tokenService.totalTransfer || 0 }}
