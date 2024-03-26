@@ -21,8 +21,6 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EvmContractContentComponent } from './evm-contracts-detail/evm-contract-content/evm-contract-content.component';
 import { EvmContractComponent } from './evm-contracts-detail/evm-contract-content/evm-contract/evm-contract.component';
-import { EvmReadAsProxyComponent } from './evm-contracts-detail/evm-contract-content/evm-contract/evm-read-as-proxy/evm-read-as-proxy.component';
-import { EvmWriteAsProxyComponent } from './evm-contracts-detail/evm-contract-content/evm-contract/evm-write-as-proxy/evm-write-as-proxy.component';
 import { EvmContractInfoComponent } from './evm-contracts-detail/evm-contract-info/evm-contract-info.component';
 import { EvmContractsDetailComponent } from './evm-contracts-detail/evm-contracts-detail.component';
 import { EvmOverviewComponent } from './evm-contracts-detail/evm-overview/evm-overview.component';
@@ -40,8 +38,6 @@ import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contract
     EvmCodeComponent,
     EvmReadComponent,
     EvmWriteComponent,
-    EvmReadAsProxyComponent,
-    EvmWriteAsProxyComponent,
     EvmContractComponent,
     EvmContractsVerifyComponent,
   ],
@@ -66,7 +62,7 @@ import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contract
     ContractTableModule,
     NgbNavModule,
   ],
-  exports: [EvmReadComponent, EvmWriteComponent, EvmReadAsProxyComponent, EvmWriteAsProxyComponent],
+  exports: [EvmReadComponent, EvmWriteComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class EvmContractsModule {}

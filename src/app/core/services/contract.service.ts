@@ -630,7 +630,7 @@ export class ContractService extends CommonService {
       .post<any>(this.graphUrl, {
         query: query,
         variables: {
-          address,
+          address: address?.toLocaleLowerCase(),
         },
         operationName: 'ProxyContractDetail',
       })
