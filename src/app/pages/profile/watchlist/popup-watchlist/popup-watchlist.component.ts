@@ -153,7 +153,7 @@ export class PopupWatchlistComponent implements OnInit {
 
   setDataFrom(data, isEditMode = false) {
     this.isEditMode = isEditMode;
-    const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
+    const isAccount = data.type !== 'contract';
 
     this.watchlistForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
