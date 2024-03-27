@@ -486,22 +486,26 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListFTByAddress(payload) {
-    this.userService.getListFTByAddress(payload).subscribe({
-      next: (data) => {
-        this.handleGetData(data);
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.transactionLoading = false;
-      },
-      complete: () => {
-        this.transactionLoading = false;
-      },
-    });
+    if (this.fungibleTokenType === ETokenCoinTypeBE.ERC20) {
+      //TODO
+    } else {
+      this.userService.getListFTByAddress(payload).subscribe({
+        next: (data) => {
+          this.handleGetData(data);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
+    }
   }
 
   getListNFTByAddress(payload) {
