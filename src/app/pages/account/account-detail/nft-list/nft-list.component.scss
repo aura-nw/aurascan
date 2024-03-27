@@ -1,5 +1,6 @@
 .aura-form.single-input-field.account-search-form {
   width: 100%;
+
   @media (min-width: 992px) {
     width: 370px;
   }
@@ -23,7 +24,7 @@
   width: 100%;
 
   @media (min-width: 991.98px) {
-    width: 220px;
+    width: 250px;
   }
 
   text-align: left;
@@ -97,7 +98,7 @@
     padding: var(--spacer-3) var(--spacer-2);
     background-color: var(--aura-gray-10);
 
-    & > * {
+    &>* {
       color: var(--aura-white);
     }
 
@@ -125,8 +126,9 @@
 
   @media (min-width: 991.98px) {
     max-width: 87%;
+
     &.label {
-      max-width: 145px;
+      max-width: 140px;
     }
   }
 }
@@ -139,12 +141,15 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
       @media (max-width: 430px) {
         max-width: 90px;
       }
+
       @media (min-width: 991.98px) {
         max-width: 150px;
       }
+
       @media (min-width: 1367px) {
         max-width: 180px;
       }
