@@ -37,7 +37,6 @@ export class ChartStatsComponent implements OnInit {
   minValueDailyAddress = 0;
   maxValueDailyTx = 0;
   minValueDailyTx = 0;
-
   chainName = this.env.chainName;
 
   constructor(
@@ -144,7 +143,7 @@ export class ChartStatsComponent implements OnInit {
         visible: true,
         borderColor: '#494C58',
         scaleMargins: {
-          top: 0.3,
+          top: 0.55,
           bottom: 0.05,
         },
         mode: 1,
