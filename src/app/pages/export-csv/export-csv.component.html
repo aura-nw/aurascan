@@ -78,25 +78,60 @@
       </div>
     </div>
 
-    <!-- Address -->
+    <!-- Cosmos Address -->
     <div class="row mb-6 align-items-center">
       <div class="col-12 col-lg-3 mb-4 mb-lg-0">
-        <span class="form-label body-02 text--gray-4 input-require">Address</span>
+        <span class="form-label body-02 text--gray-4 input-require">Cosmos Address</span>
       </div>
       <div class="col-12 col-lg-9">
         <div class="form-group">
-          <div class="input-group" [class.form-control--error]="false">
+          <div class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0">
             <input
               type="text"
               formControlName="address"
-              placeholder="{{ prefix }}... / 0x..."
+              placeholder="{{ prefix }}..."
+              class="input-address px-4"
               name="inputAddress"
-              (input)="checkFormValid(); isError = false"
+              (blur)="setAddressOther(getAddress?.value)"
               autocomplete="off" />
+            <button
+              class="button button-xxs p-0 mr-4"
+              *ngIf="this.csvForm.get('address').value.length > 0 && this.csvForm.get('address').enabled"
+              type="button"
+              (click)="clearAddress()">
+              <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+            </button>
           </div>
-          <div *ngIf="getAddress?.value?.length > 0 && !isValidAddress" class="text--danger mt-2 caption fw-normal">
-            Invalid address format
+          <div *ngIf="!isValidAddress" class="text--danger mt-2 caption fw-normal">Invalid address format</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVM Address -->
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
+        <span class="form-label body-02 text--gray-4 input-require">EVM Address</span>
+      </div>
+      <div class="col-12 col-lg-9">
+        <div class="form-group">
+          <div class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0">
+            <input
+              type="text"
+              formControlName="evmAddress"
+              placeholder="0x..."
+              class="input-address px-4"
+              name="inputEvmAddress"
+              (blur)="setAddressOther(getEvmAddress?.value)"
+              autocomplete="off" />
+            <button
+              class="button button-xxs p-0 mr-4"
+              *ngIf="this.csvForm.get('evmAddress').value.length > 0 && this.csvForm.get('evmAddress').enabled"
+              type="button"
+              (click)="clearAddress()">
+              <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+            </button>
           </div>
+          <div *ngIf="!isValidEvmAddress" class="text--danger mt-2 caption fw-normal">Invalid address Evm format</div>
         </div>
       </div>
     </div>

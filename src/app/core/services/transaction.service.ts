@@ -77,6 +77,7 @@ export class TransactionService extends CommonService {
             tx_id
             tx_msg_id
             value
+            contract_address
             evm_events {
               address
               topic0

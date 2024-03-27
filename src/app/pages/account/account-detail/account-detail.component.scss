@@ -5,9 +5,13 @@ section.account-detail {
     border-top-right-radius: 12px;
   }
 
+  .title-address {
+    min-width: 150px;
+  }
+
   .box-account-info {
     flex-grow: 1;
-    min-height: 250px;
+    min-height: 235px;
     padding: 20px;
 
     @media (max-width: 1366px) {
@@ -52,10 +56,6 @@ section.account-detail {
   }
 
   .box-summary-info {
-    @media (max-width: 992px) {
-      min-height: 585px;
-    }
-
     min-height: 540px;
   }
 }

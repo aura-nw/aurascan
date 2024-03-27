@@ -24,7 +24,7 @@
   width: 100%;
 
   @media (min-width: 991.98px) {
-    width: 220px;
+    width: 250px;
   }
 
   text-align: left;
@@ -110,7 +110,7 @@
     padding: var(--spacer-3) var(--spacer-2);
     background-color: var(--aura-gray-10);
 
-    & > * {
+    &>* {
       color: var(--aura-white);
     }
 
@@ -140,7 +140,7 @@
     max-width: 87%;
 
     &.label {
-      max-width: 145px;
+      max-width: 140px;
     }
   }
 }

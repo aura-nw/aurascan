@@ -14,6 +14,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import {
   convertBech32AddressToEvmAddress,
   convertEvmAddressToBech32Address,
+  transferAddress,
 } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 
@@ -29,6 +30,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   isError = false;
   isFilterDate = true;
   isValidAddress = true;
+  isValidEvmAddress = true;
   isValidBlock = true;
   userEmail;
   TabsAccount = TabsAccount;
@@ -50,7 +52,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private commonService: CommonService,
+    public commonService: CommonService,
     private datePipe: DatePipe,
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
@@ -86,6 +88,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     this.csvForm = this.formBuilder.group({
       dataType: null,
       address: ['', [Validators.required]],
+      evmAddress: ['', [Validators.required]],
       isFilterDate: true,
       startDate: null,
       endDate: null,
@@ -102,7 +105,19 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   setDataConfig(dataConfig) {
     const data = JSON.parse(dataConfig);
-    this.csvForm.controls.address.setValue(data['address']);
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      data['address'],
+    );
+
+    this.csvForm.controls.address.setValue(accountAddress);
+    this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
+    if (this.commonService.isValidAddress(data['address'])) {
+      this.csvForm.get('evmAddress').disable();
+    } else {
+      this.csvForm.get('address').disable();
+    }
+
     this.dataType = data['exportType'];
   }
 
@@ -128,7 +143,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let { addressDefault, address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
+    let { addressDefault, address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } =
+      this.csvForm.getRawValue();
     addressDefault = address;
 
     if (startDate || endDate) {
@@ -139,16 +155,16 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     // send both evm + native address for execute + evm execute
     if (this.dataType === this.TabsAccountLink.ExecutedTxs || this.dataType === this.TabsAccountLink.EVMExecutedTxs) {
       const addressNative = convertEvmAddressToBech32Address(this.chainInfo.bech32Config.bech32PrefixAccAddr, address);
-      const addressEvm = convertBech32AddressToEvmAddress(
+      const evmAddress = convertBech32AddressToEvmAddress(
         this.chainInfo.bech32Config.bech32PrefixAccAddr,
         addressNative,
       );
-      address = `${addressNative},${addressEvm}`;
+      address = `${addressNative},${evmAddress}`;
     }
 
     let payload = {
       addressDefault,
-      dataType: dataType,
+      dataType: this.dataType,
       address: address,
       dataRangeType: this.isFilterDate ? 'date' : 'height',
       min: this.isFilterDate ? startDate : fromBlock,
@@ -234,7 +250,11 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   }
 
   get getAddress() {
-    return this.csvForm.get('address');
+    return this.csvForm?.get('address');
+  }
+
+  get getEvmAddress() {
+    return this.csvForm?.get('evmAddress');
   }
 
   setDateRange() {
@@ -263,16 +283,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   checkFormValid(): boolean {
     this.getAddress.setValue(this.getAddress?.value?.trim());
     const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
-
     this.isValidBlock = true;
-
-    if (this.commonService.isBech32Address(address) || address.startsWith(this.evmPrefix.EVM)) {
-      this.isValidAddress = true;
-    } else {
-      this.isValidAddress = false;
-      return false;
-    }
-
     //check null/invalid block
     if (!this.isFilterDate) {
       if (!fromBlock || !toBlock) {
@@ -330,5 +341,44 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       'expired-callback': this.errorCallback.bind(this),
       'error-callback': this.errorCallback.bind(this),
     });
+  }
+
+  clearAddress() {
+    this.csvForm.controls.address.setValue('');
+    this.csvForm.controls.evmAddress.setValue('');
+    this.csvForm.get('address').enable();
+    this.csvForm.get('evmAddress').enable();
+  }
+
+  setAddressOther(address) {
+    this.isValidAddress = true;
+    this.isValidEvmAddress = true;
+
+    if (address.startsWith(EWalletType.EVM) && !this.commonService.isValidEvmAddress(address)) {
+      this.csvForm.controls.address.setValue('');
+      this.isValidEvmAddress = false;
+      return;
+    } else if (address.startsWith(this.prefix) && !this.commonService.isValidAddress(address)) {
+      this.csvForm.controls.evmAddress.setValue('');
+      this.isValidAddress = false;
+      return;
+    }
+
+    if (address.length > 0) {
+      if (this.commonService.isValidAddress(address)) {
+        this.csvForm.get('evmAddress').disable();
+      } else {
+        this.csvForm.get('address').disable();
+      }
+    }
+
+    if (!this.commonService.isValidContract(address)) {
+      const { accountAddress, accountEvmAddress } = transferAddress(
+        this.chainInfo.bech32Config.bech32PrefixAccAddr,
+        address,
+      );
+      this.csvForm.controls.address.setValue(accountAddress);
+      this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
+    }
   }
 }
