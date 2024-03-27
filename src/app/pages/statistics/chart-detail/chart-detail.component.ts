@@ -218,7 +218,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     this.chartRange = type;
     const currTime = new Date();
     const prevTime = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
-    console.log(12 * 31 * 24 * 60 * 60 * 1000);
 
     this.statisticService.getDataStatistic(prevTime, currTime).subscribe({
       next: (res) => {
