@@ -170,7 +170,7 @@
                     *ngIf="data?.hash"
                     [copyBtn]="data.hash.toString()"
                     class="text--primary cursor-pointer"
-                    [routerLink]="['/transaction', data?.hash]">
+                    [routerLink]="['/tx', data?.hash]">
                     {{ data?.hash | ellipsis: 8 : 8 }}
                   </a>
                   <span *ngIf="!data.hash" class="text--white">-</span>

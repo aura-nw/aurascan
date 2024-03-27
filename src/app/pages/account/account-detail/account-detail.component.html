@@ -3,8 +3,12 @@
     <div class="d-flex d-block align-items-center">
       <span class="h2 fw-700 text--white mr-lg-5 mr-2">Account</span>
       <a
-        [routerLink]="[isContractAddress && accountEvmAddress ? '/evm-contracts' : '/contracts', accountAddress]"
+        [routerLink]="[
+          accountEvmAddress ? '/evm-contracts' : '/contracts',
+          accountEvmAddress ? accountEvmAddress : accountAddress
+        ]"
         *ngIf="isContractAddress"
+        [appTooltip]="'Go to Contract Details'"
         class="contract-label text--primary body-04 mr-5">
         Contract
       </a>
