@@ -29,7 +29,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   logicalRangeChange$ = new Subject<{ from; to }>();
   endData = false;
   destroy$ = new Subject<void>();
-  prevYearNumber = 1;
   originalData = [];
   isLoading = true;
   errTxt: string;
@@ -159,9 +158,9 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   subscribeVisibleLogicalRangeChange() {
     this.logicalRangeChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(({ from, to }) => {
       if (from <= 0 && !this.endData) {
-        this.prevYearNumber++;
         const currTime = new Date();
-        const prevTime = new Date(currTime.getFullYear() - this.prevYearNumber, 0, 1);
+        const prevTime = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+
         this.statisticService.getDataStatistic(prevTime, currTime).subscribe((res) => {
           if (res?.daily_statistics.length > 0) {
             let dataY = [];
@@ -218,7 +217,8 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     this.endData = false;
     this.chartRange = type;
     const currTime = new Date();
-    const prevTime = new Date(currTime.getFullYear() - 1, 0, 1);
+    const prevTime = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+    console.log(12 * 31 * 24 * 60 * 60 * 1000);
 
     this.statisticService.getDataStatistic(prevTime, currTime).subscribe({
       next: (res) => {
