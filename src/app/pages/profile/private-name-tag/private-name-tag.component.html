@@ -23,9 +23,9 @@
             [maxLength]="maxLengthSearch"
             (keyup)="onKeyUp()"
             name="search"
-            autocomplete="off"/>
+            autocomplete="off" />
           <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
@@ -33,7 +33,7 @@
               !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
             }}"
             (click)="resetFilterSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
       </form>
@@ -67,11 +67,11 @@
                     height="16"
                     class="cursor-pointer"
                     (click)="updateFavorite(data)"
-                    *ngIf="data.isFavorite"/>
+                    *ngIf="data.isFavorite" />
                 </div>
                 <div *ngSwitchCase="'cosmosAddress'" class="d-flex flex-column mt-1">
-                  <a class="text--primary cursor-pointer" [routerLink]="[urlType(data), data.cosmosAddress]">
-                    <span>{{ data[template.matColumnDef] | ellipsis: 8 }}</span>
+                  <a class="text--primary cursor-pointer" [routerLink]="urlType(data, data.cosmosAddress)">
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                   </a>
                   <div
                     class="text--gray-5 line-claim"
@@ -81,9 +81,9 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'evmAddress'" class="d-flex flex-column mt-1">
-                  <a class="text--primary cursor-pointer" [routerLink]="[urlType(data), data.evmAddress]">
-                    <span>{{ data[template.matColumnDef] | ellipsis: 8 }}</span>
-                  </a>
+                  <a class="text--primary cursor-pointer" [routerLink]="urlType(data, data.evmAddress)">
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
+                  </a><br>
                 </div>
                 <div *ngSwitchCase="'type'" class="text-capitalize">
                   {{ data[template.matColumnDef] }}
@@ -121,8 +121,8 @@
       <div *ngFor="let data of dataSourceMobile" class="card-name-tag">
         <div class="d-flex align-items-center justify-content-between">
           <div class="card__title">
-            <a class="text--primary cursor-pointer" [routerLink]="[urlType(data), data.address]">
-              <span class="fw-semibold">{{ data.address | ellipsis: 8 : 8 }}</span>
+            <a class="text--primary cursor-pointer" [routerLink]="urlType(data, data.cosmosAddress)">
+              <span class="fw-semibold">{{ data.cosmosAddress | ellipsis: 8 : 8 }}</span>
             </a>
             <div class="text--gray-5 line-claim w-100">
               {{ data.note || 'Note:-' }}
@@ -141,11 +141,11 @@
                 height="16"
                 class="cursor-pointer"
                 (click)="updateFavorite(data)"
-                *ngIf="data.isFavorite"/>
+                *ngIf="data.isFavorite" />
             </div>
             <div class="dropdown aura-dropdown">
               <button class="button px-2" id="delegateAction2" data-bs-toggle="dropdown" aria-expanded="false">
-                <img [src]="'assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg' | imageS3" alt=""/>
+                <img [src]="'assets/icons/icons-svg/white/DotsThreeOutlineVertical.svg' | imageS3" alt="" />
               </button>
               <ul
                 class="dropdown-menu aura-dropdown-menu border-sm border-gray-9 border-radius--sm"
@@ -168,6 +168,12 @@
         </div>
         <div class="divider divider-horizontal my-2"></div>
         <div class="card__content">
+          <div class="d-flex align-items-center mb-2">
+            <div class="caption fw-normal text--gray-4 label__content">EVM Address</div>
+            <a class="text--primary cursor-pointer" [routerLink]="urlType(data, data.evmAddress)">
+              <span class="fw-semibold">{{ data.evmAddress | ellipsis: 8 : 8 }}</span>
+            </a>
+          </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Type</div>
             <div class="text--white text-capitalize">{{ data.type }}</div>

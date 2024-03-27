@@ -97,7 +97,6 @@ export class PopupWatchlistComponent implements OnInit {
     private fb: FormBuilder,
     public translate: TranslateService,
     private environmentService: EnvironmentService,
-    private commonService: CommonService,
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
     private nameTagService: NameTagService,
@@ -160,10 +159,9 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm.controls['favorite'].setValue(data.favorite);
     this.isTracking = isEditMode ? data.tracking : true;
     this.watchlistForm.controls['tracking'].setValue(isEditMode ? data.tracking : true);
-    this.watchlistForm.controls['address'].setValue(data.address);
-    this.watchlistForm.controls['evmAddress'].setValue(data.evmAddress);
     this.watchlistForm.controls['note'].setValue(data.note);
     this.watchlistForm.controls['id'].setValue(data.id || '');
+    this.handleSetAddress(data['address']);
 
     //set data group tracking
     if (data.settings) {
@@ -176,6 +174,23 @@ export class PopupWatchlistComponent implements OnInit {
     }
 
     this.checkNameTag();
+  }
+
+  handleSetAddress(address) {
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      address,
+    );
+
+    this.watchlistForm.controls['address'].setValue(accountAddress);
+    this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    this.watchlistForm.get('address').disable();
+    this.watchlistForm.get('evmAddress').disable();
+    if (address == accountEvmAddress.trim()) {
+      this.watchlistForm.get('evmAddress').enable();
+    } else {
+      this.watchlistForm.get('address').enable();
+    }
   }
 
   changeTracking() {
@@ -330,23 +345,7 @@ export class PopupWatchlistComponent implements OnInit {
   changeAddress(controlName: string) {
     const address = this.watchlistForm.get(controlName).value;
     if (address.length === 0) return;
-    if (controlName === 'address' && address.length > 0) {
-      this.watchlistForm.get('evmAddress').disable();
-    } else {
-      this.watchlistForm.get('address').disable();
-    }
-    if (!this.commonService.isValidContract(address)) {
-      const { accountAddress, accountEvmAddress } = transferAddress(
-        this.chainInfo.bech32Config.bech32PrefixAccAddr,
-        address,
-      );
-      this.watchlistForm.get('address').setValue(accountAddress);
-      this.watchlistForm.get('evmAddress').setValue(accountEvmAddress);
-
-      if (address.trim() == accountEvmAddress.trim()) {
-        this.watchlistForm.get('evmAddress').enable();
-      }
-    }
+    this.handleSetAddress(address);
     this.checkNameTag();
   }
 
