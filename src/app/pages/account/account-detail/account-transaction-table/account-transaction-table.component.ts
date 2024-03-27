@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { LENGTH_CHARACTER, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -113,6 +113,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   countFilter = 0;
   addressNative = '';
   addressEvm = '';
+  tokenType = ETokenCoinTypeBE;
+  fungibleTokenType = ETokenCoinTypeBE.ERC20;
 
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -708,5 +710,9 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
   encodeData(data) {
     return encodeURIComponent(data);
+  }
+
+  changeTokenType(type: any): void {
+    this.fungibleTokenType = type;
   }
 }
