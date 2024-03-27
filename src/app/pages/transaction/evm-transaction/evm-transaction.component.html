@@ -26,7 +26,7 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Cosmos Txn hash</div>
             <div class="col-auto col-lg-10">
-              <a class="text--primary" routerLink="/transaction/{{ transaction?.hash }}" [copyBtn]="transaction?.hash">
+              <a class="text--primary" routerLink="/tx/{{ transaction?.hash }}" [copyBtn]="transaction?.hash">
                 {{ environmentService.isMobile ? (transaction?.hash | ellipsis: 8 : 8) : transaction?.hash }}
               </a>
             </div>
@@ -53,7 +53,7 @@
             <div class="col-auto col-lg-10">
               <a
                 class="text--primary"
-                routerLink="/blocks/{{ transaction?.height }}"
+                routerLink="/block/{{ transaction?.height }}"
                 [copyBtn]="transaction?.height?.toString()">
                 {{ transaction?.height | number }}
               </a>
@@ -89,7 +89,7 @@
                 <app-name-tag
                   [value]="transaction.to?.toLowerCase()"
                   [fullText]="true"
-                  [linkRouter]="[isEvmContract ? '/evm-contracts' : '/account', transaction.to]"
+                  [linkRouter]="[isEvmContract ? '/evm-contracts' : '/address', transaction.to]"
                   [iconContract]="isEvmContract"></app-name-tag>
               </ng-container>
             </div>
@@ -122,7 +122,7 @@
     </div>
 
     <div class="row body justify-content-between justify-content-lg-start">
-      <app-evm-message [transaction]="transaction" [eventLog]="transaction.eventLog"> </app-evm-message>
+      <app-evm-message [transaction]="transaction" [eventLog]="transaction.eventLog"></app-evm-message>
     </div>
   </ng-container>
 </ng-container>
@@ -130,4 +130,4 @@
 <ng-template #noValues>
   <app-table-no-data [textNull]="errTxt"></app-table-no-data>
 </ng-template>
-<ng-template #dash> - </ng-template>
+<ng-template #dash> -</ng-template>

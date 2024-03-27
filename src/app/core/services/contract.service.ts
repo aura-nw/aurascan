@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import _ from 'lodash';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
@@ -12,7 +13,6 @@ import { EWalletType } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { NameTagService } from './name-tag.service';
-import _ from 'lodash';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -608,6 +608,31 @@ export class ContractService extends CommonService {
           id,
         },
         operationName: 'VerifyEvmContractStatus',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getProxyContractAbi(address: string) {
+    const query = `query ProxyContractDetail($address: String = "") {
+      ${this.envDB} {
+        evm_smart_contract(where: {address: {_eq: $address}}) {
+          evm_proxy_histories(order_by: {block_height: desc}) {
+            proxy_contract
+            implementation_contract
+            block_height
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {
+          address: address?.toLocaleLowerCase(),
+        },
+        operationName: 'ProxyContractDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

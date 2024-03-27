@@ -22,7 +22,7 @@
               [value]="codeIdDetail.creator"
               [fullText]="true"
               [maxCharacter]="13"
-              [linkRouter]="[(codeIdDetail?.creator | isContract) ? '/contracts' : '/account', codeIdDetail?.creator]">
+              [linkRouter]="[(codeIdDetail?.creator | isContract) ? '/contracts' : '/address', codeIdDetail?.creator]">
             </app-name-tag>
           </div>
         </div>
@@ -33,7 +33,7 @@
           <div class="col-7 col-lg-auto">
             <a
               *ngIf="!breakpoint.value.matches"
-              [routerLink]="['/transaction', codeIdDetail.tx_hash]"
+              [routerLink]="['/tx', codeIdDetail.tx_hash]"
               class="text--primary body"
               [copyBtn]="codeIdDetail.tx_hash">
               {{ codeIdDetail.tx_hash }}
@@ -41,7 +41,7 @@
             <a
               *ngIf="breakpoint.value.matches"
               [copyBtn]="codeIdDetail.tx_hash"
-              [routerLink]="['/transaction', codeIdDetail.tx_hash]"
+              [routerLink]="['/tx', codeIdDetail.tx_hash]"
               class="text--primary body"
               >{{ codeIdDetail.tx_hash | ellipsis: 8 : 8 }}</a
             >

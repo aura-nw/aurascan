@@ -3,9 +3,9 @@
     <!-- Filter -->
     <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
       <div class="d-flex align-items-center mb-lg-0 mb-4 justify-content-between">
-        <span class="mb-0 fw-semibold text--gray-light-2 mr-lg-6 h3">
-          NFTs <span *ngIf="listCollection[0]?.quantity">({{ listCollection[0]?.quantity || 0 }})</span>
-        </span>
+        <span class="mb-0 fw-semibold text--gray-light-2 mr-lg-6 h3"
+          >NFTs ({{ listCollection[0]?.quantity || 0 }})</span
+        >
         <div class="button-switch-stage button-fixed mt-lg-0">
           <button
             class="button button-switch-stage-nft body-04"

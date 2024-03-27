@@ -38,7 +38,7 @@ export class AccountTransactionComponent implements OnInit {
   }
 
   changeTab(value) {
-    this.location.replaceState('/account/' + this.address + '?tab=' + value);
+    this.location.replaceState('/address/' + this.address + '?tab=' + value);
     this.currentTab = value;
   }
 }

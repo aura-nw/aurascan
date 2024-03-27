@@ -321,7 +321,7 @@ export class NFTDetailComponent implements OnInit {
 
   async updateStatusSBT(payload: any, address) {
     this.soulboundService.updatePickSBToken(payload).subscribe((res) => {
-      this.route.navigate(['/account/', address]);
+      this.route.navigate(['/address/', address]);
     });
   }
 

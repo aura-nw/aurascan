@@ -208,6 +208,7 @@ export class TokenDetailComponent implements OnInit {
   getInfoTokenIBC(denom) {
     this.ibcService.getChannelInfoByDenom(encodeURIComponent(denom)).subscribe((res) => {
       this.tokenDetail['channelPath'] = _.get(res, 'denom_trace');
+      this.tokenService.pathDenom$.next(_.get(res, 'denom_trace'));
     });
   }
 }

@@ -43,7 +43,7 @@ export class NameTagComponent implements OnInit {
   chainInfo = this.env.chainInfo;
 
   get routerLinks() {
-    return this.linkRouter ? this.linkRouter : ['/account', this.addressOnly || this.value];
+    return this.linkRouter ? this.linkRouter : ['/address', this.addressOnly || this.value];
   }
 
   constructor(

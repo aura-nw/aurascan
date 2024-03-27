@@ -358,14 +358,14 @@
                   <a
                     *ngSwitchCase="'tx_hash'"
                     class="text--primary cursor-pointer hash-link"
-                    [routerLink]="['/transaction', data[template.matColumnDef]]"
+                    [routerLink]="['/tx', data[template.matColumnDef]]"
                     [copyBtn]="data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                   </a>
                   <a
                     *ngSwitchCase="'height'"
                     class="text--primary cursor-pointer block-link"
-                    [routerLink]="['/blocks', data['height']]">
+                    [routerLink]="['/block', data['height']]">
                     {{ data[template.matColumnDef] }}
                   </a>
                   <div *ngSwitchCase="'expand'">
@@ -466,7 +466,7 @@
                             [value]="item.fromAddress || currentAddress"
                             [iconContract]="item.fromAddress || currentAddress | isContract"
                             [linkRouter]="[
-                              (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                              (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
                               item.fromAddress || currentAddress
                             ]"
                             [isEnableRouter]="
@@ -515,7 +515,7 @@
                             <app-name-tag
                               [value]="item.toAddress || currentAddress"
                               [linkRouter]="[
-                                (item.toAddress || currentAddress | isContract) ? '/contracts' : '/account',
+                                (item.toAddress || currentAddress | isContract) ? '/contracts' : '/address',
                                 item.toAddress || currentAddress
                               ]"
                               [iconContract]="item.toAddress || currentAddress | isContract"
@@ -553,7 +553,7 @@
                       *ngIf="data[template.matColumnDef]"
                       [value]="data[template.matColumnDef]"
                       [linkRouter]="[
-                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
                         data[template.matColumnDef]
                       ]"
                       [iconContract]="data[template.matColumnDef] | isContract"
@@ -646,7 +646,7 @@
       <ng-container *ngIf="modeQuery != tabsData.EVMExecutedTxs">
         <app-card-mob-account
           *ngFor="let data of dataSourceMobile; first as isFirst"
-          [link]="'/transaction/' + data.tx_hash"
+          [link]="'/tx/' + data.tx_hash"
           [dataCard]="data"
           [modeQuery]="modeQuery"
           [currentAddress]="currentAddress"
@@ -675,14 +675,14 @@
             {
               label: 'Height',
               class: 'text--gray-1 body-02-mob',
-              info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+              info: '<a class=text--primary href=' + ('/block/' + data.height) + '>' + data.height + '</a>'
             },
             {
               label: 'EVM Transaction',
               class: 'text--gray-1 body-02-mob',
               info:
                 '<a class=text--primary href=' +
-                ('/transaction/' + data.tx_hash) +
+                ('/tx/' + data.tx_hash) +
                 '>' +
                 (data.tx_hash | ellipsis: 8 : 8) +
                 '</a>'
