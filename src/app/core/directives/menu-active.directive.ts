@@ -1,6 +1,6 @@
-import {AfterViewInit, Directive, ElementRef, Input} from '@angular/core';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
-import {Router} from '@angular/router';
+import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { Router } from '@angular/router';
 
 @Directive({
   selector: '[activeMenuItem]',
@@ -55,17 +55,11 @@ export class MenuActiveDirective implements AfterViewInit {
       this.addActiveClass();
     }
     // evm-transaction
-    if (
-      this.checkMenuLink('/evm-transactions') &&
-      this.urlContain('/tx') && this.urlCheckEVM()
-    ) {
+    if (this.checkMenuLink('/evm-transactions') && this.urlContain('/tx') && this.urlCheckEVM()) {
       this.addActiveClass();
     }
     // contract
-    if (
-      this.checkMenuLink('/contracts') &&
-      this.urlContain('/contracts') && !this.urlCheckEVM()
-    ) {
+    if (this.checkMenuLink('/contracts') && this.urlContain('/contracts') && !this.urlCheckEVM()) {
       this.addActiveClass();
     }
     // evm-contract
@@ -89,11 +83,7 @@ export class MenuActiveDirective implements AfterViewInit {
       this.addActiveClass();
     }
     // token-detail
-    if (
-      this.checkMenuDetailLink('token') &&
-      this.urlContain('/token/') &&
-      this.router.url.split('/').length === 3
-    ) {
+    if (this.checkMenuDetailLink('token') && this.urlContain('/token/') && this.router.url.split('/').length === 3) {
       this.addActiveClass();
     }
     // nft
@@ -101,11 +91,7 @@ export class MenuActiveDirective implements AfterViewInit {
       this.addActiveClass();
     }
     // nft-detail
-    if (
-      this.checkMenuDetailLink('nft') &&
-      this.urlContain('/token/nft') &&
-      this.router.url.split('/').length === 4
-    ) {
+    if (this.checkMenuDetailLink('nft') && this.urlContain('/token/nft') && this.router.url.split('/').length === 4) {
       this.addActiveClass();
     }
     // abt
@@ -113,11 +99,7 @@ export class MenuActiveDirective implements AfterViewInit {
       this.addActiveClass();
     }
     // abt-detail
-    if (
-      this.checkMenuDetailLink('abt') &&
-      this.urlContain('/token/abt') &&
-      this.router.url.split('/').length === 4
-    ) {
+    if (this.checkMenuDetailLink('abt') && this.urlContain('/token/abt') && this.router.url.split('/').length === 4) {
       this.addActiveClass();
     }
     // statistics
@@ -128,18 +110,13 @@ export class MenuActiveDirective implements AfterViewInit {
       this.addActiveClass();
     }
     // statistics-detail
-    if (
-      this.checkMenuLink('/statistics/top-statistic') &&
-      this.urlCompare('/statistics/top-statistic')
-    ) {
+    if (this.checkMenuLink('/statistics/top-statistic') && this.urlCompare('/statistics/top-statistic')) {
       this.addActiveClass();
     }
     // code-ids
     if (
       this.checkMenuLink('/code-ids') &&
-      (this.urlCompare('/code-ids') ||
-        this.urlContain('/code-ids/detail/') ||
-        this.urlContain('/code-ids/verify/'))
+      (this.urlCompare('/code-ids') || this.urlContain('/code-ids/detail/') || this.urlContain('/code-ids/verify/'))
     ) {
       this.addActiveClass();
     }
