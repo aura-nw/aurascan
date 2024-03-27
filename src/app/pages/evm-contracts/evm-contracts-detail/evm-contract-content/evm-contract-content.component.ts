@@ -142,7 +142,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
                   hash: _.get(tx, 'transaction.hash'),
                   method: type ? type : 'Transfer',
                   from: _.get(tx, 'from'),
-                  to: _.get(tx, 'to'),
+                  to: _.get(tx, 'contract_address'),
                   timestamp: _.get(tx, 'transaction.timestamp'),
                   evmAmount: _.get(tx, 'transaction.transaction_messages[0].content.data.value'),
                 };

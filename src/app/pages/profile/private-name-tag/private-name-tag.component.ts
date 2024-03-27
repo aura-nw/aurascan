@@ -35,9 +35,9 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 65 },
-    { matColumnDef: 'cosmosAddress', headerCellDef: 'Cosmos Add', headerWidth: 160 },
-    { matColumnDef: 'evmAddress', headerCellDef: 'EVM Add', headerWidth: 160 },
-    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 120 },
+    { matColumnDef: 'cosmosAddress', headerCellDef: 'Cosmos Add', headerWidth: 170 },
+    { matColumnDef: 'evmAddress', headerCellDef: 'EVM Add', headerWidth: 170 },
+    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 80 },
     { matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 160 },
     { matColumnDef: 'createdAt', headerCellDef: 'Added Time', headerWidth: 145 },
     { matColumnDef: 'updatedAt', headerCellDef: 'Updated Time', headerWidth: 140 },
@@ -248,12 +248,14 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
     this.getListPrivateName();
   }
 
-  urlType(data) {
-    let result = '/address';
+  urlType(data, address) {
+    let result = '/address/';
+    let linkAddress = address;
     if (data.type === 'contract') {
-      result = data.address?.startsWith(this.prefixAdd) ? '/contracts' : '/evm-contracts';
+      result = data?.evmAddress ? '/evm-contracts/' : '/contracts/';
+      linkAddress = data?.evmAddress;
     }
-    return result;
+    return [result, linkAddress];
   }
 
   async storeListNameTag() {

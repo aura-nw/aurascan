@@ -62,7 +62,7 @@ export class EvmTransactionsComponent {
                 ...tx,
                 evm_hash: _.get(tx, 'evm_transaction.hash'),
                 type: type ? type : 'Transfer',
-                from: _.get(tx, 'transaction_messages[0].sender'),
+                from: _.get(tx, 'evm_transaction.from'),
                 to: _.get(tx, 'evm_transaction.to'),
                 amount: _.get(tx, 'transaction_messages[0].content.data.value'),
               };

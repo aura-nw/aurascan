@@ -107,7 +107,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
   editWatchList() {
     const userEmail = this.userService.getCurrentUser()?.email;
     if (userEmail) {
-      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.contractAddress);
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, { address: this.contractAddress, type: 'contract' });
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

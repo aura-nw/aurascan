@@ -9,7 +9,11 @@
   <div class="d-flex flex-wrap mb-3 body" *ngIf="transaction?.contractAddress > 0">
     <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4">Contract Address</div>
     <div class="col-12 col-lg-10">
-      <app-name-tag [value]="transaction?.contractAddress" [fullText]="true"></app-name-tag>
+      <app-name-tag
+        [value]="transaction?.contractAddress?.toLowerCase()"
+        [fullText]="true"
+        [linkRouter]="['/evm-contracts', transaction?.contractAddress?.toLowerCase()]"
+        [iconContract]="true"></app-name-tag>
     </div>
   </div>
 

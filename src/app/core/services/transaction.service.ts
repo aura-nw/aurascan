@@ -137,6 +137,7 @@ export class TransactionService extends CommonService {
             sender
           }
           evm_transaction {
+            from
             hash
             to
             data
@@ -168,6 +169,7 @@ export class TransactionService extends CommonService {
           hash
           height
           data
+          contract_address
           transaction {
             timestamp
             transaction_messages {
