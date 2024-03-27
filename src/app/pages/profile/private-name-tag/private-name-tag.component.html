@@ -71,7 +71,7 @@
                 </div>
                 <div *ngSwitchCase="'cosmosAddress'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="urlType(data, data.cosmosAddress)">
-                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 }}</span>
                   </a>
                   <div
                     class="text--gray-5 line-claim"
@@ -82,7 +82,7 @@
                 </div>
                 <div *ngSwitchCase="'evmAddress'" class="d-flex flex-column mt-1">
                   <a class="text--primary cursor-pointer" [routerLink]="urlType(data, data.evmAddress)">
-                    <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 }}</span>
                   </a><br>
                 </div>
                 <div *ngSwitchCase="'type'" class="text-capitalize">

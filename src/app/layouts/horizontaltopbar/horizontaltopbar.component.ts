@@ -2,16 +2,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
-import { LENGTH_CHARACTER, STORAGE_KEYS, TIMEOUT_ERROR } from '../../../app/core/constants/common.constant';
+import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-import { ContractService } from 'src/app/core/services/contract.service';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -116,7 +116,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
         // check if address EVM contract or account
         this.contractService.findEvmContract(this.searchValue).subscribe({
           next: (res) => {
-            urlLink = res?.evm_smart_contract?.length > 0 ? 'evm-contracts' : 'account';
+            urlLink = res?.evm_smart_contract?.length > 0 ? 'evm-contracts' : 'address';
             this.redirectPage(urlLink);
           },
           error: (e) => {
@@ -140,7 +140,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
           this.redirectPage(urlLink);
         } else {
           // case aura validators/ account
-          urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
+          urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'address';
           this.redirectPage(urlLink);
         }
       }
@@ -161,7 +161,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.queryTransactionByEvmHash(payload).subscribe({
       next: (res) => {
         if (res?.transaction?.length > 0) {
-          this.redirectPage('transaction');
+          this.redirectPage('tx');
         } else {
           this.searchValue = '';
         }
@@ -181,7 +181,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
       (res) => {
         if (res?.transaction?.length > 0) {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['transaction', this.searchValue]);
+            this.router.navigate(['tx', this.searchValue]);
           });
         } else {
           this.searchValue = '';
