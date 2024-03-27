@@ -1,11 +1,11 @@
 {
   "$schema": "../chain.schema.json",
-  "chain_name": "aura-testnet-2",
+  "chain_name": "auradev_1235-3",
   "status": "live",
   "network_type": "testnet",
   "website": "https://aura.network/",
   "pretty_name": "Aura Dev Network",
-  "chain_id": "aura-testnet-2",
+  "chain_id": "auradev_1235-3",
   "bech32_prefix": "aura",
   "daemon_name": "aurad",
   "node_home": "$HOME/.aura",
