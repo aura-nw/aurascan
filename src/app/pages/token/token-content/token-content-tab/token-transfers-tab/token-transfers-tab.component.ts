@@ -3,12 +3,12 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { Subject, takeUntil } from 'rxjs';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 
-import { Subject, takeUntil } from 'rxjs';
 import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
@@ -75,6 +75,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   EModeToken = EModeToken;
   destroyed$ = new Subject<void>();
   linkAddress: string;
+  isExistDenom = false;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -114,7 +115,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-
     if (this.timerGetUpTime) {
       clearInterval(this.timerGetUpTime);
     }
@@ -128,9 +128,14 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         this.getListTransactionTokenCW20(nextKey, isReload);
       }
     } else {
-      setTimeout(() => {
+      if (this.isExistDenom) {
         this.getListTransactionTokenIBC(nextKey);
-      }, 500);
+      } else {
+        this.tokenService.pathDenom$
+          .pipe(takeUntil(this.destroyed$))
+          .subscribe(() => this.isExistDenom ?? this.getListTransactionTokenIBC(nextKey));
+        this.isExistDenom = true;
+      }
     }
   }
 
@@ -270,7 +275,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getListTransactionTokenIBC(nextKey = null) {
-    const denomFilter = this.tokenDetail.channelPath?.path + '/' + this.tokenDetail.channelPath?.base_denom;
+    const denomFilter = this.tokenDetail?.channelPath?.path + '/' + this.tokenDetail?.channelPath?.base_denom;
     let payload = {
       limit: this.pageData.pageSize,
       heightLT: nextKey,
