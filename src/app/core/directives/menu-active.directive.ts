@@ -45,62 +45,77 @@ export class MenuActiveDirective implements AfterViewInit {
     // dash board
     if ((this.urlCompare('/') || this.urlCompare('/dashboard')) && this.activeMenuItem.menuLink === '/') {
       this.addActiveClass();
+      return;
     }
     // default
     if (this.urlCompare(this.activeMenuItem.menuLink)) {
       this.addActiveClass();
+      return;
     }
     // transaction
     if (this.checkMenuLink('/transactions') && this.urlContain('/tx') && !this.urlCheckEVM()) {
       this.addActiveClass();
+      return;
     }
     // evm-transaction
     if (this.checkMenuLink('/evm-transactions') && this.urlContain('/tx') && this.urlCheckEVM()) {
       this.addActiveClass();
+      return;
     }
     // contract
     if (this.checkMenuLink('/contracts') && this.urlContain('/contracts') && !this.urlCheckEVM()) {
       this.addActiveClass();
+      return;
     }
     // evm-contract
     if (this.checkMenuLink('/evm-contracts') && this.urlContain('/evm-contracts')) {
       this.addActiveClass();
+      return;
     }
     // validate
     if (this.checkMenuLink('/validators') && this.urlContain('/validators')) {
       this.addActiveClass();
+      return;
     }
     // block
     if (this.checkMenuLink('/blocks') && this.urlContain('/block')) {
       this.addActiveClass();
+      return;
     }
     // voting
     if (this.checkMenuDetailLink('voting') && this.urlContain('/votings/')) {
       this.addActiveClass();
+      return;
     }
     // token
     if (this.checkMenuDetailLink('token') && this.urlCompare('/tokens')) {
       this.addActiveClass();
+      return;
     }
     // token-detail
     if (this.checkMenuDetailLink('token') && this.urlContain('/token/') && this.router.url.split('/').length === 3) {
       this.addActiveClass();
+      return;
     }
     // nft
     if (this.checkMenuDetailLink('nft') && this.urlCompare('/tokens/tokens-nft')) {
       this.addActiveClass();
+      return;
     }
     // nft-detail
     if (this.checkMenuDetailLink('nft') && this.urlContain('/token/nft') && this.router.url.split('/').length === 4) {
       this.addActiveClass();
+      return;
     }
     // abt
     if (this.checkMenuDetailLink('abt') && this.urlCompare('/tokens/token-abt')) {
       this.addActiveClass();
+      return;
     }
     // abt-detail
     if (this.checkMenuDetailLink('abt') && this.urlContain('/token/abt') && this.router.url.split('/').length === 4) {
       this.addActiveClass();
+      return;
     }
     // statistics
     if (
@@ -108,10 +123,12 @@ export class MenuActiveDirective implements AfterViewInit {
       (this.urlCompare('/statistics/charts-stats') || this.urlContain('/statistics/chart/'))
     ) {
       this.addActiveClass();
+      return;
     }
     // statistics-detail
     if (this.checkMenuLink('/statistics/top-statistic') && this.urlCompare('/statistics/top-statistic')) {
       this.addActiveClass();
+      return;
     }
     // code-ids
     if (
@@ -119,6 +136,7 @@ export class MenuActiveDirective implements AfterViewInit {
       (this.urlCompare('/code-ids') || this.urlContain('/code-ids/detail/') || this.urlContain('/code-ids/verify/'))
     ) {
       this.addActiveClass();
+      return;
     }
   }
 }
