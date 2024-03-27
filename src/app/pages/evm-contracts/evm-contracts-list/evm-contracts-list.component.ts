@@ -21,7 +21,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/evm-contracts', headerWidth: 300 },
     { matColumnDef: 'type', headerCellDef: 'Type Contract', headerWidth: 200 },
     { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 150 },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', headerWidth: 300 },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', headerWidth: 300 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {

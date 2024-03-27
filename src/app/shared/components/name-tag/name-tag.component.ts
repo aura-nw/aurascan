@@ -37,7 +37,7 @@ export class NameTagComponent implements OnInit {
   maxLengthNameTag = MAX_LENGTH_NAME_TAG;
 
   get routerLinks() {
-    return this.linkRouter ? this.linkRouter : ['/account', this.addressOnly || this.value];
+    return this.linkRouter ? this.linkRouter : ['/address', this.addressOnly || this.value];
   }
 
   constructor(

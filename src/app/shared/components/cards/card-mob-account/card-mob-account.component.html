@@ -4,7 +4,7 @@
     class="d-flex justify-content-between align-items-center"
     [ngStyle]="{ 'margin-bottom': '6px' }">
     <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}" [copyBtn]="dataCard['tx_hash']">
-      <span class="{{ title.titleClass ? title.titleClass : '' }}" [routerLink]="['/transaction', dataCard['tx_hash']]">
+      <span class="{{ title.titleClass ? title.titleClass : '' }}" [routerLink]="['/tx', dataCard['tx_hash']]">
         {{ title.label }}
       </span>
     </div>
@@ -81,7 +81,7 @@
                 <a
                   *ngIf="!item['address']?.startsWith('Null')"
                   class="text--primary cursor-pointer block-link caption fw-normal"
-                  [routerLink]="[(item['address'] | isContract) ? '/contracts' : '/account', item['address']]">
+                  [routerLink]="[(item['address'] | isContract) ? '/contracts' : '/address', item['address']]">
                   {{ item['address'] | ellipsis: 5 : 5 }}
                 </a>
                 <span

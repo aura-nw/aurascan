@@ -245,7 +245,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
   }
 
   urlType(data) {
-    let result = '/account';
+    let result = '/address';
     if (data.type === 'contract') {
       result = data.address?.startsWith(this.prefixAdd) ? '/contracts' : '/evm-contracts';
     }

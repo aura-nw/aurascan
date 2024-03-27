@@ -32,7 +32,7 @@
                 <app-name-tag
                   [value]="data[template.matColumnDef]"
                   [linkRouter]="[
-                    (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                    (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
                     data[template.matColumnDef]
                   ]">
                 </app-name-tag>
