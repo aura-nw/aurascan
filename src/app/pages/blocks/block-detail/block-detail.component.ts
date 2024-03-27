@@ -225,14 +225,6 @@ export class BlockDetailComponent implements OnInit {
     }
   }
 
-  checkAmountValue(amount: number, txHash: string) {
-    if (amount === 0) {
-      return '-';
-    } else {
-      return `<a class="text--primary" [routerLink]="['/tx', ` + txHash + `]">More</a>`;
-    }
-  }
-
   changeType(type: boolean) {
     this.isRawData = type;
   }
