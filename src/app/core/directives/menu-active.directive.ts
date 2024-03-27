@@ -1,6 +1,6 @@
-import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { Router } from '@angular/router';
+import {AfterViewInit, Directive, ElementRef, Input} from '@angular/core';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {Router} from '@angular/router';
 
 @Directive({
   selector: '[activeMenuItem]',
@@ -16,133 +16,132 @@ export class MenuActiveDirective implements AfterViewInit {
     this.element = this.elRef.nativeElement;
   }
 
+  urlCompare(link: string) {
+    return this.router.url === link;
+  }
+
+  urlContain(link: string) {
+    return this.router.url.includes(link);
+  }
+
+  urlCheckEVM() {
+    return this.router.url.split('/')[2]?.startsWith(EWalletType.EVM);
+  }
+
+  addActiveClass() {
+    return this.element.classList.add('active');
+  }
+
+  checkMenuLink(link: string) {
+    return this.activeMenuItem.menuLink === link;
+  }
+
+  checkMenuDetailLink(link: string) {
+    return this.activeMenuItem.menuDetailLink === link;
+  }
+
   ngAfterViewInit(): void {
     if (!this.element || !this.activeMenuItem) return;
-    let menuClass = '';
     // dash board
-    if ((this.router.url === '/' || this.router.url === '/dashboard') && this.activeMenuItem.menuLink === '/') {
-      menuClass = 'active';
+    if ((this.urlCompare('/') || this.urlCompare('/dashboard')) && this.activeMenuItem.menuLink === '/') {
+      this.addActiveClass();
     }
     // default
-    if (this.router.url === this.activeMenuItem.menuLink) {
-      menuClass = 'active';
+    if (this.urlCompare(this.activeMenuItem.menuLink)) {
+      this.addActiveClass();
     }
-
+    // transaction
+    if (this.checkMenuLink('/transactions') && this.urlContain('/tx') && !this.urlCheckEVM()) {
+      this.addActiveClass();
+    }
+    // evm-transaction
     if (
-      this.activeMenuItem.menuDetailLink === 'transaction' &&
-      this.router.url.includes('/txs') &&
-      !this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
+      this.checkMenuLink('/evm-transactions') &&
+      this.urlContain('/tx') && this.urlCheckEVM()
     ) {
-      menuClass = 'active';
+      this.addActiveClass();
     }
-
+    // contract
     if (
-      this.activeMenuItem.menuDetailLink === 'evm-transaction' &&
-      this.router.url.includes('/tx') &&
-      this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
+      this.checkMenuLink('/contracts') &&
+      this.urlContain('/contracts') && !this.urlCheckEVM()
     ) {
-      menuClass = 'active';
+      this.addActiveClass();
     }
-
+    // evm-contract
+    if (this.checkMenuLink('/evm-contracts') && this.urlContain('/evm-contracts')) {
+      this.addActiveClass();
+    }
+    // validate
+    if (this.checkMenuLink('/validators') && this.urlContain('/validators')) {
+      this.addActiveClass();
+    }
+    // block
+    if (this.checkMenuLink('/blocks') && this.urlContain('/block')) {
+      this.addActiveClass();
+    }
+    // voting
+    if (this.checkMenuDetailLink('voting') && this.urlContain('/votings/')) {
+      this.addActiveClass();
+    }
+    // token
+    if (this.checkMenuDetailLink('token') && this.urlCompare('/tokens')) {
+      this.addActiveClass();
+    }
+    // token-detail
     if (
-      this.activeMenuItem.menuLink === '/transactions' &&
-      this.router.url.includes('/transaction') &&
-      !this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
-    ) {
-      menuClass = 'active';
-    }
-
-    if (
-      this.activeMenuItem.menuLink === '/evm-transactions' &&
-      this.router.url.includes('/transaction') &&
-      this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
-    ) {
-      menuClass = 'active';
-    }
-
-    if (
-      this.activeMenuItem.menuLink === '/contracts' &&
-      this.router.url.includes('/contracts') &&
-      !this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
-    ) {
-      menuClass = 'active';
-    }
-
-    if (this.activeMenuItem.menuLink === '/evm-contracts' && this.router.url.includes('/evm-contracts')) {
-      menuClass = 'active';
-    }
-
-    if (this.activeMenuItem.menuLink === '/validators' && this.router.url.includes('/validators')) {
-      menuClass = 'active';
-    }
-
-    if (this.activeMenuItem.menuLink === '/blocks' && this.router.url.includes('/block')) {
-      menuClass = 'active';
-    }
-
-    if (this.activeMenuItem.menuDetailLink === 'voting' && this.router.url.includes('/votings/')) {
-      menuClass = 'active';
-    }
-
-    if (this.activeMenuItem.menuDetailLink === 'token' && this.router.url === '/tokens') {
-      menuClass = 'active';
-    }
-
-    if (
-      this.activeMenuItem.menuDetailLink === 'token' &&
-      this.router.url.includes('/token/') &&
+      this.checkMenuDetailLink('token') &&
+      this.urlContain('/token/') &&
       this.router.url.split('/').length === 3
     ) {
-      menuClass = 'active';
+      this.addActiveClass();
     }
-
-    if (this.activeMenuItem.menuDetailLink === 'nft' && this.router.url === '/tokens/tokens-nft') {
-      menuClass = 'active';
+    // nft
+    if (this.checkMenuDetailLink('nft') && this.urlCompare('/tokens/tokens-nft')) {
+      this.addActiveClass();
     }
-
+    // nft-detail
     if (
-      this.activeMenuItem.menuDetailLink === 'nft' &&
-      this.router.url.includes('/token/nft') &&
+      this.checkMenuDetailLink('nft') &&
+      this.urlContain('/token/nft') &&
       this.router.url.split('/').length === 4
     ) {
-      menuClass = 'active';
+      this.addActiveClass();
     }
-
-    if (this.activeMenuItem.menuDetailLink === 'abt' && this.router.url === '/tokens/token-abt') {
-      menuClass = 'active';
+    // abt
+    if (this.checkMenuDetailLink('abt') && this.urlCompare('/tokens/token-abt')) {
+      this.addActiveClass();
     }
-
+    // abt-detail
     if (
-      this.activeMenuItem.menuDetailLink === 'abt' &&
-      this.router.url.includes('/token/abt') &&
+      this.checkMenuDetailLink('abt') &&
+      this.urlContain('/token/abt') &&
       this.router.url.split('/').length === 4
     ) {
-      menuClass = 'active';
+      this.addActiveClass();
     }
-
+    // statistics
     if (
-      this.activeMenuItem.menuLink === '/statistics/charts-stats' &&
-      (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
+      this.checkMenuLink('/statistics/charts-stats') &&
+      (this.urlCompare('/statistics/charts-stats') || this.urlContain('/statistics/chart/'))
     ) {
-      menuClass = 'active';
+      this.addActiveClass();
     }
-
+    // statistics-detail
     if (
-      this.activeMenuItem.menuLink === '/statistics/top-statistic' &&
-      this.router.url == '/statistics/top-statistic'
+      this.checkMenuLink('/statistics/top-statistic') &&
+      this.urlCompare('/statistics/top-statistic')
     ) {
-      menuClass = 'active';
+      this.addActiveClass();
     }
-
+    // code-ids
     if (
-      this.activeMenuItem.menuLink === '/code-ids' &&
-      (this.router.url == '/code-ids' ||
-        this.router.url.includes('/code-ids/detail/') ||
-        this.router.url.includes('/code-ids/verify/'))
+      this.checkMenuLink('/code-ids') &&
+      (this.urlCompare('/code-ids') ||
+        this.urlContain('/code-ids/detail/') ||
+        this.urlContain('/code-ids/verify/'))
     ) {
-      menuClass = 'active';
+      this.addActiveClass();
     }
-
-    this.element.classList.add(menuClass);
   }
 }
