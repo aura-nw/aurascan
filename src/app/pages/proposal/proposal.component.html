@@ -33,14 +33,14 @@
                       <a class="text--primary h6 mb-0">
                         <div
                           *ngIf="lastedItem?.proposer"
-                          [routerLink]="['/account', lastedItem?.proposer_address]"
+                          [routerLink]="['/address', lastedItem?.proposer_address]"
                           [copyBtn]="lastedItem?.proposer_address">
                           {{ lastedItem?.proposer?.description?.moniker }}
                         </div>
                         <ng-container *ngIf="!lastedItem?.proposer">
                           <app-name-tag
                             [value]="lastedItem?.proposer_address"
-                            [linkRouter]="['/account', lastedItem?.proposer_address]"></app-name-tag>
+                            [linkRouter]="['/address', lastedItem?.proposer_address]"></app-name-tag>
                         </ng-container>
                       </a>
                     </ng-container>
@@ -211,14 +211,14 @@
                       <a class="text--primary h6 mb-0">
                         <div
                           *ngIf="lastedItem?.proposer"
-                          [routerLink]="['/account', lastedItem?.proposer_address]"
+                          [routerLink]="['/address', lastedItem?.proposer_address]"
                           [copyBtn]="lastedItem?.proposer_address">
                           {{ lastedItem?.proposer?.description?.moniker }}
                         </div>
                         <ng-container *ngIf="!lastedItem?.proposer">
                           <app-name-tag
                             [value]="lastedItem?.proposer_address"
-                            [linkRouter]="['/account', lastedItem?.proposer_address]"></app-name-tag>
+                            [linkRouter]="['/address', lastedItem?.proposer_address]"></app-name-tag>
                         </ng-container>
                       </a>
                     </ng-container>
@@ -352,7 +352,7 @@
     <div class="card" *ngIf="dataSource?.data?.length > 0">
       <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
         <h2 class="mb-0 text--white">Proposals</h2>
-        <!-- <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button> -->
+        <!-- <button type="button" class="button button-outline" [routerLink]="'/tx'">View more</button> -->
       </div>
       <div class="card-body pt-0">
         <ng-container *ngIf="!breakpoint.value.matches; else mobileTemplate">

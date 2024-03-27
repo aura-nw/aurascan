@@ -49,6 +49,7 @@ export class MenuBottomBarComponent implements OnInit {
         this.menuLink.push(arr);
       }
     }
+    this.menuLink[1] += '/tx';
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
@@ -108,14 +109,14 @@ export class MenuBottomBarComponent implements OnInit {
             const foundIndex = features.findIndex((item) => item === featureName);
 
             // If have featureName, check disable
-            subItem.disabled = featureName ? (foundIndex < 0 ? true : false) : false;
+            subItem.disabled = featureName ? foundIndex < 0 : false;
 
             isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
           });
         } else {
           const featureName = item.featureName;
           const foundIndex = features.findIndex((item) => item === featureName);
-          item.disabled = foundIndex < 0 ? true : false;
+          item.disabled = foundIndex < 0;
         }
       });
     }
@@ -123,72 +124,5 @@ export class MenuBottomBarComponent implements OnInit {
 
   overLayClickEvent() {
     this.overlayPanel = false;
-  }
-
-  checkMenuActive(menuLink: string) {
-    if ((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
-      return true;
-    }
-
-    if (!menuLink.includes('/tokens')) {
-      if (menuLink === '/' + this.router.url.split('/')[1] && this.router.url.includes(menuLink)) {
-        return true;
-      }
-    }
-
-    if (menuLink === '/tokens' && (this.router.url == '/tokens' || this.router.url.includes('/tokens/token/'))) {
-      return true;
-    }
-
-    if (
-      menuLink === '/tokens/tokens-nft' &&
-      (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
-    ) {
-      return true;
-    }
-
-    if (
-      menuLink === '/tokens/token-abt' &&
-      (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
-    ) {
-      return true;
-    }
-
-    if (
-      menuLink === '/transactions' &&
-      this.router.url.includes('/transaction') &&
-      !this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
-    ) {
-      return true;
-    }
-
-    if (
-      menuLink === '/evm-transactions' &&
-      this.router.url.includes('/transaction') &&
-      this.router.url.split('/')[2]?.startsWith(EWalletType.EVM)
-    ) {
-      return true;
-    }
-
-    if (
-      menuLink === '/statistics/charts-stats' &&
-      (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
-    ) {
-      return true;
-    }
-
-    if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
-      return true;
-    }
-
-    if (
-      menuLink === '/code-ids' &&
-      (this.router.url == '/code-ids' ||
-        this.router.url.includes('/code-ids/detail/') ||
-        this.router.url.includes('/code-ids/verify/'))
-    ) {
-      return true;
-    }
-    return false;
   }
 }

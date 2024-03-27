@@ -1,23 +1,22 @@
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="mb-1 mb-md-6">
-    <div class="d-flex d-block align-items-center {{ breakpoint.value.matches ? 'justify-content-between' : '' }}">
+    <div class="d-flex d-block align-items-center">
       <span class="h2 fw-700 text--white mr-lg-5 mr-2">Account</span>
       <a
-        [routerLink]="[isContractAddress && accountEvmAddress ? '/evm-contracts' : '/contracts', accountAddress]"
+        [routerLink]="[
+          accountEvmAddress ? '/evm-contracts' : '/contracts',
+          accountEvmAddress ? accountEvmAddress : accountAddress
+        ]"
         *ngIf="isContractAddress"
+        [appTooltip]="'Go to Contract Details'"
         class="contract-label text--primary body-04 mr-5">
         Contract
       </a>
-      <button
-        class="button button-outline button-pill"
+      <i
+        class="ph ph-star body-01"
         [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'"
-        (click)="handleWatchList()">
-        <span class="text--white caption-mob fw-normal">Add to watch list</span>
-        <i
-          class="ph ph-star body-01 ml-2"
-          *ngIf="!breakpoint.value.matches"
-          [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
-      </button>
+        (click)="handleWatchList()"
+        [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
     </div>
 
     <div class="d-lg-flex align-items-center mb-lg-2 mb-3 mt-3 body-01 body-mob">

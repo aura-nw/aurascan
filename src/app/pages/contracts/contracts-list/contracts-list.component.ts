@@ -29,7 +29,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true, isNameTag: true },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', isShort: true, isNameTag: true },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {

@@ -132,7 +132,7 @@
             <div class="col-12 col-lg-9">
               <a
                 class="text--primary"
-                routerLink="/transaction/{{ transactionDetail?.messages[0]['hash'] }}"
+                routerLink="/tx/{{ transactionDetail?.messages[0]['hash'] }}"
                 [copyBtn]="transactionDetail?.messages[0]['hash']">
                 {{
                   environmentService.isMobile
@@ -180,7 +180,7 @@
     <app-messages-item
       [label]="'Sender'"
       [value]="transactionDetail?.messages[0]?.sender"
-      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
+      [dataLink]="{ url: '/address', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Receiver'" [value]="transactionDetail?.messages[0]?.receiver"></app-messages-item>
     <app-messages-item
       [label]="'Source Channel'"
@@ -232,11 +232,11 @@
     <app-messages-item
       [label]="'Signer'"
       [value]="ibcData?.update_client?.signer || transactionDetail.messages[0].signer"
-      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
+      [dataLink]="{ url: '/address', nameTag: true }"></app-messages-item>
     <app-messages-item
       [label]="'Receiver'"
       [value]="ibcData?.receiver"
-      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
+      [dataLink]="{ url: '/address', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Sender'" [value]="ibcData?.sender"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
@@ -263,7 +263,7 @@
     <app-messages-item
       [label]="'Sender'"
       [value]="ibcData?.acknowledgement?.sender"
-      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
+      [dataLink]="{ url: '/address', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
@@ -271,7 +271,7 @@
     <app-messages-item
       [label]="'Signer'"
       [value]="ibcData?.acknowledgement?.signer"
-      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
+      [dataLink]="{ url: '/address', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 
@@ -315,14 +315,14 @@
     <app-messages-item
       [label]="'Signer'"
       [value]="ibcData?.time_out[index - 1]?.signer"
-      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
+      [dataLink]="{ url: '/address', nameTag: true }"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcUpdateClient let-data="data">
     <app-messages-item
       [label]="'Signer'"
       [value]="data?.signer"
-      [dataLink]="{ url: '/account', nameTag: true }"></app-messages-item>
+      [dataLink]="{ url: '/address', nameTag: true }"></app-messages-item>
     <app-messages-item [label]="'Client ID'" [value]="data?.client_id"></app-messages-item>
     <app-messages-item
       [label]="'block'"
@@ -420,7 +420,7 @@
                 </div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
-                    <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
+                    <a *ngIf="item.denom === denom" class="text--primary" href="/tx/{{ item.tx_hash }}">
                       <span class="d-lg-none">{{ item.tx_hash | ellipsis: 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </a>
@@ -463,7 +463,7 @@
               <app-name-tag
                 [value]="transactionDetail?.messages[0]?.inputs[0]?.address"
                 [linkRouter]="[
-                  (transactionDetail?.messages[0]?.inputs[0]?.address | isContract) ? '/contracts' : '/account',
+                  (transactionDetail?.messages[0]?.inputs[0]?.address | isContract) ? '/contracts' : '/address',
                   transactionDetail?.messages[0]?.inputs[0]?.address
                 ]"
                 [fullText]="true"
@@ -473,7 +473,7 @@
             <div class="txt-label">To</div>
             <div class="txt-address">
               <app-name-tag
-                [linkRouter]="[(item?.address | isContract) ? '/contracts' : '/account', item?.address]"
+                [linkRouter]="[(item?.address | isContract) ? '/contracts' : '/address', item?.address]"
                 [fullText]="true"
                 [fullTextMob]="true"
                 [value]="item?.address">

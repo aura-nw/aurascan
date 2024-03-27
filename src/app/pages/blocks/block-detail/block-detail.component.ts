@@ -225,14 +225,6 @@ export class BlockDetailComponent implements OnInit {
     }
   }
 
-  checkAmountValue(amount: number, txHash: string) {
-    if (amount === 0) {
-      return '-';
-    } else {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    }
-  }
-
   changeType(type: boolean) {
     this.isRawData = type;
   }
@@ -253,7 +245,7 @@ export class BlockDetailComponent implements OnInit {
   parseDataListEvmTxn(txs) {
     if (txs.length > 0) {
       this.dataSourceEvm.data = txs.map((tx) => {
-        const type = _.get(tx, 'evm_transaction.data')?.substring(0, 8);;
+        const type = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
         return {
           ...tx,
           tx_hash: _.get(tx, 'evm_transaction.hash'),

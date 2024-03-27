@@ -17,13 +17,13 @@
                         <a
                           *ngSwitchCase="'height'"
                           class="text--primary cursor-pointer block-link"
-                          [routerLink]="['/blocks', data[template.matColumnDef]]">
+                          [routerLink]="['/block', data[template.matColumnDef]]">
                           {{ data[template.matColumnDef] }}
                         </a>
                         <a
                           *ngSwitchCase="'block_hash'"
                           class="text--primary cursor-pointer block-link"
-                          [routerLink]="['/blocks', data['height']]">
+                          [routerLink]="['/block', data['height']]">
                           {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                         </a>
                         <a
@@ -55,7 +55,7 @@
           <div *ngIf="breakpoint.value.matches">
             <div class="custom-card-mob-simple body-01 mb-2" *ngFor="let data of dataSource?.data">
               <div class="text--primary body h5 mb-0 d-flex align-items-center justify-content-between">
-                <a [routerLink]="['/blocks', data.height]" class="h6-mob mb-0 ml-2 text--primary">
+                <a [routerLink]="['/block', data.height]" class="h6-mob mb-0 ml-2 text--primary">
                   {{ data.height }}
                 </a>
                 <div class="text--gray-1 h6-mob">{{ data.timestamp | customDateTime: 'Distance' }}</div>
@@ -67,7 +67,7 @@
                   href="/validators/{{ data.operator_address }}"
                   class="text--primary"
                   [copyBtn]="data.operator_address"
-                >{{ data.proposer | ellipsis : 16 }}</a
+                  >{{ data.proposer | ellipsis: 16 }}</a
                 >
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">

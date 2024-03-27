@@ -168,7 +168,7 @@
                   [value]="nftDetail?.owner"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [linkRouter]="[(nftDetail?.owner | isContract) ? '/contracts' : '/account', nftDetail?.owner]"
+                  [linkRouter]="[(nftDetail?.owner | isContract) ? '/contracts' : '/address', nftDetail?.owner]"
                   [maxCharacter]="11">
                 </app-name-tag>
               </div>
@@ -192,7 +192,7 @@
                   [value]="nftDetail?.creator"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [linkRouter]="[(nftDetail?.creator | isContract) ? '/contracts' : '/account', nftDetail?.creator]"
+                  [linkRouter]="[(nftDetail?.creator | isContract) ? '/contracts' : '/address', nftDetail?.creator]"
                   [maxCharacter]="11">
                 </app-name-tag>
               </div>
@@ -297,7 +297,7 @@
             <td mat-cell *matCellDef="let data; let i = index">
               <ng-container [ngSwitch]="template.matColumnDef">
                 <ng-container *ngSwitchCase="'tx_hash'">
-                  <a class="text--primary" [copyBtn]="data.tx_hash" [routerLink]="['/transaction', data.tx_hash]">
+                  <a class="text--primary" [copyBtn]="data.tx_hash" [routerLink]="['/tx', data.tx_hash]">
                     {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                   </a>
                 </ng-container>
@@ -340,7 +340,7 @@
                         *ngIf="data[template.matColumnDef]"
                         [value]="data[template.matColumnDef]"
                         [linkRouter]="[
-                          (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                          (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
                           data[template.matColumnDef]
                         ]"
                         [iconContract]="data[template.matColumnDef] | isContract"
@@ -372,7 +372,7 @@
                       "
                       [value]="data[template.matColumnDef]"
                       [linkRouter]="[
-                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/account',
+                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
                         data[template.matColumnDef]
                       ]"
                       [iconContract]="data[template.matColumnDef] | isContract">

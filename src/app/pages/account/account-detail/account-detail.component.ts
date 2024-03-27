@@ -12,9 +12,7 @@ import { EFeature } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import {
-  transferAddress
-} from 'src/app/core/utils/common/address-converter';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -23,6 +21,7 @@ import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constant
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -82,6 +81,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     private soulboundService: SoulboundService,
     private router: Router,
     private userService: UserService,
+    private contractService: ContractService,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -115,10 +115,9 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         );
         this.currentUrlAddress = params?.address;
         this.accountAddress = accountAddress;
-        this.accountEvmAddress = accountEvmAddress;     
+        this.accountEvmAddress = accountEvmAddress;
 
-        this.isContractAddress = this.commonService.isValidContract(this.accountAddress);
-
+        this.checkIsContract();
         this.getSBTPick();
         this.getTotalSBT();
 
@@ -126,6 +125,24 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.checkWatchList();
       }
     });
+  }
+
+  checkEvmContract() {
+    this.contractService.findEvmContract(this.accountEvmAddress).subscribe({
+      next: (res) => {
+        if (res?.evm_smart_contract?.length > 0) {
+          this.isContractAddress = true;
+        }
+      },
+    });
+  }
+
+  checkIsContract() {
+    if (this.commonService.isValidContract(this.accountAddress)) {
+      this.isContractAddress = true;
+    } else {
+      this.checkEvmContract();
+    }
   }
 
   /**
@@ -259,7 +276,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   editWatchList() {
     if (this.userEmail) {
-      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.accountAddress);
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, {
+        address: this.currentUrlAddress,
+        type: this.isContractAddress ? 'contract' : 'account',
+      });
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

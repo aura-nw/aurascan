@@ -7,7 +7,7 @@
             <a
               [copyBtn]="data?.evm_hash || data?.tx_hash"
               class="text--primary cursor-pointer body-02"
-              [routerLink]="['/transaction', data?.evm_hash || data?.tx_hash]">
+              [routerLink]="['/tx', data?.evm_hash || data?.tx_hash]">
               {{ data?.evm_hash || data?.tx_hash | ellipsis: 8 : 8 }}
             </a>
             <div class="align-items-center d-flex mt-1">
@@ -35,7 +35,7 @@
         <div class="divider divider-horizontal divider-lighter my-2"></div>
         <div class="d-flex justify-content-between">
           <div class="text--gray-4">Height</div>
-          <a class="text--primary cursor-pointer block-link" [routerLink]="['/blocks', data['height']]">
+          <a class="text--primary cursor-pointer block-link" [routerLink]="['/block', data['height']]">
             {{ data?.height }}
           </a>
         </div>
@@ -78,7 +78,7 @@
             *ngIf="data?.hash"
             [copyBtn]="data.hash"
             class="text--primary cursor-pointer"
-            [routerLink]="['/transaction', data?.hash]">
+            [routerLink]="['/tx', data?.hash]">
             {{ data?.hash | ellipsis: 8 : 8 }}
           </a>
           <span *ngIf="!data.hash" class="text--white">-</span>
