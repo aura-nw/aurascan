@@ -27,10 +27,14 @@
                         {{ data.type | convertEvmTx }}
                       </div>
                       <ng-container *ngSwitchCase="'from'">
-                        <app-name-tag [value]="data[template.matColumnDef]"> </app-name-tag>
+                        <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
+                        </app-name-tag>
+                        <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to'">
-                        <app-name-tag [value]="data[template.matColumnDef]"> </app-name-tag>
+                        <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
+                        </app-name-tag>
+                        <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>
                       <a
                         *ngSwitchCase="'height'"
@@ -138,11 +142,13 @@
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">From</div>
-                  <app-name-tag [value]="data?.from"> </app-name-tag>
+                  <app-name-tag [value]="data?.from" *ngIf="data?.from"> </app-name-tag>
+                  <span *ngIf="!data?.from">-</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">To</div>
-                  <app-name-tag [value]="data?.to"> </app-name-tag>
+                  <app-name-tag [value]="data?.to" *ngIf="data?.to"> </app-name-tag>
+                  <span *ngIf="!data?.to">-</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">Cosmos Txn</div>
