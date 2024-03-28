@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgSwitchCase } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import BigNumber from 'bignumber.js';
@@ -40,16 +40,37 @@ export class TokenDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    if (this.contractAddress?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
-      if (this.router.snapshot.url[0]?.path === 'nft' || this.router.snapshot.url[0]?.path === 'abt') {
-        this.getTokenDetailNFT();
-      } else {
-        this.getCW20Detail();
+    this.router.data.subscribe((data) => {
+      const { address, type } = data[0];
+      console.log(data);
+
+      if (address) {
+        this.contractAddress = address;
+
+        switch (type) {
+          case 'CW721':
+            this.getTokenDetailNFT();
+            break;
+          case 'CW20':
+            this.getCW20Detail();
+            break;
+          default:
+            this.getTokenDetail();
+            break;
+        }
       }
-    } else {
-      this.getTokenDetail();
-    }
+    });
+
+    // this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
+    // if (this.contractAddress?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
+    //   if (this.router.snapshot.url[0]?.path === 'nft' || this.router.snapshot.url[0]?.path === 'abt') {
+    //     this.getTokenDetailNFT();
+    //   } else {
+    //     this.getCW20Detail();
+    //   }
+    // } else {
+    //   this.getTokenDetail();
+    // }
   }
 
   getCW20Detail(): void {

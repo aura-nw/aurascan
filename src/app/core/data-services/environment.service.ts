@@ -96,6 +96,10 @@ export class EnvironmentService {
     return this.environment.nativeName || _.startCase(_.camelCase(this.chainInfo?.bech32Config?.bech32PrefixAccAddr));
   }
 
+  get bech32Config() {
+    return _.get(this.configValue, 'chainConfig.chain_info.bech32Config.bech32PrefixAccAddr');
+  }
+
   get chainConfig() {
     return _.get(this.configValue, 'chainConfig');
   }
@@ -118,6 +122,10 @@ export class EnvironmentService {
 
   get coinDecimals() {
     return _.get(this.configValue, 'chainConfig.chain_info.currencies[0].coinDecimals');
+  }
+
+  get coinMinimalDenom() {
+    return _.get(this.configValue, 'chainConfig.chain_info.stakeCurrency.coinMinimalDenom');
   }
 
   get stakingTime() {
