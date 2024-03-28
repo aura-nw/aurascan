@@ -101,7 +101,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
     if (this.typeContract && this.typeContract !== this.contractType.CW20) {
-      this.linkToken = this.typeContract === this.contractType.CW721 ? '/token/nft' : '/token/abt';
+      this.linkToken = this.typeContract === this.contractType.CW721 ? '/token' : '/token';
     }
     this.getListData();
     this.timerGetUpTime = setInterval(() => {
@@ -373,6 +373,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   goTo(data) {
     let url = this.linkToken + '/' + this.contractAddress + '/' + this.encodeData(data);
-    this.router.navigateByUrl(url);
+    console.log(['/token', this.contractAddress, this.encodeData(data)]);
+
+    this.router.navigate(['/token', this.contractAddress, this.encodeData(data)]);
   }
 }

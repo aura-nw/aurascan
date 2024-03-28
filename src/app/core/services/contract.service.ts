@@ -645,6 +645,13 @@ export class ContractService extends CommonService {
       });
     }
 
+    if (address.length == LENGTH_CHARACTER.IBC) {
+      return of({
+        type: 'IBC',
+        address,
+      });
+    }
+
     let type = address.startsWith('0x') ? 'EVM' : 'COSMOS';
 
     const smartContract =

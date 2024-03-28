@@ -146,8 +146,7 @@ export class EvmTokenContentComponent implements OnInit {
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
           if (this.tokenDetail.type && this.tokenDetail.type !== EvmContractRegisterType.ERC20) {
-            this.linkToken =
-              this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token/nft' : 'evm-token/abt';
+            this.linkToken = this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token' : 'evm-token';
             window.location.href = `/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
             window.location.href = `/evm-token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
@@ -164,7 +163,7 @@ export class EvmTokenContentComponent implements OnInit {
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
       if (this.tokenDetail.type && this.tokenDetail.type !== EvmContractRegisterType.ERC20) {
-        this.linkToken = this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token/nft' : 'evm-token/abt';
+        this.linkToken = this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token' : 'evm-token';
         window.location.href = `/${this.linkToken}/${params.contractAddress}`;
       } else {
         window.location.href = `/evm-token/${params.contractAddress}`;

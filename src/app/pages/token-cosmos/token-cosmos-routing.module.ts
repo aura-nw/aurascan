@@ -7,7 +7,7 @@ import { TokenDetailComponent } from './token-detail/token-detail.component';
 const resolveFn: ResolveFn<{ type: string; address: string }> = (route) => {
   const contract = inject(ContractService);
 
-  const address = route.params['address'];
+  const address = route.params['contractAddress'];
 
   return contract.queryTokenByContractAddress(address);
 };

@@ -74,7 +74,7 @@ export class NFTDetailComponent implements OnInit {
   isError = false;
   sbType = SB_TYPE;
   contractType = ContractRegisterType;
-  linkToken = 'token/nft';
+  linkToken = 'token';
   animationUrl: string;
   imageUrl: string;
   isCW4973 = false;
@@ -115,7 +115,7 @@ export class NFTDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('address');
+    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
     this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
@@ -147,7 +147,7 @@ export class NFTDetailComponent implements OnInit {
           if (res.name === TYPE_CW4973 && res.cw721_contract?.cw721_tokens[0]?.burned === false) {
             res['type'] = ContractRegisterType.CW4973;
             this.isSoulBound = true;
-            this.linkToken = 'token/abt';
+            this.linkToken = 'token';
             this.isCW4973 = true;
           } else {
             this.toastr.error('Token invalid');

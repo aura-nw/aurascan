@@ -44,7 +44,7 @@ export class TokenContentComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
-  linkToken = 'token/nft';
+  linkToken = 'token';
   activeTabID = 0;
   textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
   linkAddress: string;
@@ -146,7 +146,7 @@ export class TokenContentComponent implements OnInit {
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
           if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
-            this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token/nft' : 'token/abt';
+            this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token' : 'token';
             window.location.href = `/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
             window.location.href = `/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
@@ -163,7 +163,7 @@ export class TokenContentComponent implements OnInit {
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
       if (this.tokenDetail.type && this.tokenDetail.type !== ContractRegisterType.CW20) {
-        this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token/nft' : 'token/abt';
+        this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token' : 'token';
         window.location.href = `/${this.linkToken}/${params.contractAddress}`;
       } else {
         window.location.href = `/token/${params.contractAddress}`;

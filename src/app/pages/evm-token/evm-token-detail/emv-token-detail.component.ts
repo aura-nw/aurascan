@@ -29,7 +29,7 @@ export class EvmTokenDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('address');
+    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.getTokenDetail();
   }
 
