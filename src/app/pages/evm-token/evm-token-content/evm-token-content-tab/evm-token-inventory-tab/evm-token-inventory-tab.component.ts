@@ -47,9 +47,6 @@ export class EvmTokenInventoryComponent implements OnInit {
       this.keyWord = params?.a || '';
     });
 
-    if (this.route.snapshot.url[0]?.path === 'abt') {
-      this.linkToken = 'abt';
-    }
     this.getNftData();
   }
 

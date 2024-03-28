@@ -7,16 +7,6 @@ const routes: Routes = [
     path: '',
     component: EvmTokenDetailComponent,
   },
-  // {
-  //   path: ':nftId',
-  //   component: EvmTokenDetailComponent,
-  //   canMatch: [() => isEnabled(EFeature.Cw721)],
-  // },
-  // {
-  //   path: 'nft/:contractAddress/:nftId',
-  //   canMatch: [() => isEnabled(EFeature.Cw721)],
-  //   component: EvmNFTDetailComponent,
-  // },
 ];
 
 @NgModule({

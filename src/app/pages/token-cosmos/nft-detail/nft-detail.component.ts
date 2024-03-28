@@ -93,6 +93,8 @@ export class NFTDetailComponent implements OnInit {
   network = this.environmentService.chainInfo;
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
+  nftBaseType: 'CW4973' | 'CW721';
+
   constructor(
     public commonService: CommonService,
     private route: Router,
@@ -115,8 +117,21 @@ export class NFTDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    this.nftId = this.router.snapshot.paramMap.get('nftId');
+    this.router.data.subscribe((data) => {
+      const { address, type } = data[0];
+
+      if (address) {
+        this.contractAddress = address;
+        this.nftId = this.router.snapshot.paramMap.get('nftId');
+
+        this.nftBaseType = type;
+
+        this.getNFTDetail();
+      }
+    });
+
+    // this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
+    // this.nftId = this.router.snapshot.paramMap.get('nftId');
     this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.address;
@@ -124,7 +139,6 @@ export class NFTDetailComponent implements OnInit {
         this.userAddress = null;
       }
     });
-    this.getNFTDetail();
   }
 
   error(): void {
@@ -143,7 +157,7 @@ export class NFTDetailComponent implements OnInit {
         }
 
         res['type'] = res['type'] || ContractRegisterType.CW721;
-        if (this.router.snapshot.url[0]?.path === 'abt') {
+        if (this.nftBaseType == 'CW4973') {
           if (res.name === TYPE_CW4973 && res.cw721_contract?.cw721_tokens[0]?.burned === false) {
             res['type'] = ContractRegisterType.CW4973;
             this.isSoulBound = true;

@@ -20,6 +20,7 @@ const routes: Routes = [
   },
   {
     path: ':nftId',
+    resolve: [resolveFn],
     component: NFTDetailComponent,
   },
 

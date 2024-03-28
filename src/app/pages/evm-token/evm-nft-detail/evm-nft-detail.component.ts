@@ -143,18 +143,6 @@ export class EvmNFTDetailComponent implements OnInit {
         }
 
         res['type'] = res['type'] || ContractRegisterType.CW721;
-        if (this.router.snapshot.url[0]?.path === 'abt') {
-          if (res.name === TYPE_CW4973 && res.cw721_contract?.cw721_tokens[0]?.burned === false) {
-            res['type'] = ContractRegisterType.CW4973;
-            this.isSoulBound = true;
-            this.linkToken = 'abt';
-            this.isCW4973 = true;
-          } else {
-            this.toastr.error('Token invalid');
-            this.loading = false;
-            return;
-          }
-        }
 
         this.getDataTable();
 

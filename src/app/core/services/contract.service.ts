@@ -659,6 +659,7 @@ export class ContractService extends CommonService {
         ? `
         smart_contract(where: {address: {_eq: $address}}) {
           address
+          name
           cw20_contract {
             symbol
           }
@@ -701,6 +702,10 @@ export class ContractService extends CommonService {
           if (type == 'COSMOS') {
             type = _.get(x, 'smart_contract[0].cw20_contract.symbol') ? 'CW20' : type;
             type = _.get(x, 'smart_contract[0].cw721_contract.symbol') ? 'CW721' : type;
+
+            if (type == 'CW721') {
+              type = _.get(x, 'smart_contract[0].name') == 'crates.io:cw4973' ? 'CW4973' : type;
+            }
           } else {
             type = _.get(x, 'evm_smart_contract[0].erc20_contract.address') ? 'ERC20' : type;
             type = _.get(x, 'evm_smart_contract[0].erc721_contract.address') ? 'ERC721' : type;

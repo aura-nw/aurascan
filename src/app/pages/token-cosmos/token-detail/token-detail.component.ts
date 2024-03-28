@@ -49,6 +49,7 @@ export class TokenDetailComponent implements OnInit {
 
         switch (type) {
           case 'CW721':
+          case 'CW4973':
             this.getTokenDetailNFT();
             break;
           case 'CW20':
@@ -60,17 +61,6 @@ export class TokenDetailComponent implements OnInit {
         }
       }
     });
-
-    // this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    // if (this.contractAddress?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
-    //   if (this.router.snapshot.url[0]?.path === 'nft' || this.router.snapshot.url[0]?.path === 'abt') {
-    //     this.getTokenDetailNFT();
-    //   } else {
-    //     this.getCW20Detail();
-    //   }
-    // } else {
-    //   this.getTokenDetail();
-    // }
   }
 
   getCW20Detail(): void {

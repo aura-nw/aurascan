@@ -96,7 +96,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
     if (this.typeContract && this.typeContract !== this.contractType.ERC20) {
-      this.linkToken = this.typeContract === this.contractType.ERC721 ? 'nft' : 'abt';
+      this.linkToken = 'nft';
     }
     this.getListData();
     this.timerGetUpTime = setInterval(() => {
