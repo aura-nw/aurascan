@@ -145,12 +145,7 @@ export class EvmTokenContentComponent implements OnInit {
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
-          if (this.tokenDetail.type && this.tokenDetail.type !== EvmContractRegisterType.ERC20) {
-            this.linkToken = this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token' : 'evm-token';
-            window.location.href = `/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
-          } else {
-            window.location.href = `/evm-token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
-          }
+          window.location.href = `/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
         }
       });
     } else {
@@ -162,12 +157,7 @@ export class EvmTokenContentComponent implements OnInit {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      if (this.tokenDetail.type && this.tokenDetail.type !== EvmContractRegisterType.ERC20) {
-        this.linkToken = this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token' : 'evm-token';
-        window.location.href = `/${this.linkToken}/${params.contractAddress}`;
-      } else {
-        window.location.href = `/evm-token/${params.contractAddress}`;
-      }
+      window.location.href = `/token/${params.contractAddress}`;
     }
   }
 

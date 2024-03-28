@@ -67,9 +67,7 @@
               contractDetail?.erc20_contract?.name &&
               contractDetail?.erc20_contract?.symbol
             ">
-            <a
-              class="text--primary break-word line-claim-v--des"
-              [routerLink]="['/evm-token/', contractDetail?.address]">
+            <a class="text--primary break-word line-claim-v--des" [routerLink]="['/token', contractDetail?.address]">
               {{ contractDetail.erc20_contract?.name }} ({{ contractDetail.erc20_contract?.symbol }})
             </a>
             <div class="cursor-pointer">
