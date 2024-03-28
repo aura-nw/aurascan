@@ -39,7 +39,7 @@ export class NgxToastrService {
   error(message: string, title = '', configTimeOut = 3000): void {
     this.toastrService.error(message, title, {
       positionClass: this.POSITION_CLASS,
-      timeOut: 20000,
+      timeOut: configTimeOut,
     });
   }
 

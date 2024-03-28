@@ -1,6 +1,7 @@
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import { stripHexPrefix, toChecksumAddress } from 'crypto-addr-codec';
 import { EWalletType } from '../../constants/wallet.constant';
+import { LENGTH_CHARACTER } from '../../constants/common.constant';
 
 /**
  * Creates a Bech32 encoder function with the given prefix.
@@ -93,7 +94,14 @@ export function convertEvmAddressToBech32Address(prefix: string, ethAddress: str
  * @return {object} the transferred address in both EVM and Bech32 format
  */
 export function transferAddress(prefix: string, address: string) {
-  if (address.startsWith('0x')) {
+  if (address?.startsWith(prefix) && address?.length >= LENGTH_CHARACTER.CONTRACT) {
+    return {
+      accountEvmAddress: null,
+      accountAddress: address,
+    };
+  }
+
+  if (address.startsWith(EWalletType.EVM)) {
     return {
       accountEvmAddress: address?.toLowerCase(),
       accountAddress: convertEvmAddressToBech32Address(prefix, address),
