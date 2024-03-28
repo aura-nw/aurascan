@@ -8,22 +8,20 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import {
+  transferAddress
+} from 'src/app/core/utils/common/address-converter';
+import local from 'src/app/core/utils/storage/local';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
-import local from 'src/app/core/utils/storage/local';
-import {
-  convertBech32AddressToEvmAddress,
-  convertEvmAddressToBech32Address,
-} from 'src/app/core/utils/common/address-converter';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -124,20 +122,12 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
         }
         if (res.data.length > 0) {
           res.data.forEach((data) => {
-            if (data.address.startsWith(EWalletType.EVM)) {
-              data.evmAddress = data.address;
-              data.cosmosAddress = convertEvmAddressToBech32Address(
-                this.chainInfo.bech32Config.bech32PrefixAccAddr,
-                data.address,
-              );
-            }
-            if (this.commonService.isBech32Address(data.address)) {
-              data.cosmosAddress = data.address;
-              data.evmAddress = convertBech32AddressToEvmAddress(
-                this.chainInfo.bech32Config.bech32PrefixAccAddr,
-                data.address,
-              );
-            }
+            const { accountAddress, accountEvmAddress } = transferAddress(
+              this.chainInfo.bech32Config.bech32PrefixAccAddr,
+              data.address,
+            );
+            data.cosmosAddress = accountAddress;
+            data.evmAddress = accountEvmAddress;
           });
         }
         this.dataSource.data = res.data;
