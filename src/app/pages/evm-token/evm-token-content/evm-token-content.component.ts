@@ -123,19 +123,25 @@ export class EvmTokenContentComponent implements OnInit {
       // check if mode not equal native coin
       if (this.tokenDetail.modeToken !== EModeToken?.Native) {
         if (
-          this.textSearch.length === LENGTH_CHARACTER.TRANSACTION &&
-          this.textSearch == this.textSearch.toUpperCase()
+          this.textSearch.length === LENGTH_CHARACTER.EVM_TRANSACTION &&
+          this.textSearch?.toLowerCase() == this.textSearch.toLowerCase()
         ) {
           this.isSearchTx = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-        } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+        } else if (
+          this.textSearch?.length >= LENGTH_CHARACTER.EVM_ADDRESS &&
+          this.textSearch?.startsWith(this.prefixAdd)
+        ) {
           this.isSearchAddress = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
           this.getInfoAddress(this.paramQuery);
         } else {
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
         }
-      } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+      } else if (
+        this.textSearch?.length >= LENGTH_CHARACTER.EVM_ADDRESS &&
+        this.textSearch?.startsWith(this.prefixAdd)
+      ) {
         this.isSearchAddress = true;
         this.tokenService.filterBalanceNative$.subscribe((res) => {
           this.infoSearch['balance'] = res || 0;

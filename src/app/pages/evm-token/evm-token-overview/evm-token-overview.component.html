@@ -78,12 +78,14 @@
               <div class="pl-4">
                 <div class="text--gray-5 caption fw-normal">In-chain Supply Amount</div>
                 <div class="body-02 text--gray-11">
-                  <span class="text--gray-1" [appTooltip]="{ priceAmount: tokenDetail.supplyAmount }">
+                  <span
+                    class="text--gray-1"
+                    [appTooltip]="{ priceAmount: tokenDetail.supplyAmount, decimal: tokenDetail.decimal }">
                     <span *ngIf="tokenDetail.supplyAmount | lt: 0.001">
                       {{ tokenDetail.supplyAmount == 0 ? 0 : '< 0.001' }}
                     </span>
                     <span
-                      [decimal]="0"
+                      [decimal]="tokenDetail.decimal"
                       [appBigNumber]="tokenDetail.supplyAmount || 0"
                       *ngIf="tokenDetail.supplyAmount | gte: 0.001"></span>
                   </span>
