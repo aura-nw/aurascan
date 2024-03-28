@@ -81,16 +81,16 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18, cssClass: 'pt-4' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 25, cssClass: 'pt-0' },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20, cssClass: 'pt-0' },
   ];
 
   templatesERCToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 14, cssClass: 'pt-4' },
+    { matColumnDef: 'method', headerCellDef: 'Message', headerWidth: 14, cssClass: 'pt-4' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
-    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 25, cssClass: 'pt-0' },
-    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 20, cssClass: 'pt-0' },
   ];
 
   displayedColumns: string[];
@@ -408,7 +408,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           this.templates = [...this.templatesToken];
         }
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
-        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 10, cssClass: 'pt-4' });
+        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListFTByAddress(payload);
         break;
@@ -424,7 +424,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18, cssClass: 'pt-1' });
-        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 10, cssClass: 'pt-4' });
+        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         payload['limit'] = 100;
         this.getListNFTByAddress(payload);
@@ -595,7 +595,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             element.timestamp = _.get(element, 'transaction.timestamp');
             element.arrEvent = _.get(element, 'erc20_activities')?.map((item, index) => {
               const type = _.get(element, 'data')?.substring(0, 8);
-              element.type = type ? type : 'Transfer';
+              element.method = type ? type : 'Transfer';
               let from = _.get(item, 'from') || NULL_ADDRESS;
               let to = _.get(item, 'to') || NULL_ADDRESS;
               let denom = _.get(item, 'erc20_contract.symbol');

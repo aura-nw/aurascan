@@ -646,9 +646,9 @@
                             <div class="box-token-transfer d-flex mr-8">
                               <span
                                 class="token-transfer-status d-inline-flex align-items-center caption"
-                                [ngClass]="{ 'status-out': item['from'] !== currentAddress }">
-                                <ng-container *ngIf="item['from'] === currentAddress"> IN </ng-container>
-                                <ng-container *ngIf="item['from'] !== currentAddress"> OUT </ng-container>
+                                [ngClass]="{ 'status-out': item['to'] !== currentAddress }">
+                                <ng-container *ngIf="item['to'] === currentAddress"> IN </ng-container>
+                                <ng-container *ngIf="item['to'] !== currentAddress"> OUT </ng-container>
                               </span>
                             </div>
                           </div>
@@ -678,7 +678,14 @@
                   </div>
                   <div *ngSwitchCase="'tokenType'">
                     <button class="button button-pill button-flat body-02 caption-mob">
-                      {{ fungibleTokenType }}
+                      <ng-container *ngIf="modeQuery === tabsData.FtsTxs">
+                        <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'evm-color' : 'cosmos-color' }}">
+                          {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
+                        </span>
+                      </ng-container>
+                      <!-- <ng-container *ngIf="modeQuery === tabsData.NftTxs">
+                        {{ fungibleTokenType === tokenType.ERC20 ? 'ERC721' : 'CW721' }}
+                      </ng-container> -->
                     </button>
                   </div>
                   <div *ngSwitchCase="'method'">
