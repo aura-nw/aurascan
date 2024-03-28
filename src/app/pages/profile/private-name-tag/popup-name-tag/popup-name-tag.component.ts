@@ -1,17 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {UntypedFormBuilder, Validators} from '@angular/forms';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import {TranslateService} from '@ngx-translate/core';
+import {MAX_LENGTH_NAME_TAG} from 'src/app/core/constants/common.constant';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {transferAddress} from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -49,7 +49,8 @@ export class PopupNameTagComponent implements OnInit {
     private commonService: CommonService,
     private nameTagService: NameTagService,
     private toastr: NgxToastrService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.formInit();
@@ -103,7 +104,7 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   handleSetAddress(address) {
-    const { accountAddress, accountEvmAddress } = transferAddress(
+    const {accountAddress, accountEvmAddress} = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
@@ -125,7 +126,7 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, address, cosmosAddress, evmAddress, name, note } = this.privateNameForm.getRawValue();
+    const {isFavorite, address, cosmosAddress, evmAddress, name, note} = this.privateNameForm.getRawValue();
     let payload = {
       isFavorite: isFavorite == 1,
       type: this.isAccount ? 'account' : 'contract',
@@ -152,13 +153,13 @@ export class PopupNameTagComponent implements OnInit {
     this.nameTagService.createPrivateName(payload).subscribe({
       next: (res) => {
         if (res.code && res.code !== 200) {
+          this.closeDialog(true);
           this.isError = true;
           this.toastr.error(res.message || 'Error');
-          return;
+        } else {
+          this.closeDialog(true);
+          this.toastr.successWithTitle('Private name tag created!', 'Success');
         }
-
-        this.closeDialog(true);
-        this.toastr.successWithTitle('Private name tag created!', 'Success');
       },
       error: (error) => {
         this.isError = true;

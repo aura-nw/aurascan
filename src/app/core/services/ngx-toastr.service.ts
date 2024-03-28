@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
-import { MESSAGES_CODE } from '../constants/messages.constant';
-import { ResponseTemplate } from '../models/common.model';
+import {Injectable} from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
+import {Observable} from 'rxjs';
+import {MESSAGES_CODE} from '../constants/messages.constant';
+import {ResponseTemplate} from '../models/common.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,8 @@ export class NgxToastrService {
 
   TIMEOUT_DEFAULT = 3000;
 
-  constructor(private toastrService: ToastrService) {}
+  constructor(private toastrService: ToastrService) {
+  }
 
   success(message: string, title = '', configTimeOut = 3000): void {
     this.toastrService.success(message, title, {
@@ -39,7 +40,7 @@ export class NgxToastrService {
   error(message: string, title = '', configTimeOut = 3000): void {
     this.toastrService.error(message, title, {
       positionClass: this.POSITION_CLASS,
-      timeOut: 20000,
+      timeOut: configTimeOut,
     });
   }
 
