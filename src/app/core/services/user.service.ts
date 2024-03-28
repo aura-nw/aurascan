@@ -319,10 +319,11 @@ export class UserService {
       ${this.envDB} {
         evm_transaction(where: {erc20_activities: {_or: [{from: {_eq: $from}}, {to: {_eq: $to}}], height: {_gt: $heightGT, _lt: $heightLT}, action: {_in: $actionIn, _nin: $actionNotIn}}, transaction: {timestamp: {_lte: $endTime, _gte: $startTime}}}, limit: $limit) {
           data
+          hash
           transaction {
             timestamp
           }
-          erc20_activities {
+          erc20_activities(where: {action: {_in: $actionIn, _nin: $actionNotIn}}) {
             from
             to
             tx_hash

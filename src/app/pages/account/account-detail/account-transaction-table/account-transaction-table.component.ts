@@ -5,7 +5,6 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { type } from 'os';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
@@ -88,10 +87,10 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
   templatesERCToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
-    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18, cssClass: 'pt-4' },
+    { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 14, cssClass: 'pt-4' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
-    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 25 },
-    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 22 },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 25, cssClass: 'pt-0' },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 22, cssClass: 'pt-0' },
   ];
 
   displayedColumns: string[];
@@ -409,6 +408,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           this.templates = [...this.templatesToken];
         }
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
+        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 10, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListFTByAddress(payload);
         break;
@@ -424,6 +424,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18, cssClass: 'pt-1' });
+        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 10, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         payload['limit'] = 100;
         this.getListNFTByAddress(payload);
@@ -590,7 +591,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         if (this.modeQuery === TabsAccountLink.FtsTxs && this.fungibleTokenType === this.tokenType.ERC20) {
           txs = data.evm_transaction;
           txs.forEach((element) => {
-            element.tx_hash = _.get(element, 'erc20_activities[0].tx_hash');
+            element.tx_hash = _.get(element, 'hash');
             element.timestamp = _.get(element, 'transaction.timestamp');
             element.arrEvent = _.get(element, 'erc20_activities')?.map((item, index) => {
               const type = _.get(element, 'data')?.substring(0, 8);
@@ -604,6 +605,11 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
               let contractAddress = _.get(item, 'erc20_contract_address');
               return { type, from, to, amount, denom, contractAddress, amountTemp, decimal };
             });
+            element.from = element.arrEvent[0]?.from;
+            element.to = element.arrEvent[0]?.to;
+            element.denom = element.arrEvent[0]?.denom;
+            element.amount = element.arrEvent[0]?.amount;
+            element.limit = 5;
           });
         } else {
           txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
