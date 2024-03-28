@@ -6,8 +6,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 const canMatchCosmosFn: CanMatchFn = (route, segments) => {
   const env = inject(EnvironmentService);
 
-  console.log(env.bech32PrefixAccAddr, env.coinMinimalDenom);
-
   const path = segments[0]?.path;
 
   if (

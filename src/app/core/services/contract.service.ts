@@ -697,8 +697,6 @@ export class ContractService extends CommonService {
       .pipe(
         map((res) => (res?.data ? res?.data[this.envDB] : null)),
         map((x) => {
-          console.log(x);
-
           if (type == 'COSMOS') {
             type = _.get(x, 'smart_contract[0].cw20_contract.symbol') ? 'CW20' : type;
             type = _.get(x, 'smart_contract[0].cw721_contract.symbol') ? 'CW721' : type;

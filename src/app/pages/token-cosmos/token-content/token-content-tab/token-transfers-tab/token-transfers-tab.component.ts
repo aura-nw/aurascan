@@ -372,9 +372,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   goTo(data) {
-    let url = this.linkToken + '/' + this.contractAddress + '/' + this.encodeData(data);
-    console.log(['/token', this.contractAddress, this.encodeData(data)]);
-
     this.router.navigate(['/token', this.contractAddress, this.encodeData(data)]);
   }
 }

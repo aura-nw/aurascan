@@ -42,7 +42,6 @@ export class TokenDetailComponent implements OnInit {
   ngOnInit(): void {
     this.router.data.subscribe((data) => {
       const { address, type } = data[0];
-      console.log(data);
 
       if (address) {
         this.contractAddress = address;
