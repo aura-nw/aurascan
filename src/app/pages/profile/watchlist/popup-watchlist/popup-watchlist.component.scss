@@ -6,21 +6,26 @@
     max-height: 100vh;
     height: 100vh;
   }
+
   .card-header {
     background-color: var(--aura-gray-9);
   }
+
   .card-body {
     max-height: 62vh;
     overflow-y: auto;
+
     .box-content {
       overflow-y: auto;
       padding: var(--spacer-6);
       padding-right: 28px;
       border-bottom: 1px solid var(--aura-gray-9);
+
       .activities-group {
         border: 1px solid var(--aura-gray-9);
         border-radius: var(--spacer-2);
       }
+
       .box-noti-toggle {
         margin-top: 8px;
         width: fit-content;
@@ -30,6 +35,7 @@
         box-shadow: 0px 4px 10px 0px #00000005;
       }
     }
+
     @media (max-width: 430px) {
       max-height: 100vh;
       padding: 0 0 16px 0;
@@ -38,44 +44,51 @@
       }
     }
   }
+
   .watchlist-form {
     .form-label {
       font-size: 12px;
       color: var(--aura-gray-3);
     }
+
     .input-group {
       background-color: var(--aura-gray-10) !important;
       height: 40px;
+
       input {
-        max-width: 95%;
-        @media (min-width: 991.98px) {
-          max-width: 100%;
-        }
+        max-width: 100%;
       }
     }
+
     .text-area {
       background-color: var(--aura-gray-10) !important;
       padding: var(--spacer-4);
       border-radius: var(--spacer-2);
+
       &::placeholder {
         color: var(--aura-gray-4);
       }
     }
+
     .txt-note {
       width: -webkit-fill-available;
     }
+
     .opacity-disable {
       label {
         color: var(--aura-gray-9);
       }
     }
   }
+
   .btn {
     height: 40px;
     padding: 0 24px;
   }
+
   .btn-create {
     border: none;
+
     &:disabled {
       background: var(--aura-gray-8);
     }

@@ -108,11 +108,15 @@ export class PopupNameTagComponent implements OnInit {
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
-
     this.privateNameForm.controls['cosmosAddress'].setValue(accountAddress);
-    this.privateNameForm.controls['evmAddress'].setValue(accountEvmAddress);
+    if (accountEvmAddress) {
+      this.privateNameForm.controls['evmAddress'].setValue(accountEvmAddress);
+    }
+
     this.privateNameForm.get('cosmosAddress').disable();
     this.privateNameForm.get('evmAddress').disable();
+
+
     if (address == accountEvmAddress.trim()) {
       this.privateNameForm.get('evmAddress').enable();
     } else {
@@ -153,13 +157,14 @@ export class PopupNameTagComponent implements OnInit {
     this.nameTagService.createPrivateName(payload).subscribe({
       next: (res) => {
         if (res.code && res.code !== 200) {
-          this.closeDialog(true);
           this.isError = true;
           this.toastr.error(res.message || 'Error');
+          return;
         } else {
-          this.closeDialog(true);
           this.toastr.successWithTitle('Private name tag created!', 'Success');
+          this.closeDialog(true);
         }
+
       },
       error: (error) => {
         this.isError = true;

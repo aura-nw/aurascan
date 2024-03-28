@@ -33,7 +33,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="isAccount"
                   [disabled]="isEditMode"
-                  (change)="changeType(true)" />
+                  (change)="changeType(true)"/>
                 <label for="account" class="ml-2 mb-0 text-justify">Account</label>
               </div>
               <div class="form-group d-flex align-items-center ml-8">
@@ -44,7 +44,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="isContract"
                   [disabled]="isEditMode"
-                  (change)="changeType(false)" />
+                  (change)="changeType(false)"/>
                 <label for="contract" class="ml-2 mb-0 text-justify">Contract</label>
               </div>
             </div>
@@ -68,7 +68,7 @@
         <!-- Cosmos Address -->
         <div class="row mt-4 align-items-center">
           <div class="col-lg-3 col-12">
-            <label class="form-label">Cosmos Address</label>
+            <label class="form-label">Cosmos Address 123</label>
           </div>
           <div class="col-lg-9 col-12">
             <div
@@ -81,7 +81,7 @@
                 class="input-address px-4"
                 (blur)="changeAddress('cosmosAddress')"
                 (input)="isError = false"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button
                 class="button button-xxs p-0 mr-4"
                 *ngIf="
@@ -113,7 +113,7 @@
                 class="input-address px-4"
                 (input)="isError = false"
                 (blur)="changeAddress('evmAddress')"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button
                 class="button button-xxs p-0 mr-4"
                 *ngIf="
@@ -143,13 +143,13 @@
                 formControlName="name"
                 (blur)="isError = false"
                 (keypress)="checkValidNameTag($event)"
-                placeholder="Enter private name tag" />
+                placeholder="Enter private name tag"/>
             </div>
           </div>
         </div>
         <div class="d-flex offset-lg-3 text--gray-4 mt-1 caption fw-normal font-italic">
           <div class="ml-lg-1">
-            Character limit: {{ privateNameForm.value?.name?.length || 0 }}/{{ maxLengthNameTag }} <br />
+            Character limit: {{ privateNameForm.value?.name?.length || 0 }}/{{ maxLengthNameTag }} <br/>
             Set private name tag to easily identify this address in Aurascan only from your view
           </div>
         </div>
@@ -173,7 +173,7 @@
         </div>
         <div class="d-flex offset-lg-3 text--gray-4 mt-2 caption fw-normal font-italic">
           <div class="ml-lg-1">
-            Character limit: {{ privateNameForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br />
+            Character limit: {{ privateNameForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br/>
             A personal note of this address. Kindly note that DO NOT input any passwords or private key here
           </div>
         </div>
