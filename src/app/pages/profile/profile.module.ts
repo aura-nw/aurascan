@@ -21,6 +21,7 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
 import { ProfileComponent } from './profile.component';
 import { PopupWatchlistComponent } from './watchlist/popup-watchlist/popup-watchlist.component';
 import { WatchListComponent } from './watchlist/watchlist.component';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,6 @@ import { WatchListComponent } from './watchlist/watchlist.component';
     PaginatorModule,
     CommonDirectiveModule
   ],
-  providers: [UntypedFormBuilder, provideEnvironmentNgxMask(MASK_CONFIG)],
+  providers: [UntypedFormBuilder, provideEnvironmentNgxMask(MASK_CONFIG), NameTagService],
 })
 export class ProfileModule {}

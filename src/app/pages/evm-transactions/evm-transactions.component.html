@@ -27,24 +27,10 @@
                         {{ data.type | convertEvmTx }}
                       </div>
                       <ng-container *ngSwitchCase="'from'">
-                        <a
-                          *ngIf="data[template.matColumnDef]"
-                          [copyBtn]="data[template.matColumnDef]"
-                          class="text--primary cursor-pointer"
-                          [routerLink]="['/address', data[template.matColumnDef]]">
-                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
-                        </a>
-                        <span *ngIf="!data[template.matColumnDef]">-</span>
+                        <app-name-tag [value]="data[template.matColumnDef]"> </app-name-tag>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to'">
-                        <a
-                          *ngIf="data[template.matColumnDef]"
-                          [copyBtn]="data[template.matColumnDef]"
-                          class="text--primary cursor-pointer"
-                          [routerLink]="['/address', data[template.matColumnDef]]">
-                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
-                        </a>
-                        <span *ngIf="!data[template.matColumnDef]">-</span>
+                        <app-name-tag [value]="data[template.matColumnDef]"> </app-name-tag>
                       </ng-container>
                       <a
                         *ngSwitchCase="'height'"
@@ -152,25 +138,11 @@
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">From</div>
-                  <a
-                    *ngIf="data?.from"
-                    [copyBtn]="data?.from"
-                    class="text--primary cursor-pointer"
-                    [routerLink]="['/address', data?.from]">
-                    {{ data?.from | ellipsis: 8 : 8 }}
-                  </a>
-                  <span *ngIf="!data?.from" class="text--white">-</span>
+                  <app-name-tag [value]="data?.from"> </app-name-tag>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">To</div>
-                  <a
-                    *ngIf="data?.to"
-                    [copyBtn]="data?.to"
-                    class="text--primary cursor-pointer"
-                    [routerLink]="['/address', data?.to]">
-                    {{ data?.to | ellipsis: 8 : 8 }}
-                  </a>
-                  <span *ngIf="!data.evm_transaction.to" class="text--white">-</span>
+                  <app-name-tag [value]="data?.to"> </app-name-tag>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <div class="text--gray-4">Cosmos Txn</div>
