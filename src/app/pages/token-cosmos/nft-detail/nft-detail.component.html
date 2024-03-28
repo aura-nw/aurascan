@@ -297,7 +297,7 @@
             <td mat-cell *matCellDef="let data; let i = index">
               <ng-container [ngSwitch]="template.matColumnDef">
                 <ng-container *ngSwitchCase="'tx_hash'">
-                  <a class="text--primary" [copyBtn]="data.tx_hash" [routerLink]="['/transaction', data.tx_hash]">
+                  <a class="text--primary" [copyBtn]="data.tx_hash" [routerLink]="['/tx', data.tx_hash]">
                     {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                   </a>
                 </ng-container>

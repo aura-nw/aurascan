@@ -118,7 +118,7 @@ export class EvmTransactionComponent implements OnChanges {
   checkEvmContract() {
     this.contractService.findEvmContract(this.transaction.to).subscribe({
       next: (res) => {
-        if (res) {
+        if (res?.evm_smart_contract?.length > 0) {
           this.isEvmContract = true;
         }
       },

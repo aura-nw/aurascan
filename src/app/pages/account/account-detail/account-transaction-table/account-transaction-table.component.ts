@@ -8,8 +8,14 @@ import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { LENGTH_CHARACTER, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import {
+  LENGTH_CHARACTER,
+  NULL_ADDRESS,
+  PAGE_EVENT,
+  STORAGE_KEYS,
+  TIMEOUT_ERROR,
+} from 'src/app/core/constants/common.constant';
+import { ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -20,6 +26,7 @@ import {
   convertBech32AddressToEvmAddress,
   convertEvmAddressToBech32Address,
 } from 'src/app/core/utils/common/address-converter';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
@@ -74,8 +81,16 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18, cssClass: 'pt-4' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 25, cssClass: 'pt-0' },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20, cssClass: 'pt-0' },
+  ];
+
+  templatesERCToken: Array<TableTemplate> = [
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
+    { matColumnDef: 'method', headerCellDef: 'Message', headerWidth: 14, cssClass: 'pt-4' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 20, cssClass: 'pt-0' },
   ];
 
   displayedColumns: string[];
@@ -113,6 +128,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   countFilter = 0;
   addressNative = '';
   addressEvm = '';
+  tokenType = ETokenCoinTypeBE;
+  fungibleTokenType = ETokenCoinTypeBE.ERC20;
 
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -385,8 +402,13 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             payload['sender'] = '';
           }
         }
-        this.templates = [...this.templatesToken];
+        if (this.fungibleTokenType === this.tokenType.ERC20) {
+          this.templates = [...this.templatesERCToken];
+        } else {
+          this.templates = [...this.templatesToken];
+        }
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
+        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         this.getListFTByAddress(payload);
         break;
@@ -402,6 +424,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18, cssClass: 'pt-1' });
+        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         payload['limit'] = 100;
         this.getListNFTByAddress(payload);
@@ -484,22 +507,41 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListFTByAddress(payload) {
-    this.userService.getListFTByAddress(payload).subscribe({
-      next: (data) => {
-        this.handleGetData(data);
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.transactionLoading = false;
-      },
-      complete: () => {
-        this.transactionLoading = false;
-      },
-    });
+    if (this.fungibleTokenType === ETokenCoinTypeBE.ERC20) {
+      this.userService.getErc20TxByAddress(payload).subscribe({
+        next: (data) => {
+          this.handleGetData(data);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
+    } else {
+      this.userService.getCW20TxByAddress(payload).subscribe({
+        next: (data) => {
+          this.handleGetData(data);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
+    }
   }
 
   getListNFTByAddress(payload) {
@@ -546,7 +588,32 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           element.evmAmount = _.get(element, 'transaction.transaction_messages[0].content.data.value');
         });
       } else {
-        txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+        if (this.modeQuery === TabsAccountLink.FtsTxs && this.fungibleTokenType === this.tokenType.ERC20) {
+          txs = data.evm_transaction;
+          txs.forEach((element) => {
+            element.tx_hash = _.get(element, 'hash');
+            element.timestamp = _.get(element, 'transaction.timestamp');
+            element.arrEvent = _.get(element, 'erc20_activities')?.map((item, index) => {
+              const type = _.get(element, 'data')?.substring(0, 8);
+              element.method = type ? type : 'Transfer';
+              let from = _.get(item, 'from') || NULL_ADDRESS;
+              let to = _.get(item, 'to') || NULL_ADDRESS;
+              let denom = _.get(item, 'erc20_contract.symbol');
+              let amountTemp = _.get(item, 'amount');
+              let decimal = _.get(item, 'erc20_contract.decimal');
+              let amount = balanceOf(amountTemp || 0, +decimal);
+              let contractAddress = _.get(item, 'erc20_contract_address');
+              return { type, from, to, amount, denom, contractAddress, amountTemp, decimal };
+            });
+            element.from = element.arrEvent[0]?.from;
+            element.to = element.arrEvent[0]?.to;
+            element.denom = element.arrEvent[0]?.denom;
+            element.amount = element.arrEvent[0]?.amount;
+            element.limit = 5;
+          });
+        } else {
+          txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+        }
       }
 
       if (this.dataSource.data.length > 0) {
@@ -708,5 +775,15 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
   encodeData(data) {
     return encodeURIComponent(data);
+  }
+
+  changeTokenType(type: any): void {
+    this.fungibleTokenType = type;
+    this.dataSource.data = [];
+    this.pageData.length = 0;
+    this.pageData.pageIndex = 0;
+    this.nextKey = null;
+    this.currentKey = null;
+    this.getTxsAddress();
   }
 }

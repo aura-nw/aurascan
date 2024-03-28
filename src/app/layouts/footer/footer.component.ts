@@ -16,9 +16,9 @@ export class FooterComponent {
 
   dashboardURL = 'dashboard';
   blocksURL = 'blocks';
-  transactionURL = 'transaction';
+  transactionURL = 'transactions';
   validatorURL = 'validators';
-  governanceURL = 'proposal';
+  governanceURL = 'votings';
 
   constructor(private environmentService: EnvironmentService, public router: Router) {}
 

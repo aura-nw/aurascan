@@ -101,7 +101,7 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
   checkWatchList() {
     // get watch list form local storage
     const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
-    if (lstWatchList?.find((k) => k.address === this.contractAddress)) {
+    if (lstWatchList?.find((k) => k.address === this.contractAddress || k.evmAddress === this.contractAddress)) {
       this.isWatchList = true;
     }
   }
@@ -117,7 +117,7 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
   editWatchList() {
     const userEmail = this.userService.getCurrentUser()?.email;
     if (userEmail) {
-      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.contractAddress);
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, { address: this.contractAddress, type: 'contract' });
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

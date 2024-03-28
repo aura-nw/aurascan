@@ -74,12 +74,4 @@ export class TransactionsComponent implements OnInit {
       },
     });
   }
-
-  checkAmountValue(amount: number, txHash: string) {
-    if (amount === 0) {
-      return '-';
-    } else {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    }
-  }
 }
