@@ -183,7 +183,9 @@ export class PopupWatchlistComponent implements OnInit {
     );
 
     this.watchlistForm.controls['address'].setValue(accountAddress);
-    this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    if (accountEvmAddress) {
+      this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    }
     this.watchlistForm.get('address').disable();
     this.watchlistForm.get('evmAddress').disable();
     if (address == accountEvmAddress.trim()) {
