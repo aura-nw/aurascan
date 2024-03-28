@@ -115,7 +115,7 @@ export class NFTDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
+    this.contractAddress = this.router.snapshot.paramMap.get('address');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
     this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {

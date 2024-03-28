@@ -1,6 +1,5 @@
 import { inject, NgModule } from '@angular/core';
 import { ResolveFn, RouterModule, Routes } from '@angular/router';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NFTDetailComponent } from './nft-detail/nft-detail.component';
 import { TokenDetailComponent } from './token-detail/token-detail.component';
@@ -8,19 +7,19 @@ import { TokenDetailComponent } from './token-detail/token-detail.component';
 const resolveFn: ResolveFn<{ type: string; address: string }> = (route) => {
   const contract = inject(ContractService);
 
-  const address = route.params['contractAddress'];
+  const address = route.params['address'];
 
   return contract.queryTokenByContractAddress(address);
 };
 
 const routes: Routes = [
   {
-    path: ':contractAddress',
-    component: TokenDetailComponent,
+    path: '',
     resolve: [resolveFn],
+    component: TokenDetailComponent,
   },
   {
-    path: ':contractAddress/:nftId',
+    path: ':nftId',
     component: NFTDetailComponent,
   },
 

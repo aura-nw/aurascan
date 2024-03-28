@@ -96,7 +96,7 @@ export class EnvironmentService {
     return this.environment.nativeName || _.startCase(_.camelCase(this.chainInfo?.bech32Config?.bech32PrefixAccAddr));
   }
 
-  get bech32Config() {
+  get bech32PrefixAccAddr() {
     return _.get(this.configValue, 'chainConfig.chain_info.bech32Config.bech32PrefixAccAddr');
   }
 

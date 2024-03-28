@@ -64,11 +64,7 @@ const routes: Routes = [
       },
       {
         path: 'token',
-        loadChildren: () => import('./pages/token-cosmos/token-cosmos.module').then((m) => m.TokenCosmosModule),
-      },
-      {
-        path: 'evm-token',
-        loadChildren: () => import('./pages/evm-token/evm-token.module').then((m) => m.EvmTokenModule),
+        loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
       },
       {
         path: 'tokens',
