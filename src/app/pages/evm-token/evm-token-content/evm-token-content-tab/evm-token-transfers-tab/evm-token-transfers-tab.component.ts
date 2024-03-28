@@ -201,7 +201,10 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     };
 
     if (this.keyWord) {
-      if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
+      if (
+        this.keyWord?.length === LENGTH_CHARACTER.EVM_TRANSACTION &&
+        this.keyWord?.toLowerCase() == this?.keyWord.toLowerCase()
+      ) {
         payload['txHash'] = this.keyWord;
       } else {
         payload['sender'] = this.keyWord;

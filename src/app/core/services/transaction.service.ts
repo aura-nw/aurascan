@@ -89,6 +89,9 @@ export class TransactionService extends CommonService {
                 human_readable_topic
               }
             }
+            erc20_activities {
+              amount
+            }
           }
         }
       }

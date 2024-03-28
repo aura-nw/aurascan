@@ -98,7 +98,16 @@
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Amount</div>
             <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.amount }} <a appLinkDenom>{{ denom }}</a>
+              <span class="text--gray-1 mr-1" [appTooltip]="{ priceAmount: transaction.amount, decimal: 0 }">
+                <span *ngIf="transaction.amount | lt: 0.001">
+                  {{ +transaction.amount == 0 ? 0 : '< 0.001' }}
+                </span>
+                <span
+                  [decimal]="0"
+                  [appBigNumber]="transaction.amount || 0"
+                  *ngIf="transaction.amount | gte: 0.001"></span>
+              </span>
+              <a appLinkDenom>{{ denom }}</a>
             </div>
           </div>
 
