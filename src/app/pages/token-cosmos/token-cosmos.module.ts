@@ -13,10 +13,10 @@ import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card
 import { CustomPaginatorModule } from 'src/app/shared/components/custom-paginator/custom-paginator.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
 import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
-import { MaterialModule } from '../../../app/material.module';
-import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
-import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
-import { SharedModule } from '../../../app/shared/shared.module';
+import { MaterialModule } from '../../material.module';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
+import { SharedModule } from '../../shared/shared.module';
 import { ReadContractModule } from '../contracts/contracts-detail/contracts-contents/contract/read-contract/read-contract.module';
 import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
 import { ContractsModule } from '../contracts/contracts.module';
@@ -31,7 +31,7 @@ import { TokenTransfersTabComponent } from './token-content/token-content-tab/to
 import { TokenContentComponent } from './token-content/token-content.component';
 import { TokenDetailComponent } from './token-detail/token-detail.component';
 import { TokenOverviewComponent } from './token-overview/token-overview.component';
-import { TokenRoutingModule } from './token-routing.module';
+import { TokenCosmosRoutingModule } from './token-cosmos-routing.module';
 import { TokenSummaryComponent } from './token-summary/token-summary.component';
 
 @NgModule({
@@ -50,7 +50,7 @@ import { TokenSummaryComponent } from './token-summary/token-summary.component';
   ],
   imports: [
     CommonModule,
-    TokenRoutingModule,
+    TokenCosmosRoutingModule,
     SharedModule,
     NgbNavModule,
     TranslateModule,
@@ -76,4 +76,4 @@ import { TokenSummaryComponent } from './token-summary/token-summary.component';
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
-export class TokenModule {}
+export class TokenCosmosModule {}
