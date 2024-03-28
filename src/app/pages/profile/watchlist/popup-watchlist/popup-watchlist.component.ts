@@ -1,19 +1,19 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
 import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { isSafari } from 'src/app/core/utils/common/validation';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import {TranslateService} from '@ngx-translate/core';
+import {LENGTH_CHARACTER} from 'src/app/core/constants/common.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {WatchListService} from 'src/app/core/services/watch-list.service';
+import {isSafari} from 'src/app/core/utils/common/validation';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {transferAddress} from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -100,7 +100,8 @@ export class PopupWatchlistComponent implements OnInit {
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
     private nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.isSafari = isSafari();
@@ -177,13 +178,15 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   handleSetAddress(address) {
-    const { accountAddress, accountEvmAddress } = transferAddress(
+    const {accountAddress, accountEvmAddress} = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
 
     this.watchlistForm.controls['address'].setValue(accountAddress);
-    this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    if (accountEvmAddress) {
+      this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    }
     this.watchlistForm.get('address').disable();
     this.watchlistForm.get('evmAddress').disable();
     if (address == accountEvmAddress.trim()) {
@@ -215,7 +218,8 @@ export class PopupWatchlistComponent implements OnInit {
       if (!JSON.stringify(this.settingObj)?.includes('true') && this.isTracking) {
         return false;
       }
-    } catch {}
+    } catch {
+    }
 
     this.formValid = true;
     return true;
@@ -223,7 +227,7 @@ export class PopupWatchlistComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { favorite, address, evmAddress, note, id } = this.watchlistForm.getRawValue();
+    const {favorite, address, evmAddress, note, id} = this.watchlistForm.getRawValue();
 
     let payload = {
       address,
