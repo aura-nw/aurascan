@@ -291,7 +291,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
         coinInfo.coinDecimals,
       ),
     ).toFixed();
-    
+
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
     let limit = 5;
@@ -428,12 +428,12 @@ export function convertDataTransactionSimple(data, coinInfo) {
           type = 'Contract: ' + action;
         } catch {}
       }
-
-      if (type?.startsWith('Msg')) {
-        type = type?.replace('Msg', '');
-      }
     } else {
       type = txBodyMsgType?.split('.').pop();
+    }
+
+    if (type?.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
     }
 
     const status =
