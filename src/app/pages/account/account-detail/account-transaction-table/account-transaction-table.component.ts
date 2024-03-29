@@ -626,9 +626,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
-
-      console.log(this.dataSourceMobile);
-
       this.pageData.length = this.dataSource.data.length;
     }
   }
