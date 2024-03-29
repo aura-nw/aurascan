@@ -609,7 +609,7 @@ export class ContractService extends CommonService {
     const query = `query ProxyContractDetail($address: String = "") {
       ${this.envDB} {
         evm_smart_contract(where: {address: {_eq: $address}}) {
-          evm_proxy_histories(order_by: {block_height: desc}) {
+          evm_proxy_histories(order_by: {block_height: desc}, where: {implementation_contract: {_is_null: false}}) {
             proxy_contract
             implementation_contract
             block_height
