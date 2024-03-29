@@ -4,6 +4,7 @@ import { EvmContractsDetailComponent } from 'src/app/pages/evm-contracts/evm-con
 import { EvmContractsListComponent } from 'src/app/pages/evm-contracts/evm-contracts-list/evm-contracts-list.component';
 import { EvmContractsVerifyComponent } from 'src/app/pages/evm-contracts/evm-contracts-verify/evm-contracts-verify.component';
 import { ContractsTransactionsComponent } from '../contracts/contracts-transactions/contracts-transactions.component';
+import { EvmProxyContractsVerifyComponent } from './evm-proxy-contracts-verify/evm-proxy-contracts-verify.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'transactions/:addressId',
     component: ContractsTransactionsComponent,
+  },
+  {
+    path: ':contractAddress/proxy-verify',
+    component: EvmProxyContractsVerifyComponent,
   },
 ];
 
