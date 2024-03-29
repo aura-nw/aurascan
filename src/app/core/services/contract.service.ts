@@ -170,16 +170,15 @@ export class ContractService extends CommonService {
   }) {
     const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
     if (addressNameTag?.length > 0) {
-      keyword = addressNameTag;
       const { accountAddress, accountEvmAddress } = transferAddress(
         this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
-        keyword,
+        addressNameTag,
       );
       keyword = accountEvmAddress;
     }
 
     let address;
-    if (keyword.startsWith(EWalletType.EVM) && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
+    if (keyword?.startsWith(EWalletType.EVM) && keyword?.length === LENGTH_CHARACTER.EVM_ADDRESS) {
       // check 0x
       address = keyword?.toLowerCase();
     } else if (keyword?.length > 0) {
