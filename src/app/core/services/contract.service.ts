@@ -11,6 +11,7 @@ import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { ContractRegisterType, EvmContractRegisterType } from '../constants/contract.enum';
 import { EWalletType } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
+import { transferAddress } from '../utils/common/address-converter';
 import { CommonService } from './common.service';
 import { NameTagService } from './name-tag.service';
 
@@ -169,27 +170,24 @@ export class ContractService extends CommonService {
   }) {
     const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
     if (addressNameTag?.length > 0) {
-      keyword = addressNameTag;
+      const { accountAddress, accountEvmAddress } = transferAddress(
+        this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
+        addressNameTag,
+      );
+      keyword = accountEvmAddress;
     }
 
     let address;
-    let creator;
-    if (this.isValidContract(keyword)) {
-      address = keyword;
-    } else if (this.isValidAddress(keyword)) {
-      creator = keyword;
-    } else if (keyword.startsWith(EWalletType.EVM) && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
+    if (keyword?.startsWith(EWalletType.EVM) && keyword?.length === LENGTH_CHARACTER.EVM_ADDRESS) {
       // check 0x
       address = keyword?.toLowerCase();
     } else if (keyword?.length > 0) {
       return of(null);
     }
 
-    let typeQuery = '';
+    let typeQuery = '_or: [{address: {_eq: $address}}, {creator: {_eq: $address}}]';
     if (contractType?.length > 0) {
       if (contractType?.includes('Others')) {
-        contractType = contractType.filter((k) => k != 'Others');
-        typeQuery = '_or: [{type: {_is_null:true}}, {type: {_in :[' + contractType + ']}}] ,';
         contractType = contractType.filter((k) => k != 'Others');
         const listDefault = [
           EvmContractRegisterType.ERC20,
@@ -197,22 +195,18 @@ export class ContractService extends CommonService {
           EvmContractRegisterType.ERC1155,
         ];
         const listNotIn = _.pull([...listDefault.map((item) => item)], ...contractType);
-        typeQuery = '_or: [{type: {_is_null:true}}, {type: {_nin :[' + listNotIn + ']}}] ,';
+        typeQuery = '_or: [{type: {_is_null:true}}, {type: {_nin :[' + listNotIn + ']}}], _and: {' + typeQuery + '}';
       } else {
-        typeQuery = 'type: {_in: [' + contractType + ']},';
+        typeQuery = 'type: {_in: [' + contractType + ']},' + typeQuery;
       }
     }
 
     const operationsDoc = `
-    query EvmSmartContractList($limit: Int = 100, $offset: Int = 0, $address: String = null, $creator: String =null) {
+    query EvmSmartContractList($limit: Int = 100, $offset: Int = 0, $address: String = null) {
       ${this.envDB} {
-        evm_smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        evm_smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} }) {
           address
-          created_at
-          created_hash
-          created_height
           creator
-          id
           type
           updated_at
           erc20_contract {
@@ -223,7 +217,7 @@ export class ContractService extends CommonService {
             status
           }
         }
-        evm_smart_contract_aggregate(where: {${typeQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        evm_smart_contract_aggregate(where: {${typeQuery}}) {
           aggregate {
             count
           }
@@ -237,7 +231,6 @@ export class ContractService extends CommonService {
         variables: {
           limit: limit,
           offset: offset,
-          creator: creator,
           address: address,
         },
         operationName: 'EvmSmartContractList',
@@ -616,7 +609,7 @@ export class ContractService extends CommonService {
     const query = `query ProxyContractDetail($address: String = "") {
       ${this.envDB} {
         evm_smart_contract(where: {address: {_eq: $address}}) {
-          evm_proxy_histories(order_by: {block_height: desc}) {
+          evm_proxy_histories(order_by: {block_height: desc}, where: {implementation_contract: {_is_null: false}}) {
             proxy_contract
             implementation_contract
             block_height
