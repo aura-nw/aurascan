@@ -24,7 +24,7 @@ export class PopupWatchlistComponent implements OnInit {
   watchlistForm;
   isSubmit = false;
   formValid = true;
-  isAccount = false;
+  isAccount;
   isContract = false;
   maxLengthNote = 200;
   publicNameTag = '-';
@@ -141,7 +141,7 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm = this.fb.group({
       favorite: false,
       tracking: true,
-      isAccount: [false, [Validators.required]],
+      isAccount: [undefined, [Validators.required]],
       address: [''],
       evmAddress: ['', [Validators.required]],
       note: ['', [Validators.maxLength(200)]],
@@ -183,7 +183,9 @@ export class PopupWatchlistComponent implements OnInit {
     );
 
     this.watchlistForm.controls['address'].setValue(accountAddress);
-    this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    if (accountEvmAddress) {
+      this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    }
     this.watchlistForm.get('address').disable();
     this.watchlistForm.get('evmAddress').disable();
     if (address == accountEvmAddress.trim()) {
@@ -207,6 +209,10 @@ export class PopupWatchlistComponent implements OnInit {
     this.getAddress.value = this.getAddress?.value.trim();
 
     if (!this.getAddress.value) {
+      return false;
+    }
+
+    if (this.watchlistForm.value.isAccount == null) {
       return false;
     }
 

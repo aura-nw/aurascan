@@ -378,7 +378,9 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
         address,
       );
       this.csvForm.controls.address.setValue(accountAddress);
-      this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
+      if (accountEvmAddress) {
+        this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
+      }
     }
   }
 }

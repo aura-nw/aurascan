@@ -101,7 +101,7 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
   checkWatchList() {
     // get watch list form local storage
     const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
-    if (lstWatchList?.find((k) => k.address === this.contractAddress)) {
+    if (lstWatchList?.find((k) => k.address === this.contractAddress || k.evmAddress === this.contractAddress)) {
       this.isWatchList = true;
     }
   }
