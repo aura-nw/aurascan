@@ -5,14 +5,13 @@ import {
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { MAX_LENGTH_NAME_TAG, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
-import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-popup-name-tag',
