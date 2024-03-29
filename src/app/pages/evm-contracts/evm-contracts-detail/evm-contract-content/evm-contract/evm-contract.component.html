@@ -97,7 +97,7 @@
             {{ implementationContractDetail.implementationContract }}
           </a>
         </div>
-        <div class="body-02 text--gray-1">
+        <div class="body-02 text--gray-1" *ngIf="implementationContractDetail.previouslyRecordedContract">
           Previously recorded to be on
           <a
             [routerLink]="['/evm-contracts', implementationContractDetail.previouslyRecordedContract]"
