@@ -5,13 +5,14 @@ import {
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_NAME_TAG, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -115,7 +116,7 @@ export class PopupNameTagComponent implements OnInit {
     this.privateNameForm.get('cosmosAddress').disable();
     this.privateNameForm.get('evmAddress').disable();
 
-    if (address == accountEvmAddress.trim()) {
+    if (address == accountEvmAddress?.trim()) {
       this.privateNameForm.get('evmAddress').enable();
     } else {
       this.privateNameForm.get('cosmosAddress').enable();
@@ -128,7 +129,7 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, address, cosmosAddress, evmAddress, name, note } = this.privateNameForm.getRawValue();
+    const { isFavorite, cosmosAddress, evmAddress, name, note } = this.privateNameForm.getRawValue();
     let payload = {
       isFavorite: isFavorite == 1,
       type: this.isAccount ? 'account' : 'contract',
@@ -214,10 +215,8 @@ export class PopupNameTagComponent implements OnInit {
     this.publicNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const temp = this.nameTagService.findNameTagByAddress(this.getAddress.value, false);
-      if (temp !== this.getAddress.value) {
-        this.publicNameTag = temp;
-      }
+      const temp = this.nameTagService.findNameTag(this.getAddress.value)?.name_tag;
+      this.publicNameTag = temp || '-';
     }
   }
 
