@@ -113,7 +113,6 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (result) => {
-          console.log(result);
           if (result) {
             const status = _.get(result, 'evm_contract_verification[0].status');
 
