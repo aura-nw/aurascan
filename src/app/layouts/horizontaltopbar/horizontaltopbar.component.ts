@@ -148,6 +148,9 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
                 this.searchValue = accountEvmAddress;
                 urlLink = 'evm-contracts';
                 this.redirectPage(urlLink);
+              } else {
+                urlLink = 'address';
+                this.redirectPage(urlLink);
               }
             },
             error: (e) => {

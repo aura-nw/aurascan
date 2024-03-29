@@ -146,6 +146,9 @@ export class UserService {
           to
           hash
           height
+          erc20_activities {
+            amount
+          }
           transaction {
             timestamp
             hash
