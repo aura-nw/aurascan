@@ -8,11 +8,12 @@
         {{ title.label }}
       </span>
     </div>
-    <button class="button button-pill button-outline caption-mob fw-semibold button-label"
-            *ngIf="modeQuery === tabsData.FtsTxs">
-        <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
-          {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
-        </span>
+    <button
+      class="button button-pill button-outline caption-mob fw-semibold button-label"
+      *ngIf="modeQuery === tabsData.FtsTxs">
+      <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
+        {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
+      </span>
     </button>
   </div>
 
@@ -48,8 +49,9 @@
     </span>
   </ng-container>
 
-  <div *ngIf="content && content.length > 0 && modeQuery !== tabsData.FtsTxs"
-       [ngClass]="dataCard?.expand ? 'box-expand' : ''">
+  <div
+    *ngIf="content && content.length > 0 && modeQuery !== tabsData.FtsTxs"
+    [ngClass]="dataCard?.expand ? 'box-expand' : ''">
     <ng-container *ngIf="modeQuery === tabsData.ExecutedTxs">
       <div class="justify-content-between small-body caption-mob mt-3" *ngIf="dataCard?.expand">
         <ng-container *ngFor="let data of content; let i = index">
@@ -66,7 +68,9 @@
     </ng-container>
   </div>
 
-  <div *ngIf="dataCard?.expand && modeQuery !== tabsData.ExecutedTxs && modeQuery !== tabsData.FtsTxs" class="box-expand">
+  <div
+    *ngIf="dataCard?.expand && modeQuery !== tabsData.ExecutedTxs && modeQuery !== tabsData.FtsTxs"
+    class="box-expand">
     <div class="content-expand">
       <ng-container *ngFor="let item of dataCard.arrEvent">
         <div class="d-flex align-items-center justify-content-between item-expand">
@@ -102,11 +106,11 @@
             <div class="d-flex align-items-center">
               <div>
                 <ng-container *ngIf="item['address'] === item['toAddress']">
-                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14"/>
+                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
                   <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
                 </ng-container>
                 <ng-container *ngIf="item['address'] !== item['toAddress']">
-                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14"/>
+                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
                   <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
                 </ng-container>
               </div>
@@ -162,36 +166,40 @@
     <div class="content-expand" *ngIf="evmAddress || cosmosAddress">
       <div class="d-flex align-items-center justify-content-between item-expand mb-1">
         <div class="d-flex align-items-center txt-top-expand">
-              <span class="caption fw-normal text--gray-4 txt-from-to">
-                {{ ((evmAddress || cosmosAddress) === dataCard.to) ? 'To:' : 'From:' }}
-              </span>
-          <ng-container *ngIf="!((evmAddress || cosmosAddress) | nameTagTooltipPipe)">
+          <span class="caption fw-normal text--gray-4 txt-from-to">
+            {{ (evmAddress || cosmosAddress) === dataCard.to ? 'To:' : 'From:' }}
+          </span>
+          <ng-container *ngIf="!(evmAddress || cosmosAddress | nameTagTooltipPipe)">
             <app-name-tag
               [value]="evmAddress || cosmosAddress"
               [isEnableRouter]="!(evmAddress || cosmosAddress)?.startsWith('Null')"
               [linkRouter]="[
-                    (evmAddress || cosmosAddress | isContract) ? '/contracts' : '/account',
-                    evmAddress || cosmosAddress
-                  ]"
+                (evmAddress || cosmosAddress | isContract) ? '/contracts' : '/account',
+                evmAddress || cosmosAddress
+              ]"
               [maxCharacter]="10"></app-name-tag>
           </ng-container>
-          <div [copyBtn]="evmAddress || cosmosAddress" [btnClass]="['pl-2']" *ngIf="(evmAddress || cosmosAddress) | nameTagTooltipPipe">
+          <div
+            [copyBtn]="evmAddress || cosmosAddress"
+            [btnClass]="['pl-2']"
+            *ngIf="evmAddress || cosmosAddress | nameTagTooltipPipe">
             <a
               *ngIf="!(evmAddress || cosmosAddress)?.startsWith('Null')"
               class="text--primary cursor-pointer block-link caption fw-normal"
-              [routerLink]="[((evmAddress || cosmosAddress) | isContract) ? '/contracts' : '/address', evmAddress || cosmosAddress]">
-              {{ (evmAddress || cosmosAddress) | ellipsis: 5 : 5 }}
+              [routerLink]="[
+                (evmAddress || cosmosAddress | isContract) ? '/contracts' : '/address',
+                evmAddress || cosmosAddress
+              ]">
+              {{ evmAddress || cosmosAddress | ellipsis: 5 : 5 }}
             </a>
-            <span
-              *ngIf="(evmAddress || cosmosAddress)?.startsWith('Null')"
-              class="caption fw-normal">
-                  {{ ((evmAddress || cosmosAddress) | ellipsis: 6 : 6) || '-' }}
-                </span>
+            <span *ngIf="(evmAddress || cosmosAddress)?.startsWith('Null')" class="caption fw-normal">
+              {{ (evmAddress || cosmosAddress | ellipsis: 6 : 6) || '-' }}
+            </span>
           </div>
         </div>
         <div *ngIf="dataCard.amount">
           <div *ngIf="dataCard.amount === 0">0</div>
-          <div *ngIf=" dataCard.amount !== 0 && (dataCard.amount | balance: decimal | lt: 0.001) ">
+          <div *ngIf="dataCard.amount !== 0 && (dataCard.amount | balance: decimal | lt: 0.001)">
             {{ '< 0.001' }}
           </div>
           <div
@@ -204,18 +212,19 @@
       <div class="d-flex align-items-center justify-content-between item-expand">
         <div class="d-flex align-items-center">
           <div>
-            <ng-container *ngIf="((evmAddress || cosmosAddress) === dataCard.to)">
-              <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14"/>
+            <ng-container *ngIf="(evmAddress || cosmosAddress) === dataCard.to">
+              <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
               <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
             </ng-container>
-            <ng-container *ngIf="((evmAddress || cosmosAddress) !== dataCard.to)">
-              <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14"/>
+            <ng-container *ngIf="(evmAddress || cosmosAddress) !== dataCard.to">
+              <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
               <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
             </ng-container>
           </div>
         </div>
         <div>
-          <span appLinkDenom>{{ dataCard.denom }}</span></div>
+          <span appLinkDenom>{{ dataCard.denom }}</span>
+        </div>
       </div>
     </div>
   </div>
