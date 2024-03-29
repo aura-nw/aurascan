@@ -341,10 +341,12 @@ export class ContractService extends CommonService {
           code_hash
           contract_address
           creator_tx_hash
+          compiler_version
+          compile_detail
+          contract_name
         }
       }
     }
-    
     `;
     return this.http
       .post<any>(this.graphUrl, {
@@ -586,9 +588,9 @@ export class ContractService extends CommonService {
     const query = `query VerifyEvmContractStatus($address: String = "", $id: Int = 10) {
       ${this.envDB} {
         evm_contract_verification(where: {contract_address: {_eq: $address}, id: {_eq: $id}}) {
-          status         
+          status
           contract_address
-        
+          compile_detail
         }
       }
     }

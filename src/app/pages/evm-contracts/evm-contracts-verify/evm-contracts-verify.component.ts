@@ -123,7 +123,9 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
               if (status == 'SUCCESS') {
                 this.router.navigate(['evm-contracts', this.contractAddress]);
               } else {
-                this.toatr.error('Verify contract fail');
+                this.toatr.error(
+                  _.get(result, 'evm_contract_verification[0].compile_detail[0].error') || 'Verify contract fail',
+                );
               }
             }
           }

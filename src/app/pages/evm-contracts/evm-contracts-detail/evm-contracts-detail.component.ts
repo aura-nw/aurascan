@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -69,7 +70,6 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
             ...evm_smart_contract,
             ...evm_contract_verification,
           };
-
           this.contractService.setContract(contractDetail);
         }
       });
