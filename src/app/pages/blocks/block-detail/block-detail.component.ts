@@ -252,7 +252,7 @@ export class BlockDetailComponent implements OnInit {
           method: type ? type : 'Transfer',
           from: _.get(tx, 'evm_transaction.from'),
           to: _.get(tx, 'evm_transaction.to'),
-          amount: _.get(tx, 'transaction_messages[0].content.data.value'),
+          amount: _.get(tx, 'evm_transaction.erc20_activities[0].amount') || 0,
         };
       });
     }

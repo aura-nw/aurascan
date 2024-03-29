@@ -151,7 +151,6 @@ export class EvmTransactionComponent implements OnChanges {
       });
     }
 
-
     return {
       evm_hash: _.get(tx, 'evm_transaction.hash'),
       hash: tx['hash'],
@@ -163,7 +162,7 @@ export class EvmTransactionComponent implements OnChanges {
       gasWanted: _.get(tx, 'gas_wanted'),
       gas_limit: _.get(tx, 'gas_limit'),
       memo: _.get(tx, 'memo'),
-      amount: getBalance(_.get(tx, 'evm_transaction.erc20_activities[0].amount'), this.coinInfo.coinDecimals),
+      amount: getBalance(_.get(tx, 'evm_transaction.erc20_activities[0].amount') || 0, this.coinInfo.coinDecimals),
       fee: getBalance(_.get(tx, 'fee[0].amount'), this.coinInfo.coinDecimals),
       from: _.get(tx, 'evm_transaction.from'),
       to: _.get(txMessage, 'content.data.to'),

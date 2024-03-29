@@ -71,7 +71,7 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
 
     const SUPPORTED_FILE_TYPE = [EFileType.Zip, EFileType.Json];
 
-    const MAX_FILE_SIZE = 1024 * 1000;
+    const MAX_FILE_SIZE = 1024 * 2 * 1000;
 
     if (SUPPORTED_FILE_TYPE.includes(file?.type as EFileType) && file?.size <= MAX_FILE_SIZE) {
       this.contractSourceCode = file;
