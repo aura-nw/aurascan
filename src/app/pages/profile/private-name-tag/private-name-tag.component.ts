@@ -243,7 +243,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
     let linkAddress = address;
     if (data.type === 'contract') {
       result = data?.evmAddress ? '/evm-contracts/' : '/contracts/';
-      linkAddress = data?.evmAddress;
+      linkAddress = data?.evmAddress || linkAddress;
     }
     return [result, linkAddress];
   }

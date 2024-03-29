@@ -115,7 +115,7 @@ export class PopupNameTagComponent implements OnInit {
     this.privateNameForm.get('cosmosAddress').disable();
     this.privateNameForm.get('evmAddress').disable();
 
-    if (address == accountEvmAddress.trim()) {
+    if (address == accountEvmAddress?.trim()) {
       this.privateNameForm.get('evmAddress').enable();
     } else {
       this.privateNameForm.get('cosmosAddress').enable();
@@ -128,7 +128,7 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, address, cosmosAddress, evmAddress, name, note } = this.privateNameForm.getRawValue();
+    const { isFavorite, cosmosAddress, evmAddress, name, note } = this.privateNameForm.getRawValue();
     let payload = {
       isFavorite: isFavorite == 1,
       type: this.isAccount ? 'account' : 'contract',
@@ -214,10 +214,8 @@ export class PopupNameTagComponent implements OnInit {
     this.publicNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
     if (this.getAddress.status === 'VALID') {
-      const temp = this.nameTagService.findNameTagByAddress(this.getAddress.value, false);
-      if (temp !== this.getAddress.value) {
-        this.publicNameTag = temp;
-      }
+      const temp = this.nameTagService.findNameTag(this.getAddress.value)?.name_tag;
+      this.publicNameTag = temp || '-';
     }
   }
 

@@ -76,7 +76,7 @@
                   <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
                 </button>
               </div>
-              <span *ngIf="isEditMode">{{ watchlistForm.get('address').value }}</span>
+              <span *ngIf="isEditMode">{{ watchlistForm.get('address').value || '-' }}</span>
             </div>
           </div>
 
@@ -108,7 +108,7 @@
                   <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
                 </button>
               </div>
-              <span *ngIf="isEditMode">{{ watchlistForm.get('evmAddress').value }}</span>
+              <span *ngIf="isEditMode">{{ watchlistForm.get('evmAddress').value || '-' }}</span>
             </div>
           </div>
 
