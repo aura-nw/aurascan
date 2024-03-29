@@ -61,6 +61,10 @@ export class EvmMessageComponent {
   }
 
   getDataDecoded() {
+    if (!this.transaction?.to) {
+      return;
+    }
+
     this.transactionService.getAbiContract(this.transaction?.to?.toLowerCase()).subscribe((res) => {
       if (res?.evm_contract_verification?.length > 0 && res.evm_contract_verification[0]?.abi) {
         this.isContractVerified = true;

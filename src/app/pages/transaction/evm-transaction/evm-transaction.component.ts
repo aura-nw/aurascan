@@ -116,13 +116,15 @@ export class EvmTransactionComponent implements OnChanges {
   }
 
   checkEvmContract() {
-    this.contractService.findEvmContract(this.transaction.to).subscribe({
-      next: (res) => {
-        if (res?.evm_smart_contract?.length > 0) {
-          this.isEvmContract = true;
-        }
-      },
-    });
+    if (this.transaction?.to) {
+      this.contractService.findEvmContract(this.transaction.to).subscribe({
+        next: (res) => {
+          if (res?.evm_smart_contract?.length > 0) {
+            this.isEvmContract = true;
+          }
+        },
+      });
+    }
   }
 
   parseEvmTx(tx: unknown): typeof this.transaction {
@@ -149,6 +151,7 @@ export class EvmTransactionComponent implements OnChanges {
       });
     }
 
+
     return {
       evm_hash: _.get(tx, 'evm_transaction.hash'),
       hash: tx['hash'],
@@ -160,7 +163,7 @@ export class EvmTransactionComponent implements OnChanges {
       gasWanted: _.get(tx, 'gas_wanted'),
       gas_limit: _.get(tx, 'gas_limit'),
       memo: _.get(tx, 'memo'),
-      amount: getBalance(_.get(tx, 'evm_transaction.value'), this.coinInfo.coinDecimals),
+      amount: getBalance(_.get(tx, 'evm_transaction.erc20_activities[0].amount'), this.coinInfo.coinDecimals),
       fee: getBalance(_.get(tx, 'fee[0].amount'), this.coinInfo.coinDecimals),
       from: _.get(tx, 'evm_transaction.from'),
       to: _.get(txMessage, 'content.data.to'),

@@ -594,6 +594,9 @@ export class TokenService extends CommonService {
               status
             }
           }
+          erc20_activities {
+            amount
+          }
         }
       }
     }
