@@ -199,24 +199,21 @@
         </div>
         <div *ngIf="dataCard.amount">
           <div *ngIf="dataCard.amount === 0">0</div>
-          <div *ngIf="dataCard.amount !== 0 && (dataCard.amount | balance: decimal | lt: 0.001)">
+          <div *ngIf="dataCard.amount !== 0 && (dataCard.amount | lt: 0.001)">
             {{ '< 0.001' }}
           </div>
-          <div
-            *ngIf="dataCard.amount | balance: dataCard.erc20_activities[0]?.erc20_contract?.decimal | gte: 0.001"
-            [appBigNumber]="dataCard.amount"
-            [decimal]="dataCard.erc20_activities[0]?.erc20_contract?.decimal"></div>
+          <div *ngIf="dataCard.amount | gte: 0.001" [appBigNumber]="dataCard.amount" [decimal]="0"></div>
           <!--          <span class="ml-2" appLinkDenom>{{ denom }}</span>-->
         </div>
       </div>
       <div class="d-flex align-items-center justify-content-between item-expand">
         <div class="d-flex align-items-center">
           <div>
-            <ng-container *ngIf="(evmAddress || cosmosAddress) === dataCard.to">
+            <ng-container *ngIf="(evmAddress || cosmosAddress) === dataCard.from">
               <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
               <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
             </ng-container>
-            <ng-container *ngIf="(evmAddress || cosmosAddress) !== dataCard.to">
+            <ng-container *ngIf="(evmAddress || cosmosAddress) !== dataCard.from">
               <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
               <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
             </ng-container>
