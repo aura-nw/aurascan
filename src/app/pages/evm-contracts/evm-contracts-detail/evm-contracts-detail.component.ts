@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { Subject, map, of, switchMap, takeUntil } from 'rxjs';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
