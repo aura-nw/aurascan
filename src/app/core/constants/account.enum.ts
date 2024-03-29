@@ -57,7 +57,7 @@ export enum TabsAccountLink {
   ExecutedTxs = 'executed',
   EVMExecutedTxs = 'evm-executed',
   NativeTxs = 'native-transfer',
-  FtsTxs = 'cw20-transfer',
+  FtsTxs = 'fungible-token-transfer',
   NftTxs = 'nft-transfer',
 }
 

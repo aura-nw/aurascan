@@ -171,25 +171,6 @@ tr td {
       }
     }
   }
-
-  button.button {
-    height: 30px;
-    padding: 0 12px;
-    background: rgba(157, 161, 172, 0.2);
-    border-radius: 20px;
-
-    .evm-color {
-      color: var(--aura-primary);
-    }
-
-    .cosmos-color {
-      color: var(--aura-gray-2);
-    }
-
-    font-weight: 600;
-    flex: 1 0 auto;
-    border: 1px solid var(--aura-gray-6);
-  }
 }
 
 .btn-select-type {
