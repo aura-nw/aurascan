@@ -8,9 +8,7 @@
         {{ title.label }}
       </span>
     </div>
-    <button
-      class="button button-pill button-outline caption-mob fw-semibold button-label"
-      *ngIf="modeQuery === tabsData.FtsTxs">
+    <button class="button button-pill button-outline caption-mob button-label" *ngIf="modeQuery === tabsData.FtsTxs">
       <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
         {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
       </span>

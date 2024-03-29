@@ -239,6 +239,7 @@ button,
     }
 
     @media (max-width: 991.98px) {
+
       &.button--lg-mob,
       &.button--md-mob {
         padding-right: var(--spacer-11);
@@ -288,6 +289,7 @@ button,
     }
 
     &.button-flat {
+
       &:before,
       &:after {
         background: url('../../icons/icons-svg/black/caret-down-black.svg') center no-repeat;
@@ -547,10 +549,12 @@ button,
 
 .button-label {
   height: 18px;
-  border-radius: 12px;
-  box-shadow: 2px 1000px 1px #9da1ac33 inset !important;
-  border: 2px solid #717582 !important;
+  padding: 0 12px;
+  background: rgba(157, 161, 172, 0.2);
+  border-radius: 20px !important;
+  border: 2px solid var(--aura-gray-6) !important;
   cursor: text !important;
+
   @media (min-width: 991.98px) {
     height: 24px;
   }
