@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
@@ -26,10 +27,13 @@ export class EvmTokenDetailComponent implements OnInit {
     private router: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
+    // this.location.replaceState(`/token/${this.contractAddress}`, 't=ERC20');
+
     this.getTokenDetail();
   }
 

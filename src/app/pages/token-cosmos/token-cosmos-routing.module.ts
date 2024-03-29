@@ -1,15 +1,26 @@
 import { inject, NgModule } from '@angular/core';
-import { ResolveFn, RouterModule, Routes } from '@angular/router';
+import { ActivatedRoute, ResolveFn, Router, RouterModule, Routes } from '@angular/router';
+import { map, switchMap } from 'rxjs';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NFTDetailComponent } from './nft-detail/nft-detail.component';
 import { TokenDetailComponent } from './token-detail/token-detail.component';
 
-const resolveFn: ResolveFn<{ type: string; address: string }> = (route) => {
+const resolveFn: ResolveFn<{ type: string; address: string } | null> = (route) => {
   const contract = inject(ContractService);
 
   const address = route.params['contractAddress'];
+  const router = inject(Router);
 
-  return contract.queryTokenByContractAddress(address);
+  const queryParams = router.getCurrentNavigation()?.initialUrl?.queryParams;
+
+  if (queryParams?.t) {
+    return {
+      type: queryParams.t,
+      address,
+    };
+  }
+
+  return null;
 };
 
 const routes: Routes = [

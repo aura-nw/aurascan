@@ -9,6 +9,7 @@ import { ExpandableContentDirective } from './expandable-content.directive';
 import { TooltipCustomizeDirective } from 'src/app/core/directives/tooltip-customize.directive';
 import { DragDropDirective } from './drag-drop.directive';
 import { MenuActiveDirective } from 'src/app/core/directives/menu-active.directive';
+import { RouterLinkActiveMenuDirective } from './routerLinkActiveMenu.directive';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MenuActiveDirective } from 'src/app/core/directives/menu-active.directi
     TooltipCustomizeDirective,
     DragDropDirective,
     MenuActiveDirective,
+    RouterLinkActiveMenuDirective,
   ],
   imports: [],
   exports: [
@@ -35,6 +37,7 @@ import { MenuActiveDirective } from 'src/app/core/directives/menu-active.directi
     TooltipCustomizeDirective,
     DragDropDirective,
     MenuActiveDirective,
+    RouterLinkActiveMenuDirective,
   ],
 })
 export class CommonDirectiveModule {}

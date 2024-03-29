@@ -1,4 +1,4 @@
-import { DatePipe, NgSwitchCase } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import BigNumber from 'bignumber.js';
@@ -37,6 +37,7 @@ export class TokenDetailComponent implements OnInit {
     private contractService: ContractService,
     private ibcService: IBCService,
     private datePipe: DatePipe,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +46,8 @@ export class TokenDetailComponent implements OnInit {
 
       if (address) {
         this.contractAddress = address;
+
+        // this.location.replaceState(`/token/${this.contractAddress}`, `t=${type}`);
 
         switch (type) {
           case 'CW721':
