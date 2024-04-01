@@ -28,7 +28,7 @@ import { EvmContractsListComponent } from './evm-contracts-list/evm-contracts-li
 import { EvmContractsRoutingModule } from './evm-contracts-routing.module';
 import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contracts-verify.component';
 import { EvmProxyContractsVerifyComponent } from './evm-proxy-contracts-verify/evm-proxy-contracts-verify.component';
-// import { PopupProxyContractComponent } from './evm-proxy-contracts-verify/popup-proxy-contract/popup-proxy-contract.component';
+import { PopupProxyContractComponent } from './evm-proxy-contracts-verify/popup-proxy-contract/popup-proxy-contract.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +43,7 @@ import { EvmProxyContractsVerifyComponent } from './evm-proxy-contracts-verify/e
     EvmContractComponent,
     EvmContractsVerifyComponent,
     EvmProxyContractsVerifyComponent,
-    // PopupProxyContractComponent,
+    PopupProxyContractComponent,
   ],
   imports: [
     CommonModule,

@@ -43,7 +43,8 @@
         <button
           class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4 px-1 px-sm-6"
           type="submit"
-          [disabled]="loading">
+          [disabled]="loading"
+          (click)="openPopup()">
           <img
             [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
             alt=""

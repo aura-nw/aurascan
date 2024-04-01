@@ -1,11 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogConfig as MatDialogConfig,
+} from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { interval, Subject, switchMap, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { PopupProxyContractComponent } from './popup-proxy-contract/popup-proxy-contract.component';
 
 @Component({
   selector: 'app-evm-proxy-contracts-verify',
@@ -14,7 +19,6 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 })
 export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
   contractAddress = '';
-  contractSourceCode: File;
   inputFileValue = null;
 
   loading = false;
@@ -27,6 +31,7 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
     private env: EnvironmentService,
     private contractService: ContractService,
     private toatr: NgxToastrService,
+    private dialog: MatDialog,
   ) {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
 
@@ -61,15 +66,8 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
   }
 
   verifyEvmContract() {
-    if (!this.contractSourceCode) {
-      return;
-    }
-
     this.loading = true;
-
     const formdata: FormData = new FormData();
-
-    formdata.append('file', this.contractSourceCode, this.contractSourceCode.name);
     formdata.append('contract_address', this.contractAddress.toLowerCase());
     formdata.append('chainid', this.env.chainId);
 
@@ -117,5 +115,26 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
           this.interupt$.complete();
         },
       });
+  }
+
+  openPopup(data = null, isGetDetail = false) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'grant-overlay-panel';
+    dialogConfig.disableClose = true;
+    if (data) {
+      data['isGetDetail'] = isGetDetail;
+      dialogConfig.data = data;
+    }
+    dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: 5 } };
+    let dialogRef = this.dialog.open(PopupProxyContractComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        setTimeout(() => {
+          // this.getListPrivateName();
+          // this.storeListNameTag();
+        }, 3000);
+      }
+    });
   }
 }
