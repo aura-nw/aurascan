@@ -107,7 +107,7 @@
                   [appBigNumber]="transaction.amount || 0"
                   *ngIf="transaction.amount | gte: 0.001"></span>
               </span>
-              <a appLinkDenom>{{ denom }}</a>
+              <a [appLinkDenom]="transaction.contractAddress">{{ transaction.symbol }}</a>
             </div>
           </div>
 

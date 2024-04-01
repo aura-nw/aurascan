@@ -91,6 +91,11 @@ export class TransactionService extends CommonService {
             }
             erc20_activities {
               amount
+              erc20_contract {
+                decimal
+                symbol
+                address
+              }
             }
           }
         }
@@ -144,6 +149,14 @@ export class TransactionService extends CommonService {
             hash
             to
             data
+            erc20_activities {
+              amount
+              erc20_contract {
+                address
+                decimal
+                symbol
+              }
+            }
           }
         }
       }
