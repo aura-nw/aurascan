@@ -26,7 +26,6 @@ export class TokenInventoryComponent implements OnInit {
   contractAddress = '';
   keyWord = '';
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
-  linkToken = '/token';
   errTxt: string;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 

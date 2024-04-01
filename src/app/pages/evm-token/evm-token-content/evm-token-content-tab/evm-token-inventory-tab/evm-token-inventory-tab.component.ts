@@ -26,7 +26,7 @@ export class EvmTokenInventoryComponent implements OnInit {
   contractAddress = '';
   keyWord = '';
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
-  linkToken = 'nft';
+
   errTxt: string;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 

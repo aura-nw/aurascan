@@ -44,7 +44,7 @@ export class EvmTokenContentComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
-  linkToken = 'nft';
+
   activeTabID = 0;
   textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
   linkAddress: string;

@@ -74,7 +74,7 @@ export class EvmNFTDetailComponent implements OnInit {
   isError = false;
   sbType = SB_TYPE;
   contractType = ContractRegisterType;
-  linkToken = 'nft';
+
   animationUrl: string;
   imageUrl: string;
   isCW4973 = false;

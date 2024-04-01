@@ -108,7 +108,7 @@
                           <app-name-tag
                             *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]"
                             [value]="data[template.matColumnDef]"
-                            [linkRouter]="['/', linkToken, linkAddress]"
+                            [linkRouter]="['/token', linkAddress]"
                             [linkParams]="{ a: data[template.matColumnDef] }"
                             [iconContract]="data[template.matColumnDef] | isContract"
                             [maxCharacter]="15">
@@ -142,7 +142,7 @@
                         [iconContract]="data[template.matColumnDef] | isContract"
                         [maxCharacter]="15"
                         [isEnableRouter]="!data[template.matColumnDef]?.startsWith('Null')"
-                        [linkRouter]="['/', linkToken, linkAddress]"
+                        [linkRouter]="['/token', linkAddress]"
                         [linkParams]="{ a: data[template.matColumnDef] }">
                       </app-name-tag>
                       <span *ngIf="!data[template.matColumnDef]"> - </span>
@@ -168,12 +168,12 @@
                     <span class="text--primary" *ngIf="data['status'] === 'Fail'">
                       {{ data[template.matColumnDef] | ellipsis: 12 }}
                     </span>
-                    <a
+                    <!-- <a
                       class="text--primary pr-lg-3"
                       href="/{{ linkToken }}/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
                       *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
                       {{ data[template.matColumnDef] | ellipsis: 12 }}
-                    </a>
+                    </a> -->
                   </ng-container>
                   <ng-container *ngSwitchDefault>
                     {{ data[template.matColumnDef] }}

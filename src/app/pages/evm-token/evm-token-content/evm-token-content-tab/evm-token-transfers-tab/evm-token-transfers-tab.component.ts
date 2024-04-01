@@ -61,7 +61,6 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   codeTransaction = CodeTransaction;
   modeExecuteTransaction = ModeExecuteTransaction;
   nftDetail: any;
-  linkToken = 'token';
   nextKey = null;
   currentKey = null;
   contractType = EvmContractRegisterType;

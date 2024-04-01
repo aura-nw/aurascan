@@ -64,7 +64,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   codeTransaction = CodeTransaction;
   modeExecuteTransaction = ModeExecuteTransaction;
   nftDetail: any;
-  linkToken = '/token';
   nextKey = null;
   currentKey = null;
   contractType = ContractRegisterType;
@@ -100,9 +99,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
-      this.linkToken = this.typeContract === this.contractType.CW721 ? '/token' : '/token';
-    }
     this.getListData();
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
