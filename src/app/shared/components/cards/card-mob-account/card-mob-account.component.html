@@ -82,7 +82,7 @@
                   [value]="item['address']"
                   [isEnableRouter]="!item['address']?.startsWith('Null')"
                   [linkRouter]="[
-                    (item['address'] || item['toAddress'] | isContract) ? '/contracts' : '/account',
+                    (item['address'] || item['toAddress'] | isContract) ? '/contracts' : '/address',
                     item['address'] || item['toAddress']
                   ]"
                   [maxCharacter]="10"></app-name-tag>
@@ -174,7 +174,7 @@
                 <app-name-tag
                   [value]="cosmosAddress"
                   [isEnableRouter]="!cosmosAddress?.startsWith('Null')"
-                  [linkRouter]="[(cosmosAddress | isContract) ? '/contracts' : '/account', cosmosAddress]"
+                  [linkRouter]="[(cosmosAddress | isContract) ? '/contracts' : '/address', cosmosAddress]"
                   [maxCharacter]="10"></app-name-tag>
               </ng-container>
             </div>
@@ -227,7 +227,7 @@
                 <app-name-tag
                   [value]="evmAddress === item.to ? item.from : item.to"
                   [isEnableRouter]="!evmAddress?.startsWith('Null')"
-                  [linkRouter]="[(evmAddress | isContract) ? '/contracts' : '/account', evmAddress]"
+                  [linkRouter]="[(evmAddress | isContract) ? '/contracts' : '/address', evmAddress]"
                   [maxCharacter]="10"
                   [isShorterText]="true"></app-name-tag>
               </ng-container>
