@@ -93,9 +93,9 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
 
           if (proxyHistories) {
             this.implementationContractDetail = {
-              proxyContract: proxyHistories[0].proxy_contract,
-              implementationContract: proxyHistories[0].implementation_contract,
-              previouslyRecordedContract: proxyHistories[1].implementation_contract,
+              proxyContract: proxyHistories[0]?.proxy_contract,
+              implementationContract: proxyHistories[0]?.implementation_contract,
+              previouslyRecordedContract: proxyHistories[1]?.implementation_contract,
             };
 
             return this.contractService.queryEvmContractByAddress(

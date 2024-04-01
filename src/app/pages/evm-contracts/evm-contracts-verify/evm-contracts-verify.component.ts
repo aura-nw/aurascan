@@ -71,7 +71,7 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
 
     const SUPPORTED_FILE_TYPE = [EFileType.Zip, EFileType.Json];
 
-    const MAX_FILE_SIZE = 1024 * 1000;
+    const MAX_FILE_SIZE = 1024 * 2 * 1000;
 
     if (SUPPORTED_FILE_TYPE.includes(file?.type as EFileType) && file?.size <= MAX_FILE_SIZE) {
       this.contractSourceCode = file;
@@ -122,7 +122,9 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
               if (status == 'SUCCESS') {
                 this.router.navigate(['evm-contracts', this.contractAddress]);
               } else {
-                this.toatr.error('Verify contract fail');
+                this.toatr.error(
+                  _.get(result, 'evm_contract_verification[0].compile_detail[0].error') || 'Verify contract fail',
+                );
               }
             }
           }
