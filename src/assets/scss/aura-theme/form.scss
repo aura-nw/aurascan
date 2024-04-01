@@ -135,7 +135,7 @@
         -moz-appearance: textfield;
       }
 
-      &[type='text']:disabled {
+      &.convert-address:disabled {
         cursor: not-allowed;
         background-color: var(--aura-gray-8);
         border-color: var(--aura-gray-8);

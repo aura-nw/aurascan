@@ -68,7 +68,7 @@
         <!-- Cosmos Address -->
         <div class="row mt-4 align-items-center">
           <div class="col-lg-3 col-12">
-            <label class="form-label">Cosmos Address 123</label>
+            <label class="form-label">Cosmos Address</label>
           </div>
           <div class="col-lg-9 col-12">
             <div
@@ -78,7 +78,7 @@
                 type="text"
                 formControlName="cosmosAddress"
                 placeholder="{{ chainName }}..."
-                class="input-address px-4"
+                class="input-address px-4 convert-address"
                 (blur)="changeAddress('cosmosAddress')"
                 (input)="isError = false"
                 autocomplete="off" />
@@ -110,7 +110,7 @@
                 type="text"
                 formControlName="evmAddress"
                 placeholder="{{ eWalletType.EVM }}..."
-                class="input-address px-4"
+                class="input-address px-4 convert-address"
                 (input)="isError = false"
                 (blur)="changeAddress('evmAddress')"
                 autocomplete="off" />

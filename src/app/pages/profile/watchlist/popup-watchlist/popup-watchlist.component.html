@@ -62,7 +62,7 @@
                   type="text"
                   formControlName="address"
                   placeholder="{{ chainName }}..."
-                  class="input-address px-4"
+                  class="input-address px-4 convert-address"
                   (blur)="changeAddress('address')"
                   (input)="isError = false"
                   autocomplete="off" />
@@ -93,7 +93,7 @@
                   type="text"
                   formControlName="evmAddress"
                   placeholder="{{ eWalletType.EVM }}..."
-                  class="input-address px-4"
+                  class="input-address px-4 convert-address"
                   (input)="isError = false"
                   (blur)="changeAddress('evmAddress')"
                   autocomplete="off" />
