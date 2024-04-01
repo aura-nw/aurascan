@@ -106,7 +106,7 @@ export const MENU: MenuItem[] = [
         name: MenuName.TokenCW20,
         icon: 'coins',
         featureName: EFeature.Cw20,
-        activeString: '/token/cw20',
+        activeString: ['/token/cw20', '/token/evm/erc20', '/token/native'],
       },
       {
         id: 2,
@@ -150,6 +150,7 @@ export const MENU: MenuItem[] = [
         icon: 'newspaper',
         link: '/evm-contracts',
         name: MenuName.EvmContract,
+        activeString: '/evm-contracts',
       },
       {
         id: 3,
@@ -239,6 +240,7 @@ export const MENU_MOB: MenuItem[] = [
         link: '/transactions',
         activeLink: 'transaction',
         name: MenuName.Transaction,
+        activeString: '/tx',
       },
       {
         id: 2,
@@ -247,6 +249,7 @@ export const MENU_MOB: MenuItem[] = [
         link: '/evm-transactions',
         activeLink: 'evm-transaction',
         name: MenuName.EvmTransaction,
+        activeString: '/tx',
       },
       {
         id: 3,
@@ -254,6 +257,7 @@ export const MENU_MOB: MenuItem[] = [
         icon: 'graph',
         link: '/validators',
         name: MenuName.Validator,
+        activeString: '/validators',
       },
       {
         id: 4,
@@ -262,6 +266,7 @@ export const MENU_MOB: MenuItem[] = [
         link: '/votings',
         activeLink: 'voting',
         name: MenuName.Proposal,
+        activeString: '/votings',
       },
       {
         id: 5,
@@ -269,6 +274,7 @@ export const MENU_MOB: MenuItem[] = [
         icon: 'stack',
         link: '/blocks',
         name: MenuName.Block,
+        activeString: '/block',
       },
       {
         id: 6,
@@ -294,6 +300,7 @@ export const MENU_MOB: MenuItem[] = [
         name: MenuName.TokenCW20,
         icon: 'coins',
         featureName: EFeature.Cw20,
+        activeString: ['/token/cw20', '/token/evm/erc20', '/token/native'],
       },
       {
         id: 2,
@@ -303,6 +310,7 @@ export const MENU_MOB: MenuItem[] = [
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
         featureName: EFeature.Cw721,
+        activeString: '/token/cw721',
       },
       {
         id: 3,
@@ -312,6 +320,7 @@ export const MENU_MOB: MenuItem[] = [
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
         featureName: EFeature.Cw4973,
+        activeString: '/token/cw4973',
       },
     ],
   },
@@ -327,6 +336,7 @@ export const MENU_MOB: MenuItem[] = [
         icon: 'newspaper',
         link: '/contracts',
         name: MenuName.Contract,
+        activeString: '/contracts',
       },
       {
         id: 2,
@@ -334,6 +344,7 @@ export const MENU_MOB: MenuItem[] = [
         icon: 'newspaper',
         link: '/evm-contracts',
         name: MenuName.EvmContract,
+        activeString: '/evm-contracts',
       },
       {
         id: 3,
@@ -341,6 +352,7 @@ export const MENU_MOB: MenuItem[] = [
         icon: 'code-simple',
         link: '/code-ids',
         name: MenuName.CodeList,
+        activeString: 'code-ids/detail',
       },
       {
         id: 4,
@@ -349,6 +361,7 @@ export const MENU_MOB: MenuItem[] = [
         name: MenuName.ChartStats,
         icon: 'line-segments',
         featureName: EFeature.Statistics,
+        activeString: 'statistics/chart',
       },
       {
         id: 5,

@@ -41,7 +41,14 @@ export class RouterLinkActiveMenuDirective implements OnChanges {
     }
 
     if (this.routerLinkActiveMenu?.activeString) {
-      let isActive = this.isActive(this.routerLinkActiveMenu?.activeString);
+      let isActive = false;
+      if (typeof this.routerLinkActiveMenu?.activeString == 'string') {
+        isActive = this.isActive(this.routerLinkActiveMenu?.activeString);
+      } else {
+        this.routerLinkActiveMenu?.activeString.forEach((element) => {
+          isActive = this.isActive(element) || isActive;
+        });
+      }
 
       // Special case for cosmos tx detail
       if (this.routerLinkActiveMenu.link == '/transactions' && url.startsWith('/tx/0x')) {
