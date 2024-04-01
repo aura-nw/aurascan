@@ -397,19 +397,19 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.getListTxNativeByAddress(payload);
         break;
       case TabsAccountLink.FtsTxs:
-        payload['sender'] = payload['receiver'] = address;
+        if (this.fungibleTokenType === this.tokenType.ERC20) {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressEvm;
+          this.templates = [...this.templatesERCToken];
+        } else {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressNative;
+          this.templates = [...this.templatesToken];
+        }
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload['receiver'] = '';
           } else if (this.transactionFilter.typeTransfer === AccountTxType.Received) {
             payload['sender'] = '';
           }
-        }
-        if (this.fungibleTokenType === this.tokenType.ERC20) {
-          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressEvm;
-          this.templates = [...this.templatesERCToken];
-        } else {
-          this.templates = [...this.templatesToken];
         }
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
         this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });

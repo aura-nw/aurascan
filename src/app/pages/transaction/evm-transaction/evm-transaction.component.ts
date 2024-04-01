@@ -171,7 +171,9 @@ export class EvmTransactionComponent implements OnChanges {
       type: _.get(txMessage, 'content.@type'),
       inputData: _.get(tx, 'evm_transaction.data'),
       eventLog: evm_events,
-      contractAddress: _.get(tx, 'evm_transaction.erc20_activities[0].erc20_contract.address'),
+      contractAddress:
+        _.get(tx, 'evm_transaction.contract_address') ||
+        _.get(tx, 'evm_transaction.erc20_activities[0].erc20_contract.address'),
     };
   }
 }
