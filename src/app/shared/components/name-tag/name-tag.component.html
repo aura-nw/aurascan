@@ -34,7 +34,7 @@
           [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
           width="16px"
           height="16px"
-          *ngIf="iconContract"/>
+          *ngIf="iconContract" />
         <ng-container [ngTemplateOutlet]="displayNameTag"> </ng-container>
       </ng-container>
       <ng-container *ngIf="fullText">
@@ -58,14 +58,14 @@
       alt="token-contract"
       [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       width="16px"
-      height="16px"/>
+      height="16px" />
     <img
       [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
       [ngClass]="(addressOnly || value | nameTagTooltipPipe) ? 'mr-1' : 'icon-name-tag'"
       alt="contract_verification"
       width="16px"
       height="16px"
-      *ngIf="isVerified"/>
+      *ngIf="isVerified" />
     <ng-container *ngIf="!fullText">
       <ng-container [ngTemplateOutlet]="displayNameTag"></ng-container>
     </ng-container>
@@ -107,16 +107,18 @@
       else noValue
     ">
     <div
-      class="box-name-tag {{ nameTagDark ? 'dark-style' : '' }} text--white {{ mode === ENameTag.Private ? 'private-name-tag' : '' }}"
+      class="box-name-tag {{ nameTagDark ? 'dark-style' : '' }} text--white {{
+        mode === ENameTag.Private ? 'private-name-tag' : ''
+      }}"
       [appTooltip]="
         screen !== EScreen.Contract
           ? (screen === EScreen.Account ? mode + ' name: ' : '') + (value | nameTag: mode === ENameTag.Private)
           : null
       ">
       {{
-      (value
-        | nameTag: mode === ENameTag.Private
-        | ellipsis: (maxCharacter && !fullText ? maxCharacter : maxLengthNameTag)) || '-'
+        (value
+          | nameTag: mode === ENameTag.Private
+          | ellipsis: (maxCharacter && !fullText ? maxCharacter : maxLengthNameTag)) || '-'
       }}
       <a
         target="_blank"
