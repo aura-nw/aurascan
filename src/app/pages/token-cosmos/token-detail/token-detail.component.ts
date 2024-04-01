@@ -1,4 +1,4 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import BigNumber from 'bignumber.js';
@@ -37,24 +37,20 @@ export class TokenDetailComponent implements OnInit {
     private contractService: ContractService,
     private ibcService: IBCService,
     private datePipe: DatePipe,
-    private location: Location,
   ) {}
 
   ngOnInit(): void {
-    this.router.data.subscribe((data) => {
-      const { address, type } = data[0];
-
-      if (address) {
-        this.contractAddress = address;
-
-        // this.location.replaceState(`/token/${this.contractAddress}`, `t=${type}`);
+    this.router.params.subscribe((data) => {
+      if (data) {
+        const { contractAddress, type } = data;
+        this.contractAddress = contractAddress;
 
         switch (type) {
-          case 'CW721':
-          case 'CW4973':
+          case 'cw721':
+          case 'cw4973':
             this.getTokenDetailNFT();
             break;
-          case 'CW20':
+          case 'cw20':
             this.getCW20Detail();
             break;
           default:

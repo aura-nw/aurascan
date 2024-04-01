@@ -101,6 +101,7 @@ export const MENU: MenuItem[] = [
         name: MenuName.TokenCW20,
         icon: 'coins',
         featureName: EFeature.Cw20,
+        activeString: '/token/cw20',
       },
       {
         id: 2,
@@ -109,6 +110,7 @@ export const MENU: MenuItem[] = [
         activeLink: 'nft',
         name: MenuName.TokenCW721,
         icon: 'icon icon-nft',
+        activeString: '/token/cw721',
         featureName: EFeature.Cw721,
       },
       {
@@ -118,6 +120,7 @@ export const MENU: MenuItem[] = [
         activeLink: 'abt',
         name: MenuName.TokenCW4973,
         icon: 'icon icon-bound-token',
+        activeString: '/token/cw4973',
         featureName: EFeature.Cw4973,
       },
     ],
@@ -134,6 +137,7 @@ export const MENU: MenuItem[] = [
         icon: 'newspaper',
         link: '/contracts',
         name: MenuName.Contract,
+        activeString: '/contracts',
       },
       {
         id: 2,
@@ -147,6 +151,7 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.CODE-LIST',
         icon: 'code-simple',
         link: '/code-ids',
+        activeString: 'code-ids/detail',
         name: MenuName.CodeList,
       },
     ],
@@ -165,6 +170,7 @@ export const MENU: MenuItem[] = [
         name: MenuName.ChartStats,
         icon: 'line-segments',
         featureName: EFeature.Statistics,
+        activeString: 'statistics/chart',
       },
       {
         id: 2,

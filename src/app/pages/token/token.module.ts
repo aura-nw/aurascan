@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { TokenRoutingModule } from './token-routing.module';
-import { CXXX } from './xxx.component';
+import { TokenComponent } from './token.component';
 
 @NgModule({
-  declarations: [CXXX],
+  declarations: [TokenComponent],
   imports: [TokenRoutingModule],
   providers: [],
 })

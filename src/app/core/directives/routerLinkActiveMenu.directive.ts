@@ -1,6 +1,5 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, pipe, Subscription } from 'rxjs';
+import { Directive, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { IsActiveMatchOptions, Router } from '@angular/router';
 import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
 
 @Directive({
@@ -22,26 +21,29 @@ export class RouterLinkActiveMenuDirective implements OnChanges {
     this.element.classList.add('active');
   }
 
+  isActive(link: string) {
+    const matchOptions: IsActiveMatchOptions = {
+      paths: 'subset',
+      queryParams: 'ignored',
+      fragment: 'exact',
+      matrixParams: 'exact',
+    };
+
+    return this.router.isActive(link, matchOptions);
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.router.url === this.routerLinkActiveMenu.link) {
       this.toogleActive();
+      return;
     }
 
-    // const reg = /\/token\/([\w]+)\/([\w\d]+)/;
-    // const result = reg.exec(this.router.url);
+    if (this.routerLinkActiveMenu?.activeString) {
+      const isActive = this.isActive(this.routerLinkActiveMenu?.activeString);
 
-    // switch (result[1]) {
-    //   case 'cosmos':
-    //     break;
-    //   case 'evm':
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-
-    // if (this.tokenRE.test(this.router.url)) {
-    //   this.toogleActive();
-    // }
+      if (isActive) {
+        this.toogleActive();
+      }
+    }
   }
 }

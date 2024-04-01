@@ -4,34 +4,40 @@ import { map } from 'rxjs';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { TokenComponent } from './token.component';
 
-const canMatchCosmosFn: CanMatchFn = (route, segments) => {
+const canMatchFn: CanMatchFn = (route, segments) => {
   const router = inject(Router);
-  const queryParams = router.getCurrentNavigation()?.initialUrl?.queryParams;
-
-  console.log({ queryParams });
-
-  if (queryParams?.t) {
-    return true;
-  }
 
   const env = inject(EnvironmentService);
   const contract = inject(ContractService);
-  const path = segments[0]?.path;
+  const address = segments[0]?.path;
+
+  const currentQueryParams = router.getCurrentNavigation()?.initialUrl?.queryParams;
 
   if (
     // Native token
-    path == env.coinMinimalDenom ||
+    address == env.coinMinimalDenom ||
     // Cw20 token
-    path?.startsWith(env.bech32PrefixAccAddr) ||
+    address?.startsWith(env.bech32PrefixAccAddr) ||
     // Ibc token
-    path.length == LENGTH_CHARACTER.IBC
+    address.length == LENGTH_CHARACTER.IBC
   ) {
-    return contract.queryTokenByContractAddress(path).pipe(
+    return contract.queryTokenByContractAddress(address).pipe(
       map((e) => {
-        const tr = router.createUrlTree(['/token', path], {
-          queryParams: { t: e.type },
-          queryParamsHandling: 'merge',
+        const tr = router.createUrlTree(['/token', e.type.toLowerCase(), address], {
+          queryParams: currentQueryParams ? { ...currentQueryParams } : {},
+        });
+
+        return tr;
+      }),
+    );
+  } else if (address.startsWith('0x')) {
+    // Evm Token
+    return contract.queryTokenByContractAddress(address).pipe(
+      map((e) => {
+        const tr = router.createUrlTree(['/token', 'evm', e.type.toLowerCase(), address], {
+          queryParams: currentQueryParams ? { ...currentQueryParams } : {},
         });
 
         return tr;
@@ -42,38 +48,23 @@ const canMatchCosmosFn: CanMatchFn = (route, segments) => {
   return false;
 };
 
-const canMatchEvmFn: CanMatchFn = (route, segments) => {
-  return true;
-
-  // if (path.startsWith('0x')) {
-  //   return true;
-  // }
-
-  // return false;
-};
-
 const routes: Routes = [
   {
-    path: ':contractAddress',
-    canMatch: [canMatchCosmosFn],
+    path: ':type/:contractAddress',
+
     loadChildren: () => import('./../token-cosmos/token-cosmos.module').then((m) => m.TokenCosmosModule),
   },
-  // {
-  //   path: 'evm/:contractAddress',
-  //   loadChildren: () => import('./../evm-token/evm-token.module').then((m) => m.EvmTokenModule),
-  // },
-  // {
-  //   path: ':contractAddress',
-  //   canMatch: [canMatchCosmosFn],
-  //   pathMatch: 'full',
-  //   component: CXXX,
-  // },
-  // {
-  //   path: ':contractAddress',
-  //   canMatch: [canMatchEvmFn],
-  //   pathMatch: 'full',
-  //   redirectTo: 'evm/:contractAddress',
-  // },
+  {
+    path: 'evm/:type/:contractAddress',
+
+    loadChildren: () => import('./../evm-token/evm-token.module').then((m) => m.EvmTokenModule),
+  },
+  {
+    path: ':contractAddress',
+    pathMatch: 'full',
+    canMatch: [canMatchFn],
+    component: TokenComponent,
+  },
 ];
 
 @NgModule({
