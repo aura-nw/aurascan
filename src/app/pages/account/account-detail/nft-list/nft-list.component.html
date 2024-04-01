@@ -113,7 +113,7 @@
               <div class="nft-cards__item">
                 <app-nft-card
                   *ngIf="item"
-                  [nftLink]="'/token/nft/' + item.contract_address + '/' + encodeData(item.token_id)"
+                  [nftLink]="'/token/cw721/' + item.contract_address + '/' + encodeData(item.token_id)"
                   [nftItem]="item"
                   nftId="{{ 'nft#' + i }}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
@@ -125,7 +125,7 @@
                     <span class="mr-1 text--gray-1">Token:</span>
                     <a
                       class="hover-link box-name text--primary"
-                      (click)="handleRouterLink('/token/nft/' + item.contract_address)">
+                      (click)="handleRouterLink('/token/' + item.contract_address)">
                       <span class="d-inline-block txt-token-name">{{ item.token_name }}</span>
                     </a>
                   </div>
@@ -133,9 +133,7 @@
                     <span class="mr-1 text--gray-1">Token ID:</span>
                     <span
                       class="text--primary hover-link"
-                      (click)="
-                        handleRouterLink('/token/nft/' + item.contract_address + '/' + encodeData(item.token_id))
-                      ">
+                      (click)="handleRouterLink('/token/' + item.contract_address + '/' + encodeData(item.token_id))">
                       <span *ngIf="!breakpoint.value.matches">{{ item.token_id | ellipsis: 10 }}</span>
                       <span *ngIf="breakpoint.value.matches">{{ item.token_id | ellipsis: 5 }}</span>
                     </span>

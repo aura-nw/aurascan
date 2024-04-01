@@ -738,7 +738,7 @@
                             <div class="justify-content-between tokenId">
                               <a
                                 *ngIf="item.tokenId"
-                                [routerLink]="['/token/nft', data.contractAddress, encodeData(item.tokenId)]"
+                                [routerLink]="['/token', data.contractAddress, encodeData(item.tokenId)]"
                                 [copyBtn]="item.tokenId"
                                 class="text--primary cursor-pointer">
                                 #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}

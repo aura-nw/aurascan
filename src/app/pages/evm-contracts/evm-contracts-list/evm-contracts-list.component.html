@@ -125,7 +125,7 @@
                       <a
                         *ngIf="data['token_tracker']"
                         [appTooltip]="data['token_tracker']"
-                        [routerLink]="['/evm-token/', data['address']]">
+                        [routerLink]="['/token', data['address']]">
                         {{ data['token_tracker'] | ellipsis: 18 }}
                       </a>
                       <span *ngIf="!data['token_tracker']">-</span>

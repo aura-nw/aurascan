@@ -26,7 +26,6 @@ export class TokenInventoryComponent implements OnInit {
   contractAddress = '';
   keyWord = '';
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
-  linkToken = '/token/nft';
   errTxt: string;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
@@ -47,9 +46,6 @@ export class TokenInventoryComponent implements OnInit {
       this.keyWord = params?.a || '';
     });
 
-    if (this.route.snapshot.url[0]?.path === 'abt') {
-      this.linkToken = '/token/abt';
-    }
     this.getNftData();
   }
 

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
@@ -29,8 +30,14 @@ export class EvmTokenDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    this.getTokenDetail();
+    this.router.params.subscribe((data) => {
+      if (data) {
+        const { contractAddress } = data;
+
+        this.contractAddress = contractAddress;
+        this.getTokenDetail();
+      }
+    });
   }
 
   getTokenDetail(): void {

@@ -74,7 +74,6 @@ export class NFTDetailComponent implements OnInit {
   isError = false;
   sbType = SB_TYPE;
   contractType = ContractRegisterType;
-  linkToken = 'token/nft';
   animationUrl: string;
   imageUrl: string;
   isCW4973 = false;
@@ -92,6 +91,8 @@ export class NFTDetailComponent implements OnInit {
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   network = this.environmentService.chainInfo;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+
+  nftBaseType: 'CW4973' | 'CW721';
 
   constructor(
     public commonService: CommonService,
@@ -115,8 +116,19 @@ export class NFTDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    this.nftId = this.router.snapshot.paramMap.get('nftId');
+    this.router.params.subscribe((data) => {
+      const { contractAddress, type, nftId } = data;
+      this.contractAddress = contractAddress;
+
+      if (contractAddress) {
+        this.contractAddress = contractAddress;
+        this.nftId = nftId;
+        this.nftBaseType = type.toUpperCase();
+
+        this.getNFTDetail();
+      }
+    });
+
     this.walletService.walletAccount$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.address;
@@ -124,7 +136,6 @@ export class NFTDetailComponent implements OnInit {
         this.userAddress = null;
       }
     });
-    this.getNFTDetail();
   }
 
   error(): void {
@@ -143,11 +154,10 @@ export class NFTDetailComponent implements OnInit {
         }
 
         res['type'] = res['type'] || ContractRegisterType.CW721;
-        if (this.router.snapshot.url[0]?.path === 'abt') {
+        if (this.nftBaseType == 'CW4973') {
           if (res.name === TYPE_CW4973 && res.cw721_contract?.cw721_tokens[0]?.burned === false) {
             res['type'] = ContractRegisterType.CW4973;
             this.isSoulBound = true;
-            this.linkToken = 'token/abt';
             this.isCW4973 = true;
           } else {
             this.toastr.error('Token invalid');

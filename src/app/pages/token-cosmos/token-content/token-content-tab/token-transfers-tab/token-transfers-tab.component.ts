@@ -64,7 +64,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   codeTransaction = CodeTransaction;
   modeExecuteTransaction = ModeExecuteTransaction;
   nftDetail: any;
-  linkToken = '/token';
   nextKey = null;
   currentKey = null;
   contractType = ContractRegisterType;
@@ -100,9 +99,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    if (this.typeContract && this.typeContract !== this.contractType.CW20) {
-      this.linkToken = this.typeContract === this.contractType.CW721 ? '/token/nft' : '/token/abt';
-    }
     this.getListData();
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
@@ -372,7 +368,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   goTo(data) {
-    let url = this.linkToken + '/' + this.contractAddress + '/' + this.encodeData(data);
-    this.router.navigateByUrl(url);
+    const type = this.typeContract === this.contractType.CW721 ? 'cw721' : 'cw4973';
+    this.router.navigate(['/token', type, this.contractAddress, this.encodeData(data)]);
   }
 }
