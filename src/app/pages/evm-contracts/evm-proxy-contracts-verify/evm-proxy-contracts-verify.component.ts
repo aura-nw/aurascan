@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { interval, Subject, switchMap, takeUntil } from 'rxjs';
+import { Subject, interval, switchMap, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -22,7 +22,7 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
   inputFileValue = null;
 
   loading = false;
-
+  isValidAddress = false;
   interupt$ = new Subject<void>();
 
   constructor(
@@ -33,7 +33,7 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
     private toatr: NgxToastrService,
     private dialog: MatDialog,
   ) {
-    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
+    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress')?.toLowerCase();
 
     if (this.contractAddress.trim().length === 0) {
       this.router.navigate(['evm-contracts']);
@@ -47,14 +47,8 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
 
   contractForm: UntypedFormGroup;
 
-  get formControls() {
-    return this.contractForm.controls;
-  }
-
   ngOnInit(): void {
-    this.contractForm = new UntypedFormGroup({
-      address: new UntypedFormControl(this.contractAddress, { validators: [Validators.required] }),
-    });
+    this.validAddress();
   }
 
   onSubmit() {
@@ -65,13 +59,20 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
     this.contractService;
   }
 
+  validAddress() {
+    this.isValidAddress = false;
+    if (this.contractAddress?.length > 0) {
+      this.isValidAddress = true;
+    }
+  }
+
   verifyEvmContract() {
     this.loading = true;
-    const formdata: FormData = new FormData();
-    formdata.append('contract_address', this.contractAddress.toLowerCase());
-    formdata.append('chainid', this.env.chainId);
+    const formData: FormData = new FormData();
+    formData.append('contract_address', this.contractAddress.toLowerCase());
+    formData.append('chainid', this.env.chainId);
 
-    this.contractService.verifyEvmContract(formdata).subscribe({
+    this.contractService.verifyEvmContract(formData).subscribe({
       next: (res) => {
         this.checkVerifyEvmContractStatus(res?.['id']);
       },
@@ -117,17 +118,12 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
       });
   }
 
-  openPopup(data = null, isGetDetail = false) {
+  openPopup() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'grant-overlay-panel';
     dialogConfig.disableClose = true;
-    if (data) {
-      data['isGetDetail'] = isGetDetail;
-      dialogConfig.data = data;
-    }
-    dialogConfig.data = { ...dialogConfig.data, ...{ currentLength: 5 } };
+    dialogConfig.data = this.contractAddress;
     let dialogRef = this.dialog.open(PopupProxyContractComponent, dialogConfig);
-
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         setTimeout(() => {

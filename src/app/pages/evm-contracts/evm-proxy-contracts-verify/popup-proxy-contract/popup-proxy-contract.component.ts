@@ -3,6 +3,7 @@ import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -16,20 +17,39 @@ export class PopupProxyContractComponent implements OnInit {
   isContract = false;
   isError = false;
   eWalletType = EWalletType;
+  modePopup = {
+    SUCCESS: 'Success',
+    WARNING: 'Warning',
+    ERROR: 'Error',
+  };
+  displayMode = this.modePopup.SUCCESS;
+  codeId;
 
   chainName = this.environmentService.chainName.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public address: any,
     public dialogRef: MatDialogRef<PopupProxyContractComponent>,
     public translate: TranslateService,
     private environmentService: EnvironmentService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {}
 
   closeDialog(status = null) {
     this.dialogRef.close(status);
+    if (this.displayMode === this.modePopup.SUCCESS) {
+      window.history.back();
+    }
+  }
+
+  navigateToVerify() {
+    this.dialogRef.close();
+    if (this.codeId) {
+      sessionStorage.setItem('codeIdPrePage', this.router.url);
+      this.router.navigate(['/code-ids/verify', this.codeId]);
+    }
   }
 }

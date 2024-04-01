@@ -6,8 +6,59 @@
     </div>
   </div>
   <div class="card-body p-0">
-    <div class="box-proxy-verify d-flex align-items-center">
-      <span class="body-02 caption-mob fw-semibold text--green-3">Automated Proxy Implementation Verification</span>
+    <div class="box-proxy-content">
+      <div
+        class="box-proxy-verify align-items-center mb-4 {{
+          displayMode === modePopup.WARNING ? 'warning' : displayMode === modePopup.ERROR ? 'error' : ''
+        }}">
+        <div class="body-02 caption-mob fw-semibold mb-4">
+          The proxy contract verification completed with the message:
+        </div>
+
+        <ng-container *ngIf="displayMode !== modePopup.ERROR">
+          The proxy contract <span class="text--primary">{{ address }}</span
+          >(name-tag-0000803)’s <br />implementation contract is found at:
+          <div class="text--primary">
+            {{ address }}<span class="text--white">(name-tag-0000803)</span>
+            <span *ngIf="displayMode === modePopup.WARNING" class="text--white">
+              . But the implementation contract does not seem to be verified.
+            </span>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="displayMode === modePopup.ERROR">
+          Can not detect the implementation contract for the proxy address
+          <div class="text--primary">{{ address }}</div>
+        </ng-container>
+      </div>
+
+      <div>
+        <ng-container *ngIf="displayMode === modePopup.SUCCESS">
+          In case our verification process is wrong, please click “Contact Us” to provide us with more information so we
+          could update contract information more accurately.
+        </ng-container>
+        <ng-container *ngIf="displayMode === modePopup.WARNING">
+          Please <a class="text--primary" (click)="navigateToVerify()">Verify and Publish</a> the contract source before
+          proceeding with this proxy verification.
+        </ng-container>
+        <ng-container *ngIf="displayMode === modePopup.ERROR">
+          Please click "Contact Us" to provide us with more information so we could update contract information more
+          accurately
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- button group -->
+    <div class="d-flex px-6 py-6 justify-content-end">
+      <button class="button button--md button-pill button-outline btn" type="button" (click)="closeDialog()">
+        <span>Close</span>
+      </button>
+      <button
+        *ngIf="displayMode !== modePopup.WARNING"
+        class="button button--md button-pill button-outline button-outline__in-card button-outline--gradient ml-4 btn"
+        type="button">
+        <a href="mailto:support@aura.network" class="text--white">Contact Us</a>
+      </button>
     </div>
   </div>
 </div>
