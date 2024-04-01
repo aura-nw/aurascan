@@ -265,15 +265,15 @@
                               <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                               <span class="text--gray-light caption fw-normal">{{
                                 data?.timestamp | customDateTime: 'Distance'
-                              }}</span>
+                                }}</span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
-                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
                               <span class="line-claim text--gray-light caption fw-normal">{{
                                 data?.type | ellipsis: 12
-                              }}</span>
+                                }}</span>
                               <span *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4"
-                                >+{{ data.lstType?.length - 1 }}</span
+                              >+{{ data.lstType?.length - 1 }}</span
                               >
                             </div>
                           </div>
@@ -442,7 +442,7 @@
                               </span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
-                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
                               <span class="line-claim text--gray-light caption fw-normal">
                                 {{ data?.method | convertEvmTx }}
                               </span>
@@ -484,12 +484,12 @@
                       </div>
                       <div class="d-flex justify-content-between mt-2">
                         <div class="text--gray-4">From</div>
-                        <app-name-tag [value]="data?.from" *ngIf="data?.from"> </app-name-tag>
+                        <app-name-tag [value]="data?.from" *ngIf="data?.from" [nameTagDark]="true"></app-name-tag>
                         <span *ngIf="!data?.from">-</span>
                       </div>
                       <div class="d-flex justify-content-between mt-2">
                         <div class="text--gray-4">To</div>
-                        <app-name-tag [value]="data?.to" *ngIf="data?.to"> </app-name-tag>
+                        <app-name-tag [value]="data?.to" *ngIf="data?.to" [nameTagDark]="true"></app-name-tag>
                         <span *ngIf="!data?.to">-</span>
                       </div>
                       <div class="d-flex justify-content-between mt-2">
