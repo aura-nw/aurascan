@@ -161,66 +161,68 @@
   </div>
 
   <div *ngIf="dataCard?.expand && modeQuery === tabsData.FtsTxs" class="box-expand">
-    <div class="content-expand" *ngIf="evmAddress || cosmosAddress">
-      <div class="d-flex align-items-center justify-content-between item-expand mb-1">
-        <div class="d-flex align-items-center txt-top-expand">
-          <span class="caption fw-normal text--gray-4 txt-from-to">
-            {{ (evmAddress || cosmosAddress) === dataCard.to ? 'To:' : 'From:' }}
-          </span>
-          <ng-container *ngIf="!(evmAddress || cosmosAddress | nameTagTooltipPipe)">
-            <app-name-tag
-              [value]="evmAddress || cosmosAddress"
-              [isEnableRouter]="!(evmAddress || cosmosAddress)?.startsWith('Null')"
-              [linkRouter]="[
-                (evmAddress || cosmosAddress | isContract) ? '/contracts' : '/account',
-                evmAddress || cosmosAddress
-              ]"
-              [maxCharacter]="10"></app-name-tag>
-          </ng-container>
-          <div
-            [copyBtn]="evmAddress || cosmosAddress"
-            [btnClass]="['pl-2']"
-            *ngIf="evmAddress || cosmosAddress | nameTagTooltipPipe">
-            <a
-              *ngIf="!(evmAddress || cosmosAddress)?.startsWith('Null')"
-              class="text--primary cursor-pointer block-link caption fw-normal"
-              [routerLink]="[
-                (evmAddress || cosmosAddress | isContract) ? '/contracts' : '/address',
-                evmAddress || cosmosAddress
-              ]">
-              {{ evmAddress || cosmosAddress | ellipsis: 5 : 5 }}
-            </a>
-            <span *ngIf="(evmAddress || cosmosAddress)?.startsWith('Null')" class="caption fw-normal">
-              {{ (evmAddress || cosmosAddress | ellipsis: 6 : 6) || '-' }}
+    <div class="content-expand">
+      <ng-container *ngFor="let item of dataCard.arrEvent">
+        <div class="d-flex align-items-center justify-content-between item-expand mb-1">
+          <!-- Cosmos -->
+          <div class="d-flex align-items-center txt-top-expand" *ngIf="fungibleTokenType !== tokenType.ERC20">
+            <span class="caption fw-normal text--gray-4 txt-from-to">
+              {{ cosmosAddress === item.toAddress ? 'From:' : 'To:' }}
             </span>
+            <ng-container>
+              <app-name-tag
+                [value]="cosmosAddress"
+                [isEnableRouter]="!cosmosAddress?.startsWith('Null')"
+                [linkRouter]="[(cosmosAddress | isContract) ? '/contracts' : '/account', cosmosAddress]"
+                [maxCharacter]="10"></app-name-tag>
+            </ng-container>
+          </div>
+          <!-- ERC20 -->
+          <div class="d-flex align-items-center txt-top-expand" *ngIf="fungibleTokenType === tokenType.ERC20">
+            <span class="caption fw-normal text--gray-4 txt-from-to">
+              {{ evmAddress === item.to ? 'From:' : 'To:' }}
+            </span>
+            <ng-container>
+              <app-name-tag
+                [value]="evmAddress === item.to ? item.from : item.to"
+                [isEnableRouter]="!evmAddress?.startsWith('Null')"
+                [linkRouter]="[(evmAddress | isContract) ? '/contracts' : '/account', evmAddress]"
+                [maxCharacter]="10"
+                [isShorterText]="true"></app-name-tag>
+            </ng-container>
+          </div>
+          <div *ngIf="item.amount">
+            <div *ngIf="item.amount === 0">0</div>
+            <div
+              *ngIf="item.amount !== 0 && (item.amount | lt: 0.001)"
+              class="{{ evmAddress === item.to ? 'text--green-3' : 'text--red-3' }}">
+              {{ '< 0.001' }}
+            </div>
+            <div
+              *ngIf="item.amount | gte: 0.001"
+              [appBigNumber]="item.amount"
+              [decimal]="0"
+              class="{{ evmAddress === item.to ? 'text--green-3' : 'text--red-3' }}"></div>
           </div>
         </div>
-        <div *ngIf="dataCard.amount">
-          <div *ngIf="dataCard.amount === 0">0</div>
-          <div *ngIf="dataCard.amount !== 0 && (dataCard.amount | lt: 0.001)">
-            {{ '< 0.001' }}
+        <div class="d-flex align-items-center justify-content-between item-expand">
+          <div class="d-flex align-items-center">
+            <div>
+              <ng-container *ngIf="evmAddress !== item.to">
+                <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
+                <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
+              </ng-container>
+              <ng-container *ngIf="evmAddress === item.to">
+                <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
+                <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
+              </ng-container>
+            </div>
           </div>
-          <div *ngIf="dataCard.amount | gte: 0.001" [appBigNumber]="dataCard.amount" [decimal]="0"></div>
-          <!--          <span class="ml-2" appLinkDenom>{{ denom }}</span>-->
-        </div>
-      </div>
-      <div class="d-flex align-items-center justify-content-between item-expand">
-        <div class="d-flex align-items-center">
           <div>
-            <ng-container *ngIf="(evmAddress || cosmosAddress) === dataCard.from">
-              <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
-              <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
-            </ng-container>
-            <ng-container *ngIf="(evmAddress || cosmosAddress) !== dataCard.from">
-              <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
-              <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
-            </ng-container>
+            <span [appLinkDenom]="item.contractAddress">{{ item.denom }}</span>
           </div>
         </div>
-        <div>
-          <span appLinkDenom>{{ dataCard.denom }}</span>
-        </div>
-      </div>
+      </ng-container>
     </div>
   </div>
 </div>
