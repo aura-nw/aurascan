@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
-import { SmartContractListReq } from 'src/app/core/models/contract.model';
+import { ContractType, SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { ContractRegisterType, EvmContractRegisterType } from '../constants/contract.enum';
 import { EWalletType } from '../constants/wallet.constant';
@@ -647,7 +647,7 @@ export class ContractService extends CommonService {
       });
     }
 
-    let type = address.startsWith('0x') ? 'EVM' : 'COSMOS';
+    let type: ContractType = address.startsWith('0x') ? 'EVM' : 'COSMOS';
 
     const smartContract =
       type == 'COSMOS'
