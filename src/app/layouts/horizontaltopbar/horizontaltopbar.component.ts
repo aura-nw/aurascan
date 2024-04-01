@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Route, Router, UrlSegment } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
+import { delay, filter, map, Subject, takeUntil, tap } from 'rxjs';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -46,6 +46,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
+    private aRoute: ActivatedRoute,
   ) {}
 
   ngOnDestroy(): void {

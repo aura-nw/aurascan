@@ -44,10 +44,7 @@
                       [fullText]="true"
                       [fullTextMob]="true"
                       [tooltipPosition]="'tooltip--right'"
-                      [linkRouter]="[
-                        this.typeContract && this.typeContract !== contractType.CW20 ? '/token/nft' : '/token',
-                        linkAddress
-                      ]"
+                      [linkRouter]="['/token', linkAddress]"
                       [linkParams]="{ a: data[template.matColumnDef] }">
                     </app-name-tag>
                   </ng-container>

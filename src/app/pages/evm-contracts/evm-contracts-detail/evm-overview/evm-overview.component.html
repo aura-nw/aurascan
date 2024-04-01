@@ -67,9 +67,7 @@
               contractDetail?.erc20_contract?.name &&
               contractDetail?.erc20_contract?.symbol
             ">
-            <a
-              class="text--primary break-word line-claim-v--des"
-              [routerLink]="['/evm-token/', contractDetail?.address]">
+            <a class="text--primary break-word line-claim-v--des" [routerLink]="['/token', contractDetail?.address]">
               {{ contractDetail.erc20_contract?.name }} ({{ contractDetail.erc20_contract?.symbol }})
             </a>
             <div class="cursor-pointer">
@@ -90,7 +88,7 @@
               contractDetail?.cw721_contract?.symbol
             "
             class="text--primary break-word line-claim-v--des"
-            [routerLink]="['/token/nft', contractDetail?.address]">
+            [routerLink]="['/token', contractDetail?.address]">
             {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
           </a>
         </div>

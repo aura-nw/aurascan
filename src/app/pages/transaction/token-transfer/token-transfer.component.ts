@@ -173,7 +173,7 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
 
   navigateToNFTDetail(address: string, tokenId: number): void {
     let enCode = this.encodeData(tokenId);
-    this.router.navigate([`/token/nft/${address}/${enCode}`]);
+    this.router.navigate([`/token/${address}/${enCode}`]);
   }
 
   encodeData(data) {
