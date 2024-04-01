@@ -25,6 +25,10 @@ const canMatchFn: CanMatchFn = (route, segments) => {
   ) {
     return contract.queryTokenByContractAddress(address).pipe(
       map((e) => {
+        if (!e) {
+          return true; // Default, Show No Data screen
+        }
+
         const tr = router.createUrlTree(['/token', e.type.toLowerCase(), address], {
           queryParams: currentQueryParams ? { ...currentQueryParams } : {},
         });
@@ -36,6 +40,10 @@ const canMatchFn: CanMatchFn = (route, segments) => {
     // Evm Token
     return contract.queryTokenByContractAddress(address).pipe(
       map((e) => {
+        if (!e) {
+          return true; // Default, Show No Data screen
+        }
+
         const tr = router.createUrlTree(['/token', 'evm', e.type.toLowerCase(), address], {
           queryParams: currentQueryParams ? { ...currentQueryParams } : {},
         });
@@ -45,18 +53,18 @@ const canMatchFn: CanMatchFn = (route, segments) => {
     );
   }
 
-  return false;
+  return true;
 };
 
 const routes: Routes = [
   {
-    path: ':type/:contractAddress',
-    loadChildren: () => import('./../token-cosmos/token-cosmos.module').then((m) => m.TokenCosmosModule),
-  },
-  {
     path: 'evm/:type/:contractAddress',
 
     loadChildren: () => import('./../evm-token/evm-token.module').then((m) => m.EvmTokenModule),
+  },
+  {
+    path: ':type/:contractAddress',
+    loadChildren: () => import('./../token-cosmos/token-cosmos.module').then((m) => m.TokenCosmosModule),
   },
   {
     path: ':contractAddress',

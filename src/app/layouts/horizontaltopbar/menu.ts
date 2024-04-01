@@ -46,6 +46,7 @@ export const MENU: MenuItem[] = [
         link: '/transactions',
         activeLink: 'transaction',
         name: MenuName.Transaction,
+        activeString: '/tx',
       },
       {
         id: 2,
@@ -54,6 +55,7 @@ export const MENU: MenuItem[] = [
         link: '/evm-transactions',
         activeLink: 'evm-transaction',
         name: MenuName.EvmTransaction,
+        activeString: '/tx',
       },
       {
         id: 3,
@@ -61,6 +63,7 @@ export const MENU: MenuItem[] = [
         icon: 'graph',
         link: '/validators',
         name: MenuName.Validator,
+        activeString: '/validators',
       },
       {
         id: 4,
@@ -69,6 +72,7 @@ export const MENU: MenuItem[] = [
         link: '/votings',
         activeLink: 'voting',
         name: MenuName.Proposal,
+        activeString: '/votings',
       },
       {
         id: 5,
@@ -76,6 +80,7 @@ export const MENU: MenuItem[] = [
         icon: 'stack',
         link: '/blocks',
         name: MenuName.Block,
+        activeString: '/block',
       },
       {
         id: 6,

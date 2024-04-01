@@ -709,10 +709,12 @@ export class ContractService extends CommonService {
             type = _.get(x, 'evm_smart_contract[0].erc721_contract.address') ? 'ERC721' : type;
           }
 
-          return {
-            type,
-            address,
-          };
+          return type == 'EVM' || type == 'COSMOS'
+            ? null
+            : {
+                type,
+                address,
+              };
         }),
       );
   }

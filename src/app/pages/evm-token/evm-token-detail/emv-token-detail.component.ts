@@ -27,14 +27,17 @@ export class EvmTokenDetailComponent implements OnInit {
     private router: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
-    private location: Location,
   ) {}
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    // this.location.replaceState(`/token/${this.contractAddress}`, 't=ERC20');
+    this.router.params.subscribe((data) => {
+      if (data) {
+        const { contractAddress } = data;
 
-    this.getTokenDetail();
+        this.contractAddress = contractAddress;
+        this.getTokenDetail();
+      }
+    });
   }
 
   getTokenDetail(): void {
