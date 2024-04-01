@@ -684,9 +684,9 @@
                       </ng-container>
                     </div>
                     <div *ngSwitchCase="'tokenType'">
-                      <button class="button button-pill button-flat body-02 caption-mob">
+                      <button class="button button-pill button-outline button-label caption">
                         <ng-container *ngIf="modeQuery === tabsData.FtsTxs">
-                          <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'evm-color' : 'cosmos-color' }}">
+                          <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
                             {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
                           </span>
                         </ng-container>
@@ -783,6 +783,7 @@
             [currentAddress]="currentAddress"
             [currentType]="currentType"
             [expand]="isFirst"
+            [fungibleTokenType]="fungibleTokenType"
             [title]="{
               size: 'md',
               titleClass: 'body-02-mob',

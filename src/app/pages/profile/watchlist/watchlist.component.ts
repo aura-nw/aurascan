@@ -125,9 +125,9 @@ export class WatchListComponent implements OnInit, OnDestroy {
             data.cosmosAddress = accountAddress;
             data.evmAddress = accountEvmAddress;
 
-            const nameTag = this.findNameTag(data.address);
+            const nameTag = this.nameTagService.findNameTag(data.address);
             if (nameTag) {
-              data.publicNameTag = nameTag['nameTag'];
+              data.publicNameTag = nameTag['name_tag'];
               data.privateNameTag = nameTag['name_tag_private'];
             }
           });
@@ -242,18 +242,8 @@ export class WatchListComponent implements OnInit, OnDestroy {
     let linkAddress = address;
     if (data.type === 'contract') {
       result = data?.evmAddress ? '/evm-contracts/' : '/contracts/';
-      linkAddress = data?.evmAddress;
+      linkAddress = data?.evmAddress || linkAddress;
     }
     return [result, linkAddress];
-  }
-
-  findNameTag(address) {
-    const listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
-    const { accountAddress, accountEvmAddress } = transferAddress(
-      this.chainInfo.bech32Config.bech32PrefixAccAddr,
-      address,
-    );
-    const nameTag = listNameTag?.find((k) => k['address'] === accountAddress || k['address'] === accountEvmAddress);
-    return nameTag;
   }
 }

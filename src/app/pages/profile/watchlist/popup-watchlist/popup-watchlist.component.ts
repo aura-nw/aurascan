@@ -1,19 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
-  MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { isSafari } from 'src/app/core/utils/common/validation';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import { isSafari } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -183,10 +181,12 @@ export class PopupWatchlistComponent implements OnInit {
     );
 
     this.watchlistForm.controls['address'].setValue(accountAddress);
-    this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    if (accountEvmAddress) {
+      this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    }
     this.watchlistForm.get('address').disable();
     this.watchlistForm.get('evmAddress').disable();
-    if (address == accountEvmAddress.trim()) {
+    if (address == accountEvmAddress?.trim()) {
       this.watchlistForm.get('evmAddress').enable();
     } else {
       this.watchlistForm.get('address').enable();
@@ -316,16 +316,13 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   checkNameTag() {
+    this.getAddress.value = this.getAddress.value.trim();
     this.publicNameTag = '-';
     this.privateNameTag = '-';
-    this.getAddress.value = this.getAddress.value.trim();
-    const tempPublic = this.nameTagService.findNameTagByAddress(this.getAddress.value, false);
-    const tempPrivate = this.nameTagService.findNameTagByAddress(this.getAddress.value);
-    if (tempPublic !== this.getAddress.value) {
-      this.publicNameTag = tempPublic;
-    }
-    if (this.nameTagService.isPrivate(this.getAddress.value) && tempPrivate !== this.getAddress.value) {
-      this.privateNameTag = tempPrivate;
+    const nameTag = this.nameTagService.findNameTag(this.getAddress.value);
+    if (nameTag) {
+      this.publicNameTag = nameTag['name_tag'] || '-';
+      this.privateNameTag = nameTag['name_tag_private'] || '-';
     }
   }
 

@@ -365,6 +365,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
     switch (this.modeQuery) {
       case TabsAccountLink.ExecutedTxs:
+        this.currentAddress = this.addressNative;
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesExecute;
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
@@ -375,12 +376,14 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.EVMExecutedTxs:
+        this.currentAddress = this.addressEvm;
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesEvmExecute;
         this.displayedColumns = this.templatesEvmExecute.map((dta) => dta.matColumnDef);
         this.getListEvmTxByAddress(payload);
         break;
       case TabsAccountLink.NativeTxs:
+        this.currentAddress = this.addressNative;
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload.to = '_';
@@ -403,6 +406,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         if (this.fungibleTokenType === this.tokenType.ERC20) {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressEvm;
           this.templates = [...this.templatesERCToken];
         } else {
           this.templates = [...this.templatesToken];
@@ -585,7 +589,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           element.from = _.get(element, 'from');
           element.to = _.get(element, 'to');
           element.timestamp = _.get(element, 'transaction.timestamp');
-          element.evmAmount = _.get(element, 'transaction.transaction_messages[0].content.data.value');
+          element.evmAmount = _.get(element, 'erc20_activities[0].amount') || 0;
         });
       } else {
         if (this.modeQuery === TabsAccountLink.FtsTxs && this.fungibleTokenType === this.tokenType.ERC20) {
@@ -626,7 +630,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
-
       this.pageData.length = this.dataSource.data.length;
     }
   }

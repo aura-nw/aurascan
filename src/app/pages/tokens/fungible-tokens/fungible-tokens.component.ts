@@ -132,7 +132,10 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
                 ? ETokenCoinType.NATIVE
                 : token.type === ETokenCoinTypeBE.CW20
                   ? ETokenCoinType.CW20
-                  : ETokenCoinType.IBC;
+                  : token.type === ETokenCoinTypeBE.ERC20
+                    ? ETokenCoinType.ERC20
+                    : ETokenCoinType.IBC;
+            token.linkToken = token.type === ETokenCoinType.ERC20 ? '/evm-token' : '/token';
           });
           return tokens;
         }),
