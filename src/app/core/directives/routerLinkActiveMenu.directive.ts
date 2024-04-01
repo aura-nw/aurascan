@@ -33,16 +33,29 @@ export class RouterLinkActiveMenuDirective implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.router.url === this.routerLinkActiveMenu.link) {
+    const url = this.router.url;
+
+    if (url === this.routerLinkActiveMenu.link) {
       this.toogleActive();
       return;
     }
 
     if (this.routerLinkActiveMenu?.activeString) {
-      const isActive = this.isActive(this.routerLinkActiveMenu?.activeString);
+      let isActive = this.isActive(this.routerLinkActiveMenu?.activeString);
+
+      // Special case for cosmos tx detail
+      if (this.routerLinkActiveMenu.link == '/transactions' && url.startsWith('/tx/0x')) {
+        isActive = false;
+      }
+
+      // Special case for Evm tx detail
+      if (this.routerLinkActiveMenu.link == '/evm-transactions' && !url.startsWith('/tx/0x')) {
+        isActive = false;
+      }
 
       if (isActive) {
         this.toogleActive();
+        return;
       }
     }
   }
