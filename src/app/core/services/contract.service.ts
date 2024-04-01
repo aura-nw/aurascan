@@ -685,7 +685,7 @@ export class ContractService extends CommonService {
       .post<any>(this.graphUrl, {
         query,
         variables: {
-          address: address?.toLocaleLowerCase(),
+          address: address?.toLowerCase(),
         },
         operationName: 'TokenByContractAddress',
       })

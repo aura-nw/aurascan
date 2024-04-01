@@ -326,7 +326,7 @@ export class UserService {
           transaction {
             timestamp
           }
-          erc20_activities(where: {action: {_in: $actionIn, _nin: $actionNotIn}}) {
+          erc20_activities(where: {action: {_in: $actionIn, _nin: $actionNotIn} , _or: [{from: {_eq: $from}}, {to: {_eq: $to}}]}) {
             from
             to
             tx_hash
