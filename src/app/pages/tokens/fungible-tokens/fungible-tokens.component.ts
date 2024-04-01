@@ -92,7 +92,7 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
     let payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageSize * this.pageData.pageIndex,
-      keyword: this.textSearch || '',
+      keyword: this.textSearch.toLowerCase() || '',
     };
     if (this.filterType) {
       payload['type'] = this.filterType?.toString();

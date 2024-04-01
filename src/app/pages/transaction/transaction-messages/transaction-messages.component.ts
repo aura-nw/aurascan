@@ -150,12 +150,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'From Address',
             value: this.nameTagService.findNameTagByAddress(data?.from_address),
-            link: { url: '/account', data: data?.from_address, nameTag: true },
+            link: { url: '/address', data: data?.from_address, nameTag: true },
           });
           result.push({
             key: 'To Address',
             value: this.nameTagService.findNameTagByAddress(data?.to_address),
-            link: { url: '/account', data: data?.to_address, nameTag: true },
+            link: { url: '/address', data: data?.to_address, nameTag: true },
           });
           result.push({
             key: 'Amount',
@@ -176,7 +176,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Delegator Address',
             value: this.nameTagService.findNameTagByAddress(data?.delegator_address),
-            link: { url: '/account', data: data?.delegator_address, nameTag: true },
+            link: { url: '/address', data: data?.delegator_address, nameTag: true },
           });
           result.push({
             key: 'Validator Address',
@@ -216,7 +216,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Delegator Address',
             value: this.nameTagService.findNameTagByAddress(data?.delegator_address),
-            link: { url: '/account', data: data?.delegator_address, nameTag: true },
+            link: { url: '/address', data: data?.delegator_address, nameTag: true },
           });
           result.push({
             key: 'Source Validator Address',
@@ -248,12 +248,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Granter',
             value: this.nameTagService.findNameTagByAddress(data?.granter),
-            link: { url: '/account', data: data?.granter, nameTag: true },
+            link: { url: '/address', data: data?.granter, nameTag: true },
           });
           result.push({
             key: 'Grantee',
             value: this.nameTagService.findNameTagByAddress(data?.grantee),
-            link: { url: '/account', data: data?.grantee, nameTag: true },
+            link: { url: '/address', data: data?.grantee, nameTag: true },
           });
           result.push({ key: 'Authorization Type', value: data?.grant?.authorization?.authorization_type });
           result.push({ key: 'Expiration', value: this.getDateValue(data?.grant?.expiration) || '-' });
@@ -269,7 +269,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Grantee',
             value: this.nameTagService.findNameTagByAddress(data?.grantee),
-            link: { url: '/account', data: data?.grantee, nameTag: true },
+            link: { url: '/address', data: data?.grantee, nameTag: true },
           });
           result.push({ key: 'Authorization Type', value: data?.msgs[0]['@type'] });
           result.push({
@@ -285,12 +285,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Granter',
             value: this.nameTagService.findNameTagByAddress(data?.granter),
-            link: { url: '/account', data: data?.granter, nameTag: true },
+            link: { url: '/address', data: data?.granter, nameTag: true },
           });
           result.push({
             key: 'Grantee',
             value: this.nameTagService.findNameTagByAddress(data?.grantee),
-            link: { url: '/account', data: data?.grantee, nameTag: true },
+            link: { url: '/address', data: data?.grantee, nameTag: true },
           });
           result.push({ key: 'Message Type Url', value: data.msg_type_url });
           break;
@@ -305,7 +305,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Sender',
             value: this.nameTagService.findNameTagByAddress(data?.sender),
-            link: { url: '/account', data: data?.sender, nameTag: true },
+            link: { url: '/address', data: data?.sender, nameTag: true },
           });
           result.push({ key: 'Messages', value: this.objMsgContract, pipeType: pipeTypeData.Json });
           break;
@@ -321,7 +321,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Sender',
             value: this.nameTagService.findNameTagByAddress(data?.sender),
-            link: { url: '/account', data: data?.sender, nameTag: true },
+            link: { url: '/address', data: data?.sender, nameTag: true },
           });
           result.push({ key: 'Messages', value: this.objMsgContract, pipeType: pipeTypeData.Json });
           break;
@@ -330,7 +330,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Sender',
             value: this.nameTagService.findNameTagByAddress(data?.sender || data?.validator_address),
-            link: { url: '/account', data: data?.sender || data?.validator_address, nameTag: true },
+            link: { url: '/address', data: data?.sender || data?.validator_address, nameTag: true },
           });
           result.push({ key: 'Code Id', value: this.getStoreCode(index), link: { url: '/code-ids/detail' } });
           result.push({ value: data?.wasm_byte_code, specialCase: this.specialCase.ByteCode });
@@ -342,7 +342,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Voter',
             value: this.nameTagService.findNameTagByAddress(data.voter),
-            link: { url: '/account', data: data.voter, nameTag: true },
+            link: { url: '/address', data: data.voter, nameTag: true },
           });
           result.push({ key: 'Option', value: this.parsingOptionVote(data?.option) });
           break;
@@ -352,12 +352,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'From Address',
             value: this.nameTagService.findNameTagByAddress(data.from_address),
-            link: { url: '/account', data: data.from_address, nameTag: true },
+            link: { url: '/address', data: data.from_address, nameTag: true },
           });
           result.push({
             key: 'To Address',
             value: this.nameTagService.findNameTagByAddress(data.to_address),
-            link: { url: '/account', data: data.to_address, nameTag: true },
+            link: { url: '/address', data: data.to_address, nameTag: true },
           });
           result.push({ key: 'Start Time', value: this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC) });
           result.push({ key: 'Vesting Periods', value: data.vesting_periods, pipeType: pipeTypeData.Json });
@@ -368,12 +368,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'From Address',
             value: this.nameTagService.findNameTagByAddress(data.from_address),
-            link: { url: '/account', data: data.from_address, nameTag: true },
+            link: { url: '/address', data: data.from_address, nameTag: true },
           });
           result.push({
             key: 'To Address',
             value: this.nameTagService.findNameTagByAddress(data.to_address),
-            link: { url: '/account', data: data.to_address, nameTag: true },
+            link: { url: '/address', data: data.to_address, nameTag: true },
           });
           result.push({ key: 'Vesting Schedule', value: this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC) });
           break;
@@ -412,7 +412,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Delegator Address',
             value: this.nameTagService.findNameTagByAddress(data.delegator_address),
-            link: { url: '/account', data: data.delegator_address, nameTag: true },
+            link: { url: '/address', data: data.delegator_address, nameTag: true },
           });
           result.push({ key: 'Validator Address', value: data.validator_address, link: { url: '/validators' } });
           result.push({
@@ -466,7 +466,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Proposer',
             value: this.nameTagService.findNameTagByAddress(data.proposer),
-            link: { url: '/account', data: data.proposer, nameTag: true },
+            link: { url: '/address', data: data.proposer, nameTag: true },
           });
           if (this.transactionDetail?.tx?.logs?.length > 0) {
             const proposalData = this.transactionDetail?.tx?.logs[0]?.events?.find((k) => k.type === 'submit_proposal')
@@ -512,12 +512,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Granter',
             value: this.nameTagService.findNameTagByAddress(data.granter),
-            link: { url: '/account', data: data.granter, nameTag: true },
+            link: { url: '/address', data: data.granter, nameTag: true },
           });
           result.push({
             key: 'Grantee',
             value: this.nameTagService.findNameTagByAddress(data.grantee),
-            link: { url: '/account', data: data.grantee, nameTag: true },
+            link: { url: '/address', data: data.grantee, nameTag: true },
           });
           result.push({ key: 'Type', value: this.typeGrantAllowance });
           result.push({
@@ -566,12 +566,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Granter',
             value: this.nameTagService.findNameTagByAddress(data.granter),
-            link: { url: '/account', data: data.granter, nameTag: true },
+            link: { url: '/address', data: data.granter, nameTag: true },
           });
           result.push({
             key: 'Grantee',
             value: this.nameTagService.findNameTagByAddress(data.grantee),
-            link: { url: '/account', data: data.grantee, nameTag: true },
+            link: { url: '/address', data: data.grantee, nameTag: true },
           });
           break;
 
@@ -581,7 +581,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Depositor',
             value: this.nameTagService.findNameTagByAddress(data.depositor),
-            link: { url: '/account', data: data.depositor, nameTag: true },
+            link: { url: '/address', data: data.depositor, nameTag: true },
           });
           result.push({
             key: 'Amount',
@@ -595,7 +595,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Sender',
             value: this.nameTagService.findNameTagByAddress(data.sender),
-            link: { url: '/account', data: data.sender, nameTag: true },
+            link: { url: '/address', data: data.sender, nameTag: true },
           });
           result.push({ key: 'Contract', value: data.contract, link: { url: '/contracts' } });
           result.push({ key: 'Code ID', value: data.code_id, link: { url: '/code-ids/detail' } });
@@ -605,12 +605,12 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Delegator Address',
             value: this.nameTagService.findNameTagByAddress(data.delegator_address),
-            link: { url: '/account', data: data.delegator_address, nameTag: true },
+            link: { url: '/address', data: data.delegator_address, nameTag: true },
           });
           result.push({
             key: 'Withdraw Address',
             value: this.nameTagService.findNameTagByAddress(data.withdraw_address),
-            link: { url: '/account', data: data.withdraw_address, nameTag: true },
+            link: { url: '/address', data: data.withdraw_address, nameTag: true },
           });
           break;
 
