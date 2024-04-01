@@ -51,7 +51,6 @@ const canMatchFn: CanMatchFn = (route, segments) => {
 const routes: Routes = [
   {
     path: ':type/:contractAddress',
-
     loadChildren: () => import('./../token-cosmos/token-cosmos.module').then((m) => m.TokenCosmosModule),
   },
   {

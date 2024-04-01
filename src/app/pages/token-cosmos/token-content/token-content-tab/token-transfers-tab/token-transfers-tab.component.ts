@@ -372,6 +372,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   goTo(data) {
-    this.router.navigate(['/token', this.contractAddress, this.encodeData(data)]);
+    const type = this.typeContract === this.contractType.CW721 ? 'cw721' : 'cw4973';
+    this.router.navigate(['/token', type, this.contractAddress, this.encodeData(data)]);
   }
 }

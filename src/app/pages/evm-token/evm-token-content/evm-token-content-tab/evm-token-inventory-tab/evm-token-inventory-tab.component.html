@@ -18,7 +18,7 @@
               [nftItem]="item"
               [nftType]="getTypeFile(item)"
               nftId="{{ 'nft#' + i }}"
-              [nftLink]="linkToken + '/' + item.contract_address + '/' + encodeData(item.token_id)">
+              [nftLink]="linkToken + '/cw721/' + item.contract_address + '/' + encodeData(item.token_id)">
             </app-nft-card>
             <div class="nft__body px-2 px-lg-3">
               <div class="nft__info">

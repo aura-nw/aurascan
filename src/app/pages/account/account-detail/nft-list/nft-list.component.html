@@ -113,7 +113,7 @@
               <div class="nft-cards__item">
                 <app-nft-card
                   *ngIf="item"
-                  [nftLink]="'/token/' + item.contract_address + '/' + encodeData(item.token_id)"
+                  [nftLink]="'/token/cw721/' + item.contract_address + '/' + encodeData(item.token_id)"
                   [nftItem]="item"
                   nftId="{{ 'nft#' + i }}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
