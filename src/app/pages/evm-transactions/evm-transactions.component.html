@@ -27,12 +27,16 @@
                         {{ data.type | convertEvmTx }}
                       </div>
                       <ng-container *ngSwitchCase="'from'">
-                        <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
+                        <app-name-tag
+                          [value]="data[template.matColumnDef] | appEvmAddress"
+                          *ngIf="data[template.matColumnDef]">
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to'">
-                        <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
+                        <app-name-tag
+                          [value]="data[template.matColumnDef] | appEvmAddress"
+                          *ngIf="data[template.matColumnDef]">
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>
@@ -71,7 +75,7 @@
                             *ngIf="data[template.matColumnDef] | balance: data['tokenDecimal'] | gte: 0.001"
                             [appBigNumber]="data[template.matColumnDef]"
                             [decimal]="data['tokenDecimal']"></span>
-                          <a [appLinkDenom]="data['contractAddress']"> {{ data['tokenSymbol'] }}</a>
+                          <a [appLinkDenom]="data['contractAddress'] | appEvmAddress"> {{ data['tokenSymbol'] }}</a>
                         </ng-container>
                       </div>
                       <div *ngSwitchCase="'hash'" class="text-center">
