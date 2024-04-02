@@ -366,18 +366,15 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
     switch (this.modeQuery) {
       case TabsAccountLink.ExecutedTxs:
-        this.currentAddress = this.addressNative;
+        payload.address = this.currentAddress = this.addressNative;
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesExecute;
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
-        payload.address = convertEvmAddressToBech32Address(
-          this.chainInfo.bech32Config.bech32PrefixAccAddr,
-          payload.address,
-        );
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.EVMExecutedTxs:
-        this.currentAddress = this.addressEvm;
+        this.currentAddress = this.addressEvm
+        payload.address = this.addressEvm?.toLowerCase();
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesEvmExecute;
         this.displayedColumns = this.templatesEvmExecute.map((dta) => dta.matColumnDef);
@@ -453,7 +450,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListTxByAddress(payload) {
-    payload['address'] = [this.addressNative, this.addressEvm?.toLowerCase()];
     this.userService.getListTxByAddress(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
@@ -473,7 +469,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListEvmTxByAddress(payload) {
-    payload['address'] = [this.addressNative, this.addressEvm?.toLowerCase()];
     this.userService.getListEvmTxByAddress(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
