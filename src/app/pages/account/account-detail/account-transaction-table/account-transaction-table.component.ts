@@ -585,7 +585,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           const type = _.get(element, 'data')?.substring(0, 8);
           element.tx_hash = _.get(element, 'hash');
           element.hash = _.get(element, 'transaction.hash');
-          element.method = type ? type : 'Transfer';
+          element.method = type;
           element.from = _.get(element, 'from');
           element.to = _.get(element, 'to');
           element.timestamp = _.get(element, 'transaction.timestamp');
@@ -599,7 +599,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             element.timestamp = _.get(element, 'transaction.timestamp');
             element.arrEvent = _.get(element, 'erc20_activities')?.map((item, index) => {
               const type = _.get(element, 'data')?.substring(0, 8);
-              element.method = type ? type : 'Transfer';
+              element.method = type;
               let from = _.get(item, 'from') || NULL_ADDRESS;
               let to = _.get(item, 'to') || NULL_ADDRESS;
               let denom = _.get(item, 'erc20_contract.symbol');

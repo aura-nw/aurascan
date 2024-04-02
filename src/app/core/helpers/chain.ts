@@ -17,7 +17,7 @@ export function getFunctionNameByMethodId(methodId: string) {
     methodTemp = listTxEvmMapping.get(methodId);
   }
 
-  if (!methodTemp) return methodId?.slice(0, 8);
+  if (!methodTemp) return methodId?.slice(0, 8) || 'Send';
 
   methodTemp = methodTemp?.charAt(0).toUpperCase() + methodTemp?.slice(1);
   const indexChar = methodTemp?.indexOf('(');
