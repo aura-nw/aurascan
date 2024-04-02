@@ -329,30 +329,6 @@ export class IBCService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getIBCTransfer(txHash) {
-    const operationsDoc = `
-    query IbcAssetTransfer ($txHash: String = null) {
-      ${this.envDB} {
-        coin_transfer(where: {transaction: {hash: {_eq: $txHash}}}) {
-          from
-          to
-          amount
-          denom
-        }
-      }
-    }
-    `;
-    return this.http
-      .post<any>(this.graphUrl, {
-        query: operationsDoc,
-        variables: {
-          txHash: txHash,
-        },
-        operationName: 'IbcAssetTransfer',
-      })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
-  }
-
   getTotalSupplyLCD(denomHash: string) {
     // Cosmos SDK version 0.47.0 - Rest API
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SUPPLY}/by_denom?denom=${denomHash}`).catch(() => ({

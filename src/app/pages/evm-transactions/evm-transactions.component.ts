@@ -57,19 +57,6 @@ export class EvmTransactionsComponent {
           if (txsRes?.transaction?.length > 0) {
             return txsRes.transaction.map((tx) => {
               const type = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
-              let amount = 0;
-              let tokenDecimal = '';
-              let contractAddress = '';
-              let tokenSymbol = '';
-              let activitiesErc20 = _.get(tx, 'evm_transaction.erc20_activities');
-              if (activitiesErc20.length > 0) {
-                amount = _.get(tx, 'evm_transaction.erc20_activities[0].amount');
-                tokenDecimal = _.get(tx, 'evm_transaction.erc20_activities[0].erc20_contract.decimal');
-                tokenSymbol = _.get(tx, 'evm_transaction.erc20_activities[0].erc20_contract.symbol');
-                contractAddress = _.get(tx, 'evm_transaction.erc20_activities[0].erc20_contract.address');
-              } else {
-                amount = _.get(tx, 'transaction_messages[0].content.data.value');
-              }
 
               return {
                 ...tx,
@@ -77,10 +64,7 @@ export class EvmTransactionsComponent {
                 type: type,
                 from: _.get(tx, 'evm_transaction.from'),
                 to: _.get(tx, 'evm_transaction.to'),
-                amount: amount,
-                tokenDecimal: tokenDecimal,
-                contractAddress: contractAddress,
-                tokenSymbol: tokenSymbol,
+                amount: _.get(tx, 'transaction_messages[0].content.data.value'),
               };
             });
           }
