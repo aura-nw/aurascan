@@ -494,15 +494,23 @@
                               ]"
                               [isEnableRouter]="
                                 !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                item.fromAddress !== currentAddress
+                                item.fromAddress?.toLowerCase() !== currentAddress?.toLowerCase()
                               ">
                             </app-name-tag>
                             <div class="box-token-transfer d-flex mr-8">
                               <span
                                 class="token-transfer-status d-inline-flex align-items-center caption"
-                                [ngClass]="{ 'status-out': item['toAddress'] !== currentAddress }">
-                                <ng-container *ngIf="item['toAddress'] === currentAddress"> IN </ng-container>
-                                <ng-container *ngIf="item['toAddress'] !== currentAddress"> OUT </ng-container>
+                                [ngClass]="{
+                                  'status-out': item['toAddress']?.toLowerCase() !== currentAddress?.toLowerCase()
+                                }">
+                                <ng-container
+                                  *ngIf="item['toAddress']?.toLowerCase() === currentAddress?.toLowerCase()">
+                                  IN
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="item['toAddress']?.toLowerCase() !== currentAddress?.toLowerCase()">
+                                  OUT
+                                </ng-container>
                               </span>
                             </div>
                           </div>
@@ -546,7 +554,7 @@
                                 [iconContract]="item.toAddress || currentAddress | isContract"
                                 [isEnableRouter]="
                                   !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                  item.toAddress !== currentAddress
+                                  item.toAddress?.toLowerCase() !== currentAddress?.toLowerCase()
                                 ">
                               </app-name-tag>
                             </div>
@@ -585,7 +593,7 @@
                           [iconContract]="data[template.matColumnDef] | isContract"
                           [isEnableRouter]="
                             !data[template.matColumnDef]?.startsWith('Null') &&
-                            data[template.matColumnDef] !== currentAddress
+                            data[template.matColumnDef]?.toLowerCase() !== currentAddress?.toLowerCase()
                           ">
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
@@ -607,7 +615,7 @@
                                   [iconContract]="item.to || currentAddress | isContract"
                                   [isEnableRouter]="
                                     !(item.to?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                    item.to !== currentAddress
+                                    item.to?.toLowerCase() !== currentAddress?.toLowerCase()
                                   ">
                                 </app-name-tag>
                               </div>
@@ -647,15 +655,21 @@
                                 ]"
                                 [isEnableRouter]="
                                   !(item.from?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                  item.from !== currentAddress
+                                  item.from?.toLowerCase() !== currentAddress?.toLowerCase()
                                 ">
                               </app-name-tag>
                               <div class="box-token-transfer d-flex mr-8">
                                 <span
                                   class="token-transfer-status d-inline-flex align-items-center caption"
-                                  [ngClass]="{ 'status-out': item['to'] !== currentAddress }">
-                                  <ng-container *ngIf="item['to'] === currentAddress"> IN </ng-container>
-                                  <ng-container *ngIf="item['to'] !== currentAddress"> OUT </ng-container>
+                                  [ngClass]="{
+                                    'status-out': item['to']?.toLowerCase() !== currentAddress?.toLowerCase()
+                                  }">
+                                  <ng-container *ngIf="item['to']?.toLowerCase() === currentAddress?.toLowerCase()">
+                                    IN
+                                  </ng-container>
+                                  <ng-container *ngIf="item['to']?.toLowerCase() !== currentAddress?.toLowerCase()">
+                                    OUT
+                                  </ng-container>
                                 </span>
                               </div>
                             </div>
