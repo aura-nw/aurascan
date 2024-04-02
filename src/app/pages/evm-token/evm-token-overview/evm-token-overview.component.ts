@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as _ from 'lodash';
-import { ContractRegisterType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { EModeEvmToken, EModeToken } from 'src/app/core/constants/token.enum';
+import { EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EModeEvmToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 
@@ -34,8 +33,6 @@ export class EvmTokenOverviewComponent implements OnInit {
       this.params = params?.a || '';
     });
 
-    this.getDataDetail();
-
     //set price change
     this.tokenDetail['change'] = this.tokenDetail['change'] || this.tokenDetail.priceChangePercentage24h;
     this.tokenDetail['isValueUp'] = true;
@@ -45,6 +42,4 @@ export class EvmTokenOverviewComponent implements OnInit {
     }
     this.tokenDetail['isHolderUp'] = true;
   }
-
-  getDataDetail() {}
 }
