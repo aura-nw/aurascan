@@ -22,7 +22,7 @@ export class PopupProxyContractComponent implements OnInit {
     WARNING: 'Warning',
     ERROR: 'Error',
   };
-  displayMode = this.modePopup.SUCCESS;
+  displayMode = this.modePopup.WARNING;
   codeId;
 
   chainName = this.environmentService.chainName.toLowerCase();

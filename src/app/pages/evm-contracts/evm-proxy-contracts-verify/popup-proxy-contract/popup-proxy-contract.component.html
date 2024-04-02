@@ -16,10 +16,14 @@
         </div>
 
         <ng-container *ngIf="displayMode !== modePopup.ERROR">
-          The proxy contract <span class="text--primary">{{ address }}</span
-          >(name-tag-0000803)’s <br />implementation contract is found at:
+          The proxy contract <span class="text--primary">{{ address }}</span>
+          <ng-container *ngIf="!(address | nameTagTooltipPipe)">({{ address | nameTag }})</ng-container>’s
+          <br />implementation contract is found at:
           <div class="text--primary">
-            {{ address }}<span class="text--white">(name-tag-0000803)</span>
+            {{ address
+            }}<ng-container *ngIf="!(address | nameTagTooltipPipe)">
+              <span class="text--white">({{ address | nameTag }})</span>
+            </ng-container>
             <span *ngIf="displayMode === modePopup.WARNING" class="text--white">
               . But the implementation contract does not seem to be verified.
             </span>

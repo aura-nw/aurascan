@@ -11,6 +11,9 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { PopupProxyContractComponent } from './popup-proxy-contract/popup-proxy-contract.component';
+import { isAddress, isContract } from 'src/app/core/utils/common/validation';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-evm-proxy-contracts-verify',
@@ -24,6 +27,7 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
   loading = false;
   isValidAddress = false;
   interupt$ = new Subject<void>();
+  chainInfo = this.env.chainInfo;
 
   constructor(
     private route: ActivatedRoute,
@@ -61,7 +65,12 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
 
   validAddress() {
     this.isValidAddress = false;
-    if (this.contractAddress?.length > 0) {
+    if (
+      this.contractAddress?.length > 0 &&
+      (isContract(this.contractAddress, this.chainInfo.bech32Config.bech32PrefixAccAddr) ||
+        (this.contractAddress.startsWith(EWalletType.EVM) &&
+          this.contractAddress?.length === LENGTH_CHARACTER.EVM_ADDRESS))
+    ) {
       this.isValidAddress = true;
     }
   }
