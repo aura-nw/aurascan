@@ -74,7 +74,7 @@ export class EvmTransactionsComponent {
               return {
                 ...tx,
                 evm_hash: _.get(tx, 'evm_transaction.hash'),
-                type: type ? type : 'Transfer',
+                type: type,
                 from: _.get(tx, 'evm_transaction.from'),
                 to: _.get(tx, 'evm_transaction.to'),
                 amount: amount,
