@@ -131,7 +131,7 @@ export class ContractsTransactionsComponent implements OnInit {
                   hash: _.get(tx, 'transaction.hash'),
                   method: type,
                   from: _.get(tx, 'from'),
-                  to: _.get(tx, 'contract_address'),
+                  to: _.get(tx, 'to'),
                   timestamp: _.get(tx, 'transaction.timestamp'),
                   evmAmount: _.get(tx, 'transaction.transaction_messages[0].content.data.value'),
                 };
