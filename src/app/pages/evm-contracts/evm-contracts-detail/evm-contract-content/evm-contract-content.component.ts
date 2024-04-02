@@ -123,7 +123,10 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
   }
 
   getTransaction(): void {
-    if (this.contractsAddress.startsWith(EWalletType.EVM) && this.contractsAddress.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
+    if (
+      this.contractsAddress.startsWith(EWalletType.EVM) &&
+      this.contractsAddress.length >= LENGTH_CHARACTER.EVM_ADDRESS
+    ) {
       const payload = {
         limit: this.limit,
         address: this.contractsAddress.toLowerCase(),
@@ -142,7 +145,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
                   hash: _.get(tx, 'transaction.hash'),
                   method: type,
                   from: _.get(tx, 'from'),
-                  to: _.get(tx, 'contract_address'),
+                  to: _.get(tx, 'to'),
                   timestamp: _.get(tx, 'transaction.timestamp'),
                   evmAmount: _.get(tx, 'transaction.transaction_messages[0].content.data.value'),
                 };
