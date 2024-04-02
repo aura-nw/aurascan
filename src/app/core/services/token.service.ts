@@ -594,6 +594,9 @@ export class TokenService extends CommonService {
               status
             }
           }
+          erc20_activities {
+            amount
+          }
         }
       }
     }
@@ -602,7 +605,7 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          address: payload.address,
+          address: payload.address?.toLowerCase(),
         },
         operationName: 'getEvmTokenDetail',
       })

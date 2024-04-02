@@ -146,6 +146,9 @@ export class UserService {
           to
           hash
           height
+          erc20_activities {
+            amount
+          }
           transaction {
             timestamp
             hash
@@ -237,7 +240,7 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListFTByAddress(payload) {
+  getCW20TxByAddress(payload) {
     const operationsDoc = `
     query QueryCW20ListTX(
       $receiver: String = null, 
@@ -300,6 +303,59 @@ export class UserService {
           actionNotIn: null,
         },
         operationName: 'QueryCW20ListTX',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getErc20TxByAddress(payload) {
+    const operationsDoc = `
+    query QueryERC20ListTX(
+      $from: String = null
+      $to: String = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $actionIn: [String!] = null
+      $actionNotIn: [String!] = null
+      $startTime: timestamptz = null
+      $endTime: timestamptz = null
+      $limit: Int = 100) {
+      ${this.envDB} {
+        evm_transaction(where: {erc20_activities: {_or: [{from: {_eq: $from}}, {to: {_eq: $to}}], height: {_gt: $heightGT, _lt: $heightLT}, action: {_in: $actionIn, _nin: $actionNotIn}}, transaction: {timestamp: {_lte: $endTime, _gte: $startTime}}}, limit: $limit, order_by: {id: desc}) {
+          data
+          hash
+          transaction {
+            timestamp
+          }
+          erc20_activities(where: {action: {_in: $actionIn, _nin: $actionNotIn} , _or: [{from: {_eq: $from}}, {to: {_eq: $to}}]}) {
+            from
+            to
+            tx_hash
+            action
+            amount
+            erc20_contract {
+              symbol
+              address
+              decimal
+            }
+            erc20_contract_address
+            height
+          }
+        }
+      }
+    } `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          from: payload.sender,
+          to: payload.receiver,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+          heightLT: payload.heightLT,
+          actionIn: CW20_TRACKING,
+          actionNotIn: null,
+        },
+        operationName: 'QueryERC20ListTX',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

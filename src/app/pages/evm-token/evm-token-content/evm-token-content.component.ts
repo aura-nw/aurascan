@@ -44,7 +44,7 @@ export class EvmTokenContentComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
-  linkToken = 'nft';
+
   activeTabID = 0;
   textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
   linkAddress: string;
@@ -123,19 +123,25 @@ export class EvmTokenContentComponent implements OnInit {
       // check if mode not equal native coin
       if (this.tokenDetail.modeToken !== EModeToken?.Native) {
         if (
-          this.textSearch.length === LENGTH_CHARACTER.TRANSACTION &&
-          this.textSearch == this.textSearch.toUpperCase()
+          this.textSearch.length === LENGTH_CHARACTER.EVM_TRANSACTION &&
+          this.textSearch?.toLowerCase() == this.textSearch.toLowerCase()
         ) {
           this.isSearchTx = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-        } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+        } else if (
+          this.textSearch?.length >= LENGTH_CHARACTER.EVM_ADDRESS &&
+          this.textSearch?.startsWith(this.prefixAdd)
+        ) {
           this.isSearchAddress = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
           this.getInfoAddress(this.paramQuery);
         } else {
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
         }
-      } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+      } else if (
+        this.textSearch?.length >= LENGTH_CHARACTER.EVM_ADDRESS &&
+        this.textSearch?.startsWith(this.prefixAdd)
+      ) {
         this.isSearchAddress = true;
         this.tokenService.filterBalanceNative$.subscribe((res) => {
           this.infoSearch['balance'] = res || 0;
@@ -145,13 +151,7 @@ export class EvmTokenContentComponent implements OnInit {
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
-          if (this.tokenDetail.type && this.tokenDetail.type !== EvmContractRegisterType.ERC20) {
-            this.linkToken =
-              this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token/nft' : 'evm-token/abt';
-            window.location.href = `/${this.linkToken}/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
-          } else {
-            window.location.href = `/evm-token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
-          }
+          window.location.href = `/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
         }
       });
     } else {
@@ -163,12 +163,7 @@ export class EvmTokenContentComponent implements OnInit {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      if (this.tokenDetail.type && this.tokenDetail.type !== EvmContractRegisterType.ERC20) {
-        this.linkToken = this.tokenDetail.type === EvmContractRegisterType.ERC721 ? 'evm-token/nft' : 'evm-token/abt';
-        window.location.href = `/${this.linkToken}/${params.contractAddress}`;
-      } else {
-        window.location.href = `/evm-token/${params.contractAddress}`;
-      }
+      window.location.href = `/token/${params.contractAddress}`;
     }
   }
 

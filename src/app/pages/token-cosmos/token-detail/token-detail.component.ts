@@ -40,16 +40,25 @@ export class TokenDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    if (this.contractAddress?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
-      if (this.router.snapshot.url[0]?.path === 'nft' || this.router.snapshot.url[0]?.path === 'abt') {
-        this.getTokenDetailNFT();
-      } else {
-        this.getCW20Detail();
+    this.router.params.subscribe((data) => {
+      if (data) {
+        const { contractAddress, type } = data;
+        this.contractAddress = contractAddress;
+
+        switch (type) {
+          case 'cw721':
+          case 'cw4973':
+            this.getTokenDetailNFT();
+            break;
+          case 'cw20':
+            this.getCW20Detail();
+            break;
+          default:
+            this.getTokenDetail();
+            break;
+        }
       }
-    } else {
-      this.getTokenDetail();
-    }
+    });
   }
 
   getCW20Detail(): void {

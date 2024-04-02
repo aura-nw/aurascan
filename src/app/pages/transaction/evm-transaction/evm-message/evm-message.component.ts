@@ -48,7 +48,7 @@ export class EvmMessageComponent {
   ngOnInit(): void {
     this.inputDataRaw['methodId'] = this.transaction?.inputData?.substring(0, 8);
     this.inputDataRaw['arrList'] = this.transaction?.inputData?.slice(8).match(/.{1,64}/g);
-    this.method = this.inputDataRaw['methodId'] || 'Transfer';
+    this.method = this.inputDataRaw['methodId'];
     if (this.method === EMethodContract.Creation) {
       this.isCreateContract = true;
       this.typeInput = this.inputDataType.ORIGINAL;
@@ -61,6 +61,10 @@ export class EvmMessageComponent {
   }
 
   getDataDecoded() {
+    if (!this.transaction?.to) {
+      return;
+    }
+
     this.transactionService.getAbiContract(this.transaction?.to?.toLowerCase()).subscribe((res) => {
       if (res?.evm_contract_verification?.length > 0 && res.evm_contract_verification[0]?.abi) {
         this.isContractVerified = true;

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { Subject, map, of, switchMap, takeUntil } from 'rxjs';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -101,7 +101,7 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
   checkWatchList() {
     // get watch list form local storage
     const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
-    if (lstWatchList?.find((k) => k.address === this.contractAddress)) {
+    if (lstWatchList?.find((k) => k.address === this.contractAddress || k.evmAddress === this.contractAddress)) {
       this.isWatchList = true;
     }
   }

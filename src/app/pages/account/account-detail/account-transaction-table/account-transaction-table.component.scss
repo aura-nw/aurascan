@@ -1,5 +1,6 @@
 .button-filter {
   position: relative;
+
   @media (max-width: 991.99px) {
     padding: 8px;
   }
@@ -13,6 +14,17 @@
   @media (max-width: 414px) {
     .nav-item {
       min-width: 138px;
+    }
+  }
+}
+
+.token-filter {
+  .button-switch-stage {
+    height: 42px;
+    width: 100%;
+
+    @media (min-width: 992px) {
+      width: 164px;
     }
   }
 }
@@ -60,9 +72,11 @@ tr td {
 .tnx-filter-box {
   max-height: 220px;
   overflow-y: auto;
+
   @media (max-width: 1366px) {
     max-height: 150px;
   }
+
   @media (max-width: 414px) {
     max-height: 130px;
   }
@@ -171,11 +185,14 @@ tr td {
 }
 
 .filter-contain {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  /* IE and Edge */
+  -ms-overflow-style: none;
+  /* Firefox */
+  scrollbar-width: none;
   overflow: hidden;
   overflow-x: auto;
   padding-bottom: 184px;
+
   @media (min-width: 991.98px) {
     overflow: visible;
     padding-bottom: 0;
@@ -200,6 +217,7 @@ tr td {
 
 .box-filter__desc {
   margin-top: -200px;
+
   @media (min-width: 991.98px) {
     margin-top: 0;
   }

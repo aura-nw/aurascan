@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Route, Router, UrlSegment } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
+import { delay, filter, map, Subject, takeUntil, tap } from 'rxjs';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -45,6 +46,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
+    private aRoute: ActivatedRoute,
   ) {}
 
   ngOnDestroy(): void {
@@ -138,6 +140,24 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
         if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
           urlLink = 'contracts';
           this.redirectPage(urlLink);
+        } else if (this.searchValue.startsWith(this.prefixNormalAdd)) {
+          const { accountAddress, accountEvmAddress } = transferAddress(this.prefixNormalAdd, this.searchValue);
+          // check if address EVM contract or account
+          this.contractService.findEvmContract(accountEvmAddress).subscribe({
+            next: (res) => {
+              if (res?.evm_smart_contract?.length > 0) {
+                this.searchValue = accountEvmAddress;
+                urlLink = 'evm-contracts';
+                this.redirectPage(urlLink);
+              } else {
+                urlLink = 'address';
+                this.redirectPage(urlLink);
+              }
+            },
+            error: (e) => {
+              return;
+            },
+          });
         } else {
           // case aura validators/ account
           urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'address';

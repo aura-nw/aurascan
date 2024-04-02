@@ -82,25 +82,29 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'evmAddress'" class="d-flex flex-column mt-1">
-                  <a class="text--primary cursor-pointer" [routerLink]="urlType(data, data.evmAddress)">
-                    <span>{{ data[template.matColumnDef] | ellipsis: 8 }}</span> </a
-                  ><br />
+                  <a
+                    class="text--primary cursor-pointer"
+                    *ngIf="data[template.matColumnDef]"
+                    [routerLink]="urlType(data, data.evmAddress)">
+                    <span>{{ data[template.matColumnDef] | ellipsis: 8 }}</span>
+                  </a>
+                  <span *ngIf="!data[template.matColumnDef]">-</span>
+                  <br />
                 </div>
                 <div *ngSwitchCase="'type'" class="text-capitalize">
                   {{ data[template.matColumnDef] }}
                 </div>
-                <app-name-tag
-                  [value]="data.address"
-                  [mode]="ENameTag.Public"
-                  [maxCharacter]="10"
-                  [screen]="EScreen.WatchList"
-                  *ngSwitchCase="'public_name_tag'"></app-name-tag>
-                <app-name-tag
-                  [value]="data.address"
-                  [mode]="ENameTag.Private"
-                  [maxCharacter]="12"
-                  [screen]="EScreen.WatchList"
-                  *ngSwitchCase="'private_name_tag'"></app-name-tag>
+                <div *ngSwitchCase="'public_name_tag'" class="after-gray">
+                  <div [ngClass]="data.publicNameTag ? 'box-name-tag' : ''" [appTooltip]="data.publicNameTag">
+                    {{ (data.publicNameTag | ellipsis: 10) || '-' }}
+                  </div>
+                </div>
+                <div
+                  *ngSwitchCase="'private_name_tag'"
+                  [ngClass]="data.privateNameTag ? 'box-name-tag private-name-tag' : ''"
+                  [appTooltip]="data.privateNameTag">
+                  {{ (data.privateNameTag | ellipsis: 12) || '-' }}
+                </div>
                 <div *ngSwitchCase="'group'" class="">
                   <div class="d-flex align-items-center">
                     <i class="ph ph-bell-simple body-01" *ngIf="data.tracking"></i>
@@ -109,7 +113,7 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'updated_at'">
-                  {{ data[template.matColumnDef] | customDateTime: 'DateOnly' }}
+                  {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                 </div>
                 <div *ngSwitchCase="'action'">
                   <div class="d-flex align-items-center justify-content-end">
@@ -188,9 +192,13 @@
         <div class="card__content text--white">
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">EVM Address</div>
-            <a class="text--primary cursor-pointer" [routerLink]="urlType(data, data.evmAddress)">
-              <span class="fw-semibold">{{ data.evmAddress | ellipsis: 8 : 8 }}</span>
+            <a
+              class="text--primary cursor-pointer"
+              [routerLink]="urlType(data, data.evmAddress)"
+              *ngIf="data.evmAddress">
+              <span class="fw-semibold">{{ (data.evmAddress | ellipsis: 8 : 8) || '-' }}</span>
             </a>
+            <span *ngIf="!data.evmAddress">-</span>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Type</div>
@@ -198,14 +206,18 @@
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Public name tag</div>
-            <div class="line-claim" [ngClass]="(data.address | isPublicNameTag) ? 'box-name-tag' : ''">
-              {{ (data.address | isPublicNameTag) ? (data.address | nameTag: false | ellipsis: 18) : '-' }}
+            <div class="after-gray">
+              <div [ngClass]="data.publicNameTag ? 'box-name-tag' : ''" [appTooltip]="data.publicNameTag">
+                {{ (data.publicNameTag | ellipsis: 15) || '-' }}
+              </div>
             </div>
           </div>
           <div class="d-flex align-items-center mb-2">
             <div class="caption fw-normal text--gray-4 label__content">Private name tag</div>
-            <div class="line-claim" [ngClass]="(data.address | isPrivateNameTag) ? 'private-name-tag' : ''">
-              {{ (data.address | isPrivateNameTag) ? (data.address | nameTag | ellipsis: 22) : '-' }}
+            <div
+              [ngClass]="data.privateNameTag ? 'box-name-tag private-name-tag' : ''"
+              [appTooltip]="data.privateNameTag">
+              {{ (data.privateNameTag | ellipsis: 15) || '-' }}
             </div>
           </div>
           <div class="d-flex align-items-center mb-2">

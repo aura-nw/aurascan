@@ -11,6 +11,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { EvmTransactionRoutingModule } from './evm-transactions-routing.module';
 import { EvmTransactionsComponent } from './evm-transactions.component';
 import { MatIconModule } from '@angular/material/icon';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [EvmTransactionsComponent],
@@ -26,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
     CommonDirectiveModule,
     CustomPipeModule,
     MatIconModule,
+    NameTagModule
   ],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })

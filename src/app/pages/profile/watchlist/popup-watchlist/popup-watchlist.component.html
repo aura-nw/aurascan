@@ -62,7 +62,7 @@
                   type="text"
                   formControlName="address"
                   placeholder="{{ chainName }}..."
-                  class="input-address px-4"
+                  class="input-address px-4 convert-address"
                   (blur)="changeAddress('address')"
                   (input)="isError = false"
                   autocomplete="off" />
@@ -76,7 +76,7 @@
                   <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
                 </button>
               </div>
-              <span *ngIf="isEditMode">{{ watchlistForm.get('address').value }}</span>
+              <span *ngIf="isEditMode">{{ watchlistForm.get('address').value || '-' }}</span>
             </div>
           </div>
 
@@ -93,7 +93,7 @@
                   type="text"
                   formControlName="evmAddress"
                   placeholder="{{ eWalletType.EVM }}..."
-                  class="input-address px-4"
+                  class="input-address px-4 convert-address"
                   (input)="isError = false"
                   (blur)="changeAddress('evmAddress')"
                   autocomplete="off" />
@@ -108,7 +108,7 @@
                   <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
                 </button>
               </div>
-              <span *ngIf="isEditMode">{{ watchlistForm.get('evmAddress').value }}</span>
+              <span *ngIf="isEditMode">{{ watchlistForm.get('evmAddress').value || '-' }}</span>
             </div>
           </div>
 

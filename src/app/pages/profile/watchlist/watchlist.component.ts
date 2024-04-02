@@ -16,9 +16,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
-import {
-  transferAddress
-} from 'src/app/core/utils/common/address-converter';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
@@ -126,6 +124,12 @@ export class WatchListComponent implements OnInit, OnDestroy {
             );
             data.cosmosAddress = accountAddress;
             data.evmAddress = accountEvmAddress;
+
+            const nameTag = this.nameTagService.findNameTag(data.address);
+            if (nameTag) {
+              data.publicNameTag = nameTag['name_tag'];
+              data.privateNameTag = nameTag['name_tag_private'];
+            }
           });
         }
         this.dataSource.data = [...res.data];
@@ -238,7 +242,7 @@ export class WatchListComponent implements OnInit, OnDestroy {
     let linkAddress = address;
     if (data.type === 'contract') {
       result = data?.evmAddress ? '/evm-contracts/' : '/contracts/';
-      linkAddress = data?.evmAddress;
+      linkAddress = data?.evmAddress || linkAddress;
     }
     return [result, linkAddress];
   }

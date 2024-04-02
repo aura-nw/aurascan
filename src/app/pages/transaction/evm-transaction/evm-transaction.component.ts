@@ -29,6 +29,7 @@ export class EvmTransactionComponent implements OnChanges {
     gasUsed: string;
     gas_limit: string;
     code: CodeTransaction;
+    symbol: string;
     fee: string;
     memo: string;
     type: string;
@@ -116,13 +117,15 @@ export class EvmTransactionComponent implements OnChanges {
   }
 
   checkEvmContract() {
-    this.contractService.findEvmContract(this.transaction.to).subscribe({
-      next: (res) => {
-        if (res?.evm_smart_contract?.length > 0) {
-          this.isEvmContract = true;
-        }
-      },
-    });
+    if (this.transaction?.to) {
+      this.contractService.findEvmContract(this.transaction.to).subscribe({
+        next: (res) => {
+          if (res?.evm_smart_contract?.length > 0) {
+            this.isEvmContract = true;
+          }
+        },
+      });
+    }
   }
 
   parseEvmTx(tx: unknown): typeof this.transaction {
@@ -160,10 +163,11 @@ export class EvmTransactionComponent implements OnChanges {
       gasWanted: _.get(tx, 'gas_wanted'),
       gas_limit: _.get(tx, 'gas_limit'),
       memo: _.get(tx, 'memo'),
-      amount: getBalance(_.get(tx, 'evm_transaction.value'), this.coinInfo.coinDecimals),
+      symbol: _.get(tx, 'evm_transaction.erc20_activities[0].erc20_contract.symbol'),
+      amount: getBalance(_.get(tx, 'evm_transaction.erc20_activities[0].amount') || 0, this.coinInfo.coinDecimals),
       fee: getBalance(_.get(tx, 'fee[0].amount'), this.coinInfo.coinDecimals),
       from: _.get(tx, 'evm_transaction.from'),
-      to: _.get(txMessage, 'content.data.to'),
+      to: _.get(tx, 'evm_transaction.to'),
       type: _.get(txMessage, 'content.@type'),
       inputData: _.get(tx, 'evm_transaction.data'),
       eventLog: evm_events,

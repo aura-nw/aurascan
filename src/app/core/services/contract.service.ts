@@ -6,11 +6,12 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
-import { SmartContractListReq } from 'src/app/core/models/contract.model';
+import { ContractType, SmartContractListReq } from 'src/app/core/models/contract.model';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { ContractRegisterType, EvmContractRegisterType } from '../constants/contract.enum';
 import { EWalletType } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
+import { transferAddress } from '../utils/common/address-converter';
 import { CommonService } from './common.service';
 import { NameTagService } from './name-tag.service';
 
@@ -169,27 +170,24 @@ export class ContractService extends CommonService {
   }) {
     const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
     if (addressNameTag?.length > 0) {
-      keyword = addressNameTag;
+      const { accountAddress, accountEvmAddress } = transferAddress(
+        this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
+        addressNameTag,
+      );
+      keyword = accountEvmAddress;
     }
 
     let address;
-    let creator;
-    if (this.isValidContract(keyword)) {
-      address = keyword;
-    } else if (this.isValidAddress(keyword)) {
-      creator = keyword;
-    } else if (keyword.startsWith(EWalletType.EVM) && keyword.length === LENGTH_CHARACTER.EVM_ADDRESS) {
+    if (keyword?.startsWith(EWalletType.EVM) && keyword?.length === LENGTH_CHARACTER.EVM_ADDRESS) {
       // check 0x
       address = keyword?.toLowerCase();
     } else if (keyword?.length > 0) {
       return of(null);
     }
 
-    let typeQuery = '';
+    let typeQuery = '_or: [{address: {_eq: $address}}, {creator: {_eq: $address}}]';
     if (contractType?.length > 0) {
       if (contractType?.includes('Others')) {
-        contractType = contractType.filter((k) => k != 'Others');
-        typeQuery = '_or: [{type: {_is_null:true}}, {type: {_in :[' + contractType + ']}}] ,';
         contractType = contractType.filter((k) => k != 'Others');
         const listDefault = [
           EvmContractRegisterType.ERC20,
@@ -197,22 +195,18 @@ export class ContractService extends CommonService {
           EvmContractRegisterType.ERC1155,
         ];
         const listNotIn = _.pull([...listDefault.map((item) => item)], ...contractType);
-        typeQuery = '_or: [{type: {_is_null:true}}, {type: {_nin :[' + listNotIn + ']}}] ,';
+        typeQuery = '_or: [{type: {_is_null:true}}, {type: {_nin :[' + listNotIn + ']}}], _and: {' + typeQuery + '}';
       } else {
-        typeQuery = 'type: {_in: [' + contractType + ']},';
+        typeQuery = 'type: {_in: [' + contractType + ']},' + typeQuery;
       }
     }
 
     const operationsDoc = `
-    query EvmSmartContractList($limit: Int = 100, $offset: Int = 0, $address: String = null, $creator: String =null) {
+    query EvmSmartContractList($limit: Int = 100, $offset: Int = 0, $address: String = null) {
       ${this.envDB} {
-        evm_smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        evm_smart_contract(limit: $limit, offset: $offset, order_by: {updated_at: desc}, where: {${typeQuery} }) {
           address
-          created_at
-          created_hash
-          created_height
           creator
-          id
           type
           updated_at
           erc20_contract {
@@ -223,7 +217,7 @@ export class ContractService extends CommonService {
             status
           }
         }
-        evm_smart_contract_aggregate(where: {${typeQuery} address: {_eq: $address}, creator: {_eq: $creator}}) {
+        evm_smart_contract_aggregate(where: {${typeQuery}}) {
           aggregate {
             count
           }
@@ -237,7 +231,6 @@ export class ContractService extends CommonService {
         variables: {
           limit: limit,
           offset: offset,
-          creator: creator,
           address: address,
         },
         operationName: 'EvmSmartContractList',
@@ -348,16 +341,18 @@ export class ContractService extends CommonService {
           code_hash
           contract_address
           creator_tx_hash
+          compiler_version
+          compile_detail
+          contract_name
         }
       }
     }
-    
     `;
     return this.http
       .post<any>(this.graphUrl, {
         query: contractDoc,
         variables: {
-          address,
+          address: address?.toLowerCase(),
         },
         operationName: 'EVMContractDetail',
       })
@@ -593,9 +588,9 @@ export class ContractService extends CommonService {
     const query = `query VerifyEvmContractStatus($address: String = "", $id: Int = 10) {
       ${this.envDB} {
         evm_contract_verification(where: {contract_address: {_eq: $address}, id: {_eq: $id}}) {
-          status         
+          status
           contract_address
-        
+          compile_detail
         }
       }
     }
@@ -616,7 +611,7 @@ export class ContractService extends CommonService {
     const query = `query ProxyContractDetail($address: String = "") {
       ${this.envDB} {
         evm_smart_contract(where: {address: {_eq: $address}}) {
-          evm_proxy_histories(order_by: {block_height: desc}) {
+          evm_proxy_histories(order_by: {block_height: desc}, where: {implementation_contract: {_is_null: false}}) {
             proxy_contract
             implementation_contract
             block_height
@@ -635,5 +630,87 @@ export class ContractService extends CommonService {
         operationName: 'ProxyContractDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  queryTokenByContractAddress(address: string) {
+    if (address.toLowerCase() == this.environmentService.coinMinimalDenom) {
+      return of({
+        type: 'NATIVE',
+        address,
+      });
+    }
+
+    if (address.length == LENGTH_CHARACTER.IBC) {
+      return of({
+        type: 'IBC',
+        address,
+      });
+    }
+
+    let type: ContractType = address.startsWith('0x') ? 'EVM' : 'COSMOS';
+
+    const smartContract =
+      type == 'COSMOS'
+        ? `
+        smart_contract(where: {address: {_eq: $address}}) {
+          address
+          name
+          cw20_contract {
+            symbol
+          }
+          cw721_contract {
+            symbol
+          }
+        }
+        `
+        : `
+        evm_smart_contract(where: {address: {_eq: $address}}) {
+          id
+          address
+          erc20_contract {
+            symbol
+            address
+          }
+        }
+        `;
+
+    const query = `query TokenByContractAddress($address: String = "") {
+      ${this.envDB} {
+        ${smartContract}        
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query,
+        variables: {
+          address: address?.toLowerCase(),
+        },
+        operationName: 'TokenByContractAddress',
+      })
+      .pipe(
+        map((res) => (res?.data ? res?.data[this.envDB] : null)),
+        map((x) => {
+          if (type == 'COSMOS') {
+            type = _.get(x, 'smart_contract[0].cw20_contract.symbol') ? 'CW20' : type;
+            type = _.get(x, 'smart_contract[0].cw721_contract.symbol') ? 'CW721' : type;
+
+            if (type == 'CW721') {
+              type = _.get(x, 'smart_contract[0].name') == 'crates.io:cw4973' ? 'CW4973' : type;
+            }
+          } else {
+            type = _.get(x, 'evm_smart_contract[0].erc20_contract.address') ? 'ERC20' : type;
+            type = _.get(x, 'evm_smart_contract[0].erc721_contract.address') ? 'ERC721' : type;
+          }
+
+          return type == 'EVM' || type == 'COSMOS'
+            ? null
+            : {
+                type,
+                address,
+              };
+        }),
+      );
   }
 }
