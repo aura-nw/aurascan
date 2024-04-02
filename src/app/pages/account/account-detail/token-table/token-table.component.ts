@@ -9,7 +9,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { convertEvmAddressToBech32Address } from 'src/app/core/utils/common/address-converter';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
@@ -96,10 +96,13 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
+    const { accountAddress } = transferAddress(this.chainInfo.bech32Config.bech32PrefixAccAddr, this.address);
+
     const payload = {
-      account_address: convertEvmAddressToBech32Address(this.chainInfo.bech32Config.bech32PrefixAccAddr, this.address),
+      account_address: accountAddress?.toLowerCase(),
       keyword: this.textSearch,
     };
+
     if (this.dataTable?.length > 0) {
       let searchList;
       // Filter type token

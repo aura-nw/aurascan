@@ -113,6 +113,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
           this.chainInfo.bech32Config.bech32PrefixAccAddr,
           params?.address,
         );
+
         this.currentUrlAddress = params?.address;
         this.accountAddress = accountAddress;
         this.accountEvmAddress = accountEvmAddress;
@@ -232,6 +233,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   getSBTPick() {
+    if (!this.accountAddress) {
+      return;
+    }
+
     const payload = {
       limit: 100,
       offset: 0,
@@ -249,13 +254,11 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   getTotalSBT() {
-    this.soulboundService.countTotalABT(this.accountAddress).subscribe(
-      (res) => {
+    if (this.accountAddress) {
+      this.soulboundService.countTotalABT(this.accountAddress).subscribe((res) => {
         this.totalSBT = res.data;
-      },
-      () => {},
-      () => {},
-    );
+      });
+    }
   }
 
   checkWatchList() {

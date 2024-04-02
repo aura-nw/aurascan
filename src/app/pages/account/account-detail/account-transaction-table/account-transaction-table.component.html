@@ -486,23 +486,31 @@
                           *ngIf="index < data.limit">
                           <div class="item-show d-flex justify-content-between align-items-center">
                             <app-name-tag
-                              [value]="item.fromAddress || currentAddress"
+                              [value]="item.fromAddress || currentAddress | appEvmAddress"
                               [iconContract]="item.fromAddress || currentAddress | isContract"
                               [linkRouter]="[
                                 (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
-                                item.fromAddress || currentAddress
+                                item.fromAddress || currentAddress | appEvmAddress
                               ]"
                               [isEnableRouter]="
                                 !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                item.fromAddress !== currentAddress
+                                item.fromAddress?.toLowerCase() !== currentAddress?.toLowerCase()
                               ">
                             </app-name-tag>
                             <div class="box-token-transfer d-flex mr-8">
                               <span
                                 class="token-transfer-status d-inline-flex align-items-center caption"
-                                [ngClass]="{ 'status-out': item['toAddress'] !== currentAddress }">
-                                <ng-container *ngIf="item['toAddress'] === currentAddress"> IN </ng-container>
-                                <ng-container *ngIf="item['toAddress'] !== currentAddress"> OUT </ng-container>
+                                [ngClass]="{
+                                  'status-out': item['toAddress']?.toLowerCase() !== currentAddress?.toLowerCase()
+                                }">
+                                <ng-container
+                                  *ngIf="item['toAddress']?.toLowerCase() === currentAddress?.toLowerCase()">
+                                  IN
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="item['toAddress']?.toLowerCase() !== currentAddress?.toLowerCase()">
+                                  OUT
+                                </ng-container>
                               </span>
                             </div>
                           </div>
@@ -546,7 +554,7 @@
                                 [iconContract]="item.toAddress || currentAddress | isContract"
                                 [isEnableRouter]="
                                   !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                  item.toAddress !== currentAddress
+                                  item.toAddress?.toLowerCase() !== currentAddress?.toLowerCase()
                                 ">
                               </app-name-tag>
                             </div>
@@ -577,15 +585,15 @@
                       <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">
                         <app-name-tag
                           *ngIf="data[template.matColumnDef]"
-                          [value]="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef] | appEvmAddress"
                           [linkRouter]="[
                             (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
-                            data[template.matColumnDef]
+                            data[template.matColumnDef] | appEvmAddress
                           ]"
                           [iconContract]="data[template.matColumnDef] | isContract"
                           [isEnableRouter]="
                             !data[template.matColumnDef]?.startsWith('Null') &&
-                            data[template.matColumnDef] !== currentAddress
+                            data[template.matColumnDef]?.toLowerCase() !== currentAddress?.toLowerCase()
                           ">
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
@@ -599,15 +607,15 @@
                             <div class="item-show d-flex align-items-center">
                               <div [style]="'min-width: 148px'">
                                 <app-name-tag
-                                  [value]="item.to || currentAddress"
+                                  [value]="item.to || currentAddress | appEvmAddress"
                                   [linkRouter]="[
                                     (item.to || currentAddress | isContract) ? '/contracts' : '/address',
-                                    item.to || currentAddress
+                                    item.to || currentAddress | appEvmAddress
                                   ]"
                                   [iconContract]="item.to || currentAddress | isContract"
                                   [isEnableRouter]="
                                     !(item.to?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                    item.to !== currentAddress
+                                    item.to?.toLowerCase() !== currentAddress?.toLowerCase()
                                   ">
                                 </app-name-tag>
                               </div>
@@ -639,23 +647,29 @@
                             *ngIf="index < data.limit">
                             <div class="item-show d-flex justify-content-between align-items-center">
                               <app-name-tag
-                                [value]="item.from || currentAddress"
+                                [value]="item.from || currentAddress | appEvmAddress"
                                 [iconContract]="item.from || currentAddress | isContract"
                                 [linkRouter]="[
                                   (item.from || currentAddress | isContract) ? '/contracts' : '/address',
-                                  item.from || currentAddress
+                                  item.from || currentAddress | appEvmAddress
                                 ]"
                                 [isEnableRouter]="
                                   !(item.from?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                  item.from !== currentAddress
+                                  item.from?.toLowerCase() !== currentAddress?.toLowerCase()
                                 ">
                               </app-name-tag>
                               <div class="box-token-transfer d-flex mr-8">
                                 <span
                                   class="token-transfer-status d-inline-flex align-items-center caption"
-                                  [ngClass]="{ 'status-out': item['to'] !== currentAddress }">
-                                  <ng-container *ngIf="item['to'] === currentAddress"> IN </ng-container>
-                                  <ng-container *ngIf="item['to'] !== currentAddress"> OUT </ng-container>
+                                  [ngClass]="{
+                                    'status-out': item['to']?.toLowerCase() !== currentAddress?.toLowerCase()
+                                  }">
+                                  <ng-container *ngIf="item['to']?.toLowerCase() === currentAddress?.toLowerCase()">
+                                    IN
+                                  </ng-container>
+                                  <ng-container *ngIf="item['to']?.toLowerCase() !== currentAddress?.toLowerCase()">
+                                    OUT
+                                  </ng-container>
                                 </span>
                               </div>
                             </div>
@@ -750,9 +764,9 @@
                             <div class="mt-1">
                               <app-name-tag
                                 [iconContract]="true"
-                                [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
+                                [linkRouter]="['/contracts', item.contractAddress || currentAddress | appEvmAddress]"
                                 [isShorterText]="true"
-                                [value]="item.contractAddress"
+                                [value]="item.contractAddress | appEvmAddress"
                                 [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                             </div>
                           </div>

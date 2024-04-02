@@ -8,7 +8,7 @@
         width="22px"
         height="18px"
         (click)="changeMode(screenType.Login)"
-        *ngIf="mode !== screenType.Login" />
+        *ngIf="mode !== screenType.Login"/>
       <div class="mb-0 text--white w-100" *ngIf="mode === screenType.Login">Log in to AuraScan</div>
       <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Register">Register to AuraScan</div>
       <div class="mb-0 text--white w-100 ml-4" *ngIf="mode === screenType.Forgot">Forgot password</div>
@@ -26,12 +26,12 @@
                 alt=""
                 [ngStyle]="{ 'margin-top': '2px' }"
                 width="16px"
-                height="16px" />
+                height="16px"/>
             </div>
             <div>
               <ng-container *ngIf="errorCode === 'EU001' && (mode === screenType.Login || mode === screenType.Forgot)">
                 <ng-container *ngIf="i === 0">
-                  Please click on the verification link sent to your mail to complete the registration process.<br />
+                  Please click on the verification link sent to your mail to complete the registration process.<br/>
                   In case you've not yet received any email.
                   <a (click)="resendMail()" class="text--primary cursor-pointer">Resend</a>
                 </ng-container>
@@ -61,7 +61,7 @@
       autocomplete="off">
       <ng-container *ngIf="mode === screenType.Forgot">
         <div class="text-center mb-6">
-          <img [src]="'assets/images/pages/key_left.png' | imageS3" />
+          <img [src]="'assets/images/pages/key_left.png' | imageS3"/>
           <div class="body-01 text--gray-2 mt-6">
             Kindly enter the email linked to your account, we'll send you a link to reset password
           </div>
@@ -81,8 +81,8 @@
                 placeholder="Enter your email"
                 class="input-email"
                 name="inputEmail"
-                (blur)="checkEmail = true; isError = false"
-                autocomplete="off" />
+                (blur)="changeEmail()"
+                autocomplete="off"/>
             </div>
             <div
               *ngIf="getEmail.errors?.pattern && getEmail.touched && getEmail.dirty"
@@ -102,9 +102,9 @@
                 [type]="hidePassword ? 'password' : 'text'"
                 placeholder="Enter your password"
                 formControlName="password"
-                (blur)="checkPassword = true; isError = false"
+                (blur)="changePass()"
                 name="inputEmail"
-                autocomplete="off" />
+                autocomplete="off"/>
               <i
                 class="pr-4 hidden-icon cursor-pointer ph-bold  {{ hidePassword ? 'ph-eye-slash' : 'ph-fill ph-eye' }}"
                 (click)="hidePassword = !hidePassword"></i>
@@ -138,7 +138,7 @@
                   placeholder="Re-enter your password"
                   formControlName="confirmPassword"
                   name="inputConfirmEmail"
-                  autocomplete="off" />
+                  autocomplete="off"/>
                 <i
                   class="pr-4 hidden-icon cursor-pointer ph-bold  {{
                     hideConfirmPassword ? 'ph-eye-slash' : 'ph-fill ph-eye'
@@ -179,7 +179,7 @@
           <div class="mt-4 body-01">
             <span class="text--gray-4">Don’t have an account?</span>
             <a class="text--primary fw-semibold ml-2 cursor-pointer" (click)="changeMode(screenType.Register)"
-              >Register</a
+            >Register</a
             >
           </div>
           <ng-container *ngIf="!environmentService.isNativeApp">
@@ -209,7 +209,7 @@
           <div class="mt-lg-6 body-mob {{!environmentService.isNativeApp ? 'mt-4' : 'mt-6'}}">
             <span class="body-02">By continuing, you agree to our</span>
             <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms"
-              >Terms and Conditions</a
+            >Terms and Conditions</a
             >
           </div>
         </div>
@@ -230,7 +230,7 @@
         <div class="mt-lg-6 mt-4 body-mob text-center text--gray-4">
           <span class="body-02">By continuing, you agree to our</span>
           <a class="text--primary fw-semibold cursor-pointer body-02 ml-1" target="_blank" routerLink="/terms"
-            >Terms and Conditions</a
+          >Terms and Conditions</a
           >
         </div>
       </ng-container>
@@ -251,7 +251,7 @@
 </div>
 
 <div *ngIf="mode === screenType.Welcome" class="card-welcome text-center">
-  <img class="img-welcome" [src]="'assets/images/pages/planet.png' | imageS3" />
+  <img class="img-welcome" [src]="'assets/images/pages/planet.png' | imageS3"/>
   <div class="title-welcome">Welcome to AuraScan</div>
   <span class="body-01 text--gray-2">
     Congratulation! You have successfully registered an account. Please Login in to your account and experience the
@@ -265,18 +265,18 @@
 </div>
 
 <div *ngIf="mode === screenType.Verify" class="card-verify text-center text--gray-4 mt-6">
-  <img class="mb-6" [src]="'assets/images/pages/rocket.png' | imageS3" *ngIf="!isForgotScreen" />
-  <img class="mb-6" [src]="'assets/images/pages/planet-2.png' | imageS3" *ngIf="isForgotScreen" />
+  <img class="mb-6" [src]="'assets/images/pages/rocket.png' | imageS3" *ngIf="!isForgotScreen"/>
+  <img class="mb-6" [src]="'assets/images/pages/planet-2.png' | imageS3" *ngIf="isForgotScreen"/>
   <div class="title-verify w-100">
     {{ !isForgotScreen ? 'Email verification' : 'Password recovery' }}
   </div>
   <div class="body-01 text--gray-2">
     <ng-container *ngIf="!isForgotScreen">
-      <span>A verification link has been sent to {{ emailFormat }}.</span><br />
+      <span>A verification link has been sent to {{ emailFormat }}.</span><br/>
       <span>Please click on the link to verify your email account.</span>
     </ng-container>
     <ng-container *ngIf="isForgotScreen">
-      A password reset link has been sent to {{ emailFormat }}.<br />
+      A password reset link has been sent to {{ emailFormat }}.<br/>
       Please click on the link to change your password.
     </ng-container>
   </div>

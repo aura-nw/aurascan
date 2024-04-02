@@ -249,7 +249,7 @@ export class BlockDetailComponent implements OnInit {
         return {
           ...tx,
           tx_hash: _.get(tx, 'evm_transaction.hash'),
-          method: type ? type : 'Transfer',
+          method: type,
           from: _.get(tx, 'evm_transaction.from'),
           to: _.get(tx, 'evm_transaction.to'),
           amount: _.get(tx, 'transaction_messages[0].content.data.value') || 0,

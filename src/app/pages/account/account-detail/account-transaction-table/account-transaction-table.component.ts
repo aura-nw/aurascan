@@ -25,6 +25,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import {
   convertBech32AddressToEvmAddress,
   convertEvmAddressToBech32Address,
+  transferAddress,
 } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
@@ -165,14 +166,14 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
-        this.addressNative = convertEvmAddressToBech32Address(
+        const { accountAddress, accountEvmAddress } = transferAddress(
           this.chainInfo.bech32Config.bech32PrefixAccAddr,
           this.currentAddress,
         );
-        this.addressEvm = convertBech32AddressToEvmAddress(
-          this.chainInfo.bech32Config.bech32PrefixAccAddr,
-          this.addressNative,
-        );
+
+        this.addressNative = accountAddress;
+        this.addressEvm = accountEvmAddress;
+
         this.transactionLoading = true;
 
         this.dataSource = new MatTableDataSource();
@@ -365,18 +366,15 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
     switch (this.modeQuery) {
       case TabsAccountLink.ExecutedTxs:
-        this.currentAddress = this.addressNative;
+        payload.address = this.currentAddress = this.addressNative;
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesExecute;
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
-        payload.address = convertEvmAddressToBech32Address(
-          this.chainInfo.bech32Config.bech32PrefixAccAddr,
-          payload.address,
-        );
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.EVMExecutedTxs:
-        this.currentAddress = this.addressEvm;
+        this.currentAddress = this.addressEvm
+        payload.address = this.addressEvm?.toLowerCase();
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesEvmExecute;
         this.displayedColumns = this.templatesEvmExecute.map((dta) => dta.matColumnDef);
@@ -452,7 +450,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListTxByAddress(payload) {
-    payload['address'] = [this.addressNative, this.addressEvm];
     this.userService.getListTxByAddress(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
@@ -472,7 +469,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListEvmTxByAddress(payload) {
-    payload['address'] = [this.addressNative, this.addressEvm];
     this.userService.getListEvmTxByAddress(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
@@ -585,7 +581,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           const type = _.get(element, 'data')?.substring(0, 8);
           element.tx_hash = _.get(element, 'hash');
           element.hash = _.get(element, 'transaction.hash');
-          element.method = type ? type : 'Transfer';
+          element.method = type;
           element.from = _.get(element, 'from');
           element.to = _.get(element, 'to');
           element.timestamp = _.get(element, 'transaction.timestamp');
@@ -599,7 +595,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             element.timestamp = _.get(element, 'transaction.timestamp');
             element.arrEvent = _.get(element, 'erc20_activities')?.map((item, index) => {
               const type = _.get(element, 'data')?.substring(0, 8);
-              element.method = type ? type : 'Transfer';
+              element.method = type;
               let from = _.get(item, 'from') || NULL_ADDRESS;
               let to = _.get(item, 'to') || NULL_ADDRESS;
               let denom = _.get(item, 'erc20_contract.symbol');
