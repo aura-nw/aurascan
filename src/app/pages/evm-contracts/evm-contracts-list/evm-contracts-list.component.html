@@ -139,6 +139,13 @@
                         [tooltipPosition]="'tooltip--right'"></app-name-tag>
                       <span *ngIf="!data[template.matColumnDef]">-</span>
                     </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      {{
+                        (template.isShort
+                          ? (data[template.matColumnDef] | ellipsis: 8 : 8)
+                          : data[template.matColumnDef]) || '-'
+                      }}
+                    </ng-container>
                   </ng-container>
                 </td>
               </ng-container>
