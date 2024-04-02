@@ -11,11 +11,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
-import {
-  convertBech32AddressToEvmAddress,
-  convertEvmAddressToBech32Address,
-  transferAddress,
-} from 'src/app/core/utils/common/address-converter';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
@@ -154,12 +150,11 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
     // send both evm + native address for execute + evm execute
     if (this.dataType === this.TabsAccountLink.ExecutedTxs || this.dataType === this.TabsAccountLink.EVMExecutedTxs) {
-      const addressNative = convertEvmAddressToBech32Address(this.chainInfo.bech32Config.bech32PrefixAccAddr, address);
-      const evmAddress = convertBech32AddressToEvmAddress(
+      const { accountAddress, accountEvmAddress } = transferAddress(
         this.chainInfo.bech32Config.bech32PrefixAccAddr,
-        addressNative,
+        address,
       );
-      address = `${addressNative},${evmAddress}`;
+      address = `${accountAddress},${accountEvmAddress}`;
     }
 
     let payload = {

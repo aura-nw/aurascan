@@ -12,7 +12,7 @@
           <div class="d-block d-lg-inline">
             {{ eventLog.contractName }}
           </div>
-          <span>{{ eventLog.address }}</span>
+          <span>{{ eventLog.address | appEvmAddress }}</span>
         </div>
       </div>
     </div>

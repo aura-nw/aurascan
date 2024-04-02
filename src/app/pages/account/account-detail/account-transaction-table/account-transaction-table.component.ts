@@ -25,6 +25,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import {
   convertBech32AddressToEvmAddress,
   convertEvmAddressToBech32Address,
+  transferAddress,
 } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
@@ -165,14 +166,14 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
-        this.addressNative = convertEvmAddressToBech32Address(
+        const { accountAddress, accountEvmAddress } = transferAddress(
           this.chainInfo.bech32Config.bech32PrefixAccAddr,
           this.currentAddress,
         );
-        this.addressEvm = convertBech32AddressToEvmAddress(
-          this.chainInfo.bech32Config.bech32PrefixAccAddr,
-          this.addressNative,
-        );
+
+        this.addressNative = accountAddress;
+        this.addressEvm = accountEvmAddress;
+
         this.transactionLoading = true;
 
         this.dataSource = new MatTableDataSource();
@@ -452,7 +453,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListTxByAddress(payload) {
-    payload['address'] = [this.addressNative, this.addressEvm];
+    payload['address'] = [this.addressNative, this.addressEvm?.toLowerCase()];
     this.userService.getListTxByAddress(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
@@ -472,7 +473,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListEvmTxByAddress(payload) {
-    payload['address'] = [this.addressNative, this.addressEvm];
+    payload['address'] = [this.addressNative, this.addressEvm?.toLowerCase()];
     this.userService.getListEvmTxByAddress(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);

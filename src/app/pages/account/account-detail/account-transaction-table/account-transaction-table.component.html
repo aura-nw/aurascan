@@ -486,11 +486,11 @@
                           *ngIf="index < data.limit">
                           <div class="item-show d-flex justify-content-between align-items-center">
                             <app-name-tag
-                              [value]="item.fromAddress || currentAddress"
+                              [value]="item.fromAddress || currentAddress | appEvmAddress"
                               [iconContract]="item.fromAddress || currentAddress | isContract"
                               [linkRouter]="[
                                 (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
-                                item.fromAddress || currentAddress
+                                item.fromAddress || currentAddress | appEvmAddress
                               ]"
                               [isEnableRouter]="
                                 !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
@@ -577,10 +577,10 @@
                       <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">
                         <app-name-tag
                           *ngIf="data[template.matColumnDef]"
-                          [value]="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef] | appEvmAddress"
                           [linkRouter]="[
                             (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
-                            data[template.matColumnDef]
+                            data[template.matColumnDef] | appEvmAddress
                           ]"
                           [iconContract]="data[template.matColumnDef] | isContract"
                           [isEnableRouter]="
@@ -599,10 +599,10 @@
                             <div class="item-show d-flex align-items-center">
                               <div [style]="'min-width: 148px'">
                                 <app-name-tag
-                                  [value]="item.to || currentAddress"
+                                  [value]="item.to || currentAddress | appEvmAddress"
                                   [linkRouter]="[
                                     (item.to || currentAddress | isContract) ? '/contracts' : '/address',
-                                    item.to || currentAddress
+                                    item.to || currentAddress | appEvmAddress
                                   ]"
                                   [iconContract]="item.to || currentAddress | isContract"
                                   [isEnableRouter]="
@@ -750,9 +750,9 @@
                             <div class="mt-1">
                               <app-name-tag
                                 [iconContract]="true"
-                                [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
+                                [linkRouter]="['/contracts', item.contractAddress || currentAddress | appEvmAddress]"
                                 [isShorterText]="true"
-                                [value]="item.contractAddress"
+                                [value]="item.contractAddress | appEvmAddress"
                                 [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                             </div>
                           </div>

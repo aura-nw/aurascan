@@ -227,8 +227,8 @@ export class UserService {
         query: operationsDoc,
         variables: {
           limit: payload.limit || 100,
-          from: payload.from,
-          to: payload.to,
+          from: payload.from?.toLowerCase(),
+          to: payload.to?.toLowerCase(),
           height_lt: payload.heightLT,
           msg_types_in: payload.listTxMsgTypeNotIn?.length > 0 ? null : payload.listTxMsgType,
           msg_types_nin: payload.listTxMsgTypeNotIn,
@@ -347,8 +347,8 @@ export class UserService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          from: payload.sender,
-          to: payload.receiver,
+          from: payload.sender?.toLowerCase(),
+          to: payload.receiver?.toLowerCase(),
           startTime: payload.startTime,
           endTime: payload.endTime,
           heightLT: payload.heightLT,
@@ -421,8 +421,8 @@ export class UserService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          sender: payload.sender,
-          receiver: payload.receiver,
+          sender: payload.sender?.toLowerCase(),
+          receiver: payload.receiver?.toLowerCase(),
           startTime: payload.startTime,
           endTime: payload.endTime,
           heightLT: payload.heightLT,
