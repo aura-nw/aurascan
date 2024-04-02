@@ -639,11 +639,11 @@
                             *ngIf="index < data.limit">
                             <div class="item-show d-flex justify-content-between align-items-center">
                               <app-name-tag
-                                [value]="item.from || currentAddress"
+                                [value]="item.from || currentAddress | appEvmAddress"
                                 [iconContract]="item.from || currentAddress | isContract"
                                 [linkRouter]="[
                                   (item.from || currentAddress | isContract) ? '/contracts' : '/address',
-                                  item.from || currentAddress
+                                  item.from || currentAddress | appEvmAddress
                                 ]"
                                 [isEnableRouter]="
                                   !(item.from?.startsWith('Null') || currentAddress?.startsWith('Null')) &&

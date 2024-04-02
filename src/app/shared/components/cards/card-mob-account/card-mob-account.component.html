@@ -79,25 +79,28 @@
               </span>
               <ng-container *ngIf="!(item['address'] | nameTagTooltipPipe)">
                 <app-name-tag
-                  [value]="item['address']"
+                  [value]="item['address'] | appEvmAddress"
                   [isEnableRouter]="!item['address']?.startsWith('Null')"
                   [linkRouter]="[
                     (item['address'] || item['toAddress'] | isContract) ? '/contracts' : '/address',
-                    item['address'] || item['toAddress']
+                    item['address'] || item['toAddress'] | appEvmAddress
                   ]"
                   [maxCharacter]="10"></app-name-tag>
               </ng-container>
-              <div [copyBtn]="item['address']" [btnClass]="['pl-2']" *ngIf="item['address'] | nameTagTooltipPipe">
+              <div
+                [copyBtn]="item['address'] | appEvmAddress"
+                [btnClass]="['pl-2']"
+                *ngIf="item['address'] | nameTagTooltipPipe">
                 <a
                   *ngIf="!item['address']?.startsWith('Null')"
                   class="text--primary cursor-pointer block-link caption fw-normal"
                   [routerLink]="[(item['address'] | isContract) ? '/contracts' : '/address', item['address']]">
-                  {{ item['address'] | ellipsis: 5 : 5 }}
+                  {{ item['address'] | appEvmAddress | ellipsis: 5 : 5 }}
                 </a>
                 <span
                   *ngIf="item['address']?.startsWith('Null') || currentAddress?.startsWith('Null')"
                   class="caption fw-normal">
-                  {{ (item['address'] | ellipsis: 6 : 6) || '-' }}
+                  {{ (item['address'] | appEvmAddress | ellipsis: 6 : 6) || '-' }}
                 </span>
               </div>
             </div>
@@ -152,7 +155,7 @@
               <i
                 [style]="'margin-top: 2px'"
                 class="ph-arrow-square-out-fill body-01-mob cursor-pointer mr-1 ml-2"
-                [routerLink]="['/token', item.contractAddress, item.tokenId]"></i>
+                [routerLink]="['/token', item.contractAddress | appEvmAddress, item.tokenId]"></i>
             </div>
           </div>
         </div>
@@ -225,9 +228,9 @@
               </span>
               <ng-container>
                 <app-name-tag
-                  [value]="evmAddress === item.to ? item.from : item.to"
+                  [value]="(evmAddress === item.to ? item.from : item.to) | appEvmAddress"
                   [isEnableRouter]="!evmAddress?.startsWith('Null')"
-                  [linkRouter]="[(evmAddress | isContract) ? '/contracts' : '/address', evmAddress]"
+                  [linkRouter]="[(evmAddress | isContract) ? '/contracts' : '/address', evmAddress | appEvmAddress]"
                   [maxCharacter]="10"
                   [isShorterText]="true"></app-name-tag>
               </ng-container>
@@ -266,7 +269,7 @@
               </div>
             </div>
             <div>
-              <span [appLinkDenom]="item.contractAddress">{{ item.denom }}</span>
+              <span [appLinkDenom]="item.contractAddress | appEvmAddress">{{ item.denom }}</span>
             </div>
           </div>
         </ng-container>

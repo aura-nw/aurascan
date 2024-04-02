@@ -67,11 +67,15 @@ export class NameTagService extends CommonService {
     let address = '';
     if (this.listNameTag?.length > 0) {
       if (userEmail) {
-        address = this.listNameTag?.find((k) => k.name_tag_private?.trim() === nameTag?.trim())?.address || '';
+        address =
+          this.listNameTag?.find((k) => k.name_tag_private?.toLowerCase()?.trim() === nameTag?.toLowerCase()?.trim())
+            ?.address || '';
       }
 
       if (!address) {
-        address = this.listNameTag?.find((k) => k.name_tag?.trim() === nameTag?.trim())?.address || '';
+        address =
+          this.listNameTag?.find((k) => k.name_tag?.toLowerCase()?.trim() === nameTag?.toLowerCase()?.trim())
+            ?.address || '';
       }
     }
     return address;
@@ -98,7 +102,7 @@ export class NameTagService extends CommonService {
 
   checkDisplayTooltip(address: string): boolean {
     const nameTag = this.findNameTag(address);
-    return !nameTag || nameTag?.name_tag === address;
+    return !nameTag || nameTag?.name_tag?.toLowerCase() === address?.toLowerCase();
   }
 
   findNameTag(address) {
@@ -110,7 +114,11 @@ export class NameTagService extends CommonService {
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
-    const nameTag = this.listNameTag?.find((k) => k.address === accountAddress || k.address === accountEvmAddress);
+    const nameTag = this.listNameTag?.find(
+      (k) =>
+        k.address?.toLowerCase() === accountAddress?.toLowerCase() ||
+        k.address?.toLowerCase() === accountEvmAddress?.toLowerCase(),
+    );
     return nameTag;
   }
 }
