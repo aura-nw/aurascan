@@ -1,18 +1,18 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { transferAddress } from 'src/app/core/utils/common/address-converter';
-import { isSafari } from 'src/app/core/utils/common/validation';
-import { CommonService } from 'src/app/core/services/common.service';
+import {TranslateService} from '@ngx-translate/core';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {WatchListService} from 'src/app/core/services/watch-list.service';
+import {transferAddress} from 'src/app/core/utils/common/address-converter';
+import {isSafari} from 'src/app/core/utils/common/validation';
+import {CommonService} from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -101,7 +101,8 @@ export class PopupWatchlistComponent implements OnInit {
     private watchListService: WatchListService,
     private commonService: CommonService,
     private nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.isSafari = isSafari();
@@ -142,7 +143,7 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm = this.fb.group({
       favorite: false,
       tracking: true,
-      isAccount: [undefined, [Validators.required]],
+      isAccount: [null, [Validators.required]],
       address: [''],
       evmAddress: ['', [Validators.required]],
       note: ['', [Validators.maxLength(200)]],
@@ -178,7 +179,7 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   handleSetAddress(address, controlName?: string) {
-    const { accountAddress, accountEvmAddress } = transferAddress(
+    const {accountAddress, accountEvmAddress} = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
@@ -187,12 +188,12 @@ export class PopupWatchlistComponent implements OnInit {
       if (controlName === 'address') {
         this.toastr.error('Invalid evmos address format');
         this.watchlistForm.get('evmAddress').disable();
-        this.watchlistForm.get('address').setErrors({ incorrect: true });
+        this.watchlistForm.get('address').setErrors({incorrect: true});
       }
       if (controlName === 'evmAddress') {
         this.toastr.error('Invalid EVM address format');
         this.watchlistForm.get('address').disable();
-        this.watchlistForm.get('evmAddress').setErrors({ incorrect: true });
+        this.watchlistForm.get('evmAddress').setErrors({incorrect: true});
       }
       return;
     }
@@ -236,7 +237,8 @@ export class PopupWatchlistComponent implements OnInit {
       if (!JSON.stringify(this.settingObj)?.includes('true') && this.isTracking) {
         return false;
       }
-    } catch {}
+    } catch {
+    }
 
     this.formValid = true;
     return true;
@@ -244,7 +246,7 @@ export class PopupWatchlistComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { favorite, address, evmAddress, note, id } = this.watchlistForm.getRawValue();
+    const {favorite, address, evmAddress, note, id} = this.watchlistForm.getRawValue();
 
     let payload = {
       address,
@@ -325,12 +327,10 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   changeType(type) {
-    console.log(type);
     this.isAccount = type;
     this.isContract = !this.isAccount;
     this.isError = false;
-    this.watchlistForm.value.isAccount = type;
-    console.log(this.watchlistForm.value.isAccount);
+    this.watchlistForm.value.isAccount = this.isAccount;
     this.checkFormValid();
   }
 
@@ -369,7 +369,9 @@ export class PopupWatchlistComponent implements OnInit {
     } else {
       this.handleSetAddress(address, controlName);
       this.checkNameTag();
+      this.watchlistForm.value.isAccount = this.isAccount;
     }
+    this.checkFormValid();
   }
 
   resetAddress() {
@@ -379,5 +381,6 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm.get('address').enable();
     this.publicNameTag = '-';
     this.privateNameTag = '-';
+    this.checkFormValid();
   }
 }
