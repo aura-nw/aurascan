@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
@@ -63,6 +63,7 @@ export class EvmTokenContentComponent implements OnInit {
     private tokenService: TokenService,
     private nameTagService: NameTagService,
     private contractService: ContractService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -122,43 +123,41 @@ export class EvmTokenContentComponent implements OnInit {
       let tempTabs;
       this.paramQuery = addressNameTag || this.searchTemp;
       // check if mode not equal native coin
-      if (this.tokenDetail.modeToken !== EModeToken?.Native) {
-        if (
-          this.textSearch.length === LENGTH_CHARACTER.EVM_TRANSACTION &&
-          this.textSearch?.toLowerCase() == this.textSearch.toLowerCase()
-        ) {
-          this.isSearchTx = true;
-          tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-        } else if (this.textSearch?.startsWith(EWalletType.EVM) || this.textSearch?.startsWith(this.prefixAdd)) {
-          this.isSearchAddress = true;
-          tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
-          this.getInfoAddress(this.paramQuery);
-        } else {
-          tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
-        }
-      } else if (this.textSearch?.length === LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+      if (
+        this.textSearch.length === LENGTH_CHARACTER.EVM_TRANSACTION ||
+        (this.textSearch.length === LENGTH_CHARACTER.TRANSACTION && this.textSearch == this.textSearch.toUpperCase())
+      ) {
+        this.isSearchTx = true;
+        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
+      } else if (this.textSearch?.startsWith(EWalletType.EVM) || this.textSearch?.startsWith(this.prefixAdd)) {
         this.isSearchAddress = true;
-        this.tokenService.filterBalanceNative$.subscribe((res) => {
-          this.infoSearch['balance'] = res || 0;
-          this.setFilterValue(this.infoSearch['balance']);
-        });
+        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
+        this.getInfoAddress(this.paramQuery);
+      } else {
+        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
       }
+
       this.TABS = tempTabs || this.tabsBackup;
-      this.route.queryParams.subscribe((params) => {
-        if (!params?.a) {
-          window.location.href = `/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
-        }
-      });
+      const queryParams = this.route.snapshot.queryParams.get('a');
+      if (!queryParams) {
+        this.redirectPage(`/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`);
+      }
     } else {
       this.textSearch = '';
     }
+  }
+
+  redirectPage(urlLink: string) {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([urlLink]).then((r) => {});
+    });
   }
 
   resetSearch() {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      window.location.href = `/token/${params.contractAddress}`;
+      this.redirectPage(`/token/${params.contractAddress}`);
     }
   }
 
