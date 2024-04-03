@@ -756,6 +756,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.nextKey = null;
     this.currentKey = null;
     this.pageData.pageSize = event;
+    this.pageData.pageIndex = 0;
     this.dataSource = new MatTableDataSource();
     this.getTxsAddress(this.nextKey);
   }
