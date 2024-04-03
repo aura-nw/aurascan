@@ -581,7 +581,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           element.from = _.get(element, 'from');
           element.to = _.get(element, 'to');
           element.timestamp = _.get(element, 'transaction.timestamp');
-          element.evmAmount = _.get(element, 'erc20_activities[0].amount') || 0;
+          element.evmAmount = _.get(element, 'transaction_message[0].value') || 0;
         });
       } else {
         if (this.modeQuery === TabsAccountLink.FtsTxs && this.fungibleTokenType === this.tokenType.ERC20) {
