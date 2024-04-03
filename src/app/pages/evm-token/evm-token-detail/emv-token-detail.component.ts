@@ -71,7 +71,7 @@ export class EvmTokenDetailComponent implements OnInit {
               decimals: token.decimal,
               contract_verification: token.evm_smart_contract?.evm_contract_verifications[0]?.status,
               type: EvmContractRegisterType.ERC20,
-              price: tokenMarket?.currentPrice,
+              price: tokenMarket?.currentPrice || 0,
               priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
             };
           });

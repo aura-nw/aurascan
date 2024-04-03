@@ -7,6 +7,7 @@ import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.co
 import { ContractVerifyType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token.constant';
 import { EModeToken, TokenTab } from 'src/app/core/constants/token.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
@@ -128,20 +129,14 @@ export class EvmTokenContentComponent implements OnInit {
         ) {
           this.isSearchTx = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-        } else if (
-          this.textSearch?.length >= LENGTH_CHARACTER.EVM_ADDRESS &&
-          this.textSearch?.startsWith(this.prefixAdd)
-        ) {
+        } else if (this.textSearch?.startsWith(EWalletType.EVM) || this.textSearch?.startsWith(this.prefixAdd)) {
           this.isSearchAddress = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
           this.getInfoAddress(this.paramQuery);
         } else {
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
         }
-      } else if (
-        this.textSearch?.length >= LENGTH_CHARACTER.EVM_ADDRESS &&
-        this.textSearch?.startsWith(this.prefixAdd)
-      ) {
+      } else if (this.textSearch?.length === LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
         this.isSearchAddress = true;
         this.tokenService.filterBalanceNative$.subscribe((res) => {
           this.infoSearch['balance'] = res || 0;
