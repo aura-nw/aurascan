@@ -104,11 +104,11 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     if (!regexRule.test(this.searchValue)) return;
     const isNumber = /^\d+$/.test(this.searchValue);
     const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
-    // case address is nameTag
+    // get address by nameTag
     if (addressNameTag?.length > 0) {
       this.searchValue = addressNameTag;
-      this.searchWithUnAddress();
     }
+
     // check is EVM address
     if (this.searchValue.startsWith(EWalletType.EVM)) {
       if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
@@ -127,55 +127,28 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
         });
       }
     } else {
-      // if address is not EVM -> validator/Aura account/ aura transaction/ block
-      if (isNumber) {
-        if (addressNameTag?.length > 0) {
-          this.searchValue = addressNameTag;
-          this.searchWithUnAddress();
-        } else {
-          // case block
-          urlLink = 'blocks';
-          this.redirectPage(urlLink);
-        }
-      } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
-        // case Aura transaction
+      if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
+        // case cosmoms transaction
         this.getTxhDetail(this.searchValue);
-      } else {
-        // case aura contract
-        if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
-          urlLink = 'contracts';
-          this.redirectPage(urlLink);
+      } else if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
+        // case cosmos contract
+        urlLink = 'contracts';
+        this.redirectPage(urlLink);
+      } else if (this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
+        // case cosmos address or validator address
+        if (this.searchValue.length === LENGTH_CHARACTER.ADDRESS) {
+          urlLink = 'address';
+        } else if (this.searchValue.startsWith(this.prefixValAdd)) {
+          urlLink = 'validators';
         } else {
-          this.searchWithUnAddress();
-        }
-      }
-    }
-  }
-
-  searchWithUnAddress() {
-    let urlLink;
-    if (this.searchValue.startsWith(this.prefixNormalAdd)) {
-      const { accountAddress, accountEvmAddress } = transferAddress(this.prefixNormalAdd, this.searchValue);
-      // check if address EVM contract or account
-      this.contractService.findEvmContract(accountEvmAddress).subscribe({
-        next: (res) => {
-          if (res?.evm_smart_contract?.length > 0) {
-            this.searchValue = accountEvmAddress;
-            urlLink = 'evm-contracts';
-            this.redirectPage(urlLink);
-          } else {
-            urlLink = 'address';
-            this.redirectPage(urlLink);
-          }
-        },
-        error: (e) => {
           return;
-        },
-      });
-    } else {
-      // case aura validators/ account
-      urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'address';
-      this.redirectPage(urlLink);
+        }
+        this.redirectPage(urlLink);
+      } else if (isNumber) {
+        // case block
+        urlLink = 'block';
+        this.redirectPage(urlLink);
+      }
     }
   }
 
