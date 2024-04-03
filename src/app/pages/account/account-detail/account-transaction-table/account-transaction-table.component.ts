@@ -1,13 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { AccountTxType, ETypeFtExport, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import {
   LENGTH_CHARACTER,
   NULL_ADDRESS,
@@ -762,10 +762,15 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   linkExportPage() {
-    local.setItem(
-      STORAGE_KEYS.SET_DATA_EXPORT,
-      JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }),
-    );
+    let exportType = this.modeQuery;
+    if (this.modeQuery === TabsAccountLink.FtsTxs) {
+      if (this.fungibleTokenType === ETokenCoinTypeBE.ERC20) {
+        exportType = ETypeFtExport.ERC20;
+      } else {
+        exportType = ETypeFtExport.CW20;
+      }
+    }
+    local.setItem(STORAGE_KEYS.SET_DATA_EXPORT, JSON.stringify({ address: this.currentAddress, exportType }));
     this.router.navigate(['/export-csv']);
   }
 
