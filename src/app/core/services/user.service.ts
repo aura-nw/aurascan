@@ -99,9 +99,9 @@ export class UserService {
 
   getListTxByAddress(payload) {
     const operationsDoc = `
-    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderId: order_by = desc, $address: [String!] = null) {
+    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderId: order_by = desc, $address: String! = null) {
       ${this.envDB} {
-        transaction(where: {timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}, sender: {_in: $address}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {height: $orderId}) {
+        transaction(where: {timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}, sender: {_eq: $address}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {id: $orderId}) {
           hash
           height
           fee
@@ -138,14 +138,17 @@ export class UserService {
 
   getListEvmTxByAddress(payload) {
     const operationsDoc = `
-    query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $orderId: order_by = desc, $address: [String!] = null) {
+    query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $orderId: order_by = desc, $address: String! = null) {
       ${this.envDB} {
-        evm_transaction(where: {from: {_in: $address}, transaction: {timestamp: {_gt: $startTime, _lt: $endTime}}}, limit: $limit, order_by: {height: $orderId}) {
+        evm_transaction(where: {from: {_eq: $address}, transaction: {timestamp: {_gt: $startTime, _lt: $endTime}}}, limit: $limit, order_by: {id: $orderId}) {
           data
           from
           to
           hash
           height
+          erc20_activities {
+            amount
+          }
           transaction {
             timestamp
             hash
@@ -224,8 +227,8 @@ export class UserService {
         query: operationsDoc,
         variables: {
           limit: payload.limit || 100,
-          from: payload.from,
-          to: payload.to,
+          from: payload.from?.toLowerCase(),
+          to: payload.to?.toLowerCase(),
           height_lt: payload.heightLT,
           msg_types_in: payload.listTxMsgTypeNotIn?.length > 0 ? null : payload.listTxMsgType,
           msg_types_nin: payload.listTxMsgTypeNotIn,
@@ -317,13 +320,13 @@ export class UserService {
       $endTime: timestamptz = null
       $limit: Int = 100) {
       ${this.envDB} {
-        evm_transaction(where: {erc20_activities: {_or: [{from: {_eq: $from}}, {to: {_eq: $to}}], height: {_gt: $heightGT, _lt: $heightLT}, action: {_in: $actionIn, _nin: $actionNotIn}}, transaction: {timestamp: {_lte: $endTime, _gte: $startTime}}}, limit: $limit) {
+        evm_transaction(where: {erc20_activities: {_or: [{from: {_eq: $from}}, {to: {_eq: $to}}], height: {_gt: $heightGT, _lt: $heightLT}, action: {_in: $actionIn, _nin: $actionNotIn}}, transaction: {timestamp: {_lte: $endTime, _gte: $startTime}}}, limit: $limit, order_by: {id: desc}) {
           data
           hash
           transaction {
             timestamp
           }
-          erc20_activities(where: {action: {_in: $actionIn, _nin: $actionNotIn}}) {
+          erc20_activities(where: {action: {_in: $actionIn, _nin: $actionNotIn} , _or: [{from: {_eq: $from}}, {to: {_eq: $to}}]}) {
             from
             to
             tx_hash
@@ -344,8 +347,8 @@ export class UserService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          from: payload.sender,
-          to: payload.receiver,
+          from: payload.sender?.toLowerCase(),
+          to: payload.receiver?.toLowerCase(),
           startTime: payload.startTime,
           endTime: payload.endTime,
           heightLT: payload.heightLT,
@@ -418,8 +421,8 @@ export class UserService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          sender: payload.sender,
-          receiver: payload.receiver,
+          sender: payload.sender?.toLowerCase(),
+          receiver: payload.receiver?.toLowerCase(),
           startTime: payload.startTime,
           endTime: payload.endTime,
           heightLT: payload.heightLT,

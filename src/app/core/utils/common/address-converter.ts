@@ -2,6 +2,7 @@ import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import { stripHexPrefix, toChecksumAddress } from 'crypto-addr-codec';
 import { EWalletType } from '../../constants/wallet.constant';
 import { LENGTH_CHARACTER } from '../../constants/common.constant';
+import { getAddress } from 'ethers';
 
 /**
  * Creates a Bech32 encoder function with the given prefix.
@@ -60,7 +61,7 @@ function makeChecksummedHexEncoder(chainId?: number) {
 export function convertBech32AddressToEvmAddress(prefix: string, bech32Address: string): string {
   try {
     const data = makeBech32Decoder(prefix)(bech32Address);
-    return makeChecksummedHexEncoder()(data)?.toLowerCase();
+    return makeChecksummedHexEncoder()(data);
   } catch (err) {
     return null;
   }
@@ -83,7 +84,7 @@ export function convertEvmAddressToBech32Address(prefix: string, ethAddress: str
       return null;
     }
   }
-  return result?.toLowerCase();
+  return result;
 }
 
 /**
@@ -103,7 +104,7 @@ export function transferAddress(prefix: string, address: string) {
 
   if (address.startsWith(EWalletType.EVM)) {
     return {
-      accountEvmAddress: address?.toLowerCase(),
+      accountEvmAddress: getAddress(address),
       accountAddress: convertEvmAddressToBech32Address(prefix, address),
     };
   } else {
@@ -111,5 +112,13 @@ export function transferAddress(prefix: string, address: string) {
       accountAddress: address,
       accountEvmAddress: convertBech32AddressToEvmAddress(prefix, address),
     };
+  }
+}
+
+export function getEvmChecksumAddress(address: string) {
+  try {
+    return getAddress(address);
+  } catch (error) {
+    return address;
   }
 }

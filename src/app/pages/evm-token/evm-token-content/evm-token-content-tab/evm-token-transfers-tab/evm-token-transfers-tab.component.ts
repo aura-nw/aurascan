@@ -61,7 +61,6 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   codeTransaction = CodeTransaction;
   modeExecuteTransaction = ModeExecuteTransaction;
   nftDetail: any;
-  linkToken = 'evm-token';
   nextKey = null;
   currentKey = null;
   contractType = EvmContractRegisterType;
@@ -95,9 +94,6 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    if (this.typeContract && this.typeContract !== this.contractType.ERC20) {
-      this.linkToken = this.typeContract === this.contractType.ERC721 ? 'nft' : 'abt';
-    }
     this.getListData();
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
@@ -232,7 +228,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
               _.get(element, 'evm_transaction.transaction.code') == CodeTransaction.Success
                 ? StatusTransaction.Success
                 : StatusTransaction.Fail;
-            element['type'] = _.get(element, 'evm_transaction.data')?.substring(0, 8) || 'Transfer';
+            element['type'] = _.get(element, 'evm_transaction.data')?.substring(0, 8);
             element['decimal'] = _.get(element, 'erc20_contract.decimal');
             element['lstTypeTemp'] = _.get(element, 'evm_transaction.transaction_message');
           });
@@ -302,7 +298,6 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   goTo(data) {
-    let url = '/' + this.linkToken + '/' + this.contractAddress + '/' + this.encodeData(data);
-    this.router.navigateByUrl(url);
+    this.router.navigate(['/token', this.contractAddress, this.encodeData(data)]);
   }
 }

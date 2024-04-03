@@ -1,18 +1,20 @@
 <div class="message-container text--white">
-  <div class="d-flex flex-wrap mb-3 body">
-    <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4">
+  <div class="row mb-2 body justify-content-between justify-content-lg-start">
+    <div class="col-auto col-lg-2 text--gray-4">
       {{ 'Method' }}
     </div>
-    <div class="col-12 col-lg-10">{{ method | convertEvmTx }}</div>
+    <div class="col-auto col-lg-10 text--gray-1">{{ method | convertEvmTx }}</div>
   </div>
 
-  <div class="d-flex flex-wrap mb-3 body" *ngIf="transaction?.contractAddress > 0">
-    <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4">Contract Address</div>
-    <div class="col-12 col-lg-10">
+  <div
+    class="row mb-3 body justify-content-between justify-content-lg-start align-items-center"
+    *ngIf="transaction?.contractAddress > 0">
+    <div class="col-auto col-lg-2 text--gray-4">Contract Address</div>
+    <div class="col-auto col-lg-10">
       <app-name-tag
-        [value]="transaction?.contractAddress?.toLowerCase()"
+        [value]="transaction?.contractAddress | appEvmAddress"
         [fullText]="true"
-        [linkRouter]="['/evm-contracts', transaction?.contractAddress?.toLowerCase()]"
+        [linkRouter]="['/evm-contracts', transaction?.contractAddress | appEvmAddress]"
         [iconContract]="true"></app-name-tag>
     </div>
   </div>

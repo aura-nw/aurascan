@@ -92,7 +92,7 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
     let payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageSize * this.pageData.pageIndex,
-      keyword: this.textSearch || '',
+      keyword: this.textSearch?.toLowerCase() || '',
     };
     if (this.filterType) {
       payload['type'] = this.filterType?.toString();
@@ -132,7 +132,10 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
                 ? ETokenCoinType.NATIVE
                 : token.type === ETokenCoinTypeBE.CW20
                   ? ETokenCoinType.CW20
-                  : ETokenCoinType.IBC;
+                  : token.type === ETokenCoinTypeBE.ERC20
+                    ? ETokenCoinType.ERC20
+                    : ETokenCoinType.IBC;
+            token.linkToken = '/token';
           });
           return tokens;
         }),
@@ -182,8 +185,8 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
     this.isLoadingTable = true;
     if (!val) {
       this.filterType = [];
-    } else if (this.filterType.includes(val)) {
-      this.filterType = this.filterType.filter((item) => item !== val);
+    } else if (this.filterType?.includes(val)) {
+      this.filterType = this.filterType?.filter((item) => item !== val);
     } else {
       this.filterType.push(val);
     }

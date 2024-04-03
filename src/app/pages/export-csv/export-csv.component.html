@@ -90,7 +90,7 @@
               type="text"
               formControlName="address"
               placeholder="{{ prefix }}..."
-              class="input-address px-4"
+              class="input-address px-4 convert-address"
               name="inputAddress"
               (blur)="setAddressOther(getAddress?.value)"
               autocomplete="off" />
@@ -119,7 +119,7 @@
               type="text"
               formControlName="evmAddress"
               placeholder="0x..."
-              class="input-address px-4"
+              class="input-address px-4 convert-address"
               name="inputEvmAddress"
               (blur)="setAddressOther(getEvmAddress?.value)"
               autocomplete="off" />
