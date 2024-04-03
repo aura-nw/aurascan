@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
 import { Subject, takeUntil } from 'rxjs';
-import { ExportFileName, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { ETypeFtExport, ExportFileName, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -43,6 +43,11 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
+  ETypeFtExport = ETypeFtExport;
+  typeFtDisplay = {
+    CW20: 'CW20 Token Transfer',
+    ERC20: 'ERC20 Token Transfer',
+  };
 
   destroyed$ = new Subject<void>();
 
@@ -123,8 +128,10 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
         return this.TabsAccount.EVMExecutedTxs;
       case TabsAccountLink.NativeTxs:
         return this.TabsAccount.NativeTxs;
-      case TabsAccountLink.FtsTxs:
-        return this.TabsAccount.FtsTxs;
+      case ETypeFtExport.CW20:
+        return this.typeFtDisplay.CW20;
+      case ETypeFtExport.ERC20:
+        return this.typeFtDisplay.ERC20;
       case TabsAccountLink.NftTxs:
         return this.TabsAccount.NftTxs;
       default:
@@ -139,9 +146,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let { addressDefault, address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } =
-      this.csvForm.getRawValue();
-    addressDefault = address;
+    let { address, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.getRawValue();
 
     if (startDate || endDate) {
       startDate = moment(startDate).startOf('day').toISOString();
@@ -149,18 +154,15 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
 
     // send both evm + native address for execute + evm execute
-    if (this.dataType === this.TabsAccountLink.ExecutedTxs || this.dataType === this.TabsAccountLink.EVMExecutedTxs) {
-      const { accountAddress, accountEvmAddress } = transferAddress(
-        this.chainInfo.bech32Config.bech32PrefixAccAddr,
-        address,
-      );
-      address = `${accountAddress},${accountEvmAddress}`;
-    }
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      address,
+    );
 
     let payload = {
-      addressDefault,
       dataType: this.dataType,
       address: address,
+      evmAddress: accountEvmAddress || '',
       dataRangeType: this.isFilterDate ? 'date' : 'height',
       min: this.isFilterDate ? startDate : fromBlock,
       max: this.isFilterDate ? endDate : toBlock,
@@ -218,8 +220,11 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       case TabsAccountLink.NativeTxs:
         nameTab = ExportFileName.NativeTxs;
         break;
-      case TabsAccountLink.FtsTxs:
-        nameTab = ExportFileName.FtsTxs;
+      case ETypeFtExport.CW20:
+        nameTab = ETypeFtExport.CW20;
+        break;
+      case ETypeFtExport.ERC20:
+        nameTab = ETypeFtExport.ERC20;
         break;
       case TabsAccountLink.NftTxs:
         nameTab = ExportFileName.NftTxs;
@@ -236,7 +241,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       'export-account-' +
       (payload.dataType === TabsAccountLink.NativeTxs ? 'native-ibc-transfer' : nameTab) +
       '-' +
-      payload.addressDefault +
+      payload.address +
       '.csv';
     saveAs(data, fileName);
     this.isDownload = false;

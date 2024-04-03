@@ -128,7 +128,7 @@ export class CommonService {
     const privateUrl = getPrivate ? '/private-name-tag' : '';
 
     return this._http.get<any>(
-      `${this.apiUrl}/export-csv${privateUrl}?dataType=${payload.dataType}&address=${payload.address}&dataRangeType=${payload.dataRangeType}&min=${payload.min}&max=${payload.max}`,
+      `${this.apiUrl}/export-csv${privateUrl}?dataType=${payload.dataType}&address=${payload.address}&evmAddress=${payload.evmAddress}&dataRangeType=${payload.dataRangeType}&min=${payload.min}&max=${payload.max}`,
       options,
     );
   }

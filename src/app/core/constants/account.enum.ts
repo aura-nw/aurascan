@@ -61,6 +61,11 @@ export enum TabsAccountLink {
   NftTxs = 'nft-transfer',
 }
 
+export enum ETypeFtExport {
+  CW20 = 'cw20-transfer',
+  ERC20 = 'erc20-transfer'
+}
+
 export enum ExportFileName {
   ExecutedTxs = 'cosmos-executed',
   EVMExecutedTxs = 'evm-executed',
