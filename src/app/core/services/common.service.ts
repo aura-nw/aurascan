@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { DATEFORMAT, STORAGE_KEYS } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -158,5 +158,33 @@ export class CommonService {
 
   getRawData(url): Observable<any> {
     return this._http.get<any>(url);
+  }
+
+  searchValue(value) {
+    const query = `query searchHeader($evm_address: String = null, $address: String = null) {
+      ${this.envDB} {
+        account(limit: 1, where: {address: {_eq: $address}}) {
+          address
+        }
+        evm_smart_contract(where: {address: {_eq: $evm_address}}, limit: 1) {
+          address
+        }
+        validator(where: {account_address: {_eq: $address}}, limit: 1) {
+          account_address
+        }
+      }
+    }
+    `;
+
+    return this._http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {
+          evm_address: value?.accountEvmAddress?.toLowerCase(),
+          address: value?.accountAddress?.toLowerCase(),
+        },
+        operationName: 'searchHeader',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }
