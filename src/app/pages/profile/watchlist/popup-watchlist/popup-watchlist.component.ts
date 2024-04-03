@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
@@ -12,7 +12,6 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { isSafari } from 'src/app/core/utils/common/validation';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -99,7 +98,6 @@ export class PopupWatchlistComponent implements OnInit {
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
-    private commonService: CommonService,
     private nameTagService: NameTagService,
   ) {}
 
@@ -185,7 +183,7 @@ export class PopupWatchlistComponent implements OnInit {
     // inValid address
     if (accountAddress.length > 0 && !accountEvmAddress) {
       if (controlName === 'address') {
-        this.toastr.error('Invalid evmos address format');
+        this.toastr.error('Invalid ' + this.chainName + ' address format');
         this.watchlistForm.get('evmAddress').disable();
         this.watchlistForm.get('address').setErrors({ incorrect: true });
       }
