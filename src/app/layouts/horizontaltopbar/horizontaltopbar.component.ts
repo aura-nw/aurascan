@@ -1,18 +1,18 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
-import {Subject, takeUntil} from 'rxjs';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {ContractService} from 'src/app/core/services/contract.service';
-import {NameTagService} from 'src/app/core/services/name-tag.service';
-import {UserService} from 'src/app/core/services/user.service';
-import {transferAddress} from 'src/app/core/utils/common/address-converter';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
-import {LENGTH_CHARACTER, STORAGE_KEYS} from '../../../app/core/constants/common.constant';
-import {TransactionService} from '../../core/services/transaction.service';
-import {MENU, MenuName} from './menu';
-import {MenuItem} from './menu.model';
+import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
+import { TransactionService } from '../../core/services/transaction.service';
+import { MENU, MenuName } from './menu';
+import { MenuItem } from './menu.model';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -46,8 +46,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
-  ) {
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
@@ -156,7 +155,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   searchWithUnAddress() {
     let urlLink;
     if (this.searchValue.startsWith(this.prefixNormalAdd)) {
-      const {accountAddress, accountEvmAddress} = transferAddress(this.prefixNormalAdd, this.searchValue);
+      const { accountAddress, accountEvmAddress } = transferAddress(this.prefixNormalAdd, this.searchValue);
       // check if address EVM contract or account
       this.contractService.findEvmContract(accountEvmAddress).subscribe({
         next: (res) => {
@@ -181,9 +180,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   }
 
   redirectPage(urlLink: string) {
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate([urlLink, this.searchValue]).then((r) => {
-      });
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([urlLink, this.searchValue]).then((r) => {});
     });
   }
 
@@ -214,7 +212,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate(['tx', this.searchValue]);
           });
         } else {
