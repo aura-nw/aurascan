@@ -1,17 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {UntypedFormBuilder, Validators} from '@angular/forms';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import {TranslateService} from '@ngx-translate/core';
+import {LENGTH_CHARACTER, MAX_LENGTH_NAME_TAG} from 'src/app/core/constants/common.constant';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CommonService} from 'src/app/core/services/common.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {transferAddress} from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-popup-name-tag',
@@ -39,6 +39,7 @@ export class PopupNameTagComponent implements OnInit {
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
   chainName = this.environmentService.chainName.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
+  prefixAccAddr = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -49,7 +50,8 @@ export class PopupNameTagComponent implements OnInit {
     private commonService: CommonService,
     private nameTagService: NameTagService,
     private toastr: NgxToastrService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.formInit();
@@ -103,28 +105,35 @@ export class PopupNameTagComponent implements OnInit {
   }
 
   handleSetAddress(address, controlName?: string) {
-    const { accountAddress, accountEvmAddress } = transferAddress(
+    let {accountAddress, accountEvmAddress} = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
     // inValid address
     if (accountAddress.length > 0 && !accountEvmAddress) {
-      if (controlName === 'cosmosAddress') {
-        this.toastr.error('Invalid evmos address format');
-        this.privateNameForm.get('evmAddress').disable();
-        this.privateNameForm.get('cosmosAddress').setErrors({ incorrect: true });
+      // check if address is contract and start with bench32Add -> true/ else false
+      if (address.length === LENGTH_CHARACTER.CONTRACT && address.startsWith(this.prefixAccAddr)) {
+        accountEvmAddress = null;
+      } else {
+        if (controlName === 'cosmosAddress') {
+          this.toastr.error('Invalid evmos address format');
+          this.privateNameForm.get('evmAddress').disable();
+          this.privateNameForm.get('cosmosAddress').setErrors({incorrect: true});
+        }
+        if (controlName === 'evmAddress') {
+          this.toastr.error('Invalid EVM address format');
+          this.privateNameForm.get('cosmosAddress').disable();
+          this.privateNameForm.get('evmAddress').setErrors({incorrect: true});
+        }
+        return;
       }
-      if (controlName === 'evmAddress') {
-        this.toastr.error('Invalid EVM address format');
-        this.privateNameForm.get('cosmosAddress').disable();
-        this.privateNameForm.get('evmAddress').setErrors({ incorrect: true });
-      }
-      return;
     }
     // valid address
     this.privateNameForm.controls['cosmosAddress'].setValue(accountAddress);
     if (accountEvmAddress) {
       this.privateNameForm.controls['evmAddress'].setValue(accountEvmAddress);
+    } else {
+      this.privateNameForm.controls['evmAddress'].setValue('');
     }
     this.privateNameForm.get('cosmosAddress').disable();
     this.privateNameForm.get('evmAddress').disable();
@@ -141,7 +150,7 @@ export class PopupNameTagComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { isFavorite, cosmosAddress, evmAddress, name, note } = this.privateNameForm.getRawValue();
+    const {isFavorite, cosmosAddress, evmAddress, name, note} = this.privateNameForm.getRawValue();
     let payload = {
       isFavorite: isFavorite == 1,
       type: this.isAccount ? 'account' : 'contract',
