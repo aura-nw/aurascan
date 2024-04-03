@@ -16,7 +16,7 @@
       <div class="">
         <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
         <app-name-tag
-          [value]="contractDetail?.address | appEvmAddress"
+          [value]="contractDetail?.address"
           [mode]="ENameTag.Public"
           [screen]="EScreen.Contract"
           [fullText]="true">
@@ -25,10 +25,7 @@
 
       <div class="mt-3">
         <div class="text--gray-4 caption fw-normal mb-1">Private Name Tag</div>
-        <app-name-tag
-          [value]="contractDetail?.address | appEvmAddress"
-          [mode]="ENameTag.Private"
-          [screen]="EScreen.Contract">
+        <app-name-tag [value]="contractDetail?.address" [mode]="ENameTag.Private" [screen]="EScreen.Contract">
         </app-name-tag>
       </div>
     </div>
@@ -57,11 +54,11 @@
         <div class="text--gray-light">
           <span class="mr-1 mr-lg-2" *ngIf="contractDetail?.creator">
             <app-name-tag
-              [value]="contractDetail?.creator | appEvmAddress"
+              [value]="contractDetail?.creator"
               [widthAuto]="true"
               [linkRouter]="[
                 (contractDetail?.creator | isContract) ? '/contracts' : '/address',
-                contractDetail?.creator | appEvmAddress
+                contractDetail?.creator
               ]">
             </app-name-tag>
           </span>

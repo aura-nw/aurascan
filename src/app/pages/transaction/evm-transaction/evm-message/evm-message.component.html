@@ -12,9 +12,9 @@
     <div class="col-auto col-lg-2 text--gray-4">Contract Address</div>
     <div class="col-auto col-lg-10">
       <app-name-tag
-        [value]="transaction?.contractAddress | appEvmAddress"
+        [value]="transaction?.contractAddress?.toLowerCase()"
         [fullText]="true"
-        [linkRouter]="['/evm-contracts', transaction?.contractAddress | appEvmAddress]"
+        [linkRouter]="['/evm-contracts', transaction?.contractAddress?.toLowerCase()]"
         [iconContract]="true"></app-name-tag>
     </div>
   </div>

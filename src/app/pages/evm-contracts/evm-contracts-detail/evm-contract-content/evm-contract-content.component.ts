@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { getAddress } from 'ethers';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -14,7 +13,6 @@ import { getFunctionNameByMethodId } from 'src/app/core/helpers/chain';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { getEvmChecksumAddress } from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-evm-contract-content',
@@ -141,14 +139,13 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
             if (txsRes?.evm_transaction?.length > 0) {
               return txsRes.evm_transaction.map((tx) => {
                 const type = getFunctionNameByMethodId(_.get(tx, 'data')?.substring(0, 8));
-
                 return {
                   ...tx,
                   tx_hash: _.get(tx, 'hash'),
                   hash: _.get(tx, 'transaction.hash'),
                   method: type,
-                  from: getEvmChecksumAddress(_.get(tx, 'from')),
-                  to: getEvmChecksumAddress(_.get(tx, 'to')),
+                  from: _.get(tx, 'from'),
+                  to: _.get(tx, 'to'),
                   timestamp: _.get(tx, 'transaction.timestamp'),
                   evmAmount: _.get(tx, 'transaction.transaction_messages[0].content.data.value'),
                 };

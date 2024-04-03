@@ -114,10 +114,7 @@
                   <img class="rounded-circle" [appImg]="element.image" width="18" height="18" />
                   <div class="ml-3 d-flex align-items-center">
                     <a
-                      [routerLink]="[
-                        element.linkToken,
-                        (element.contract_address | appEvmAddress) || element.denom?.replace('ibc/', '')
-                      ]"
+                      [routerLink]="[element.linkToken, element.contract_address || element.denom?.replace('ibc/', '')]"
                       class="text--primary text-nowrap">
                       {{ element.name | ellipsis: 25 }}
                       <span *ngIf="element.symbol"> ({{ element.symbol | ellipsis: 15 }}) </span>
@@ -223,10 +220,7 @@
                 <img class="rounded-circle" [appImg]="data.image" width="18" height="18" />
                 <div class="ml-3 d-flex align-items-center">
                   <a
-                    [routerLink]="[
-                      data.linkToken,
-                      (data.contract_address | appEvmAddress) || data.denom?.replace('ibc/', '')
-                    ]"
+                    [routerLink]="[data.linkToken, data.contract_address || data.denom?.replace('ibc/', '')]"
                     class="text--primary">
                     {{ data.name | ellipsis: 12 }}
                     <span *ngIf="data.symbol"> ({{ data.symbol | ellipsis: 8 }}) </span>

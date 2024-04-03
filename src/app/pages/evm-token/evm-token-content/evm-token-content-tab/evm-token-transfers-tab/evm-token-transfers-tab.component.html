@@ -98,7 +98,7 @@
                             data.modeExecute === modeExecuteTransaction.Take ||
                             data[template.matColumnDef]?.startsWith('Null')
                           ">
-                          <span>{{ data[template.matColumnDef] | appEvmAddress | ellipsis: 8 : 8 }}</span>
+                          <span>{{ data[template.matColumnDef] | ellipsis: 8 : 8 }}</span>
                         </ng-container>
                         <ng-container
                           *ngIf="
@@ -107,9 +107,9 @@
                           ">
                           <app-name-tag
                             *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]"
-                            [value]="data[template.matColumnDef] | appEvmAddress"
-                            [linkRouter]="['/token', linkAddress | appEvmAddress]"
-                            [linkParams]="{ a: data[template.matColumnDef] | appEvmAddress }"
+                            [value]="data[template.matColumnDef]"
+                            [linkRouter]="['/token', linkAddress]"
+                            [linkParams]="{ a: data[template.matColumnDef] }"
                             [iconContract]="data[template.matColumnDef] | isContract"
                             [maxCharacter]="15">
                           </app-name-tag>
@@ -138,12 +138,12 @@
                     <div [style.min-width]="'210px'">
                       <app-name-tag
                         *ngIf="data[template.matColumnDef]"
-                        [value]="data[template.matColumnDef] | appEvmAddress"
+                        [value]="data[template.matColumnDef]"
                         [iconContract]="data[template.matColumnDef] | isContract"
                         [maxCharacter]="15"
                         [isEnableRouter]="!data[template.matColumnDef]?.startsWith('Null')"
-                        [linkRouter]="['/token', linkAddress | appEvmAddress]"
-                        [linkParams]="{ a: data[template.matColumnDef] | appEvmAddress }">
+                        [linkRouter]="['/token', linkAddress]"
+                        [linkParams]="{ a: data[template.matColumnDef] }">
                       </app-name-tag>
                       <span *ngIf="!data[template.matColumnDef]"> - </span>
                     </div>

@@ -22,11 +22,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
-import {
-  convertBech32AddressToEvmAddress,
-  convertEvmAddressToBech32Address,
-  transferAddress,
-} from 'src/app/core/utils/common/address-converter';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -373,7 +369,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.EVMExecutedTxs:
-        this.currentAddress = this.addressEvm
+        this.currentAddress = this.addressEvm;
         payload.address = this.addressEvm?.toLowerCase();
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesEvmExecute;

@@ -61,7 +61,7 @@ function makeChecksummedHexEncoder(chainId?: number) {
 export function convertBech32AddressToEvmAddress(prefix: string, bech32Address: string): string {
   try {
     const data = makeBech32Decoder(prefix)(bech32Address);
-    return makeChecksummedHexEncoder()(data);
+    return makeChecksummedHexEncoder()(data)?.toLowerCase();
   } catch (err) {
     return null;
   }
@@ -84,7 +84,7 @@ export function convertEvmAddressToBech32Address(prefix: string, ethAddress: str
       return null;
     }
   }
-  return result;
+  return result?.toLowerCase();
 }
 
 /**
@@ -104,7 +104,7 @@ export function transferAddress(prefix: string, address: string) {
 
   if (address.startsWith(EWalletType.EVM)) {
     return {
-      accountEvmAddress: getAddress(address),
+      accountEvmAddress: address?.toLowerCase(),
       accountAddress: convertEvmAddressToBech32Address(prefix, address),
     };
   } else {
