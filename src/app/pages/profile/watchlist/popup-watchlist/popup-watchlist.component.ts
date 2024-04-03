@@ -1,15 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { transferAddress } from 'src/app/core/utils/common/address-converter';
-import { isSafari } from 'src/app/core/utils/common/validation';
-import { CommonService } from 'src/app/core/services/common.service';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {TranslateService} from '@ngx-translate/core';
+import {EWalletType} from 'src/app/core/constants/wallet.constant';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {NameTagService} from 'src/app/core/services/name-tag.service';
+import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
+import {WatchListService} from 'src/app/core/services/watch-list.service';
+import {transferAddress} from 'src/app/core/utils/common/address-converter';
+import {isSafari} from 'src/app/core/utils/common/validation';
+import {LENGTH_CHARACTER} from 'src/app/core/constants/common.constant';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -98,7 +98,8 @@ export class PopupWatchlistComponent implements OnInit {
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
     private nameTagService: NameTagService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.isSafari = isSafari();
@@ -175,7 +176,7 @@ export class PopupWatchlistComponent implements OnInit {
   }
 
   handleSetAddress(address, controlName?: string) {
-    let { accountAddress, accountEvmAddress } = transferAddress(
+    let {accountAddress, accountEvmAddress} = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
@@ -188,12 +189,12 @@ export class PopupWatchlistComponent implements OnInit {
         if (controlName === 'address') {
           this.toastr.error('Invalid ' + this.chainName + ' address format');
           this.watchlistForm.get('evmAddress').disable();
-          this.watchlistForm.get('address').setErrors({ incorrect: true });
+          this.watchlistForm.get('address').setErrors({incorrect: true});
         }
         if (controlName === 'evmAddress') {
           this.toastr.error('Invalid EVM address format');
           this.watchlistForm.get('address').disable();
-          this.watchlistForm.get('evmAddress').setErrors({ incorrect: true });
+          this.watchlistForm.get('evmAddress').setErrors({incorrect: true});
         }
         return;
       }
@@ -240,7 +241,8 @@ export class PopupWatchlistComponent implements OnInit {
       if (!JSON.stringify(this.settingObj)?.includes('true') && this.isTracking) {
         return false;
       }
-    } catch {}
+    } catch {
+    }
 
     this.formValid = true;
     return true;
@@ -248,11 +250,11 @@ export class PopupWatchlistComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { favorite, address, evmAddress, note, id } = this.watchlistForm.getRawValue();
+    const {favorite, address, evmAddress, note, id} = this.watchlistForm.getRawValue();
 
     let payload = {
-      address,
-      evmAddress,
+      address: address.toLowerCase(),
+      evmAddress: evmAddress.toLowerCase(),
       type: this.isAccount ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,
