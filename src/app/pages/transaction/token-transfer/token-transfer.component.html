@@ -3,7 +3,9 @@
     <div class="card mb-0 transfer-card">
       <div class="card-body p-0 overflow-hidden">
         <div class="d-xl-flex justify-content-between align-items-center">
-          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">Fungible Token Transfer</h5>
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
+            {{ transaction['evm_hash'] ? 'ERC20 Transfer' : 'Fungible Token Transfer ' }}
+          </h5>
         </div>
         <div class="table-token" *ngIf="dataSourceFTs?.data?.length > 0; else noFTValues">
           <table mat-table [dataSource]="dataSourceFTs" class="aura-table none-header">
