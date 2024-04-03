@@ -377,7 +377,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.getListEvmTxByAddress(payload);
         break;
       case TabsAccountLink.NativeTxs:
-        this.currentAddress = this.addressNative;
+        payload.to = payload.from = this.currentAddress = this.addressNative;
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload.to = '_';
