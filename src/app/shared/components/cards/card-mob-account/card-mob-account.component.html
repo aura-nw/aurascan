@@ -187,20 +187,20 @@
             <div *ngIf="item.amount">
               <div
                 class="item-show txt-top-expand justify-content-end {{
-                  cosmosAddress === item['to'] ? 'text--green-3' : 'text--red-3'
+                  cosmosAddress === item['toAddress'] ? 'text--green-3' : 'text--red-3'
                 }}">
-                {{ cosmosAddress === item['to'] ? '+' : '-' }}
+                {{ cosmosAddress === item['toAddress'] ? '+' : '-' }}
                 <div *ngIf="item.amount === 0">0</div>
                 <div
                   *ngIf="item.amount !== 0 && (item.amount | lt: 0.001)"
-                  class="{{ cosmosAddress === item.to ? 'text--green-3' : 'text--red-3' }}">
+                  class="{{ cosmosAddress === item.toAddress ? 'text--green-3' : 'text--red-3' }}">
                   {{ '< 0.001' }}
                 </div>
                 <div
                   *ngIf="item.amount | gte: 0.001"
                   [appBigNumber]="item.amount"
                   [decimal]="0"
-                  class="{{ cosmosAddress === item.to ? 'text--green-3' : 'text--red-3' }}"></div>
+                  class="{{ cosmosAddress === item.toAddress ? 'text--green-3' : 'text--red-3' }}"></div>
               </div>
             </div>
           </div>
@@ -227,11 +227,13 @@
           <div class="d-flex align-items-center justify-content-between item-expand mb-1">
             <div class="d-flex align-items-center txt-top-expand">
               <span class="caption fw-normal text--gray-4 txt-from-to">
-                {{ evmAddress === item.to ? 'From:' : 'To:' }}
+                {{ (evmAddress | appEvmAddress) === (item.to | appEvmAddress) ? 'From:' : 'To:' }}
               </span>
               <ng-container>
                 <app-name-tag
-                  [value]="(evmAddress === item.to ? item.from : item.to) | appEvmAddress"
+                  [value]="
+                    ((evmAddress | appEvmAddress) === (item.to | appEvmAddress) ? item.from : item.to) | appEvmAddress
+                  "
                   [isEnableRouter]="!evmAddress?.startsWith('Null')"
                   [linkRouter]="[(evmAddress | isContract) ? '/contracts' : '/address', evmAddress | appEvmAddress]"
                   [maxCharacter]="10"
@@ -241,31 +243,35 @@
             <div *ngIf="item.amount">
               <div
                 class="item-show txt-top-expand justify-content-end {{
-                  evmAddress === item['to'] ? 'text--green-3' : 'text--red-3'
+                  (evmAddress | appEvmAddress) === (item.to | appEvmAddress) ? 'text--green-3' : 'text--red-3'
                 }}">
-                {{ evmAddress === item['to'] ? '+' : '-' }}
+                {{ (evmAddress | appEvmAddress) === (item.to | appEvmAddress) ? '+' : '-' }}
                 <div *ngIf="item.amount === 0">0</div>
                 <div
                   *ngIf="item.amount !== 0 && (item.amount | lt: 0.001)"
-                  class="{{ evmAddress === item.to ? 'text--green-3' : 'text--red-3' }}">
+                  class="{{
+                    (evmAddress | appEvmAddress) === (item.to | appEvmAddress) ? 'text--green-3' : 'text--red-3'
+                  }}">
                   {{ '< 0.001' }}
                 </div>
                 <div
                   *ngIf="item.amount | gte: 0.001"
                   [appBigNumber]="item.amount"
                   [decimal]="0"
-                  class="{{ evmAddress === item.to ? 'text--green-3' : 'text--red-3' }}"></div>
+                  class="{{
+                    (evmAddress | appEvmAddress) === (item.to | appEvmAddress) ? 'text--green-3' : 'text--red-3'
+                  }}"></div>
               </div>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between item-expand">
             <div class="d-flex align-items-center">
               <div>
-                <ng-container *ngIf="evmAddress !== item.to">
+                <ng-container *ngIf="(evmAddress | appEvmAddress) !== (item.to | appEvmAddress)">
                   <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
                   <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
                 </ng-container>
-                <ng-container *ngIf="evmAddress === item.to">
+                <ng-container *ngIf="(evmAddress | appEvmAddress) === (item.to | appEvmAddress)">
                   <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
                   <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
                 </ng-container>
