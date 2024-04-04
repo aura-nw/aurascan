@@ -37,7 +37,7 @@ export class PopupNameTagComponent implements OnInit {
     Contract: 'contract',
   };
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
-  chainName = this.environmentService.chainName.toLowerCase();
+  chainName = this.environmentService.chainName?.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
   prefixAccAddr = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
@@ -153,8 +153,8 @@ export class PopupNameTagComponent implements OnInit {
     let payload = {
       isFavorite: isFavorite == 1,
       type: this.isAccount ? 'account' : 'contract',
-      address: cosmosAddress.toLowerCase(),
-      evmAddress: evmAddress.toLowerCase(),
+      address: cosmosAddress?.toLowerCase(),
+      evmAddress: evmAddress?.toLowerCase(),
       nameTag: name,
       note: note,
       id: this.idEdit,

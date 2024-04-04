@@ -84,7 +84,7 @@ export class PopupWatchlistComponent implements OnInit {
   };
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
-  chainName = this.environmentService.chainName.toLowerCase();
+  chainName = this.environmentService.chainName?.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
   prefixAccAddr = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
@@ -251,8 +251,8 @@ export class PopupWatchlistComponent implements OnInit {
     const { favorite, address, evmAddress, note, id } = this.watchlistForm.getRawValue();
 
     let payload = {
-      address: address.toLowerCase(),
-      evmAddress: evmAddress.toLowerCase(),
+      address: address?.toLowerCase(),
+      evmAddress: evmAddress?.toLowerCase(),
       type: this.isAccount ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,

@@ -45,7 +45,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
-  chainName = this.environmentService.chainName.toLowerCase();
+  chainName = this.environmentService.chainName?.toLowerCase();
 
   chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
@@ -165,9 +165,9 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
 
     let payload = {
-      addressDefault: addressDefault.toLowerCase(),
+      addressDefault: addressDefault?.toLowerCase(),
       dataType: this.dataType,
-      address: address.toLowerCase(),
+      address: address?.toLowerCase(),
       dataRangeType: this.isFilterDate ? 'date' : 'height',
       min: this.isFilterDate ? startDate : fromBlock,
       max: this.isFilterDate ? endDate : toBlock,
