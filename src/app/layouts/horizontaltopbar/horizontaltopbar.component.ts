@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import _ from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -13,7 +14,6 @@ import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/comm
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-
 @Component({
   selector: 'app-horizontaltopbar',
   templateUrl: './horizontaltopbar.component.html',
@@ -25,18 +25,16 @@ import { MenuItem } from './menu.model';
  */
 export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = MENU;
-
   searchValue = null;
   pageTitle = null;
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
   userEmail: string;
+  destroy$ = new Subject();
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
-
-  destroy$ = new Subject();
 
   constructor(
     public router: Router,
@@ -94,68 +92,68 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   }
 
   async handleSearch() {
+    this.searchValue = this.searchValue?.trim();
     if (!this.searchValue) return;
-    this.searchValue = this.searchValue.trim();
-    let urlLink = '';
+
     const VALIDATORS = {
       HASHRULE: /^[A-Za-z0-9]/,
     };
-    const regexRule = VALIDATORS.HASHRULE;
-    if (!regexRule.test(this.searchValue)) return;
-    const isNumber = /^\d+$/.test(this.searchValue);
-    const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
+
+    if (!VALIDATORS.HASHRULE.test(this.searchValue)) return;
+
+    let addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
     // get address by nameTag
-    if (addressNameTag?.length > 0) {
-      this.searchValue = addressNameTag;
+    let address;
+
+    if (!addressNameTag && this.contractService.isValidAddress(this.searchValue)) {
+      if (this.searchValue.startsWith(this.prefixValAdd)) {
+        this.redirectPage('validators', this.searchValue);
+      } else if (this.searchValue?.length === LENGTH_CHARACTER.CONTRACT) {
+        // case cosmos contract
+        this.redirectPage('contracts', this.searchValue);
+      } else {
+        addressNameTag = this.searchValue;
+      }
     }
 
-    // check is EVM address
-    if (this.searchValue.startsWith(EWalletType.EVM)) {
-      if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
-        // case EVM transaction
-        this.getEvmTxnDetail(this.searchValue);
-      } else {
-        // check if address EVM contract or account
-        this.contractService.findEvmContract(this.searchValue).subscribe({
-          next: (res) => {
-            urlLink = res?.evm_smart_contract?.length > 0 ? 'evm-contracts' : 'address';
-            this.redirectPage(urlLink);
-          },
-          error: (e) => {
-            return;
-          },
-        });
-      }
+    if (!addressNameTag && this.contractService.isValidContract(this.searchValue)) {
+      addressNameTag = this.searchValue;
+    }
+
+    if (addressNameTag) {
+      address = transferAddress(this.prefixNormalAdd, addressNameTag);
+      this.contractService.searchAddress(address).subscribe({
+        next: (res) => {
+          if (res?.account?.length > 0 || res.validator?.length > 0) {
+            this.redirectPage('address', address.accountEvmAddress);
+          } else if (res.evm_smart_contract?.length > 0) {
+            this.redirectPage('evm-contracts', address.accountEvmAddress);
+          }
+        },
+        error: (e) => {
+          this.searchValue = '';
+        },
+      });
     } else {
-      if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
-        // case cosmoms transaction
+      if (
+        this.searchValue.startsWith(EWalletType.EVM) &&
+        this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION
+      ) {
+        this.getEvmTxnDetail(this.searchValue);
+      } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
         this.getTxhDetail(this.searchValue);
-      } else if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
-        // case cosmos contract
-        urlLink = 'contracts';
-        this.redirectPage(urlLink);
-      } else if (this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
-        // case cosmos address or validator address
-        if (this.searchValue.length === LENGTH_CHARACTER.ADDRESS) {
-          urlLink = 'address';
-        } else if (this.searchValue.startsWith(this.prefixValAdd)) {
-          urlLink = 'validators';
-        } else {
-          return;
-        }
-        this.redirectPage(urlLink);
-      } else if (isNumber) {
-        // case block
-        urlLink = 'block';
-        this.redirectPage(urlLink);
+      } else if (this.isBlock(this.searchValue)) {
+        this.redirectPage('block', this.searchValue);
       }
     }
   }
 
-  redirectPage(urlLink: string) {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([urlLink, this.searchValue]).then((r) => {});
-    });
+  isBlock(value) {
+    return _.isNumber(+value);
+  }
+
+  redirectPage(urlLink: string, value: string | number) {
+    this.router.navigate([urlLink, value]);
   }
 
   getEvmTxnDetail(value): void {
@@ -166,7 +164,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.queryTransactionByEvmHash(payload).subscribe({
       next: (res) => {
         if (res?.transaction?.length > 0) {
-          this.redirectPage('tx');
+          this.redirectPage('tx', value);
         } else {
           this.searchValue = '';
         }
@@ -185,9 +183,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['tx', this.searchValue]);
-          });
+          this.redirectPage('tx', value);
         } else {
           this.searchValue = '';
         }

@@ -107,14 +107,16 @@ export class NameTagComponent implements OnInit {
 
   editPrivateName() {
     const userEmail = this.userService.getCurrentUser()?.email;
-    const dataNameTag = this.nameTagService.findNameTag(this.value);
+    let dataNameTag = this.nameTagService.findNameTag(this.value);
     if (userEmail) {
+      const type = this.isContractAddress ? 'contract' : 'account';
       if (dataNameTag) {
+        dataNameTag['type'] = type;
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, {
           address: this.value,
-          type: this.isContractAddress ? 'contract' : 'account',
+          type,
         });
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
