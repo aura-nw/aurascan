@@ -19,39 +19,9 @@
     "quotaSetPrivateName": 10,
     "quotaSetWatchList": 10,
     "quotaNotification": 100,
-    "coins": [
-      {
-        "name": "Serenity Aura",
-        "display": "AURA",
-        "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Serenity Aura 2",
-        "display": "AURA",
-        "denom": "ibc/64846F530A4FFAF387CFC4F3F369EA9C83FC158B7F09B4573DD9A3EE8EA49F06",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Serenity Aura 3",
-        "display": "AURA",
-        "denom": "ibc/0BE15F56B56143F8E36B346577011F6661D3445EDC3B81891A9779F85ED90D75",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Serenity Aura 4",
-        "display": "AURA4",
-        "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      }
-    ],
     "features": [],
     "chain_info": {
-      "chainId": "aura-testnet-2",
+      "chainId": "auradev_1235-3",
       "chainName": "aura devnet",
       "rpc": "https://rpc.dev.aura.network",
       "rest": "https://lcd.dev.aura.network",
@@ -96,8 +66,34 @@
       "logo": "https://i.imgur.com/zi0mTYb.png",
       "explorer": "https://explorer.dev.aura.network/",
       "beta": "false"
+    },
+    "evmChainInfo": {
+      "name": "Aura EVM Devnet",
+      "chain": "Aura-Dev",
+      "rpc": "https://jsonrpc.dev.aura.network",
+      "faucets": [""],
+      "nativeCurrency": {
+        "name": "test-Aura",
+        "symbol": "tAURA",
+        "decimals": 18
+      },
+      "infoURL": "https://aura.network",
+      "shortName": "aura-devnet",
+      "chainId": 1235,
+      "networkId": 1235,
+      "slip44": 1,
+      "icon": "",
+      "explorers": [
+        {
+          "name": "Aura Explorer (Aurascan)",
+          "url": "https://explorer.dev.aura.network",
+          "standard": "none",
+          "icon": ""
+        }
+      ]
     }
   },
+  "etherJsonRpc": "https://jsonrpc.dev.aura.network",
   "image": {
     "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
     "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
@@ -139,7 +135,7 @@
           "name": "Aurascan",
           "description": "Aura Network Explorer",
           "url": "https://explorer.dev.aurascan.io/",
-          "icons": ["https://explorer.dev.aura.network/assets/images/logo/title-logo.png"]
+          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
         }
       }
     }
