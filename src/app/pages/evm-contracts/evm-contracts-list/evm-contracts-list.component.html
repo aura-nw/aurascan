@@ -112,8 +112,8 @@
                           *ngIf="data['contract_verification'] === ContractVerifyType.Verified" />
                       </div>
                       <app-name-tag
-                        [value]="data[template.matColumnDef] | appEvmAddress"
-                        [linkRouter]="[template.isUrl, data[template.matColumnDef] | appEvmAddress]"
+                        [value]="data[template.matColumnDef]"
+                        [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                         [maxCharacter]="12"
                         [tooltipPosition]="'tooltip--right'"></app-name-tag>
                     </div>
@@ -125,7 +125,7 @@
                       <a
                         *ngIf="data['token_tracker']"
                         [appTooltip]="data['token_tracker']"
-                        [routerLink]="['/token', data['address'] | appEvmAddress]">
+                        [routerLink]="['/token', data['address']]">
                         {{ data['token_tracker'] | ellipsis: 18 }}
                       </a>
                       <span *ngIf="!data['token_tracker']">-</span>
@@ -133,8 +133,8 @@
                     <ng-container *ngSwitchCase="'creator'">
                       <app-name-tag
                         *ngIf="data[template.matColumnDef]"
-                        [value]="data[template.matColumnDef] | appEvmAddress"
-                        [linkRouter]="[template.isUrl, data[template.matColumnDef] | appEvmAddress]"
+                        [value]="data[template.matColumnDef]"
+                        [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                         [maxCharacter]="12"
                         [tooltipPosition]="'tooltip--right'"></app-name-tag>
                       <span *ngIf="!data[template.matColumnDef]">-</span>

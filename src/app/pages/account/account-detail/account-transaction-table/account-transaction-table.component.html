@@ -427,6 +427,7 @@
                       <ng-container *ngIf="+data[template.matColumnDef] > 0">
                         <span
                           [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                          [decimalLengthTooltip]="12"
                           *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
                           {{ '<0.001' }}
                         </span>
@@ -435,7 +436,7 @@
                           [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
                           [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
                           [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="decimal"></span>
+                          [decimal]="0"></span>
                         <span class="ml-1" appLinkDenom>{{ denom }}</span>
                       </ng-container>
                     </div>
@@ -486,31 +487,23 @@
                           *ngIf="index < data.limit">
                           <div class="item-show d-flex justify-content-between align-items-center">
                             <app-name-tag
-                              [value]="item.fromAddress || currentAddress | appEvmAddress"
+                              [value]="item.fromAddress || currentAddress"
                               [iconContract]="item.fromAddress || currentAddress | isContract"
                               [linkRouter]="[
                                 (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
-                                item.fromAddress || currentAddress | appEvmAddress
+                                item.fromAddress || currentAddress
                               ]"
                               [isEnableRouter]="
                                 !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                item.fromAddress?.toLowerCase() !== currentAddress?.toLowerCase()
+                                item.fromAddress !== currentAddress
                               ">
                             </app-name-tag>
                             <div class="box-token-transfer d-flex mr-8">
                               <span
                                 class="token-transfer-status d-inline-flex align-items-center caption"
-                                [ngClass]="{
-                                  'status-out': item['toAddress']?.toLowerCase() !== currentAddress?.toLowerCase()
-                                }">
-                                <ng-container
-                                  *ngIf="item['toAddress']?.toLowerCase() === currentAddress?.toLowerCase()">
-                                  IN
-                                </ng-container>
-                                <ng-container
-                                  *ngIf="item['toAddress']?.toLowerCase() !== currentAddress?.toLowerCase()">
-                                  OUT
-                                </ng-container>
+                                [ngClass]="{ 'status-out': item['toAddress'] !== currentAddress }">
+                                <ng-container *ngIf="item['toAddress'] === currentAddress"> IN </ng-container>
+                                <ng-container *ngIf="item['toAddress'] !== currentAddress"> OUT </ng-container>
                               </span>
                             </div>
                           </div>
@@ -554,7 +547,7 @@
                                 [iconContract]="item.toAddress || currentAddress | isContract"
                                 [isEnableRouter]="
                                   !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                  item.toAddress?.toLowerCase() !== currentAddress?.toLowerCase()
+                                  item.toAddress !== currentAddress
                                 ">
                               </app-name-tag>
                             </div>
@@ -585,15 +578,15 @@
                       <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">
                         <app-name-tag
                           *ngIf="data[template.matColumnDef]"
-                          [value]="data[template.matColumnDef] | appEvmAddress"
+                          [value]="data[template.matColumnDef]"
                           [linkRouter]="[
                             (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
-                            data[template.matColumnDef] | appEvmAddress
+                            data[template.matColumnDef]
                           ]"
                           [iconContract]="data[template.matColumnDef] | isContract"
                           [isEnableRouter]="
                             !data[template.matColumnDef]?.startsWith('Null') &&
-                            data[template.matColumnDef]?.toLowerCase() !== currentAddress?.toLowerCase()
+                            data[template.matColumnDef] !== currentAddress
                           ">
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
@@ -607,15 +600,15 @@
                             <div class="item-show d-flex align-items-center">
                               <div [style]="'min-width: 148px'">
                                 <app-name-tag
-                                  [value]="item.to || currentAddress | appEvmAddress"
+                                  [value]="item.to || currentAddress"
                                   [linkRouter]="[
                                     (item.to || currentAddress | isContract) ? '/contracts' : '/address',
-                                    item.to || currentAddress | appEvmAddress
+                                    item.to || currentAddress
                                   ]"
                                   [iconContract]="item.to || currentAddress | isContract"
                                   [isEnableRouter]="
                                     !(item.to?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                    item.to?.toLowerCase() !== currentAddress?.toLowerCase()
+                                    item.to !== currentAddress
                                   ">
                                 </app-name-tag>
                               </div>
@@ -647,29 +640,23 @@
                             *ngIf="index < data.limit">
                             <div class="item-show d-flex justify-content-between align-items-center">
                               <app-name-tag
-                                [value]="item.from || currentAddress | appEvmAddress"
+                                [value]="item.from || currentAddress"
                                 [iconContract]="item.from || currentAddress | isContract"
                                 [linkRouter]="[
                                   (item.from || currentAddress | isContract) ? '/contracts' : '/address',
-                                  item.from || currentAddress | appEvmAddress
+                                  item.from || currentAddress
                                 ]"
                                 [isEnableRouter]="
                                   !(item.from?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                  item.from?.toLowerCase() !== currentAddress?.toLowerCase()
+                                  item.from !== currentAddress
                                 ">
                               </app-name-tag>
                               <div class="box-token-transfer d-flex mr-8">
                                 <span
                                   class="token-transfer-status d-inline-flex align-items-center caption"
-                                  [ngClass]="{
-                                    'status-out': item['to']?.toLowerCase() !== currentAddress?.toLowerCase()
-                                  }">
-                                  <ng-container *ngIf="item['to']?.toLowerCase() === currentAddress?.toLowerCase()">
-                                    IN
-                                  </ng-container>
-                                  <ng-container *ngIf="item['to']?.toLowerCase() !== currentAddress?.toLowerCase()">
-                                    OUT
-                                  </ng-container>
+                                  [ngClass]="{ 'status-out': item['to'] !== currentAddress }">
+                                  <ng-container *ngIf="item['to'] === currentAddress"> IN </ng-container>
+                                  <ng-container *ngIf="item['to'] !== currentAddress"> OUT </ng-container>
                                 </span>
                               </div>
                             </div>
@@ -730,11 +717,13 @@
                     </div>
                     <div *ngSwitchCase="'evmTx'">
                       <a
+                        *ngIf="data[template.matColumnDef]"
                         [routerLink]="['/tx', data[template.matColumnDef]]"
                         [copyBtn]="data[template.matColumnDef]"
                         class="ml-2 p-0 button button--ssm d-inline-flex">
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
+                      <span *ngIf="!data[template.matColumnDef]">{{ '-' }}</span>
                     </div>
                     <div *ngSwitchCase="'hash'">
                       <a
@@ -764,9 +753,9 @@
                             <div class="mt-1">
                               <app-name-tag
                                 [iconContract]="true"
-                                [linkRouter]="['/contracts', item.contractAddress || currentAddress | appEvmAddress]"
+                                [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
                                 [isShorterText]="true"
-                                [value]="item.contractAddress | appEvmAddress"
+                                [value]="item.contractAddress"
                                 [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                             </div>
                           </div>
@@ -828,12 +817,13 @@
               {
                 label: 'EVM Transaction',
                 class: 'text--gray-1 body-02-mob',
-                info:
-                  '<a class=text--primary href=' +
-                  ('/tx/' + data.tx_hash) +
-                  '>' +
-                  (data.tx_hash | ellipsis: 8 : 8) +
-                  '</a>'
+                info: data.evmTx
+                  ? '<a class=text--primary href=' +
+                    ('/tx/' + data.evmTx) +
+                    '>' +
+                    (data.evmTx | ellipsis: 8 : 8) +
+                    '</a>'
+                  : '-'
               }
             ]"></app-card-mob-account>
         </ng-container>

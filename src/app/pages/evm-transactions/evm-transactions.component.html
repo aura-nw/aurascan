@@ -27,16 +27,12 @@
                         {{ data.type | convertEvmTx }}
                       </div>
                       <ng-container *ngSwitchCase="'from'">
-                        <app-name-tag
-                          [value]="data[template.matColumnDef] | appEvmAddress"
-                          *ngIf="data[template.matColumnDef]">
+                        <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to'">
-                        <app-name-tag
-                          [value]="data[template.matColumnDef] | appEvmAddress"
-                          *ngIf="data[template.matColumnDef]">
+                        <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>

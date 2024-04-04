@@ -28,13 +28,16 @@
                           [routerLink]="['/tx', data['tx_hash']]">
                           {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                         </a>
-                        <a
-                          *ngSwitchCase="'hash'"
-                          [copyBtn]="data[template.matColumnDef]"
-                          class="text--primary cursor-pointer hash-link"
-                          [routerLink]="['/tx', data['hash']]">
-                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
-                        </a>
+                        <ng-container *ngSwitchCase="'hash'">
+                          <a
+                            *ngIf="data[template.matColumnDef]"
+                            [copyBtn]="data[template.matColumnDef]?.toString()"
+                            class="text--primary cursor-pointer hash-link"
+                            [routerLink]="['/tx', data[template.matColumnDef]]">
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                          </a>
+                          <span *ngIf="!data.hash" class="text--white">-</span>
+                        </ng-container>
                         <a
                           *ngSwitchCase="'height'"
                           class="text--primary cursor-pointer block-link"
@@ -77,7 +80,7 @@
                               [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
                               [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
                               [appBigNumber]="data[template.matColumnDef]"
-                              [decimal]="decimal"></span>
+                              [decimal]="0"></span>
                             <span class="ml-1" appLinkDenom>{{ denom }}</span>
                           </ng-container>
                         </div>

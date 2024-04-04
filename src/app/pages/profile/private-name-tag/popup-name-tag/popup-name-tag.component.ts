@@ -5,7 +5,7 @@ import {
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, MAX_LENGTH_NAME_TAG } from 'src/app/core/constants/common.constant';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -37,8 +37,9 @@ export class PopupNameTagComponent implements OnInit {
     Contract: 'contract',
   };
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
-  chainName = this.environmentService.chainName.toLowerCase();
+  chainName = this.environmentService.chainName?.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
+  prefixAccAddr = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -102,20 +103,40 @@ export class PopupNameTagComponent implements OnInit {
     this.checkPublicNameTag();
   }
 
-  handleSetAddress(address) {
-    const { accountAddress, accountEvmAddress } = transferAddress(
+  handleSetAddress(address, controlName?: string) {
+    let { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
+    // inValid address
+    if (accountAddress.length > 0 && !accountEvmAddress) {
+      // check if address is contract and start with bench32Add -> true/ else false
+      if (address.length === LENGTH_CHARACTER.CONTRACT && address.startsWith(this.prefixAccAddr)) {
+        accountEvmAddress = null;
+      } else {
+        if (controlName === 'cosmosAddress') {
+          this.toastr.error('Invalid ' + this.chainName + ' address format');
+          this.privateNameForm.get('evmAddress').disable();
+          this.privateNameForm.get('cosmosAddress').setErrors({ incorrect: true });
+        }
+        if (controlName === 'evmAddress') {
+          this.toastr.error('Invalid EVM address format');
+          this.privateNameForm.get('cosmosAddress').disable();
+          this.privateNameForm.get('evmAddress').setErrors({ incorrect: true });
+        }
+        return;
+      }
+    }
+    // valid address
     this.privateNameForm.controls['cosmosAddress'].setValue(accountAddress);
     if (accountEvmAddress) {
       this.privateNameForm.controls['evmAddress'].setValue(accountEvmAddress);
+    } else {
+      this.privateNameForm.controls['evmAddress'].setValue('');
     }
-
     this.privateNameForm.get('cosmosAddress').disable();
     this.privateNameForm.get('evmAddress').disable();
-
-    if (address == accountEvmAddress?.trim()) {
+    if (address === accountEvmAddress?.trim()) {
       this.privateNameForm.get('evmAddress').enable();
     } else {
       this.privateNameForm.get('cosmosAddress').enable();
@@ -132,8 +153,8 @@ export class PopupNameTagComponent implements OnInit {
     let payload = {
       isFavorite: isFavorite == 1,
       type: this.isAccount ? 'account' : 'contract',
-      address: cosmosAddress,
-      evmAddress,
+      address: cosmosAddress?.toLowerCase(),
+      evmAddress: evmAddress?.toLowerCase(),
       nameTag: name,
       note: note,
       id: this.idEdit,
@@ -233,10 +254,12 @@ export class PopupNameTagComponent implements OnInit {
 
   changeAddress(controlName: string) {
     const address = this.privateNameForm.get(controlName).value;
-    if (address.length === 0) return;
-
-    this.handleSetAddress(address);
-    this.checkPublicNameTag();
+    if (address.length === 0) {
+      this.resetAddress();
+    } else {
+      this.handleSetAddress(address, controlName);
+      this.checkPublicNameTag();
+    }
   }
 
   resetAddress() {
@@ -244,5 +267,6 @@ export class PopupNameTagComponent implements OnInit {
     this.privateNameForm.get('evmAddress').setValue('');
     this.privateNameForm.get('evmAddress').enable();
     this.privateNameForm.get('cosmosAddress').enable();
+    this.publicNameTag = '-';
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Route, Router, UrlSegment } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { delay, filter, map, Subject, takeUntil, tap } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -13,7 +13,6 @@ import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/comm
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-
 @Component({
   selector: 'app-horizontaltopbar',
   templateUrl: './horizontaltopbar.component.html',
@@ -25,18 +24,16 @@ import { MenuItem } from './menu.model';
  */
 export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = MENU;
-
   searchValue = null;
   pageTitle = null;
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
   userEmail: string;
+  destroy$ = new Subject();
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
-
-  destroy$ = new Subject();
 
   constructor(
     public router: Router,
@@ -46,7 +43,6 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
-    private aRoute: ActivatedRoute,
   ) {}
 
   ngOnDestroy(): void {
@@ -94,83 +90,82 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
       : this.environmentService.environment.label.desktop;
   }
 
-  async handleSearch() {
+  handleSearch() {
+    this.searchValue = this.searchValue?.trim();
     if (!this.searchValue) return;
-    this.searchValue = this.searchValue.trim();
-    let urlLink = '';
+
     const VALIDATORS = {
       HASHRULE: /^[A-Za-z0-9]/,
     };
-    const regexRule = VALIDATORS.HASHRULE;
-    if (!regexRule.test(this.searchValue)) return;
-    const isNumber = /^\d+$/.test(this.searchValue);
-    const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
-    // case address is nameTag
-    if (addressNameTag?.length > 0) {
-      this.searchValue = addressNameTag;
-    }
-    // check is EVM address
-    if (this.searchValue.startsWith(EWalletType.EVM)) {
-      if (this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
-        // case EVM transaction
-        this.getEvmTxnDetail(this.searchValue);
+
+    if (!VALIDATORS.HASHRULE.test(this.searchValue)) return;
+
+    let addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
+
+    if (!addressNameTag && this.contractService.isValidAddress(this.searchValue)) {
+      if (this.searchValue.startsWith(this.prefixValAdd)) {
+        return this.redirectPage('validators', this.searchValue);
+      } else if (this.searchValue?.length === LENGTH_CHARACTER.CONTRACT) {
+        // case cosmos contract
+        return this.redirectPage('contracts', this.searchValue);
       } else {
-        // check if address EVM contract or account
-        this.contractService.findEvmContract(this.searchValue).subscribe({
-          next: (res) => {
-            urlLink = res?.evm_smart_contract?.length > 0 ? 'evm-contracts' : 'address';
-            this.redirectPage(urlLink);
-          },
-          error: (e) => {
-            return;
-          },
-        });
+        addressNameTag = this.searchValue;
       }
+    }
+
+    if (!addressNameTag && this.contractService.isValidContract(this.searchValue)) {
+      addressNameTag = this.searchValue;
+    }
+
+    if (
+      !addressNameTag &&
+      this.searchValue.startsWith(EWalletType.EVM) &&
+      this.searchValue.length === LENGTH_CHARACTER.EVM_ADDRESS
+    ) {
+      addressNameTag = this.searchValue;
+    }
+
+    if (addressNameTag) {
+      return this.searchAddressByNameTag(addressNameTag);
     } else {
-      // if address is not EVM -> validator/Aura account/ aura transaction/ block
-      if (isNumber) {
-        // case block
-        urlLink = 'blocks';
-        this.redirectPage(urlLink);
+      if (
+        this.searchValue.startsWith(EWalletType.EVM) &&
+        this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION
+      ) {
+        return this.getEvmTxnDetail(this.searchValue);
       } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
-        // case Aura transaction
-        this.getTxhDetail(this.searchValue);
-      } else {
-        // case aura contract
-        if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
-          urlLink = 'contracts';
-          this.redirectPage(urlLink);
-        } else if (this.searchValue.startsWith(this.prefixNormalAdd)) {
-          const { accountAddress, accountEvmAddress } = transferAddress(this.prefixNormalAdd, this.searchValue);
-          // check if address EVM contract or account
-          this.contractService.findEvmContract(accountEvmAddress).subscribe({
-            next: (res) => {
-              if (res?.evm_smart_contract?.length > 0) {
-                this.searchValue = accountEvmAddress;
-                urlLink = 'evm-contracts';
-                this.redirectPage(urlLink);
-              } else {
-                urlLink = 'address';
-                this.redirectPage(urlLink);
-              }
-            },
-            error: (e) => {
-              return;
-            },
-          });
-        } else {
-          // case aura validators/ account
-          urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'address';
-          this.redirectPage(urlLink);
-        }
+        return this.getTxhDetail(this.searchValue);
+      } else if (this.isBlock(this.searchValue)) {
+        return this.redirectPage('block', this.searchValue);
       }
     }
   }
 
-  redirectPage(urlLink: string) {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([urlLink, this.searchValue]).then((r) => {});
+  searchAddressByNameTag(nametag) {
+    // get address by nameTag
+    const address = transferAddress(this.prefixNormalAdd, nametag);
+    return this.contractService.searchAddress(address).subscribe({
+      next: (res) => {
+        if (res.evm_smart_contract?.length > 0) {
+          this.redirectPage('evm-contracts', address.accountEvmAddress);
+        } else if (res?.account?.length > 0 || res.validator?.length > 0) {
+          this.redirectPage('address', address.accountEvmAddress);
+        }
+      },
+      error: (e) => {
+        this.searchValue = '';
+      },
     });
+  }
+
+  isBlock(value) {
+    return /^\d+$/.test(value);
+  }
+
+  redirectPage(urlLink: string, value: string | number) {
+    this.router.navigate([urlLink, value]);
+
+    this.searchValue = '';
   }
 
   getEvmTxnDetail(value): void {
@@ -181,7 +176,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.queryTransactionByEvmHash(payload).subscribe({
       next: (res) => {
         if (res?.transaction?.length > 0) {
-          this.redirectPage('tx');
+          this.redirectPage('tx', value);
         } else {
           this.searchValue = '';
         }
@@ -200,9 +195,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['tx', this.searchValue]);
-          });
+          this.redirectPage('tx', value);
         } else {
           this.searchValue = '';
         }

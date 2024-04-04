@@ -1,13 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { AccountTxType, ETypeFtExport, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import {
   LENGTH_CHARACTER,
   NULL_ADDRESS,
@@ -22,11 +22,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/user.service';
-import {
-  convertBech32AddressToEvmAddress,
-  convertEvmAddressToBech32Address,
-  transferAddress,
-} from 'src/app/core/utils/common/address-converter';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
 import { convertDataAccountTransaction } from 'src/app/global/global';
@@ -64,7 +60,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 17 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
-    { matColumnDef: 'evmTx', headerCellDef: 'Evmos Tx', headerWidth: 15, cssClass: 'pt-3' },
+    { matColumnDef: 'evmTx', headerCellDef: 'EVM Tx', headerWidth: 15, cssClass: 'pt-3' },
   ];
 
   templatesEvmExecute: Array<TableTemplate> = [
@@ -373,7 +369,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.getListTxByAddress(payload);
         break;
       case TabsAccountLink.EVMExecutedTxs:
-        this.currentAddress = this.addressEvm
+        this.currentAddress = this.addressEvm;
         payload.address = this.addressEvm?.toLowerCase();
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesEvmExecute;
@@ -381,7 +377,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.getListEvmTxByAddress(payload);
         break;
       case TabsAccountLink.NativeTxs:
-        this.currentAddress = this.addressNative;
+        payload.to = payload.from = this.currentAddress = this.addressNative;
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload.to = '_';
@@ -585,7 +581,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           element.from = _.get(element, 'from');
           element.to = _.get(element, 'to');
           element.timestamp = _.get(element, 'transaction.timestamp');
-          element.evmAmount = _.get(element, 'erc20_activities[0].amount') || 0;
+          element.evmAmount = _.get(element, 'transaction.transaction_messages[0].content.data.value') || 0;
         });
       } else {
         if (this.modeQuery === TabsAccountLink.FtsTxs && this.fungibleTokenType === this.tokenType.ERC20) {
@@ -760,15 +756,21 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.nextKey = null;
     this.currentKey = null;
     this.pageData.pageSize = event;
+    this.pageData.pageIndex = 0;
     this.dataSource = new MatTableDataSource();
     this.getTxsAddress(this.nextKey);
   }
 
   linkExportPage() {
-    local.setItem(
-      STORAGE_KEYS.SET_DATA_EXPORT,
-      JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }),
-    );
+    let exportType = this.modeQuery;
+    if (this.modeQuery === TabsAccountLink.FtsTxs) {
+      if (this.fungibleTokenType === ETokenCoinTypeBE.ERC20) {
+        exportType = ETypeFtExport.ERC20;
+      } else {
+        exportType = ETypeFtExport.CW20;
+      }
+    }
+    local.setItem(STORAGE_KEYS.SET_DATA_EXPORT, JSON.stringify({ address: this.currentAddress, exportType }));
     this.router.navigate(['/export-csv']);
   }
 

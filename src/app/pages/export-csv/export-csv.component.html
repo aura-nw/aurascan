@@ -61,9 +61,15 @@
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
-                  [class.active]="dataType === TabsAccountLink.FtsTxs"
-                  (click)="changeTypeFilter(TabsAccountLink.FtsTxs)">
-                  <button type="button" class="button px-2">{{ TabsAccount.FtsTxs }}</button>
+                  [class.active]="dataType === ETypeFtExport.CW20"
+                  (click)="changeTypeFilter(ETypeFtExport.CW20)">
+                  <button type="button" class="button px-2">{{ typeFtDisplay.CW20 }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === ETypeFtExport.ERC20"
+                  (click)="changeTypeFilter(ETypeFtExport.ERC20)">
+                  <button type="button" class="button px-2">{{ typeFtDisplay.ERC20 }}</button>
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
@@ -92,7 +98,7 @@
               placeholder="{{ prefix }}..."
               class="input-address px-4 convert-address"
               name="inputAddress"
-              (blur)="setAddressOther(getAddress?.value)"
+              (blur)="setAddressOther(getAddress?.value, 'address')"
               autocomplete="off" />
             <button
               class="button button-xxs p-0 mr-4"
@@ -121,7 +127,7 @@
               placeholder="0x..."
               class="input-address px-4 convert-address"
               name="inputEvmAddress"
-              (blur)="setAddressOther(getEvmAddress?.value)"
+              (blur)="setAddressOther(getEvmAddress?.value, 'evmAddress')"
               autocomplete="off" />
             <button
               class="button button-xxs p-0 mr-4"

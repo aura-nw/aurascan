@@ -60,7 +60,7 @@
           <div class="text--gray-4">From</div>
           <app-name-tag
             *ngIf="data?.from"
-            [value]="data?.from | appEvmAddress"
+            [value]="data?.from"
             [isEnableRouter]="!data?.from?.startsWith('Null') && data?.from !== currentAddress"></app-name-tag>
           <span *ngIf="!data?.from" class="text--white">-</span>
         </div>
@@ -68,7 +68,7 @@
           <div class="text--gray-4">To</div>
           <app-name-tag
             *ngIf="data?.to"
-            [value]="data?.to | appEvmAddress"
+            [value]="data?.to"
             [isEnableRouter]="!data?.to?.startsWith('Null') && data?.to !== currentAddress"></app-name-tag>
           <span *ngIf="!data?.to" class="text--white">-</span>
         </div>

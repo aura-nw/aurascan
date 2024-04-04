@@ -31,9 +31,7 @@
 
         <span appLinkDenom>{{ denom }}</span>
 
-        <a
-          class="text--primary text-decoration-underline ml-1"
-          [routerLink]="['/address', contractDetail.address | appEvmAddress]">
+        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/address', contractDetail.address]">
           More info
         </a>
       </div>
@@ -69,9 +67,7 @@
               contractDetail?.erc20_contract?.name &&
               contractDetail?.erc20_contract?.symbol
             ">
-            <a
-              class="text--primary break-word line-claim-v--des"
-              [routerLink]="['/token', contractDetail?.address | appEvmAddress]">
+            <a class="text--primary break-word line-claim-v--des" [routerLink]="['/token', contractDetail?.address]">
               {{ contractDetail.erc20_contract?.name }} ({{ contractDetail.erc20_contract?.symbol }})
             </a>
             <div class="cursor-pointer">
@@ -92,7 +88,7 @@
               contractDetail?.cw721_contract?.symbol
             "
             class="text--primary break-word line-claim-v--des"
-            [routerLink]="['/token', contractDetail?.address | appEvmAddress]">
+            [routerLink]="['/token', contractDetail?.address]">
             {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
           </a>
         </div>
