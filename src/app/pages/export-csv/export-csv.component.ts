@@ -45,6 +45,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  chainName = this.environmentService.chainName.toLowerCase();
 
   chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
@@ -365,7 +366,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
         accountEvmAddress = null;
       } else {
         if (controlName === 'address') {
-          this.toastr.error('Invalid evmos address format');
+          this.toastr.error('Invalid ' + this.chainName + ' address format');
           this.csvForm.get('evmAddress').disable();
           this.csvForm.get('address').setErrors({ incorrect: true });
         }
