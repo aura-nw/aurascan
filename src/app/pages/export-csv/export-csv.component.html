@@ -98,7 +98,7 @@
               placeholder="{{ prefix }}..."
               class="input-address px-4 convert-address"
               name="inputAddress"
-              (blur)="setAddressOther(getAddress?.value)"
+              (blur)="setAddressOther(getAddress?.value, 'address')"
               autocomplete="off" />
             <button
               class="button button-xxs p-0 mr-4"
@@ -127,7 +127,7 @@
               placeholder="0x..."
               class="input-address px-4 convert-address"
               name="inputEvmAddress"
-              (blur)="setAddressOther(getEvmAddress?.value)"
+              (blur)="setAddressOther(getEvmAddress?.value, 'evmAddress')"
               autocomplete="off" />
             <button
               class="button button-xxs p-0 mr-4"

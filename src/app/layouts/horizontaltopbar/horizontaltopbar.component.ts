@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import _ from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -91,7 +90,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
       : this.environmentService.environment.label.desktop;
   }
 
-  async handleSearch() {
+  handleSearch() {
     this.searchValue = this.searchValue?.trim();
     if (!this.searchValue) return;
 
@@ -102,15 +101,13 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     if (!VALIDATORS.HASHRULE.test(this.searchValue)) return;
 
     let addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
-    // get address by nameTag
-    let address;
 
     if (!addressNameTag && this.contractService.isValidAddress(this.searchValue)) {
       if (this.searchValue.startsWith(this.prefixValAdd)) {
-        this.redirectPage('validators', this.searchValue);
+        return this.redirectPage('validators', this.searchValue);
       } else if (this.searchValue?.length === LENGTH_CHARACTER.CONTRACT) {
         // case cosmos contract
-        this.redirectPage('contracts', this.searchValue);
+        return this.redirectPage('contracts', this.searchValue);
       } else {
         addressNameTag = this.searchValue;
       }
@@ -120,40 +117,55 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
       addressNameTag = this.searchValue;
     }
 
+    if (
+      !addressNameTag &&
+      this.searchValue.startsWith(EWalletType.EVM) &&
+      this.searchValue.length === LENGTH_CHARACTER.EVM_ADDRESS
+    ) {
+      addressNameTag = this.searchValue;
+    }
+
     if (addressNameTag) {
-      address = transferAddress(this.prefixNormalAdd, addressNameTag);
-      this.contractService.searchAddress(address).subscribe({
-        next: (res) => {
-          if (res?.account?.length > 0 || res.validator?.length > 0) {
-            this.redirectPage('address', address.accountEvmAddress);
-          } else if (res.evm_smart_contract?.length > 0) {
-            this.redirectPage('evm-contracts', address.accountEvmAddress);
-          }
-        },
-        error: (e) => {
-          this.searchValue = '';
-        },
-      });
+      return this.searchAddressByNameTag(addressNameTag);
     } else {
       if (
         this.searchValue.startsWith(EWalletType.EVM) &&
         this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION
       ) {
-        this.getEvmTxnDetail(this.searchValue);
+        return this.getEvmTxnDetail(this.searchValue);
       } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
-        this.getTxhDetail(this.searchValue);
+        return this.getTxhDetail(this.searchValue);
       } else if (this.isBlock(this.searchValue)) {
-        this.redirectPage('block', this.searchValue);
+        return this.redirectPage('block', this.searchValue);
       }
     }
   }
 
+  searchAddressByNameTag(nametag) {
+    // get address by nameTag
+    const address = transferAddress(this.prefixNormalAdd, nametag);
+    return this.contractService.searchAddress(address).subscribe({
+      next: (res) => {
+        if (res?.account?.length > 0 || res.validator?.length > 0) {
+          this.redirectPage('address', address.accountEvmAddress);
+        } else if (res.evm_smart_contract?.length > 0) {
+          this.redirectPage('evm-contracts', address.accountEvmAddress);
+        }
+      },
+      error: (e) => {
+        this.searchValue = '';
+      },
+    });
+  }
+
   isBlock(value) {
-    return _.isNumber(+value);
+    return /^\d+$/.test(value);
   }
 
   redirectPage(urlLink: string, value: string | number) {
     this.router.navigate([urlLink, value]);
+
+    this.searchValue = '';
   }
 
   getEvmTxnDetail(value): void {
