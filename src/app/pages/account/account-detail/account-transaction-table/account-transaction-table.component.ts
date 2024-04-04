@@ -60,7 +60,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 17 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
-    { matColumnDef: 'evmTx', headerCellDef: 'Evmos Tx', headerWidth: 15, cssClass: 'pt-3' },
+    { matColumnDef: 'evmTx', headerCellDef: 'EVM Tx', headerWidth: 15, cssClass: 'pt-3' },
   ];
 
   templatesEvmExecute: Array<TableTemplate> = [
