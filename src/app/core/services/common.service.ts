@@ -160,8 +160,8 @@ export class CommonService {
     return this._http.get<any>(url);
   }
 
-  searchValue(value) {
-    const query = `query searchHeader($evm_address: String = null, $address: String = null) {
+  searchAddress(value) {
+    const query = `query searchAddress($evm_address: String = null, $address: String = null) {
       ${this.envDB} {
         account(limit: 1, where: {address: {_eq: $address}}) {
           address
@@ -183,7 +183,7 @@ export class CommonService {
           evm_address: value?.accountEvmAddress?.toLowerCase(),
           address: value?.accountAddress?.toLowerCase(),
         },
-        operationName: 'searchHeader',
+        operationName: 'searchAddress',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
