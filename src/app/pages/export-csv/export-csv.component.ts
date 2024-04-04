@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import * as moment from 'moment';
 import { Subject, takeUntil } from 'rxjs';
 import { ETypeFtExport, ExportFileName, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -41,6 +41,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  chainName = this.environmentService.chainName?.toLowerCase();
+
   chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
   ETypeFtExport = ETypeFtExport;
@@ -161,8 +163,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
     let payload = {
       dataType: this.dataType,
-      address: address,
-      evmAddress: accountEvmAddress || '',
+      address: address?.toLowerCase(),
+      evmAddress: accountEvmAddress?.toLowerCase() || '',
       dataRangeType: this.isFilterDate ? 'date' : 'height',
       min: this.isFilterDate ? startDate : fromBlock,
       max: this.isFilterDate ? endDate : toBlock,
@@ -350,37 +352,45 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     this.csvForm.get('evmAddress').enable();
   }
 
-  setAddressOther(address) {
+  setAddressOther(address, controlName?: string) {
     this.isValidAddress = true;
     this.isValidEvmAddress = true;
-
-    if (address.startsWith(EWalletType.EVM) && !this.commonService.isValidEvmAddress(address)) {
-      this.csvForm.controls.address.setValue('');
-      this.isValidEvmAddress = false;
-      return;
-    } else if (address.startsWith(this.prefix) && !this.commonService.isValidAddress(address)) {
-      this.csvForm.controls.evmAddress.setValue('');
-      this.isValidAddress = false;
-      return;
-    }
-
-    if (address.length > 0) {
-      if (this.commonService.isValidAddress(address)) {
-        this.csvForm.get('evmAddress').disable();
+    let { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      address,
+    );
+    // inValid address
+    if (accountAddress.length > 0 && !accountEvmAddress) {
+      // check if address is contract and start with bench32Add -> true/ else false
+      if (address.length === LENGTH_CHARACTER.CONTRACT && address.startsWith(this.prefix)) {
+        accountEvmAddress = null;
       } else {
-        this.csvForm.get('address').disable();
+        if (controlName === 'address') {
+          this.toastr.error('Invalid ' + this.chainName + ' address format');
+          this.csvForm.get('evmAddress').disable();
+          this.csvForm.get('address').setErrors({ incorrect: true });
+        }
+        if (controlName === 'evmAddress') {
+          this.toastr.error('Invalid EVM address format');
+          this.csvForm.get('address').disable();
+          this.csvForm.get('evmAddress').setErrors({ incorrect: true });
+        }
+        return;
       }
     }
-
-    if (!this.commonService.isValidContract(address)) {
-      const { accountAddress, accountEvmAddress } = transferAddress(
-        this.chainInfo.bech32Config.bech32PrefixAccAddr,
-        address,
-      );
-      this.csvForm.controls.address.setValue(accountAddress);
-      if (accountEvmAddress) {
-        this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
-      }
+    // valid address
+    this.csvForm.controls.address.setValue(accountAddress);
+    if (accountEvmAddress) {
+      this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
+    } else {
+      this.csvForm.controls.evmAddress.setValue('');
+    }
+    this.getAddress.disable();
+    this.getEvmAddress.disable();
+    if (address === accountEvmAddress?.trim()) {
+      this.getEvmAddress.enable();
+    } else {
+      this.getAddress.enable();
     }
   }
 }

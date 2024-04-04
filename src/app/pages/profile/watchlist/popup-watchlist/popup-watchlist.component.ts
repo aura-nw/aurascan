@@ -1,9 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-  MatLegacyDialogRef as MatDialogRef,
-} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -12,6 +8,8 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { isSafari } from 'src/app/core/utils/common/validation';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -86,8 +84,10 @@ export class PopupWatchlistComponent implements OnInit {
   };
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
-  chainName = this.environmentService.chainName.toLowerCase();
+  chainName = this.environmentService.chainName?.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
+  prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  prefixAccAddr = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -139,7 +139,7 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm = this.fb.group({
       favorite: false,
       tracking: true,
-      isAccount: [undefined, [Validators.required]],
+      isAccount: [null, [Validators.required]],
       address: [''],
       evmAddress: ['', [Validators.required]],
       note: ['', [Validators.maxLength(200)]],
@@ -174,15 +174,36 @@ export class PopupWatchlistComponent implements OnInit {
     this.checkNameTag();
   }
 
-  handleSetAddress(address) {
-    const { accountAddress, accountEvmAddress } = transferAddress(
+  handleSetAddress(address, controlName?: string) {
+    let { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
-
+    // inValid address
+    if (accountAddress.length > 0 && !accountEvmAddress) {
+      // check if address is contract and start with bench32Add -> true/ else false
+      if (address.length === LENGTH_CHARACTER.CONTRACT && address.startsWith(this.prefixAccAddr)) {
+        accountEvmAddress = null;
+      } else {
+        if (controlName === 'address') {
+          this.toastr.error('Invalid ' + this.chainName + ' address format');
+          this.watchlistForm.get('evmAddress').disable();
+          this.watchlistForm.get('address').setErrors({ incorrect: true });
+        }
+        if (controlName === 'evmAddress') {
+          this.toastr.error('Invalid EVM address format');
+          this.watchlistForm.get('address').disable();
+          this.watchlistForm.get('evmAddress').setErrors({ incorrect: true });
+        }
+        return;
+      }
+    }
+    // valid address
     this.watchlistForm.controls['address'].setValue(accountAddress);
     if (accountEvmAddress) {
       this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    } else {
+      this.watchlistForm.controls['evmAddress'].setValue('');
     }
     this.watchlistForm.get('address').disable();
     this.watchlistForm.get('evmAddress').disable();
@@ -210,7 +231,7 @@ export class PopupWatchlistComponent implements OnInit {
       return false;
     }
 
-    if (this.watchlistForm.value.isAccount == null) {
+    if (this.watchlistForm.value.isAccount == undefined) {
       return false;
     }
 
@@ -230,8 +251,8 @@ export class PopupWatchlistComponent implements OnInit {
     const { favorite, address, evmAddress, note, id } = this.watchlistForm.getRawValue();
 
     let payload = {
-      address,
-      evmAddress,
+      address: address?.toLowerCase(),
+      evmAddress: evmAddress?.toLowerCase(),
       type: this.isAccount ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,
@@ -311,7 +332,7 @@ export class PopupWatchlistComponent implements OnInit {
     this.isAccount = type;
     this.isContract = !this.isAccount;
     this.isError = false;
-    this.watchlistForm.value.isAccount = type;
+    this.watchlistForm.value.isAccount = this.isAccount;
     this.checkFormValid();
   }
 
@@ -345,9 +366,14 @@ export class PopupWatchlistComponent implements OnInit {
 
   changeAddress(controlName: string) {
     const address = this.watchlistForm.get(controlName).value;
-    if (address.length === 0) return;
-    this.handleSetAddress(address);
-    this.checkNameTag();
+    if (address.length === 0) {
+      this.resetAddress();
+    } else {
+      this.handleSetAddress(address, controlName);
+      this.checkNameTag();
+      this.watchlistForm.value.isAccount = this.isAccount;
+    }
+    this.checkFormValid();
   }
 
   resetAddress() {
@@ -355,5 +381,8 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm.get('evmAddress').setValue('');
     this.watchlistForm.get('evmAddress').enable();
     this.watchlistForm.get('address').enable();
+    this.publicNameTag = '-';
+    this.privateNameTag = '-';
+    this.checkFormValid();
   }
 }
