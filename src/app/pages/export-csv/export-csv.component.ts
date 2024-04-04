@@ -4,18 +4,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
 import { Subject, takeUntil } from 'rxjs';
-import { ExportFileName, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { DATEFORMAT, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { ETypeFtExport, ExportFileName, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { DATEFORMAT, LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { UserService } from 'src/app/core/services/user.service';
-import {
-  convertBech32AddressToEvmAddress,
-  convertEvmAddressToBech32Address,
-  transferAddress,
-} from 'src/app/core/utils/common/address-converter';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
@@ -45,8 +41,15 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   isValidCaptcha = false;
   siteKey = this.environmentService.siteKeyCaptcha;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  chainName = this.environmentService.chainName?.toLowerCase();
+
   chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
+  ETypeFtExport = ETypeFtExport;
+  typeFtDisplay = {
+    CW20: 'CW20 Token Transfer',
+    ERC20: 'ERC20 Token Transfer',
+  };
 
   destroyed$ = new Subject<void>();
 
@@ -127,8 +130,10 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
         return this.TabsAccount.EVMExecutedTxs;
       case TabsAccountLink.NativeTxs:
         return this.TabsAccount.NativeTxs;
-      case TabsAccountLink.FtsTxs:
-        return this.TabsAccount.FtsTxs;
+      case ETypeFtExport.CW20:
+        return this.typeFtDisplay.CW20;
+      case ETypeFtExport.ERC20:
+        return this.typeFtDisplay.ERC20;
       case TabsAccountLink.NftTxs:
         return this.TabsAccount.NftTxs;
       default:
@@ -143,9 +148,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let { addressDefault, address, dataType, displayPrivate, endDate, fromBlock, startDate, toBlock } =
-      this.csvForm.getRawValue();
-    addressDefault = address;
+    let { address, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.getRawValue();
 
     if (startDate || endDate) {
       startDate = moment(startDate).startOf('day').toISOString();
@@ -153,19 +156,15 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
 
     // send both evm + native address for execute + evm execute
-    if (this.dataType === this.TabsAccountLink.ExecutedTxs || this.dataType === this.TabsAccountLink.EVMExecutedTxs) {
-      const addressNative = convertEvmAddressToBech32Address(this.chainInfo.bech32Config.bech32PrefixAccAddr, address);
-      const evmAddress = convertBech32AddressToEvmAddress(
-        this.chainInfo.bech32Config.bech32PrefixAccAddr,
-        addressNative,
-      );
-      address = `${addressNative},${evmAddress}`;
-    }
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      address,
+    );
 
     let payload = {
-      addressDefault,
       dataType: this.dataType,
-      address: address,
+      address: address?.toLowerCase(),
+      evmAddress: accountEvmAddress?.toLowerCase() || '',
       dataRangeType: this.isFilterDate ? 'date' : 'height',
       min: this.isFilterDate ? startDate : fromBlock,
       max: this.isFilterDate ? endDate : toBlock,
@@ -223,8 +222,11 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       case TabsAccountLink.NativeTxs:
         nameTab = ExportFileName.NativeTxs;
         break;
-      case TabsAccountLink.FtsTxs:
-        nameTab = ExportFileName.FtsTxs;
+      case ETypeFtExport.CW20:
+        nameTab = ETypeFtExport.CW20;
+        break;
+      case ETypeFtExport.ERC20:
+        nameTab = ETypeFtExport.ERC20;
         break;
       case TabsAccountLink.NftTxs:
         nameTab = ExportFileName.NftTxs;
@@ -241,7 +243,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       'export-account-' +
       (payload.dataType === TabsAccountLink.NativeTxs ? 'native-ibc-transfer' : nameTab) +
       '-' +
-      payload.addressDefault +
+      payload.address +
       '.csv';
     saveAs(data, fileName);
     this.isDownload = false;
@@ -350,37 +352,45 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     this.csvForm.get('evmAddress').enable();
   }
 
-  setAddressOther(address) {
+  setAddressOther(address, controlName?: string) {
     this.isValidAddress = true;
     this.isValidEvmAddress = true;
-
-    if (address.startsWith(EWalletType.EVM) && !this.commonService.isValidEvmAddress(address)) {
-      this.csvForm.controls.address.setValue('');
-      this.isValidEvmAddress = false;
-      return;
-    } else if (address.startsWith(this.prefix) && !this.commonService.isValidAddress(address)) {
-      this.csvForm.controls.evmAddress.setValue('');
-      this.isValidAddress = false;
-      return;
-    }
-
-    if (address.length > 0) {
-      if (this.commonService.isValidAddress(address)) {
-        this.csvForm.get('evmAddress').disable();
+    let { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      address,
+    );
+    // inValid address
+    if (accountAddress.length > 0 && !accountEvmAddress) {
+      // check if address is contract and start with bench32Add -> true/ else false
+      if (address.length === LENGTH_CHARACTER.CONTRACT && address.startsWith(this.prefix)) {
+        accountEvmAddress = null;
       } else {
-        this.csvForm.get('address').disable();
+        if (controlName === 'address') {
+          this.toastr.error('Invalid ' + this.chainName + ' address format');
+          this.csvForm.get('evmAddress').disable();
+          this.csvForm.get('address').setErrors({ incorrect: true });
+        }
+        if (controlName === 'evmAddress') {
+          this.toastr.error('Invalid EVM address format');
+          this.csvForm.get('address').disable();
+          this.csvForm.get('evmAddress').setErrors({ incorrect: true });
+        }
+        return;
       }
     }
-
-    if (!this.commonService.isValidContract(address)) {
-      const { accountAddress, accountEvmAddress } = transferAddress(
-        this.chainInfo.bech32Config.bech32PrefixAccAddr,
-        address,
-      );
-      this.csvForm.controls.address.setValue(accountAddress);
-      if (accountEvmAddress) {
-        this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
-      }
+    // valid address
+    this.csvForm.controls.address.setValue(accountAddress);
+    if (accountEvmAddress) {
+      this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
+    } else {
+      this.csvForm.controls.evmAddress.setValue('');
+    }
+    this.getAddress.disable();
+    this.getEvmAddress.disable();
+    if (address === accountEvmAddress?.trim()) {
+      this.getEvmAddress.enable();
+    } else {
+      this.getAddress.enable();
     }
   }
 }

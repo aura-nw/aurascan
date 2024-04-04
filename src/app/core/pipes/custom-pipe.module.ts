@@ -13,6 +13,7 @@ import { IsContractPipe } from './address.pipe';
 import { ObjectKeysPipe } from './object-keys.pipe';
 import { CapacityPipe } from './capacity.pipe';
 import { ConvertEvmTxPipe } from './evm.pipe';
+import { EvmAddressPipe } from './evm-address.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -39,7 +40,8 @@ import { ConvertEvmTxPipe } from './evm.pipe';
     IsContractPipe,
     ObjectKeysPipe,
     CapacityPipe,
-    ConvertEvmTxPipe
+    ConvertEvmTxPipe,
+    EvmAddressPipe,
   ],
   exports: [
     JsonPipe,
@@ -64,7 +66,8 @@ import { ConvertEvmTxPipe } from './evm.pipe';
     IsContractPipe,
     ObjectKeysPipe,
     CapacityPipe,
-    ConvertEvmTxPipe
+    ConvertEvmTxPipe,
+    EvmAddressPipe,
   ],
   providers: [],
 })

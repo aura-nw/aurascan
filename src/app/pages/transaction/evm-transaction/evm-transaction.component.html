@@ -107,7 +107,7 @@
                   [appBigNumber]="transaction.amount || 0"
                   *ngIf="transaction.amount | gte: 0.001"></span>
               </span>
-              <a [appLinkDenom]="transaction.contractAddress">{{ transaction.symbol || denom }}</a>
+              <a appLinkDenom>{{ denom }}</a>
             </div>
           </div>
 
@@ -129,6 +129,13 @@
         </div>
       </div>
     </div>
+
+    <ng-container>
+      <h2 class="text--white">Asset Transfer</h2>
+      <div class="mb-6">
+        <app-token-transfer [transaction]="transaction"></app-token-transfer>
+      </div>
+    </ng-container>
 
     <div class="row body justify-content-between justify-content-lg-start">
       <app-evm-message [transaction]="transaction" [eventLog]="transaction.eventLog"></app-evm-message>

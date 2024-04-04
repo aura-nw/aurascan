@@ -671,6 +671,51 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListEVMTransferFromTx(hash, height = null): Observable<any> {
+    const operationsDoc = `
+    query EvmTxTransferDetail(
+      $listFilterCW20: [String!] = null
+      $listFilterCW721: [String!] = null
+      $txHash: String = null
+      $msgTypeNotIn: [String!] = null
+      $compositeKeyIn: [String!] = null
+      $heightGTE: Int = null
+      $heightLTE: Int = null
+    ) {
+      ${this.envDB} {
+        erc20_activity(where: {tx_hash: {_eq: $txHash}, amount: {_is_null: false}, action: {_in: $listFilterCW20}}) {
+          action
+          amount
+          from
+          to
+          erc20_contract {
+            evm_smart_contract {
+              address
+            }
+            symbol
+            decimal
+            name
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          txHash: hash,
+          // compositeKeyIn: ['coin_spent.spender', 'coin_received.receiver', 'coin_spent.amount', 'coin_received.amount'],
+          listFilterCW20: CW20_TRACKING,
+          // listFilterCW721: CW721_TRACKING,
+          // heightLTE: height,
+          // heightGTE: height,
+        },
+        operationName: 'EvmTxTransferDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getAbiContract(address: string) {
     const operationsDoc = `
     query QueryAbiContract($address: String = null) {

@@ -427,6 +427,7 @@
                       <ng-container *ngIf="+data[template.matColumnDef] > 0">
                         <span
                           [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                          [decimalLengthTooltip]="12"
                           *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
                           {{ '<0.001' }}
                         </span>
@@ -435,7 +436,7 @@
                           [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
                           [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
                           [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="decimal"></span>
+                          [decimal]="0"></span>
                         <span class="ml-1" appLinkDenom>{{ denom }}</span>
                       </ng-container>
                     </div>
@@ -716,11 +717,13 @@
                     </div>
                     <div *ngSwitchCase="'evmTx'">
                       <a
+                        *ngIf="data[template.matColumnDef]"
                         [routerLink]="['/tx', data[template.matColumnDef]]"
                         [copyBtn]="data[template.matColumnDef]"
                         class="ml-2 p-0 button button--ssm d-inline-flex">
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
+                      <span *ngIf="!data[template.matColumnDef]">{{ '-' }}</span>
                     </div>
                     <div *ngSwitchCase="'hash'">
                       <a
@@ -814,12 +817,13 @@
               {
                 label: 'EVM Transaction',
                 class: 'text--gray-1 body-02-mob',
-                info:
-                  '<a class=text--primary href=' +
-                  ('/tx/' + data.tx_hash) +
-                  '>' +
-                  (data.tx_hash | ellipsis: 8 : 8) +
-                  '</a>'
+                info: data.evmTx
+                  ? '<a class=text--primary href=' +
+                    ('/tx/' + data.evmTx) +
+                    '>' +
+                    (data.evmTx | ellipsis: 8 : 8) +
+                    '</a>'
+                  : '-'
               }
             ]"></app-card-mob-account>
         </ng-container>
