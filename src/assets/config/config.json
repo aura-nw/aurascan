@@ -60,8 +60,8 @@
       "bip44": {
         "coinType": 60
       },
-      "rpc": "https://rpc-t.evmos.nodestake.top",
-      "rest": "https://api-t.evmos.nodestake.top",
+      "rpc": "https://evmos-testnet-rpc.publicnode.com",
+      "rest": "https://evmos-testnet-rest.publicnode.com",
       "beta": true,
       "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
     },
@@ -83,8 +83,8 @@
       "icon": "evmos",
       "explorers": [
         {
-          "name": "Evmos Explorer (Escan)",
-          "url": "https://testnet.escan.live",
+          "name": "Evmos Explorer (Aurascan)",
+          "url": "https://evmos.dev.aurascan.io",
           "standard": "none",
           "icon": "evmos"
         }

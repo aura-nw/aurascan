@@ -77,7 +77,7 @@
                               [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
                               [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
                               [appBigNumber]="data[template.matColumnDef]"
-                              [decimal]="decimal"></span>
+                              [decimal]="0"></span>
                             <span class="ml-1" appLinkDenom>{{ denom }}</span>
                           </ng-container>
                         </div>

@@ -2,6 +2,7 @@ import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import { stripHexPrefix, toChecksumAddress } from 'crypto-addr-codec';
 import { EWalletType } from '../../constants/wallet.constant';
 import { LENGTH_CHARACTER } from '../../constants/common.constant';
+import { getAddress } from 'ethers';
 
 /**
  * Creates a Bech32 encoder function with the given prefix.
@@ -111,5 +112,13 @@ export function transferAddress(prefix: string, address: string) {
       accountAddress: address,
       accountEvmAddress: convertBech32AddressToEvmAddress(prefix, address),
     };
+  }
+}
+
+export function getEvmChecksumAddress(address: string) {
+  try {
+    return getAddress(address);
+  } catch (error) {
+    return address;
   }
 }

@@ -427,6 +427,7 @@
                       <ng-container *ngIf="+data[template.matColumnDef] > 0">
                         <span
                           [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                          [decimalLengthTooltip]="12"
                           *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
                           {{ '<0.001' }}
                         </span>
@@ -435,7 +436,7 @@
                           [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
                           [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
                           [appBigNumber]="data[template.matColumnDef]"
-                          [decimal]="decimal"></span>
+                          [decimal]="0"></span>
                         <span class="ml-1" appLinkDenom>{{ denom }}</span>
                       </ng-container>
                     </div>
@@ -684,7 +685,9 @@
                       </ng-container>
                     </div>
                     <div *ngSwitchCase="'tokenType'">
-                      <button class="button button-pill button-outline button-label caption">
+                      <button
+                        class="button button-pill button-outline button-label caption cursor-pointer"
+                        [routerLink]="fungibleTokenType === tokenType.ERC20 ? ['/tx', data['tx_hash']] : null">
                         <ng-container *ngIf="modeQuery === tabsData.FtsTxs">
                           <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
                             {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}

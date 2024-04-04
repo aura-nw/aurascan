@@ -43,36 +43,19 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'amount'">
-                        <ng-container *ngIf="!data['contractAddress']">
-                          <span
-                            *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001"
-                            [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }">
-                            {{ (data[template.matColumnDef] | balance: decimal) == 0 ? 0 : '<0.001' }}
-                          </span>
-                          <span
-                            [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }"
-                            [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
-                            *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
-                            [appBigNumber]="data[template.matColumnDef]"
-                            [decimal]="decimal"></span>
-                          <a appLinkDenom> {{ denom }}</a>
-                        </ng-container>
-                        <ng-container *ngIf="data['contractAddress']">
-                          <span
-                            *ngIf="data[template.matColumnDef] | balance: data['tokenDecimal'] | lt: 0.001"
-                            [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: data['tokenDecimal'] }">
-                            {{ (data[template.matColumnDef] | balance: data['tokenDecimal']) == 0 ? 0 : '<0.001' }}
-                          </span>
-                          <span
-                            [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: data['tokenDecimal'] }"
-                            [class.cursor-text]="
-                              data[template.matColumnDef] | balance: data['tokenDecimal'] | lt: 1000000
-                            "
-                            *ngIf="data[template.matColumnDef] | balance: data['tokenDecimal'] | gte: 0.001"
-                            [appBigNumber]="data[template.matColumnDef]"
-                            [decimal]="data['tokenDecimal']"></span>
-                          <a [appLinkDenom]="data['contractAddress']"> {{ data['tokenSymbol'] }}</a>
-                        </ng-container>
+                        <span
+                          *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001"
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }">
+                          {{ (data[template.matColumnDef] | balance: decimal) == 0 ? 0 : '<0.001' }}
+                        </span>
+                        <span
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }"
+                          [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
+                          *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
+                          [appBigNumber]="data[template.matColumnDef]"
+                          [decimal]="decimal"></span>
+                        <a appLinkDenom> {{ denom }}</a>
+                          <a [appLinkDenom]="data['contractAddress'] | appEvmAddress"> {{ data['tokenSymbol'] }}</a>
                       </div>
                       <div *ngSwitchCase="'hash'" class="text-center">
                         <a

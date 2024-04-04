@@ -1,7 +1,9 @@
 import { id as keccak256Str } from 'ethers';
-import { ABI_CHECK_INTERFACE } from '../constants/transaction.constant';
 import { EMethodContract } from '../constants/common.constant';
+import { ABI_CHECK_INTERFACE } from '../constants/transaction.constant';
 let listTxEvmMapping: Map<string, string>;
+
+const defaultTransactionMethod = 'Send';
 
 export function getFunctionNameByMethodId(methodId: string) {
   let methodTemp = '';
@@ -17,7 +19,7 @@ export function getFunctionNameByMethodId(methodId: string) {
     methodTemp = listTxEvmMapping.get(methodId);
   }
 
-  if (!methodTemp) return methodId?.slice(0, 8);
+  if (!methodTemp) return methodId?.slice(0, 8) || defaultTransactionMethod;
 
   methodTemp = methodTemp?.charAt(0).toUpperCase() + methodTemp?.slice(1);
   const indexChar = methodTemp?.indexOf('(');

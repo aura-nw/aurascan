@@ -19,7 +19,7 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
   styleUrls: ['./token-transfer.component.scss'],
 })
 export class TokenTransferComponent implements OnInit, OnDestroy {
-  @Input() transaction: Number;
+  @Input() transaction: any;
   nullAddress = NULL_ADDRESS;
   dataSourceFTs = new MatTableDataSource<any>([]);
   dataSourceNFTs = new MatTableDataSource<any>([]);
@@ -77,8 +77,11 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
     if (this.transaction['status'] == 'Fail') {
       return;
     }
-
-    this.getTokenTransfer();
+    if (this.transaction['evm_hash']) {
+      this.getEVMTokenTransfer();
+    } else {
+      this.getTokenTransfer();
+    }
   }
 
   getTokenTransfer() {
@@ -153,22 +156,19 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
       });
   }
 
-  getIBCTransfer() {
-    this.ibcService.getIBCTransfer(this.transaction['tx_hash']).subscribe((res) => {
-      let coinIBC = [];
-      res?.coin_transfer?.forEach((element) => {
-        let cw20_contract = {};
-        let dataAmount = this.commonService.mappingNameIBC(element.denom);
-        cw20_contract['symbol'] = dataAmount['symbol'] || this.coinInfo.coinDenom;
-        cw20_contract['name'] = dataAmount['symbol'] || this.coinInfo.coinDenom;
-        const decimal = dataAmount['decimals'] || 6;
-        const amount = element.amount;
-        const from = element.from;
-        const to = element.to;
-        coinIBC.push({ amount, cw20_contract, from, to, decimal });
+  getEVMTokenTransfer() {
+    let coinTransfer = [];
+    this.transactionService
+      .getListEVMTransferFromTx(this.transaction['evm_hash'], this.transaction['height'])
+      .subscribe((res) => {
+        if (res.erc20_activity?.length > 0 || coinTransfer?.length > 0) {
+          this.dataSourceFTs.data = [...coinTransfer, ...(res.erc20_activity || [])];
+
+          res.erc20_activity.forEach((element) => {
+            element.decimal = element.decimal || element.erc20_contract?.decimal || 6;
+          });
+        }
       });
-      this.dataSourceFTs.data = [...this.dataSourceFTs.data, ...coinIBC];
-    });
   }
 
   navigateToNFTDetail(address: string, tokenId: number): void {

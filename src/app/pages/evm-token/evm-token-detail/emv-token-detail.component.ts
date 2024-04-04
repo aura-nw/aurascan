@@ -1,6 +1,8 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import _ from 'lodash';
+import { filter, take } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeEvmToken, EModeToken } from 'src/app/core/constants/token.enum';
@@ -53,16 +55,26 @@ export class EvmTokenDetailComponent implements OnInit {
           return;
         }
 
-        this.tokenDetail = {
-          ...token,
-          supplyAmount: token.total_supply,
-          modeToken: EModeEvmToken.ERCToken,
-          contract_address: this.contractAddress,
-          decimals: token.decimal,
-          contract_verification: token.evm_smart_contract?.evm_contract_verifications[0]?.status,
-          type: EvmContractRegisterType.ERC20,
-          price: 0,
-        };
+        this.tokenService.tokensMarket$
+          .pipe(
+            filter((data) => _.isArray(data)),
+            take(1),
+          )
+          .subscribe((item) => {
+            const tokenMarket = item.find((element) => element.denom === token?.address);
+
+            this.tokenDetail = {
+              ...token,
+              supplyAmount: token.total_supply,
+              modeToken: EModeEvmToken.ERCToken,
+              contract_address: this.contractAddress,
+              decimals: token.decimal,
+              contract_verification: token.evm_smart_contract?.evm_contract_verifications[0]?.status,
+              type: EvmContractRegisterType.ERC20,
+              price: tokenMarket?.currentPrice || 0,
+              priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
+            };
+          });
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {

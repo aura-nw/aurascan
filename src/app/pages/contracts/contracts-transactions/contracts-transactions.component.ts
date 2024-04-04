@@ -129,9 +129,9 @@ export class ContractsTransactionsComponent implements OnInit {
                   ...tx,
                   tx_hash: _.get(tx, 'hash'),
                   hash: _.get(tx, 'transaction.hash'),
-                  method: type ? type : 'Transfer',
+                  method: type,
                   from: _.get(tx, 'from'),
-                  to: _.get(tx, 'contract_address'),
+                  to: _.get(tx, 'to'),
                   timestamp: _.get(tx, 'transaction.timestamp'),
                   evmAmount: _.get(tx, 'transaction.transaction_messages[0].content.data.value'),
                 };

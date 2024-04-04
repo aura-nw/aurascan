@@ -656,10 +656,10 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          sender: payload.sender,
-          receiver: payload.receiver,
+          sender: payload.sender?.toLowerCase(),
+          receiver: payload.receiver?.toLowerCase(),
           listTxMsgType: payload.listTxMsgType,
-          contractAddr: payload.contractAddr,
+          contractAddr: payload.contractAddr?.toLowerCase(),
           heightLT: payload.heightLT,
           txHash: payload.txHash,
           actionIn: CW20_TRACKING,
