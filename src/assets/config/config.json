@@ -60,8 +60,8 @@
       "bip44": {
         "coinType": 60
       },
-      "rpc": "https://evmos-testnet-rpc.publicnode.com",
-      "rest": "https://evmos-testnet-rest.publicnode.com",
+      "rpc": "https://evmos-testnet-rpc.polkachu.com/",
+      "rest": "https://evmos-testnet-api.polkachu.com/",
       "beta": true,
       "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
     },
