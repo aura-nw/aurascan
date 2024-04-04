@@ -81,13 +81,13 @@
                   <span
                     class="text--gray-1"
                     [appTooltip]="{ priceAmount: tokenDetail.supplyAmount, decimal: tokenDetail.decimal }">
-                    <span *ngIf="tokenDetail.supplyAmount | lt: 0.001">
+                    <span *ngIf="tokenDetail.supplyAmount | balance: tokenDetail.decimal | lt: 0.001">
                       {{ tokenDetail.supplyAmount == 0 ? 0 : '< 0.001' }}
                     </span>
                     <span
                       [decimal]="tokenDetail.decimal"
                       [appBigNumber]="tokenDetail.supplyAmount || 0"
-                      *ngIf="tokenDetail.supplyAmount | gte: 0.001"></span>
+                      *ngIf="tokenDetail.supplyAmount | balance: tokenDetail.decimal | gte: 0.001"></span>
                   </span>
                   <span class="ml-1">{{ tokenDetail?.symbol }}</span>
                 </div>
@@ -108,16 +108,14 @@
                   multipliedBy: tokenDetail.price,
                   lt: 0.01
                 }">
-                <span *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
+                <span *ngIf="tokenDetail['tokenValue'].lt(0.01)">
                   {{ tokenDetail.price == 0 || tokenDetail.supplyAmount == 0 ? '$0.00' : '< $0.01' }}
                 </span>
-                <ng-container
-                  *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
+                <ng-container *ngIf="tokenDetail['tokenValue'].gte(0.01)">
                   <span *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
                     {{ tokenDetail.price == 0 ? '$0.00' : '< $0.01' }}
                   </span>
-                  <span
-                    *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
+                  <span *ngIf="tokenDetail['tokenValue'].gte(0.01)">
                     <span
                       [decimal]="tokenDetail.decimal"
                       [appBigNumber]="tokenDetail.supplyAmount"

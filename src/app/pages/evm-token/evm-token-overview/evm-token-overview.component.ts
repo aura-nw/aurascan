@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import BigNumber from 'bignumber.js';
 import { EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeEvmToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -41,5 +42,11 @@ export class EvmTokenOverviewComponent implements OnInit {
       this.tokenDetail.change = Number(this.tokenDetail.change.toString().substring(1));
     }
     this.tokenDetail['isHolderUp'] = true;
+    this.tokenDetail['tokenValue'] =
+      this.tokenDetail.supplyAmount == 0
+        ? 0
+        : BigNumber(this.tokenDetail.supplyAmount)
+            .dividedBy(BigNumber(10).pow(this.tokenDetail.decimal))
+            .multipliedBy(this.tokenDetail.price);
   }
 }
