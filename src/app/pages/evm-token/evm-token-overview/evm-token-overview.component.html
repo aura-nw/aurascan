@@ -102,7 +102,12 @@
               <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span>
               <div
                 class="body-02 text--gray-1"
-                [appTooltip]="{ priceAmount: tokenDetail.supplyAmount, multipliedBy: tokenDetail.price, lt: 0.01 }">
+                [appTooltip]="{
+                  priceAmount: tokenDetail.supplyAmount,
+                  decimal: tokenDetail.decimal,
+                  multipliedBy: tokenDetail.price,
+                  lt: 0.01
+                }">
                 <span *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).lt(0.01)">
                   {{ tokenDetail.price == 0 || tokenDetail.supplyAmount == 0 ? '$0.00' : '< $0.01' }}
                 </span>
@@ -114,7 +119,7 @@
                   <span
                     *ngIf="(tokenDetail.supplyAmount | balance: 0 : true).multipliedBy(tokenDetail.price).gte(0.01)">
                     <span
-                      [decimal]="0"
+                      [decimal]="tokenDetail.decimal"
                       [appBigNumber]="tokenDetail.supplyAmount"
                       [tokenPrice]="tokenDetail.price"></span>
                   </span>

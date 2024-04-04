@@ -157,10 +157,6 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
       );
   }
 
-  getTokenData() {
-    this.getListToken();
-  }
-
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
   }
