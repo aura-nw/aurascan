@@ -9,7 +9,10 @@ import { WatchListService } from 'src/app/core/services/watch-list.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { isSafari } from 'src/app/core/utils/common/validation';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-popup-watchlist',
