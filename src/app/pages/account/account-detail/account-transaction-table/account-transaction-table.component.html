@@ -717,11 +717,13 @@
                     </div>
                     <div *ngSwitchCase="'evmTx'">
                       <a
+                        *ngIf="data[template.matColumnDef]"
                         [routerLink]="['/tx', data[template.matColumnDef]]"
                         [copyBtn]="data[template.matColumnDef]"
                         class="ml-2 p-0 button button--ssm d-inline-flex">
                         {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                       </a>
+                      <span *ngIf="!data[template.matColumnDef]">{{ '-' }}</span>
                     </div>
                     <div *ngSwitchCase="'hash'">
                       <a
@@ -815,12 +817,13 @@
               {
                 label: 'EVM Transaction',
                 class: 'text--gray-1 body-02-mob',
-                info:
-                  '<a class=text--primary href=' +
-                  ('/tx/' + data.tx_hash) +
-                  '>' +
-                  (data.tx_hash | ellipsis: 8 : 8) +
-                  '</a>'
+                info: data.evmTx
+                  ? '<a class=text--primary href=' +
+                    ('/tx/' + data.evmTx) +
+                    '>' +
+                    (data.evmTx | ellipsis: 8 : 8) +
+                    '</a>'
+                  : '-'
               }
             ]"></app-card-mob-account>
         </ng-container>
