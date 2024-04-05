@@ -45,7 +45,7 @@
                       [fullTextMob]="true"
                       [tooltipPosition]="'tooltip--right'"
                       [linkRouter]="[
-                        this.typeContract && this.typeContract !== contractType.CW20 ? 'nft' : '',
+                        this.typeContract && this.typeContract !== contractType.ERC20 ? 'nft' : '',
                         linkAddress
                       ]"
                       [linkParams]="{ a: data[template.matColumnDef] }">
@@ -71,10 +71,10 @@
                     </div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'percent_hold'">
-                    <span *ngIf="!this.typeContract || this.typeContract === contractType.CW20">
+                    <span *ngIf="!this.typeContract || this.typeContract === contractType.ERC20">
                       {{ data[template.matColumnDef] | formatDigit: 2 }}%
                     </span>
-                    <ng-container *ngIf="this.typeContract && this.typeContract !== contractType.CW20">
+                    <ng-container *ngIf="this.typeContract && this.typeContract === contractType.ERC721">
                       <span>{{ data.percent_hold || 0 | formatDigit: 2 }} %</span>
                       <div class="percentage-bar mt-2">
                         <div class="percentage-bar__process" [style.width]="(data.width_chart || 0) + '%'"></div>
