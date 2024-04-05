@@ -1,54 +1,49 @@
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <div class="d-lg-flex mb-1 mb-md-6">
+  <div class="mb-1 mb-md-6">
     <div class="d-flex d-block align-items-center">
-      <app-pagetitle title="Account" [displayInfo]="false"></app-pagetitle>
+      <span class="h2 fw-700 text--white mr-lg-5 mr-2">Account</span>
       <a
-        [routerLink]="['/contracts/', currentAddress]"
-        *ngIf="isContractAddress && breakpoint.value.matches"
-        class="contract-label text--primary ml-6 caption fw-normal"
-        >Contract</a
-      >
+        [routerLink]="[
+          accountEvmAddress ? '/evm-contracts' : '/contracts',
+          accountEvmAddress ? accountEvmAddress : accountAddress
+        ]"
+        *ngIf="isContractAddress"
+        [appTooltip]="'Go to Contract Details'"
+        class="contract-label text--primary body-04 mr-5">
+        Contract
+      </a>
+      <i
+        class="ph ph-star body-01"
+        [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'"
+        (click)="handleWatchList()"
+        [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
     </div>
-    <div class="d-flex mb-2 mb-lg-0" [class.justify-content-between]="breakpoint.value.matches">
-      <div class="d-none d-lg-flex align-items-center">
-        <span class="body-01 text--gray-5 caption-mob fw-normal">{{ currentAddress }}</span>
-      </div>
-      <div class="d-lg-none mb-lg-2">
-        <span class="body-01 text--gray-5 caption-mob fw-normal break-word">{{ currentAddress }}</span>
-      </div>
-      <div class="d-flex">
-        <div class="ml-lg-0 ml-4" [copyBtn]="currentAddress"></div>
-        <button
-          class="ml-lg-4 button button--xxs p-lg-0"
-          [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'"
-          (click)="handleWatchList()">
-          <i class="ph ph-star body-01" [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
-        </button>
-        <div
-          class="contract-label ml-8"
-          [appTooltip]="'Go to Contract Details'"
-          *ngIf="!breakpoint.value.matches && isContractAddress">
-          <a class="text--primary" [routerLink]="['/contracts/', currentAddress]">Contract</a>
-        </div>
-      </div>
+
+    <div class="d-lg-flex align-items-center mb-lg-2 mb-3 mt-3 body-01 body-mob">
+      <div class="text--gray-4 title-address mb-1 mb-lg-0">Cosmos Address:</div>
+      <span [copyBtn]="accountAddress" class="break-word">{{ accountAddress }} </span>
+    </div>
+    <div class="d-lg-flex align-items-center mb-4 body-01 body-mob" *ngIf="accountEvmAddress">
+      <div class="text--gray-4 title-address mb-1 mb-lg-0">EVM Address:</div>
+      <span [copyBtn]="accountEvmAddress" class="break-word">{{ accountEvmAddress }} </span>
     </div>
   </div>
   <!-- Summary info -->
-  <div class="row">
+  <div class="row box-summary-info">
     <div class="col-12 col-lg-3">
       <div class="card card-h-100">
         <div class="px-4 px-xl-0 py-4 py-lg-6 qr-code d-none d-lg-block">
-          <app-qr [address]="currentAddress || ''"></app-qr>
+          <app-qr [address]="accountAddress || ''"></app-qr>
         </div>
         <div class="d-flex flex-column col-lg-auto col-12 box-account-info">
           <div>
             <h3 class="fw-bold fw-semibold-mob mb-2 text--white">Account Info</h3>
-            <app-name-tag [value]="currentAddress" [mode]="ENameTag.Public" [fullText]="true"></app-name-tag>
-
+            <app-name-tag [value]="accountAddress" [mode]="ENameTag.Public" [fullText]="true"></app-name-tag>
             <div class="mt-2">
-              <app-name-tag [value]="currentAddress" [mode]="ENameTag.Private" [fullText]="true"></app-name-tag>
+              <app-name-tag [value]="accountAddress" [mode]="ENameTag.Private" [fullText]="true"></app-name-tag>
             </div>
           </div>
+
           <div class="mt-auto d-flex justify-content-between align-items-center d-xl-block">
             <div>
               <div class="body mb-1 text--white">Total Value</div>
@@ -59,7 +54,9 @@
                   {{ totalValue.eq(0) ? '$0' : '< $0.01' }}
                 </span>
                 <span
-                  [appTooltip]="totalValue.toFixed() | mask: 'separator.6'"
+                  [appTooltip]="
+                    totalValue.gte(0.01) && totalValue.lt(1000000) ? null : (totalValue.toFixed() | mask: 'separator.6')
+                  "
                   [class.cursor-text]="totalValue.gte(0.01) && totalValue.lt(1000000)"
                   *ngIf="!isNoData && totalValue.gte(0.01)">
                   $<span [decimal]="0" [appBigNumber]="totalValue.toFixed() || 0"></span>
@@ -89,7 +86,7 @@
       <div class="card card-h-100">
         <div class="px-4 py-4 px-lg-6 py-lg-6">
           <app-token-table
-            [address]="currentAddress"
+            [address]="accountAddress"
             (totalAssets)="totalAssets = $event"
             (totalValue)="totalValueToken = $event"
             *ngIf="!isNoData"></app-token-table>
@@ -110,7 +107,7 @@
             height="14"
             (click)="closePopup()" />
         </div>
-        <app-qr [address]="currentAddress || ''"></app-qr>
+        <app-qr [address]="accountAddress || ''"></app-qr>
       </div>
     </ng-template>
   </div>
@@ -120,14 +117,17 @@
   <!--SBT  -->
   <div
     class="card"
-    *ngIf="totalSBTPick > 0 || (currentAddress === userAddress && totalSBT > 0)"
+    *ngIf="
+      (totalSBTPick > 0 || (accountAddress === connectedAddress && totalSBT > 0)) &&
+      commonService.isValidAddress(accountAddress)
+    "
     [appFeature]="EFeature.Cw4973">
     <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
       <app-soulbound-feature-tokens
         [extend]="true"
         (totalSBTPick)="totalSBTPick = $event"
         [displayManage]="true"
-        [accountAddress]="currentAddress"
+        [accountAddress]="accountAddress"
         [reloadAPI]="false"
         [isAccountDetail]="true"></app-soulbound-feature-tokens>
     </div>
@@ -135,7 +135,7 @@
 
   <!-- NFT -->
   <app-nft-list
-    [address]="currentAddress"
+    [address]="accountAddress"
     (totalValueNft)="totalValueNft = $event"
     [appFeature]="EFeature.Cw721"></app-nft-list>
 
@@ -147,7 +147,7 @@
     [currentAccountDetail]="currentAccountDetail"></app-account-stake>
 
   <!-- Transaction List-->
-  <app-account-transaction [address]="currentAddress"></app-account-transaction>
+  <app-account-transaction [address]="currentUrlAddress"></app-account-transaction>
 </section>
 
 <ng-template #reloadTemplate>

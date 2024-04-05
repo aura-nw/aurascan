@@ -1,0 +1,69 @@
+<div class="card box-token-info">
+  <table class="aura-basic-table w-100 body-02">
+    <tr>
+      <td colspan="2">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="h4 mb-0">
+            <span class="text--white">Profile Summary </span>
+          </div>
+          <div class="dropdown aura-dropdown">
+            <ul
+              class="dropdown-menu aura-dropdown-menu token-summary-more"
+              *ngIf="!tokenDetail.isNFTContract"
+              aria-labelledby="token-summary-more">
+              <li class="dropdown-item cursor-pointer">Add token to Web3</li>
+              <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+            </ul>
+            <ul
+              class="dropdown-menu aura-dropdown-menu token-summary-more"
+              *ngIf="tokenDetail.isNFTContract"
+              aria-labelledby="token-summary-more">
+              <li class="dropdown-item cursor-pointer">Add token to Web3</li>
+              <li class="dropdown-item cursor-pointer">Update Token Info</li>
+              <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <div class="d-flex align-items-center py-2">
+          <div class="first-col text--gray-5">Contract:</div>
+          <div class="break-word">
+            <app-name-tag
+              [value]="tokenDetail?.contract_address || tokenDetail?.denom"
+              [linkRouter]="['/evm-contracts', tokenDetail?.contract_address]"
+              [fullText]="true"></app-name-tag>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr *ngIf="!tokenDetail.isNFTContract">
+      <td colspan="2">
+        <div class="d-flex align-items-center py-2">
+          <div class="first-col text--gray-5">Decimals:</div>
+          <div class="text--white">{{ tokenDetail?.decimals }}</div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <div class="d-flex align-items-center py-2">
+          <div class="first-col text--gray-5">Official Site:</div>
+          <div>-</div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="d-flex align-items-center py-2">
+          <div class="first-col text--gray-5 mb-1">Social Profiles:</div>
+          <div>-</div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>

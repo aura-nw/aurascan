@@ -6,6 +6,9 @@ import { ENameTag, EScreen } from 'src/app/core/constants/account.enum';
 import { UserService } from 'src/app/core/services/user.service';
 import local from 'src/app/core/utils/storage/local';
 import { Params, Router } from '@angular/router';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-name-tag',
@@ -31,13 +34,17 @@ export class NameTagComponent implements OnInit {
   @Input() mode = ENameTag.Normal;
   @Input() screen = EScreen.Account;
   @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
+  @Input() nameTagDark = false;
 
   ENameTag = ENameTag;
   EScreen = EScreen;
   maxLengthNameTag = MAX_LENGTH_NAME_TAG;
+  isContractAddress = false;
+
+  chainInfo = this.env.chainInfo;
 
   get routerLinks() {
-    return this.linkRouter ? this.linkRouter : ['/account', this.addressOnly || this.value];
+    return this.linkRouter ? this.linkRouter : ['/address', this.addressOnly || this.value];
   }
 
   constructor(
@@ -45,11 +52,17 @@ export class NameTagComponent implements OnInit {
     public nameTagService: NameTagService,
     private userService: UserService,
     private router: Router,
+    private contractService: ContractService,
+    private env: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
     if (this.isShorterText) {
       this.maxCharacter = 6;
+    }
+
+    if (this.mode === ENameTag.Private) {
+      this.checkIsContract();
     }
   }
 
@@ -69,14 +82,42 @@ export class NameTagComponent implements OnInit {
     return result;
   }
 
+  checkIsContract() {
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      this.value,
+    );
+
+    if (this.commonService.isValidContract(accountAddress)) {
+      this.isContractAddress = true;
+    } else {
+      this.checkEvmContract(accountEvmAddress);
+    }
+  }
+
+  checkEvmContract(evmAddress) {
+    this.contractService.findEvmContract(evmAddress).subscribe({
+      next: (res) => {
+        if (res?.evm_smart_contract?.length > 0) {
+          this.isContractAddress = true;
+        }
+      },
+    });
+  }
+
   editPrivateName() {
     const userEmail = this.userService.getCurrentUser()?.email;
-    const dataNameTag = this.nameTagService.listNameTag?.find((k) => k.address === this.value);
+    let dataNameTag = this.nameTagService.findNameTag(this.value);
     if (userEmail) {
+      const type = this.isContractAddress ? 'contract' : 'account';
       if (dataNameTag) {
+        dataNameTag['type'] = type;
         local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, dataNameTag);
       } else {
-        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, { address: this.value });
+        local.setItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG, {
+          address: this.value,
+          type,
+        });
       }
       this.router.navigate(['/profile'], { queryParams: { tab: 'private' } });
     } else {

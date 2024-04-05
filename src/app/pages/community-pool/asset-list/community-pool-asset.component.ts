@@ -122,18 +122,13 @@ export class CommunityPoolAssetComponent implements OnInit, OnDestroy {
               element.decimal = findItem.decimal;
               element.symbol = findItem.display || findItem.symbol;
               element.logo = findItem.logo || findItem.image;
+              element.isNative = findItem.type === ETokenCoinTypeBE?.NATIVE;
               element.name =
                 findItem.type === ETokenCoinTypeBE?.NATIVE ? this.environmentService.chainName : findItem.name;
-            } else {
-              element.decimal = 6;
-              element.symbol = '';
-              element.logo = '';
-              element.name = this.environmentService.chainName;
-              element.amount = getBalance(element.amount, this.environmentService.coinDecimals);
-              element.isNative = true;
             }
           });
-          this.listAssetLcd = this.listAssetLcd?.filter((k) => k.denom);
+
+          this.listAssetLcd = this.listAssetLcd?.filter((k) => k.denom && k.symbol);
           this.listAssetLcd = this.listAssetLcd?.sort((a, b) => {
             return this.compare(balanceOf(a.amount, a.decimal), balanceOf(b.amount, b.decimal), false);
           });

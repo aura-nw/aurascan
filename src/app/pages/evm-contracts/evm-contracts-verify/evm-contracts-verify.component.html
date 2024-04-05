@@ -1,0 +1,90 @@
+<section class="contract-verify col-12 col-lg-6">
+  <h1 class="text--white mb-2 mb-lg-0">Verify & Publish EVM Contract source code</h1>
+
+  <div class="body-02 caption-mob fw-normal-mob text--gray-6">
+    Add the Solidity source files and metadata of contract you want to verify.
+  </div>
+
+  <div class="py-6">
+    <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form" autocomplete="off">
+      <div class="row mb-6">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="address" class="form-label text--gray-1 body-02">Contract to verify</label>
+            <input formControlName="address" type="text" class="form-control" id="address" />
+            <div class="error" *ngIf="formControls['address'].invalid">Address is required!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-6">
+        <div class="col-12">
+          <h4 class="text--white mb-1">Add file</h4>
+          <div class="d-flex justify-content-between w-100 mb-4">
+            <div class="body-02 caption-mob fw-normal-mob text--gray-6">Format: Zip/Json. Maximum size: 1MB</div>
+            <div
+              *ngIf="contractSourceCode"
+              class="body-02 caption-mob fw-normal-mob text--primary cursor-pointer"
+              (click)="contractSourceCode = null">
+              Clear Files
+            </div>
+          </div>
+
+          <div
+            class="drop-zone"
+            [ngClass]="{ 'with-data': contractSourceCode }"
+            appDragDrop
+            (onFileDropped)="onFileDropped($event)">
+            <div class="drop-content" *ngIf="!contractSourceCode">
+              <button class="button add-icon" (click)="fileInput.click()">
+                <i class="ph-plus-fill text--gray-4"></i>
+              </button>
+
+              <div class="body-01 text--gray-4">
+                Drag and drop here or
+                <span class="text--primary cursor-pointer" (click)="fileInput.click()">browse</span>
+              </div>
+              <input
+                type="file"
+                class="d-none"
+                #fileInput
+                (change)="onFileDropped($event?.target['files'])"
+                [(ngModel)]="inputFileValue" />
+            </div>
+
+            <div class="drop-content flex-row align-items-start" *ngIf="contractSourceCode">
+              <div class="icon-wrapper">
+                <img
+                  src="{{
+                    contractSourceCode.type == EFileType.Zip
+                      ? '../../../../assets/icons/icons-svg/basic/FileZip.svg'
+                      : '../../../../assets/icons/icons-svg/basic/FileJSON.svg'
+                  }}" />
+              </div>
+              <div class="body-02 text-white">
+                {{ contractSourceCode.name }}
+                <div class="body-04 text--gray-6">{{ contractSourceCode.size | appCapacity }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center justify-content-lg-end align-items-center pt-2 pt-lg-0">
+        <button
+          class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4 px-1 px-sm-6"
+          type="submit"
+          [disabled]="loading || !contractSourceCode">
+          <img
+            [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+            alt=""
+            class="mr-2"
+            width="20"
+            height="20"
+            *ngIf="loading" />
+          <span>Verify & Publish</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

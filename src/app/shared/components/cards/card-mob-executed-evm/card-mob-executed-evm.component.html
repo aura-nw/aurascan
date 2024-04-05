@@ -1,0 +1,90 @@
+<div *ngFor="let data of dataSource">
+  <div class="custom-card-mob-simple card-explain body-01 mb-2 px-0">
+    <mat-expansion-panel class="px-3" hideToggle #panel [disabled]="true">
+      <mat-expansion-panel-header class="px-0">
+        <mat-panel-title>
+          <div>
+            <a
+              [copyBtn]="data?.evm_hash || data?.tx_hash"
+              class="text--primary cursor-pointer body-02"
+              [routerLink]="['/tx', data?.evm_hash || data?.tx_hash]">
+              {{ data?.evm_hash || data?.tx_hash | ellipsis: 8 : 8 }}
+            </a>
+            <div class="align-items-center d-flex mt-1">
+              <div class="d-flex align-items-center">
+                <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
+                <span class="text--gray-light caption fw-normal">
+                  {{ data?.timestamp | customDateTime: 'Distance' }}
+                </span>
+              </div>
+              <div class="d-flex align-items-center ml-5">
+                <i class="ph ph-chat-circle-text mr-1 text--gray-4 body-mob"></i>
+                <span class="line-claim text--gray-light caption fw-normal">
+                  {{ data?.method | convertEvmTx }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </mat-panel-title>
+        <div class="body-01 text--white d-flex align-items-center" (click)="panel.expanded = !panel.expanded">
+          <i class="ph ph-caret-up" *ngIf="panel.expanded"></i>
+          <i class="ph ph-caret-down" *ngIf="!panel.expanded"></i>
+        </div>
+      </mat-expansion-panel-header>
+      <div class="body-03">
+        <div class="divider divider-horizontal divider-lighter my-2"></div>
+        <div class="d-flex justify-content-between">
+          <div class="text--gray-4">Height</div>
+          <a class="text--primary cursor-pointer block-link" [routerLink]="['/block', data['height']]">
+            {{ data?.height }}
+          </a>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+          <div class="text--gray-4">Amount</div>
+          <div class="text--white">
+            <span
+              *ngIf="data.amount || data.evmAmount | balance: decimal | lt: 0.001"
+              [appTooltip]="{ priceAmount: data.amount || data.evmAmount, decimal: decimal }">
+              {{ (data.amount || data.evmAmount | balance: decimal) == 0 ? 0 : '<0.001' }}
+            </span>
+            <span
+              [appTooltip]="{ priceAmount: data.amount || data.evmAmount, decimal: decimal }"
+              [class.cursor-text]="data.amount | balance: decimal | lt: 1000000"
+              *ngIf="data.amount || data.evmAmount | balance: decimal | gte: 0.001"
+              [appBigNumber]="data.amount || data.evmAmount"
+              [decimal]="decimal"></span>
+            <a appLinkDenom> {{ denom }}</a>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+          <div class="text--gray-4">From</div>
+          <app-name-tag
+            *ngIf="data?.from"
+            [value]="data?.from"
+            [nameTagDark]="true"
+            [isEnableRouter]="!data?.from?.startsWith('Null') && data?.from !== currentAddress"></app-name-tag>
+          <span *ngIf="!data?.from" class="text--white">-</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+          <div class="text--gray-4">To</div>
+          <app-name-tag
+            *ngIf="data?.to"
+            [value]="data?.to"
+            [isEnableRouter]="!data?.to?.startsWith('Null') && data?.to !== currentAddress"></app-name-tag>
+          <span *ngIf="!data?.to" class="text--white">-</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+          <div class="text--gray-4">Cosmos Txn</div>
+          <a
+            *ngIf="data?.hash"
+            [copyBtn]="data.hash"
+            class="text--primary cursor-pointer"
+            [routerLink]="['/tx', data?.hash]">
+            {{ data?.hash | ellipsis: 8 : 8 }}
+          </a>
+          <span *ngIf="!data.hash" class="text--white">-</span>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>

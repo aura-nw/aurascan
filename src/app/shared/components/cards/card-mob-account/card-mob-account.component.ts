@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CodeTransaction } from '../../../../core/constants/transaction.enum';
+import { ETokenCoinTypeBE } from 'src/app/core/constants/token.constant';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 
 export interface CardMobSimpleValidatorAddress {
   imgUrl: string;
@@ -22,6 +24,7 @@ export interface CardMobSimpleTitle {
   isFail?: boolean;
   link?: string;
 }
+
 export interface CardMobSimpleContent {
   label: string;
   class?: string;
@@ -58,16 +61,32 @@ export class CardMobAccountComponent implements OnInit {
   @Input() currentAddress: string;
   @Input() currentType: string;
   @Input() expand: boolean = false;
+  @Input() fungibleTokenType = ETokenCoinTypeBE.ERC20;
+  cosmosAddress;
+  evmAddress;
 
   tabsData = TabsAccountLink;
   statusTransaction = CodeTransaction;
+  tokenType = ETokenCoinTypeBE;
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  chainInfo = this.environmentService.chainInfo;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+
   constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     if (this.modeQuery !== this.tabsData.ExecutedTxs) {
       this.content[this.content.length - 1].label = 'Expand';
+    }
+    if (this.modeQuery === this.tabsData.FtsTxs) {
+      const { accountAddress, accountEvmAddress } = transferAddress(
+        this.chainInfo.bech32Config.bech32PrefixAccAddr,
+        this.currentAddress,
+      );
+      this.cosmosAddress = accountAddress;
+      this.evmAddress = accountEvmAddress;
     }
 
     this.dataCard?.arrEvent?.forEach((element) => {

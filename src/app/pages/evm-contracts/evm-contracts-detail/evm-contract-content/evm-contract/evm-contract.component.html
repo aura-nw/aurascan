@@ -1,0 +1,124 @@
+<div class="box-contract text--white">
+  <ng-container *ngIf="contractTypeData === ContractVerifyType.Unverified && contractDetail">
+    <div class="d-flex break-word align-items-center">
+      <img
+        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+        alt=""
+        width="16"
+        height="16"
+        class="mr-2" />
+      <div>
+        Are you the contract creator?
+        <a class="text--primary" [routerLink]="['verify']"> Verify and Publish </a>
+        your contract source code today!
+      </div>
+    </div>
+    <div
+      class="mt-3 content-info caption fw-normal"
+      *ngIf="contractCode"
+      [appExpandable]="contractCode"
+      [maxCharVisible]="900">
+      {{ contractCode }}
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="contractTypeData === ContractVerifyType.Verified">
+    <div class="button-tab-group">
+      <button
+        class="button-tab"
+        [class.active]="currentTab === ContractType.Code"
+        (click)="changeTab(ContractType.Code)">
+        <span>Code</span>
+      </button>
+      <button
+        class="button-tab"
+        [class.active]="currentTab === ContractType.ReadContract"
+        (click)="changeTab(ContractType.ReadContract)">
+        <span class="d-none d-lg-block">Read Contract</span>
+        <span class="d-lg-none">Read</span>
+      </button>
+      <button
+        class="button-tab"
+        [class.active]="currentTab === ContractType.WriteContract"
+        (click)="changeTab(ContractType.WriteContract)">
+        <span class="d-none d-lg-block">Write Contract</span>
+        <span class="d-lg-none">Write</span>
+      </button>
+      <ng-container *ngIf="contractDetail?.type?.startsWith('PROXY_EIP_1967')">
+        <button
+          class="button-tab"
+          [class.active]="currentTab === ContractType.ReadContractProxy"
+          (click)="changeTab(ContractType.ReadContractProxy)">
+          <span class="d-none d-lg-block">Read as Proxy</span>
+          <span class="d-lg-none">Read as Proxy</span>
+        </button>
+        <button
+          class="button-tab"
+          [class.active]="currentTab === ContractType.WriteContractProxy"
+          (click)="changeTab(ContractType.WriteContractProxy)">
+          <span class="d-none d-lg-block">Write as Proxy</span>
+          <span class="d-lg-none">Write as Proxy</span>
+        </button>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>
+<div class="mt-4 mt-lg-6">
+  <ng-container *ngIf="contractDetail && contractTypeData === ContractVerifyType.Verified">
+    <app-evm-code
+      *ngIf="currentTab === ContractType.Code"
+      [contractDetailData]="contractDetail"
+      [abiString]="contractAbiString">
+    </app-evm-code>
+
+    <app-evm-read
+      *ngIf="currentTab === ContractType.ReadContract"
+      [abi]="contractDetail.abi"
+      [contractAddress]="contractsAddress">
+    </app-evm-read>
+
+    <app-evm-write
+      *ngIf="currentTab === ContractType.WriteContract"
+      [abi]="contractDetail.abi"
+      [contractAddress]="contractsAddress">
+    </app-evm-write>
+
+    <ng-container
+      *ngIf="
+        contractDetail?.type?.startsWith('PROXY_') &&
+        (currentTab === ContractType.ReadContractProxy || currentTab === ContractType.WriteContractProxy)
+      ">
+      <div class="mb-6">
+        <div class="body-02 text--gray-1 fw-semibold mb-2">
+          ABI for the implementation contract at
+          <a
+            [routerLink]="['/evm-contracts', implementationContractDetail.implementationContract]"
+            class="text--primary body-02 fw-semibold">
+            {{ implementationContractDetail.implementationContract }}
+          </a>
+        </div>
+        <div class="body-02 text--gray-1" *ngIf="implementationContractDetail.previouslyRecordedContract">
+          Previously recorded to be on
+          <a
+            [routerLink]="['/evm-contracts', implementationContractDetail.previouslyRecordedContract]"
+            class="text--primary body-02">
+            {{ implementationContractDetail.previouslyRecordedContract }}
+          </a>
+        </div>
+      </div>
+      <app-evm-read
+        *ngIf="currentTab === ContractType.ReadContractProxy"
+        [abi]="implementationContractDetail.abi"
+        [contractAddress]="contractsAddress"
+        [isProxyContract]="true">
+      </app-evm-read>
+
+      <app-evm-write
+        *ngIf="currentTab === ContractType.WriteContractProxy"
+        [abi]="implementationContractDetail.abi"
+        [contractAddress]="contractsAddress"
+        [isProxyContract]="true">
+      </app-evm-write>
+    </ng-container>
+  </ng-container>
+</div>

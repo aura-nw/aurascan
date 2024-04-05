@@ -1,0 +1,56 @@
+.icon-connect {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background-color: var(--aura-danger);
+
+  &.connected {
+    background-color: var(--aura-green-3);
+  }
+}
+
+.divider.divider-vertical {
+  min-height: 16px;
+  margin: 0 16px;
+}
+
+input.form-check-input {
+  color: var(--aura-gray-1);
+}
+
+.error-null {
+  border: 2px solid var(--aura-red-3) !important;
+}
+
+.btn-add-zero {
+  width: 25px;
+  height: 25px;
+
+  .icon-add-zero {
+    font-size: 15px;
+    color: var(--aura-white);
+  }
+}
+
+textarea {
+  padding: 8px 12px;
+  resize: none;
+}
+
+.warning-wrapper {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+
+  border-radius: 8px;
+  background: rgba(255, 200, 0, 0.16);
+  color: var(--aura-white);
+
+  img {
+    width: 20px;
+  }
+}

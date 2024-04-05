@@ -66,8 +66,35 @@
       "logo": "https://i.imgur.com/zi0mTYb.png",
       "explorer": "https://explorer.dev.aura.network/",
       "beta": "false"
+    },
+    "evmChainInfo": {
+      "name": "Aura EVM Devnet",
+      "chain": "Aura-Dev",
+      "rpc": "https://jsonrpc.dev.aura.network",
+      "faucets": [""],
+      "nativeCurrency": {
+        "name": "test-Aura",
+        "symbol": "tAURA",
+        "denom": "atAURA",
+        "decimals": 18
+      },
+      "infoURL": "https://aura.network",
+      "shortName": "aura-devnet",
+      "chainId": 1235,
+      "networkId": 1235,
+      "slip44": 1,
+      "icon": "",
+      "explorers": [
+        {
+          "name": "Aura Explorer (Aurascan)",
+          "url": "https://explorer.dev.aura.network",
+          "standard": "none",
+          "icon": ""
+        }
+      ]
     }
   },
+  "etherJsonRpc": "https://jsonrpc.dev.aura.network",
   "image": {
     "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
     "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
@@ -86,6 +113,7 @@
     "backend": "https://explorer-api.dev.aura.network/api/v1",
     "socket": "https://explorer-api.dev.aura.network",
     "ipfsDomain": "https://ipfs.io/",
+    "verifyContract": "https://evmos-verify.dev.aurascan.io/verify-contract/v1",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
       "ids": ["aura-network"]

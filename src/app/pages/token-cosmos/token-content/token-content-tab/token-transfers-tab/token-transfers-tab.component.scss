@@ -1,0 +1,42 @@
+.content-transfer {
+  min-width: 190px;
+  display: inline-block;
+}
+
+.box-token-transfer {
+  min-width: 80px;
+  display: flex;
+  justify-content: flex-start;
+
+  .token-transfer-status {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacer-2);
+    color: var(--aura-green-3);
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+    width: auto;
+    margin: auto;
+
+    &.status-out {
+      color: var(--aura-red-3);
+    }
+  }
+}
+
+.aura-status {
+  display: flex;
+  align-items: center;
+
+  .status {
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+}
+
+.transfer-table-container {
+  tr.mat-header-row {
+    text-transform: initial;
+  }
+}

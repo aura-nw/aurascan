@@ -29,7 +29,7 @@
             [decimal]="6"></div>
         </div>
         <span appLinkDenom>{{ denom }}</span>
-        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/account', contractDetail.address]">
+        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/address', contractDetail.address]">
           More info</a
         >
       </div>
@@ -63,9 +63,7 @@
                 contractDetail?.cw20_contract?.name &&
                 contractDetail?.cw20_contract?.symbol
               ">
-              <a
-                class="text--primary break-word line-claim-v--des"
-                [routerLink]="['/tokens/token/', contractDetail?.address]">
+              <a class="text--primary break-word line-claim-v--des" [routerLink]="['/token/', contractDetail?.address]">
                 {{ contractDetail | marketInfo: 'name' }} ({{ contractDetail | marketInfo: 'symbol' }})
               </a>
               <div class="cursor-pointer">
@@ -86,7 +84,7 @@
                 contractDetail?.cw721_contract?.symbol
               "
               class="text--primary break-word line-claim-v--des"
-              [routerLink]="['/tokens/' + linkNft, contractDetail?.address]">
+              [routerLink]="['/token', contractDetail?.address]">
               {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
             </a>
           </ng-container>

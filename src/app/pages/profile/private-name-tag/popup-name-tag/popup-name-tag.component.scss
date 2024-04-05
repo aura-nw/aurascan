@@ -5,12 +5,15 @@
   @media (max-width: 414px) {
     max-height: 80vh;
   }
+
   .card-header {
     background-color: var(--aura-gray-9);
   }
+
   .card-body {
-    max-height: 70vh;
+    max-height: 80vh;
     overflow-y: auto;
+
     .box-content {
       min-height: 536px;
       overflow-y: auto;
@@ -19,39 +22,45 @@
       border-bottom: 1px solid var(--aura-gray-9);
     }
   }
+
   .private-name-form {
     .form-label {
       font-size: 12px;
       color: var(--aura-gray-3);
     }
+
     .input-group {
       background-color: var(--aura-gray-10) !important;
       height: 40px;
+
       input {
-        max-width: 95%;
-        @media (min-width: 991.98px) {
-          max-width: 100%;
-        }
+        max-width: 100%;
       }
     }
+
     .text-area {
       background-color: var(--aura-gray-10) !important;
       padding: var(--spacer-4);
       border-radius: var(--spacer-2);
-      &::placeholder{
+
+      &::placeholder {
         color: var(--aura-gray-4);
       }
     }
+
     .btn {
       height: 40px;
       padding: 0 24px;
     }
+
     .btn-create {
       border: none;
+
       &:disabled {
         background: var(--aura-gray-8);
       }
     }
+
     .txt-note {
       width: -webkit-fill-available;
     }

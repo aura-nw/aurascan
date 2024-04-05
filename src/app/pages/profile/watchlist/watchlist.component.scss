@@ -17,36 +17,12 @@
   }
 }
 
-.watchlist-table {
-  th.mat-header-cell:nth-child(1) {
-    width: 75px;
-  }
-  th.mat-header-cell:nth-child(2) {
-    width: 180px;
-  }
-  th.mat-header-cell:nth-child(3) {
-    width: 80px;
-  }
-  th.mat-header-cell:nth-child(4),
-  th.mat-header-cell:nth-child(5) {
-    width: 180px;
-  }
-  th.mat-header-cell:nth-child(6) {
-    width: 140px;
-  }
-  th.mat-header-cell:nth-child(7) {
-    width: 140px;
-  }
-  th.mat-header-cell:nth-child(8) {
-    min-width: 80px;
-  }
-}
-
 .box-watch-list {
   .private-name-tag {
     width: fit-content;
     padding: 2px var(--spacer-2);
   }
+
   .mobile {
     .box-name-tag {
       &:after {
@@ -63,6 +39,7 @@
       word-break: break-all;
       margin-bottom: 0;
     }
+
     &:before {
       top: 100% !important;
       transform: translate(-50%, 0) !important;
@@ -75,21 +52,26 @@
     }
   }
 }
+
 // Mobile card
 .card-name-tag {
   border: 1px solid var(--aura-gray-9);
   border-radius: 8px;
   padding: 12px;
+
   &:not(:last-child) {
     margin-bottom: var(--spacer-4);
   }
 }
+
 .card__title {
   max-width: calc(100% - 140px);
 }
+
 .label__content {
   min-width: 120px;
 }
+
 .action-mob {
   height: 44px;
 }

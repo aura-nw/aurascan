@@ -7,6 +7,7 @@
       [appTooltip]="!(addressOnly || value | nameTagTooltipPipe) ? displayContent(addressOnly || value) : null"
       [classTooltip]="tooltipPosition"
       [ngClass]="{
+        'dark-style': nameTagDark && !(addressOnly || value | nameTagTooltipPipe),
         'box-name-tag': !(addressOnly || value | nameTagTooltipPipe),
         'w-auto': widthAuto,
         'private-name-tag': (addressOnly || value | isPrivateNameTag)
@@ -18,10 +19,11 @@
 
   <ng-template #displayText>
     <span
-      class="break-all"
+      class="break-all d-flex align-items-center"
       [appTooltip]="!(addressOnly || value | nameTagTooltipPipe) ? displayContent(addressOnly || value) : null"
       [classTooltip]="tooltipPosition"
       [ngClass]="{
+        'dark-style': nameTagDark && !(addressOnly || value | nameTagTooltipPipe),
         'box-name-tag': !(addressOnly || value | nameTagTooltipPipe),
         'w-auto': widthAuto,
         'private-name-tag': (addressOnly || value | isPrivateNameTag)
@@ -105,7 +107,9 @@
       else noValue
     ">
     <div
-      class="box-name-tag text--white {{ mode === ENameTag.Private ? 'private-name-tag' : '' }}"
+      class="box-name-tag {{ nameTagDark ? 'dark-style' : '' }} text--white {{
+        mode === ENameTag.Private ? 'private-name-tag' : ''
+      }}"
       [appTooltip]="
         screen !== EScreen.Contract
           ? (screen === EScreen.Account ? mode + ' name: ' : '') + (value | nameTag: mode === ENameTag.Private)

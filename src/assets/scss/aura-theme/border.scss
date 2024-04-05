@@ -2,16 +2,20 @@
 .border-sm {
   border: 1px solid !important;
 }
+
 // border color
 .border-gray-8 {
   border-color: var(--aura-gray-8) !important;
 }
+
 .border-gray-9 {
   border-color: var(--aura-gray-9) !important;
 }
+
 .border-white {
   border-color: var(--aura-white) !important;
 }
+
 // border radius
 .border-radius--sm {
   border-radius: 8px !important;
@@ -25,6 +29,7 @@
   border-top: solid 1px var(--aura-light-gray) !important;
   padding-top: var(--spacer-5);
 }
+
 .border-right {
   border-right: 1px solid var(--aura-gray-9);
 }

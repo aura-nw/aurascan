@@ -17,7 +17,7 @@ export class ContractsOverviewCardComponent implements OnChanges {
   contractBalance;
   contractValue;
   contractRegisterType = ContractRegisterType;
-  linkNft = 'token-nft';
+
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;

@@ -98,8 +98,10 @@ export class IBCComponent implements OnInit {
           connectedChain: _.get(res, 'total_connected_chain.aggregate.count') || 0,
           totalOpen:
             (_.get(res, 'total_opening_channels.aggregate.sum.open_channel') || 0) +
-              '/' +
-              _.get(res, 'total_channels.aggregate.sum.total_channel') || 0,
+            '/' +
+            (_.get(res, 'total_channels.aggregate.sum.total_channel') > 0
+              ? _.get(res, 'total_channels.aggregate.sum.total_channel')
+              : 0),
           totalSend: _.get(res, 'total_send.aggregate.sum.send_asset_transfer') || 0,
           totalReceive: _.get(res, 'total_receive.aggregate.sum.receive_asset_transfer') || 0,
         };

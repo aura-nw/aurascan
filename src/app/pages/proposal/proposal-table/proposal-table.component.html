@@ -135,12 +135,12 @@
                       ? '-'
                       : !(data.voter | nameTagTooltipPipe)
                         ? '<a class=text--primary href=' +
-                          ('/account/' + data.voter) +
+                          ('/address/' + data.voter) +
                           '>' +
                           (data.voter | nameTag | ellipsis: 16) +
                           '</a>'
                         : '<a class=text--primary href=' +
-                          ('/account/' + data.voter) +
+                          ('/address/' + data.voter) +
                           '>' +
                           (data.voter | nameTag | ellipsis: 8 : 8) +
                           '</a>'
@@ -148,7 +148,7 @@
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">TxHash</div>
-                <a href="/transaction/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
+                <a href="/tx/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
                   data.txhash | ellipsis: 6 : 6
                 }}</a>
               </div>
@@ -184,7 +184,7 @@
               <span class="divider divider-horizontal divider-lighter d-block my-3"></span>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">TxHash</div>
-                <a href="/transaction/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
+                <a href="/tx/{{ data.txhash }}" class="text--primary" [copyBtn]="data.txhash">{{
                   data.txhash | ellipsis: 6 : 6
                 }}</a>
               </div>
@@ -223,12 +223,12 @@
                       ? '-'
                       : !(data.depositors | nameTagTooltipPipe)
                         ? '<a class=text--primary href=' +
-                          ('/account/' + data.depositors) +
+                          ('/address/' + data.depositors) +
                           '>' +
                           (data.depositors | nameTag | ellipsis: 16) +
                           '</a>'
                         : '<a class=text--primary href=' +
-                          ('/account/' + data.depositors) +
+                          ('/address/' + data.depositors) +
                           '>' +
                           (data.depositors | nameTag | ellipsis: 8 : 8) +
                           '</a>'
@@ -236,7 +236,7 @@
               </div>
               <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="text--gray-4">TxHash</div>
-                <a href="/transaction/{{ data.hash }}" class="text--primary" [copyBtn]="data.hash">{{
+                <a href="/tx/{{ data.hash }}" class="text--primary" [copyBtn]="data.hash">{{
                   data.hash | ellipsis: 6 : 6
                 }}</a>
               </div>
@@ -250,7 +250,7 @@
                         (data.amount < 0.001 ? '<0.001' : (data.amount | mask: 'separator.6')) +
                         '</span>' +
                         '<a class=text--primary href=' +
-                        ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+                        ('/token/' + coinInfo.coinMinimalDenom) +
                         '>' +
                         coinInfo.coinDenom +
                         '</a>'
