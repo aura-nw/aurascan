@@ -112,9 +112,8 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       data['address'],
     );
-
     this.csvForm.controls.address.setValue(accountAddress);
-    this.csvForm.controls.evmAddress.setValue(accountEvmAddress);
+    this.csvForm.controls.evmAddress.setValue(accountEvmAddress ?? '');
     if (this.commonService.isValidAddress(data['address'])) {
       this.csvForm.get('evmAddress').disable();
     } else {

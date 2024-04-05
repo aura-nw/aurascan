@@ -280,7 +280,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   editWatchList() {
     if (this.userEmail) {
       local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, {
-        address: this.isContractAddress ? this.accountEvmAddress : this.accountAddress,
+        address: this.isContractAddress ? this.accountEvmAddress || this.accountAddress : this.accountAddress,
         type: this.isContractAddress ? 'contract' : 'account',
       });
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
