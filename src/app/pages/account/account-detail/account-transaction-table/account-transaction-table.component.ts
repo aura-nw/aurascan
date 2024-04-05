@@ -375,7 +375,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesEvmExecute;
         this.displayedColumns = this.templatesEvmExecute.map((dta) => dta.matColumnDef);
-        this.getListEvmTxByAddress(payload);
+        if (payload.address) {
+          this.getListEvmTxByAddress(payload);
+        } else {
+          this.dataSource.data = [];
+          this.transactionLoading = false;
+        }
         break;
       case TabsAccountLink.NativeTxs:
         payload.to = payload.from = this.currentAddress = this.addressNative;
@@ -409,7 +414,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.templates.push({matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0'});
         this.templates.push({matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4'});
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
-        this.getListFTByAddress(payload);
+        if (payload['sender']) {
+          this.getListFTByAddress(payload);
+        } else {
+          this.dataSource.data = [];
+          this.transactionLoading = false;
+        }
         break;
       case TabsAccountLink.NftTxs:
         payload['sender'] = payload['receiver'] = address;
