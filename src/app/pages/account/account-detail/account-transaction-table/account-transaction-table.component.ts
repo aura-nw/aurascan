@@ -132,6 +132,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   coinInfo = this.environmentService.chainInfo.currencies[0];
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  evmDecimal = this.environmentService.evmDecimal;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -374,7 +375,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesEvmExecute;
         this.displayedColumns = this.templatesEvmExecute.map((dta) => dta.matColumnDef);
-        this.getListEvmTxByAddress(payload);
+        if (payload.address) {
+          this.getListEvmTxByAddress(payload);
+        } else {
+          this.dataSource.data = [];
+          this.transactionLoading = false;
+        }
         break;
       case TabsAccountLink.NativeTxs:
         payload.to = payload.from = this.currentAddress = this.addressNative;
@@ -408,7 +414,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
         this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
-        this.getListFTByAddress(payload);
+        if (payload['sender']) {
+          this.getListFTByAddress(payload);
+        } else {
+          this.dataSource.data = [];
+          this.transactionLoading = false;
+        }
         break;
       case TabsAccountLink.NftTxs:
         payload['sender'] = payload['receiver'] = address;
@@ -608,7 +619,13 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             element.limit = 5;
           });
         } else {
-          txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+          txs = convertDataAccountTransaction(
+            data,
+            this.coinInfo,
+            this.modeQuery,
+            this.environmentService.getDecimals(),
+            setReceive,
+          );
         }
       }
 
@@ -770,7 +787,10 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         exportType = ETypeFtExport.CW20;
       }
     }
-    local.setItem(STORAGE_KEYS.SET_DATA_EXPORT, JSON.stringify({ address: this.currentAddress, exportType }));
+    local.setItem(
+      STORAGE_KEYS.SET_DATA_EXPORT,
+      JSON.stringify({ address: this.currentAddress || this.addressNative, exportType }),
+    );
     this.router.navigate(['/export-csv']);
   }
 

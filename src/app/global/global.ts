@@ -152,7 +152,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
   return [fromAddress, toAddress, value, method, tokenId, modeExecute];
 }
 
-export function convertDataTransaction(data, coinInfo) {
+export function convertDataTransaction(data, coinDecimals) {
   const txs = _.get(data, 'transaction').map((element) => {
     if (element['data']) {
       if (!element['data']['body'] && !element['data']['linkS3']) {
@@ -178,12 +178,9 @@ export function convertDataTransaction(data, coinInfo) {
       });
     }
 
-    const fee = BigNumber(
-      balanceOf(
-        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
-        coinInfo.coinDecimals,
-      ),
-    ).toFixed();
+    // Get fee by evm denom and cosmos minimalDenom
+    const { amount, denom } = _.get(element, 'fee[0]') || _.get(element, 'data.auth_info.fee.amount[0]');
+    const fee = BigNumber(balanceOf(amount || 0, coinDecimals[denom?.toLowerCase()])).toFixed();
 
     const typeOrigin = _type;
     let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
@@ -256,7 +253,7 @@ export function convertDataBlock(data) {
   return block;
 }
 
-export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false) {
+export function convertDataAccountTransaction(data, coinInfo, modeQuery, coinDecimals?: any, setReceive = false) {
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
@@ -285,12 +282,14 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    const fee = BigNumber(
-      balanceOf(
-        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
-        coinInfo.coinDecimals,
-      ),
-    ).toFixed();
+    // Get fee by evm denom and cosmos minimalDenom
+    const { amount: feeAmount, denom: feeDenom } = _.get(element, 'fee[0]') ||
+      _.get(element, 'data.auth_info.fee.amount[0]') || {
+        amount: 0,
+        denom: '',
+      };
+
+    const fee = BigNumber(balanceOf(feeAmount || 0, coinDecimals[feeDenom?.toLowerCase()])).toFixed();
 
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
@@ -389,7 +388,6 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       type,
       status,
       amount,
-      fee,
       height,
       timestamp,
       denom,
@@ -397,6 +395,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       toAddress,
       tokenId,
       contractAddress,
+      fee,
       arrEvent,
       limit,
       action,
@@ -408,7 +407,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
   return txs;
 }
 
-export function convertDataTransactionSimple(data, coinInfo) {
+export function convertDataTransactionSimple(data, coinDecimals) {
   return _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
@@ -439,12 +438,9 @@ export function convertDataTransactionSimple(data, coinInfo) {
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    const fee = BigNumber(
-      balanceOf(
-        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
-        coinInfo.coinDecimals,
-      ),
-    ).toFixed();
+    // Get fee by evm denom and cosmos minimalDenom
+    const { amount, denom } = _.get(element, 'fee[0]') || _.get(element, 'data.auth_info.fee.amount[0]');
+    const fee = BigNumber(balanceOf(amount || 0, coinDecimals[denom?.toLowerCase()])).toFixed();
 
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');

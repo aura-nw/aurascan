@@ -40,7 +40,7 @@ export class WalletService implements OnDestroy {
   private _walletManager: WalletManager | null = null;
   private _chain: Chain;
 
-  private testnets = ['aura-testnet-2', 'serenity-testnet-001'];
+  private testnets = ['auradev_1235-3', 'serenity-testnet-001'];
 
   // account subject config
   private _walletAccountSubject$: BehaviorSubject<IMultichainWalletAccount>;

@@ -98,7 +98,9 @@ export class CosmosTransactionComponent implements OnChanges {
   handleLoadData(res) {
     this.loading = false;
 
-    const txs = convertDataTransaction(res, this.coinInfo);
+    const coinDecimals = this.environmentService.getDecimals();
+
+    const txs = convertDataTransaction(res, coinDecimals);
     if (txs?.length === 0) {
       this.loading = false;
       return;

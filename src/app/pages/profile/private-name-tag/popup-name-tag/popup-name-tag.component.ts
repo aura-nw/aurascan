@@ -86,7 +86,7 @@ export class PopupNameTagComponent implements OnInit {
     });
   }
 
-  setDataFrom(data) {
+  setDataFrom(data, isSetDetail = false) {
     if (data.nameTag || data.name_tag_private) {
       this.isEditMode = true;
       this.idEdit = this.data.id || data.id;
@@ -101,6 +101,12 @@ export class PopupNameTagComponent implements OnInit {
     this.privateNameForm.controls['note'].setValue(data.note);
     this.handleSetAddress(data['address']);
     this.checkPublicNameTag();
+    // case set name tag when click in contract detail
+    // if contract has evmAddress -> enable evmAddress
+    if (isSetDetail && this.isContract && this.privateNameForm.controls['evmAddress'].value.length > 0) {
+      this.privateNameForm.get('cosmosAddress').disable();
+      this.privateNameForm.get('evmAddress').enable();
+    }
   }
 
   handleSetAddress(address, controlName?: string) {
@@ -234,10 +240,8 @@ export class PopupNameTagComponent implements OnInit {
   checkPublicNameTag() {
     this.publicNameTag = '-';
     this.getAddress.value = this.getAddress.value.trim();
-    if (this.getAddress.status === 'VALID') {
-      const temp = this.nameTagService.findNameTag(this.getAddress.value)?.name_tag;
-      this.publicNameTag = temp || '-';
-    }
+    const temp = this.nameTagService.findNameTag(this.getAddress.value)?.name_tag;
+    this.publicNameTag = temp || '-';
   }
 
   getDetailNameTag(address = null) {
@@ -248,7 +252,7 @@ export class PopupNameTagComponent implements OnInit {
     };
 
     this.nameTagService.getListPrivateNameTag(payload).subscribe((res) => {
-      this.setDataFrom(res?.data[0] || this.data);
+      this.setDataFrom(res?.data[0] || this.data, true);
     });
   }
 
