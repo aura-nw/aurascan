@@ -152,7 +152,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
   return [fromAddress, toAddress, value, method, tokenId, modeExecute];
 }
 
-export function convertDataTransaction(data, coinInfo) {
+export function convertDataTransaction(data, coinDecimals) {
   const txs = _.get(data, 'transaction').map((element) => {
     if (element['data']) {
       if (!element['data']['body'] && !element['data']['linkS3']) {
@@ -178,12 +178,9 @@ export function convertDataTransaction(data, coinInfo) {
       });
     }
 
-    const fee = BigNumber(
-      balanceOf(
-        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
-        coinInfo.coinDecimals,
-      ),
-    ).toFixed();
+    // Get fee by evm denom and cosmos minimalDenom
+    const { amount, denom } = _.get(element, 'fee[0]') || _.get(element, 'data.auth_info.fee.amount[0]');
+    const fee = BigNumber(balanceOf(amount || 0, coinDecimals[denom?.toLowerCase()])).toFixed();
 
     const typeOrigin = _type;
     let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();

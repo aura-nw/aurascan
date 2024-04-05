@@ -202,7 +202,7 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   getListData(data, isReload = false) {
-    const txsExecute = convertDataTransaction(data, this.coinInfo);
+    const txsExecute = convertDataTransaction(data, this.environmentService.getDecimals());
     if (data.transaction?.length > 0) {
       this.nextKey = null;
       if (txsExecute.length >= 100) {
