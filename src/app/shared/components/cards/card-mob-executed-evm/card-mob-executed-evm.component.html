@@ -61,6 +61,7 @@
           <app-name-tag
             *ngIf="data?.from"
             [value]="data?.from"
+            [nameTagDark]="true"
             [isEnableRouter]="!data?.from?.startsWith('Null') && data?.from !== currentAddress"></app-name-tag>
           <span *ngIf="!data?.from" class="text--white">-</span>
         </div>
