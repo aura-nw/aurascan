@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-between contract__title">
     <div class="d-flex align-items-center">
       <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px" />
-      <span class="body-02 text--gray-1 ml-2 item-read">Read Contract Information</span>
+      <span class="body-02 text--gray-1 ml-2">Read Contract Information</span>
     </div>
     <div class="caption fw-normal-mob d-flex align-items-center">
       <span class="cursor-pointer text--primary" (click)="expandMenu()">
@@ -14,84 +14,73 @@
     </div>
   </div>
   <div class="box-content text--white mt-4">
-    <div *ngIf="extendedAbi?.length === 0" class="item-notify d-flex">
-      <img
-        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-        alt=""
-        width="16"
-        height="16"
-        class="mr-2 mt-1" />
-      The current implementation contract has not yet been verified
-    </div>
-    <ng-container *ngIf="extendedAbi?.length > 0">
-      <ng-container *ngFor="let jsonFragment of extendedAbi; index as index">
-        <mat-expansion-panel
-          hideToggle
-          *ngIf="jsonFragment.name"
-          class="custom-expansion-panel outline"
-          (afterExpand)="afterExpand(jsonFragment)">
-          <mat-expansion-panel-header class="content-contract txt-header">
-            <mat-panel-title class="item-content body-02 text--gray-1">
-              {{ index + 1 }}. {{ jsonFragment.name }}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
+    <ng-container *ngFor="let jsonFragment of extendedAbi; index as index">
+      <mat-expansion-panel
+        hideToggle
+        *ngIf="jsonFragment.name"
+        class="custom-expansion-panel outline"
+        (afterExpand)="afterExpand(jsonFragment)">
+        <mat-expansion-panel-header class="content-contract txt-header">
+          <mat-panel-title class="item-content body-02 text--gray-1">
+            {{ index + 1 }}. {{ jsonFragment.name }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
-          <form [formGroup]="jsonFragment.formGroup" class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
-            <ng-container *ngFor="let item of jsonFragment.inputs">
-              <p class="px-0 mb-2 body-02" [class.input-require]="true">{{ item.name }} ({{ item.type }})</p>
-              <ng-container *ngIf="jsonFragment.formGroup.controls[item.name] as control">
-                <input
-                  #value
-                  *ngIf="!item.type?.includes('boolean')"
-                  [formControlName]="item.name"
-                  [ngClass]="{
-                    'input-require': true,
-                    'error-null': control.invalid && jsonFragment.isValidate
-                  }"
-                  class="form-check-input col-12 mb-4"
-                  [type]="item.type"
-                  placeholder="{{ item.name }} ({{ item.type }})" />
-              </ng-container>
+        <form [formGroup]="jsonFragment.formGroup" class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
+          <ng-container *ngFor="let item of jsonFragment.inputs">
+            <p class="px-0 mb-2 body-02" [class.input-require]="true">{{ item.name }} ({{ item.type }})</p>
+            <ng-container *ngIf="jsonFragment.formGroup.controls[item.name] as control">
+              <input
+                #value
+                *ngIf="!item.type?.includes('boolean')"
+                [formControlName]="item.name"
+                [ngClass]="{
+                  'input-require': true,
+                  'error-null': control.invalid && jsonFragment.isValidate
+                }"
+                class="form-check-input col-12 mb-4"
+                [type]="item.type"
+                placeholder="{{ item.name }} ({{ item.type }})" />
             </ng-container>
+          </ng-container>
 
-            <div class="w-100 mb-2 px-0">
-              <button
-                *ngIf="jsonFragment.inputs?.length > 0"
-                class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card text--white"
-                type="submit"
-                (click)="handleQueryContract(jsonFragment)"
-                [disabled]="jsonFragment.isLoading">
-                <img
-                  [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                  alt=""
-                  class="mr-2"
-                  width="20"
-                  height="20"
-                  *ngIf="jsonFragment.isLoading" />
-
-                Query
-              </button>
-
+          <div class="w-100 mb-2 px-0">
+            <button
+              *ngIf="jsonFragment.inputs?.length > 0"
+              class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card text--white"
+              type="submit"
+              (click)="handleQueryContract(jsonFragment)"
+              [disabled]="jsonFragment.isLoading">
               <img
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
                 class="mr-2"
                 width="20"
                 height="20"
-                *ngIf="jsonFragment.isLoading && jsonFragment.inputs?.length == 0" />
-            </div>
+                *ngIf="jsonFragment.isLoading" />
 
-            <div class="px-0">
-              <div class="d-flex" *ngIf="jsonFragment.result !== undefined">
-                <div>Response:</div>
-                <div class="overflow-scroll-x">
-                  <pre id="json" class="raw-content text--white pl-2" [innerHtml]="jsonFragment.result | appJson"></pre>
-                </div>
+              Query
+            </button>
+
+            <img
+              [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+              alt=""
+              class="mr-2"
+              width="20"
+              height="20"
+              *ngIf="jsonFragment.isLoading && jsonFragment.inputs?.length == 0" />
+          </div>
+
+          <div class="px-0">
+            <div class="d-flex" *ngIf="jsonFragment.result !== undefined">
+              <div>Response:</div>
+              <div class="overflow-scroll-x">
+                <pre id="json" class="raw-content text--white pl-2" [innerHtml]="jsonFragment.result | appJson"></pre>
               </div>
             </div>
-          </form>
-        </mat-expansion-panel>
-      </ng-container>
+          </div>
+        </form>
+      </mat-expansion-panel>
     </ng-container>
   </div>
 </ng-container>

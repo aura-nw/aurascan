@@ -32,6 +32,7 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
     previouslyRecordedContract: string;
     abi?: JsonFragment[];
   };
+  isImplementationVerified = false;
 
   destroyed$ = new Subject<void>();
 
@@ -53,6 +54,7 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     this.loadContractDetail();
+    this.loadProxyContractDetail();
   }
 
   loadContractDetail() {
@@ -112,5 +114,21 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
           this.implementationContractDetail['abi'] = abi as JsonFragment[];
         }
       });
+  }
+
+  loadProxyContractDetail() {
+    this.contractService.loadProxyContractDetail(this.contractsAddress).subscribe((res) => {
+      if (res.implementation_contract) {
+        this.getListContractInfo(res.implementation_contract);
+      }
+    });
+  }
+
+  getListContractInfo(address) {
+    this.contractService.getListContractInfo(address).subscribe((res) => {
+      if (res?.evm_contract_verification?.length > 0) {
+        this.isImplementationVerified = res.evm_contract_verification[0]?.status;
+      }
+    });
   }
 }

@@ -5,15 +5,14 @@ import {
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as _ from 'lodash';
-import { Subject, interval, switchMap, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { isContract } from 'src/app/core/utils/common/validation';
 import { PopupProxyContractComponent } from './popup-proxy-contract/popup-proxy-contract.component';
-import { isAddress, isContract } from 'src/app/core/utils/common/validation';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-evm-proxy-contracts-verify',
@@ -28,13 +27,19 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
   isValidAddress = false;
   interupt$ = new Subject<void>();
   chainInfo = this.env.chainInfo;
+  popupData = {};
+  modePopup = {
+    SUCCESS: 'Success',
+    WARNING: 'Warning',
+    ERROR: 'Error',
+  };
+  isVerifying = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private env: EnvironmentService,
     private contractService: ContractService,
-    private toatr: NgxToastrService,
     private dialog: MatDialog,
   ) {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress')?.toLowerCase();
@@ -55,10 +60,6 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
     this.validAddress();
   }
 
-  onSubmit() {
-    this.verifyEvmContract();
-  }
-
   checkStatusVerify() {
     this.contractService;
   }
@@ -75,71 +76,47 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
     }
   }
 
-  verifyEvmContract() {
-    this.loading = true;
-    const formData: FormData = new FormData();
-    formData.append('contract_address', this.contractAddress.toLowerCase());
-    formData.append('chainid', this.env.chainId);
+  verifyProxyContract() {
+    //return if verifying
+    if (this.isVerifying) {
+      return;
+    }
 
-    this.contractService.verifyEvmContract(formData).subscribe({
+    this.popupData['modePopup'] = this.modePopup.ERROR;
+    this.popupData['proxyContract'] = this.contractAddress;
+    this.isVerifying = true;
+    this.contractService.loadProxyContractDetail(this.contractAddress).subscribe({
       next: (res) => {
-        this.checkVerifyEvmContractStatus(res?.['id']);
+        this.popupData['implementationContract'] = res?.implementation_contract || '';
+        if (res?.implementation_contract) {
+          this.popupData['modePopup'] = this.modePopup.WARNING;
+          this.getListContractInfo(this.popupData['implementationContract']);
+        }
       },
-      error: (e) => {
-        this.loading = false;
+      error: (err) => {
+        this.popupData['modePopup'] = this.modePopup.ERROR;
+        this.openPopup();
       },
     });
   }
 
-  checkVerifyEvmContractStatus(id: number) {
-    this.interupt$ = new Subject();
-    interval(5000)
-      .pipe(
-        switchMap(() => {
-          return this.contractService.checkVerifyEvmContractStatus(this.contractAddress, id);
-        }),
-        takeUntil(this.interupt$),
-      )
-      .subscribe({
-        next: (result) => {
-          if (result) {
-            const status = _.get(result, 'evm_contract_verification[0].status');
-
-            if (status != 'PENDING') {
-              this.interupt$.next();
-
-              if (status == 'SUCCESS') {
-                this.router.navigate(['evm-contracts', this.contractAddress]);
-              } else {
-                this.toatr.error('Verify contract fail');
-              }
-            }
-          }
-        },
-        error: () => {
-          this.toatr.error('Verify contract fail');
-          this.interupt$.next();
-        },
-        complete: () => {
-          this.loading = false;
-          this.interupt$.complete();
-        },
-      });
+  getListContractInfo(address) {
+    this.contractService.getListContractInfo(address).subscribe((res) => {
+      if (res.evm_contract_verification?.length > 0) {
+        if (res.evm_contract_verification[0]?.status === ContractVerifyType.Verified) {
+          this.popupData['modePopup'] = this.modePopup.SUCCESS;
+        }
+      }
+      this.openPopup();
+    });
   }
 
   openPopup() {
+    this.isVerifying = false;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'grant-overlay-panel';
     dialogConfig.disableClose = true;
-    dialogConfig.data = this.contractAddress;
+    dialogConfig.data = this.popupData;
     let dialogRef = this.dialog.open(PopupProxyContractComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        setTimeout(() => {
-          // this.getListPrivateName();
-          // this.storeListNameTag();
-        }, 3000);
-      }
-    });
   }
 }

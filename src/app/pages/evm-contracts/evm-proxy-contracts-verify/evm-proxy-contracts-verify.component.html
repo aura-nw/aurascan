@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="row mb-lg-12 mb-6">
+  <div class="row mb-lg-8 mb-4">
     <div class="col-12">
       <div class="form-group">
         <label for="address" class="form-label text--gray-4 body-02">
@@ -31,7 +31,7 @@
           id="address"
           [(ngModel)]="contractAddress"
           (ngModelChange)="validAddress()" />
-        <!-- <div class="error" *ngIf="validAddress">Address is required!</div> -->
+        <div class="error text--danger mt-2 {{ !isValidAddress ? 'visible' : 'invisible' }}">Invalid Address!</div>
       </div>
     </div>
   </div>
@@ -46,15 +46,14 @@
     <button
       class="button button--xlg button-pill button-outline button-outline--gradient button-fixed ml-4 px-1 px-sm-6"
       type="submit"
-      [disabled]="loading || !isValidAddress"
-      (click)="openPopup()">
+      [disabled]="isVerifying || !isValidAddress"
+      (click)="verifyProxyContract()">
       <img
         [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
         alt=""
-        class="mr-2"
         width="20"
         height="20"
-        *ngIf="loading" />
+        *ngIf="isVerifying" />
       <span>Verify</span>
     </button>
   </div>

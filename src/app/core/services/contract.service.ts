@@ -21,6 +21,7 @@ export class ContractService extends CommonService {
   contractObservable: Observable<any>;
   chainInfo = this.environmentService.chainInfo;
   apiUrl = `${this.environmentService.backend}`;
+  horoscopeApi = this.horoscope?.url + this.horoscope?.rest;
 
   get contract() {
     return this.contract$.value;
@@ -712,5 +713,32 @@ export class ContractService extends CommonService {
               };
         }),
       );
+  }
+
+  loadProxyContractDetail(contractAddress: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.horoscopeApi}/evm-proxy?contractAddress=${contractAddress}&chainId=${this.chainInfo.chainId}`,
+    );
+  }
+
+  getListContractInfo(listContractAddress: string[]): Observable<any> {
+    const query = `query queryListContract($address: [String!]) {
+      ${this.envDB} {
+        evm_contract_verification(where: {contract_address: {_in: $address}}) {
+          status
+          contract_address
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {
+          address: listContractAddress,
+        },
+        operationName: 'queryListContract',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }

@@ -165,14 +165,6 @@
     </div>
   </ng-container>
   <ng-template #noValues>
-    <div class="item-notify d-flex text--white">
-      <img
-        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-        alt=""
-        width="16"
-        height="16"
-        class="mr-2 mt-1" />
-      The current implementation contract has not yet been verified
-    </div>
+    <app-table-no-data></app-table-no-data>
   </ng-template>
 </ng-container>

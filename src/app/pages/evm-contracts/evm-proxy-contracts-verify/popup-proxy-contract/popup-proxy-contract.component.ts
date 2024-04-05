@@ -24,32 +24,38 @@ export class PopupProxyContractComponent implements OnInit {
   };
   displayMode = this.modePopup.WARNING;
   codeId;
+  address;
 
   chainName = this.environmentService.chainName.toLowerCase();
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public address: any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupProxyContractComponent>,
     public translate: TranslateService,
     private environmentService: EnvironmentService,
     private router: Router,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.address = this.data['proxyContract'];
+    this.displayMode = this.data['modePopup'];
+  }
 
   closeDialog(status = null) {
     this.dialogRef.close(status);
-    if (this.displayMode === this.modePopup.SUCCESS) {
+    if (this.displayMode === this.modePopup.SUCCESS && status === 'close') {
       window.history.back();
     }
   }
 
   navigateToVerify() {
     this.dialogRef.close();
-    if (this.codeId) {
-      sessionStorage.setItem('codeIdPrePage', this.router.url);
-      this.router.navigate(['/code-ids/verify', this.codeId]);
-    }
+    this.router.navigate(['/evm-contracts', this.data['implementationContract'], 'verify']);
+  }
+
+  navigateToAddress(address) {
+    this.dialogRef.close();
+    this.router.navigate(['/evm-contracts', address]);
   }
 }

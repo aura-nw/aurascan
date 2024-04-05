@@ -16,23 +16,29 @@
         </div>
 
         <ng-container *ngIf="displayMode !== modePopup.ERROR">
-          The proxy contract <span class="text--primary">{{ address }}</span>
-          <ng-container *ngIf="!(address | nameTagTooltipPipe)">({{ address | nameTag }})</ng-container>’s
-          <br />implementation contract is found at:
-          <div class="text--primary">
-            {{ address
-            }}<ng-container *ngIf="!(address | nameTagTooltipPipe)">
-              <span class="text--white">({{ address | nameTag }})</span>
-            </ng-container>
-            <span *ngIf="displayMode === modePopup.WARNING" class="text--white">
-              . But the implementation contract does not seem to be verified.
-            </span>
-          </div>
+          The proxy contract
+          <a class="text--primary" (click)="navigateToAddress(address)">
+            {{ address }}
+            <ng-container *ngIf="!(address | nameTagTooltipPipe)">({{ address | nameTag }})</ng-container> </a
+          >’s <br />implementation contract is found at:
+          <a class="text--primary" (click)="navigateToAddress(data['implementationContract'])">
+            {{ data['implementationContract']
+            }}<ng-container *ngIf="!(data['implementationContract'] | nameTagTooltipPipe)">
+              <span>({{ data['implementationContract'] | nameTag }})</span>
+            </ng-container> </a
+          ><span *ngIf="displayMode === modePopup.WARNING" class="text--white"
+            >. But the implementation contract does not seem to be verified.
+          </span>
         </ng-container>
 
         <ng-container *ngIf="displayMode === modePopup.ERROR">
           Can not detect the implementation contract for the proxy address
-          <div class="text--primary">{{ address }}</div>
+          <a class="text--primary" (click)="navigateToAddress(address)">
+            {{ address
+            }}<ng-container *ngIf="!(address | nameTagTooltipPipe)">
+              <span>({{ address | nameTag }})</span>
+            </ng-container>
+          </a>
         </ng-container>
       </div>
 
@@ -54,7 +60,7 @@
 
     <!-- button group -->
     <div class="d-flex px-6 py-6 justify-content-end">
-      <button class="button button--md button-pill button-outline btn" type="button" (click)="closeDialog()">
+      <button class="button button--md button-pill button-outline btn" type="button" (click)="closeDialog('close')">
         <span>Close</span>
       </button>
       <button
