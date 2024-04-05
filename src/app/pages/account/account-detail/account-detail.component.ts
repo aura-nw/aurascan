@@ -1,27 +1,27 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatLegacySelect as MatSelect} from '@angular/material/legacy-select';
-import {MatSort} from '@angular/material/sort';
-import {ActivatedRoute, Router} from '@angular/router';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
+import { MatSort } from '@angular/material/sort';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import BigNumber from 'bignumber.js';
-import {ChartComponent} from 'ng-apexcharts';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {EFeature} from 'src/app/core/models/common.model';
-import {SoulboundService} from 'src/app/core/services/soulbound.service';
-import {UserService} from 'src/app/core/services/user.service';
-import {WalletService} from 'src/app/core/services/wallet.service';
-import {transferAddress} from 'src/app/core/utils/common/address-converter';
+import { ChartComponent } from 'ng-apexcharts';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { EFeature } from 'src/app/core/models/common.model';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
-import {EnvironmentService} from '../../../../app/core/data-services/environment.service';
-import {ACCOUNT_WALLET_COLOR} from '../../../core/constants/account.constant';
-import {ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount} from '../../../core/constants/account.enum';
-import {DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS} from '../../../core/constants/common.constant';
-import {AccountService} from '../../../core/services/account.service';
-import {CommonService} from '../../../core/services/common.service';
-import {CHART_OPTION, ChartOptions, chartCustomOptions} from './chart-options';
-import {ContractService} from 'src/app/core/services/contract.service';
+import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
+import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount } from '../../../core/constants/account.enum';
+import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
+import { AccountService } from '../../../core/services/account.service';
+import { CommonService } from '../../../core/services/common.service';
+import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -109,7 +109,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
-        const {accountAddress, accountEvmAddress} = transferAddress(
+        const { accountAddress, accountEvmAddress } = transferAddress(
           this.chainInfo.bech32Config.bech32PrefixAccAddr,
           params?.address,
         );
@@ -210,10 +210,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
           });
         }
       },
-      () => {
-      },
-      () => {
-      },
+      () => {},
+      () => {},
     );
   }
 
@@ -250,10 +248,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       (res) => {
         this.totalSBTPick = res.data.length;
       },
-      () => {
-      },
-      () => {
-      },
+      () => {},
+      () => {},
     );
   }
 
@@ -275,7 +271,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   handleWatchList() {
     if (this.isWatchList) {
-      this.router.navigate(['/profile'], {queryParams: {tab: 'watchList'}});
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.editWatchList();
     }
@@ -284,10 +280,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   editWatchList() {
     if (this.userEmail) {
       local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, {
-        address: this.isContractAddress ? (this.accountEvmAddress || this.accountAddress) : this.accountAddress,
+        address: this.isContractAddress ? this.accountEvmAddress || this.accountAddress : this.accountAddress,
         type: this.isContractAddress ? 'contract' : 'account',
       });
-      this.router.navigate(['/profile'], {queryParams: {tab: 'watchList'}});
+      this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);
     }

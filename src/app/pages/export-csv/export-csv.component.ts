@@ -1,17 +1,17 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {saveAs} from 'file-saver';
+import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { saveAs } from 'file-saver';
 import * as moment from 'moment';
-import {Subject, takeUntil} from 'rxjs';
-import {ETypeFtExport, ExportFileName, TabsAccount, TabsAccountLink} from 'src/app/core/constants/account.enum';
-import {DATEFORMAT, LENGTH_CHARACTER, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
-import {UserService} from 'src/app/core/services/user.service';
-import {transferAddress} from 'src/app/core/utils/common/address-converter';
+import { Subject, takeUntil } from 'rxjs';
+import { ETypeFtExport, ExportFileName, TabsAccount, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { DATEFORMAT, LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
@@ -60,8 +60,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
     private userService: UserService,
-  ) {
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -109,7 +108,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   setDataConfig(dataConfig) {
     const data = JSON.parse(dataConfig);
-    const {accountAddress, accountEvmAddress} = transferAddress(
+    const { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       data['address'],
     );
@@ -148,7 +147,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let {address, displayPrivate, endDate, fromBlock, startDate, toBlock} = this.csvForm.getRawValue();
+    let { address, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.getRawValue();
 
     if (startDate || endDate) {
       startDate = moment(startDate).startOf('day').toISOString();
@@ -156,7 +155,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
 
     // send both evm + native address for execute + evm execute
-    const {accountAddress, accountEvmAddress} = transferAddress(
+    const { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
@@ -284,7 +283,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   checkFormValid(): boolean {
     this.getAddress.setValue(this.getAddress?.value?.trim());
-    const {address, endDate, fromBlock, startDate, toBlock} = this.csvForm.value;
+    const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
     this.isValidBlock = true;
     //check null/invalid block
     if (!this.isFilterDate) {
@@ -355,7 +354,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   setAddressOther(address, controlName?: string) {
     this.isValidAddress = true;
     this.isValidEvmAddress = true;
-    let {accountAddress, accountEvmAddress} = transferAddress(
+    let { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
@@ -368,12 +367,12 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
         if (controlName === 'address') {
           this.toastr.error('Invalid ' + this.chainName + ' address format');
           this.csvForm.get('evmAddress').disable();
-          this.csvForm.get('address').setErrors({incorrect: true});
+          this.csvForm.get('address').setErrors({ incorrect: true });
         }
         if (controlName === 'evmAddress') {
           this.toastr.error('Invalid EVM address format');
           this.csvForm.get('address').disable();
-          this.csvForm.get('evmAddress').setErrors({incorrect: true});
+          this.csvForm.get('evmAddress').setErrors({ incorrect: true });
         }
         return;
       }
