@@ -233,7 +233,7 @@ export class BlockDetailComponent implements OnInit {
     let dataTempTx = {};
     dataTempTx['transaction'] = txs;
     if (txs.length > 0) {
-      txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
+      txs = convertDataTransactionSimple(dataTempTx, this.environmentService.getDecimals());
       dataTempTx['transaction'].forEach((k) => {
         this.blockDetail['gas_used'] += +k?.gas_used;
         this.blockDetail['gas_wanted'] += +k?.gas_wanted;

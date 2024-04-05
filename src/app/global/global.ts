@@ -282,13 +282,6 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    const fee = BigNumber(
-      balanceOf(
-        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
-        coinInfo.coinDecimals,
-      ),
-    ).toFixed();
-
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
     let limit = 5;
@@ -386,7 +379,6 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       type,
       status,
       amount,
-      fee,
       height,
       timestamp,
       denom,
@@ -405,7 +397,7 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
   return txs;
 }
 
-export function convertDataTransactionSimple(data, coinInfo) {
+export function convertDataTransactionSimple(data, coinDecimals) {
   return _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
@@ -436,12 +428,9 @@ export function convertDataTransactionSimple(data, coinInfo) {
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    const fee = BigNumber(
-      balanceOf(
-        _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
-        coinInfo.coinDecimals,
-      ),
-    ).toFixed();
+    // Get fee by evm denom and cosmos minimalDenom
+    const { amount, denom } = _.get(element, 'fee[0]') || _.get(element, 'data.auth_info.fee.amount[0]');
+    const fee = BigNumber(balanceOf(amount || 0, coinDecimals[denom?.toLowerCase()])).toFixed();
 
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');

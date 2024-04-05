@@ -686,6 +686,7 @@
                     </div>
                     <div *ngSwitchCase="'tokenType'">
                       <button
+                        *ngIf="modeQuery === tabsData.FtsTxs"
                         class="button button-pill button-outline button-label caption cursor-pointer"
                         [routerLink]="fungibleTokenType === tokenType.ERC20 ? ['/tx', data['tx_hash']] : null">
                         <ng-container *ngIf="modeQuery === tabsData.FtsTxs">
