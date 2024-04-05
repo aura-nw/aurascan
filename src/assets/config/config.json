@@ -63,16 +63,24 @@
       "rpc": "https://evmos-testnet-rpc.polkachu.com/",
       "rest": "https://evmos-testnet-api.polkachu.com/",
       "beta": true,
-      "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
+      "features": [
+        "ibc-transfer",
+        "ibc-go",
+        "eth-address-gen",
+        "eth-key-sign"
+      ]
     },
     "evmChainInfo": {
       "name": "Evmos Testnet",
       "chain": "Evmos",
       "rpc": "https://evmos-testnet-json.qubelabs.io",
-      "faucets": ["https://faucet.evmos.dev"],
+      "faucets": [
+        "https://faucet.evmos.dev"
+      ],
       "nativeCurrency": {
         "name": "test-Evmos",
         "symbol": "tEVMOS",
+        "denom": "atEVMOS",
         "decimals": 18
       },
       "infoURL": "https://evmos.org",
@@ -112,7 +120,9 @@
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": ["evmos"]
+      "ids": [
+        "evmos"
+      ]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -133,7 +143,9 @@
           "name": "Aurascan",
           "description": "Aura Network Explorer",
           "url": "https://explorer.dev.aurascan.io/",
-          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
+          "icons": [
+            "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
+          ]
         }
       }
     }
