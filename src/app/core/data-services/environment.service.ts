@@ -29,7 +29,6 @@ export interface IConfiguration {
     quotaSetPrivateName: number;
     quotaSetWatchList: number;
     quotaNotification: number;
-    etherJsonRpc: string;
     coins: {
       name: string;
       display: string;
@@ -105,7 +104,7 @@ export class EnvironmentService {
   }
 
   get etherJsonRpc() {
-    return _.get(this.configValue, 'chainConfig.etherJsonRpc');
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.rpc');
   }
 
   get evmChainInfo() {
@@ -182,6 +181,14 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.verifyContract');
   }
 
+  get evmDenom(): string {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.nativeCurrency.denom');
+  }
+
+  get evmDecimal(): number {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.nativeCurrency.decimals');
+  }
+
   setLatestBlockHeight(value: string | number) {
     this.latestBlockHeight$.next(value);
   }
@@ -248,5 +255,18 @@ export class EnvironmentService {
         this.config.next(configuration);
       }
     });
+  }
+
+  getDecimals(denom?: string): number | { [key: string]: number } {
+    if (!(this.coinMinimalDenom && this.evmDenom)) {
+      return undefined;
+    }
+
+    const decimals = {
+      [this.coinMinimalDenom?.toLowerCase()]: this.coinDecimals,
+      [this.evmDenom?.toLowerCase()]: this.evmDecimal,
+    };
+
+    return denom ? decimals[denom.toLowerCase()] : decimals;
   }
 }

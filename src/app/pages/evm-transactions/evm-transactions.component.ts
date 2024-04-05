@@ -16,7 +16,7 @@ import { TransactionService } from 'src/app/core/services/transaction.service';
 export class EvmTransactionsComponent {
   dataTx: any[];
   denom = this.env.chainInfo.currencies[0].coinDenom;
-  decimal = this.env.chainInfo.currencies[0].coinDecimals;
+  decimal = this.env.evmDecimal; // EVM decimal
   maxPageSize = 20;
   loading = true;
   errTxt = null;

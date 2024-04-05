@@ -77,6 +77,7 @@ export class BlockDetailComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  evmDecimal = this.environmentService.evmDecimal;
 
   constructor(
     private route: ActivatedRoute,
@@ -233,7 +234,7 @@ export class BlockDetailComponent implements OnInit {
     let dataTempTx = {};
     dataTempTx['transaction'] = txs;
     if (txs.length > 0) {
-      txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
+      txs = convertDataTransactionSimple(dataTempTx, this.environmentService.getDecimals());
       dataTempTx['transaction'].forEach((k) => {
         this.blockDetail['gas_used'] += +k?.gas_used;
         this.blockDetail['gas_wanted'] += +k?.gas_wanted;

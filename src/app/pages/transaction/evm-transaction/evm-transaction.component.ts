@@ -53,6 +53,7 @@ export class EvmTransactionComponent implements OnChanges {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainName = this.environmentService.chainName;
+  evmDecimal = this.environmentService.evmDecimal;
 
   loading = true;
   seeLess = false;
@@ -162,8 +163,8 @@ export class EvmTransactionComponent implements OnChanges {
       gasWanted: _.get(tx, 'gas_wanted'),
       gas_limit: _.get(tx, 'gas_limit'),
       memo: _.get(tx, 'memo'),
-      amount: getBalance(_.get(tx, 'evm_transaction.value'), this.coinInfo.coinDecimals),
-      fee: getBalance(_.get(tx, 'fee[0].amount'), this.coinInfo.coinDecimals),
+      amount: getBalance(_.get(tx, 'evm_transaction.value'), this.evmDecimal),
+      fee: getBalance(_.get(tx, 'fee[0].amount'), this.evmDecimal),
       from: _.get(tx, 'evm_transaction.from'),
       to: _.get(tx, 'evm_transaction.to'),
       type: _.get(txMessage, 'content.@type'),

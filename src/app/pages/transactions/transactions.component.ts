@@ -52,7 +52,7 @@ export class TransactionsComponent implements OnInit {
     this.transactionService.getListTx(payload).subscribe({
       next: (res) => {
         if (res?.transaction?.length > 0) {
-          const txs = convertDataTransactionSimple(res, this.coinInfo);
+          const txs = convertDataTransactionSimple(res, this.environmentService.getDecimals());
           if (this.dataSource.data.length > 0) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
           } else {

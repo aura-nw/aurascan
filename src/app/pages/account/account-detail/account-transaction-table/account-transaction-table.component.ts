@@ -132,6 +132,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   coinInfo = this.environmentService.chainInfo.currencies[0];
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  evmDecimal = this.environmentService.evmDecimal;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -618,7 +619,13 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             element.limit = 5;
           });
         } else {
-          txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+          txs = convertDataAccountTransaction(
+            data,
+            this.coinInfo,
+            this.modeQuery,
+            this.environmentService.getDecimals(),
+            setReceive,
+          );
         }
       }
 
