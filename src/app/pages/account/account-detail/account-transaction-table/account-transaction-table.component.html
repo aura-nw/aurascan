@@ -704,16 +704,16 @@
                     </div>
                     <div *ngSwitchCase="'evmAmount'">
                       <span
-                        *ngIf="data[template.matColumnDef] | balance: decimal | lt: 0.001"
-                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }">
-                        {{ (data[template.matColumnDef] | balance: decimal) == 0 ? 0 : '<0.001' }}
+                        *ngIf="data[template.matColumnDef] | balance: evmDecimal | lt: 0.001"
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: evmDecimal }">
+                        {{ (data[template.matColumnDef] | balance: evmDecimal) == 0 ? 0 : '<0.001' }}
                       </span>
                       <span
-                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: decimal }"
-                        [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
-                        *ngIf="data[template.matColumnDef] | balance: decimal | gte: 0.001"
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: evmDecimal }"
+                        [class.cursor-text]="data[template.matColumnDef] | balance: evmDecimal | lt: 1000000"
+                        *ngIf="data[template.matColumnDef] | balance: evmDecimal | gte: 0.001"
                         [appBigNumber]="data[template.matColumnDef]"
-                        [decimal]="decimal"></span>
+                        [decimal]="evmDecimal"></span>
                       <span appLinkDenom> {{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'evmTx'">

@@ -18,7 +18,7 @@ export class CardMobExecutedEvmComponent implements OnInit {
   destroyed$ = new Subject<void>();
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
-  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  decimal = this.environmentService.evmDecimal;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   constructor(

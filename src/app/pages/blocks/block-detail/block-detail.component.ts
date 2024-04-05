@@ -77,6 +77,7 @@ export class BlockDetailComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  evmDecimal = this.environmentService.evmDecimal;
 
   constructor(
     private route: ActivatedRoute,
