@@ -76,6 +76,11 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
     }
   }
 
+  clearInput() {
+    this.contractAddress = null;
+    this.isValidAddress = false;
+  }
+
   verifyProxyContract() {
     //return if verifying
     if (this.isVerifying) {

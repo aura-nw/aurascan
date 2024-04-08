@@ -31,7 +31,12 @@
           id="address"
           [(ngModel)]="contractAddress"
           (ngModelChange)="validAddress()" />
-        <div class="error text--danger mt-2 {{ !isValidAddress ? 'visible' : 'invisible' }}">Invalid Address!</div>
+        <div
+          class="error text--danger mt-2 {{
+            contractAddress?.length > 0 && !isValidAddress ? 'visible' : 'invisible'
+          }}">
+          Invalid Address!
+        </div>
       </div>
     </div>
   </div>
@@ -40,7 +45,7 @@
     <button
       class="button button--xlg button-pill button-outline button-fixed px-1 px-sm-6"
       type="button"
-      (click)="contractAddress = null; isValidAddress = false">
+      (click)="clearInput()">
       <span>Reset</span>
     </button>
     <button
