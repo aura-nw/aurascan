@@ -1,17 +1,17 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
+import _ from 'lodash';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
-import { ContractVerifyType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token.constant';
 import { EModeToken, TokenTab } from 'src/app/core/constants/token.enum';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -62,7 +62,6 @@ export class EvmTokenContentComponent implements OnInit {
     private layout: BreakpointObserver,
     private tokenService: TokenService,
     private nameTagService: NameTagService,
-    private contractService: ContractService,
     private router: Router,
   ) {}
 
@@ -162,46 +161,29 @@ export class EvmTokenContentComponent implements OnInit {
   }
 
   async getInfoAddress(address: string) {
-    let queryData = {};
     if (this.tokenDetail.isNFTContract) {
-      queryData = {
-        tokens: { limit: 1000, owner: address },
-      };
+      this.countBalanceNFT(address);
     } else {
-      queryData = {
-        balance: { address: address },
+      this.infoSearch.balance = 0;
+      this.infoSearch.value = 0;
+      this.infoSearch.valueAura = 0;
+
+      const { accountAddress, accountEvmAddress } = transferAddress(
+        this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
+        address,
+      );
+
+      const payload = {
+        denomHash: this.contractAddress,
+        address: accountAddress,
       };
-    }
-    const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
-    try {
-      if (this.tokenDetail.isNFTContract) {
-        this.countBalanceNFT(address);
-      } else if (this.contractAddress && this.tokenDetail.modeToken !== ETokenCoinType.IBC) {
-        const data = await client.queryContractSmart(this.contractAddress, queryData);
-        this.infoSearch['balance'] = data?.balance;
-        this.infoSearch['value'] = new BigNumber(data?.balance)
-          .multipliedBy(this.tokenDetail.price)
-          .dividedBy(Math.pow(10, this.tokenDetail.decimals))
-          .toFixed();
-        this.infoSearch['valueAura'] = new BigNumber(data?.balance)
-          .multipliedBy(this.tokenDetail.price)
-          .dividedBy(Math.pow(10, this.tokenDetail.decimals))
-          .dividedBy(this.tokenService.nativePrice)
-          .toFixed();
-      } else {
-        const tempBalance = await this.contractService.getContractBalance(address).catch((error) => null);
-        if (tempBalance?.data?.balances?.length > 0) {
-          this.infoSearch['balance'] =
-            tempBalance?.data?.balances?.find((k) => k.denom === this.tokenDetail?.denomHash)?.amount || 0;
+      this.tokenService.getDenomHolder(payload).subscribe((res) => {
+        const balance = _.get(res, 'account_balance[0].amount');
+        if (balance > 0) {
+          this.infoSearch['balance'] = balance || 0;
           this.setFilterValue(this.infoSearch['balance']);
-        } else {
-          this.infoSearch.balance = 0;
-          this.infoSearch.value = 0;
-          this.infoSearch.valueAura = 0;
         }
-      }
-    } catch (error) {
-      this.infoSearch['balance'] = 0;
+      });
     }
   }
 

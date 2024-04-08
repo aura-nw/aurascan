@@ -44,7 +44,7 @@ export class EvmTokenOverviewComponent implements OnInit {
     this.tokenDetail['isHolderUp'] = true;
     this.tokenDetail['tokenValue'] =
       this.tokenDetail.supplyAmount == 0
-        ? 0
+        ? BigNumber(0)
         : BigNumber(this.tokenDetail.supplyAmount)
             .dividedBy(BigNumber(10).pow(this.tokenDetail.decimal))
             .multipliedBy(this.tokenDetail.price);
