@@ -119,7 +119,7 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
   loadProxyContractDetail() {
     this.contractService.loadProxyContractDetail(this.contractsAddress).subscribe((res) => {
       if (res.implementation_contract) {
-        this.getListContractInfo(res.implementation_contract);
+        this.getListContractInfo([res.implementation_contract]);
       }
     });
   }

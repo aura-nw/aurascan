@@ -4,7 +4,6 @@ import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -36,18 +35,10 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
   isVerifying = false;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private env: EnvironmentService,
     private contractService: ContractService,
     private dialog: MatDialog,
-  ) {
-    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress')?.toLowerCase();
-
-    if (this.contractAddress.trim().length === 0) {
-      this.router.navigate(['evm-contracts']);
-    }
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.interupt$.next();
@@ -95,7 +86,7 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
         this.popupData['implementationContract'] = res?.implementation_contract || '';
         if (res?.implementation_contract) {
           this.popupData['modePopup'] = this.modePopup.WARNING;
-          this.getListContractInfo(this.popupData['implementationContract']);
+          this.getListContractInfo([this.popupData['implementationContract']]);
         }
       },
       error: (err) => {

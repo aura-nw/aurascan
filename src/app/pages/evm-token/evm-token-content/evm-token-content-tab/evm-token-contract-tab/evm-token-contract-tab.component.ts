@@ -121,7 +121,7 @@ export class EvmTokenContractTabComponent implements OnInit {
     this.contractService.loadProxyContractDetail(this.contractAddress).subscribe((res) => {
       if (res.implementation_contract) {
         this.implementationContractAddress = res.implementation_contract;
-        this.getListContractInfo(res.implementation_contract);
+        this.getListContractInfo([res.implementation_contract]);
       }
     });
   }
