@@ -9,10 +9,10 @@ import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EFeature } from 'src/app/core/models/common.model';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
@@ -21,6 +21,7 @@ import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constant
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -41,12 +42,13 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;
 
-  currentAddress: string;
+  currentUrlAddress: string;
+  accountAddress: string;
   currentAccountDetail: any;
   chartCustomOptions = chartCustomOptions;
 
   // loading param check
-  userAddress = '';
+  connectedAddress = '';
   modalReference: any;
   isNoData = false;
   userEmail = '';
@@ -65,6 +67,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   isWatchList = false;
   EFeature = EFeature;
   ENameTag = ENameTag;
+  accountEvmAddress = '';
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     public commonService: CommonService,
@@ -76,8 +80,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
     private router: Router,
-    private nameTagService: NameTagService,
     private userService: UserService,
+    private contractService: ContractService,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -94,15 +98,52 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       this.userEmail = currentUser ? currentUser.email : null;
     });
 
+    //get data from client for my account
+    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
+      if (wallet) {
+        this.connectedAddress = wallet.address;
+      }
+      this.getSBTPick();
+      this.getTotalSBT();
+    });
+
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
-        this.currentAddress = params?.address;
-        this.isContractAddress = this.commonService.isValidContract(this.currentAddress);
-        this.loadDataTemp();
+        const { accountAddress, accountEvmAddress } = transferAddress(
+          this.chainInfo.bech32Config.bech32PrefixAccAddr,
+          params?.address,
+        );
+
+        this.currentUrlAddress = params?.address;
+        this.accountAddress = accountAddress;
+        this.accountEvmAddress = accountEvmAddress;
+
+        this.checkIsContract();
+        this.getSBTPick();
+        this.getTotalSBT();
+
         this.getAccountDetail();
         this.checkWatchList();
       }
     });
+  }
+
+  checkEvmContract() {
+    this.contractService.findEvmContract(this.accountEvmAddress).subscribe({
+      next: (res) => {
+        if (res?.evm_smart_contract?.length > 0) {
+          this.isContractAddress = true;
+        }
+      },
+    });
+  }
+
+  checkIsContract() {
+    if (this.commonService.isValidContract(this.accountAddress)) {
+      this.isContractAddress = true;
+    } else {
+      this.checkEvmContract();
+    }
   }
 
   /**
@@ -113,21 +154,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  loadDataTemp(): void {
-    //get data from client for my account
-    this.walletService.walletAccount$.subscribe((wallet) => {
-      if (wallet) {
-        this.userAddress = wallet.address;
-      }
-      this.getSBTPick();
-      this.getTotalSBT();
-    });
-  }
-
   getAccountDetail(): void {
     this.isNoData = false;
     const halftime = 15000;
-    this.accountService.getAccountDetail(this.currentAddress).subscribe(
+    this.accountService.getAccountDetail(this.accountAddress).subscribe(
       (res) => {
         if (res.data.code === 200 && !res.data?.data) {
           this.isNoData = true;
@@ -203,10 +233,14 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   getSBTPick() {
+    if (!this.accountAddress) {
+      return;
+    }
+
     const payload = {
       limit: 100,
       offset: 0,
-      receiverAddress: this.currentAddress,
+      receiverAddress: this.accountAddress,
       isEquipToken: true,
     };
 
@@ -220,19 +254,17 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   getTotalSBT() {
-    this.soulboundService.countTotalABT(this.currentAddress).subscribe(
-      (res) => {
+    if (this.accountAddress) {
+      this.soulboundService.countTotalABT(this.accountAddress).subscribe((res) => {
         this.totalSBT = res.data;
-      },
-      () => {},
-      () => {},
-    );
+      });
+    }
   }
 
   checkWatchList() {
     // get watch list form local storage
     const lstWatchList = local.getItem<any>(STORAGE_KEYS.LIST_WATCH_LIST);
-    if (lstWatchList?.find((k) => k.address === this.currentAddress)) {
+    if (lstWatchList?.find((k) => k.address === this.accountAddress)) {
       this.isWatchList = true;
     }
   }
@@ -247,7 +279,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   editWatchList() {
     if (this.userEmail) {
-      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, this.currentAddress);
+      local.setItem(STORAGE_KEYS.SET_ADDRESS_WATCH_LIST, {
+        address: this.isContractAddress ? this.accountEvmAddress || this.accountAddress : this.accountAddress,
+        type: this.isContractAddress ? 'contract' : 'account',
+      });
       this.router.navigate(['/profile'], { queryParams: { tab: 'watchList' } });
     } else {
       this.router.navigate(['/login']);

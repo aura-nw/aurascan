@@ -1,5 +1,5 @@
-import { CodeTransaction } from "src/app/core/constants/transaction.enum";
-import { TableData } from "src/app/shared/components/contract-table/contract-table.component";
+import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
 
 export interface IContractsResponse {
   codespace: string;
@@ -22,7 +22,7 @@ export interface IContractsResponse {
   tx: string;
   messages: {
     msg: {
-      [key: string]: any
+      [key: string]: any;
     };
     '@type': string;
     funds: {
@@ -40,15 +40,13 @@ export interface IContractsResponse {
   }[];
 }
 
-
 export interface ITableContract {
   contractsAddress: string;
   count: number;
   viewAll?: boolean;
   popover?: boolean;
-  tableData?: TableData[]
+  tableData?: TableData[];
 }
-
 
 export interface IContractPopoverData {
   status: string;
@@ -66,7 +64,6 @@ export interface IContractPopoverData {
   nftDetail: any;
   modeExecute: string;
 }
-
 
 export const DROPDOWN_ELEMENT = [
   {
@@ -91,7 +88,7 @@ export const DROPDOWN_ELEMENT = [
 
 export interface SmartContractStatus {
   key: string;
-  label: string
+  label: string;
 }
 
 export interface SmartContractListReq {
@@ -103,25 +100,27 @@ export interface SmartContractListReq {
 }
 
 export interface DeployContractListReq {
-  requester_address: string,
-  code_ids: number[],
-  project_name: string,
-  official_project_website: string,
-  official_project_email: string,
-  name: string,
-  email: string,
-  contract_description: string,
-  project_sector?: string,
-  whitepaper?: string,
-  github?: string,
-  telegram?: string,
-  wechat?: string,
-  linkedin?: string,
-  discord?: string,
-  medium?: string,
-  reddit?: string,
-  slack?: string,
-  facebook?: string,
-  twitter?: string
-  bitcointalk?: string,
+  requester_address: string;
+  code_ids: number[];
+  project_name: string;
+  official_project_website: string;
+  official_project_email: string;
+  name: string;
+  email: string;
+  contract_description: string;
+  project_sector?: string;
+  whitepaper?: string;
+  github?: string;
+  telegram?: string;
+  wechat?: string;
+  linkedin?: string;
+  discord?: string;
+  medium?: string;
+  reddit?: string;
+  slack?: string;
+  facebook?: string;
+  twitter?: string;
+  bitcointalk?: string;
 }
+
+export type ContractType = 'COSMOS' | 'NATIVE' | 'EVM' | 'CW20' | 'CW721' | 'CW4973' | 'ERC20' | 'ERC721';

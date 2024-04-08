@@ -59,14 +59,14 @@
                 <div
                   *ngIf="proDetail?.proposer"
                   [copyBtn]="proDetail?.proposer_address"
-                  [routerLink]="['/account', proDetail?.proposer_address]">
+                  [routerLink]="['/address', proDetail?.proposer_address]">
                   {{ proDetail?.proposer?.description?.moniker }}
                 </div>
                 <ng-container *ngIf="!proDetail?.proposer">
                   <app-name-tag
                     [value]="proDetail?.proposer_address"
                     [fullText]="true"
-                    [linkRouter]="['/account', proDetail?.proposer_address]"></app-name-tag>
+                    [linkRouter]="['/address', proDetail?.proposer_address]"></app-name-tag>
                 </ng-container>
               </a>
             </ng-container>

@@ -1,0 +1,23 @@
+.contract-verify {
+  @media (min-width: 992px) {
+    padding-top: 16px;
+    padding-bottom: 56px;
+  }
+
+  .box-proxy {
+    gap: 8px;
+    padding: 6px 12px;
+    width: fit-content;
+    position: relative;
+    background: #273033;
+    border-radius: 16px;
+  }
+
+  .form-group {
+    input.form-check-input {
+      height: 40px;
+      margin-top: 0;
+      background-color: var(--aura-gray-10) !important;
+    }
+  }
+}

@@ -40,7 +40,7 @@
               <div class="nft-cards__item">
                 <app-nft-card
                   nftId="{{ 'nft#' + i }}"
-                  [nftLink]="'/tokens/token-abt/' + token.contract_address + '/' + token.token_id"
+                  [nftLink]="'/token/cw4973' + token.contract_address + '/' + token.token_id"
                   [nftItem]="token"
                   [nftType]="getTypeFile(token)"></app-nft-card>
                 <div class="nft-cards__label" [class.sbt-validator]="isSBTValidator">

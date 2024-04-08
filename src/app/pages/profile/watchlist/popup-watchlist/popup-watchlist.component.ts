@@ -1,17 +1,18 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { WatchListService } from 'src/app/core/services/watch-list.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import { isSafari } from 'src/app/core/utils/common/validation';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
 } from '@angular/material/legacy-dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { NameTagService } from 'src/app/core/services/name-tag.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { WatchListService } from 'src/app/core/services/watch-list.service';
-import { isAddress, isSafari } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-watchlist',
@@ -22,12 +23,11 @@ export class PopupWatchlistComponent implements OnInit {
   watchlistForm;
   isSubmit = false;
   formValid = true;
-  isAccount = false;
+  isAccount;
   isContract = false;
   maxLengthNote = 200;
   publicNameTag = '-';
   privateNameTag = '-';
-  isValidAddress = true;
   isError = false;
   isEditMode = false;
   reStakeSent = true;
@@ -42,6 +42,7 @@ export class PopupWatchlistComponent implements OnInit {
     nativeCoinReceived: 'nativeCoinReceived',
   };
   isTracking = true;
+  eWalletType = EWalletType;
 
   listTracking = [
     {
@@ -86,7 +87,10 @@ export class PopupWatchlistComponent implements OnInit {
   };
 
   quota = this.environmentService.chainConfig.quotaSetWatchList;
-  chainName = this.environmentService.chainName.toLowerCase();
+  chainName = this.environmentService.chainName?.toLowerCase();
+  chainInfo = this.environmentService.chainInfo;
+  prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  prefixAccAddr = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -94,7 +98,6 @@ export class PopupWatchlistComponent implements OnInit {
     private fb: FormBuilder,
     public translate: TranslateService,
     private environmentService: EnvironmentService,
-    private commonService: CommonService,
     private toastr: NgxToastrService,
     private watchListService: WatchListService,
     private nameTagService: NameTagService,
@@ -139,17 +142,17 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm = this.fb.group({
       favorite: false,
       tracking: true,
-      isAccount: [false, [Validators.required]],
-      address: ['', [Validators.required]],
+      isAccount: [null, [Validators.required]],
+      address: [''],
+      evmAddress: ['', [Validators.required]],
       note: ['', [Validators.maxLength(200)]],
       id: '',
     });
   }
 
   setDataFrom(data, isEditMode = false) {
-    this.isValidAddress = true;
     this.isEditMode = isEditMode;
-    const isAccount = data.address?.length === LENGTH_CHARACTER.ADDRESS;
+    const isAccount = data.type !== 'contract';
 
     this.watchlistForm.controls['isAccount'].setValue(isAccount);
     this.isAccount = isAccount;
@@ -157,9 +160,9 @@ export class PopupWatchlistComponent implements OnInit {
     this.watchlistForm.controls['favorite'].setValue(data.favorite);
     this.isTracking = isEditMode ? data.tracking : true;
     this.watchlistForm.controls['tracking'].setValue(isEditMode ? data.tracking : true);
-    this.watchlistForm.controls['address'].setValue(data.address);
     this.watchlistForm.controls['note'].setValue(data.note);
     this.watchlistForm.controls['id'].setValue(data.id || '');
+    this.handleSetAddress(data['address']);
 
     //set data group tracking
     if (data.settings) {
@@ -172,6 +175,46 @@ export class PopupWatchlistComponent implements OnInit {
     }
 
     this.checkNameTag();
+  }
+
+  handleSetAddress(address, controlName?: string) {
+    let { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      address,
+    );
+    // inValid address
+    if (accountAddress.length > 0 && !accountEvmAddress) {
+      // check if address is contract and start with bench32Add -> true/ else false
+      if (address.length === LENGTH_CHARACTER.CONTRACT && address.startsWith(this.prefixAccAddr)) {
+        accountEvmAddress = null;
+      } else {
+        if (controlName === 'address') {
+          this.toastr.error('Invalid ' + this.chainName + ' address format');
+          this.watchlistForm.get('evmAddress').disable();
+          this.watchlistForm.get('address').setErrors({ incorrect: true });
+        }
+        if (controlName === 'evmAddress') {
+          this.toastr.error('Invalid EVM address format');
+          this.watchlistForm.get('address').disable();
+          this.watchlistForm.get('evmAddress').setErrors({ incorrect: true });
+        }
+        return;
+      }
+    }
+    // valid address
+    this.watchlistForm.controls['address'].setValue(accountAddress);
+    if (accountEvmAddress) {
+      this.watchlistForm.controls['evmAddress'].setValue(accountEvmAddress);
+    } else {
+      this.watchlistForm.controls['evmAddress'].setValue('');
+    }
+    this.watchlistForm.get('address').disable();
+    this.watchlistForm.get('evmAddress').disable();
+    if (address == accountEvmAddress?.trim()) {
+      this.watchlistForm.get('evmAddress').enable();
+    } else {
+      this.watchlistForm.get('address').enable();
+    }
   }
 
   changeTracking() {
@@ -191,16 +234,7 @@ export class PopupWatchlistComponent implements OnInit {
       return false;
     }
 
-    if (this.getAddress.value?.length > 0) {
-      this.isValidAddress = false;
-      if (this.commonService.isBech32Address(this.getAddress?.value)) {
-        this.isValidAddress =
-          (this.commonService.isValidAddress(this.getAddress.value) && this.isAccount) ||
-          (this.commonService.isValidContract(this.getAddress.value) && this.isContract);
-      }
-    }
-
-    if (!this.isValidAddress) {
+    if (this.watchlistForm.value.isAccount == undefined) {
       return false;
     }
 
@@ -217,11 +251,12 @@ export class PopupWatchlistComponent implements OnInit {
 
   onSubmit() {
     this.isSubmit = true;
-    const { favorite, address, note, id } = this.watchlistForm.value;
+    const { favorite, address, evmAddress, note, id } = this.watchlistForm.getRawValue();
 
     let payload = {
-      address: address,
-      type: isAddress(address, this.commonService.addressPrefix) ? 'account' : 'contract',
+      address: address?.toLowerCase(),
+      evmAddress: evmAddress?.toLowerCase(),
+      type: this.isAccount ? 'account' : 'contract',
       favorite: favorite,
       tracking: this.isTracking,
       note: note,
@@ -299,25 +334,19 @@ export class PopupWatchlistComponent implements OnInit {
   changeType(type) {
     this.isAccount = type;
     this.isContract = !this.isAccount;
-    this.isValidAddress = false;
     this.isError = false;
-    this.watchlistForm.value.isAccount = type;
+    this.watchlistForm.value.isAccount = this.isAccount;
     this.checkFormValid();
   }
 
   checkNameTag() {
+    this.getAddress.value = this.getAddress.value.trim();
     this.publicNameTag = '-';
     this.privateNameTag = '-';
-    this.getAddress.value = this.getAddress.value.trim();
-    if (this.getAddress.status === 'VALID') {
-      const tempPublic = this.nameTagService.findNameTagByAddress(this.getAddress.value, false);
-      const tempPrivate = this.nameTagService.findNameTagByAddress(this.getAddress.value);
-      if (tempPublic !== this.getAddress.value) {
-        this.publicNameTag = tempPublic;
-      }
-      if (this.nameTagService.isPrivate(this.getAddress.value) && tempPrivate !== this.getAddress.value) {
-        this.privateNameTag = tempPrivate;
-      }
+    const nameTag = this.nameTagService.findNameTag(this.getAddress.value);
+    if (nameTag) {
+      this.publicNameTag = nameTag['name_tag'] || '-';
+      this.privateNameTag = nameTag['name_tag_private'] || '-';
     }
   }
 
@@ -335,6 +364,28 @@ export class PopupWatchlistComponent implements OnInit {
     }
     this.settingObj[type] = event.target.checked;
 
+    this.checkFormValid();
+  }
+
+  changeAddress(controlName: string) {
+    const address = this.watchlistForm.get(controlName).value;
+    if (address.length === 0) {
+      this.resetAddress();
+    } else {
+      this.handleSetAddress(address, controlName);
+      this.checkNameTag();
+      this.watchlistForm.value.isAccount = this.isAccount;
+    }
+    this.checkFormValid();
+  }
+
+  resetAddress() {
+    this.watchlistForm.get('address').setValue('');
+    this.watchlistForm.get('evmAddress').setValue('');
+    this.watchlistForm.get('evmAddress').enable();
+    this.watchlistForm.get('address').enable();
+    this.publicNameTag = '-';
+    this.privateNameTag = '-';
     this.checkFormValid();
   }
 }

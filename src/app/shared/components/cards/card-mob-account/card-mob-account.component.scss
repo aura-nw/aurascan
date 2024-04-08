@@ -1,11 +1,11 @@
-.card-mob-simple {
+.card-mob-account {
   background-color: var(--aura-gray-10);
   border-radius: var(--spacer-3);
   padding: var(--spacer-4);
   margin-bottom: var(--spacer-4);
   border: 1px solid var(--aura-gray-9);
 
-  & > * {
+  &>* {
     color: var(--aura-white);
   }
 
@@ -31,10 +31,6 @@
   border-top: 1px solid var(--aura-gray-9);
 
   .content-expand {
-    //max-height: 250px;
-    //overflow-x: auto;
-    //padding-right: 10px;
-
     .item-expand {
       min-height: 24px;
       align-items: center;

@@ -14,7 +14,7 @@ const routes: Routes = [
     component: SoulboundTokenContractComponent,
   },
   {
-    path: 'account/:address',
+    path: 'address/:address',
     component: SoulboundAccountTokenListComponent,
   },
 ];

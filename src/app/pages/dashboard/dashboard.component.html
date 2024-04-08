@@ -385,7 +385,7 @@
                           <a
                             *ngSwitchCase="'height'"
                             class="text--primary cursor-pointer"
-                            [routerLink]="['/blocks', data.height]">
+                            [routerLink]="['/block', data.height]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -425,7 +425,7 @@
           <button
             type="button"
             class="button button-pill button--sm button-outline button-outline__in-card body"
-            [routerLink]="'/transaction'"
+            [routerLink]="'/transactions'"
             *ngIf="dataSourceTx?.data?.length > 0">
             <span>View more</span>
           </button>
@@ -455,13 +455,13 @@
                             *ngSwitchCase="'tx_hash'"
                             class="text--primary cursor-pointer hash-link"
                             [copyBtn]="data[template.matColumnDef]"
-                            [routerLink]="['/transaction', data['tx_hash']]">
+                            [routerLink]="['/tx', data['tx_hash']]">
                             {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
                             class="text--primary cursor-pointer block-link pl-3"
-                            [routerLink]="['/blocks', data['height']]">
+                            [routerLink]="['/block', data['height']]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchCase="'type'">

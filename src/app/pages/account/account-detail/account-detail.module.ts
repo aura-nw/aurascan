@@ -29,6 +29,7 @@ import { AccountTransactionTableComponent } from './account-transaction-table/ac
 import { AccountTransactionComponent } from './account-transaction/account-transaction.component';
 import { NftListComponent } from './nft-list/nft-list.component';
 import { TokenTableComponent } from './token-table/token-table.component';
+import { CardMobExecutedEvmModule } from 'src/app/shared/components/cards/card-mob-executed-evm/card-mob-executed-evm.module';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { TokenTableComponent } from './token-table/token-table.component';
     NameTagModule,
     ClipboardModule,
     RouterModule,
+    CardMobExecutedEvmModule
   ],
   providers: [TransactionService, AccountService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })

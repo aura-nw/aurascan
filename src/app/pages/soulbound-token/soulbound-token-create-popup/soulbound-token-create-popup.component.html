@@ -51,7 +51,7 @@
           formControlName="receiverAddress"
           type="text"
           class="form-control form-check-input body-01"
-          placeholder="{{ prefix }}..."
+          placeholder="{{ prefix }}.../ {{ eWalletType.EVM }}..."
           (ngModelChange)="resetCheck()"
           [class.form-control--error]="createSBTokenForm.get('receiverAddress')?.invalid && ngForm.submitted" />
         <div class="error" *ngIf="isAddressInvalid && ngForm.submitted">

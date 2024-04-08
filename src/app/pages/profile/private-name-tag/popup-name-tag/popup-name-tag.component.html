@@ -65,28 +65,67 @@
           </div>
         </div>
 
-        <!-- Address -->
+        <!-- Cosmos Address -->
         <div class="row mt-4 align-items-center">
           <div class="col-lg-3 col-12">
-            <label class="form-label">Address</label>
+            <label class="form-label">Cosmos Address</label>
           </div>
           <div class="col-lg-9 col-12">
-            <div class="input-group form-check-input pr-0" *ngIf="!isEditMode">
+            <div
+              class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0"
+              *ngIf="!isEditMode">
               <input
                 type="text"
-                formControlName="address"
+                formControlName="cosmosAddress"
                 placeholder="{{ chainName }}..."
-                class="input-address"
-                (change)="checkPublicNameTag()"
-                (input)="checkFormValid(); isError = false"
+                class="input-address px-4 convert-address"
+                (blur)="changeAddress('cosmosAddress')"
+                (input)="isError = false"
                 autocomplete="off" />
+              <button
+                class="button button-xxs p-0 mr-4"
+                *ngIf="
+                  this.privateNameForm.get('cosmosAddress').value.length > 0 &&
+                  this.privateNameForm.get('cosmosAddress').enabled
+                "
+                type="button"
+                (click)="resetAddress()">
+                <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+              </button>
             </div>
-            <span *ngIf="isEditMode">{{ getAddress.value }}</span>
+            <span *ngIf="isEditMode">{{ privateNameForm.get('cosmosAddress').value }}</span>
+          </div>
+        </div>
+
+        <!-- EVM Address -->
+        <div class="row mt-4 align-items-center">
+          <div class="col-lg-3 col-12">
+            <label class="form-label">EVM Address</label>
+          </div>
+          <div class="col-lg-9 col-12">
             <div
-              *ngIf="getAddress?.value?.length > 0 && !isValidAddress && (isAccount || isContract)"
-              class="text--danger mt-2 caption fw-normal">
-              Invalid {{ chainName }} address format
+              class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0"
+              *ngIf="!isEditMode">
+              <input
+                type="text"
+                formControlName="evmAddress"
+                placeholder="{{ eWalletType.EVM }}..."
+                class="input-address px-4 convert-address"
+                (input)="isError = false"
+                (blur)="changeAddress('evmAddress')"
+                autocomplete="off" />
+              <button
+                class="button button-xxs p-0 mr-4"
+                *ngIf="
+                  this.privateNameForm.get('evmAddress').value.length > 0 &&
+                  this.privateNameForm.get('evmAddress').enabled
+                "
+                type="button"
+                (click)="resetAddress()">
+                <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+              </button>
             </div>
+            <span *ngIf="isEditMode">{{ privateNameForm.get('evmAddress').value }}</span>
           </div>
         </div>
 
@@ -149,14 +188,8 @@
         </button>
         <button
           class="button button--md button-outline button-pill button-flat ml-4 btn btn-create"
-          type="button"
-          (click)="onSubmit()"
-          [disabled]="
-            privateNameForm.status === 'INVALID' ||
-            !isValidAddress ||
-            isError ||
-            (isAccount === false && isContract === false)
-          ">
+          type="submit"
+          [disabled]="privateNameForm.status === 'INVALID' || isError || (isAccount === false && isContract === false)">
           <span class="text--black">
             {{ isEditMode ? 'Edit' : 'Create' }}
           </span>

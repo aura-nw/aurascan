@@ -2,8 +2,34 @@
   <div class="card-body">
     <!-- Filter -->
     <div class="d-xl-flex justify-content-between align-items-center mb-4" *ngIf="!loading">
-      <span class="mb-0 fw-semibold text--gray-light-2 mr-lg-6 h3">NFTs ({{ listCollection[0]?.quantity || 0 }})</span>
-      <div class="d-flex flex-column flex-lg-row align-items-end justify-content-end gap-2">
+      <div class="d-flex align-items-center mb-lg-0 mb-4 justify-content-between">
+        <span class="mb-0 fw-semibold text--gray-light-2 mr-lg-6 h3"
+          >NFTs ({{ listCollection[0]?.quantity || 0 }})</span
+        >
+        <div class="button-switch-stage button-fixed mt-lg-0">
+          <button
+            class="button button-switch-stage-nft body-04"
+            (click)="changeType('')"
+            [class.active]="typeToken === ''">
+            All types
+          </button>
+          <button
+            class="button button-switch-stage-nft body-04"
+            (click)="changeType(typeTokeList.CW721)"
+            [class.active]="typeToken === typeTokeList.CW721">
+            CW721
+          </button>
+          <button
+            class="button button-switch-stage-nft body-04"
+            (click)="changeType(typeTokeList.ERC721)"
+            [class.active]="typeToken === typeTokeList.ERC721">
+            ERC721
+          </button>
+        </div>
+      </div>
+      <div
+        class="d-flex flex-column flex-lg-row align-items-end justify-content-end gap-2"
+        *ngIf="listCollection[0]?.quantity">
         <ng-container *ngIf="!errTxt">
           <div class="d-flex align-items-center justify-content-center ml-2 ml-lg-0 w-100">
             <div class="body d-lg-flex d-none mr-2 text--gray-1">Collections</div>
@@ -87,7 +113,7 @@
               <div class="nft-cards__item">
                 <app-nft-card
                   *ngIf="item"
-                  [nftLink]="'/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id)"
+                  [nftLink]="'/token/cw721/' + item.contract_address + '/' + encodeData(item.token_id)"
                   [nftItem]="item"
                   nftId="{{ 'nft#' + i }}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
@@ -99,7 +125,7 @@
                     <span class="mr-1 text--gray-1">Token:</span>
                     <a
                       class="hover-link box-name text--primary"
-                      (click)="handleRouterLink('/tokens/token-nft/' + item.contract_address)">
+                      (click)="handleRouterLink('/token/' + item.contract_address)">
                       <span class="d-inline-block txt-token-name">{{ item.token_name }}</span>
                     </a>
                   </div>
@@ -107,9 +133,7 @@
                     <span class="mr-1 text--gray-1">Token ID:</span>
                     <span
                       class="text--primary hover-link"
-                      (click)="
-                        handleRouterLink('/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id))
-                      ">
+                      (click)="handleRouterLink('/token/' + item.contract_address + '/' + encodeData(item.token_id))">
                       <span *ngIf="!breakpoint.value.matches">{{ item.token_id | ellipsis: 10 }}</span>
                       <span *ngIf="breakpoint.value.matches">{{ item.token_id | ellipsis: 5 }}</span>
                     </span>

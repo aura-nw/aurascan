@@ -18,6 +18,7 @@ import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.c
 import { LayoutComponent } from './layout.component';
 import { MenuBottomBarComponent } from './menu-bottom-bar/menu-bottom-bar.component';
 import { NotificationModule } from '../shared/components/notification/notification.module';
+import { CommonDirectiveModule } from 'src/app/core/directives/common-directive.module';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { NotificationModule } from '../shared/components/notification/notificati
     CustomPipeModule,
     AuthenticateMailModule,
     NotificationModule,
+    CommonDirectiveModule,
   ],
   providers: [LanguageService, CommonService, TransactionService, ContractService],
   exports: [],
