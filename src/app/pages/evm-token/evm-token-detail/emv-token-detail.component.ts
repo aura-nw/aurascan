@@ -38,6 +38,34 @@ export class EvmTokenDetailComponent implements OnInit {
 
         this.contractAddress = contractAddress;
         this.getTokenDetail();
+        this.getAssetsDetail();
+      }
+    });
+  }
+
+  getAssetsDetail(): void {
+    this.tokenService.getTokenDetail(this.contractAddress).subscribe((res) => {
+      if (res) {
+        const holder =
+          res?.tokenHolderStatistics?.length > 0
+            ? res?.tokenHolderStatistics?.[res?.tokenHolderStatistics?.length - 1]?.totalHolder
+            : 0;
+        let changePercent = 0;
+        if (
+          res.tokenHolderStatistics?.length > 1 &&
+          res.tokenHolderStatistics[0]?.totalHolder > 0 &&
+          res.tokenHolderStatistics[1]?.totalHolder > 0
+        ) {
+          changePercent =
+            (res.tokenHolderStatistics[1].totalHolder * 100) / res.tokenHolderStatistics[0].totalHolder - 100;
+        }
+
+        this.tokenDetail = {
+          ...this.tokenDetail,
+          holder,
+          isHolderUp: changePercent >= 0,
+          holderChange: Math.abs(changePercent),
+        };
       }
     });
   }
@@ -74,6 +102,7 @@ export class EvmTokenDetailComponent implements OnInit {
               price: tokenMarket?.currentPrice || 0,
               priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
             };
+            this.getAssetsDetail();
           });
       },
       error: (e) => {

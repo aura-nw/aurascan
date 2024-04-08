@@ -123,11 +123,11 @@ export class EvmTokenHoldersTabComponent implements OnInit {
           let accountBalance = element['account_balance'];
           if (this.tokenDetail.modeToken === this.EModeToken.ERCToken) {
             accountBalance?.forEach((item) => {
-              item.balance = item.amount;
+              item.balance = item.amount > 0 ? item.amount : 0;
               item.owner = item.account?.address;
-              item.percent_hold = BigNumber(item.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
+              item.percent_hold = BigNumber(item.balance).dividedBy(tokenSupplyOrigin).multipliedBy(100);
               item.value =
-                BigNumber(item.amount)
+                BigNumber(item.balance)
                   .multipliedBy(this.tokenDetail?.price || 0)
                   .dividedBy(BigNumber(10).pow(this.decimalValue))
                   .toFixed() || 0;
