@@ -1,6 +1,14 @@
 <div
   *ngIf="{ value: breakpoint$ | async } as breakpoint"
   class="code-contract justify-content-between text--white mt-8 mt-lg-6">
+  <div class="d-flex break-word align-items-center mb-3">
+    <img [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3" alt="" width="16" height="16" class="mr-2" />
+    <div>
+      In case this is proxy contract, verify
+      <a class="text--primary" [routerLink]="['proxy-verify']"> Is this a proxy </a>
+      or not?
+    </div>
+  </div>
   <div class="d-flex align-items-center">
     <img [src]="'assets/images/icons/contract-verify.svg' | imageS3" alt="" width="16" height="16" />
     <span class="ml-2 mr-1 text--gray-1"> Contract Source Code Verified </span>

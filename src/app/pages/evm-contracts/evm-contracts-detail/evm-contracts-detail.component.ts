@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subject, map, of, switchMap, takeUntil } from 'rxjs';
 import { STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -51,6 +52,11 @@ export class EvmContractsDetailComponent implements OnInit, OnDestroy {
           if (!ca) {
             return of(null);
           }
+
+          if (ca.trim().length === 0 || !ca.trim().startsWith(EWalletType.EVM)) {
+            this.router.navigate(['evm-contracts']);
+          }
+
           this.contractAddress = ca;
           this.checkWatchList();
 
