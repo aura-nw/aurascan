@@ -54,6 +54,44 @@
           [abi]="contractDetail.abi"
           [contractAddress]="contractAddress">
         </app-evm-write>
+
+        <ng-container
+          *ngIf="
+            isImplementationVerified &&
+            (currentTab === contractType.ReadProxy || currentTab === contractType.WriteProxy)
+          ">
+          <div class="mb-6">
+            <div class="body-02 text--gray-1 fw-semibold mb-2">
+              ABI for the implementation contract at
+              <a
+                [routerLink]="['/evm-contracts', implementationContractAddress]"
+                class="text--primary body-02 fw-semibold">
+                {{ implementationContractAddress }}
+              </a>
+            </div>
+            <div class="body-02 text--gray-1" *ngIf="implementationContractDetail.previouslyRecordedContract">
+              Previously recorded to be on
+              <a
+                [routerLink]="['/evm-contracts', implementationContractDetail.previouslyRecordedContract]"
+                class="text--primary body-02">
+                {{ implementationContractDetail.previouslyRecordedContract }}
+              </a>
+            </div>
+          </div>
+          <app-evm-read
+            *ngIf="currentTab === contractType.ReadProxy"
+            [abi]="implementationContractDetail.abi"
+            [contractAddress]="contractAddress"
+            [isProxyContract]="true">
+          </app-evm-read>
+
+          <app-evm-write
+            *ngIf="currentTab === contractType.WriteProxy"
+            [abi]="implementationContractDetail.abi"
+            [contractAddress]="contractAddress"
+            [isProxyContract]="true">
+          </app-evm-write>
+        </ng-container>
       </ng-container>
     </div>
   </ng-container>

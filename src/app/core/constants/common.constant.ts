@@ -56,9 +56,9 @@ export const CHART_RANGE = {
 
 // Only aura address
 export const LENGTH_CHARACTER = {
-  ADDRESS: 43,
+  ADDRESS: 44,
   EVM_ADDRESS: 42,
-  CONTRACT: 63,
+  CONTRACT: 64,
   TRANSACTION: 64,
   IBC: 64,
   EVM_TRANSACTION: 66,

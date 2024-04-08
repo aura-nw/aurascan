@@ -1,100 +1,104 @@
 {
   "environment": {
-    "name": "develop",
+    "name": "Evmos",
     "label": {
-      "desktop": "Develop Testnet Network",
-      "mobile": "Develop Testnet"
+      "desktop": "Evmos",
+      "mobile": "Evmos"
     },
     "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
     "notice": {
       "content": null,
       "url": null
     },
-    "nativeName": "Aura"
+    "nativeName": "Evmos"
   },
   "chainConfig": {
     "stakingTime": "86400",
-    "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
+    "excludedAddresses": [],
     "blockTime": 4000,
     "quotaSetPrivateName": 10,
     "quotaSetWatchList": 10,
     "quotaNotification": 100,
+    "coins": [],
     "features": [],
+    "etherJsonRpc": "https://evmos-testnet.lava.build",
     "chain_info": {
-      "chainId": "auradev_1235-3",
-      "chainName": "aura devnet",
-      "rpc": "https://rpc.dev.aura.network",
-      "rest": "https://lcd.dev.aura.network",
-      "bip44": {
-        "coinType": 118
+      "chainId": "evmos_9000-4",
+      "chainName": "Evmos Testnet",
+      "stakeCurrency": {
+        "coinDenom": "TEVMOS",
+        "coinMinimalDenom": "atevmos",
+        "coinDecimals": 18
       },
       "bech32Config": {
-        "bech32PrefixAccAddr": "aura",
-        "bech32PrefixAccPub": "aurapub",
-        "bech32PrefixValAddr": "auravaloper",
-        "bech32PrefixValPub": "auravaloperpub",
-        "bech32PrefixConsAddr": "auravalcons",
-        "bech32PrefixConsPub": "auravalconspub"
+        "bech32PrefixAccAddr": "evmos",
+        "bech32PrefixAccPub": "evmospub",
+        "bech32PrefixValAddr": "evmosvaloper",
+        "bech32PrefixValPub": "evmosvaloperpub",
+        "bech32PrefixConsAddr": "evmosvalcons",
+        "bech32PrefixConsPub": "evmosvalconspub"
       },
       "currencies": [
         {
-          "coinDenom": "TAURA",
-          "coinMinimalDenom": "utaura",
-          "coinDecimals": 6
+          "coinDenom": "TEVMOS",
+          "coinMinimalDenom": "atevmos",
+          "coinDecimals": 18
         }
       ],
       "feeCurrencies": [
         {
-          "coinDenom": "TAURA",
-          "coinMinimalDenom": "utaura",
-          "coinDecimals": 6
+          "coinDenom": "TEVMOS",
+          "coinMinimalDenom": "atevmos",
+          "coinDecimals": 18,
+          "gasPriceStep": {
+            "low": 25000000000,
+            "average": 25000000000,
+            "high": 40000000000
+          }
         }
       ],
-      "stakeCurrency": {
-        "coinDenom": "TAURA",
-        "coinMinimalDenom": "utaura",
-        "coinDecimals": 6
+      "bip44": {
+        "coinType": 60
       },
-      "coinType": 118,
-      "gasPriceStep": {
-        "low": 0.001,
-        "average": 0.0025,
-        "high": 0.004
-      },
-      "features": ["ibc-transfer"],
-      "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
-      "logo": "https://i.imgur.com/zi0mTYb.png",
-      "explorer": "https://explorer.dev.aura.network/",
-      "beta": "false"
+      "rpc": "https://evmos-testnet-rpc.polkachu.com/",
+      "rest": "https://evmos-testnet-api.polkachu.com/",
+      "beta": true,
+      "features": [
+        "ibc-transfer",
+        "ibc-go",
+        "eth-address-gen",
+        "eth-key-sign"
+      ]
     },
     "evmChainInfo": {
-      "name": "Aura EVM Devnet",
-      "chain": "Aura-Dev",
-      "rpc": "https://jsonrpc.dev.aura.network",
-      "faucets": [""],
+      "name": "Evmos Testnet",
+      "chain": "Evmos",
+      "rpc": "https://evmos-testnet-json.qubelabs.io",
+      "faucets": [
+        "https://faucet.evmos.dev"
+      ],
       "nativeCurrency": {
-        "name": "test-Aura",
-        "symbol": "tAURA",
-        "denom": "atAURA",
+        "name": "test-Evmos",
+        "symbol": "tEVMOS",
+        "denom": "atEVMOS",
         "decimals": 18
       },
-      "infoURL": "https://aura.network",
-      "shortName": "aura-devnet",
-      "chainId": 1235,
-      "networkId": 1235,
+      "infoURL": "https://evmos.org",
+      "shortName": "evmos-testnet",
+      "chainId": 9000,
+      "networkId": 9000,
       "slip44": 1,
-      "icon": "",
+      "icon": "evmos",
       "explorers": [
         {
-          "name": "Aura Explorer (Aurascan)",
-          "url": "https://explorer.dev.aura.network",
+          "name": "Evmos Explorer (Aurascan)",
+          "url": "https://evmos.dev.aurascan.io",
           "standard": "none",
-          "icon": ""
+          "icon": "evmos"
         }
       ]
     }
   },
-  "etherJsonRpc": "https://jsonrpc.dev.aura.network",
   "image": {
     "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
     "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
@@ -110,13 +114,15 @@
     ]
   },
   "api": {
-    "backend": "https://explorer-api.dev.aura.network/api/v1",
-    "socket": "https://explorer-api.dev.aura.network",
-    "ipfsDomain": "https://ipfs.io/",
+    "backend": "https://evmos-api.dev.aurascan.io/api/v1",
+    "socket": "https://evmos-api.dev.aurascan.io",
     "verifyContract": "https://evmos-verify.dev.aurascan.io/verify-contract/v1",
+    "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": ["aura-network"]
+      "ids": [
+        "evmos"
+      ]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -127,7 +133,7 @@
       "url": "https://indexer-v2.dev.aurascan.io/api",
       "graphql": "/v2/graphql",
       "rest": "/v2",
-      "chain": "auratestnet"
+      "chain": "evmostestnet"
     },
     "walletConnect": {
       "signClient": {
@@ -137,7 +143,9 @@
           "name": "Aurascan",
           "description": "Aura Network Explorer",
           "url": "https://explorer.dev.aurascan.io/",
-          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
+          "icons": [
+            "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
+          ]
         }
       }
     }
