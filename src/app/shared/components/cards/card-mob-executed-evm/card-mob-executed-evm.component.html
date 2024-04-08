@@ -70,6 +70,7 @@
           <app-name-tag
             *ngIf="data?.to"
             [value]="data?.to"
+            [nameTagDark]="true"
             [isEnableRouter]="!data?.to?.startsWith('Null') && data?.to !== currentAddress"></app-name-tag>
           <span *ngIf="!data?.to" class="text--white">-</span>
         </div>
