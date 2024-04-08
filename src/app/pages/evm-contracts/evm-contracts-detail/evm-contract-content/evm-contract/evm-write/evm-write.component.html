@@ -48,20 +48,18 @@
         </div>
       </div>
 
-      <div class="d-flex d-lg-block justify-content-between align-items-center mt-3 mt-lg-0">
-        <div>
-          <div
-            *ngIf="breakpoint.value.matches && ng.wallet"
-            class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center"
-            (click)="disconnect()">
-            <span class="txt-disconnect">Disconnect</span>
-            <img
-              [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
-              alt=""
-              width="18px"
-              height="18px"
-              class="ml-1" />
-          </div>
+      <div class="d-flexjustify-content-between align-items-center mt-3 mt-lg-0" *ngIf="!breakpoint.value.matches">
+        <div
+          *ngIf="ng.wallet"
+          class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center"
+          (click)="disconnect()">
+          <span class="txt-disconnect">Disconnect</span>
+          <img
+            [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
+            alt=""
+            width="18px"
+            height="18px"
+            class="ml-1" />
         </div>
         <div class="caption fw-normal-mob d-flex align-items-center justify-content-end">
           <span class="cursor-pointer text--primary" (click)="expandMenu()">

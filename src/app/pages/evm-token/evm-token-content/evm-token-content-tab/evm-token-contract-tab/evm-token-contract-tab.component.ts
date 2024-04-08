@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { JsonFragment } from 'ethers';
 import * as _ from 'lodash';
+import { of, switchMap } from 'rxjs';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { TokenContractType } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -23,9 +24,16 @@ export class EvmTokenContractTabComponent implements OnInit {
 
   contractDetail;
   contractCode;
+  isImplementationVerified = false;
+  implementationContractAddress = '';
+  implementationContractDetail: {
+    proxyContract: string;
+    implementationContract: string;
+    previouslyRecordedContract: string;
+    abi?: JsonFragment[];
+  };
 
   constructor(
-    private router: Router,
     private contractService: ContractService,
     private env: EnvironmentService,
   ) {}
@@ -76,6 +84,53 @@ export class EvmTokenContractTabComponent implements OnInit {
       error: () => {
         this.isLoading = false;
       },
+    });
+  }
+
+  getProxyContractAbi(address) {
+    this.contractService
+      .getProxyContractAbi(address)
+      .pipe(
+        switchMap((e) => {
+          const proxyHistories = _.get(e, 'evm_smart_contract[0].evm_proxy_histories');
+
+          if (proxyHistories) {
+            this.implementationContractDetail = {
+              proxyContract: proxyHistories[0]?.proxy_contract,
+              implementationContract: proxyHistories[0]?.implementation_contract,
+              previouslyRecordedContract: proxyHistories[1]?.implementation_contract,
+            };
+
+            return this.contractService.queryEvmContractByAddress(
+              this.implementationContractDetail.implementationContract,
+            );
+          }
+
+          return of(null);
+        }),
+      )
+      .subscribe((res) => {
+        const abi = _.get(res, 'evm_contract_verification[0].abi');
+        if (abi) {
+          this.implementationContractDetail['abi'] = abi as JsonFragment[];
+        }
+      });
+  }
+
+  loadProxyContractDetail() {
+    this.contractService.loadProxyContractDetail(this.contractAddress).subscribe((res) => {
+      if (res.implementation_contract) {
+        this.implementationContractAddress = res.implementation_contract;
+        this.getListContractInfo([res.implementation_contract]);
+      }
+    });
+  }
+
+  getListContractInfo(address) {
+    this.contractService.getListContractInfo(address).subscribe((res) => {
+      if (res?.evm_contract_verification?.length > 0) {
+        this.isImplementationVerified = res.evm_contract_verification[0]?.status;
+      }
     });
   }
 }
