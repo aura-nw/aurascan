@@ -55,3 +55,14 @@ export const CW20_TOKENS_TEMPLATE = _.template(`
     }
   }
 `);
+
+export const ERC20_TOKENS_TEMPLATE = _.template(`
+  query ERC20_TOKENS_TEMPLATE($address: String = "") {
+    <%= chain %>  {
+      account_balance(where: {account: {address: {_eq: $address}}, denom: {_ilike: "%0x%"}}) {
+        denom
+        amount
+      }
+    }
+  }
+`);

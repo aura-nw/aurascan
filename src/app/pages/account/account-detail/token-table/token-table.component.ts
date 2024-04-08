@@ -26,6 +26,8 @@ export class TokenTableComponent implements OnChanges {
   textSearch = '';
   searchValue = '';
   errTxt: string;
+
+  COIN_TOKEN_TYPE = COIN_TOKEN_TYPE;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
