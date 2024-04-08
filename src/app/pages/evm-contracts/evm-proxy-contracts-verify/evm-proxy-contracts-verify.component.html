@@ -1,7 +1,7 @@
 <section class="contract-verify col-12 col-lg-6">
   <h1 class="text--white mb-4">Proxy Contract Verification</h1>
   <div class="box-proxy d-flex align-items-center">
-    <span class="body-02 caption-mob fw-semibold text--green-3">Automated Proxy Implementation Verification</span>
+    <span class="body-02 fw-semibold text--green-3">Automated Proxy Implementation Verification</span>
   </div>
 
   <div class="text--white my-lg-12 my-6 body-04">
@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="row mb-lg-8 mb-4">
+  <div class="row mb-lg-6">
     <div class="col-12">
       <div class="form-group">
         <label for="address" class="form-label text--gray-4 body-02">
@@ -32,7 +32,7 @@
           [(ngModel)]="contractAddress"
           (ngModelChange)="validAddress()" />
         <div
-          class="error text--danger mt-2 {{
+          class="error text--danger mt-1 {{
             contractAddress?.length > 0 && !isValidAddress ? 'visible' : 'invisible'
           }}">
           Invalid Address!

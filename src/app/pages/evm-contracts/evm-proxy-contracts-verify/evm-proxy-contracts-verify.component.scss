@@ -13,11 +13,11 @@
     border-radius: 16px;
   }
 
-  .aura-form .form-group {
-    input.form-control,
-    .select-input--flat {
+  .form-group {
+    input.form-check-input {
       height: 40px;
       margin-top: 0;
+      background-color: var(--aura-gray-10) !important;
     }
   }
 }

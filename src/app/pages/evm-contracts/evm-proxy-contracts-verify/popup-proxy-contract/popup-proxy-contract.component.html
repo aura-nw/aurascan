@@ -1,7 +1,7 @@
 <div class="card card-proxy-contract">
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
-      <div class="h2 h3-mob mb-0 text--white w-100 fw-700 fw-semibold-mob">Proxy Contract Verification</div>
+      <div class="h2 h3-mob mb-0 text--white w-100 fw-semibold">Proxy Contract Verification</div>
       <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
     </div>
   </div>
@@ -11,9 +11,7 @@
         class="box-proxy-verify align-items-center mb-4 {{
           displayMode === modePopup.WARNING ? 'warning' : displayMode === modePopup.ERROR ? 'error' : ''
         }}">
-        <div class="body-02 caption-mob fw-semibold mb-4">
-          The proxy contract verification completed with the message:
-        </div>
+        <div class="body-02 mb-4">The proxy contract verification completed with the message:</div>
 
         <ng-container *ngIf="displayMode !== modePopup.ERROR">
           The proxy contract
@@ -42,7 +40,7 @@
         </ng-container>
       </div>
 
-      <div>
+      <div class="body-04">
         <ng-container *ngIf="displayMode === modePopup.SUCCESS">
           In case our verification process is wrong, please click “Contact Us” to provide us with more information so we
           could update contract information more accurately.
@@ -60,12 +58,12 @@
 
     <!-- button group -->
     <div class="d-flex px-6 py-6 justify-content-end">
-      <button class="button button--md button-pill button-outline btn" type="button" (click)="closeDialog('close')">
+      <button class="button button--xlg button-pill button-outline btn" type="button" (click)="closeDialog('close')">
         <span>Close</span>
       </button>
       <button
         *ngIf="displayMode !== modePopup.WARNING"
-        class="button button--md button-pill button-outline button-outline__in-card button-outline--gradient ml-4 btn"
+        class="button button--xlg button-pill button-outline button-outline__in-card button-outline--gradient ml-4 btn"
         type="button">
         <a href="mailto:support@aura.network" class="text--white">Contact Us</a>
       </button>
