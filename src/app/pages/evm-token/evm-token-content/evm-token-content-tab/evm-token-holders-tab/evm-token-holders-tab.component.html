@@ -45,7 +45,7 @@
                       [fullTextMob]="true"
                       [tooltipPosition]="'tooltip--right'"
                       [linkRouter]="[
-                        this.typeContract && this.typeContract !== contractType.ERC20 ? 'nft' : '',
+                        this.typeContract && this.typeContract !== contractType.ERC20 ? '/nft' : '/token',
                         linkAddress
                       ]"
                       [linkParams]="{ a: data[template.matColumnDef] }">

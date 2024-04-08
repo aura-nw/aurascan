@@ -4,6 +4,7 @@ import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -38,7 +39,10 @@ export class EvmProxyContractsVerifyComponent implements OnInit, OnDestroy {
     private env: EnvironmentService,
     private contractService: ContractService,
     private dialog: MatDialog,
-  ) {}
+    private route: ActivatedRoute,
+  ) {
+    this.contractAddress = this.route.snapshot.paramMap.get('contractAddress')?.toLowerCase();
+  }
 
   ngOnDestroy(): void {
     this.interupt$.next();
