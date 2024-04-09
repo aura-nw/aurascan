@@ -25,7 +25,7 @@
     "quotaNotification": 100,
     "features": [],
     "chain_info": {
-      "chainId": "auradev_1235-3",
+      "chainId": "auradev_1236-2",
       "chainName": "Aura serenity testnet",
       "rpc": "https://rpc.serenity.aura.network",
       "rest": "https://lcd.serenity.aura.network",
