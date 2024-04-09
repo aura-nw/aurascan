@@ -521,7 +521,7 @@ export class TokenService extends CommonService {
     isExcludedAddresses?: boolean;
   }): Observable<any> {
     const operationsDoc = `
-    query queryHolderIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null, $addressNotIn: [String!] = null) {
+    query queryHolderDenom($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null, $addressNotIn: [String!] = null) {
       ${this.envDB} {
         account_balance(where: {account: {address: {_eq: $address, _nin: $addressNotIn}}, denom: {_eq: $denom}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           account {
@@ -547,7 +547,7 @@ export class TokenService extends CommonService {
           offset: payload.offset || 0,
           addressNotIn: payload.isExcludedAddresses ? this.excludedAddresses : [],
         },
-        operationName: 'queryHolderIBC',
+        operationName: 'queryHolderDenom',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

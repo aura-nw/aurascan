@@ -114,9 +114,9 @@ export class TokenContentComponent implements OnInit {
 
   handleSearch() {
     const queryParams = this.route.snapshot?.queryParams?.a;
-    if (!queryParams && this.textSearch?.length > 0) {
+    if (!queryParams && this.searchTemp?.length > 0) {
       this.redirectPage(`/token/${this.linkAddress}`, {
-        a: this.textSearch,
+        a: this.searchTemp,
       });
     }
 
