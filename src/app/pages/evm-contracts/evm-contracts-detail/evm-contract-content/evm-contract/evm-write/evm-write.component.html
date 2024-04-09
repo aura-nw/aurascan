@@ -1,0 +1,170 @@
+<ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <ng-container *ngIf="abi; else noValues">
+    <div class="d-lg-flex justify-content-between align-items-center" *ngIf="{ wallet: wallet$ | async } as ng">
+      <div class="my-t mb-1 mb-lg-3 small-text">
+        <button
+          (click)="connectWallet()"
+          *ngIf="!ng.wallet"
+          type="button"
+          class="button button-pill button-outline caption fw-normal cursor-pointer">
+          <span class="icon-connect"></span>
+          <span class="text--white">Connect Wallet</span>
+        </button>
+
+        <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
+          <div class="button button-pill button-outline button--xs caption fw-normal">
+            <span class="icon-connect connected"></span>
+            <span
+              class="fw-semibold fw-normal-mob text--gray-1 d-flex align-items-center"
+              [copyBtn]="ng.wallet?.address">
+              <span class="txt-wallet cursor-pointer" [routerLink]="['/address/', ng.wallet?.address]">
+                Connected [<ng-container *ngIf="ng.wallet?.cosmosAccount?.username">
+                  {{ ng.wallet?.cosmosAccount?.username | ellipsis: 16 }}
+                </ng-container>
+                <ng-container *ngIf="!ng.wallet?.cosmosAccount?.username">
+                  {{ ng.wallet?.address | ellipsis: 8 : 8 }} </ng-container
+                >]
+              </span>
+            </span>
+          </div>
+          <ng-container *ngIf="!breakpoint.value.matches">
+            <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
+            <div
+              class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center"
+              (click)="disconnect()">
+              <span class="txt-disconnect">Disconnect</span>
+              <img
+                [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
+                alt=""
+                width="18px"
+                height="18px"
+                class="ml-1" />
+            </div>
+          </ng-container>
+        </div>
+        <div class="warning-wrapper" *ngIf="ng.wallet?.cosmosAccount">
+          <img src="assets/icons/icons-svg/color/warning.svg" alt="warning" />
+          <span>Need to connect by EVM address to interact with EVM contract</span>
+        </div>
+      </div>
+
+      <div class="d-flexjustify-content-between align-items-center mt-3 mt-lg-0" *ngIf="!breakpoint.value.matches">
+        <div
+          *ngIf="ng.wallet"
+          class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center"
+          (click)="disconnect()">
+          <span class="txt-disconnect">Disconnect</span>
+          <img
+            [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
+            alt=""
+            width="18px"
+            height="18px"
+            class="ml-1" />
+        </div>
+        <div class="caption fw-normal-mob d-flex align-items-center justify-content-end">
+          <span class="cursor-pointer text--primary" (click)="expandMenu()">
+            <ng-container *ngIf="!isExpand">Expand all</ng-container>
+            <ng-container *ngIf="isExpand">Collapse all</ng-container>
+          </span>
+          <div class="divider divider-vertical"></div>
+          <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="box-content text--white mt-3">
+      <ng-container *ngFor="let jsonFragment of extendedAbi; index as index">
+        <mat-expansion-panel hideToggle *ngIf="jsonFragment.name" class="custom-expansion-panel outline">
+          <mat-expansion-panel-header class="content-contract txt-header">
+            <mat-panel-title class="item-content body-02 text--gray-1">
+              {{ index + 1 }}. {{ jsonFragment.name }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <form [formGroup]="jsonFragment.formGroup" class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
+            <ng-container *ngFor="let item of jsonFragment.inputs">
+              <div class="d-lg-block">
+                <div class="d-flex align-items-center mb-2">
+                  <span class="px-0 text--gray-1 body-02 input-require"> {{ item.name }} ({{ item.type }}) </span>
+                  <button
+                    class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
+                    *ngIf="item.name == 'amount'"
+                    (click)="addZero(jsonFragment, item.name)">
+                    <i class="ph ph-gear icon-add-zero"></i>
+                  </button>
+                </div>
+                <ng-container *ngIf="jsonFragment.formGroup.controls[item.name] as control">
+                  <textarea
+                    *ngIf="!item.type?.includes('boolean')"
+                    matInput
+                    rows="3"
+                    [formControlName]="item.name"
+                    style="height: auto"
+                    placeholder="{{ item.name }} ({{ item.type }})"
+                    class="form-check-input input-require col-12 mb-4"
+                    [ngClass]="{
+                      'error-null': control.invalid && jsonFragment.isValidate
+                    }">
+                  </textarea>
+
+                  <!-- <mat-form-field contract appearance="fill" *ngIf="item.type?.includes('boolean')" class="col-12 mb-4">
+                    <mat-select
+                      panelClass="contractPanel"
+                      (selectionChange)="resetError(jsonFragment)"
+                      [disableOptionCentering]="true"
+                      placeholder="{{ item.name }} ({{ item.type }})">
+                      <mat-option [value]="true">
+                        <div class="d-flex option-contain">
+                          <div class="option-lable">
+                            <span>true</span>
+                          </div>
+                        </div>
+                      </mat-option>
+                      <mat-option [value]="false">
+                        <div class="d-flex option-contain">
+                          <div class="option-lable">
+                            <span>false</span>
+                          </div>
+                        </div>
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                </ng-container>
+              </div>
+            </ng-container>
+
+            <div class="px-0">
+              <button
+                class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
+                type="button"
+                [disabled]="jsonFragment.isLoading"
+                (click)="handleExecute(jsonFragment)">
+                <img
+                  [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                  alt=""
+                  class="mr-2"
+                  width="20"
+                  height="20"
+                  *ngIf="jsonFragment.isLoading" />
+
+                <span>Write</span>
+              </button>
+            </div>
+
+            <div class="px-0">
+              <div class="d-flex" *ngIf="jsonFragment.result !== undefined">
+                <div>Response:</div>
+                <div class="overflow-scroll-x">
+                  <pre id="json" class="raw-content text--white pl-2" [innerHtml]="jsonFragment.result | appJson"></pre>
+                </div>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
+</ng-container>

@@ -16,6 +16,7 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
 import { BlockDetailComponent } from './block-detail/block-detail.component';
 import { BlocksRoutingModule } from './blocks-routing.module';
 import { BlocksComponent } from './blocks.component';
+import { NameTagModule } from 'src/app/shared/components/name-tag/name-tag.module';
 
 @NgModule({
   declarations: [BlocksComponent, BlockDetailComponent],
@@ -35,6 +36,7 @@ import { BlocksComponent } from './blocks.component';
     PaginatorModule,
     CommonDirectiveModule,
     ClipboardModule,
+    NameTagModule
   ],
   providers: [BlockService, provideEnvironmentNgxMask(MASK_CONFIG)],
 })

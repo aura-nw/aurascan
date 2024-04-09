@@ -99,13 +99,13 @@
                       *ngSwitchCase="'tx_hash'"
                       [copyBtn]="data[template.matColumnDef]"
                       class="text--primary cursor-pointer hash-link"
-                      [routerLink]="['/transaction', data['tx_hash']]">
+                      [routerLink]="['/tx', data['tx_hash']]">
                       {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                     </a>
                     <a
                       *ngSwitchCase="'height'"
                       class="text--primary cursor-pointer block-link"
-                      [routerLink]="['/blocks', data['height']]">
+                      [routerLink]="['/block', data['height']]">
                       {{ data[template.matColumnDef] }}
                     </a>
                     <div *ngSwitchCase="'type'" class="aura-status">
@@ -178,7 +178,7 @@
       <div *ngIf="breakpoint.value.matches">
         <app-card-mob-channel
           *ngFor="let data of dataSource?.data; first as isFirst"
-          [link]="'/transaction/' + data.tx_hash"
+          [link]="'/tx/' + data.tx_hash"
           [dataCard]="data"
           [title]="{
             size: 'md',
@@ -197,7 +197,7 @@
             {
               label: 'Height',
               class: 'text--gray-1 body-02-mob',
-              info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+              info: '<a class=text--primary href=' + ('/block/' + data.height) + '>' + data.height + '</a>'
             },
             {
               label: 'Fee',
@@ -206,7 +206,7 @@
                 (+data.fee | mask: 'separator.6') +
                 '<span> ' +
                 ' <a class=text--primary href=' +
-                ('/tokens/token/' + coinInfo.coinMinimalDenom) +
+                ('/token/' + coinInfo.coinMinimalDenom) +
                 '>' +
                 coinInfo.coinDenom +
                 '</a>'

@@ -3,13 +3,12 @@ import {
   MatLegacyDialog as MatDialog,
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
-import { WalletAccount } from '@cosmos-kit/core';
 import { TranslateService } from '@ngx-translate/core';
-import { log } from 'console';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
+import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
@@ -25,7 +24,7 @@ export class WriteContractComponent implements OnInit {
 
   isExpand = false;
   userAddress = '';
-  walletAccount: WalletAccount;
+  walletAccount: IMultichainWalletAccount;
 
   jsValidator = new Validator();
   root: any[];

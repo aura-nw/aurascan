@@ -11,6 +11,8 @@ import {
 } from 'src/app/core/utils/cosmoskit';
 import { Errors } from 'src/app/core/utils/cosmoskit/constant';
 import { checkDesktopWallets } from 'src/app/core/utils/cosmoskit/wallets';
+import { getMetamask } from 'src/app/core/utils/ethers/utils';
+import { EVM_WALLETS } from 'src/app/core/utils/ethers/wallets';
 
 @Component({
   selector: 'app-wallet-provider',
@@ -24,6 +26,22 @@ export class WalletProviderComponent implements AfterViewInit {
   chainName = this.environmentService.chainName;
 
   wallets: (Wallet & { state?: State })[] = [];
+
+  evmWallets: {
+    name: string;
+    prettyName: string;
+    logo: string;
+    downloadInfo?: string;
+    state?: State;
+  }[] = EVM_WALLETS;
+
+  othersEvmWallet: {
+    name: string;
+    prettyName: string;
+    logo: string;
+    downloadInfo?: string;
+    state?: State;
+  }[];
 
   otherWallets: (Wallet & { state?: State })[] = [];
 
@@ -51,6 +69,7 @@ export class WalletProviderComponent implements AfterViewInit {
   async ngAfterViewInit() {
     if (this.mode == 'MOBILE') {
       this.wallets = this.mobileWallets.map((w) => w.walletInfo);
+      this.evmWallets = EVM_WALLETS;
     } else {
       const wallets = this.walletService.getWalletRepo().wallets;
 
@@ -65,6 +84,28 @@ export class WalletProviderComponent implements AfterViewInit {
         typeof wcWallets[0].walletInfo.logo == 'string'
           ? wcWallets[0].walletInfo.logo
           : wcWallets[0].walletInfo.logo?.major;
+
+      // Only support Metamask
+      if (getMetamask()) {
+        this.evmWallets = EVM_WALLETS;
+      } else {
+        this.evmWallets = [];
+        this.othersEvmWallet = EVM_WALLETS;
+      }
+    }
+  }
+
+  connectEvm(wallet) {
+    if (wallet) {
+      wallet.state = 'Pending';
+      this.walletService
+        .connectEvmWallet()
+        .then(() => {
+          wallet.state = 'Done';
+
+          this.close();
+        })
+        .catch(console.error);
     }
   }
 

@@ -33,10 +33,17 @@ export enum ETokenCoinType {
   NATIVE = 'Native',
   IBC = 'IBC Token',
   CW20 = 'CW20 Token',
+  ERC20 = 'ERC20 Token',
 }
 
 export enum ETokenCoinTypeBE {
   NATIVE = 'NATIVE',
   IBC = 'IBC_TOKEN',
   CW20 = 'CW20_TOKEN',
+  ERC20 = 'ERC20_TOKEN',
+}
+
+export enum ETokenNFTTypeBE {
+  CW721 = 'CW721_TOKEN',
+  ERC721 = 'ERC721_TOKEN',
 }

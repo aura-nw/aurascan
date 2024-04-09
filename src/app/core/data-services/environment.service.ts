@@ -38,6 +38,7 @@ export interface IConfiguration {
     }[];
     features: string[];
     chain_info: any;
+    evmChainInfo: any;
     cosmos_sdk_version?: string;
   };
   image: {
@@ -53,6 +54,7 @@ export interface IConfiguration {
     socket: string;
     ipfsDomain: string;
     googleClientId: string;
+    verifyContract: string;
     coingecko: {
       url: string;
       ids: string[];
@@ -93,8 +95,20 @@ export class EnvironmentService {
     return this.environment.nativeName || _.startCase(_.camelCase(this.chainInfo?.bech32Config?.bech32PrefixAccAddr));
   }
 
+  get bech32PrefixAccAddr() {
+    return _.get(this.configValue, 'chainConfig.chain_info.bech32Config.bech32PrefixAccAddr');
+  }
+
   get chainConfig() {
     return _.get(this.configValue, 'chainConfig');
+  }
+
+  get etherJsonRpc() {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.rpc');
+  }
+
+  get evmChainInfo() {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo');
   }
 
   get chainInfo() {
@@ -107,6 +121,10 @@ export class EnvironmentService {
 
   get coinDecimals() {
     return _.get(this.configValue, 'chainConfig.chain_info.currencies[0].coinDecimals');
+  }
+
+  get coinMinimalDenom() {
+    return _.get(this.configValue, 'chainConfig.chain_info.stakeCurrency.coinMinimalDenom');
   }
 
   get stakingTime() {
@@ -157,6 +175,18 @@ export class EnvironmentService {
 
   get walletConnect() {
     return _.get(this.configValue, 'api.walletConnect');
+  }
+
+  get verifyContractUrl() {
+    return _.get(this.configValue, 'api.verifyContract');
+  }
+
+  get evmDenom(): string {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.nativeCurrency.denom');
+  }
+
+  get evmDecimal(): number {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.nativeCurrency.decimals');
   }
 
   setLatestBlockHeight(value: string | number) {
@@ -225,5 +255,18 @@ export class EnvironmentService {
         this.config.next(configuration);
       }
     });
+  }
+
+  getDecimals(denom?: string): number | { [key: string]: number } {
+    if (!(this.coinMinimalDenom && this.evmDenom)) {
+      return undefined;
+    }
+
+    const decimals = {
+      [this.coinMinimalDenom?.toLowerCase()]: this.coinDecimals,
+      [this.evmDenom?.toLowerCase()]: this.evmDecimal,
+    };
+
+    return denom ? decimals[denom.toLowerCase()] : decimals;
   }
 }

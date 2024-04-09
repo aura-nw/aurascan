@@ -29,7 +29,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/account', isShort: true, isNameTag: true },
+    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', isShort: true, isNameTag: true },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -91,21 +91,21 @@ export class ContractsListComponent implements OnInit, OnDestroy {
         if (res?.smart_contract?.length) {
           res?.smart_contract.forEach((item) => {
             if (item?.code?.type === ContractRegisterType.CW20 && item['cw20_contract']?.name) {
-              item.url = '/tokens/token/' + item.address;
+              item.url = '/token/' + item.address;
               item.token_tracker = item['cw20_contract']?.name;
             } else if (
               item?.code?.type === ContractRegisterType.CW721 &&
               item?.name !== this.typeCW4973 &&
               item['cw721_contract']?.name
             ) {
-              item.url = '/tokens/token-nft/' + item.address;
+              item.url = '/token/' + item.address;
               item.token_tracker = item['cw721_contract']?.name;
             } else if (
               item['code'].type === ContractRegisterType.CW721 &&
               item['name'] === this.typeCW4973 &&
               item['cw721_contract']?.name
             ) {
-              item.url = '/tokens/token-abt/' + item.address;
+              item.url = '/token/' + item.address;
               item.token_tracker = item['cw721_contract']?.name;
             }
 

@@ -100,8 +100,8 @@
               <a
                 class="nav-link d-flex align-items-center mb-0"
                 [routerLink]="item.link"
-                [class.active]="checkMenuActive(item.link)"
-                role="button">
+                role="button"
+                [routerLinkActiveMenu]="item">
                 <i class="ph-{{ item.icon }}"></i>
                 <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
               </a>
@@ -120,7 +120,7 @@
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
                         (click)="removeConfigCSV(subMenu)"
-                        [class.active]="checkMenuActive(subMenu.link)">
+                        [routerLinkActiveMenu]="subMenu">
                         <!-- Menu token has special icon -->
                         <i class="icon icon-nft text--white" *ngIf="subMenu.name === menuName.TokenCW721"></i>
                         <i class="icon icon-bound-token text--white" *ngIf="subMenu.name === menuName.TokenCW4973"></i>

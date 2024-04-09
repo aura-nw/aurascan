@@ -144,7 +144,7 @@ export class ApiAccountService {
   // https://github.com/aura-nw/aura-explorer-api/blob/main/src/components/account/services/account.service.ts#L132
   parseAvailableBalance(account) {
     const spendableBalances = _.get(account, '[0].spendable_balances') || [];
-    if (spendableBalances?.length == 0) {
+    if (!Array.isArray(spendableBalances) || spendableBalances?.length == 0) {
       return 0;
     }
 

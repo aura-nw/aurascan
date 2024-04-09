@@ -78,7 +78,7 @@
           <h6 class="mb-0 text--gray-1">Address</h6>
           <app-name-tag
             [value]="currentValidatorDetail?.acc_address"
-            [linkRouter]="['/account', currentValidatorDetail?.acc_address]"
+            [linkRouter]="['/address', currentValidatorDetail?.acc_address]"
             [fullText]="true"
             [widthAuto]="true"
             [fullTextMob]="true"></app-name-tag>
@@ -202,13 +202,13 @@
                           <a
                             *ngSwitchCase="'block_hash'"
                             class="text--primary cursor-pointer"
-                            [routerLink]="['/blocks', data.height]">
+                            [routerLink]="['/block', data.height]">
                             {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                           </a>
                           <a
                             *ngSwitchCase="'height'"
                             class="text--primary cursor-pointer"
-                            [routerLink]="['/blocks', data.height]">
+                            [routerLink]="['/block', data.height]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchDefault class="pl-5">{{ data[template.matColumnDef] }}</div>
@@ -230,7 +230,7 @@
                 <div *ngIf="dataSourceBlock" class="titleMob">
                   <app-card-mob-simple
                     *ngFor="let data of dataSourceBlockMob"
-                    [link]="'/blocks/' + data.height"
+                    [link]="'/block/' + data.height"
                     [content]="[
                       {
                         label: data.height,
@@ -295,7 +295,7 @@
                     class="block-uptime tool-tip"
                     [appTooltip]="(itemBlock?.height || 0).toString()"
                     [class.block-fail]="isBlockFail(itemBlock)"
-                    href="/blocks/{{ itemBlock?.height }}"
+                    href="/block/{{ itemBlock?.height }}"
                     currentitem="false">
                     <div class="d-flex">
                       <ng-container *ngIf="isBlockFail(itemBlock)">
@@ -333,7 +333,7 @@
                         <ng-container [ngSwitch]="template.matColumnDef">
                           <app-name-tag
                             *ngSwitchCase="'delegator_address'"
-                            [linkRouter]="['/account', data.delegator_address]"
+                            [linkRouter]="['/address', data.delegator_address]"
                             [value]="data.delegator_address"
                             [tooltipPosition]="'tooltip--right'"></app-name-tag>
                           <div *ngSwitchCase="'amount'">
@@ -358,7 +358,7 @@
             <div *ngIf="breakpoint.value.matches">
               <div class="custom-card-mob-simple body-01 mb-2" *ngFor="let data of dataSourceDelegatorMob">
                 <a
-                  [routerLink]="['/account', data.delegator_address]"
+                  [routerLink]="['/address', data.delegator_address]"
                   class="{{
                     !(data.delegator_address | nameTagTooltipPipe)
                       ? (data.delegator_address | isPrivateNameTag)
@@ -377,7 +377,7 @@
                   <div class="text--gray-4">Amount</div>
                   <div class="d-flex">
                     <div class="text--white mr-2">{{ data.amount | mask: 'separator.6' }}</div>
-                    <a class="text--primary" href="/tokens/token/{{ minimalDenom }}">{{ denom }}</a>
+                    <a class="text--primary" href="/token/{{ minimalDenom }}">{{ denom }}</a>
                   </div>
                 </div>
               </div>
@@ -429,14 +429,14 @@
                               *ngSwitchCase="'tx_hash'"
                               [copyBtn]="data[template.matColumnDef]"
                               class="text--primary cursor-pointer hash-link"
-                              [routerLink]="['/transaction', data['tx_hash']]">
+                              [routerLink]="['/tx', data['tx_hash']]">
                               {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
                               <ng-container *ngIf="data['amount'] === 'More'">
                                 <a
                                   class="text--primary cursor-pointer hash-link"
-                                  [routerLink]="['/transaction', data['tx_hash']]">
+                                  [routerLink]="['/tx', data['tx_hash']]">
                                   More
                                 </a>
                               </ng-container>
@@ -451,7 +451,7 @@
                             <a
                               *ngSwitchCase="'height'"
                               class="text--primary cursor-pointer block-link"
-                              [routerLink]="['/blocks', data[template.matColumnDef]]">
+                              [routerLink]="['/block', data[template.matColumnDef]]">
                               {{ data[template.matColumnDef] }}
                             </a>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -473,10 +473,8 @@
               <div *ngIf="breakpoint.value.matches">
                 <div class="custom-card-mob-simple body-01 mb-2" *ngFor="let data of dataSourcePowerMob">
                   <div class="d-flex align-items-center justify-content-between text--primary">
-                    <a href="/blocks/{{ data.height }}">{{ data.height }}</a>
-                    <a href="/transaction/{{ data.tx_hash }}" [copyBtn]="data.tx_hash">{{
-                      data.tx_hash | ellipsis: 6 : 6
-                    }}</a>
+                    <a href="/block/{{ data.height }}">{{ data.height }}</a>
+                    <a href="/tx/{{ data.tx_hash }}" [copyBtn]="data.tx_hash">{{ data.tx_hash | ellipsis: 6 : 6 }}</a>
                   </div>
                   <div class="d-flex align-items-center justify-content-between mt-3">
                     <div class="text--gray-4">Amount</div>

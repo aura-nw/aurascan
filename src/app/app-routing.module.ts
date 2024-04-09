@@ -38,20 +38,37 @@ const routes: Routes = [
         loadChildren: () => import('./pages/validators/validators.module').then((m) => m.ValidatorsModule),
       },
       {
+        path: 'block',
+        loadChildren: () => import('./pages/blocks/blocks.module').then((m) => m.BlocksModule),
+      },
+      {
         path: 'blocks',
         loadChildren: () => import('./pages/blocks/blocks.module').then((m) => m.BlocksModule),
       },
       {
-        path: 'transaction',
+        path: 'transactions',
+        loadChildren: () => import('./pages/transactions/transactions.module').then((m) => m.TransactionsModule),
+      },
+      {
+        path: 'tx',
         loadChildren: () => import('./pages/transaction/transaction.module').then((m) => m.TransactionModule),
+      },
+      {
+        path: 'evm-transactions',
+        loadChildren: () =>
+          import('./pages/evm-transactions/evm-transactions.module').then((m) => m.EvmTransactionsModule),
       },
       {
         path: 'votings',
         loadChildren: () => import('./pages/proposal/proposal.module').then((m) => m.ProposalModule),
       },
       {
-        path: 'tokens',
+        path: 'token',
         loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
+      },
+      {
+        path: 'tokens',
+        loadChildren: () => import('./pages/tokens/tokens.module').then((m) => m.TokensModule),
       },
       {
         path: 'statistics',
@@ -60,6 +77,10 @@ const routes: Routes = [
       {
         path: 'contracts',
         loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
+      },
+      {
+        path: 'evm-contracts',
+        loadChildren: () => import('./pages/evm-contracts/evm-contracts.module').then((m) => m.EvmContractsModule),
       },
       {
         path: 'code-ids',
@@ -101,7 +122,7 @@ const routes: Routes = [
         canMatch: [() => isEnabled(EFeature.ExportCsv)],
       },
       {
-        path: 'account',
+        path: 'address',
         loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule),
       },
       {
