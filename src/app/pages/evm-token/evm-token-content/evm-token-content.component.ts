@@ -117,10 +117,10 @@ export class EvmTokenContentComponent implements OnInit {
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
     if (this.searchTemp?.length > 0) {
-      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchTemp);
+      const addressNameTag = this.nameTagService.findNameTag(this.searchTemp);
       this.textSearch = this.searchTemp;
+      this.searchTemp = addressNameTag.name_tag_private || addressNameTag.nameTag || this.textSearch;
       let tempTabs;
-      this.paramQuery = addressNameTag || this.searchTemp;
       // check if mode not equal native coin
       if (
         this.textSearch.length === LENGTH_CHARACTER.EVM_TRANSACTION ||
@@ -131,7 +131,7 @@ export class EvmTokenContentComponent implements OnInit {
       } else if (this.textSearch?.startsWith(EWalletType.EVM) || this.textSearch?.startsWith(this.prefixAdd)) {
         this.isSearchAddress = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
-        this.getInfoAddress(this.paramQuery);
+        this.getInfoAddress(this.textSearch);
       } else {
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
       }
@@ -139,7 +139,7 @@ export class EvmTokenContentComponent implements OnInit {
       this.TABS = tempTabs || this.tabsBackup;
       const queryParams = this.route.snapshot.queryParams.get('a');
       if (!queryParams) {
-        this.redirectPage(`/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`);
+        this.redirectPage(`/token/${this.linkAddress}?a=${encodeURIComponent(this.textSearch)}`);
       }
     } else {
       this.textSearch = '';
