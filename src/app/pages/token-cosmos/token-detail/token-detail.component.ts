@@ -134,18 +134,18 @@ export class TokenDetailComponent implements OnInit {
             break;
         }
 
-        const holder =
-          token?.tokenHolderStatistics?.length > 0
-            ? token?.tokenHolderStatistics?.[token?.tokenHolderStatistics?.length - 1]?.totalHolder
-            : 0;
+        let holder = 0;
         let changePercent = 0;
-        if (
-          token.tokenHolderStatistics?.length > 1 &&
-          token.tokenHolderStatistics[0]?.totalHolder > 0 &&
-          token.tokenHolderStatistics[1]?.totalHolder > 0
-        ) {
-          changePercent =
-            (token.tokenHolderStatistics[1].totalHolder * 100) / token.tokenHolderStatistics[0].totalHolder - 100;
+        if (token.tokenHolderStatistics?.length > 0) {
+          holder = token?.tokenHolderStatistics?.[token?.tokenHolderStatistics?.length - 1]?.totalHolder;
+          if (
+            token.tokenHolderStatistics?.length > 1 &&
+            token.tokenHolderStatistics[0]?.totalHolder > 0 &&
+            token.tokenHolderStatistics[1]?.totalHolder > 0
+          ) {
+            changePercent =
+              (token.tokenHolderStatistics[1].totalHolder * 100) / token.tokenHolderStatistics[0]?.totalHolder - 100;
+          }
         }
 
         this.tokenDetail = {
@@ -165,7 +165,7 @@ export class TokenDetailComponent implements OnInit {
 
         if (this.contractAddress !== this.chainInfo?.currencies[0].coinMinimalDenom) {
           this.getInfoTokenIBC(this.tokenDetail.denom);
-        }
+        } 
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {

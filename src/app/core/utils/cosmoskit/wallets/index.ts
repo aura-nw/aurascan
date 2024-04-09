@@ -52,7 +52,7 @@ const desktopWallets = [
   ...coin98Wallets,
   ...keplrWallets,
   ...leapWallets,
-  // ...leapSnapMetaMaskWallets,
+  ...leapSnapMetaMaskWallets,
 ] as MainWalletBase[];
 
 function checkDesktopWallets(walletName: WalletName) {
