@@ -724,7 +724,7 @@ export class ContractService extends CommonService {
   getListContractInfo(listContractAddress: string[]): Observable<any> {
     const query = `query queryListContract($address: [String!]) {
       ${this.envDB} {
-        evm_contract_verification(where: {contract_address: {_in: $address}}) {
+        evm_contract_verification(where: {contract_address: {_in: $address}}, order_by: {id: desc}) {
           status
           contract_address
         }

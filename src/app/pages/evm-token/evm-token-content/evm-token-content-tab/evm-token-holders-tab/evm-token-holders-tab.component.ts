@@ -11,6 +11,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-evm-token-holders-tab',
@@ -98,11 +99,16 @@ export class EvmTokenHoldersTabComponent implements OnInit {
   }
 
   getDenomHolder() {
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
+      this.keyWord,
+    );
+
     const payload = {
       denomHash: this.contractAddress,
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      address: this.keyWord || null,
+      address: accountAddress || null,
       isExcludedAddresses: this.tokenDetail.modeToken === this.EModeToken.ERCToken,
     };
 

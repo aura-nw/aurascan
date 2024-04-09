@@ -74,6 +74,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   destroyed$ = new Subject<void>();
   linkAddress: string;
   isExistDenom = false;
+  channelPath: any;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -126,9 +127,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       if (this.isExistDenom) {
         this.getListTransactionTokenIBC(nextKey);
       } else {
-        this.tokenService.pathDenom$
-          .pipe(takeUntil(this.destroyed$))
-          .subscribe(() => this.isExistDenom ?? this.getListTransactionTokenIBC(nextKey));
+        this.tokenService.pathDenom$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+          if (!this.isExistDenom) {
+            this.channelPath = res;
+            this.getListTransactionTokenIBC();
+          }
+        });
         this.isExistDenom = true;
       }
     }
@@ -270,7 +274,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getListTransactionTokenIBC(nextKey = null) {
-    const denomFilter = this.tokenDetail?.channelPath?.path + '/' + this.tokenDetail?.channelPath?.base_denom;
+    const denomFilter = this.channelPath?.path + '/' + this.channelPath?.base_denom;
     let payload = {
       limit: this.pageData.pageSize,
       heightLT: nextKey,
