@@ -4,15 +4,14 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
+import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TokenService } from 'src/app/core/services/token.service';
-
-import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { TokenService } from 'src/app/core/services/token.service';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { convertTxIBC } from 'src/app/global/global';

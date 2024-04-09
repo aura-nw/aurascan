@@ -573,8 +573,9 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   handleGetData(data) {
     if (data?.transaction?.length > 0 || data?.evm_transaction?.length > 0) {
       this.nextKey = null;
-      if (data?.transaction?.length >= 100) {
-        this.nextKey = data?.transaction[data?.transaction?.length - 1]?.height;
+      const lstData = data?.transaction || data?.evm_transaction;
+      if (lstData?.length >= 100) {
+        this.nextKey = lstData[lstData?.length - 1]?.height;
       }
 
       let setReceive = false;

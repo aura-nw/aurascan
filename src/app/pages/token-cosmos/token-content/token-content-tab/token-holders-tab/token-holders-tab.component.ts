@@ -70,6 +70,10 @@ export class TokenHoldersTabComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.tokenDetail?.modeToken === this.EModeToken.Native) {
+      this.pageData.pageSize = 50;
+    }
+
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.getListData();
 
