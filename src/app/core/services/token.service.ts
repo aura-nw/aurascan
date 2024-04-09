@@ -590,7 +590,7 @@ export class TokenService extends CommonService {
           symbol
           total_supply
           evm_smart_contract {
-            evm_contract_verifications {
+            evm_contract_verifications(order_by: {id: desc}) {
               status
             }
           }
