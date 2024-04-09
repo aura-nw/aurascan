@@ -62,10 +62,6 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
       this.contractDetail = res;
 
       this.contractAbiString = this.contractDetail?.abi ? JSON.stringify(this.contractDetail?.abi) : '-';
-
-      if (this.contractDetail.type.startsWith('PROXY')) {
-        this.getProxyContractAbi(this.contractsAddress);
-      }
     });
   }
 
@@ -127,7 +123,11 @@ export class EvmContractComponent implements OnInit, OnDestroy, OnChanges {
   getListContractInfo(address) {
     this.contractService.getListContractInfo(address).subscribe((res) => {
       if (res?.evm_contract_verification?.length > 0) {
-        this.isImplementationVerified = res.evm_contract_verification[0]?.status;
+        this.isImplementationVerified =
+          res.evm_contract_verification[0]?.status === ContractVerifyType.Verified ? true : false;
+        if (this.isImplementationVerified) {
+          this.getProxyContractAbi(this.contractsAddress);
+        }
       }
     });
   }

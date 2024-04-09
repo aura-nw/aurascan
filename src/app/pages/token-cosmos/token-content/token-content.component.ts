@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
@@ -62,6 +62,7 @@ export class TokenContentComponent implements OnInit {
     private tokenService: TokenService,
     private nameTagService: NameTagService,
     private contractService: ContractService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -112,6 +113,13 @@ export class TokenContentComponent implements OnInit {
   }
 
   handleSearch() {
+    const queryParams = this.route.snapshot?.queryParams?.a;
+    if (!queryParams && this.textSearch?.length > 0) {
+      this.redirectPage(`/token/${this.linkAddress}`, {
+        a: this.textSearch,
+      });
+    }
+
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
@@ -143,22 +151,20 @@ export class TokenContentComponent implements OnInit {
         });
       }
       this.TABS = tempTabs || this.tabsBackup;
-      this.route.queryParams.subscribe((params) => {
-        if (!params?.a) {
-          window.location.href = `/token/${this.linkAddress}?a=${encodeURIComponent(this.paramQuery)}`;
-        }
-      });
     } else {
       this.textSearch = '';
     }
+  }
+
+  redirectPage(urlLink: string, queryParams?: any) {
+    this.router.navigate([urlLink], { queryParams });
   }
 
   resetSearch() {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-
-      window.location.href = `/token/${params.contractAddress}`;
+      this.redirectPage(`/token/${params.contractAddress}`);
     }
   }
 

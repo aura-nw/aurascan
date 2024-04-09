@@ -82,7 +82,7 @@
     }
   },
   "MENUITEMS": {
-    "CODE-LIST": "Cosmos Code ID",
+    "CODE-LIST": " CosmWasm Code ID",
     "CHART-STATS": "Chart & Stats",
     "TOP-STATISTICS": "Top Statistics",
     "MULTI-SEND": "Multi-send",
@@ -90,7 +90,7 @@
     "RESOURCES": "Resources",
     "BLOCKCHAIN": "Blockchain",
     "TOKEN": "Assets",
-    "CONTRACT": "Cosmos Contracts",
+    "CONTRACT": "CosmWasm Contracts",
     "EVM_CONTRACT": "EVM Contracts",
     "DASHBOARDS": "Dashboard",
     "VALIDATORS": "Validators",
