@@ -44,9 +44,6 @@ export class PopupProxyContractComponent implements OnInit {
 
   closeDialog(status = null) {
     this.dialogRef.close(status);
-    if (this.displayMode === this.modePopup.SUCCESS && status === 'close') {
-      window.history.back();
-    }
   }
 
   navigateToVerify() {

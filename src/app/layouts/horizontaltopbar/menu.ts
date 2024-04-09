@@ -102,7 +102,7 @@ export const MENU: MenuItem[] = [
         name: MenuName.TokenCW20,
         icon: 'coins',
         featureName: EFeature.Cw20,
-        activeString: ['/token/cw20', '/token/evm/erc20', '/token/native'],
+        activeString: ['/token/cw20', '/token/evm/erc20', '/token/native', '/token/ibc'],
       },
       {
         id: 2,
@@ -290,7 +290,7 @@ export const MENU_MOB: MenuItem[] = [
         name: MenuName.TokenCW20,
         icon: 'coins',
         featureName: EFeature.Cw20,
-        activeString: ['/token/cw20', '/token/evm/erc20', '/token/native'],
+        activeString: ['/token/cw20', '/token/evm/erc20', '/token/native', '/token/ibc'],
       },
       {
         id: 2,

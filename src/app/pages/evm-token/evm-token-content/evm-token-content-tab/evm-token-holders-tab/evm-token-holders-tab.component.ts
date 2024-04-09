@@ -109,7 +109,7 @@ export class EvmTokenHoldersTabComponent implements OnInit {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       address: accountAddress || null,
-      isExcludedAddresses: this.tokenDetail.modeToken === this.EModeToken.ERCToken,
+      isExcludedAddresses: false,
     };
 
     this.tokenService
