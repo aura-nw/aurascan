@@ -112,10 +112,6 @@ export class EvmTokenHoldersTabComponent implements OnInit {
       isExcludedAddresses: this.tokenDetail.modeToken === this.EModeToken.ERCToken,
     };
 
-    const tokenSupplyOrigin = BigNumber(this.tokenDetail?.total_supply).multipliedBy(
-      BigNumber(10).pow(this.tokenDetail.decimal),
-    );
-
     this.tokenService
       .getDenomHolder(payload)
       .pipe(
@@ -125,13 +121,14 @@ export class EvmTokenHoldersTabComponent implements OnInit {
           }
 
           this.totalHolder = element?.account_balance_aggregate?.aggregate?.count;
-
           let accountBalance = element['account_balance'];
           if (this.tokenDetail.modeToken === this.EModeToken.ERCToken) {
             accountBalance?.forEach((item) => {
               item.balance = item.amount > 0 ? item.amount : 0;
               item.owner = item.account?.address;
-              item.percent_hold = BigNumber(item.balance).dividedBy(tokenSupplyOrigin).multipliedBy(100);
+              item.percent_hold = BigNumber(item.balance)
+                .dividedBy(BigNumber(this.tokenDetail?.total_supply))
+                .multipliedBy(100);
               item.value =
                 BigNumber(item.balance)
                   .multipliedBy(this.tokenDetail?.price || 0)
