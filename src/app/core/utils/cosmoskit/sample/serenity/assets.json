@@ -1,6 +1,6 @@
 {
   "$schema": "../assetlist.schema.json",
-  "chain_name": "serenity-testnet-001",
+  "chain_name": "auradev_1235-3",
   "assets": [
     {
       "description": "The native token of Aura Network",

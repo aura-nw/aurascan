@@ -1,10 +1,10 @@
 {
   "$schema": "../chain.schema.json",
-  "chain_name": "serenity-testnet-001",
+  "chain_name": "auradev_1235-3",
   "status": "live",
   "network_type": "testnet",
   "pretty_name": "Aura Serenity Network",
-  "chain_id": "serenity-testnet-001",
+  "chain_id": "auradev_1235-3",
   "bech32_prefix": "aura",
   "daemon_name": "aurad",
   "node_home": "$HOME/.aura",
