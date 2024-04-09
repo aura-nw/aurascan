@@ -113,13 +113,20 @@ export class EvmTokenContentComponent implements OnInit {
   }
 
   handleSearch() {
+    const queryParams = this.route.snapshot?.queryParams?.a;
+    if (!queryParams && this.textSearch?.length > 0) {
+      this.redirectPage(`/token/${this.linkAddress}`, {
+        a: this.textSearch,
+      });
+    }
+
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
     if (this.searchTemp?.length > 0) {
       const addressNameTag = this.nameTagService.findNameTag(this.searchTemp);
       this.textSearch = this.searchTemp;
-      this.searchTemp = addressNameTag.name_tag_private || addressNameTag.nameTag || this.textSearch;
+      this.searchTemp = addressNameTag?.name_tag_private || addressNameTag?.nameTag || this.textSearch;
       let tempTabs;
       // check if mode not equal native coin
       if (
@@ -135,21 +142,14 @@ export class EvmTokenContentComponent implements OnInit {
       } else {
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
       }
-
       this.TABS = tempTabs || this.tabsBackup;
-      const queryParams = this.route.snapshot.queryParams.get('a');
-      if (!queryParams) {
-        this.redirectPage(`/token/${this.linkAddress}?a=${encodeURIComponent(this.textSearch)}`);
-      }
     } else {
       this.textSearch = '';
     }
   }
 
-  redirectPage(urlLink: string) {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([urlLink]).then((r) => {});
-    });
+  redirectPage(urlLink: string, queryParams?: any) {
+    this.router.navigate([urlLink], { queryParams });
   }
 
   resetSearch() {
