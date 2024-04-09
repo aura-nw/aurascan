@@ -11,8 +11,23 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <a class="text--primary" [routerLink]="['verify']"> Verify and Publish </a>
+        <a class="text--primary" [routerLink]="['/evm-contracts', contractAddress, 'verify']"> Verify and Publish </a>
         your contract source code today!
+      </div>
+    </div>
+    <div class="d-flex break-word align-items-center mt-2">
+      <img
+        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+        alt=""
+        width="16"
+        height="16"
+        class="mr-2" />
+      <div>
+        In case this is proxy contract, verify
+        <a class="text--primary" [routerLink]="['/evm-contracts', contractAddress, 'proxy-verify']">
+          Is this a proxy
+        </a>
+        or not?
       </div>
     </div>
     <div
