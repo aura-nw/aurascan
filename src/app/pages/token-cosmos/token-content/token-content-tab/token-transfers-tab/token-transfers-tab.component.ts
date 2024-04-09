@@ -128,7 +128,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         this.getListTransactionTokenIBC(nextKey);
       } else {
         this.tokenService.pathDenom$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-          if (!this.isExistDenom) {
+          if (this.isExistDenom) {
             this.channelPath = res;
             this.getListTransactionTokenIBC();
           }
