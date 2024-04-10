@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+
 @Component({
   selector: 'app-evm-transaction-event-log',
   templateUrl: './evm-transaction-event-log.component.html',

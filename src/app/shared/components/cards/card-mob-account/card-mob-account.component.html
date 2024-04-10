@@ -52,22 +52,20 @@
   </ng-container>
 
   <div
-    *ngIf="content && content.length > 0 && modeQuery !== tabsData.FtsTxs"
+    *ngIf="content?.length > 0 && modeQuery !== tabsData.FtsTxs && modeQuery === tabsData.ExecutedTxs"
     [ngClass]="dataCard?.expand ? 'box-expand' : ''">
-    <ng-container *ngIf="modeQuery === tabsData.ExecutedTxs">
-      <div class="justify-content-between small-body caption-mob mt-3" *ngIf="dataCard?.expand">
-        <ng-container *ngFor="let data of content; let i = index">
-          <div class="d-flex justify-content-between mb-2">
-            <div class="text--gray-4 fw-normal" *ngIf="data.label !== 'Expand'">{{ data.label }}</div>
-            <div
-              *ngIf="data.info"
-              class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
-              [ngClass]="data.label === 'Result' && data['status'] === 'Fail' ? 'text--red-3' : ''"
-              [innerHTML]="data.info"></div>
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
+    <div class="justify-content-between small-body caption-mob mt-3" *ngIf="dataCard?.expand">
+      <ng-container *ngFor="let data of content; let i = index">
+        <div class="d-flex justify-content-between mb-2">
+          <div class="text--gray-4 fw-normal" *ngIf="data.label !== 'Expand'">{{ data.label }}</div>
+          <div
+            *ngIf="data.info"
+            class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
+            [ngClass]="data.label === 'Result' && data['status'] === 'Fail' ? 'text--red-3' : ''"
+            [innerHTML]="data.info"></div>
+        </div>
+      </ng-container>
+    </div>
   </div>
 
   <div
