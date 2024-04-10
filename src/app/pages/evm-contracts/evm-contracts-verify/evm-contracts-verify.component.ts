@@ -24,6 +24,8 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
 
   interupt$ = new Subject<void>();
 
+  MAXIMUM_FILE_SIZE = 5; // 5MB
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -71,7 +73,7 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
 
     const SUPPORTED_FILE_TYPE = [EFileType.Zip, EFileType.Json];
 
-    const MAX_FILE_SIZE = 1024 * 2 * 1000;
+    const MAX_FILE_SIZE = 1024 * 2 * 1000 * this.MAXIMUM_FILE_SIZE;
 
     if (SUPPORTED_FILE_TYPE.includes(file?.type as EFileType) && file?.size <= MAX_FILE_SIZE) {
       this.contractSourceCode = file;
