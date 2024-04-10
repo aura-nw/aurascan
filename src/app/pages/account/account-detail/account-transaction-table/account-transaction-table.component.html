@@ -4,13 +4,13 @@
     *ngIf="modeQuery === tabsData.FtsTxs">
     <div class="button-switch-stage button-fixed mt-lg-0">
       <button
-        class="button body {{ fungibleTokenType === tokenType.ERC20 ? 'button-outline button-outline--gradient' : '' }}"
+        class="button body border-radius--sm"
         (click)="changeTokenType(tokenType.ERC20)"
         [class.active-gradient]="fungibleTokenType === tokenType.ERC20">
         <span>ERC20</span>
       </button>
       <button
-        class="button body {{ fungibleTokenType === tokenType.CW20 ? 'button-outline button-outline--gradient' : '' }}"
+        class="button body border-radius--sm"
         (click)="changeTokenType(tokenType.CW20)"
         [class.active-gradient]="fungibleTokenType === tokenType.CW20">
         <span>CW20</span>

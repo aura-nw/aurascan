@@ -44,6 +44,14 @@ export class EvmTransactionComponent implements OnChanges {
       }[];
       data: string;
     }[];
+    evm_internal_transactions: {
+      type_trace_address: string;
+      from: string;
+      to: string;
+      value: string;
+      gas: string;
+      gas_used: string;
+    }[];
   };
 
   codeTransaction = CodeTransaction;
@@ -171,6 +179,7 @@ export class EvmTransactionComponent implements OnChanges {
       inputData: _.get(tx, 'evm_transaction.data'),
       eventLog: evm_events,
       contractAddress: _.get(tx, 'evm_transaction.contract_address'),
+      evm_internal_transactions: _.get(tx, 'evm_transaction.evm_internal_transactions'),
     };
   }
 }
