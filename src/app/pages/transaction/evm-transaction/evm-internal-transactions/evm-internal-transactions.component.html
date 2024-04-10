@@ -37,7 +37,7 @@
                     {{ data[template.matColumnDef] | number }}
                   </div>
                   <div *ngSwitchCase="'value'">
-                    <ng-container *ngIf="+data[template.matColumnDef] == 0">0.0</ng-container>
+                    <ng-container *ngIf="+data[template.matColumnDef] == 0">0</ng-container>
                     <ng-container *ngIf="+data[template.matColumnDef] > 0">
                       <span
                         [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal }"
@@ -50,8 +50,8 @@
                         [class.cursor-text]="data[template.matColumnDef] | balance: decimal | lt: 1000000"
                         [appBigNumber]="data[template.matColumnDef]"
                         [decimal]="decimal"></span>
-                      <span class="ml-1" appLinkDenom>{{ denom }}</span>
                     </ng-container>
+                    <span class="ml-1" appLinkDenom>{{ denom }}</span>
                   </div>
                   <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                 </ng-container>
@@ -105,7 +105,7 @@
         <div class="mb-3">
           <div class="caption fw-normal text--gray-4">Value</div>
           <div class="text--white body-02">
-            <ng-container *ngIf="+data.value == 0">0.0</ng-container>
+            <ng-container *ngIf="+data.value == 0">0</ng-container>
             <ng-container *ngIf="+data.value > 0">
               <span
                 [appTooltip]="{ priceAmount: data.value, decimal }"
@@ -118,8 +118,8 @@
                 [class.cursor-text]="data.value | balance: decimal | lt: 1000000"
                 [appBigNumber]="data.value"
                 [decimal]="decimal"></span>
-              <span class="ml-1" appLinkDenom>{{ denom }}</span>
             </ng-container>
+            <span class="ml-1" appLinkDenom>{{ denom }}</span>
           </div>
         </div>
         <div [class.mb-3]="!isLast">

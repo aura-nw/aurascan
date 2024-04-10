@@ -99,16 +99,11 @@ export class EvmTokenHoldersTabComponent implements OnInit {
   }
 
   getDenomHolder() {
-    const { accountAddress, accountEvmAddress } = transferAddress(
-      this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
-      this.keyWord,
-    );
-
     const payload = {
       denomHash: this.contractAddress,
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      address: accountAddress || null,
+      address: this.keyWord || null,
       isExcludedAddresses: false,
     };
 
@@ -125,10 +120,13 @@ export class EvmTokenHoldersTabComponent implements OnInit {
           if (this.tokenDetail.modeToken === this.EModeToken.ERCToken) {
             accountBalance?.forEach((item) => {
               item.balance = item.amount > 0 ? item.amount : 0;
-              item.owner = item.account?.address;
-              item.percent_hold = BigNumber(item.balance)
-                .dividedBy(BigNumber(this.tokenDetail?.total_supply))
-                .multipliedBy(100);
+              item.owner = item.account?.evm_address;
+              item.percent_hold =
+                +this.tokenDetail?.total_supply > 0
+                  ? BigNumber(item.balance)
+                      .dividedBy(BigNumber(this.tokenDetail?.total_supply))
+                      .multipliedBy(100)
+                  : 0;
               item.value =
                 BigNumber(item.balance)
                   .multipliedBy(this.tokenDetail?.price || 0)

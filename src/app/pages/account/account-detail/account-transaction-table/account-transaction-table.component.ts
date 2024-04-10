@@ -641,6 +641,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
       this.pageData.length = this.dataSource.data.length;
+
+      this.expandData(this.dataSource.data[0]);
     }
   }
 
@@ -649,7 +651,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   expandData(data) {
-    if (data.arrEvent?.length <= 1) {
+    if (data.arrEvent?.length <= 1 || !data) {
       return;
     }
     data.limit = 6;
@@ -673,6 +675,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     const next = length <= (pageIndex + 2) * pageSize;
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
     this.pageData = e;
+
+    this.expandData(this.dataSource.data[pageIndex * pageSize]);
 
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getTxsAddress(this.nextKey);
