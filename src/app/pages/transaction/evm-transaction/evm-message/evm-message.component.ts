@@ -1,8 +1,8 @@
-import {Component, Input} from '@angular/core';
-import {Interface, parseEther} from 'ethers';
-import {EMethodContract} from 'src/app/core/constants/common.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TransactionService} from 'src/app/core/services/transaction.service';
+import { Component, Input } from '@angular/core';
+import { Interface, parseEther } from 'ethers';
+import { EMethodContract } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 
 @Component({
   selector: 'app-evm-message',
@@ -88,14 +88,13 @@ export class EvmMessageComponent {
       to: '0xad148890efd358dda9987a4e18c0e2ff2320e4cd',
       value: '0',
       gas: 331872023,
-    }
+    },
   ];
 
   constructor(
     private transactionService: TransactionService,
     public env: EnvironmentService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.inputDataRaw['methodId'] = this.transaction?.inputData?.substring(0, 8);
@@ -124,7 +123,7 @@ export class EvmMessageComponent {
         this.interfaceCoder = new Interface(res.evm_contract_verification[0].abi);
 
         const value = parseEther('1.0');
-        const rawData = this.interfaceCoder.parseTransaction({data: '0x' + this.transaction?.inputData, value});
+        const rawData = this.interfaceCoder.parseTransaction({ data: '0x' + this.transaction?.inputData, value });
         if (rawData?.fragment?.inputs?.length > 0) {
           this.getListTopicDecode();
           this.inputDataRaw['name'] =
@@ -151,8 +150,7 @@ export class EvmMessageComponent {
             .decodeEventLog(element.topic0, `0x${this.transaction?.inputData}`, element.topics)
             .toArray() || [];
         arrTopicTemp = [...this.arrTopicDecode[index], ...arrTemp];
-      } catch (e) {
-      }
+      } catch (e) {}
 
       this.arrTopicDecode[index] = arrTopicTemp;
     });

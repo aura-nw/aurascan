@@ -1,7 +1,7 @@
 <ng-container *ngIf="extendedAbi; else noValues">
   <div class="d-flex justify-content-between contract__title">
     <div class="d-flex align-items-center">
-      <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px"/>
+      <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px" />
       <span class="body-02 text--gray-1 ml-2">Read Contract Information</span>
     </div>
     <div class="caption fw-normal d-flex align-items-center">
@@ -40,7 +40,7 @@
                 }"
                 class="form-check-input col-12 mb-4"
                 [type]="item.type"
-                placeholder="{{ item.name }} ({{ item.type }})"/>
+                placeholder="{{ item.name }} ({{ item.type }})" />
             </ng-container>
           </ng-container>
 
@@ -57,7 +57,7 @@
                 class="mr-2"
                 width="20"
                 height="20"
-                *ngIf="jsonFragment.isLoading"/>
+                *ngIf="jsonFragment.isLoading" />
 
               Query
             </button>
@@ -68,7 +68,7 @@
               class="mr-2"
               width="20"
               height="20"
-              *ngIf="jsonFragment.isLoading && jsonFragment.inputs?.length == 0"/>
+              *ngIf="jsonFragment.isLoading && jsonFragment.inputs?.length == 0" />
           </div>
 
           <div class="px-0">

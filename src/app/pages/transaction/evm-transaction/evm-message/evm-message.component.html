@@ -122,10 +122,7 @@
           [disabled]="isCreateContract">
           <span>{{ 'Event log' }}</span>
         </button>
-        <button
-          (click)="showAll = false"
-          class="button body-04 border-radius--sm"
-          [class.active-gradient]="!showAll">
+        <button (click)="showAll = false" class="button body-04 border-radius--sm" [class.active-gradient]="!showAll">
           <span>Internal Transactions</span>
         </button>
       </div>
@@ -143,7 +140,8 @@
         </div>
       </div>
       <div class="box-data box mt-2" *ngIf="!showAll">
-        <app-evm-internal-transactions [dataTable]="transaction.evm_internal_transactions"></app-evm-internal-transactions>
+        <app-evm-internal-transactions
+          [dataTable]="transaction.evm_internal_transactions"></app-evm-internal-transactions>
       </div>
     </div>
   </div>

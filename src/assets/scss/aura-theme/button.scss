@@ -156,7 +156,7 @@ button,
     &--gradient {
       border: solid 1px transparent;
       background-image: linear-gradient(#000, #000),
-      linear-gradient(339deg, #ffd569 23.57%, #fc8e4f 50.76%, #ff697b 76.37%);
+        linear-gradient(339deg, #ffd569 23.57%, #fc8e4f 50.76%, #ff697b 76.37%);
       background-origin: border-box;
       background-clip: content-box, border-box;
       box-shadow: 2px 1000px 1px #141416 inset;
@@ -240,7 +240,6 @@ button,
     }
 
     @media (max-width: 991.98px) {
-
       &.button--lg-mob,
       &.button--md-mob {
         padding-right: var(--spacer-11);
@@ -290,7 +289,6 @@ button,
     }
 
     &.button-flat {
-
       &:before,
       &:after {
         background: url('../../icons/icons-svg/black/caret-down-black.svg') center no-repeat;

@@ -11,12 +11,12 @@
           <span class="text--white">Connect Wallet</span>
         </button>
 
-        <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet justify-content-between justify-content-lg-start">
+        <div
+          *ngIf="ng.wallet"
+          class="d-flex align-items-center box-connect-wallet justify-content-between justify-content-lg-start">
           <div class="button button-pill button-outline button--xs caption fw-normal">
             <span class="icon-connect connected"></span>
-            <span
-              class="text--gray-1 d-flex align-items-center"
-              [copyBtn]="ng.wallet?.address">
+            <span class="text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
               <span class="txt-wallet cursor-pointer" [routerLink]="['/address/', ng.wallet?.address]">
                 Connected [<ng-container *ngIf="ng.wallet?.cosmosAccount?.username">
                   {{ ng.wallet?.cosmosAccount?.username | ellipsis: 16 }}
@@ -38,12 +38,12 @@
                 alt=""
                 width="18px"
                 height="18px"
-                class="ml-1"/>
+                class="ml-1" />
             </div>
           </ng-container>
         </div>
         <div class="warning-wrapper" *ngIf="ng.wallet?.cosmosAccount">
-          <img src="assets/icons/icons-svg/color/warning.svg" alt="warning"/>
+          <img src="assets/icons/icons-svg/color/warning.svg" alt="warning" />
           <span>Need to connect by EVM address to interact with EVM contract</span>
         </div>
       </div>
@@ -131,7 +131,7 @@
                   class="mr-2"
                   width="20"
                   height="20"
-                  *ngIf="jsonFragment.isLoading"/>
+                  *ngIf="jsonFragment.isLoading" />
 
                 <span>Write</span>
               </button>

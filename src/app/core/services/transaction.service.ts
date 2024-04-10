@@ -1,12 +1,12 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import axios from 'axios';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {CW20_TRACKING, CW721_TRACKING} from '../constants/common.constant';
-import {LCD_COSMOS} from '../constants/url.constant';
-import {EnvironmentService} from '../data-services/environment.service';
-import {CommonService} from './common.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
+import { EnvironmentService } from '../data-services/environment.service';
+import { CommonService } from './common.service';
 
 @Injectable()
 export class TransactionService extends CommonService {
