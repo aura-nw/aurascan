@@ -116,19 +116,21 @@
     <div class="col-12 mb-2 mb-lg-0 text--gray-4 body">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
         <button
-          (click)="showAll = true"
+          type="button"
+          (click)="isLog = true"
           class="button body-04 border-radius--sm"
-          [class.active-gradient]="showAll"
-          [disabled]="isCreateContract">
+          [class.active-gradient]="isLog">
           <span>{{ 'Event log' }}</span>
         </button>
-        <button (click)="showAll = false" class="button body-04 border-radius--sm" [class.active-gradient]="!showAll">
+        <button
+          type="button"
+          (click)="isLog = false" class="button body-04 border-radius--sm" [class.active-gradient]="!isLog">
           <span>Internal Transactions</span>
         </button>
       </div>
     </div>
     <div class="col-12">
-      <div class="box-data box mt-2" *ngIf="showAll">
+      <div class="box-data box mt-2" *ngIf="isLog">
         <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog?.length }})</div>
         <div class="">
           <app-evm-transaction-event-log
@@ -139,7 +141,7 @@
           </app-evm-transaction-event-log>
         </div>
       </div>
-      <div class="box-data box mt-2" *ngIf="!showAll">
+      <div class="box-data box mt-2" *ngIf="!isLog">
         <app-evm-internal-transactions
           [dataTable]="transaction.evm_internal_transactions"></app-evm-internal-transactions>
       </div>
