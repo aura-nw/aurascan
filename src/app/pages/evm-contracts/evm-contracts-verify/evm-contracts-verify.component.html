@@ -20,7 +20,9 @@
         <div class="col-12">
           <h4 class="text--white mb-1">Add file</h4>
           <div class="d-flex justify-content-between w-100 mb-4">
-            <div class="body-02 caption-mob fw-normal-mob text--gray-6">Format: Zip/Json. Maximum size: 1MB</div>
+            <div class="body-02 caption-mob fw-normal-mob text--gray-6">
+              Format: Zip/Json. Maximum size: {{ MAXIMUM_FILE_SIZE }}MB
+            </div>
             <div
               *ngIf="contractSourceCode"
               class="body-02 caption-mob fw-normal-mob text--primary cursor-pointer"

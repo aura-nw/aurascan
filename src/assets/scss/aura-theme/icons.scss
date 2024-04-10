@@ -1,10 +1,12 @@
 @import 'icons-variable';
+
 .aura-icon {
   font-size: 20px;
   position: relative;
   width: 1em;
   height: 1em;
   display: inline-block;
+
   &::before {
     content: '';
     position: absolute;
@@ -39,6 +41,7 @@
       background-size: contain;
       transition: background 0.35s ease-in-out;
     }
+
     @media (min-width: 992px) {
       &:hover {
         &::before {
@@ -47,6 +50,7 @@
         }
       }
     }
+
     &:active {
       &::before {
         background: url('../../icons/icons-svg/color/#{$icon-name}.svg') no-repeat center;
@@ -55,11 +59,24 @@
     }
   }
 }
+
 @each $icon-name in $icon-black-variables {
   .icon-#{$icon-name} {
     &::before {
       background: url('../../icons/icons-svg/black/#{$icon-name}.svg') no-repeat center;
       background-size: contain;
     }
+  }
+}
+
+.icon-connect {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background-color: var(--aura-danger);
+
+  &.connected {
+    background-color: var(--aura-blue-4);
   }
 }

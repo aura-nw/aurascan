@@ -25,6 +25,7 @@ import { MessagesItemComponent } from './transaction-messages/messages-item/mess
 import { TransactionMessagesComponent } from './transaction-messages/transaction-messages.component';
 import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
+import { EvmInternalTransactionsComponent } from './evm-transaction/evm-internal-transactions/evm-internal-transactions.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { TransactionComponent } from './transaction.component';
     EvmTransactionComponent,
     EvmMessageComponent,
     EvmTransactionEventLogComponent,
+    EvmInternalTransactionsComponent,
   ],
   imports: [
     CommonModule,
