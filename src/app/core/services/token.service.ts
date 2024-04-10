@@ -526,6 +526,7 @@ export class TokenService extends CommonService {
         account_balance(where: {account: {address: {_eq: $address, _nin: $addressNotIn}}, denom: {_eq: $denom}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           account {
             address
+            evm_address
           }
           amount
         }
