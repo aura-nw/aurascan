@@ -132,19 +132,19 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         id: 1,
-        label: 'MENUITEMS.CONTRACT',
-        icon: 'newspaper',
-        link: '/contracts',
-        name: MenuName.Contract,
-        activeString: '/contracts',
-      },
-      {
-        id: 2,
         label: 'MENUITEMS.EVM_CONTRACT',
         icon: 'newspaper',
         link: '/evm-contracts',
         name: MenuName.EvmContract,
         activeString: '/evm-contracts',
+      },
+      {
+        id: 2,
+        label: 'MENUITEMS.CONTRACT',
+        icon: 'newspaper',
+        link: '/contracts',
+        name: MenuName.Contract,
+        activeString: '/contracts',
       },
       {
         id: 3,
@@ -320,19 +320,19 @@ export const MENU_MOB: MenuItem[] = [
     subItems: [
       {
         id: 1,
-        label: 'MENUITEMS.CONTRACT',
-        icon: 'newspaper',
-        link: '/contracts',
-        name: MenuName.Contract,
-        activeString: '/contracts',
-      },
-      {
-        id: 2,
         label: 'MENUITEMS.EVM_CONTRACT',
         icon: 'newspaper',
         link: '/evm-contracts',
         name: MenuName.EvmContract,
         activeString: '/evm-contracts',
+      },
+      {
+        id: 2,
+        label: 'MENUITEMS.CONTRACT',
+        icon: 'newspaper',
+        link: '/contracts',
+        name: MenuName.Contract,
+        activeString: '/contracts',
       },
       {
         id: 3,

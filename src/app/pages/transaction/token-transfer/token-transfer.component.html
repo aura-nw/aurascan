@@ -29,22 +29,34 @@
                           height="20"
                           alt="" />
                         <div class="ml-2 ml-sm-3 d-flex transfer-token-info">
+                          <ng-container *ngIf="data | marketInfo: 'symbol'">
+                            <span
+                              [appTooltip]="data | marketInfo: 'symbol'"
+                              class="caption-mob text-sm mb-1"
+                              [appLinkDenom]="
+                                (data | marketInfo: 'symbol') == coinInfo.coinDenom
+                                  ? coinInfo.coinMinimalDenom
+                                  : data?.cw20_contract?.ibc_denom || data?.erc20_contract?.evm_smart_contract?.address
+                              "
+                              [isDisable]="
+                                (data | marketInfo: 'symbol') != coinInfo.coinDenom &&
+                                !data?.cw20_contract?.ibc_denom &&
+                                !data?.erc20_contract?.symbol
+                              ">
+                              {{ data?.erc20_contract?.evm_smart_contract?.address }}
+                              {{
+                                (data | marketInfo: 'symbol')
+                                  ? (data | marketInfo: 'symbol' | ellipsis: maxLengthSymbol)
+                                  : data?.erc20_contract?.evm_smart_contract?.address
+                              }}
+                            </span>
+                          </ng-container>
                           <span
-                            *ngIf="data | marketInfo: 'symbol'"
-                            [appTooltip]="data | marketInfo: 'symbol'"
-                            class="caption-mob text-sm mb-1"
-                            [appLinkDenom]="
-                              (data | marketInfo: 'symbol') == coinInfo.coinDenom
-                                ? coinInfo.coinMinimalDenom
-                                : data?.cw20_contract?.ibc_denom || data?.erc20_contract?.evm_smart_contract.address
-                            "
-                            [isDisable]="
-                              (data | marketInfo: 'symbol') != coinInfo.coinDenom &&
-                              !data?.cw20_contract?.ibc_denom &&
-                              !data?.erc20_contract?.symbol
-                            ">
-                            {{ data | marketInfo: 'symbol' | ellipsis: maxLengthSymbol }}
+                            *ngIf="!(data | marketInfo: 'symbol') && data?.erc20_contract?.evm_smart_contract?.address"
+                            [appLinkDenom]="data?.erc20_contract?.evm_smart_contract?.address">
+                            {{ data?.erc20_contract?.evm_smart_contract?.address | ellipsis: 8 : 8 }}
                           </span>
+
                           <span *ngIf="!breakpoint.value.matches" class="body-02">
                             {{ data | marketInfo: 'name' | ellipsis: 20 }}
                           </span>
