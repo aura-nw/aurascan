@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ContractService } from 'src/app/core/services/contract.service';
 import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
@@ -14,10 +13,9 @@ export class EvmOverviewComponent {
 
   contractBalance = 0;
   contractValue = 0;
-  contractRegisterType = EvmContractRegisterType;  
+  contractRegisterType = EvmContractRegisterType;
 
   currencies = this.environmentService.chainInfo.currencies[0];
-
   denom = this.currencies?.coinDenom;
   coinMinimalDenom = this.currencies?.coinMinimalDenom;
   decimal = this.currencies?.coinDecimals;
@@ -28,7 +26,6 @@ export class EvmOverviewComponent {
 
   constructor(
     private environmentService: EnvironmentService,
-    private contractService: ContractService,
     public tokenService: TokenService,
   ) {}
 }
