@@ -156,7 +156,7 @@ button,
     &--gradient {
       border: solid 1px transparent;
       background-image: linear-gradient(#000, #000),
-        linear-gradient(339deg, #ffd569 23.57%, #fc8e4f 50.76%, #ff697b 76.37%);
+      linear-gradient(339deg, #ffd569 23.57%, #fc8e4f 50.76%, #ff697b 76.37%);
       background-origin: border-box;
       background-clip: content-box, border-box;
       box-shadow: 2px 1000px 1px #141416 inset;
@@ -509,12 +509,12 @@ button,
     }
 
     &.active-gradient {
-      background: var(--aura-gradient-button);
-      box-shadow: 2px 1000px 1px var(--aura-gray-10) inset;
+      background-color: var(--aura-gray-10);
 
       span {
-        background: var(--aura-gray-10);
-        color: var(--aura-white);
+        background: var(--aura-gradient-button);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     }
   }

@@ -19,11 +19,10 @@
     </div>
   </div>
 
-  <div class="d-flex flex-wrap mb-3" *ngIf="transaction?.inputData">
+  <div class="d-flex flex-wrap mb-4" *ngIf="transaction?.inputData">
     <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4 body">
       {{ 'Input Data' }}
     </div>
-
     <div class="col-12 col-lg-10">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
         <button
@@ -114,13 +113,25 @@
   </div>
 
   <div class="d-flex flex-wrap mb-3" *ngIf="eventLog?.length > 0">
-    <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4 body">
-      {{ 'Event log' }}
+    <div class="col-12 mb-2 mb-lg-0 text--gray-4 body">
+      <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
+        <button
+          (click)="showAll = true"
+          class="button body-04 border-radius--sm"
+          [class.active-gradient]="showAll"
+          [disabled]="isCreateContract">
+          <span>{{ 'Event log' }}</span>
+        </button>
+        <button
+          (click)="showAll = false"
+          class="button body-04 border-radius--sm"
+          [class.active-gradient]="!showAll">
+          <span>Internal Transactions</span>
+        </button>
+      </div>
     </div>
-    <div class="col-12 col-lg-10">
-      <mat-slide-toggle (toggleChange)="showAll = !showAll"> Show all events </mat-slide-toggle>
-
-      <div class="box-data event-log mt-2" *ngIf="showAll">
+    <div class="col-12">
+      <div class="box-data box mt-2" *ngIf="showAll">
         <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog?.length }})</div>
         <div class="">
           <app-evm-transaction-event-log
@@ -130,6 +141,9 @@
             [index]="idx">
           </app-evm-transaction-event-log>
         </div>
+      </div>
+      <div class="box-data box mt-2" *ngIf="!showAll">
+        <app-evm-internal-transactions [dataTable]="transaction.evm_internal_transactions"></app-evm-internal-transactions>
       </div>
     </div>
   </div>

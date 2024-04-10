@@ -14,24 +14,28 @@
   .box-data {
     background-color: var(--aura-gray-9);
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 12px;
     max-height: 558px;
     overflow: auto;
     @media (min-width: 992px) {
       max-height: 330px;
+      padding: 12px 16px;
     }
-    &.event-log {
+
+    &.box {
       max-height: max-content;
     }
 
     .log-content {
       display: flex;
       gap: 24px;
+
       .log {
         &-label {
           width: 110px;
           flex-shrink: 0;
         }
+
         &-data {
           flex-grow: 1;
         }
@@ -45,12 +49,14 @@
 
     .box-raw {
       display: flex;
+
       .index-raw-item {
         width: 90px;
         @media (min-width: 992px) {
           width: 50px;
         }
       }
+
       .font-mono {
         font-family: monospace;
       }
@@ -68,6 +74,7 @@
   .box-input-data {
     width: fit-content;
     border-radius: 8px;
+
     button {
       width: auto;
       padding: 0 16px;
@@ -76,9 +83,11 @@
 
   .box-decoded {
     padding: 8px 12px;
+
     .decoded-header {
       border-bottom: 1px solid var(--aura-gray-6);
     }
+
     .item-decoded {
       border-bottom: 1px solid var(--aura-gray-6);
       align-items: center;
@@ -91,6 +100,7 @@
       }
     }
   }
+
   ::-webkit-scrollbar {
     height: 6px;
   }

@@ -1,0 +1,9 @@
+table.internal-transaction {
+  tr.mat-row {
+    height: 48px;
+  }
+
+  td.mat-cell, th {
+    border-bottom-color: var(--aura-gray-6);
+  }
+}
