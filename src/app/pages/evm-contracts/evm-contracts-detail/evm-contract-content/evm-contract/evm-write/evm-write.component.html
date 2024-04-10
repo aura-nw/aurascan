@@ -11,12 +11,12 @@
           <span class="text--white">Connect Wallet</span>
         </button>
 
-        <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
+        <div
+          *ngIf="ng.wallet"
+          class="d-flex align-items-center box-connect-wallet justify-content-between justify-content-lg-start">
           <div class="button button-pill button-outline button--xs caption fw-normal">
             <span class="icon-connect connected"></span>
-            <span
-              class="fw-semibold fw-normal-mob text--gray-1 d-flex align-items-center"
-              [copyBtn]="ng.wallet?.address">
+            <span class="text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
               <span class="txt-wallet cursor-pointer" [routerLink]="['/address/', ng.wallet?.address]">
                 Connected [<ng-container *ngIf="ng.wallet?.cosmosAccount?.username">
                   {{ ng.wallet?.cosmosAccount?.username | ellipsis: 16 }}
@@ -27,7 +27,7 @@
               </span>
             </span>
           </div>
-          <ng-container *ngIf="!breakpoint.value.matches">
+          <ng-container>
             <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
             <div
               class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center"
@@ -48,27 +48,13 @@
         </div>
       </div>
 
-      <div class="d-flexjustify-content-between align-items-center mt-3 mt-lg-0" *ngIf="!breakpoint.value.matches">
-        <div
-          *ngIf="ng.wallet"
-          class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center"
-          (click)="disconnect()">
-          <span class="txt-disconnect">Disconnect</span>
-          <img
-            [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
-            alt=""
-            width="18px"
-            height="18px"
-            class="ml-1" />
-        </div>
-        <div class="caption fw-normal-mob d-flex align-items-center justify-content-end">
-          <span class="cursor-pointer text--primary" (click)="expandMenu()">
-            <ng-container *ngIf="!isExpand">Expand all</ng-container>
-            <ng-container *ngIf="isExpand">Collapse all</ng-container>
-          </span>
-          <div class="divider divider-vertical"></div>
-          <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
-        </div>
+      <div class="caption fw-normal d-flex align-items-center justify-content-end mt-3 mt-lg-0">
+        <span class="cursor-pointer text--primary" (click)="expandMenu()">
+          <ng-container *ngIf="!isExpand">Expand all</ng-container>
+          <ng-container *ngIf="isExpand">Collapse all</ng-container>
+        </span>
+        <div class="divider divider-vertical"></div>
+        <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
       </div>
     </div>
 
