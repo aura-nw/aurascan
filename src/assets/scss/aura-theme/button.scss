@@ -240,7 +240,6 @@ button,
     }
 
     @media (max-width: 991.98px) {
-
       &.button--lg-mob,
       &.button--md-mob {
         padding-right: var(--spacer-11);
@@ -290,7 +289,6 @@ button,
     }
 
     &.button-flat {
-
       &:before,
       &:after {
         background: url('../../icons/icons-svg/black/caret-down-black.svg') center no-repeat;
@@ -509,12 +507,12 @@ button,
     }
 
     &.active-gradient {
-      background: var(--aura-gradient-button);
-      box-shadow: 2px 1000px 1px var(--aura-gray-10) inset;
+      background-color: var(--aura-gray-10);
 
       span {
-        background: var(--aura-gray-10);
-        color: var(--aura-white);
+        background: var(--aura-gradient-button);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     }
   }

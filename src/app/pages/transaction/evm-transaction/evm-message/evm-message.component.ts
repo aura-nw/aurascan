@@ -32,7 +32,7 @@ export class EvmMessageComponent {
   inputDataRaw = {};
   inputDataDecoded = {};
 
-  showAll = false;
+  isLog = true;
   method;
   isDecoded = false;
   isContractVerified = false;

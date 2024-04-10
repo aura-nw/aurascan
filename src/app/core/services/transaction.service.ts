@@ -97,6 +97,14 @@ export class TransactionService extends CommonService {
                 address
               }
             }
+           evm_internal_transactions {
+              type_trace_address
+              from
+              to
+              value
+              gas
+              gas_used
+           }
           }
         }
       }
