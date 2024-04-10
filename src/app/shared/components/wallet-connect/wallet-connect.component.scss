@@ -13,32 +13,25 @@
   cursor: unset;
 }
 
-.icon-connect {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  margin-right: 7px;
-  background-color: var(--aura-danger);
-  &.connected {
-    background-color: var(--aura-green-3);
-  }
-}
-
 .box-connect-wallet {
   .divider-vertical {
     height: 32px;
   }
+
   .aura-tooltip-object {
     background: none;
   }
+
   .txt-wallet,
   .txt-disconnect:hover {
     text-decoration: underline;
     text-underline-offset: 2px;
   }
+
   .txt-disconnect:hover {
     color: var(--aura-blue-4);
   }
+
   @media (max-width: 992px) {
     width: 100%;
     justify-content: space-between;
