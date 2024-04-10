@@ -43,7 +43,6 @@
                                 !data?.cw20_contract?.ibc_denom &&
                                 !data?.erc20_contract?.symbol
                               ">
-                              {{ data?.erc20_contract?.evm_smart_contract?.address }}
                               {{
                                 (data | marketInfo: 'symbol')
                                   ? (data | marketInfo: 'symbol' | ellipsis: maxLengthSymbol)
