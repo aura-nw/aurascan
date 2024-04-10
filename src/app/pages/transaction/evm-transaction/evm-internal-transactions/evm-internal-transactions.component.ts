@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -9,7 +9,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   templateUrl: './evm-internal-transactions.component.html',
   styleUrls: ['./evm-internal-transactions.component.scss'],
 })
-export class EvmInternalTransactionsComponent implements OnChanges {
+export class EvmInternalTransactionsComponent implements OnInit {
   @Input() dataTable = [];
   isLoadingTx = true;
 
@@ -31,7 +31,7 @@ export class EvmInternalTransactionsComponent implements OnChanges {
     private layout: BreakpointObserver,
   ) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnInit(): void {
     this.dataSourceTx.data = this.dataTable;
     this.isLoadingTx = false;
   }
