@@ -85,6 +85,14 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
       address: this.nftFilter || null,
     };
 
+    // TODO, set null list erc721
+    if (this.typeToken === ETokenNFTTypeBE.ERC721) {
+      this.pageData.length = 0;
+      this.searchNotFound = true;
+      this.nftList = [];
+      return;
+    }
+
     if (this.nftFilter) {
       if (this.textSearch.length === LENGTH_CHARACTER.CONTRACT && this.textSearch !== this.nftFilter) {
         this.nftList = [];
@@ -211,5 +219,6 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
 
   changeType(type: string): void {
     this.typeToken = type;
+    this.getNftData();
   }
 }
