@@ -67,10 +67,11 @@
       </ng-container>
     </div>
   </div>
-
+  <!-- NFT transfer -->
   <div
     *ngIf="dataCard?.expand && modeQuery !== tabsData.ExecutedTxs && modeQuery !== tabsData.FtsTxs"
-    class="box-expand">
+    class="box-expand"
+    [style.max-height.px]="dataCard?.maximumExpanded * 46 + 16 * dataCard?.maximumExpanded">
     <div class="content-expand">
       <ng-container *ngFor="let item of dataCard.arrEvent">
         <div class="d-flex align-items-center justify-content-between item-expand">
@@ -154,7 +155,7 @@
               <i
                 [style]="'margin-top: 2px'"
                 class="ph-arrow-square-out-fill body-01-mob cursor-pointer mr-1 ml-2"
-                [routerLink]="['/token', item.contractAddress, item.tokenId]"></i>
+                [routerLink]="['/token/cw721', item.contractAddress, item.tokenId]"></i>
             </div>
           </div>
         </div>
@@ -162,7 +163,12 @@
     </div>
   </div>
 
-  <div *ngIf="dataCard?.expand && modeQuery === tabsData.FtsTxs" class="box-expand">
+  <!--  Fungible Token Transfer  -->
+
+  <div
+    *ngIf="dataCard?.expand && modeQuery === tabsData.FtsTxs"
+    class="box-expand"
+    [style.max-height.px]="dataCard?.maximumExpanded * 46 + 16 * dataCard?.maximumExpanded">
     <div class="content-expand">
       <ng-container *ngFor="let item of dataCard.arrEvent">
         <!-- Cosmos -->
@@ -274,5 +280,14 @@
         </ng-container>
       </ng-container>
     </div>
+  </div>
+  <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="dataCard.arrEvent?.length > 5 && dataCard.expand">
+    <span
+      (click)="seeMoreData(dataCard)"
+      *ngIf="dataCard.maximumExpanded < dataCard.arrEvent?.length"
+      class="cursor-pointer mr-8"
+      >See more</span
+    >
+    <span (click)="collapseData(dataCard)" class="cursor-pointer">Collapse all</span>
   </div>
 </div>

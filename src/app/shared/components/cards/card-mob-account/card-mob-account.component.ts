@@ -98,10 +98,35 @@ export class CardMobAccountComponent implements OnInit {
         element.isFromAddress = false;
       }
     });
+    this.initMaximumExpandData(this.dataCard);
+    // console.log(this.dataCard?.arrEvent)
     this.dataCard.expand = this.expand;
+  }
+
+  initMaximumExpandData(data) {
+    // maximum first expand is 5 (if data <5 -> maximum is data length)
+    if (data.arrEvent?.length >= 5) {
+      data.maximumExpanded = 5;
+    } else {
+      data.maximumExpanded = data.arrEvent?.length;
+    }
   }
 
   expandData(data) {
     data.expand = true;
+  }
+
+  collapseData(data) {
+    data.expand = false;
+    this.initMaximumExpandData(data);
+  }
+
+  seeMoreData(data) {
+    if (data.maximumExpanded < data.arrEvent.length) {
+      data.maximumExpanded += 5;
+      if (data.maximumExpanded > data.arrEvent.length) {
+        data.maximumExpanded = data.arrEvent.length;
+      }
+    }
   }
 }
