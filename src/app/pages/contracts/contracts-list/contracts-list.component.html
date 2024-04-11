@@ -163,17 +163,25 @@
                   </ng-container>
 
                   <ng-container *ngIf="template.matColumnDef === 'token_tracker'">
-                    <a *ngIf="data['token_tracker']" [appTooltip]="data['token_tracker']" [routerLink]="data.url">
-                      {{ data['token_tracker'] | ellipsis: 18 }}
-                    </a>
-                    <span
-                      *ngIf="
-                        !data['code']?.type ||
-                        (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
-                        (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
-                      ">
-                      -
-                    </span>
+                    <div class="d-flex align-items-center">
+                      <div *ngIf="data['token_tracker']" [appTooltip]="data['token_tracker']">
+                        {{ data['token_tracker'] | ellipsis: 18 }}
+                      </div>
+                      <span
+                        *ngIf="
+                          !data['code']?.type ||
+                          (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
+                          (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
+                        ">
+                        -
+                      </span>
+                      <a
+                        *ngIf="data['token_tracker']"
+                        class="ml-1 p-0 button button--ssm button-ghost"
+                        [routerLink]="data.url">
+                        <i class="ph-arrow-square-out-fill text--primary body-01 h3-mob mb-0"></i>
+                      </a>
+                    </div>
                   </ng-container>
                   <ng-container
                     *ngIf="
