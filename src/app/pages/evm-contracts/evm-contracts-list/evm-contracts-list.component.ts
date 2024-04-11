@@ -128,7 +128,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
         break;
       case EvmContractRegisterType.ERC20:
       case EvmContractRegisterType.ERC721:
-      case EvmContractRegisterType.ERC1155:
+      // case EvmContractRegisterType.ERC1155:
       case '': //Others
       default:
         if (i >= 0) {

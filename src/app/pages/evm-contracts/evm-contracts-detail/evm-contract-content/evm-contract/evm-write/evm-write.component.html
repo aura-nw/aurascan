@@ -22,7 +22,7 @@
                   {{ ng.wallet?.cosmosAccount?.username | ellipsis: (!breakpoint.value.matches ? 16 : 8) }}
                 </ng-container>
                 <ng-container *ngIf="!ng.wallet?.cosmosAccount?.username">
-                  {{ ng.wallet?.address | ellipsis: 8 : 8 }} </ng-container
+                  {{ ng.wallet?.address | ellipsis: 8 : (!breakpoint.value.matches ? 8 : null) }} </ng-container
                 >]
               </span>
             </span>

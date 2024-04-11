@@ -20,12 +20,12 @@
       (click)="filterButton(EvmContractRegisterType.ERC721)">
       ERC721
     </button>
-    <button
+    <!-- <button
       class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes(EvmContractRegisterType.ERC1155)"
       (click)="filterButton(EvmContractRegisterType.ERC1155)">
       ERC1155
-    </button>
+    </button> -->
     <button
       class="button button-pill button-flat body-02 caption-mob"
       [class.active]="filterButtons.includes('Others')"
@@ -121,14 +121,20 @@
                     <div class="text-nowrap" *ngSwitchCase="'name'" [appTooltip]="data[template.matColumnDef]">
                       {{ (data[template.matColumnDef] | ellipsis: 28) || '-' }}
                     </div>
-                    <div *ngSwitchCase="'token_tracker'">
-                      <a
-                        *ngIf="data['token_tracker']"
-                        [appTooltip]="data['token_tracker']"
-                        [routerLink]="['/token', data['address']]">
+                    <div *ngSwitchCase="'token_tracker'" class="d-flex align-items-center">
+                      <div *ngIf="data['token_tracker']" [appTooltip]="data['token_tracker']">
                         {{ data['token_tracker'] | ellipsis: 18 }}
+                      </div>
+                      <span *ngIf="!data['token_tracker']">--</span>
+                      <a
+                        *ngIf="
+                          data['type'] === EvmContractRegisterType.ERC20 ||
+                          data['type'] === EvmContractRegisterType.ERC721
+                        "
+                        class="ml-1 p-0 button button--ssm button-ghost"
+                        [routerLink]="['/token', data['address']]">
+                        <i class="ph-arrow-square-out-fill text--primary body-01 h3-mob mb-0"></i>
                       </a>
-                      <span *ngIf="!data['token_tracker']">-</span>
                     </div>
                     <ng-container *ngSwitchCase="'creator'">
                       <app-name-tag
