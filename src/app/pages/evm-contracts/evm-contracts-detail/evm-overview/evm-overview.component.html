@@ -61,6 +61,10 @@
         <div class="d-flex align-items-center">
           <div class="text--gray-4 caption fw-normal mb-1">Token Tracker</div>
           <a
+            *ngIf="
+              contractDetail?.type === contractRegisterType.ERC20 ||
+              contractDetail?.type === contractRegisterType.ERC721
+            "
             class="ml-1 p-0 button button--ssm mb-1"
             [routerLink]="['/token', contractDetail?.address]">
             <i class="ph-arrow-square-out-fill text--primary body-01 h3-mob mb-0"></i>

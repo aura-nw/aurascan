@@ -86,6 +86,7 @@
                     </span>
                     <span
                       [decimal]="tokenDetail.decimal"
+                      [numberDecimal]="environmentService?.isMobile ? 2 : 6"
                       [appBigNumber]="tokenDetail.supplyAmount || 0"
                       *ngIf="tokenDetail.supplyAmount | balance: tokenDetail.decimal | gte: 0.001"></span>
                   </span>

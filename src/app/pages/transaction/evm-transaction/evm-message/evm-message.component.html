@@ -28,22 +28,24 @@
         <button
           class="button body-04 {{ isCreateContract ? 'text--gray-7 pe-none' : '' }}"
           (click)="changeType(inputDataType.RAW)"
-          [class.active]="typeInput === inputDataType.RAW"
+          [class.active-gradient]="typeInput === inputDataType.RAW"
           [disabled]="isCreateContract">
-          {{ inputDataType.RAW }}
+          <span>{{ inputDataType.RAW }}</span>
         </button>
         <button
-          class="button body-04 {{ !isContractVerified || isCreateContract ? 'text--gray-7 pe-none' : '' }}"
+          class="button body-04 {{
+            !isContractVerified || isCreateContract ? 'text--gray-7 pe-none' : ''
+          }} active-gradient"
           (click)="changeType(inputDataType.DECODED)"
-          [class.active]="typeInput === inputDataType.DECODED"
+          [class.active-gradient]="typeInput === inputDataType.DECODED"
           [disabled]="!isContractVerified || isCreateContract">
-          {{ inputDataType.DECODED }}
+          <span>{{ inputDataType.DECODED }}</span>
         </button>
         <button
-          class="button body-04"
+          class="button body-04 active-gradient"
           (click)="changeType(inputDataType.ORIGINAL)"
-          [class.active]="typeInput === inputDataType.ORIGINAL">
-          {{ inputDataType.ORIGINAL }}
+          [class.active-gradient]="typeInput === inputDataType.ORIGINAL">
+          <span>{{ inputDataType.ORIGINAL }}</span>
         </button>
       </div>
 
