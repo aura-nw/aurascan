@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { ETokenCoinTypeBE, ETokenNFTTypeBE } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CodeTransaction } from '../../../../core/constants/transaction.enum';
-import { ETokenCoinTypeBE } from 'src/app/core/constants/token.constant';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import { CodeTransaction } from '../../../../core/constants/transaction.enum';
 
 export interface CardMobSimpleValidatorAddress {
   imgUrl: string;
@@ -61,13 +61,14 @@ export class CardMobAccountComponent implements OnInit {
   @Input() currentAddress: string;
   @Input() currentType: string;
   @Input() expand: boolean = false;
-  @Input() fungibleTokenType = ETokenCoinTypeBE.ERC20;
+  @Input() tokenTypeInput: any;
   cosmosAddress;
   evmAddress;
 
   tabsData = TabsAccountLink;
   statusTransaction = CodeTransaction;
   tokenType = ETokenCoinTypeBE;
+  nftType = ETokenNFTTypeBE;
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   chainInfo = this.environmentService.chainInfo;

@@ -11,9 +11,17 @@
     <button
       class="button button-pill button-outline caption-mob button-label"
       *ngIf="modeQuery === tabsData.FtsTxs"
-      [routerLink]="fungibleTokenType === tokenType.ERC20 ? ['/tx', dataCard['tx_hash']] : null">
-      <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
-        {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
+      [routerLink]="tokenTypeInput === tokenType.ERC20 ? ['/tx', dataCard['tx_hash']] : null">
+      <span class="{{ tokenTypeInput === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
+        {{ tokenTypeInput === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
+      </span>
+    </button>
+    <button
+      class="button button-pill button-outline caption-mob button-label"
+      *ngIf="modeQuery === tabsData.NftTxs"
+      [routerLink]="tokenTypeInput === nftType.ERC721 ? ['/tx', dataCard['tx_hash']] : null">
+      <span class="{{ tokenTypeInput === nftType.ERC721 ? 'text--primary' : 'text--gray-2' }}">
+        {{ tokenTypeInput === nftType.ERC721 ? 'ERC721' : 'CW721' }}
       </span>
     </button>
   </div>
@@ -166,7 +174,7 @@
     <div class="content-expand">
       <ng-container *ngFor="let item of dataCard.arrEvent">
         <!-- Cosmos -->
-        <ng-container *ngIf="fungibleTokenType !== tokenType.ERC20">
+        <ng-container *ngIf="tokenTypeInput !== tokenType.ERC20">
           <div class="d-flex align-items-center justify-content-between item-expand mb-1">
             <div class="d-flex align-items-center txt-top-expand">
               <span class="caption fw-normal text--gray-4 txt-from-to">
@@ -219,7 +227,7 @@
           </div>
         </ng-container>
         <!-- ERC20 -->
-        <ng-container *ngIf="fungibleTokenType === tokenType.ERC20">
+        <ng-container *ngIf="tokenTypeInput === tokenType.ERC20">
           <div class="d-flex align-items-center justify-content-between item-expand mb-1">
             <div class="d-flex align-items-center txt-top-expand">
               <span class="caption fw-normal text--gray-4 txt-from-to">
