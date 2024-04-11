@@ -1,8 +1,8 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { TableTemplate } from 'src/app/core/models/common.model';
 
 @Component({
   selector: 'app-evm-internal-transactions',
