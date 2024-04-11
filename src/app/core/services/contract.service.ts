@@ -672,12 +672,16 @@ export class ContractService extends CommonService {
             symbol
             address
           }
+          erc721_contract {
+            symbol
+            address
+          }
         }
         `;
 
     const query = `query TokenByContractAddress($address: String = "") {
       ${this.envDB} {
-        ${smartContract}        
+        ${smartContract}
       }
     }
     `;

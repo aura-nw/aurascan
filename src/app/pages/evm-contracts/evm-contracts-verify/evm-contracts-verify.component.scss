@@ -70,4 +70,14 @@
       }
     }
   }
+  .txt-error {
+    color: var(--aura-red-3);
+  }
+  .box-error {
+    padding: 16px;
+    border-radius: 8px;
+    background-color: var(--aura-red-4);
+    color: var(--aura-white);
+    line-height: 1.8rem;
+  }
 }
