@@ -61,7 +61,6 @@
         <div class="d-flex align-items-center">
           <div class="text--gray-4 caption fw-normal mb-1">Token Tracker</div>
           <a
-            *ngIf="contractDetail?.type === contractRegisterType.ERC20"
             class="ml-1 p-0 button button--ssm mb-1"
             [routerLink]="['/token', contractDetail?.address]">
             <i class="ph-arrow-square-out-fill text--primary body-01 h3-mob mb-0"></i>
@@ -75,7 +74,7 @@
               contractDetail?.erc20_contract?.name &&
               contractDetail?.erc20_contract?.symbol
             ">
-            <a class="text--primary break-word line-claim-v--des" [routerLink]="['/token', contractDetail?.address]">
+            <a class="text--white break-word line-claim-v--des">
               {{ contractDetail.erc20_contract?.name }} ({{ contractDetail.erc20_contract?.symbol }})
             </a>
             <div class="cursor-pointer">
