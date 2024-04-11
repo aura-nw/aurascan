@@ -17,6 +17,24 @@
       </button>
     </div>
   </div>
+  <div
+    class="d-flex align-items-center mb-lg-1 mb-4 justify-content-between token-filter"
+    *ngIf="modeQuery === tabsData.NftTxs">
+    <div class="button-switch-stage button-fixed mt-lg-0">
+      <button
+        class="button body border-radius--sm"
+        (click)="changeTokenType(nftType.ERC721)"
+        [class.active-gradient]="nonFungibleTokenType === nftType.ERC721">
+        <span>ERC721</span>
+      </button>
+      <button
+        class="button body border-radius--sm"
+        (click)="changeTokenType(nftType.CW721)"
+        [class.active-gradient]="nonFungibleTokenType === nftType.CW721">
+        <span>CW721</span>
+      </button>
+    </div>
+  </div>
   <div class="mb-4" *ngIf="breakpoint.value.matches">
     <div class="d-flex align-items-center justify-content-end">
       <button
@@ -689,14 +707,17 @@
                         *ngIf="modeQuery === tabsData.FtsTxs"
                         class="button button-pill button-outline button-label caption cursor-pointer"
                         [routerLink]="fungibleTokenType === tokenType.ERC20 ? ['/tx', data['tx_hash']] : null">
-                        <ng-container *ngIf="modeQuery === tabsData.FtsTxs">
-                          <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
-                            {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
-                          </span>
-                        </ng-container>
-                        <!-- <ng-container *ngIf="modeQuery === tabsData.NftTxs">
-                          {{ fungibleTokenType === tokenType.ERC20 ? 'ERC721' : 'CW721' }}
-                        </ng-container> -->
+                        <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
+                          {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
+                        </span>
+                      </button>
+                      <button
+                        *ngIf="modeQuery === tabsData.NftTxs"
+                        class="button button-pill button-outline button-label caption cursor-pointer"
+                        [routerLink]="nonFungibleTokenType === nftType.ERC721 ? ['/tx', data['tx_hash']] : null">
+                        <span class="{{ nonFungibleTokenType === nftType.ERC721 ? 'text--primary' : 'text--gray-2' }}">
+                          {{ nonFungibleTokenType === nftType.ERC721 ? 'ERC721' : 'CW721' }}
+                        </span>
                       </button>
                     </div>
                     <div *ngSwitchCase="'method'">
@@ -789,7 +810,7 @@
             [currentAddress]="currentAddress"
             [currentType]="currentType"
             [expand]="isFirst"
-            [fungibleTokenType]="fungibleTokenType"
+            [tokenTypeInput]="modeQuery === tabsData.FtsTxs ? fungibleTokenType : nonFungibleTokenType"
             [title]="{
               size: 'md',
               titleClass: 'body-02-mob',
