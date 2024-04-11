@@ -11,9 +11,17 @@
     <button
       class="button button-pill button-outline caption-mob button-label"
       *ngIf="modeQuery === tabsData.FtsTxs"
-      [routerLink]="fungibleTokenType === tokenType.ERC20 ? ['/tx', dataCard['tx_hash']] : null">
-      <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
-        {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
+      [routerLink]="tokenTypeInput === tokenType.ERC20 ? ['/tx', dataCard['tx_hash']] : null">
+      <span class="{{ tokenTypeInput === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
+        {{ tokenTypeInput === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
+      </span>
+    </button>
+    <button
+      class="button button-pill button-outline caption-mob button-label"
+      *ngIf="modeQuery === tabsData.NftTxs"
+      [routerLink]="tokenTypeInput === nftType.ERC721 ? ['/tx', dataCard['tx_hash']] : null">
+      <span class="{{ tokenTypeInput === nftType.ERC721 ? 'text--primary' : 'text--gray-2' }}">
+        {{ tokenTypeInput === nftType.ERC721 ? 'ERC721' : 'CW721' }}
       </span>
     </button>
   </div>
@@ -67,10 +75,11 @@
       </ng-container>
     </div>
   </div>
-
+  <!-- NFT transfer -->
   <div
     *ngIf="dataCard?.expand && modeQuery !== tabsData.ExecutedTxs && modeQuery !== tabsData.FtsTxs"
-    class="box-expand">
+    class="box-expand"
+    [style.max-height.px]="dataCard?.maximumExpanded * 46 + 16 * dataCard?.maximumExpanded">
     <div class="content-expand">
       <ng-container *ngFor="let item of dataCard.arrEvent">
         <div class="d-flex align-items-center justify-content-between item-expand">
@@ -154,7 +163,7 @@
               <i
                 [style]="'margin-top: 2px'"
                 class="ph-arrow-square-out-fill body-01-mob cursor-pointer mr-1 ml-2"
-                [routerLink]="['/token', item.contractAddress, item.tokenId]"></i>
+                [routerLink]="['/token/cw721', item.contractAddress, item.tokenId]"></i>
             </div>
           </div>
         </div>
@@ -162,11 +171,16 @@
     </div>
   </div>
 
-  <div *ngIf="dataCard?.expand && modeQuery === tabsData.FtsTxs" class="box-expand">
+  <!--  Fungible Token Transfer  -->
+
+  <div
+    *ngIf="dataCard?.expand && modeQuery === tabsData.FtsTxs"
+    class="box-expand"
+    [style.max-height.px]="dataCard?.maximumExpanded * 46 + 16 * dataCard?.maximumExpanded">
     <div class="content-expand">
       <ng-container *ngFor="let item of dataCard.arrEvent">
         <!-- Cosmos -->
-        <ng-container *ngIf="fungibleTokenType !== tokenType.ERC20">
+        <ng-container *ngIf="tokenTypeInput !== tokenType.ERC20">
           <div class="d-flex align-items-center justify-content-between item-expand mb-1">
             <div class="d-flex align-items-center txt-top-expand">
               <span class="caption fw-normal text--gray-4 txt-from-to">
@@ -219,7 +233,7 @@
           </div>
         </ng-container>
         <!-- ERC20 -->
-        <ng-container *ngIf="fungibleTokenType === tokenType.ERC20">
+        <ng-container *ngIf="tokenTypeInput === tokenType.ERC20">
           <div class="d-flex align-items-center justify-content-between item-expand mb-1">
             <div class="d-flex align-items-center txt-top-expand">
               <span class="caption fw-normal text--gray-4 txt-from-to">
@@ -274,5 +288,14 @@
         </ng-container>
       </ng-container>
     </div>
+  </div>
+  <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="dataCard.arrEvent?.length > 5 && dataCard.expand">
+    <span
+      (click)="seeMoreData(dataCard)"
+      *ngIf="dataCard.maximumExpanded < dataCard.arrEvent?.length"
+      class="cursor-pointer mr-8"
+      >See more</span
+    >
+    <span (click)="collapseData(dataCard)" class="cursor-pointer">Collapse all</span>
   </div>
 </div>

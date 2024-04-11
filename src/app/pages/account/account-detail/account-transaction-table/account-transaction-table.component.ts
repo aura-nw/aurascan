@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -15,7 +15,7 @@ import {
   STORAGE_KEYS,
   TIMEOUT_ERROR,
 } from 'src/app/core/constants/common.constant';
-import { ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { ETokenCoinTypeBE, ETokenNFTTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -126,7 +126,9 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   addressNative = '';
   addressEvm = '';
   tokenType = ETokenCoinTypeBE;
+  nftType = ETokenNFTTypeBE;
   fungibleTokenType = ETokenCoinTypeBE.ERC20;
+  nonFungibleTokenType = ETokenNFTTypeBE.ERC721;
 
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -422,8 +424,15 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         }
         break;
       case TabsAccountLink.NftTxs:
-        payload['sender'] = payload['receiver'] = address;
-        payload['isCw721'] = true;
+        if (this.nonFungibleTokenType === this.nftType.ERC721) {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressEvm;
+        } else {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressNative;
+          payload['isCw721'] = true;
+        }
+
+        // payload['sender'] = payload['receiver'] = address;
+        // payload['isCw721'] = true;
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload['receiver'] = '';
@@ -552,22 +561,27 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListNFTByAddress(payload) {
-    this.userService.getListNFTByAddress(payload).subscribe({
-      next: (data) => {
-        this.handleGetData(data);
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.transactionLoading = false;
-      },
-      complete: () => {
-        this.transactionLoading = false;
-      },
-    });
+    if (this.nonFungibleTokenType === ETokenNFTTypeBE.ERC721) {
+      //TODO
+      this.transactionLoading = false;
+    } else {
+      this.userService.getListNFTByAddress(payload).subscribe({
+        next: (data) => {
+          this.handleGetData(data);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
+    }
   }
 
   handleGetData(data) {
@@ -804,7 +818,11 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   changeTokenType(type: any): void {
-    this.fungibleTokenType = type;
+    if (this.modeQuery === TabsAccountLink.FtsTxs) {
+      this.fungibleTokenType = type;
+    } else {
+      this.nonFungibleTokenType = type;
+    }
     this.dataSource.data = [];
     this.pageData.length = 0;
     this.pageData.pageIndex = 0;

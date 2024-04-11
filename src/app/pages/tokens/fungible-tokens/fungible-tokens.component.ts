@@ -13,6 +13,7 @@ import { PaginatorComponent } from 'src/app/shared/components/paginator/paginato
 import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../core/constants/common.constant';
 import { ETokenCoinType, ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-fungible-tokens',
@@ -92,7 +93,7 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
     let payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageSize * this.pageData.pageIndex,
-      keyword: this.textSearch?.toLowerCase() || '',
+      keyword: this.textSearch?.startsWith(EWalletType.EVM) ? this.textSearch?.toLowerCase() : this.textSearch || '',
     };
     if (this.filterType) {
       payload['type'] = this.filterType?.toString();

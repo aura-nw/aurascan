@@ -3,6 +3,12 @@
   @media (min-width: 992px) {
     min-width: 560px;
   }
+  .ft-filter {
+    max-width: 85%;
+    @media (min-width: 992px) {
+      min-width: 90%;
+    }
+  }
 }
 
 .filter-group {

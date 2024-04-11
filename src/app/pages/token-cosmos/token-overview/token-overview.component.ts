@@ -22,7 +22,7 @@ export class TokenOverviewComponent implements OnInit {
   constructor(
     public tokenService: TokenService,
     private route: ActivatedRoute,
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
   ) {}
 
   ngOnDestroy(): void {

@@ -69,7 +69,7 @@
         </tr>
       </table>
     </div>
-    <div *ngIf="breakpoint.value.matches">
+    <div *ngIf="breakpoint.value.matches" class="box-internal-mobile">
       <div
         *ngFor="let data of dataSourceTx.data; first as isFirst; last as isLast"
         [class.border-bottom]="!isLast"
@@ -124,7 +124,7 @@
         </div>
         <div [class.mb-3]="!isLast">
           <div class="caption fw-normal text--gray-4">Gas</div>
-          <div class="text--white body-02">{{ data.gas | number }}</div>
+          <div class="text--white body-02">{{ data.gas_used | number }}</div>
         </div>
       </div>
     </div>

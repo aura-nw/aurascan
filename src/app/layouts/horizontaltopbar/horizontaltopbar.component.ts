@@ -149,7 +149,12 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
         if (res.evm_smart_contract?.length > 0) {
           this.redirectPage('evm-contracts', address.accountEvmAddress);
         } else if (res?.account?.length > 0 || res.validator?.length > 0) {
-          this.redirectPage('address', address.accountEvmAddress);
+          this.redirectPage(
+            'address',
+            this.searchValue == address.accountEvmAddress || this.searchValue == address.accountAddress
+              ? this.searchValue
+              : address.accountAddress,
+          );
         }
       },
       error: (e) => {
