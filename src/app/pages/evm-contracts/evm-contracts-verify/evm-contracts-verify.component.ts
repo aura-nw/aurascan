@@ -21,6 +21,8 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
   inputFileValue = null;
 
   loading = false;
+  errorFormat = '';
+  errorBE = '';
 
   interupt$ = new Subject<void>();
 
@@ -70,14 +72,20 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
 
   onFileDropped(files: File[]) {
     const file: File = files[0];
-
     const SUPPORTED_FILE_TYPE = [EFileType.Zip, EFileType.Json];
-
-    const MAX_FILE_SIZE = 1024 * 2 * 1000 * this.MAXIMUM_FILE_SIZE;
+    const MAX_FILE_SIZE = 1024 * 1000 * this.MAXIMUM_FILE_SIZE;
+    this.errorFormat = '';
+    this.errorBE = '';
 
     if (SUPPORTED_FILE_TYPE.includes(file?.type as EFileType) && file?.size <= MAX_FILE_SIZE) {
       this.contractSourceCode = file;
       this.inputFileValue = null;
+    } else {
+      if (!SUPPORTED_FILE_TYPE.includes(file?.type as EFileType)) {
+        this.errorFormat = 'The added file format is invalid';
+      } else {
+        this.errorFormat = 'Added file size exceeds maximum capacity';
+      }
     }
   }
 
@@ -124,9 +132,8 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
               if (status == 'SUCCESS') {
                 this.router.navigate(['evm-contracts', this.contractAddress]);
               } else {
-                this.toatr.error(
-                  _.get(result, 'evm_contract_verification[0].compile_detail[0].error') || 'Verify contract fail',
-                );
+                this.errorBE =
+                  _.get(result, 'evm_contract_verification[0].compile_detail[0].error') || 'Verify contract fail';
               }
             }
           }
