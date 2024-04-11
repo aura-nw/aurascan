@@ -54,9 +54,9 @@ export class ContractsOverviewCardComponent implements OnChanges {
       )
       .subscribe((res) => {
         if (res?.length > 0) {
-          const value = res.find((token) => token.contract_address === this.contractDetail?.address);
-          this.verifiedStatus = value?.verify_status;
-          this.verifiedText = value?.verifiedText;
+          const value = res.find((token) => token.denom === this.contractDetail?.address);
+          this.verifiedStatus = value?.verifyStatus;
+          this.verifiedText = value?.verifyText;
         }
       });
   }
