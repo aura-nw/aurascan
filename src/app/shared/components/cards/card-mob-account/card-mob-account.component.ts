@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CodeTransaction } from '../../../../core/constants/transaction.enum';
-import { ETokenCoinTypeBE } from 'src/app/core/constants/token.constant';
-import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import {Component, Input, OnInit} from '@angular/core';
+import {TabsAccountLink} from 'src/app/core/constants/account.enum';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {CodeTransaction} from '../../../../core/constants/transaction.enum';
+import {ETokenCoinTypeBE} from 'src/app/core/constants/token.constant';
+import {transferAddress} from 'src/app/core/utils/common/address-converter';
 
 export interface CardMobSimpleValidatorAddress {
   imgUrl: string;
@@ -74,14 +74,15 @@ export class CardMobAccountComponent implements OnInit {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
 
-  constructor(private environmentService: EnvironmentService) {}
+  constructor(private environmentService: EnvironmentService) {
+  }
 
   ngOnInit(): void {
     if (this.modeQuery !== this.tabsData.ExecutedTxs) {
       this.content[this.content.length - 1].label = 'Expand';
     }
     if (this.modeQuery === this.tabsData.FtsTxs) {
-      const { accountAddress, accountEvmAddress } = transferAddress(
+      const {accountAddress, accountEvmAddress} = transferAddress(
         this.chainInfo.bech32Config.bech32PrefixAccAddr,
         this.currentAddress,
       );
@@ -98,10 +99,35 @@ export class CardMobAccountComponent implements OnInit {
         element.isFromAddress = false;
       }
     });
+    this.initMaximumExpandData(this.dataCard);
+    // console.log(this.dataCard?.arrEvent)
     this.dataCard.expand = this.expand;
+  }
+
+  initMaximumExpandData(data) {
+    // maximum first expand is 5 (if data <5 -> maximum is data length)
+    if (data.arrEvent?.length >= 5) {
+      data.maximumExpanded = 5;
+    } else {
+      data.maximumExpanded = data.arrEvent?.length;
+    }
   }
 
   expandData(data) {
     data.expand = true;
+  }
+
+  collapseData(data) {
+    data.expand = false;
+    this.initMaximumExpandData(data);
+  }
+
+  seeMoreData(data) {
+    if (data.maximumExpanded < data.arrEvent.length) {
+      data.maximumExpanded += 5;
+      if (data.maximumExpanded > data.arrEvent.length) {
+        data.maximumExpanded = data.arrEvent.length;
+      }
+    }
   }
 }
