@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import _ from 'lodash';
@@ -90,6 +89,8 @@ export class EvmTokenDetailComponent implements OnInit {
           )
           .subscribe((item) => {
             const tokenMarket = item.find((element) => element.denom === token?.address);
+            console.log(tokenMarket);
+            
 
             this.tokenDetail = {
               ...token,
@@ -101,6 +102,8 @@ export class EvmTokenDetailComponent implements OnInit {
               type: EvmContractRegisterType.ERC20,
               price: tokenMarket?.currentPrice || 0,
               priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
+              verify_text: tokenMarket?.verifyText || '',
+              verify_status: tokenMarket?.verifyStatus || ''
             };
             this.getAssetsDetail();
           });

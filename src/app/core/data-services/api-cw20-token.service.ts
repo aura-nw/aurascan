@@ -62,7 +62,7 @@ export class ApiCw20TokenService {
 
         const cw20TokenList: any[] = this.parseCw20Tokens(cw20Tokens, coinsMarkets) || [];
 
-        const erc20TokenList = this.parseEc20Tokens(erc20Tokens, coinsMarkets) || [];
+        const erc20TokenList = this.parseErc20Tokens(erc20Tokens, coinsMarkets) || [];
 
         const ibcTokenBalances = this.parseIbcTokens(account, coinsMarkets) || [];
 
@@ -88,7 +88,7 @@ export class ApiCw20TokenService {
     );
   }
 
-  parseEc20Tokens(tokens, coinsMarkets) {
+  parseErc20Tokens(tokens, coinsMarkets) {
     return tokens?.map((item) => {
       const coinMarket = coinsMarkets.find((coin) => coin.type === ETokenCoinTypeBE.ERC20 && coin.denom === item.denom);
 
