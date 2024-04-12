@@ -89,8 +89,6 @@ export class EvmTokenDetailComponent implements OnInit {
           )
           .subscribe((item) => {
             const tokenMarket = item.find((element) => element.denom === token?.address);
-            console.log(tokenMarket);
-            
 
             this.tokenDetail = {
               ...token,
