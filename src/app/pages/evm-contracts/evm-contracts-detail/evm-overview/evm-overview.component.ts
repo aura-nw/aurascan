@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import _ from 'lodash';
+import { filter, take } from 'rxjs';
 import { EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -28,4 +30,19 @@ export class EvmOverviewComponent {
     private environmentService: EnvironmentService,
     public tokenService: TokenService,
   ) {}
+
+  ngOnInit(): void {
+    this.tokenService.tokensMarket$
+      .pipe(
+        filter((data) => _.isArray(data)),
+        take(1),
+      )
+      .subscribe((res) => {
+        if (res?.length > 0) {
+          const value = res.find((token) => token.denom === this.contractDetail?.address);
+          this.verifiedStatus = value?.verifyStatus;
+          this.verifiedText = value?.verifyText;
+        }
+      });
+  }
 }
