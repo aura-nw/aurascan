@@ -193,14 +193,10 @@ export class TransactionService extends CommonService {
           hash
           height
           data
+          value
           contract_address
           transaction {
             timestamp
-            transaction_messages {
-              type
-              content
-              sender
-            }
           }
         }
       }

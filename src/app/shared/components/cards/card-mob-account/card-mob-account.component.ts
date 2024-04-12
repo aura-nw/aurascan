@@ -100,7 +100,6 @@ export class CardMobAccountComponent implements OnInit {
       }
     });
     this.initMaximumExpandData(this.dataCard);
-    // console.log(this.dataCard?.arrEvent)
     this.dataCard.expand = this.expand;
   }
 
