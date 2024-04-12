@@ -79,7 +79,7 @@ export const CHART_CONFIG: {
   ['12M']: {
     initRange: 365,
     type: RangeType.day,
-    value: 400,
+    value: 365,
     unit: 'd',
     step: 1,
   },
