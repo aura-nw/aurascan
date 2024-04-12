@@ -79,7 +79,7 @@ export const CHART_CONFIG: {
   ['12M']: {
     initRange: 365,
     type: RangeType.day,
-    value: 365,
+    value: 365, // Coingecko public API users are limited to querying historical data within the past 365 days
     unit: 'd',
     step: 1,
   },
