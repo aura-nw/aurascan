@@ -29,7 +29,7 @@ import { EvmTokenInfoTabComponent } from './evm-token-content/evm-token-content-
 import { EvmTokenInventoryComponent } from './evm-token-content/evm-token-content-tab/evm-token-inventory-tab/evm-token-inventory-tab.component';
 import { EvmTokenTransfersTabComponent } from './evm-token-content/evm-token-content-tab/evm-token-transfers-tab/evm-token-transfers-tab.component';
 import { EvmTokenContentComponent } from './evm-token-content/evm-token-content.component';
-import { EvmTokenDetailComponent } from './evm-token-detail/emv-token-detail.component';
+import { EvmTokenDetailComponent } from './evm-token-detail/evm-token-detail.component';
 import { EvmTokenOverviewComponent } from './evm-token-overview/evm-token-overview.component';
 import { EvmTokenRoutingModule } from './evm-token-routing.module';
 import { EvmTokenSummaryComponent } from './evm-token-summary/evm-token-summary.component';
