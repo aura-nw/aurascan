@@ -146,16 +146,13 @@ export class UserService {
           to
           hash
           height
+          value
           erc20_activities {
             amount
           }
           transaction {
             timestamp
             hash
-            transaction_messages {
-              type
-              content
-            }
           }
         }
       }
