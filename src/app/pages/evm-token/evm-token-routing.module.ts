@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EvmTokenDetailComponent } from './evm-token-detail/emv-token-detail.component';
+import { EvmTokenDetailComponent } from './evm-token-detail/evm-token-detail.component';
 
 const routes: Routes = [
   {
