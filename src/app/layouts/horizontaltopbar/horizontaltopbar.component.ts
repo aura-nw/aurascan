@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -35,6 +35,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
+  search$ = new BehaviorSubject(null);
+
   constructor(
     public router: Router,
     public translate: TranslateService,
@@ -57,6 +59,10 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
 
     this.userService.user$?.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
       this.userEmail = currentUser ? currentUser.email : null;
+    });
+
+    this.search$.pipe(debounceTime(100), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((data) => {
+      this.handleSearch();
     });
   }
 
@@ -88,6 +94,10 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.pageTitle = this.environmentService.isMobile
       ? this.environmentService.environment.label.mobile
       : this.environmentService.environment.label.desktop;
+  }
+
+  search() {
+    this.search$.next(this.searchValue);
   }
 
   handleSearch() {
