@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { WalletConnectOptions } from '@cosmos-kit/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 import { isMobileBrowser } from '../helpers/wallet';
@@ -228,8 +229,28 @@ export class EnvironmentService {
       });
   }
 
+  configAddressLength() {
+    if (!this.bech32PrefixAccAddr) {
+      return;
+    }
+
+    const prefix: string = this.bech32PrefixAccAddr;
+
+    const ACCOUNT_SUFFIX_LENGTH = 39;
+    const CONTRACT_SUFFIX_LENGTH = 39;
+
+    // Set account lenght
+    const accountLenght = prefix.length + ACCOUNT_SUFFIX_LENGTH;
+    const contractLenght = prefix.length + CONTRACT_SUFFIX_LENGTH;
+
+    LENGTH_CHARACTER.ADDRESS = accountLenght;
+    LENGTH_CHARACTER.CONTRACT = contractLenght;
+  }
+
   async load(): Promise<void> {
     await this.loadConfig();
+    this.configAddressLength();
+
     await this.extendsTxType();
 
     this.getNodeInfo();
