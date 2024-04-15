@@ -77,20 +77,16 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
     this.errorFormat = '';
     this.errorBE = '';
 
-    if (SUPPORTED_FILE_TYPE.includes(file?.type as EFileType) && file?.size <= MAX_FILE_SIZE) {
-      this.contractSourceCode = file;
-      this.inputFileValue = null;
-    } else {
-      if (!SUPPORTED_FILE_TYPE.includes(file?.type as EFileType)) {
-        this.errorFormat = 'The added file format is invalid';
-      } else {
-        this.errorFormat = 'Added file size exceeds maximum capacity';
-      }
+    this.contractSourceCode = file;
+    if (!SUPPORTED_FILE_TYPE.includes(file?.type as EFileType)) {
+      this.errorFormat = 'The added file format is invalid';
+    } else if (file?.size > MAX_FILE_SIZE) {
+      this.errorFormat = 'Added file size exceeds maximum capacity';
     }
   }
 
   verifyEvmContract() {
-    if (!this.contractSourceCode) {
+    if (!this.contractSourceCode || this.errorFormat) {
       return;
     }
 
@@ -147,5 +143,11 @@ export class EvmContractsVerifyComponent implements OnInit, OnDestroy {
           this.interupt$.complete();
         },
       });
+  }
+
+  handleClearFile() {
+    this.contractSourceCode = null;
+    this.errorFormat = null;
+    this.errorBE = null;
   }
 }
