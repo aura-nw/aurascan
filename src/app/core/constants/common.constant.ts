@@ -54,7 +54,7 @@ export const CHART_RANGE = {
   MONTH_12: '12M',
 };
 
-// Only aura address
+// Default is Aura address, config on EnvironmentService for other chain
 export const LENGTH_CHARACTER = {
   ADDRESS: 43,
   EVM_ADDRESS: 42,
