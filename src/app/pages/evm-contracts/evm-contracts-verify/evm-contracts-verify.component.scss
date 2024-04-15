@@ -37,6 +37,10 @@
     border: 1px dashed var(--aura-gray-3);
     background: var(--aura-bg-form);
 
+    &.error {
+      border: 1px dashed var(--aura-red-3);
+    }
+
     &.with-data {
       padding: 24px;
       justify-content: flex-start;
