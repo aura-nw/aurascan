@@ -237,7 +237,7 @@ export class EnvironmentService {
     const prefix: string = this.bech32PrefixAccAddr;
 
     const ACCOUNT_SUFFIX_LENGTH = 39;
-    const CONTRACT_SUFFIX_LENGTH = 39;
+    const CONTRACT_SUFFIX_LENGTH = 59;
 
     // Set account lenght
     const accountLenght = prefix.length + ACCOUNT_SUFFIX_LENGTH;
