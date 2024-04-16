@@ -66,8 +66,9 @@ export class ContractService extends CommonService {
     let filterName = '';
     if (this.isValidContract(keyword)) {
       address = keyword;
-    } else if (this.isValidAddress(keyword)) {
-      creator = keyword;
+    } else if (this.isValidAddress(keyword) || this.isValidEvmAddress(keyword)) {
+      const { accountAddress } = transferAddress(this.addressPrefix, keyword);
+      creator = accountAddress;
     } else if (/^\d+$/.test(keyword)) {
       codeId = +keyword;
       name = '%' + keyword + '%';
@@ -170,18 +171,13 @@ export class ContractService extends CommonService {
     contractType?: string[];
   }) {
     const addressNameTag = this.nameTagService.findAddressByNameTag(keyword);
-    if (addressNameTag?.length > 0) {
-      const { accountAddress, accountEvmAddress } = transferAddress(
-        this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
-        addressNameTag,
-      );
-      keyword = accountEvmAddress;
-    }
-
     let address;
-    if (keyword?.startsWith(EWalletType.EVM) && keyword?.length === LENGTH_CHARACTER.EVM_ADDRESS) {
-      // check 0x
-      address = keyword?.toLowerCase();
+    if (addressNameTag?.length > 0) {
+      const { accountEvmAddress } = transferAddress(this.addressPrefix, addressNameTag);
+      address = accountEvmAddress;
+    } else if (this.isValidEvmAddress(keyword) || this.isValidAddress(keyword)) {
+      const { accountEvmAddress } = transferAddress(this.addressPrefix, keyword);
+      address = accountEvmAddress;
     } else if (keyword?.length > 0) {
       return of(null);
     }
