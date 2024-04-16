@@ -504,7 +504,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListTxNativeByAddress(payload) {
-    this.transactionLoading = true;
     this.userService.getListNativeTransfer(payload).subscribe({
       next: (data) => {
         this.handleGetData(data);
@@ -524,7 +523,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListFTByAddress(payload) {
-    this.transactionLoading = true;
     if (this.fungibleTokenType === ETokenCoinTypeBE.ERC20) {
       this.userService.getErc20TxByAddress(payload).subscribe({
         next: (data) => {
@@ -563,7 +561,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListNFTByAddress(payload) {
-    this.transactionLoading = true;
     if (this.nonFungibleTokenType === ETokenNFTTypeBE.ERC721) {
       //TODO
       this.transactionLoading = false;
@@ -831,6 +828,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.pageData.pageIndex = 0;
     this.nextKey = null;
     this.currentKey = null;
+    this.transactionLoading = true;
     this.getTxsAddress();
   }
 }
