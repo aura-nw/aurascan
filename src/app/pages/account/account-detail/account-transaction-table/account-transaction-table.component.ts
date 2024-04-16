@@ -656,7 +656,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
       );
       this.pageData.length = this.dataSource.data.length;
 
-      this.expandData(this.dataSource.data[0]);
+      this.expandData(this.dataSource.data[0], true);
     }
   }
 
@@ -664,12 +664,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     data.limit += 6;
   }
 
-  expandData(data) {
+  expandData(data, isExpand?: boolean) {
     if (data.arrEvent?.length <= 1 || !data) {
       return;
     }
     data.limit = 6;
-    data.expand = !data.expand;
+    data.expand = !data.expand || isExpand;
   }
 
   paginatorEmit(e: MatPaginator): void {
@@ -690,7 +690,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
     this.pageData = e;
 
-    this.expandData(this.dataSource.data[pageIndex * pageSize]);
+    this.expandData(this.dataSource.data[pageIndex * pageSize], true);
 
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getTxsAddress(this.nextKey);
@@ -828,6 +828,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.pageData.pageIndex = 0;
     this.nextKey = null;
     this.currentKey = null;
+    this.transactionLoading = true;
     this.getTxsAddress();
   }
 }
