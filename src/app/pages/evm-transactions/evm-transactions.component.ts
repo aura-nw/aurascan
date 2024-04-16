@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
-import { map } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -53,27 +53,39 @@ export class EvmTransactionsComponent {
     this.transactionService
       .queryEvmTransactionList(payload)
       .pipe(
-        map((txsRes) => {
-          if (txsRes?.transaction?.length > 0) {
-            return txsRes.transaction.map((tx) => {
-              const type = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+        switchMap((res) => {
+          const listTemp = res?.transaction
+            ?.filter((j) => j.evm_transaction.data?.length > 0)
+            ?.map((k) => k.evm_transaction.data?.substring(0, 8));
+          const listMethodId = _.uniq(listTemp);
+          return this.transactionService.getListMappingName(listMethodId).pipe(
+            map((element) => {
+              console.log('elementelement', element);
 
-              return {
-                ...tx,
-                evm_hash: _.get(tx, 'evm_transaction.hash'),
-                type: type,
-                from: _.get(tx, 'evm_transaction.from'),
-                to: _.get(tx, 'evm_transaction.to'),
-                amount: _.get(tx, 'transaction_messages[0].content.data.value'),
-              };
-            });
-          }
-
-          return [];
+              if (res?.transaction?.length > 0) {
+                return res.transaction.map((tx) => {
+                  const typeTemp =  _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                  console.log(element[typeTemp]);
+                  
+                  return {
+                    ...tx,
+                    evm_hash: _.get(tx, 'evm_transaction.hash'),
+                    type: element[typeTemp] || typeTemp || 'Send',
+                    from: _.get(tx, 'evm_transaction.from'),
+                    to: _.get(tx, 'evm_transaction.to'),
+                    amount: _.get(tx, 'evm_transaction.value'),
+                  };
+                });
+              }
+              return [];
+            }),
+          );
         }),
       )
       .subscribe({
         next: (res) => {
+          console.log(res);
+
           this.dataSource.data = res;
         },
         error: (e) => {

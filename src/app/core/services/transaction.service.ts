@@ -7,6 +7,7 @@ import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { titleCaseWord } from 'src/app/global/global';
 
 @Injectable()
 export class TransactionService extends CommonService {
@@ -157,6 +158,7 @@ export class TransactionService extends CommonService {
             hash
             to
             data
+            value
             erc20_activities {
               amount
               erc20_contract {
@@ -746,5 +748,40 @@ export class TransactionService extends CommonService {
         operationName: 'QueryAbiContract',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListMappingName(methodId: any): Observable<any> {
+    const operationsDoc = `
+    query queryListNameMethod($limit: Int = 100, $methodId: [String!] = null) {
+      ${this.envDB} {
+        evm_signature_mapping(where: {function_id: {_in: $methodId}}) {
+          function_id
+          human_readable_topic
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          methodId: methodId,
+        },
+        operationName: 'queryListNameMethod',
+      })
+      .pipe(
+        map((res) => (res?.data ? res?.data[this.envDB] : null)),
+        map((res) => {
+          // console.log(res);
+          return res?.evm_signature_mapping?.reduce((pre, current) => {
+            // console.log(pre, current);
+            let methodName = current?.human_readable_topic?.replace('function ', '');
+            methodName = titleCaseWord(methodName?.substring(0, methodName?.indexOf('(')));
+            pre[current?.function_id] = methodName || current?.human_readable_topic;
+            return pre;
+          }, {});
+        }),
+      );
   }
 }
