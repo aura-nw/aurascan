@@ -51,7 +51,7 @@
               <div class="nft-cards__item-border">
                 <div class="nft-cards__item">
                   <app-nft-card
-                    [nftLink]="'/token/cw4973' + token?.contract_address + '/' + token?.token_id"
+                    [nftLink]="'/token/cw4973/' + token?.contract_address + '/' + token?.token_id"
                     [nftItem]="token"
                     nftId="{{ 'nft#' + i }}"
                     [nftType]="getTypeFile(token)">

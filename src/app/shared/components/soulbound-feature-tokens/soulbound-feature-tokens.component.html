@@ -2,7 +2,7 @@
   <div class="d-flex w-100 justify-content-between mb-4" *ngIf="displayManage">
     <h3 class="mb-0 fw-700 text--gray-light-2">ABTs ({{ totalABT || 0 }})</h3>
     <a
-      [routerLink]="['/accountbound/account', accountAddress]"
+      [routerLink]="['/accountbound/address', accountAddress]"
       (click)="setLinkTab()"
       [class.mr-2]="soulboundUnclaimedNum > 0 && wallet === userAddress"
       class="button button-pill button-outline button--sm position-relative d-inline-flex btn-sbt">
@@ -40,7 +40,7 @@
               <div class="nft-cards__item">
                 <app-nft-card
                   nftId="{{ 'nft#' + i }}"
-                  [nftLink]="'/token/cw4973' + token.contract_address + '/' + token.token_id"
+                  [nftLink]="'/token/cw4973/' + token.contract_address + '/' + token.token_id"
                   [nftItem]="token"
                   [nftType]="getTypeFile(token)"></app-nft-card>
                 <div class="nft-cards__label" [class.sbt-validator]="isSBTValidator">
