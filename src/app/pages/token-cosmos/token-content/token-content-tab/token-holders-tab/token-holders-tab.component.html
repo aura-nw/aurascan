@@ -3,7 +3,7 @@
     <div class="body-03 caption-mob fw-normal-mob text--gray-5">
       <span class="small-body text--light-gray" *ngIf="totalHolder > numberTopHolder">
         Top {{ numberTopHolder | number }} holders (From a total of {{ totalHolder || 0 | number }} holder{{
-          totalHolder > 1 ? 's' : ''
+        totalHolder > 1 ? 's' : ''
         }})
       </span>
       <span class="small-body text--light-gray" *ngIf="totalHolder <= numberTopHolder">
@@ -118,6 +118,7 @@
       </table>
     </div>
     <app-paginator
+      [updateTime]="updateTime"
       [length]="pageData.length"
       [pageSize]="pageData.pageSize"
       (paginator)="paginatorEmit($event)"
