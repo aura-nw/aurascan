@@ -26,6 +26,8 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() pageEvent: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
   @Output() pageChangeRecord = new EventEmitter<number>();
 
+  @Input() updateTime: string;
+
   @Input() length: number;
   @Input() actualLength: number;
 
@@ -57,6 +59,7 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
     this.changePageMax(_.get(this.current, 'list[0].index'));
     this.changePage();
   }
+
   constructor() {}
 
   ngOnChanges(): void {
