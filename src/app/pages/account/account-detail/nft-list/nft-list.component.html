@@ -123,9 +123,7 @@
                 <div class="nft__body">
                   <div class="nft__info d-flex">
                     <span class="mr-1 text--gray-1">Token:</span>
-                    <a
-                      class="hover-link box-name text--primary"
-                      (click)="handleRouterLink('/token/' + item.contract_address)">
+                    <a class="hover-link box-name text--primary" [routerLink]="['/token/', item.contract_address]">
                       <span class="d-inline-block txt-token-name">{{ item.token_name }}</span>
                     </a>
                   </div>
@@ -133,7 +131,7 @@
                     <span class="mr-1 text--gray-1">Token ID:</span>
                     <span
                       class="text--primary hover-link"
-                      (click)="handleRouterLink('/token/' + item.contract_address + '/' + encodeData(item.token_id))">
+                      [routerLink]="['/token/cw721', item.contract_address, item.token_id]">
                       <span *ngIf="!breakpoint.value.matches">{{ item.token_id | ellipsis: 10 }}</span>
                       <span *ngIf="breakpoint.value.matches">{{ item.token_id | ellipsis: 5 }}</span>
                     </span>
