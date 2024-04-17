@@ -4,20 +4,22 @@
     [pageSize]="paginator.pageSize"
     [collectionSize]="length"
     (pageChange)="pageChange.emit($event)"
-    [boundaryLinks]="true"
+    [boundaryLinks]="false"
     [maxSize]="maxSize"
     [ellipses]="false"
     [rotate]="true">
-    <ng-template ngbPaginationPrevious="">
-      <img src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="Previous" />
+    <ng-template ngbPaginationPrevious>
+      <span>Previous</span>
+      <img class="mx-4" src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="Previous" width="16px"/>
     </ng-template>
 
     <ng-template ngbPaginationNext>
-      <img src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="Next" />
+      <img class="mx-4" src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="Next" width="16px"/>
+      <span>Next</span>
     </ng-template>
 
-    <ng-template ngbPaginationFirst>First</ng-template>
-    <ng-template ngbPaginationLast>Last</ng-template>
+    <!--    <ng-template ngbPaginationFirst>First</ng-template>-->
+    <!--    <ng-template ngbPaginationLast>Last</ng-template>-->
     <ng-template ngbPaginationNumber let-p>{{ p }}</ng-template>
   </ngb-pagination>
 </ng-container>
