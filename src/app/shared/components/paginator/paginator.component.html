@@ -1,45 +1,49 @@
 <mat-paginator class="d-none" [pageSize]="pageSize"></mat-paginator>
 
-<div class="row" [class.page-list]="showSelectRecord || pageLength > 1">
+<div
+  class="row {{ updateTime ? 'justify-content-center justify-content-lg-between' : 'justify-content-end' }}"
+  [class.page-list]="showSelectRecord || pageLength > 1">
   <div
+    *ngIf="showSelectRecord"
     class="align-items-center col-12 col-lg-6 mb-6 mb-lg-0 content-record {{
       !showSelectRecord ? 'd-none d-lg-flex' : 'd-flex'
     }}">
-    <ng-container *ngIf="showSelectRecord">
-      Show
-      <div class="dropdown aura-dropdown box-record px-2">
-        <button
-          class="align-items-center d-flex justify-content-between cursor-pointer btn-record"
-          type="button"
-          id="pageRecord"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-          #trigger>
-          <span class="body">
-            <span>{{ pageSize }} </span>
-          </span>
-          <div class="ml-3 d-flex align-items-center">
-            <i class="ph ph-caret-down text--white body"></i>
-            <i class="ph ph-caret-up text--white body"></i>
-          </div>
-        </button>
-        <ul class="dropdown-menu aura-dropdown-menu menu-record" id="pageRecord" #pageRecord>
-          <ng-container *ngFor="let item of pageRecordSize; let last = last">
-            <li
-              class="dropdown-item cursor-pointer py-2 body"
-              [class.active]="pageSize === item"
-              [class.mb-1]="!last"
-              (click)="changeRecord(item)">
-              <button type="button" class="button p-0 h-auto">{{ item }}</button>
-            </li>
-          </ng-container>
-        </ul>
-      </div>
-      Txs per page
-    </ng-container>
+    <span>Show</span>
+    <div class="dropdown aura-dropdown box-record px-2">
+      <button
+        class="align-items-center d-flex justify-content-between cursor-pointer btn-record"
+        type="button"
+        id="pageRecord"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        #trigger>
+        <span class="body">
+          <span>{{ pageSize }} </span>
+        </span>
+        <div class="ml-3 d-flex align-items-center">
+          <i class="ph ph-caret-down text--white body"></i>
+          <i class="ph ph-caret-up text--white body"></i>
+        </div>
+      </button>
+      <ul class="dropdown-menu aura-dropdown-menu menu-record" id="pageRecord" #pageRecord>
+        <ng-container *ngFor="let item of pageRecordSize; let last = last">
+          <li
+            class="dropdown-item cursor-pointer py-2 body"
+            [class.active]="pageSize === item"
+            [class.mb-1]="!last"
+            (click)="changeRecord(item)">
+            <button type="button" class="button p-0 h-auto">{{ item }}</button>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <span>Txs per page</span>
   </div>
-  <div *ngIf="updateTime">
-    {{ updateTime }}
+  <div
+    *ngIf="updateTime"
+    class="text--gray-5 col-12 col-lg-6 text-center text-lg-start mb-7 mb-lg-0 caption-mob body-02 fw-normal">
+    Data updated {{ updateTime | customDateTime: 'Distance' }} ({{ updateTime | customDateTime: 'DateOnly' }} |
+    {{ updateTime | customDateTime: 'TimeOnly' }})
   </div>
   <ul class="d-flex position-paginator pb-0 px-0 small-body col-12 col-lg-auto" *ngIf="length && pageLength > 1">
     <!--    <li class="page page-first" (click)="changePageMax(0); selectPage(0)" [class.disabled]="current.isFirst">First</li>-->

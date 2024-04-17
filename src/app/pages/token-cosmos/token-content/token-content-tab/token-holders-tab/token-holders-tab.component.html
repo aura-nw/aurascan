@@ -118,6 +118,8 @@
       </table>
     </div>
     <app-paginator
+      *ngIf="!loading"
+      [updateTime]="updateTime"
       [length]="pageData.length"
       [pageSize]="pageData.pageSize"
       (paginator)="paginatorEmit($event)"
