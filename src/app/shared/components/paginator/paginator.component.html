@@ -1,9 +1,11 @@
 <mat-paginator class="d-none" [pageSize]="pageSize"></mat-paginator>
 
-<div class="row {{updateTime ? 'justify-content-center justify-content-lg-between' : 'justify-content-end'}}"
-     [class.page-list]="showSelectRecord || pageLength > 1">
-  <div *ngIf="showSelectRecord"
-       class="align-items-center col-12 col-lg-6 mb-6 mb-lg-0 content-record {{
+<div
+  class="row {{ updateTime ? 'justify-content-center justify-content-lg-between' : 'justify-content-end' }}"
+  [class.page-list]="showSelectRecord || pageLength > 1">
+  <div
+    *ngIf="showSelectRecord"
+    class="align-items-center col-12 col-lg-6 mb-6 mb-lg-0 content-record {{
       !showSelectRecord ? 'd-none d-lg-flex' : 'd-flex'
     }}">
     <span>Show</span>
@@ -15,9 +17,9 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
         #trigger>
-          <span class="body">
-            <span>{{ pageSize }} </span>
-          </span>
+        <span class="body">
+          <span>{{ pageSize }} </span>
+        </span>
         <div class="ml-3 d-flex align-items-center">
           <i class="ph ph-caret-down text--white body"></i>
           <i class="ph ph-caret-up text--white body"></i>
@@ -37,16 +39,17 @@
     </div>
     <span>Txs per page</span>
   </div>
-  <div *ngIf="updateTime"
-       class="text--gray-5 col-12 col-lg-6 text-center text-lg-start mb-7 mb-lg-0 caption-mob body-02 fw-normal">
-    Data updated {{ updateTime | customDateTime: 'Distance' }} ({{ updateTime | customDateTime: 'DateOnly' }}
-    | {{ updateTime | customDateTime: 'TimeOnly' }})
+  <div
+    *ngIf="updateTime"
+    class="text--gray-5 col-12 col-lg-6 text-center text-lg-start mb-7 mb-lg-0 caption-mob body-02 fw-normal">
+    Data updated {{ updateTime | customDateTime: 'Distance' }} ({{ updateTime | customDateTime: 'DateOnly' }} |
+    {{ updateTime | customDateTime: 'TimeOnly' }})
   </div>
   <ul class="d-flex position-paginator pb-0 px-0 small-body col-12 col-lg-auto" *ngIf="length && pageLength > 1">
     <!--    <li class="page page-first" (click)="changePageMax(0); selectPage(0)" [class.disabled]="current.isFirst">First</li>-->
     <li class="page page-prev" (click)="prevPage()" [class.disabled]="current.isFirst">
       <span>Previous</span>
-      <img class="ml-4" src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="Previous" width="16px"/>
+      <img class="ml-4" src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="Previous" width="16px" />
     </li>
     <ng-container *ngFor="let page of current.list">
       <li
@@ -57,7 +60,7 @@
       </li>
     </ng-container>
     <li class="page page-next" (click)="nextPage()" [class.disabled]="current.isLast">
-      <img class="mr-4" src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="Next" width="16px"/>
+      <img class="mr-4" src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="Next" width="16px" />
       <span>Next</span>
     </li>
     <!--    <li-->

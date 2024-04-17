@@ -1,15 +1,15 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {CW20_TRACKING} from '../constants/common.constant';
-import {LCD_COSMOS} from '../constants/url.constant';
-import {EnvironmentService} from '../data-services/environment.service';
-import {CommonService} from './common.service';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { CW20_TRACKING } from '../constants/common.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
+import { EnvironmentService } from '../data-services/environment.service';
+import { CommonService } from './common.service';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.chainInfo;
   tokensMarket$ = new BehaviorSubject<any[]>(null);
@@ -513,12 +513,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTokenHolder(payload: {
-    denomHash: string;
-    limit?: number;
-    offset?: number;
-    address?: string;
-  }): Observable<any> {
+  getTokenHolder(payload: { denomHash: string; limit?: number; offset?: number; address?: string }): Observable<any> {
     const operationsDoc = `
     query queryTokenHolder($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = nul) {
       ${this.envDB} {
