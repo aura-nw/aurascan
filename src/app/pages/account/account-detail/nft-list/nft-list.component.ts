@@ -204,10 +204,6 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
     this.getNftData();
   }
 
-  handleRouterLink(link): void {
-    this.router.navigate([link]);
-  }
-
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;

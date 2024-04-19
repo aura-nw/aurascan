@@ -199,10 +199,10 @@ export class PopupAddGrantComponent implements OnInit {
 
   async executeGrant(granter: string, msg) {
     const multiplier = 1.7; // Grant multiplier
-    const fee = await this.walletService.estimateFee([msg], 'stargate', '', multiplier).catch(() => undefined);
+    const fee = await this.walletService.estimateFee([msg], 'cosmwasm', '', multiplier).catch(() => undefined);
 
     this.walletService
-      .signAndBroadcastStargate(granter, [msg], fee, '')
+      .signAndBroadcast(granter, [msg], fee, '')
       .then((result) => {
         this.closeDialog(result?.transactionHash);
       })

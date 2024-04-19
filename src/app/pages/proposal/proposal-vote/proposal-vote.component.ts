@@ -61,7 +61,7 @@ export class ProposalVoteComponent {
     this.isLoading = true;
 
     const multiplier = 1.7; // multiplier
-    const fee = await this.walletService.estimateFee([msg], 'stargate', '', multiplier).catch(() => undefined);
+    const fee = await this.walletService.estimateFee([msg], 'cosmwasm', '', multiplier).catch(() => undefined);
 
     this.walletService
       .signAndBroadcast(account.address, [msg], fee)

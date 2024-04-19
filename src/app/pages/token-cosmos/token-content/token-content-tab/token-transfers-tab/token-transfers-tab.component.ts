@@ -1,4 +1,14 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,7 +31,7 @@ import { convertTxIBC } from 'src/app/global/global';
   templateUrl: './token-transfers-tab.component.html',
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
-export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
+export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() tokenDetail: any;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
@@ -75,6 +85,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   linkAddress: string;
   isExistDenom = false;
   channelPath: any;
+  denomFilter = '';
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -88,6 +99,10 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private tokenService: TokenService,
     private router: Router,
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.getListData();
+  }
 
   ngOnInit(): void {
     this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -111,9 +126,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-    if (this.timerGetUpTime) {
-      clearInterval(this.timerGetUpTime);
-    }
+    clearInterval(this.timerGetUpTime);
   }
 
   getListData(nextKey = null, isReload = false) {
@@ -128,8 +141,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         this.getListTransactionTokenIBC(nextKey);
       } else {
         this.tokenService.pathDenom$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+          this.channelPath = res;
+          this.denomFilter = this.channelPath?.path + '/' + this.channelPath?.base_denom;
           if (this.isExistDenom) {
-            this.channelPath = res;
             this.getListTransactionTokenIBC();
           }
         });
@@ -274,11 +288,11 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getListTransactionTokenIBC(nextKey = null) {
-    const denomFilter = this.channelPath?.path + '/' + this.channelPath?.base_denom;
+    this.denomFilter = this.channelPath?.path + '/' + this.channelPath?.base_denom;
     let payload = {
       limit: this.pageData.pageSize,
       heightLT: nextKey,
-      denom: denomFilter,
+      denom: this.denomFilter,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       address: null,
     };

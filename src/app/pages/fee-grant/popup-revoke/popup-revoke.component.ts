@@ -45,7 +45,7 @@ export class PopupRevokeComponent implements OnInit {
     };
 
     const revokeMultiplier = 1.7; // revoke multiplier - NOT FOR ALL
-    const fee = await this.walletService.estimateFee([msg], 'stargate', '', revokeMultiplier).catch(() => undefined);
+    const fee = await this.walletService.estimateFee([msg], 'cosmwasm', '', revokeMultiplier).catch(() => undefined);
 
     this.walletService
       .signAndBroadcastStargate(account.address, [msg], fee, '')

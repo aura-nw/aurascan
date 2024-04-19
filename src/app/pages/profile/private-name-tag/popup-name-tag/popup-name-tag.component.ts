@@ -121,14 +121,14 @@ export class PopupNameTagComponent implements OnInit {
         accountEvmAddress = null;
       } else {
         if (controlName === 'cosmosAddress') {
-          this.toastr.error('Invalid ' + this.chainName + ' address format');
+          // this.toastr.error('Invalid ' + this.chainName + ' address format');
           this.privateNameForm.get('evmAddress').disable();
-          this.privateNameForm.get('cosmosAddress').setErrors({ incorrect: true });
+          // this.privateNameForm.get('cosmosAddress').setErrors({ incorrect: true });
         }
         if (controlName === 'evmAddress') {
-          this.toastr.error('Invalid EVM address format');
+          // this.toastr.error('Invalid EVM address format');
           this.privateNameForm.get('cosmosAddress').disable();
-          this.privateNameForm.get('evmAddress').setErrors({ incorrect: true });
+          // this.privateNameForm.get('evmAddress').setErrors({ incorrect: true });
         }
         return;
       }
