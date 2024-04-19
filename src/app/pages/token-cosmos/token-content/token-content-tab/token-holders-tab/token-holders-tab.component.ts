@@ -82,6 +82,10 @@ export class TokenHoldersTabComponent implements OnInit {
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
 
+  ngOnDestroy(): void {
+    this.tokenService.filterBalanceNative$.next(null);
+  }
+
   getListData() {
     if (this.typeContract) {
       if (this.typeContract !== ContractRegisterType.CW20) {

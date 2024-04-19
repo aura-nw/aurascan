@@ -3,7 +3,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, map, switchMap, takeUntil } from 'rxjs';
 import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
@@ -11,8 +11,10 @@ import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
+import { mappingMethodName } from 'src/app/global/global';
 
 @Component({
   selector: 'app-evm-token-transfers-tab',
@@ -82,6 +84,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private tokenService: TokenService,
     private router: Router,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -140,52 +143,75 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.tokenService.getCW721Transfer(payload).subscribe({
-      next: (res) => {
-        if (res) {
-          this.nextKey = null;
-          if (res.cw721_activity?.length >= 100) {
-            this.nextKey = res?.cw721_activity[res.cw721_activity?.length - 1]?.id;
-            this.hasMore.emit(true);
-          } else {
-            this.hasMore.emit(false);
+    this.tokenService
+      .getCW721Transfer(payload)
+      .pipe(
+        switchMap((res) => {
+          const listTemp = res?.cw721_activity
+            ?.filter((j) => j.evm_transaction?.data?.length > 0)
+            ?.map((k) => k.evm_transaction?.data?.substring(0, 8));
+          const listMethodId = _.uniq(listTemp);
+          return this.transactionService.getListMappingName(listMethodId).pipe(
+            map((element) => {
+              if (res?.cw721_activity?.length > 0) {
+                return res.cw721_activity.map((tx) => {
+                  const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                  return {
+                    ...tx,
+                    type: mappingMethodName(element, methodId),
+                  };
+                });
+              }
+              return [];
+            }),
+          );
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.nextKey = null;
+            if (res?.length >= 100) {
+              this.nextKey = res[res.length - 1]['id'];
+              this.hasMore.emit(true);
+            } else {
+              this.hasMore.emit(false);
+            }
+
+            res.forEach((element) => {
+              element['tx_hash'] = element.tx.hash;
+              element['from_address'] = element.from || NULL_ADDRESS;
+              element['to_address'] = element.to || NULL_ADDRESS;
+              element['token_id'] = element.cw721_token.token_id;
+              element['timestamp'] = element.tx.timestamp;
+              element['status'] =
+                element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+              element['type'] = getTypeTx(element.tx)?.type;
+              element['lstTypeTemp'] = _.get(element, 'tx.transaction_messages');
+            });
+
+            if (this.dataSource.data.length > 0 && !isReload) {
+              this.dataSource.data = [...this.dataSource.data, ...res];
+            } else {
+              this.dataSource.data = [...res];
+            }
+
+            this.pageData.length = this.dataSource.data.length;
+            this.tokenService.setTotalTransfer(this.pageData.length);
           }
-
-          let txs = res.cw721_activity;
-          txs.forEach((element) => {
-            element['tx_hash'] = element.tx.hash;
-            element['from_address'] = element.from || NULL_ADDRESS;
-            element['to_address'] = element.to || NULL_ADDRESS;
-            element['token_id'] = element.cw721_token.token_id;
-            element['timestamp'] = element.tx.timestamp;
-            element['status'] =
-              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx)?.type;
-            element['lstTypeTemp'] = _.get(element, 'tx.transaction_messages');
-          });
-
-          if (this.dataSource.data.length > 0 && !isReload) {
-            this.dataSource.data = [...this.dataSource.data, ...txs];
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
           } else {
-            this.dataSource.data = [...txs];
+            this.errTxt = e.status + ' ' + e.statusText;
           }
-
-          this.pageData.length = this.dataSource.data.length;
-          this.tokenService.setTotalTransfer(this.pageData.length);
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 
   async getListTransactionTokenERC20(nextKey = null, isReload = false) {
@@ -208,52 +234,76 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.tokenService.getERC20Transfer(payload).subscribe({
-      next: (res) => {
-        if (res) {
-          this.nextKey = null;
-          if (res.erc20_activity.length >= 100) {
-            this.nextKey = res?.erc20_activity[res.erc20_activity.length - 1].height;
-            this.hasMore.emit(true);
-          } else {
-            this.hasMore.emit(false);
-          }
-          let txs = res.erc20_activity;
-          txs.forEach((element) => {
-            element['tx_hash'] = element.tx_hash;
-            element['from_address'] = element.from?.toLowerCase() || NULL_ADDRESS;
-            element['to_address'] = element.to?.toLowerCase() || NULL_ADDRESS;
-            element['timestamp'] = _.get(element, 'evm_transaction.transaction.timestamp');
-            element['status'] =
-              _.get(element, 'evm_transaction.transaction.code') == CodeTransaction.Success
-                ? StatusTransaction.Success
-                : StatusTransaction.Fail;
-            element['type'] = _.get(element, 'evm_transaction.data')?.substring(0, 8);
-            element['decimal'] = _.get(element, 'erc20_contract.decimal');
-            element['lstTypeTemp'] = _.get(element, 'evm_transaction.transaction_message');
-          });
-          if (this.dataSource.data.length > 0 && !isReload) {
-            this.dataSource.data = [...this.dataSource.data, ...txs];
-          } else {
-            this.dataSource.data = [...txs];
-          }
+    this.tokenService
+      .getERC20Transfer(payload)
+      .pipe(
+        switchMap((res) => {
+          const listTemp = res?.erc20_activity
+            ?.filter((j) => j.evm_transaction?.data?.length > 0)
+            ?.map((k) => k.evm_transaction?.data?.substring(0, 8));
+          const listMethodId = _.uniq(listTemp);
+          return this.transactionService.getListMappingName(listMethodId).pipe(
+            map((element) => {
+              if (res?.erc20_activity?.length > 0) {
+                return res.erc20_activity.map((tx) => {
+                  const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                  return {
+                    ...tx,
+                    type: mappingMethodName(element, methodId),
+                  };
+                });
+              }
+              return [];
+            }),
+          );
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.nextKey = null;
+            if (res.length >= 100) {
+              this.nextKey = res[res.length - 1]['height'];
+              this.hasMore.emit(true);
+            } else {
+              this.hasMore.emit(false);
+            }
 
-          this.pageData.length = this.dataSource.data.length;
-          this.tokenService.totalTransfer$.next(this.pageData.length);
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+            res.forEach((element) => {
+              element['tx_hash'] = element.tx_hash;
+              element['from_address'] = element.from?.toLowerCase() || NULL_ADDRESS;
+              element['to_address'] = element.to?.toLowerCase() || NULL_ADDRESS;
+              element['timestamp'] = _.get(element, 'evm_transaction.transaction.timestamp');
+              element['status'] =
+                _.get(element, 'evm_transaction.transaction.code') == CodeTransaction.Success
+                  ? StatusTransaction.Success
+                  : StatusTransaction.Fail;
+              element['type'] = _.get(element, 'evm_transaction.data')?.substring(0, 8);
+              element['decimal'] = _.get(element, 'erc20_contract.decimal');
+              element['lstTypeTemp'] = _.get(element, 'evm_transaction.transaction_message');
+            });
+            if (this.dataSource.data.length > 0 && !isReload) {
+              this.dataSource.data = [...this.dataSource.data, ...res];
+            } else {
+              this.dataSource.data = [...res];
+            }
+
+            this.pageData.length = this.dataSource.data.length;
+            this.tokenService.totalTransfer$.next(this.pageData.length);
+          }
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {

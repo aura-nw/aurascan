@@ -3,6 +3,7 @@ import { Interface, parseEther } from 'ethers';
 import { EMethodContract } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { mappingMethodName } from 'src/app/global/global';
 
 @Component({
   selector: 'app-evm-message',
@@ -48,12 +49,12 @@ export class EvmMessageComponent {
   ngOnInit(): void {
     this.inputDataRaw['methodId'] = this.transaction?.inputData?.substring(0, 8);
     this.inputDataRaw['arrList'] = this.transaction?.inputData?.slice(8).match(/.{1,64}/g);
-    this.method = this.inputDataRaw['methodId'];
-    if (this.method === EMethodContract.Creation) {
+    if (this.inputDataRaw['methodId'] === EMethodContract.Creation) {
       this.isCreateContract = true;
       this.typeInput = this.inputDataType.ORIGINAL;
     }
     this.getDataDecoded();
+    this.getMethodName(this.inputDataRaw['methodId']);
   }
 
   changeType(data) {
@@ -102,6 +103,12 @@ export class EvmMessageComponent {
       } catch (e) {}
 
       this.arrTopicDecode[index] = arrTopicTemp;
+    });
+  }
+
+  getMethodName(methodId) {
+    this.transactionService.getListMappingName(methodId).subscribe((res) => {
+      this.method = mappingMethodName(res, methodId);
     });
   }
 }
