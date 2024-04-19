@@ -41,7 +41,9 @@
   </div>
   <div
     *ngIf="updateTime"
-    class="text--gray-5 col-12 col-lg-6 text-center text-lg-start mb-7 mb-lg-0 caption-mob body-02 fw-normal">
+    class="text--gray-5 col-12 col-lg-6 text-center text-lg-start mb-7 mb-lg-0 caption-mob body-02 fw-normal {{
+      length && pageLength > 1 ? '' : 'mt-2'
+    }}">
     Data updated {{ updateTime | customDateTime: 'Distance' }} ({{ updateTime | customDateTime: 'DateOnly' }} |
     {{ updateTime | customDateTime: 'TimeOnly' }})
   </div>

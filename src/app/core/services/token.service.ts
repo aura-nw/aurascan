@@ -513,16 +513,16 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getTokenHolder(payload: { denomHash: string; limit?: number; offset?: number; address?: string }): Observable<any> {
+  getNativeHolder(payload: { limit?: number; offset?: number; address?: string }): Observable<any> {
     const operationsDoc = `
-    query queryTokenHolder($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = nul) {
+    query queryTokenHolder(, $limit: Int = null, $offset: Int = null, $address: String = null) {
       ${this.envDB} {
         m_view_account_balance_statistic(where: {address: {_eq: $address}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           updated_at
           amount
           address
         }
-        account_balance_aggregate (where: {account: {address: {_eq: $address}}, denom: {_eq: $denom}}) {
+        m_view_account_balance_statistic_aggregate (where: {address: {_eq: $address}}) {
           aggregate {
             count
           }
@@ -534,7 +534,6 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          denom: payload.denomHash,
           address: payload.address,
           limit: payload.limit || 100,
           offset: payload.offset || 0,

@@ -189,14 +189,14 @@ export class PopupWatchlistComponent implements OnInit {
         accountEvmAddress = null;
       } else {
         if (controlName === 'address') {
-          this.toastr.error('Invalid ' + this.chainName + ' address format');
+          // this.toastr.error('Invalid ' + this.chainName + ' address format');
           this.watchlistForm.get('evmAddress').disable();
-          this.watchlistForm.get('address').setErrors({ incorrect: true });
+          // this.watchlistForm.get('address').setErrors({ incorrect: true });
         }
         if (controlName === 'evmAddress') {
-          this.toastr.error('Invalid EVM address format');
+          // this.toastr.error('Invalid EVM address format');
           this.watchlistForm.get('address').disable();
-          this.watchlistForm.get('evmAddress').setErrors({ incorrect: true });
+          // this.watchlistForm.get('evmAddress').setErrors({ incorrect: true });
         }
         return;
       }
