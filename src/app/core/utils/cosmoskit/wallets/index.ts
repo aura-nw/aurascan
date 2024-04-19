@@ -1,6 +1,6 @@
 import { MainWalletBase } from '@cosmos-kit/core';
 import { WalletName } from '@cosmos-kit/core/cjs/types';
-import { wallets as keplrWallets } from '@cosmos-kit/keplr-extension';
+import { wallets as keplrWallets, KeplrClient } from '@cosmos-kit/keplr-extension';
 import { wallets as keplrMobileWallets } from '@cosmos-kit/keplr-mobile';
 import { wallets as leapWallets } from '@cosmos-kit/leap-extension';
 import { wallets as leapMobileWallets } from '@cosmos-kit/leap-mobile';
@@ -16,7 +16,7 @@ import {
   isLeapExtention,
   isMetamaskExtention,
 } from '../helpers/browser';
-import { wallets as coin98Wallets } from './coin98-extension';
+import { Coin98Client, wallets as coin98Wallets } from './coin98-extension';
 import { wallets as coin98MobileWallets } from './coin98-mobile';
 import { wallets as leapSnapMetaMaskWallets } from './leap-metamask-cosmos-snap';
 import { wallets as wcWallets } from './wallet-connect/wc';
@@ -71,4 +71,6 @@ function checkDesktopWallets(walletName: WalletName) {
   }
 }
 
-export { desktopWallets, mobileWallets, wcWallets, checkDesktopWallets };
+type ExtendsWalletClient = KeplrClient | Coin98Client;
+
+export { desktopWallets, mobileWallets, wcWallets, checkDesktopWallets, ExtendsWalletClient };
