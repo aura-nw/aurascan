@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
-import { map, of, switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeToken } from 'src/app/core/constants/token.enum';
@@ -233,56 +233,34 @@ export class TokenHoldersTabComponent implements OnInit {
       address: this.keyWord || null,
       isExcludedAddresses: this.tokenDetail.modeToken === this.EModeToken.Native,
     };
-    const tokenSupplyOrigin = BigNumber(this.tokenDetail?.totalSupply).multipliedBy(
-      BigNumber(10).pow(this.tokenDetail.decimal),
-    );
+
+    // get list holder for Native Token
+    if (this.tokenDetail.modeToken === this.EModeToken.Native) {
+      this.getDenomNative(payload);
+      return;
+    }
+
+    // get list holder for IBC Token
     this.tokenService
-      .getTokenHolder(payload)
+      .getDenomHolder(payload)
       .pipe(
         switchMap((element) => {
-          if (element?.m_view_account_balance_statistic?.length === 0) {
-            return of([]);
-          }
-          this.totalHolder = element?.account_balance_aggregate?.aggregate?.count;
-          let accountBalance = element['m_view_account_balance_statistic'];
-          this.updateTime = accountBalance[0].updated_at;
-          if (this.tokenDetail.modeToken === this.EModeToken.IBCCoin) {
-            accountBalance?.forEach((item) => {
-              item.balance = item.amount;
-              item.owner = item.address;
-              item.percent_hold = BigNumber(item.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
-              item.value =
-                BigNumber(item.amount)
-                  .multipliedBy(this.tokenDetail?.price || 0)
-                  .dividedBy(BigNumber(10).pow(this.decimalValue))
-                  .toFixed() || 0;
-            });
-            return of(accountBalance);
-          }
-          const addressList = accountBalance?.map((k) => {
-            return k.address;
-          });
-          return this.tokenService.getListAmountNative(addressList).pipe(
-            map((res) => {
-              accountBalance?.forEach((item) => {
-                const element = res?.data?.find((k) => k.address === item?.address);
-                item.amount = item.balance = _.get(element, 'amount');
-                item.owner = element?.address;
-                item.percent_hold = BigNumber(element.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
-                item.value =
-                  BigNumber(item.amount)
-                    .multipliedBy(this.tokenDetail?.price || 0)
-                    .dividedBy(BigNumber(10).pow(this.decimalValue))
-                    .toFixed() || 0;
-              });
-              if (accountBalance?.length == 1 && this.keyWord) {
-                this.tokenService.filterBalanceNative$.next(accountBalance[0]?.balance);
-              }
-              // sort list data with amount desc
-              const sortData = accountBalance?.sort((a, b) => this.compare(a.amount, b.amount, false));
-              return sortData;
-            }),
+          const tokenSupplyOrigin = BigNumber(this.tokenDetail?.totalSupply).multipliedBy(
+            BigNumber(10).pow(this.tokenDetail.decimal),
           );
+          this.totalHolder = element?.account_balance_aggregate?.aggregate?.count;
+          let accountBalance = element['account_balance'];
+          accountBalance?.forEach((item) => {
+            item.balance = item.amount;
+            item.owner = item.account?.address;
+            item.percent_hold = BigNumber(item.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
+            item.value =
+              BigNumber(item.amount)
+                .multipliedBy(this.tokenDetail?.price || 0)
+                .dividedBy(BigNumber(10).pow(this.decimalValue))
+                .toFixed() || 0;
+          });
+          return of(accountBalance);
         }),
       )
       .subscribe({
@@ -292,6 +270,47 @@ export class TokenHoldersTabComponent implements OnInit {
           } else {
             this.pageData.length = this.totalHolder;
           }
+          this.dataSource = new MatTableDataSource<any>(res);
+        },
+        error: () => {
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
+  }
+
+  getDenomNative(payload) {
+    this.tokenService
+      .getNativeHolder(payload)
+      .pipe(
+        switchMap((element) => {
+          if (element['m_view_account_balance_statistic']?.length === 0) {
+            return of([]);
+          }
+          const tokenSupplyOrigin = BigNumber(this.tokenDetail?.totalSupply).multipliedBy(
+            BigNumber(10).pow(this.tokenDetail.decimal),
+          );
+          this.totalHolder = element['m_view_account_balance_statistic_aggregate']?.aggregate?.count;
+          let accountBalance = element['m_view_account_balance_statistic'];
+          this.updateTime = accountBalance[0]?.updated_at;
+          accountBalance?.forEach((item) => {
+            item.balance = item.amount;
+            item.owner = item.address;
+            item.percent_hold = BigNumber(item.amount).dividedBy(tokenSupplyOrigin).multipliedBy(100);
+            item.value =
+              BigNumber(item.amount)
+                .multipliedBy(this.tokenDetail?.price || 0)
+                .dividedBy(BigNumber(10).pow(this.decimalValue))
+                .toFixed() || 0;
+          });
+          return of(accountBalance);
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          this.pageData.length = this.totalHolder;
           this.dataSource = new MatTableDataSource<any>(res);
         },
         error: () => {
