@@ -26,7 +26,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
-import { convertDataAccountTransaction } from 'src/app/global/global';
+import { convertDataAccountTransaction, mappingMethodName } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -497,8 +497,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             map((element) => {
               if (res?.evm_transaction?.length > 0) {
                 res.evm_transaction.forEach((tx) => {
-                  const typeTemp = _.get(tx, 'data')?.substring(0, 8);
-                  tx['method'] = element[typeTemp] || typeTemp || 'Send';
+                  const methodId = _.get(tx, 'data')?.substring(0, 8);
+                  tx['method'] = mappingMethodName(element, methodId);
                 });
                 return res;
               }
@@ -546,22 +546,44 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
   getListFTByAddress(payload) {
     if (this.fungibleTokenType === ETokenCoinTypeBE.ERC20) {
-      this.userService.getErc20TxByAddress(payload).subscribe({
-        next: (data) => {
-          this.handleGetData(data);
-        },
-        error: (e) => {
-          if (e.name === TIMEOUT_ERROR) {
-            this.errTxt = e.message;
-          } else {
-            this.errTxt = e.status + ' ' + e.statusText;
-          }
-          this.transactionLoading = false;
-        },
-        complete: () => {
-          this.transactionLoading = false;
-        },
-      });
+      this.userService
+        .getErc20TxByAddress(payload)
+        .pipe(
+          switchMap((res) => {
+            const listTemp = res?.evm_transaction
+              ?.filter((j) => j.data?.length > 0)
+              ?.map((k) => k.data?.substring(0, 8));
+            const listMethodId = _.uniq(listTemp);
+            return this.transactionService.getListMappingName(listMethodId).pipe(
+              map((element) => {
+                if (res?.evm_transaction?.length > 0) {
+                  res.evm_transaction.forEach((tx) => {
+                    const methodId = _.get(tx, 'data')?.substring(0, 8);
+                    tx['method'] = mappingMethodName(element, methodId);
+                  });
+                  return res;
+                }
+                return [];
+              }),
+            );
+          }),
+        )
+        .subscribe({
+          next: (data) => {
+            this.handleGetData(data);
+          },
+          error: (e) => {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.status + ' ' + e.statusText;
+            }
+            this.transactionLoading = false;
+          },
+          complete: () => {
+            this.transactionLoading = false;
+          },
+        });
     } else {
       this.userService.getCW20TxByAddress(payload).subscribe({
         next: (data) => {
@@ -636,8 +658,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             element.tx_hash = _.get(element, 'hash');
             element.timestamp = _.get(element, 'transaction.timestamp');
             element.arrEvent = _.get(element, 'erc20_activities')?.map((item, index) => {
-              const type = _.get(element, 'data')?.substring(0, 8);
-              element.method = type;
               let from = _.get(item, 'from') || NULL_ADDRESS;
               let to = _.get(item, 'to') || NULL_ADDRESS;
               let denom = _.get(item, 'erc20_contract.symbol');
@@ -645,7 +665,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
               let decimal = _.get(item, 'erc20_contract.decimal');
               let amount = balanceOf(amountTemp || 0, +decimal);
               let contractAddress = _.get(item, 'erc20_contract_address');
-              return { type, from, to, amount, denom, contractAddress, amountTemp, decimal };
+              return { type: _.get(item, 'type'), from, to, amount, denom, contractAddress, amountTemp, decimal };
             });
             element.from = element.arrEvent[0]?.from;
             element.to = element.arrEvent[0]?.to;

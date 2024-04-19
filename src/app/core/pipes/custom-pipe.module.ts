@@ -1,19 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { IsContractPipe } from './address.pipe';
+import { CapacityPipe } from './capacity.pipe';
 import { DecodeDataPipe } from './coded.pipe';
 import { CustomTimeDatePipe } from './date.pipe';
+import { EvmAddressPipe } from './evm-address.pipe';
 import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
 import { JsonPipe } from './json.pipe';
 import { IbcDenomPipe, MarketInfoPipe } from './market-info.pipe';
 import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
-import { BalancePipe, FormatDigitPipe, GtePipe, GtPipe, LtePipe, LtPipe } from './number.pipe';
+import { BalancePipe, FormatDigitPipe, GtPipe, GtePipe, LtPipe, LtePipe } from './number.pipe';
+import { ObjectKeysPipe } from './object-keys.pipe';
 import { CombineTxsMsgPipe, EllipsisPipe } from './string.pipe';
 import { NameTagTooltipPipe } from './tooltip.pipe';
-import { IsContractPipe } from './address.pipe';
-import { ObjectKeysPipe } from './object-keys.pipe';
-import { CapacityPipe } from './capacity.pipe';
-import { ConvertEvmTxPipe } from './evm.pipe';
-import { EvmAddressPipe } from './evm-address.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -40,7 +39,6 @@ import { EvmAddressPipe } from './evm-address.pipe';
     IsContractPipe,
     ObjectKeysPipe,
     CapacityPipe,
-    ConvertEvmTxPipe,
     EvmAddressPipe,
   ],
   exports: [
@@ -66,7 +64,6 @@ import { EvmAddressPipe } from './evm-address.pipe';
     IsContractPipe,
     ObjectKeysPipe,
     CapacityPipe,
-    ConvertEvmTxPipe,
     EvmAddressPipe,
   ],
   providers: [],

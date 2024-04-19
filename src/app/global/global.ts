@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TabsAccountLink } from '../core/constants/account.enum';
-import { LENGTH_CHARACTER, NULL_ADDRESS, STORAGE_KEYS } from '../core/constants/common.constant';
+import { EMethodContract, LENGTH_CHARACTER, NULL_ADDRESS, STORAGE_KEYS } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -502,4 +502,13 @@ export function convertTxIBC(data, coinInfo) {
 export function titleCaseWord(word: string) {
   if (!word) return word;
   return word[0].toUpperCase() + word.substr(1);
+}
+
+export function mappingMethodName(lstMapping, codeId) {
+  // check is type Create Contract
+  if (EMethodContract.Creation === codeId) {
+    return 'Create Contract';
+  }
+
+  return lstMapping[codeId] || codeId || 'Send';
 }

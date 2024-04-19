@@ -3,16 +3,16 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { LENGTH_CHARACTER, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { CONTRACT_TAB, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { ContractTab, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { getFunctionNameByMethodId } from 'src/app/core/helpers/chain';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { mappingMethodName } from 'src/app/global/global';
 
 @Component({
   selector: 'app-evm-contract-content',
@@ -135,24 +135,32 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
       this.transactionService
         .getListEvmContractTxByAddress(payload)
         .pipe(
-          map((txsRes) => {
-            if (txsRes?.evm_transaction?.length > 0) {
-              return txsRes.evm_transaction.map((tx) => {
-                const type = getFunctionNameByMethodId(_.get(tx, 'data')?.substring(0, 8));
-                return {
-                  ...tx,
-                  tx_hash: _.get(tx, 'hash'),
-                  hash: _.get(tx, 'transaction.hash'),
-                  method: type,
-                  from: _.get(tx, 'from'),
-                  to: _.get(tx, 'to'),
-                  timestamp: _.get(tx, 'transaction.timestamp'),
-                  evmAmount: _.get(tx, 'value'),
-                };
-              });
-            }
+          switchMap((txsRes) => {
+            const listTemp = txsRes.evm_transaction
+              ?.filter((j) => j.data?.length > 0)
+              ?.map((k) => k.data?.substring(0, 8));
+            const listMethodId = _.uniq(listTemp);
+            return this.transactionService.getListMappingName(listMethodId).pipe(
+              map((res) => {
+                if (txsRes?.evm_transaction?.length > 0) {
+                  return txsRes.evm_transaction.map((tx) => {
+                    const methodId = _.get(tx, 'data')?.substring(0, 8);
+                    return {
+                      ...tx,
+                      tx_hash: _.get(tx, 'hash'),
+                      hash: _.get(tx, 'transaction.hash'),
+                      method:  mappingMethodName(res, methodId),
+                      from: _.get(tx, 'from'),
+                      to: _.get(tx, 'to'),
+                      timestamp: _.get(tx, 'transaction.timestamp'),
+                      evmAmount: _.get(tx, 'value'),
+                    };
+                  });
+                }
 
-            return [];
+                return [];
+              }),
+            );
           }),
         )
         .subscribe({

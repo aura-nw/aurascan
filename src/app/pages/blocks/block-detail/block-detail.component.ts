@@ -11,7 +11,7 @@ import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { convertDataBlock, convertDataTransactionSimple } from '../../../../app/global/global';
+import { convertDataBlock, convertDataTransactionSimple, mappingMethodName } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -138,10 +138,7 @@ export class BlockDetailComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: () => {
-          this.getListCosmosTxn();
-          this.getListEVMTxn();
-        },
+        next: () => {},
         error: (e) => {
           if (e.message === this.NOT_FOUND) {
             setTimeout(() => {
@@ -193,11 +190,32 @@ export class BlockDetailComponent implements OnInit {
       height: this.blockHeight,
     };
     return this.transactionService.queryTransactionByEvmHash(payload).pipe(
+      switchMap((res) => {
+        const listTemp = res?.transaction
+          ?.filter((j) => j.evm_transaction.data?.length > 0)
+          ?.map((k) => k.evm_transaction.data?.substring(0, 8));
+        const listMethodId = _.uniq(listTemp);
+        return this.transactionService.getListMappingName(listMethodId).pipe(
+          map((element) => {
+            if (res?.transaction?.length > 0) {
+              return res.transaction.map((tx) => {
+                const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                return {
+                  ...tx,
+                  method: mappingMethodName(element, methodId),
+                };
+              });
+            }
+            return [];
+          }),
+        );
+      }),
       map((res) => {
-        if (res?.transaction?.length > 0) {
-          this.parseDataListEvmTxn(res?.transaction);
+        if (res?.length > 0) {
+          this.parseDataListEvmTxn(res);
         }
         this.loadingEVMTxs = false;
+
         return true;
       }),
       catchError((e) => {
@@ -249,11 +267,9 @@ export class BlockDetailComponent implements OnInit {
   parseDataListEvmTxn(txs) {
     if (txs.length > 0) {
       this.dataSourceEvm.data = txs.map((tx) => {
-        const type = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
         return {
           ...tx,
           tx_hash: _.get(tx, 'evm_transaction.hash'),
-          method: type,
           from: _.get(tx, 'evm_transaction.from'),
           to: _.get(tx, 'evm_transaction.to'),
           amount: _.get(tx, 'transaction_messages[0].content.data.value') || 0,

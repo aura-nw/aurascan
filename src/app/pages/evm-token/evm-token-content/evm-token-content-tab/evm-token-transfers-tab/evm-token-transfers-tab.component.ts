@@ -14,6 +14,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
+import { mappingMethodName } from 'src/app/global/global';
 
 @Component({
   selector: 'app-evm-token-transfers-tab',
@@ -154,10 +155,10 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
             map((element) => {
               if (res?.cw721_activity?.length > 0) {
                 return res.cw721_activity.map((tx) => {
-                  const typeTemp = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                  const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
                   return {
                     ...tx,
-                    type: element[typeTemp] || typeTemp || 'Send',
+                    type: mappingMethodName(element, methodId),
                   };
                 });
               }
@@ -245,10 +246,10 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
             map((element) => {
               if (res?.erc20_activity?.length > 0) {
                 return res.erc20_activity.map((tx) => {
-                  const typeTemp = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                  const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
                   return {
                     ...tx,
-                    type: element[typeTemp] || typeTemp || 'Send',
+                    type: mappingMethodName(element, methodId),
                   };
                 });
               }

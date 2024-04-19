@@ -3,6 +3,7 @@ import { Interface, parseEther } from 'ethers';
 import { EMethodContract } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { mappingMethodName } from 'src/app/global/global';
 
 @Component({
   selector: 'app-evm-message',
@@ -107,7 +108,7 @@ export class EvmMessageComponent {
 
   getMethodName(methodId) {
     this.transactionService.getListMappingName(methodId).subscribe((res) => {
-      this.method = res[methodId] || methodId || 'Send';
+      this.method = mappingMethodName(res, methodId);
     });
   }
 }

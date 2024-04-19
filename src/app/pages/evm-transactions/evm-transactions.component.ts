@@ -7,6 +7,7 @@ import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { mappingMethodName } from 'src/app/global/global';
 
 @Component({
   selector: 'app-evm-transactions',
@@ -62,11 +63,11 @@ export class EvmTransactionsComponent {
             map((element) => {
               if (res?.transaction?.length > 0) {
                 return res.transaction.map((tx) => {
-                  const typeTemp =  _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                  const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
                   return {
                     ...tx,
                     evm_hash: _.get(tx, 'evm_transaction.hash'),
-                    type: element[typeTemp] || typeTemp || 'Send',
+                    type: mappingMethodName(element, methodId),
                     from: _.get(tx, 'evm_transaction.from'),
                     to: _.get(tx, 'evm_transaction.to'),
                     amount: _.get(tx, 'evm_transaction.value'),
