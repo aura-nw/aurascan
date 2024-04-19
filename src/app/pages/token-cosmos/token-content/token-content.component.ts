@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token.constant';
@@ -110,11 +110,6 @@ export class TokenContentComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
   changeTab(tabId): void {
     this.currentTab = tabId;
   }
@@ -152,7 +147,7 @@ export class TokenContentComponent implements OnInit {
         }
       } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
         this.isSearchAddress = true;
-        this.tokenService.filterBalanceNative$.subscribe((res) => {
+        this.tokenService.filterBalanceNative$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
           this.infoSearch['balance'] = res || 0;
           this.setFilterValue(this.infoSearch['balance']);
         });
