@@ -82,6 +82,10 @@ export class TokenHoldersTabComponent implements OnInit {
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
 
+  ngOnDestroy(): void {
+    this.tokenService.filterBalanceNative$.next(null);
+  }
+
   getListData() {
     if (this.typeContract) {
       if (this.typeContract !== ContractRegisterType.CW20) {
@@ -305,6 +309,10 @@ export class TokenHoldersTabComponent implements OnInit {
                 .dividedBy(BigNumber(10).pow(this.decimalValue))
                 .toFixed() || 0;
           });
+
+          if (payload.address && accountBalance?.length === 1) {
+            this.tokenService.filterBalanceNative$.next(accountBalance[0].balance);
+          }
           return of(accountBalance);
         }),
       )
