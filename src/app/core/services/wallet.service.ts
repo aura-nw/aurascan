@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Chain } from '@chain-registry/types';
-import { JsonObject } from '@cosmjs/cosmwasm-stargate';
+import { JsonObject, SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { EncodeObject } from '@cosmjs/proto-signing';
 import { Coin, StdFee } from '@cosmjs/stargate';
 import {
@@ -19,7 +19,10 @@ import {
   WalletName,
 } from '@cosmos-kit/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { EnvironmentService } from '../data-services/environment.service';
 import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
+import { getGasPriceByChain } from '../utils/cosmoskit/helpers/gas';
+import { ExtendsWalletClient } from '../utils/cosmoskit/wallets';
 
 @Injectable({
   providedIn: 'root',
@@ -52,7 +55,7 @@ export class WalletService implements OnDestroy {
     return this._chain;
   }
 
-  constructor() {
+  constructor(private env: EnvironmentService) {
     this._walletAccountSubject$ = new BehaviorSubject<WalletAccount>(null);
     this.walletAccount$ = this._walletAccountSubject$.asObservable();
   }
@@ -203,6 +206,24 @@ export class WalletService implements OnDestroy {
     });
   }
 
+  private async _getSigningCosmWasmClientAuto() {
+    let _walletName = localStorage.getItem(STORAGE_KEY.CURRENT_WALLET);
+    const chainWallet = this._walletManager.getMainWallet(_walletName);
+
+    try {
+      const client = chainWallet?.clientMutable?.data as ExtendsWalletClient;
+      const signer = await client?.client?.getOfflineSignerAuto(this._chain.chain_id);
+
+      return SigningCosmWasmClient.connectWithSigner(this.env.chainInfo.rpc, signer, {
+        gasPrice: getGasPriceByChain(this._chain),
+      });
+    } catch (error) {
+      console.log(`Error: ${error}`);
+
+      return undefined;
+    }
+  }
+
   getChainWallet(walletName?: WalletName): ChainWalletBase {
     let _walletName = walletName ?? localStorage.getItem(STORAGE_KEY.CURRENT_WALLET);
     if (!_walletName) {
@@ -223,10 +244,17 @@ export class WalletService implements OnDestroy {
     memo?: string,
     timeoutHeight?: bigint,
   ) {
-    return (await this._getSigningCosmWasmClient()).signAndBroadcast(signerAddress, messages, fee, memo, timeoutHeight);
+    let client;
+    try {
+      client = await this._getSigningCosmWasmClientAuto();
+    } catch (error) {
+      client = await this._getSigningCosmWasmClient();
+    }
+
+    return client.signAndBroadcast(signerAddress, messages, fee, memo);
   }
 
-  executeContract(
+  async executeContract(
     senderAddress: string,
     contractAddress: string,
     msg: JsonObject,
@@ -234,9 +262,13 @@ export class WalletService implements OnDestroy {
     memo?: string,
     funds?: readonly Coin[],
   ) {
-    return this._getSigningCosmWasmClient().then(
-      (client) => client?.execute(senderAddress, contractAddress, msg, fee, memo, funds),
-    );
+    let client;
+    try {
+      client = await this._getSigningCosmWasmClientAuto();
+    } catch (error) {
+      client = await this._getSigningCosmWasmClient();
+    }
+    return client?.execute(senderAddress, contractAddress, msg, fee, memo, funds);
   }
 
   signArbitrary(signer: string, data: string | Uint8Array) {
@@ -263,9 +295,17 @@ export class WalletService implements OnDestroy {
     fee: StdFee | 'auto' | number = 'auto',
     memo?: string,
   ) {
-    return this._getSigningCosmWasmClient().then((client) =>
-      client.delegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
-    );
+    let client;
+    try {
+      client = await this._getSigningCosmWasmClientAuto();
+    } catch (error) {
+      client = await this._getSigningCosmWasmClient();
+    }
+
+    return client.delegateTokens(delegatorAddress, validatorAddress, amount, fee, memo);
+    // return this._getSigningCosmWasmClient().then((client) =>
+    //   client.delegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
+    // );
   }
 
   async undelegateTokens(
@@ -275,9 +315,17 @@ export class WalletService implements OnDestroy {
     fee: StdFee | 'auto' | number = 'auto',
     memo?: string,
   ) {
-    return this._getSigningCosmWasmClient().then((client) =>
-      client.undelegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
-    );
+    let client;
+    try {
+      client = await this._getSigningCosmWasmClientAuto();
+    } catch (error) {
+      client = await this._getSigningCosmWasmClient();
+    }
+
+    return client.undelegateTokens(delegatorAddress, validatorAddress, amount, fee, memo);
+    // return this._getSigningCosmWasmClient().then((client) =>
+    //   client.undelegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
+    // );
   }
 
   estimateFee(messages: EncodeObject[], type?: CosmosClientType, memo?: string, multiplier?: number) {
