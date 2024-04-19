@@ -515,14 +515,14 @@ export class TokenService extends CommonService {
 
   getNativeHolder(payload: { limit?: number; offset?: number; address?: string }): Observable<any> {
     const operationsDoc = `
-    query queryTokenHolder(, $limit: Int = null, $offset: Int = null, $address: String = null) {
+    query queryTokenHolder($limit: Int = null, $offset: Int = null, $address: String = null) {
       ${this.envDB} {
-        m_view_account_balance_statistic(where: {address: {_eq: $address}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
+        m_view_account_balance_statistic(where: {address: {_eq: $address}, amount: {_gt: "0"}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           updated_at
           amount
           address
         }
-        m_view_account_balance_statistic_aggregate (where: {address: {_eq: $address}}) {
+        m_view_account_balance_statistic_aggregate (where: {address: {_eq: $address}, amount: {_gt: "0"}}) {
           aggregate {
             count
           }
