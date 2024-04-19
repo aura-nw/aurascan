@@ -507,7 +507,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.walletService
         .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount, 'auto')
         .then((broadcastResult) => {
-          console.log('🐛 broadcastResult: ', broadcastResult);
           let error = undefined;
           if (broadcastResult?.code != 0) {
             error = broadcastResult;
@@ -537,7 +536,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }));
 
         const revokeMultiplier = 1.7; // revoke multiplier - NOT FOR ALL
-        const fee = await this.walletService.estimateFee(msg, 'stargate', '', revokeMultiplier);
+        const fee = await this.walletService.estimateFee(msg, 'cosmwasm', '', revokeMultiplier);
 
         this.walletService
           .signAndBroadcast(this.userAddress, msg, fee || 'auto')
