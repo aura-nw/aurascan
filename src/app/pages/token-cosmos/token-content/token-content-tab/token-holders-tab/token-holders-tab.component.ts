@@ -305,6 +305,10 @@ export class TokenHoldersTabComponent implements OnInit {
                 .dividedBy(BigNumber(10).pow(this.decimalValue))
                 .toFixed() || 0;
           });
+
+          if (payload.address && accountBalance?.length === 1) {
+            this.tokenService.filterBalanceNative$.next(accountBalance[0].balance);
+          }
           return of(accountBalance);
         }),
       )
