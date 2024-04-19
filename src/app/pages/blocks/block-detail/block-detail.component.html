@@ -375,7 +375,7 @@
                           </a>
                           <div *ngSwitchCase="'method'" class="g-type aura-status">
                             <div class="d-flex" [appTooltip]="data.lstType | combineTxsMsg">
-                              {{ data[template.matColumnDef] | convertEvmTx }}
+                              {{ data[template.matColumnDef] }}
                               <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
                                 +{{ data.lstType?.length - 1 }}
                               </div>
@@ -468,7 +468,7 @@
                             <div class="d-flex align-items-center ml-5">
                               <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
                               <span class="line-claim text--gray-light caption fw-normal">
-                                {{ data?.method | convertEvmTx }}
+                                {{ data?.method }}
                               </span>
                             </div>
                           </div>

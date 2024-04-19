@@ -35,7 +35,7 @@
       <div class="d-flex align-items-center" [ngClass]="modeQuery === tabsData.ExecutedTxs ? 'ml-4' : 'mt-1'">
         <i class="ph ph-chat-circle-text mr-1 text--gray-4 body-mob"></i>
         <span [class.line-claim]="modeQuery === tabsData.ExecutedTxs || modeQuery === tabsData.FtsTxs">
-          {{ (title.subLabelContent | ellipsis: 30) || (dataCard.method | convertEvmTx) }}
+          {{ (title.subLabelContent | ellipsis: 30) || dataCard.method }}
         </span>
         <div *ngIf="dataCard.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
           +{{ dataCard.lstTypeTemp?.length - 1 }}

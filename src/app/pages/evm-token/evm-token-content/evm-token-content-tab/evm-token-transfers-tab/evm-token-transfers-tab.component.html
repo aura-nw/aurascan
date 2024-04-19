@@ -83,7 +83,7 @@
                     {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'type'">
-                    <span> {{ data[template.matColumnDef] | convertEvmTx }}</span>
+                    <span> {{ data[template.matColumnDef] }}</span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'tx_hash'">
                     <a class="text--primary" [routerLink]="['/tx', data.tx_hash]" [copyBtn]="data.tx_hash">
