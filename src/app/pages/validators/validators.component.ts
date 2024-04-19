@@ -16,7 +16,7 @@ import {
   NUMBER_2_DIGIT,
   NUM_BLOCK,
   TIMEOUT_ERROR,
-  TIME_OUT_CALL_API
+  TIME_OUT_CALL_API,
 } from 'src/app/core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { VOTING_POWER_STATUS } from 'src/app/core/constants/validator.constant';
@@ -507,7 +507,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.walletService
         .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount, 'auto')
         .then((broadcastResult) => {
-          console.log('🐛 broadcastResult: ', broadcastResult);
           let error = undefined;
           if (broadcastResult?.code != 0) {
             error = broadcastResult;
@@ -537,7 +536,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         }));
 
         const revokeMultiplier = 1.7; // revoke multiplier - NOT FOR ALL
-        const fee = await this.walletService.estimateFee(msg, 'stargate', '', revokeMultiplier);
+        const fee = await this.walletService.estimateFee(msg, 'cosmwasm', '', revokeMultiplier);
 
         this.walletService
           .signAndBroadcast(this.userAddress, msg, fee || 'auto')
