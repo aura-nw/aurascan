@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import BigNumber from 'bignumber.js';
+import { Subject } from 'rxjs';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token.constant';
@@ -49,6 +50,7 @@ export class TokenContentComponent implements OnInit {
   textPlaceHolder = 'Filter Address/Name Tag/Txn Hash';
   linkAddress: string;
   EModeToken = EModeToken;
+  destroyed$ = new Subject<void>();
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
@@ -106,6 +108,11 @@ export class TokenContentComponent implements OnInit {
       this.activeTabID = this.TABS.findIndex((k) => k.key === this.tokenTab.Contract);
       local.removeItem(STORAGE_KEYS.IS_VERIFY_TAB);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   changeTab(tabId): void {
