@@ -773,9 +773,7 @@ export class TransactionService extends CommonService {
       .pipe(
         map((res) => (res?.data ? res?.data[this.envDB] : null)),
         map((res) => {
-          // console.log(res);
           return res?.evm_signature_mapping?.reduce((pre, current) => {
-            // console.log(pre, current);
             let methodName = current?.human_readable_topic?.replace('function ', '');
             methodName = titleCaseWord(methodName?.substring(0, methodName?.indexOf('(')));
             pre[current?.function_id] = methodName || current?.human_readable_topic;

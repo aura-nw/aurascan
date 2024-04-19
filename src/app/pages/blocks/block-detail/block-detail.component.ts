@@ -138,7 +138,10 @@ export class BlockDetailComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: () => {},
+        next: () => {
+          this.getListCosmosTxn();
+          this.getListEVMTxn();
+        },
         error: (e) => {
           if (e.message === this.NOT_FOUND) {
             setTimeout(() => {

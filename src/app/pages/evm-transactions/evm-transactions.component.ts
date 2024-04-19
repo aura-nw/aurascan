@@ -60,13 +60,9 @@ export class EvmTransactionsComponent {
           const listMethodId = _.uniq(listTemp);
           return this.transactionService.getListMappingName(listMethodId).pipe(
             map((element) => {
-              console.log('elementelement', element);
-
               if (res?.transaction?.length > 0) {
                 return res.transaction.map((tx) => {
                   const typeTemp =  _.get(tx, 'evm_transaction.data')?.substring(0, 8);
-                  console.log(element[typeTemp]);
-                  
                   return {
                     ...tx,
                     evm_hash: _.get(tx, 'evm_transaction.hash'),
@@ -84,8 +80,6 @@ export class EvmTransactionsComponent {
       )
       .subscribe({
         next: (res) => {
-          console.log(res);
-
           this.dataSource.data = res;
         },
         error: (e) => {
