@@ -266,15 +266,15 @@
                               <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
                               <span class="text--gray-light caption fw-normal">{{
                                 data?.timestamp | customDateTime: 'Distance'
-                                }}</span>
+                              }}</span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
-                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
+                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
                               <span class="line-claim text--gray-light caption fw-normal">{{
                                 data?.type | ellipsis: 12
-                                }}</span>
+                              }}</span>
                               <span *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4"
-                              >+{{ data.lstType?.length - 1 }}</span
+                                >+{{ data.lstType?.length - 1 }}</span
                               >
                             </div>
                           </div>
@@ -467,7 +467,7 @@
                               </span>
                             </div>
                             <div class="d-flex align-items-center ml-5">
-                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1"/>
+                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
                               <span class="line-claim text--gray-light caption fw-normal">
                                 {{ data?.method }}
                               </span>

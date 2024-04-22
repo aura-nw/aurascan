@@ -2,7 +2,7 @@
   <section class="text--white">
     <div *ngIf="isSearchTx" class="px-4 py-4 py-lg-3 card border-none">
       <p class="caption d-flex align-item-center mb-1">
-        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px"/>
+        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
         FILTER BY TOKEN TXN HASH
       </p>
       <a class="text--primary body-02 break-word" [copyBtn]="textSearch" [routerLink]="['/tx', textSearch]">
@@ -18,7 +18,7 @@
               class="mr-2"
               alt=""
               width="18px"
-              height="18px"/>
+              height="18px" />
             FILTER BY ADDRESS
           </div>
           <div class="mt-2">
@@ -58,8 +58,7 @@
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
           <ng-container *ngIf="infoSearch.value | gt: 0; else zeroValue">
-            <span *ngIf="infoSearch['value'] | lt: 0.01"
-                  [appTooltip]="infoSearch['value'].toString()">
+            <span *ngIf="infoSearch['value'] | lt: 0.01" [appTooltip]="infoSearch['value'].toString()">
               {{ '< $0.01' }}
             </span>
             <span
@@ -107,7 +106,7 @@
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
               width="16px"
-              height="16px"/>
+              height="16px" />
           </a>
         </li>
       </ng-container>
@@ -130,9 +129,9 @@
             name="search"
             (keyup.enter)="handleSearch()"
             [disabled]="paramQuery?.length > 0"
-            autocomplete="off"/>
+            autocomplete="off" />
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
@@ -140,7 +139,7 @@
               !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : ''
             }}"
             (click)="resetSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
       </form>

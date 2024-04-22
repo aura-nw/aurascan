@@ -1,7 +1,9 @@
 <mat-paginator class="d-none" [pageSize]="pageSize"></mat-paginator>
 
 <div
-  class="row {{ (updateTime || showSelectRecord) ? 'justify-content-center justify-content-lg-between' : 'justify-content-end' }}"
+  class="row {{
+    updateTime || showSelectRecord ? 'justify-content-center justify-content-lg-between' : 'justify-content-end'
+  }}"
   [class.page-list]="showSelectRecord || pageLength > 1">
   <div
     *ngIf="showSelectRecord"
@@ -51,7 +53,7 @@
     <!--    <li class="page page-first" (click)="changePageMax(0); selectPage(0)" [class.disabled]="current.isFirst">First</li>-->
     <li class="page page-prev" (click)="prevPage()" [class.disabled]="current.isFirst">
       <span>Previous</span>
-      <img class="ml-4" src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="Previous" width="16px"/>
+      <img class="ml-4" src="../../../../assets/icons/icons-svg/white/chevron-left.svg" alt="Previous" width="16px" />
     </li>
     <ng-container *ngFor="let page of current.list">
       <li
@@ -62,7 +64,7 @@
       </li>
     </ng-container>
     <li class="page page-next" (click)="nextPage()" [class.disabled]="current.isLast">
-      <img class="mr-4" src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="Next" width="16px"/>
+      <img class="mr-4" src="../../../../assets/icons/icons-svg/white/chevron-right.svg" alt="Next" width="16px" />
       <span>Next</span>
     </li>
     <!--    <li-->
