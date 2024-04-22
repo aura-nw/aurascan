@@ -534,7 +534,7 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          address: payload.address,
+          address: payload.address || null,
           limit: payload.limit || 100,
           offset: payload.offset || 0,
         },
@@ -573,7 +573,7 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           denom: payload.denomHash,
-          address: payload.address,
+          address: payload.address || null,
           limit: payload.limit || 100,
           offset: payload.offset || 0,
           addressNotIn: payload.isExcludedAddresses ? this.excludedAddresses : [],

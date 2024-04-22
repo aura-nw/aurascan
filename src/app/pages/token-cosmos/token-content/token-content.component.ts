@@ -8,10 +8,12 @@ import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.co
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token.constant';
 import { EModeToken, TokenTab } from 'src/app/core/constants/token.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 
 @Component({
@@ -116,12 +118,6 @@ export class TokenContentComponent implements OnInit {
 
   handleSearch() {
     const queryParams = this.route.snapshot?.queryParams?.a;
-    if (!queryParams && this.searchTemp?.length > 0) {
-      this.redirectPage(`/token/${this.linkAddress}`, {
-        a: this.searchTemp,
-      });
-    }
-
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
@@ -129,7 +125,18 @@ export class TokenContentComponent implements OnInit {
       const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchTemp);
       this.textSearch = this.searchTemp;
       let tempTabs;
-      this.paramQuery = addressNameTag || this.searchTemp;
+      const { accountAddress } = transferAddress(
+        this.chainInfo.bech32Config.bech32PrefixAccAddr,
+        addressNameTag || this.searchTemp,
+      );
+      this.paramQuery = accountAddress || addressNameTag || this.searchTemp;
+
+      if (!queryParams && this.paramQuery?.length > 0) {
+        this.redirectPage(`/token/${this.linkAddress}`, {
+          a: this.paramQuery,
+        });
+      }
+
       // check if mode not equal native coin
       if (this.tokenDetail.modeToken !== EModeToken?.Native) {
         if (
@@ -145,7 +152,7 @@ export class TokenContentComponent implements OnInit {
         } else {
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
         }
-      } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+      } else if (this.paramQuery?.length >= LENGTH_CHARACTER.ADDRESS && this.paramQuery?.startsWith(this.prefixAdd)) {
         this.isSearchAddress = true;
         this.tokenService.filterBalanceNative$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
           this.infoSearch['balance'] = res || 0;
