@@ -25,6 +25,7 @@ import { convertEvmAddressToBech32Address, transferAddress } from '../utils/comm
 import { allAssets, STORAGE_KEY } from '../utils/cosmoskit';
 import { getGasPriceByChain } from '../utils/cosmoskit/helpers/gas';
 import { ExtendsWalletClient } from '../utils/cosmoskit/wallets';
+import { wallets as leapMetamask } from '../utils/cosmoskit/wallets/leap-metamask-cosmos-snap';
 import { getSigner } from '../utils/ethers/ethers';
 import { addNetwork, checkNetwork } from '../utils/ethers/utils';
 import local from '../utils/storage/local';
@@ -251,6 +252,10 @@ export class WalletService implements OnDestroy {
     let _walletName = localStorage.getItem(STORAGE_KEY.CURRENT_WALLET);
     const chainWallet = this._walletManager.getMainWallet(_walletName);
 
+    if (_walletName == leapMetamask[0].walletName) {
+      return undefined;
+    }
+
     try {
       const client = chainWallet?.clientMutable?.data as ExtendsWalletClient;
       const signer = await client?.client?.getOfflineSignerAuto(this._chain.chain_id);
@@ -352,14 +357,13 @@ export class WalletService implements OnDestroy {
     let client;
     try {
       client = await this._getSigningCosmWasmClientAuto();
-    } catch (error) {
+    } catch (error) {}
+
+    if (!client) {
       client = await this._getSigningCosmWasmClient();
     }
 
     return client.delegateTokens(delegatorAddress, validatorAddress, amount, fee, memo);
-    // return this._getSigningCosmWasmClient().then((client) =>
-    //   client.delegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
-    // );
   }
 
   async undelegateTokens(
@@ -377,9 +381,6 @@ export class WalletService implements OnDestroy {
     }
 
     return client.undelegateTokens(delegatorAddress, validatorAddress, amount, fee, memo);
-    // return this._getSigningCosmWasmClient().then((client) =>
-    //   client.undelegateTokens(delegatorAddress, validatorAddress, amount, fee, memo),
-    // );
   }
 
   estimateFee(messages: EncodeObject[], type?: CosmosClientType, memo?: string, multiplier?: number) {
