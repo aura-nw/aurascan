@@ -114,19 +114,24 @@ export class EvmTokenContentComponent implements OnInit {
 
   handleSearch() {
     const queryParams = this.route.snapshot?.queryParams?.a;
-    if (!queryParams && this.textSearch?.length > 0) {
-      this.redirectPage(`/token/${this.linkAddress}`, {
-        a: this.textSearch,
-      });
-    }
-
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
     if (this.searchTemp?.length > 0) {
       const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchTemp);
       this.textSearch = this.searchTemp;
-      this.searchTemp = addressNameTag || this.textSearch;
+      const { accountEvmAddress } = transferAddress(
+        this.chainInfo.bech32Config.bech32PrefixAccAddr,
+        addressNameTag || this.searchTemp,
+      );
+      this.searchTemp = accountEvmAddress || addressNameTag || this.textSearch;
+
+      if (!queryParams && this.searchTemp?.length > 0) {
+        this.redirectPage(`/token/${this.linkAddress}`, {
+          a: this.searchTemp,
+        });
+      }
+
       let tempTabs;
       // check if mode not equal native coin
       if (
