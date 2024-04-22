@@ -21,7 +21,9 @@ import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { convertTxIBC } from 'src/app/global/global';
@@ -86,11 +88,13 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
   isExistDenom = false;
   channelPath: any;
   denomFilter = '';
+  addressNameTag = '';
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     private environmentService: EnvironmentService,
@@ -98,6 +102,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
     private cdr: ChangeDetectorRef,
     private tokenService: TokenService,
     private router: Router,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -130,6 +135,11 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
   }
 
   getListData(nextKey = null, isReload = false) {
+    const nameTagTemp = this.nameTagService.findAddressByNameTag(this.keyWord) || this.keyWord;
+    const { accountAddress } = transferAddress(this.chainInfo.bech32Config.bech32PrefixAccAddr, nameTagTemp);
+    // get address cosmos name tag
+    this.addressNameTag = accountAddress;
+
     if (this.tokenDetail.modeToken === EModeToken.CWToken) {
       if (this.typeContract !== this.contractType.CW20) {
         this.getListTransactionTokenCW721(nextKey, isReload);
@@ -154,7 +164,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
 
   async getListTransactionTokenCW721(nextKey = null, isReload = false) {
     let payload = {
-      address: this.keyWord,
       contractAddr: this.contractAddress,
       idLte: nextKey,
     };
@@ -168,8 +177,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
         payload['txHash'] = this.keyWord;
       } else {
         if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
-          payload['sender'] = this.keyWord;
-          payload['receiver'] = this.keyWord;
+          payload['sender'] = this.addressNameTag || this.keyWord;
+          payload['receiver'] = this.addressNameTag || this.keyWord;
         } else {
           payload['tokenId'] = this.keyWord;
         }
@@ -227,7 +236,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
   async getListTransactionTokenCW20(nextKey = null, isReload = false) {
     let payload = {
       limit: 100,
-      address: this.keyWord,
       heightLT: nextKey,
       contractAddr: this.contractAddress,
     };
@@ -236,8 +244,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
       if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
         payload['txHash'] = this.keyWord;
       } else {
-        payload['sender'] = this.keyWord;
-        payload['receiver'] = this.keyWord;
+        payload['sender'] = this.addressNameTag || this.keyWord;
+        payload['receiver'] = this.addressNameTag || this.keyWord;
       }
     }
 
@@ -301,7 +309,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
       if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
         payload['txHash'] = this.keyWord;
       } else {
-        payload['address'] = this.keyWord;
+        payload['address'] = this.addressNameTag || this.keyWord;
       }
     }
 
