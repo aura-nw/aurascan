@@ -1,17 +1,17 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
-import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR } from '../../../core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
-import { EFeature, TableTemplate } from '../../../core/models/common.model';
-import { ContractService } from '../../../core/services/contract.service';
-import { shortenAddress } from '../../../core/utils/common/shorten';
+import {DatePipe} from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {TranslateService} from '@ngx-translate/core';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {TYPE_CW4973} from 'src/app/core/constants/contract.constant';
+import {ContractRegisterType, ContractVerifyType} from 'src/app/core/constants/contract.enum';
+import {DATEFORMAT, PAGE_EVENT, TIMEOUT_ERROR} from '../../../core/constants/common.constant';
+import {MAX_LENGTH_SEARCH_TOKEN} from '../../../core/constants/token.constant';
+import {EFeature, TableTemplate} from '../../../core/models/common.model';
+import {ContractService} from '../../../core/services/contract.service';
+import {shortenAddress} from '../../../core/utils/common/shorten';
 
 @Component({
   selector: 'app-contracts-list',
@@ -22,14 +22,14 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   typeCW4973 = TYPE_CW4973;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
-    { matColumnDef: 'name', headerCellDef: 'Contract Name' },
-    { matColumnDef: 'label', headerCellDef: 'Label' },
-    { matColumnDef: 'version', headerCellDef: 'Contract Ver' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
-    { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', isShort: true, isNameTag: true },
+    {matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true, headerWidth: 235},
+    {matColumnDef: 'name', headerCellDef: 'Contract Name', headerWidth: 200},
+    {matColumnDef: 'label', headerCellDef: 'Label', headerWidth: 150},
+    {matColumnDef: 'version', headerCellDef: 'Contract Ver', headerWidth: 110},
+    {matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 110},
+    {matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 215},
+    {matColumnDef: 'code_id', headerCellDef: 'Code ID', headerWidth: 110},
+    {matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', isShort: true, isNameTag: true, headerWidth: 235},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -55,7 +55,8 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     public translate: TranslateService,
     private contractService: ContractService,
     private datePipe: DatePipe,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

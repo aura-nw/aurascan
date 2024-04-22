@@ -46,15 +46,15 @@
         [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
         (keyup)="onKeyUp()"
         name="search"
-        autocomplete="off" />
+        autocomplete="off"/>
       <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
       </button>
       <button
         type="reset"
         class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
         (click)="resetFilterSearch()">
-        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
       </button>
     </div>
   </form>
@@ -75,9 +75,9 @@
                 [maxLength]="MAX_LENGTH_SEARCH_TOKEN"
                 (keyup)="onKeyUp()"
                 name="search"
-                autocomplete="off" />
+                autocomplete="off"/>
               <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
               <button
                 type="reset"
@@ -85,7 +85,7 @@
                   !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
                 }}"
                 (click)="resetFilterSearch()">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
               </button>
             </div>
           </form>
@@ -100,8 +100,9 @@
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
-                <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate" [style.min-width]="'150px'"></div>
+                <th mat-header-cell *matHeaderCellDef
+                    [style.min-width.px]="template?.headerWidth">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
                   <ng-container *ngIf="template.isNameTag">
@@ -113,7 +114,7 @@
                             alt="contract_verification"
                             width="16px"
                             height="16px"
-                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified" />
+                            *ngIf="data['contract_verification'] === ContractVerifyType.Verified"/>
                         </div>
 
                         <app-name-tag
@@ -194,9 +195,9 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchDefault>
                         {{
-                          (template.isShort
-                            ? shortenAddress(data[template.matColumnDef])
-                            : data[template.matColumnDef]) || '-'
+                        (template.isShort
+                          ? shortenAddress(data[template.matColumnDef])
+                          : data[template.matColumnDef]) || '-'
                         }}
                       </ng-container>
                     </ng-container>

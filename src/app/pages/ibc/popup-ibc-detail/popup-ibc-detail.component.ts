@@ -1,22 +1,22 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { PageEvent } from '@angular/material/paginator';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {PageEvent} from '@angular/material/paginator';
+import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { map } from 'rxjs';
-import { PAGE_EVENT, TIMEOUT_ERROR, TITLE_LOGO } from 'src/app/core/constants/common.constant';
-import { Relayer } from 'src/app/core/constants/ibc.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
-import { IBCService } from 'src/app/core/services/ibc.service';
-import { NotificationsService } from 'src/app/core/services/notifications.service';
-import { isSafari } from 'src/app/core/utils/common/validation';
+import {map} from 'rxjs';
+import {PAGE_EVENT, TIMEOUT_ERROR, TITLE_LOGO} from 'src/app/core/constants/common.constant';
+import {Relayer} from 'src/app/core/constants/ibc.enum';
+import {EnvironmentService} from 'src/app/core/data-services/environment.service';
+import {TableTemplate} from 'src/app/core/models/common.model';
+import {CommonService} from 'src/app/core/services/common.service';
+import {IBCService} from 'src/app/core/services/ibc.service';
+import {NotificationsService} from 'src/app/core/services/notifications.service';
+import {isSafari} from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-popup-ibc-detail',
@@ -39,19 +39,20 @@ export class PopupIBCDetailComponent implements OnInit {
   TITLE_LOGO = TITLE_LOGO;
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'channel_id', headerCellDef: 'channel', headerWidth: 20 },
-    { matColumnDef: 'counterparty_channel_id', headerCellDef: 'counter', headerWidth: 18 },
-    { matColumnDef: 'state', headerCellDef: 'State', headerWidth: 13 },
-    { matColumnDef: 'operatingSince', headerCellDef: 'Operating Since', headerWidth: 19 },
-    { matColumnDef: 'total', headerCellDef: 'Total', headerWidth: 13 },
-    { matColumnDef: 'receive', headerCellDef: 'Receive', headerWidth: 13 },
-    { matColumnDef: 'send', headerCellDef: 'Send', headerWidth: 13 },
-    { matColumnDef: 'action', headerCellDef: '', headerWidth: 10 },
+    {matColumnDef: 'channel_id', headerCellDef: 'channel', headerWidth: 20},
+    {matColumnDef: 'counterparty_channel_id', headerCellDef: 'counter', headerWidth: 18},
+    {matColumnDef: 'state', headerCellDef: 'State', headerWidth: 13},
+    {matColumnDef: 'operatingSince', headerCellDef: 'Operating Since', headerWidth: 19},
+    {matColumnDef: 'total', headerCellDef: 'Total', headerWidth: 13},
+    {matColumnDef: 'receive', headerCellDef: 'Receive', headerWidth: 13},
+    {matColumnDef: 'send', headerCellDef: 'Send', headerWidth: 13},
+    {matColumnDef: 'action', headerCellDef: '', headerWidth: 10},
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
   chainInfo = this.environmentService.chainInfo;
   counterInfo: any;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupIBCDetailComponent>,
@@ -61,7 +62,8 @@ export class PopupIBCDetailComponent implements OnInit {
     public commonService: CommonService,
     public route: Router,
     private notificationsService: NotificationsService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     if (this.data) {
