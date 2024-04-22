@@ -293,7 +293,9 @@ export class WalletService implements OnDestroy {
     let client;
     try {
       client = await this._getSigningCosmWasmClientAuto();
-    } catch (error) {
+    } catch (error) {}
+
+    if (!client) {
       client = await this._getSigningCosmWasmClient();
     }
 
@@ -311,9 +313,12 @@ export class WalletService implements OnDestroy {
     let client;
     try {
       client = await this._getSigningCosmWasmClientAuto();
-    } catch (error) {
+    } catch (error) {}
+
+    if (!client) {
       client = await this._getSigningCosmWasmClient();
     }
+
     return client?.execute(senderAddress, contractAddress, msg, fee, memo, funds);
   }
 
@@ -376,7 +381,9 @@ export class WalletService implements OnDestroy {
     let client;
     try {
       client = await this._getSigningCosmWasmClientAuto();
-    } catch (error) {
+    } catch (error) {}
+
+    if (!client) {
       client = await this._getSigningCosmWasmClient();
     }
 
