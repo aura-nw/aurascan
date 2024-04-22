@@ -12,6 +12,7 @@ import { EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
@@ -68,6 +69,7 @@ export class TokenHoldersTabComponent implements OnInit {
     private environmentService: EnvironmentService,
     public commonService: CommonService,
     private route: ActivatedRoute,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -230,13 +232,18 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getDenomHolder() {
-    const payload = {
+    let payload = {
       denomHash: this.tokenDetail?.denomHash || this.tokenDetail?.denom,
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       address: this.keyWord || null,
       isExcludedAddresses: this.tokenDetail.modeToken === this.EModeToken.Native,
     };
+
+    const addressNameTag = this.nameTagService.findAddressByNameTag(this.keyWord);
+    if (addressNameTag?.length > 0) {
+      payload['address'] = addressNameTag;
+    }
 
     // get list holder for Native Token
     if (this.tokenDetail.modeToken === this.EModeToken.Native) {

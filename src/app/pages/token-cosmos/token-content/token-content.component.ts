@@ -138,7 +138,7 @@ export class TokenContentComponent implements OnInit {
         ) {
           this.isSearchTx = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-        } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
+        } else if (this.paramQuery?.length >= LENGTH_CHARACTER.ADDRESS && this.paramQuery?.startsWith(this.prefixAdd)) {
           this.isSearchAddress = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
           this.getInfoAddress(this.paramQuery);
