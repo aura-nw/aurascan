@@ -124,9 +124,9 @@ export class EvmTokenContentComponent implements OnInit {
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
     if (this.searchTemp?.length > 0) {
-      const addressNameTag = this.nameTagService.findNameTag(this.searchTemp);
+      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchTemp);
       this.textSearch = this.searchTemp;
-      this.searchTemp = addressNameTag?.name_tag_private || addressNameTag?.nameTag || this.textSearch;
+      this.searchTemp = addressNameTag || this.textSearch;
       let tempTabs;
       // check if mode not equal native coin
       if (
@@ -135,10 +135,10 @@ export class EvmTokenContentComponent implements OnInit {
       ) {
         this.isSearchTx = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-      } else if (this.textSearch?.startsWith(EWalletType.EVM) || this.textSearch?.startsWith(this.prefixAdd)) {
+      } else if (this.searchTemp?.startsWith(EWalletType.EVM) || this.searchTemp?.startsWith(this.prefixAdd)) {
         this.isSearchAddress = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
-        this.getInfoAddress(this.textSearch);
+        this.getInfoAddress(this.searchTemp);
       } else {
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
       }

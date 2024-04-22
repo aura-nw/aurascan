@@ -10,8 +10,10 @@ import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { mappingMethodName } from 'src/app/global/global';
@@ -72,11 +74,13 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   contractAddress: string;
   destroyed$ = new Subject<void>();
   linkAddress: string;
+  addressNameTag = '';
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     private environmentService: EnvironmentService,
@@ -85,6 +89,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     private tokenService: TokenService,
     private router: Router,
     private transactionService: TransactionService,
+    private nameTagService: NameTagService,
   ) {}
 
   ngOnInit(): void {
@@ -116,6 +121,14 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getListData(nextKey = null, isReload = false) {
+    const nameTagTemp = this.nameTagService.findAddressByNameTag(this.keyWord) || this.keyWord;
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      nameTagTemp,
+    );
+    // get address cosmos name tag
+    this.addressNameTag = accountEvmAddress;
+
     if (this.typeContract === this.contractType.ERC20) {
       this.getListTransactionTokenERC20(nextKey, isReload);
     } else {
@@ -125,7 +138,6 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   async getListTransactionTokenERC721(nextKey = null, isReload = false) {
     let payload = {
-      address: this.keyWord,
       contractAddr: this.contractAddress,
       idLte: nextKey,
     };
@@ -135,8 +147,8 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
         payload['txHash'] = this.keyWord;
       } else {
         if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
-          payload['sender'] = this.keyWord;
-          payload['receiver'] = this.keyWord;
+          payload['sender'] = this.addressNameTag || this.keyWord;
+          payload['receiver'] = this.addressNameTag || this.keyWord;
         } else {
           payload['tokenId'] = this.keyWord;
         }
@@ -217,7 +229,6 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   async getListTransactionTokenERC20(nextKey = null, isReload = false) {
     let payload = {
       limit: 100,
-      address: this.keyWord,
       heightLT: nextKey,
       contractAddr: this.contractAddress,
     };
@@ -229,8 +240,8 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
       ) {
         payload['txHash'] = this.keyWord;
       } else {
-        payload['sender'] = this.keyWord;
-        payload['receiver'] = this.keyWord;
+        payload['sender'] = this.addressNameTag || this.keyWord;
+        payload['receiver'] = this.addressNameTag || this.keyWord;
       }
     }
 
