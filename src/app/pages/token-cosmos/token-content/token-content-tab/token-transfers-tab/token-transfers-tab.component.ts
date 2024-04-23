@@ -8,24 +8,24 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {ActivatedRoute, Router} from '@angular/router';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {Subject, takeUntil} from 'rxjs';
-import {LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR} from 'src/app/core/constants/common.constant';
-import {ContractRegisterType} from 'src/app/core/constants/contract.enum';
-import {EModeToken} from 'src/app/core/constants/token.enum';
-import {TYPE_TRANSACTION} from 'src/app/core/constants/transaction.constant';
-import {CodeTransaction, ModeExecuteTransaction, StatusTransaction} from 'src/app/core/constants/transaction.enum';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {NameTagService} from 'src/app/core/services/name-tag.service';
-import {TokenService} from 'src/app/core/services/token.service';
-import {transferAddress} from 'src/app/core/utils/common/address-converter';
-import {getTypeTx} from 'src/app/core/utils/common/info-common';
-import {shortenAddress} from 'src/app/core/utils/common/shorten';
-import {convertTxIBC} from 'src/app/global/global';
+import { Subject, takeUntil } from 'rxjs';
+import { LENGTH_CHARACTER, NULL_ADDRESS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EModeToken } from 'src/app/core/constants/token.enum';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import { getTypeTx } from 'src/app/core/utils/common/info-common';
+import { shortenAddress } from 'src/app/core/utils/common/shorten';
+import { convertTxIBC } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -40,24 +40,24 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true, headerWidth: 230},
-    {matColumnDef: 'type', headerCellDef: 'Method', isShort: true, headerWidth: 170},
-    {matColumnDef: 'status', headerCellDef: 'Result'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 150},
-    {matColumnDef: 'from_address', headerCellDef: 'From', headerWidth: 250},
-    {matColumnDef: 'to_address', headerCellDef: 'To', headerWidth: 180},
-    {matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true, headerWidth: 100},
+    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true, headerWidth: 230 },
+    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true, headerWidth: 170 },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 150 },
+    { matColumnDef: 'from_address', headerCellDef: 'From', headerWidth: 250 },
+    { matColumnDef: 'to_address', headerCellDef: 'To', headerWidth: 180 },
+    { matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true, headerWidth: 100 },
   ];
 
   NFTTemplates: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true, headerWidth: 230},
-    {matColumnDef: 'type', headerCellDef: 'Method', isShort: true, headerWidth: 170},
-    {matColumnDef: 'status', headerCellDef: 'Result'},
-    {matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 150},
-    {matColumnDef: 'from_address', headerCellDef: 'From', headerWidth: 250},
-    {matColumnDef: 'to_address', headerCellDef: 'To', headerWidth: 180},
-    {matColumnDef: 'token_id', headerCellDef: 'Token ID'},
-    {matColumnDef: 'details', headerCellDef: 'Details', headerWidth: 120},
+    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true, headerWidth: 230 },
+    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true, headerWidth: 170 },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 150 },
+    { matColumnDef: 'from_address', headerCellDef: 'From', headerWidth: 250 },
+    { matColumnDef: 'to_address', headerCellDef: 'To', headerWidth: 180 },
+    { matColumnDef: 'token_id', headerCellDef: 'Token ID' },
+    { matColumnDef: 'details', headerCellDef: 'Details', headerWidth: 120 },
   ];
 
   displayedColumns: string[];
@@ -102,8 +102,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     private tokenService: TokenService,
     private router: Router,
     private nameTagService: NameTagService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -132,7 +131,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   getListData(nextKey = null, isReload = false) {
     const nameTagTemp = this.nameTagService.findAddressByNameTag(this.keyWord) || this.keyWord;
-    const {accountAddress} = transferAddress(this.chainInfo.bech32Config.bech32PrefixAccAddr, nameTagTemp);
+    const { accountAddress } = transferAddress(this.chainInfo.bech32Config.bech32PrefixAccAddr, nameTagTemp);
     // get address cosmos name tag
     this.addressNameTag = accountAddress;
 
@@ -363,7 +362,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   pageEvent(e: PageEvent): void {
     if (this.tokenDetail.modeToken === EModeToken.CWToken) {
-      const {length, pageIndex, pageSize} = e;
+      const { length, pageIndex, pageSize } = e;
       const next = length <= (pageIndex + 2) * pageSize;
       this.pageData = e;
       if (next && this.nextKey && this.currentKey !== this.nextKey) {

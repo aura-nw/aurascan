@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {ActivatedRoute} from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { ActivatedRoute } from '@angular/router';
 import BigNumber from 'bignumber.js';
-import {map} from 'rxjs';
-import {PAGE_EVENT} from 'src/app/core/constants/common.constant';
-import {EvmContractRegisterType} from 'src/app/core/constants/contract.enum';
-import {EModeEvmToken} from 'src/app/core/constants/token.enum';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {TableTemplate} from 'src/app/core/models/common.model';
-import {CommonService} from 'src/app/core/services/common.service';
-import {TokenService} from 'src/app/core/services/token.service';
+import { map } from 'rxjs';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EModeEvmToken } from 'src/app/core/constants/token.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-evm-token-holders-tab',
@@ -25,11 +25,11 @@ export class EvmTokenHoldersTabComponent implements OnInit {
   @Input() decimalValue: number;
 
   ERC20Templates: Array<TableTemplate> = [
-    {matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5},
-    {matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30},
-    {matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12},
-    {matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12},
-    {matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12},
+    { matColumnDef: 'id', headerCellDef: 'rank', headerWidth: 5 },
+    { matColumnDef: 'owner', headerCellDef: 'address', headerWidth: 30 },
+    { matColumnDef: 'balance', headerCellDef: 'amount', headerWidth: 12 },
+    { matColumnDef: 'percent_hold', headerCellDef: 'percentage', headerWidth: 12 },
+    { matColumnDef: 'value', headerCellDef: 'value', headerWidth: 12 },
   ];
 
   // CW721Templates: Array<TableTemplate> = [
@@ -65,8 +65,7 @@ export class EvmTokenHoldersTabComponent implements OnInit {
     private environmentService: EnvironmentService,
     public commonService: CommonService,
     private route: ActivatedRoute,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -124,8 +123,8 @@ export class EvmTokenHoldersTabComponent implements OnInit {
               item.percent_hold =
                 +this.tokenDetail?.total_supply > 0
                   ? BigNumber(item.balance)
-                    .dividedBy(BigNumber(this.tokenDetail?.total_supply))
-                    .multipliedBy(100)
+                      .dividedBy(BigNumber(this.tokenDetail?.total_supply))
+                      .multipliedBy(100)
                   : 0;
               item.value =
                 BigNumber(item.balance)
