@@ -4,10 +4,8 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
-  Output,
-  SimpleChanges,
+  Output
 } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -33,11 +31,12 @@ import { convertTxIBC } from 'src/app/global/global';
   templateUrl: './token-transfers-tab.component.html',
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
-export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChanges {
+export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Input() tokenDetail: any;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
   @Input() decimalValue: number;
+  @Input() channelPath: any;
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
@@ -86,7 +85,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
   destroyed$ = new Subject<void>();
   linkAddress: string;
   isExistDenom = false;
-  channelPath: any;
   denomFilter = '';
   addressNameTag = '';
 
@@ -104,10 +102,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
     private router: Router,
     private nameTagService: NameTagService,
   ) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.getListData();
-  }
 
   ngOnInit(): void {
     this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -147,7 +141,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
         this.getListTransactionTokenCW20(nextKey, isReload);
       }
     } else {
-      if (this.isExistDenom) {
+      if (this.isExistDenom || this.channelPath?.path) {
         this.getListTransactionTokenIBC(nextKey);
       } else {
         this.tokenService.pathDenom$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {

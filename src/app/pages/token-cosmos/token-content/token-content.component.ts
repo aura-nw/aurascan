@@ -24,6 +24,7 @@ import local from 'src/app/core/utils/storage/local';
 export class TokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
+  @Input() channelPath: any;
   @Output() hasMore = new EventEmitter<any>();
 
   tabStaking = [TokenTab.Holders];
