@@ -5,7 +5,8 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
+  SimpleChanges,
 } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -104,8 +105,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-    this.typeContract = this.tokenDetail?.type;
     this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       this.keyWord = params?.a || '';
     });
@@ -113,13 +112,18 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    this.getListData();
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
         this.currentKey = null;
         this.getListData(null, true);
       }
     }, 30000);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
+    this.typeContract = this.tokenDetail?.type;
+    this.getListData();
   }
 
   ngOnDestroy(): void {
@@ -134,25 +138,14 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     // get address cosmos name tag
     this.addressNameTag = accountAddress;
 
-    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+    if (this.tokenDetail?.modeToken === EModeToken.CWToken) {
       if (this.typeContract !== this.contractType.CW20) {
         this.getListTransactionTokenCW721(nextKey, isReload);
       } else {
         this.getListTransactionTokenCW20(nextKey, isReload);
       }
-    } else {
-      if (this.isExistDenom || this.channelPath?.path) {
-        this.getListTransactionTokenIBC(nextKey);
-      } else {
-        this.tokenService.pathDenom$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-          this.channelPath = res;
-          this.denomFilter = this.channelPath?.path + '/' + this.channelPath?.base_denom;
-          if (this.isExistDenom) {
-            this.getListTransactionTokenIBC();
-          }
-        });
-        this.isExistDenom = true;
-      }
+    } else if (this.channelPath?.path) {
+      this.getListTransactionTokenIBC(nextKey);
     }
   }
 
