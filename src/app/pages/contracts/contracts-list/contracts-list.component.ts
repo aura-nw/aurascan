@@ -22,14 +22,28 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   typeCW4973 = TYPE_CW4973;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true, isNameTag: true },
-    { matColumnDef: 'name', headerCellDef: 'Contract Name' },
-    { matColumnDef: 'label', headerCellDef: 'Label' },
-    { matColumnDef: 'version', headerCellDef: 'Contract Ver' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker' },
-    { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'creator', headerCellDef: 'Creator', isUrl: '/address', isShort: true, isNameTag: true },
+    {
+      matColumnDef: 'address',
+      headerCellDef: 'Address',
+      isUrl: '/contracts',
+      isShort: true,
+      isNameTag: true,
+      headerWidth: 235,
+    },
+    { matColumnDef: 'name', headerCellDef: 'Contract Name', headerWidth: 200 },
+    { matColumnDef: 'label', headerCellDef: 'Label', headerWidth: 150 },
+    { matColumnDef: 'version', headerCellDef: 'Contract Ver', headerWidth: 110 },
+    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 110 },
+    { matColumnDef: 'token_tracker', headerCellDef: 'Token Tracker', headerWidth: 215 },
+    { matColumnDef: 'code_id', headerCellDef: 'Code ID', headerWidth: 110 },
+    {
+      matColumnDef: 'creator',
+      headerCellDef: 'Creator',
+      isUrl: '/address',
+      isShort: true,
+      isNameTag: true,
+      headerWidth: 235,
+    },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
