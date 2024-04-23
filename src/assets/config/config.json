@@ -1,9 +1,9 @@
 {
   "environment": {
-    "name": "serenity",
+    "name": "develop",
     "label": {
-      "desktop": "Serenity Testnet (v0.8.0)",
-      "mobile": "Serenity Testnet"
+      "desktop": "Develop Testnet Network",
+      "mobile": "Develop Testnet"
     },
     "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
     "notice": {
@@ -14,21 +14,17 @@
   },
   "chainConfig": {
     "stakingTime": "86400",
-    "excludedAddresses": [
-      "aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw",
-      "aura1z9whsygd9hdquamn84vs76uy8ytatnw28aff3m",
-      "aura1752fawv92g2c9eegqedj5689gevgscsc0y7stk"
-    ],
-    "blockTime": 2000,
-    "quotaSetPrivateName": 20,
-    "quotaSetWatchList": 20,
+    "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
+    "blockTime": 4000,
+    "quotaSetPrivateName": 10,
+    "quotaSetWatchList": 10,
     "quotaNotification": 100,
     "features": [],
     "chain_info": {
-      "chainId": "auradev_1236-2",
-      "chainName": "Aura serenity testnet",
-      "rpc": "https://rpc.serenity.aura.network",
-      "rest": "https://lcd.serenity.aura.network",
+      "chainId": "auradev_1235-3",
+      "chainName": "aura devnet",
+      "rpc": "https://rpc.dev.aura.network",
+      "rest": "https://lcd.dev.aura.network",
       "bip44": {
         "coinType": 118
       },
@@ -42,21 +38,21 @@
       },
       "currencies": [
         {
-          "coinDenom": "AURA",
-          "coinMinimalDenom": "uaura",
+          "coinDenom": "TAURA",
+          "coinMinimalDenom": "utaura",
           "coinDecimals": 6
         }
       ],
       "feeCurrencies": [
         {
-          "coinDenom": "AURA",
-          "coinMinimalDenom": "uaura",
+          "coinDenom": "TAURA",
+          "coinMinimalDenom": "utaura",
           "coinDecimals": 6
         }
       ],
       "stakeCurrency": {
-        "coinDenom": "AURA",
-        "coinMinimalDenom": "uaura",
+        "coinDenom": "TAURA",
+        "coinMinimalDenom": "utaura",
         "coinDecimals": 6
       },
       "coinType": 118,
@@ -65,67 +61,62 @@
         "average": 0.0025,
         "high": 0.004
       },
-      "features": [
-        "ibc-transfer"
-      ],
-      "walletUrlForStaking": "https://serenity.aurascan.io/validators",
+      "features": ["ibc-transfer"],
+      "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
       "logo": "https://i.imgur.com/zi0mTYb.png",
-      "explorer": "https://serenity.aurascan.io/",
+      "explorer": "https://explorer.dev.aura.network/",
       "beta": "false"
     },
     "evmChainInfo": {
-      "name": "Aura EVM Serenity",
-      "chain": "Aura-Serenity",
-      "rpc": "https://jsonrpc.serenity.aura.network",
-      "faucets": [
-        ""
-      ],
+      "name": "Aura EVM Devnet",
+      "chain": "Aura-Dev",
+      "rpc": "https://jsonrpc.dev.aura.network",
+      "faucets": [""],
       "nativeCurrency": {
         "name": "test-Aura",
-        "symbol": "AURA",
-        "denom": "aAURA",
+        "symbol": "tAURA",
+        "denom": "atAURA",
         "decimals": 18
       },
       "infoURL": "https://aura.network",
-      "shortName": "aura-serenity",
-      "chainId": 1236,
-      "networkId": 1236,
+      "shortName": "aura-devnet",
+      "chainId": 1235,
+      "networkId": 1235,
       "slip44": 1,
       "icon": "",
       "explorers": [
         {
           "name": "Aura Explorer (Aurascan)",
-          "url": "https://serenity.aurascan.io",
+          "url": "https://explorer.dev.aura.network",
           "standard": "none",
           "icon": ""
         }
       ]
     }
   },
+  "etherJsonRpc": "https://jsonrpc.dev.aura.network",
   "image": {
     "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
-    "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/",
+    "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
     "banner": [
       {
-        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/images/pages/banner_aurascan-2.png",
+        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan.png",
         "url": "https://beta.seekhype.io/"
       },
       {
-        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/images/pages/banner_aurascan-2.png",
+        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan-2.png",
         "url": "https://beta.seekhype.io/"
       }
     ]
   },
   "api": {
-    "backend": "https://serenity-api.aurascan.io/api/v1",
-    "socket": "https://serenity-api.aurascan.io",
+    "backend": "https://explorer-api.dev.aura.network/api/v1",
+    "socket": "https://explorer-api.dev.aura.network",
     "ipfsDomain": "https://ipfs.io/",
-    "verifyContract": "https://indexer-v2.dev.aurascan.io/verify-contract/v1",
+    "verifyContract": "https://evmos-verify.dev.aurascan.io/verify-contract/v1",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": [
-        "aura-network"
-      ]
+      "ids": ["aura-network"]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -136,7 +127,7 @@
       "url": "https://indexer-v2.dev.aurascan.io/api",
       "graphql": "/v2/graphql",
       "rest": "/v2",
-      "chain": "serenity"
+      "chain": "auratestnet"
     },
     "walletConnect": {
       "signClient": {
@@ -145,10 +136,8 @@
         "metadata": {
           "name": "Aurascan",
           "description": "Aura Network Explorer",
-          "url": "https://serenity.aurascan.io/",
-          "icons": [
-            "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-          ]
+          "url": "https://explorer.dev.aurascan.io/",
+          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
         }
       }
     }
