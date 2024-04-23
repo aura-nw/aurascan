@@ -100,8 +100,8 @@
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
-                <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate" [style.min-width]="'150px'"></div>
+                <th mat-header-cell *matHeaderCellDef [style.min-width.px]="template?.headerWidth">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
                   <ng-container *ngIf="template.isNameTag">

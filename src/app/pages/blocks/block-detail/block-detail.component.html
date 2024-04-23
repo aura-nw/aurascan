@@ -194,6 +194,7 @@
                             <ng-container *ngIf="+data[template.matColumnDef] > 0">
                               <span
                                 [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                                [decimalLengthTooltip]="12"
                                 *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
                                 {{ '<0.001' }}
                               </span>

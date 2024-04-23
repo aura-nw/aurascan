@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Interface, parseEther } from 'ethers';
+import _ from 'lodash';
 import { EMethodContract } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { mappingMethodName } from 'src/app/global/global';
 
@@ -40,10 +42,12 @@ export class EvmMessageComponent {
   isCreateContract = false;
   arrTopicDecode = [];
   interfaceCoder: Interface;
+  contractAddressAbi = '';
 
   constructor(
     private transactionService: TransactionService,
     public env: EnvironmentService,
+    private contractService: ContractService,
   ) {}
 
   ngOnInit(): void {
@@ -53,20 +57,33 @@ export class EvmMessageComponent {
       this.isCreateContract = true;
       this.typeInput = this.inputDataType.ORIGINAL;
     }
-    this.getDataDecoded();
     this.getMethodName(this.inputDataRaw['methodId']);
+    this.getProxyContractAbi(this.transaction?.to);
   }
 
   changeType(data) {
     this.typeInput = data;
   }
 
+  getProxyContractAbi(address) {
+    this.contractAddressAbi = this.transaction?.to;
+    this.contractService.getProxyContractAbi(address).subscribe({
+      next: (res) => {
+        this.contractAddressAbi =
+          _.get(res, 'evm_smart_contract[0].evm_proxy_histories[0].implementation_contract') || this.contractAddressAbi;
+      },
+      complete: () => {
+        this.getDataDecoded();
+      },
+    });
+  }
+
   getDataDecoded() {
-    if (!this.transaction?.to) {
+    if (!this.contractAddressAbi) {
       return;
     }
 
-    this.transactionService.getAbiContract(this.transaction?.to?.toLowerCase()).subscribe((res) => {
+    this.transactionService.getAbiContract(this.contractAddressAbi?.toLowerCase()).subscribe((res) => {
       if (res?.evm_contract_verification?.length > 0 && res.evm_contract_verification[0]?.abi) {
         this.isContractVerified = true;
         this.isDecoded = true;

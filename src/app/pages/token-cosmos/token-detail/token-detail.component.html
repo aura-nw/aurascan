@@ -23,7 +23,10 @@
     </div>
 
     <div class="col-12 col-lg-6">
-      <app-token-summary *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-summary>
+      <app-token-summary
+        *ngIf="tokenDetail"
+        [tokenDetail]="tokenDetail"
+        [channelPath]="channelPath"></app-token-summary>
     </div>
   </div>
 
@@ -31,6 +34,7 @@
     *ngIf="tokenDetail"
     [tokenDetail]="tokenDetail"
     [contractAddress]="contractAddress"
+    [channelPath]="channelPath"
     (hasMore)="getMoreTx($event)">
   </app-token-content>
 </ng-container>

@@ -15,6 +15,7 @@ import { Globals } from 'src/app/global/global';
 })
 export class TokenSummaryComponent implements OnInit {
   @Input() tokenDetail: any;
+  @Input() channelPath: any;
   projectDetail: ProjectDetail;
   EModeToken = EModeToken;
   channelId: string;
@@ -36,7 +37,7 @@ export class TokenSummaryComponent implements OnInit {
   getChannelInfoByDenom() {
     const denomHash = this.router.snapshot.paramMap.get('contractAddress');
     if (!denomHash?.startsWith(this.chainInfo.bech32Config.bech32PrefixAccAddr)) {
-      this.channelId = this.tokenDetail.channelPath?.path?.replace('transfer/', '');
+      this.channelId = this.channelPath?.path?.replace('transfer/', '');
       this.ibcService.getChannelCounter(this.channelId).subscribe((res) => {
         this.channelCounterId = _.get(res, 'ibc_channel[0].counterparty_channel_id');
       });

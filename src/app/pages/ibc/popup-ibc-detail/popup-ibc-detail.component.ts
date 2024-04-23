@@ -52,6 +52,7 @@ export class PopupIBCDetailComponent implements OnInit {
 
   chainInfo = this.environmentService.chainInfo;
   counterInfo: any;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupIBCDetailComponent>,
