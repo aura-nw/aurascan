@@ -4,7 +4,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
   SimpleChanges,
@@ -33,7 +32,7 @@ import { convertTxIBC } from 'src/app/global/global';
   templateUrl: './token-transfers-tab.component.html',
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
-export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChanges {
+export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Input() tokenDetail: any;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
@@ -104,10 +103,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
     private router: Router,
     private nameTagService: NameTagService,
   ) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.getListData();
-  }
 
   ngOnInit(): void {
     this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -235,7 +230,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
 
   async getListTransactionTokenCW20(nextKey = null, isReload = false) {
     let payload = {
-      limit: 100,
+      limit: 50,
       heightLT: nextKey,
       contractAddr: this.contractAddress,
     };
@@ -253,7 +248,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
       next: (res) => {
         if (res) {
           this.nextKey = null;
-          if (res.cw20_activity.length >= 100) {
+          if (res.cw20_activity.length >= 50) {
             this.nextKey = res?.cw20_activity[res.cw20_activity.length - 1].height;
             this.hasMore.emit(true);
           } else {

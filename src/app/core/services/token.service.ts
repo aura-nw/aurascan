@@ -393,7 +393,7 @@ export class TokenService extends CommonService {
       $contractAddr: String = null
       $heightGT: Int = null
       $heightLT: Int = null
-      $limit: Int = 100
+      $limit: Int = 50
       $txHash: String = null
       $actionIn: [String!] = null
       $actionNotIn: [String!] = null) {
@@ -650,7 +650,7 @@ export class TokenService extends CommonService {
       $contractAddr: String = null
       $heightGT: Int = null
       $heightLT: Int = null
-      $limit: Int = 100
+      $limit: Int = 50
       $txHash: String = null
       $actionIn: [String!] = null
       $actionNotIn: [String!] = null) {

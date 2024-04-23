@@ -228,7 +228,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   async getListTransactionTokenERC20(nextKey = null, isReload = false) {
     let payload = {
-      limit: 100,
+      limit: 50,
       heightLT: nextKey,
       contractAddr: this.contractAddress,
     };
