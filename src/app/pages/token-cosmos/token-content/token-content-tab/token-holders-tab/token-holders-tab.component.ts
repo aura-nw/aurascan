@@ -14,6 +14,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-token-holders-tab',
@@ -233,16 +234,19 @@ export class TokenHoldersTabComponent implements OnInit {
     };
 
     const addressNameTag = this.nameTagService.findAddressByNameTag(this.keyWord);
-    if (addressNameTag?.length > 0) {
-      payload['address'] = addressNameTag;
-    }
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      addressNameTag || this.keyWord,
+    );
 
     // get list holder for Native Token
     if (this.tokenDetail.modeToken === this.EModeToken.Native) {
+      payload['address'] = accountAddress || addressNameTag || this.keyWord;
       this.getDenomNative(payload);
       return;
     }
 
+    payload['address'] = accountEvmAddress || payload['address'];
     // get list holder for IBC Token
     this.tokenService
       .getDenomHolder(payload)

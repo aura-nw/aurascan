@@ -17,7 +17,6 @@ export class TokenService extends CommonService {
   filterBalanceNative$ = new BehaviorSubject<number>(null);
   totalTransfer$ = new BehaviorSubject<number>(null);
   excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
-  pathDenom$ = new BehaviorSubject<string>(null);
 
   get tokensMarket() {
     return this.tokensMarket$.getValue();
@@ -534,7 +533,7 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          address: payload.address,
+          address: payload.address || null,
           limit: payload.limit || 100,
           offset: payload.offset || 0,
         },
@@ -553,14 +552,14 @@ export class TokenService extends CommonService {
     const operationsDoc = `
     query queryHolderDenom($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null, $addressNotIn: [String!] = null) {
       ${this.envDB} {
-        account_balance(where: {account: {address: {_eq: $address, _nin: $addressNotIn}}, denom: {_eq: $denom}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
+        account_balance(where: {account: {address: {_eq: $address, _nin: $addressNotIn}}, amount: {_gt: "0"}, denom: {_eq: $denom}}, limit: $limit, offset: $offset, order_by: {amount: desc}) {
           account {
             address
             evm_address
           }
           amount
         }
-        account_balance_aggregate (where: {account: {address: {_eq: $address}}, denom: {_eq: $denom}}) {
+        account_balance_aggregate (where: {account: {address: {_eq: $address}}, amount: {_gt: "0"}, denom: {_eq: $denom}}) {
           aggregate {
             count
           }
@@ -573,7 +572,7 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           denom: payload.denomHash,
-          address: payload.address,
+          address: payload.address || null,
           limit: payload.limit || 100,
           offset: payload.offset || 0,
           addressNotIn: payload.isExcludedAddresses ? this.excludedAddresses : [],
