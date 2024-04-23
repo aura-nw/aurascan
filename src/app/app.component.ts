@@ -97,7 +97,6 @@ export class AppComponent implements OnInit, OnDestroy {
   getInfoCommon(): void {
     this.commonService.status().subscribe({
       next: (res) => {
-        console.log(res);
         getInfo(this.globals, res, this.environmentService.coinDecimals);
         this.environmentService.setLatestBlockHeight(res?.total_blocks || null);
       },
