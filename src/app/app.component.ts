@@ -1,23 +1,23 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import BigNumber from 'bignumber.js';
 import eruda from 'eruda';
 import * as _ from 'lodash';
-import { Subject, forkJoin, map, takeUntil } from 'rxjs';
-import { STORAGE_KEYS } from './core/constants/common.constant';
-import { ETokenCoinTypeBE } from './core/constants/token.constant';
-import { EnvironmentService } from './core/data-services/environment.service';
-import { IUser } from './core/models/auth.models';
-import { CommonService } from './core/services/common.service';
-import { IBCService } from './core/services/ibc.service';
-import { NameTagService } from './core/services/name-tag.service';
-import { NotificationsService } from './core/services/notifications.service';
-import { TokenService } from './core/services/token.service';
-import { UserService } from './core/services/user.service';
-import { ValidatorService } from './core/services/validator.service';
-import { WatchListService } from './core/services/watch-list.service';
-import { getInfo } from './core/utils/common/info-common';
+import {Subject, forkJoin, map, takeUntil} from 'rxjs';
+import {STORAGE_KEYS} from './core/constants/common.constant';
+import {ETokenCoinTypeBE} from './core/constants/token.constant';
+import {EnvironmentService} from './core/data-services/environment.service';
+import {IUser} from './core/models/auth.models';
+import {CommonService} from './core/services/common.service';
+import {IBCService} from './core/services/ibc.service';
+import {NameTagService} from './core/services/name-tag.service';
+import {NotificationsService} from './core/services/notifications.service';
+import {TokenService} from './core/services/token.service';
+import {UserService} from './core/services/user.service';
+import {ValidatorService} from './core/services/validator.service';
+import {WatchListService} from './core/services/watch-list.service';
+import {getInfo} from './core/utils/common/info-common';
 import local from './core/utils/storage/local';
-import { Globals } from './global/global';
+import {Globals} from './global/global';
 
 @Component({
   selector: 'app-root',
@@ -45,7 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private environmentService: EnvironmentService,
     private ibcService: IBCService,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -97,6 +98,7 @@ export class AppComponent implements OnInit, OnDestroy {
   getInfoCommon(): void {
     this.commonService.status().subscribe({
       next: (res) => {
+        console.log(res)
         getInfo(this.globals, res, this.environmentService.coinDecimals);
         this.environmentService.setLatestBlockHeight(res?.total_blocks || null);
       },
@@ -129,7 +131,7 @@ export class AppComponent implements OnInit, OnDestroy {
       forkJoin({
         publicName: this.nameTagService.getListNameTag(payload),
         privateName: this.nameTagService.getListPrivateNameTag(payloadPrivate),
-      }).subscribe(({ publicName, privateName }) => {
+      }).subscribe(({publicName, privateName}) => {
         const listNameTag = publicName.data?.nameTags?.map((element) => {
           const address = _.get(element, 'address');
           const name_tag = _.get(element, 'name_tag');
@@ -146,7 +148,7 @@ export class AppComponent implements OnInit, OnDestroy {
             isPrivate = true;
             id = privateData.id;
           }
-          return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
+          return {address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id};
         });
 
         // get other data of private list
