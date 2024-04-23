@@ -27,7 +27,7 @@
                           [appImg]="data | marketInfo: 'logo'"
                           width="20"
                           height="20"
-                          alt=""/>
+                          alt="" />
                         <div class="ml-2 ml-sm-3 d-flex transfer-token-info">
                           <ng-container *ngIf="data | marketInfo: 'symbol'">
                             <span
@@ -36,7 +36,9 @@
                               [appLinkDenom]="
                                 (data | marketInfo: 'symbol') == coinInfo.coinDenom
                                   ? coinInfo.coinMinimalDenom
-                                  : data?.cw20_contract?.ibc_denom || data?.erc20_contract?.evm_smart_contract?.address || data?.cw20_contract?.smart_contract?.address
+                                  : data?.cw20_contract?.ibc_denom ||
+                                    data?.erc20_contract?.evm_smart_contract?.address ||
+                                    data?.cw20_contract?.smart_contract?.address
                               "
                               [isDisable]="
                                 (data | marketInfo: 'symbol') != coinInfo.coinDenom &&
@@ -45,9 +47,9 @@
                                 !data?.erc20_contract?.symbol
                               ">
                               {{
-                              (data | marketInfo: 'symbol')
-                                ? (data | marketInfo: 'symbol' | ellipsis: maxLengthSymbol)
-                                : data?.erc20_contract?.evm_smart_contract?.address
+                                (data | marketInfo: 'symbol')
+                                  ? (data | marketInfo: 'symbol' | ellipsis: maxLengthSymbol)
+                                  : data?.erc20_contract?.evm_smart_contract?.address
                               }}
                             </span>
                           </ng-container>
@@ -173,12 +175,12 @@
                         <div *ngIf="!breakpoint.value.matches" class="mb-1 d-flex align-items-center">
                           <span class="caption fw-normal text--gray-4 mr-1 text-nowrap">Token ID</span>
                           <span class="line-claim w-100" [copyBtn]="data?.cw721_token?.token_id"
-                          >#{{ data?.cw721_token?.token_id | ellipsis: 10 }}</span
+                            >#{{ data?.cw721_token?.token_id | ellipsis: 10 }}</span
                           >
                         </div>
                         <div *ngIf="breakpoint.value.matches" class="d-flex mb-1">
                           <span class="line-claim token-id" [copyBtn]="data?.cw721_token?.token_id"
-                          >#{{ data?.cw721_token?.token_id }}</span
+                            >#{{ data?.cw721_token?.token_id }}</span
                           >
                           <div
                             *ngIf="breakpoint.value.matches"
