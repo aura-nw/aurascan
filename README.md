@@ -1,14 +1,50 @@
-# aura
+<p align='center'>
+  <img src='./src/assets/images/logo/title-logo.png' height="120px"/>
+</p>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.2.
+<p align='center' style='font-weight:bold; font-size: 32px'>AuraScan</p>
+
+## Overview
+
+Begin tracking wallets, active users, and other stats through AuraScan
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This project using [Angular CLI](https://github.com/angular/angular-cli) version 16.
+
+NODEJS version: ^16.14.0 || ^18.10.0
+
+### **1. Clone the repository**
+
+```bash
+git clone https://github.com/aura-nw/aurascan
+```
+
+### **2. Navigate to the project folder**
+
+```bash
+cd aurascan
+```
+
+### **3. Install dependencies**
+
+```bash
+npm install
+```
+
+### **4. Run app**
+
+```bash
+ng serve
+# or using
+npm start
+```
 
 ## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `ng generate component component-name` to generate a new component.
+
+You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 

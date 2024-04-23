@@ -1,7 +1,9 @@
 <mat-paginator class="d-none" [pageSize]="pageSize"></mat-paginator>
 
 <div
-  class="row {{ updateTime ? 'justify-content-center justify-content-lg-between' : 'justify-content-end' }}"
+  class="row {{
+    updateTime || showSelectRecord ? 'justify-content-center justify-content-lg-between' : 'justify-content-end'
+  }}"
   [class.page-list]="showSelectRecord || pageLength > 1">
   <div
     *ngIf="showSelectRecord"

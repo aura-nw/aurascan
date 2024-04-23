@@ -4,7 +4,7 @@
       <div class="card-body p-0 overflow-hidden">
         <div class="d-xl-flex justify-content-between align-items-center">
           <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
-            {{ transaction['evm_hash'] ? 'ERC20 Transfer' : 'Fungible Token Transfer ' }}
+            {{ transaction['evm_hash'] ? 'ERC20 Transfer' : 'Fungible Token Transfer' }}
           </h5>
         </div>
         <div class="table-token" *ngIf="dataSourceFTs?.data?.length > 0; else noFTValues">
@@ -36,11 +36,14 @@
                               [appLinkDenom]="
                                 (data | marketInfo: 'symbol') == coinInfo.coinDenom
                                   ? coinInfo.coinMinimalDenom
-                                  : data?.cw20_contract?.ibc_denom || data?.erc20_contract?.evm_smart_contract?.address
+                                  : data?.cw20_contract?.ibc_denom ||
+                                    data?.erc20_contract?.evm_smart_contract?.address ||
+                                    data?.cw20_contract?.smart_contract?.address
                               "
                               [isDisable]="
                                 (data | marketInfo: 'symbol') != coinInfo.coinDenom &&
                                 !data?.cw20_contract?.ibc_denom &&
+                                !data?.cw20_contract?.smart_contract?.address &&
                                 !data?.erc20_contract?.symbol
                               ">
                               {{

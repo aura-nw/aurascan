@@ -4,7 +4,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
   SimpleChanges,
@@ -33,11 +32,12 @@ import { convertTxIBC } from 'src/app/global/global';
   templateUrl: './token-transfers-tab.component.html',
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
-export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChanges {
+export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Input() tokenDetail: any;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
   @Input() decimalValue: number;
+  @Input() channelPath: any;
   @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
@@ -86,7 +86,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
   destroyed$ = new Subject<void>();
   linkAddress: string;
   isExistDenom = false;
-  channelPath: any;
   denomFilter = '';
   addressNameTag = '';
 
@@ -105,13 +104,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
     private nameTagService: NameTagService,
   ) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.getListData();
-  }
-
   ngOnInit(): void {
-    this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-    this.typeContract = this.tokenDetail?.type;
     this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       this.keyWord = params?.a || '';
     });
@@ -119,13 +112,18 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    this.getListData();
     this.timerGetUpTime = setInterval(() => {
       if (this.pageData.pageIndex === 0) {
         this.currentKey = null;
         this.getListData(null, true);
       }
     }, 30000);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
+    this.typeContract = this.tokenDetail?.type;
+    this.getListData();
   }
 
   ngOnDestroy(): void {
@@ -140,25 +138,14 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit, OnChan
     // get address cosmos name tag
     this.addressNameTag = accountAddress;
 
-    if (this.tokenDetail.modeToken === EModeToken.CWToken) {
+    if (this.tokenDetail?.modeToken === EModeToken.CWToken) {
       if (this.typeContract !== this.contractType.CW20) {
         this.getListTransactionTokenCW721(nextKey, isReload);
       } else {
         this.getListTransactionTokenCW20(nextKey, isReload);
       }
-    } else {
-      if (this.isExistDenom) {
-        this.getListTransactionTokenIBC(nextKey);
-      } else {
-        this.tokenService.pathDenom$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-          this.channelPath = res;
-          this.denomFilter = this.channelPath?.path + '/' + this.channelPath?.base_denom;
-          if (this.isExistDenom) {
-            this.getListTransactionTokenIBC();
-          }
-        });
-        this.isExistDenom = true;
-      }
+    } else if (this.channelPath?.path) {
+      this.getListTransactionTokenIBC(nextKey);
     }
   }
 

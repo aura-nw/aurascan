@@ -26,6 +26,7 @@ export class TokenDetailComponent implements OnInit {
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
+  channelPath: any;
 
   chainInfo = this.environmentService.chainInfo;
   excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
@@ -165,7 +166,7 @@ export class TokenDetailComponent implements OnInit {
 
         if (this.contractAddress !== this.chainInfo?.currencies[0].coinMinimalDenom) {
           this.getInfoTokenIBC(this.tokenDetail.denom);
-        } 
+        }
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
@@ -216,8 +217,7 @@ export class TokenDetailComponent implements OnInit {
 
   getInfoTokenIBC(denom) {
     this.ibcService.getChannelInfoByDenom(encodeURIComponent(denom)).subscribe((res) => {
-      this.tokenDetail['channelPath'] = _.get(res, 'denom_trace');
-      this.tokenService.pathDenom$.next(_.get(res, 'denom_trace'));
+      this.channelPath = _.get(res, 'denom_trace');
     });
   }
 }

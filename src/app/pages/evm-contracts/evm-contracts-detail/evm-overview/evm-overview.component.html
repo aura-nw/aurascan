@@ -74,7 +74,7 @@
           <div
             class="d-flex align-items-center"
             *ngIf="
-              contractDetail?.type === contractRegisterType.ERC20 &&
+              contractDetail?.type !== contractRegisterType.ERC721 &&
               contractDetail?.erc20_contract?.name &&
               contractDetail?.erc20_contract?.symbol
             ">
@@ -94,7 +94,7 @@
           </div>
           <a
             *ngIf="
-              contractDetail?.type !== contractRegisterType.ERC20 &&
+              contractDetail?.type === contractRegisterType.ERC721 &&
               contractDetail?.cw721_contract?.name &&
               contractDetail?.cw721_contract?.symbol
             "
