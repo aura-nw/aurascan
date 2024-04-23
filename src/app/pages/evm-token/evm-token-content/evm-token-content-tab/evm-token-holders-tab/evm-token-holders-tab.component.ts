@@ -11,7 +11,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { transferAddress } from 'src/app/core/utils/common/address-converter';
 
 @Component({
   selector: 'app-evm-token-holders-tab',
@@ -44,7 +43,7 @@ export class EvmTokenHoldersTabComponent implements OnInit {
   displayedColumns: string[];
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
+    pageSize: 50,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   loading = true;
