@@ -47,7 +47,7 @@ export class TokenHoldersTabComponent implements OnInit {
   displayedColumns: string[];
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 5,
+    pageSize: 50,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   loading = true;
@@ -74,10 +74,6 @@ export class TokenHoldersTabComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.tokenDetail?.modeToken === this.EModeToken.Native) {
-      this.pageData.pageSize = 50;
-    }
-
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.getListData();
 
@@ -114,11 +110,7 @@ export class TokenHoldersTabComponent implements OnInit {
           const count = _.get(res, `cw20_holder_aggregate`);
           if (data?.length > 0) {
             this.totalHolder = count.aggregate?.count;
-            if (this.totalHolder > this.numberTopHolder) {
-              this.pageData.length = this.numberTopHolder;
-            } else {
-              this.pageData.length = this.totalHolder;
-            }
+            this.pageData.length = this.totalHolder;
             let dataFlat = data?.map((item) => {
               return {
                 owner: item.address,
