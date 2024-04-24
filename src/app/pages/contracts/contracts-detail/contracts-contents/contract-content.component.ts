@@ -133,7 +133,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         next: (res) => {
           const data = res;
           if (res?.transaction?.length > 0) {
-            const txsExecute = convertDataTransaction(data, this.coinInfo);
+            const txsExecute = convertDataTransaction(data, this.environmentService.getDecimals());
             this.contractTransaction['data'] = txsExecute;
             this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
 

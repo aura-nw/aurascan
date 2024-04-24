@@ -3,6 +3,7 @@
     div {
       border-radius: 8px;
       color: var(--aura-gray-2);
+
       .item {
         background: linear-gradient(110.97deg, #262838 0%, #2e2e38 97.13%);
         padding: 12px 8px;
@@ -13,23 +14,26 @@
       }
     }
   }
+
   .txt-status {
     color: var(--aura-green-6);
+
     .icon-connect {
+      display: inline-block;
       width: 8px;
       height: 8px;
-      border-radius: 50%;
-      margin-right: 7px;
       background-color: var(--aura-green-6);
-      display: inline-block;
     }
+
     &.inactive {
       color: #98989b;
+
       .icon-connect {
         background-color: #98989b;
       }
     }
   }
+
   .ibc-relayer-table {
     .row-chain.cursor-pointer {
       &:hover {
@@ -37,6 +41,7 @@
       }
     }
   }
+
   .txt-title {
     font-size: 2.2rem;
     font-weight: 700;
@@ -47,6 +52,7 @@
       font-size: 3.2rem;
     }
   }
+
   .search-form {
     width: 100%;
     @media (min-width: 992px) {
@@ -58,6 +64,7 @@
     border-radius: 8px;
     padding: 12px;
     background-color: var(--aura-gray-9);
+
     &:not(:last-child) {
       margin-bottom: var(--spacer-4);
     }

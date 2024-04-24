@@ -15,6 +15,7 @@ export class BigNumberDirective implements AfterViewInit {
   @Input() tokenPrice: any;
   @Input() auraValue: boolean = false;
   @Input() votingPower: boolean = false;
+  @Input() numberDecimal = 6;
   element: HTMLElement;
 
   constructor(
@@ -91,7 +92,7 @@ export class BigNumberDirective implements AfterViewInit {
           this.element.textContent =
             IntlFormat(amountValue.toString(), 2) === '0' ? '0.00' : IntlFormat(amountValue.toString(), 2);
         } else {
-          this.element.textContent = IntlFormat(amountValue.toString(), 6);
+          this.element.textContent = IntlFormat(amountValue.toString(), this.numberDecimal);
         }
         return;
       }

@@ -9,7 +9,7 @@ import { TokenService } from '../services/token.service';
 import { balanceOf, getBalance } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
 import { EnvironmentService } from './environment.service';
-import { CW20_TOKENS_TEMPLATE } from './template';
+import { CW20_TOKENS_TEMPLATE, ERC20_TOKENS_TEMPLATE } from './template';
 
 export interface IAsset {
   name: string;
@@ -48,6 +48,7 @@ export class ApiCw20TokenService {
   getByOwner(address: string) {
     return forkJoin([
       this.queryCw20TokenByOwner(address),
+      this.queryERC20TokenByOwner(address),
       this.apiAccount.getAccountByAddress(address, true),
       this.tokenService.tokensMarket$.pipe(
         filter((data) => _.isArray(data)),
@@ -55,16 +56,20 @@ export class ApiCw20TokenService {
       ),
     ]).pipe(
       map((data) => {
-        const [cw20Tokens, account, coinsMarkets] = data;
+        const [cw20Tokens, erc20Tokens, account, coinsMarkets] = data;
 
         const nativeToken = this.parseNativeToken(account, coinsMarkets);
 
         const cw20TokenList: any[] = this.parseCw20Tokens(cw20Tokens, coinsMarkets) || [];
 
+        const erc20TokenList = this.parseErc20Tokens(erc20Tokens, coinsMarkets) || [];
+
         const ibcTokenBalances = this.parseIbcTokens(account, coinsMarkets) || [];
 
         // get coin native && token balance > 0
-        const tokens = [...ibcTokenBalances, ...cw20TokenList].filter((token) => BigNumber(token.balance).gt(0));
+        const tokens = [...ibcTokenBalances, ...cw20TokenList, ...erc20TokenList].filter((token) =>
+          BigNumber(token.balance).gt(0),
+        );
 
         const allTokens = [nativeToken, ...tokens];
 
@@ -81,6 +86,33 @@ export class ApiCw20TokenService {
         return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
     );
+  }
+
+  parseErc20Tokens(tokens, coinsMarkets) {
+    return tokens?.map((item) => {
+      const coinMarket = coinsMarkets.find((coin) => coin.type === ETokenCoinTypeBE.ERC20 && coin.denom === item.denom);
+
+      const amount = getBalance(item?.amount, coinMarket?.decimal || 0);
+
+      const value = new BigNumber(amount).multipliedBy(coinMarket?.currentPrice || 0);
+
+      return {
+        name: coinMarket?.name,
+        symbol: coinMarket?.symbol,
+        decimals: coinMarket?.decimal,
+        image: coinMarket?.image,
+        max_total_supply: coinMarket?.totalSupply,
+        contract_address: coinMarket?.denom || '-',
+        denom: coinMarket?.denom,
+        balance: coinMarket ? item?.amount : 0, // Only show token in Coin Markets
+        price: coinMarket?.currentPrice || 0,
+        priceChangePercentage24h: coinMarket?.priceChangePercentage24h || 0,
+        type: COIN_TOKEN_TYPE.ERC20,
+        value: value.toFixed(),
+        verify_status: coinMarket?.verifyStatus || '',
+        verify_text: coinMarket?.verifyText || '',
+      };
+    });
   }
 
   parseCw20Tokens(tokens, coinsMarkets) {
@@ -189,6 +221,21 @@ export class ApiCw20TokenService {
     return this.http.post<any>(this.env.graphql, query).pipe(
       map((res) => (res?.data ? res?.data[this.horoscope.chain] : null)),
       map((data) => data?.cw20_holder),
+    );
+  }
+
+  queryERC20TokenByOwner(address: string) {
+    const query = {
+      query: ERC20_TOKENS_TEMPLATE({ chain: this.horoscope.chain }),
+      variables: {
+        address,
+      },
+      operationName: 'ERC20_TOKENS_TEMPLATE',
+    };
+
+    return this.http.post<any>(this.env.graphql, query).pipe(
+      map((res) => (res?.data ? res?.data[this.horoscope.chain] : null)),
+      map((data) => data?.account_balance),
     );
   }
 }

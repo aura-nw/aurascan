@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { ETokenCoinTypeBE, ETokenNFTTypeBE } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { CodeTransaction } from '../../../../core/constants/transaction.enum';
 
 export interface CardMobSimpleValidatorAddress {
@@ -22,6 +24,7 @@ export interface CardMobSimpleTitle {
   isFail?: boolean;
   link?: string;
 }
+
 export interface CardMobSimpleContent {
   label: string;
   class?: string;
@@ -58,16 +61,33 @@ export class CardMobAccountComponent implements OnInit {
   @Input() currentAddress: string;
   @Input() currentType: string;
   @Input() expand: boolean = false;
+  @Input() tokenTypeInput: any;
+  cosmosAddress;
+  evmAddress;
 
   tabsData = TabsAccountLink;
   statusTransaction = CodeTransaction;
+  tokenType = ETokenCoinTypeBE;
+  nftType = ETokenNFTTypeBE;
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  chainInfo = this.environmentService.chainInfo;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+
   constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     if (this.modeQuery !== this.tabsData.ExecutedTxs) {
       this.content[this.content.length - 1].label = 'Expand';
+    }
+    if (this.modeQuery === this.tabsData.FtsTxs) {
+      const { accountAddress, accountEvmAddress } = transferAddress(
+        this.chainInfo.bech32Config.bech32PrefixAccAddr,
+        this.currentAddress,
+      );
+      this.cosmosAddress = accountAddress;
+      this.evmAddress = accountEvmAddress;
     }
 
     this.dataCard?.arrEvent?.forEach((element) => {
@@ -79,10 +99,34 @@ export class CardMobAccountComponent implements OnInit {
         element.isFromAddress = false;
       }
     });
+    this.initMaximumExpandData(this.dataCard);
     this.dataCard.expand = this.expand;
+  }
+
+  initMaximumExpandData(data) {
+    // maximum first expand is 5 (if data <5 -> maximum is data length)
+    if (data.arrEvent?.length >= 5) {
+      data.maximumExpanded = 5;
+    } else {
+      data.maximumExpanded = data.arrEvent?.length;
+    }
   }
 
   expandData(data) {
     data.expand = true;
+  }
+
+  collapseData(data) {
+    data.expand = false;
+    this.initMaximumExpandData(data);
+  }
+
+  seeMoreData(data) {
+    if (data.maximumExpanded < data.arrEvent.length) {
+      data.maximumExpanded += 5;
+      if (data.maximumExpanded > data.arrEvent.length) {
+        data.maximumExpanded = data.arrEvent.length;
+      }
+    }
   }
 }

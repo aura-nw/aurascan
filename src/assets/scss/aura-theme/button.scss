@@ -20,78 +20,97 @@ button,
     height: 44px;
     padding: 0 24px;
   }
+
   &--xlg {
     height: 40px;
     padding: 0 24px;
   }
+
   &--md {
     height: 36px;
     padding: 0 24px;
   }
+
   &--sm {
     height: 34px;
     padding: 0 20px;
   }
+
   &--ssm {
     height: 32px;
     padding: 0 16px;
   }
+
   &--xs {
     height: 28px;
     padding: 0 16px;
   }
+
   &--xxs {
     height: 24px;
     padding: 0 12px;
   }
+
+  &--xlg,
   &--lg,
   &--md {
     font-size: 1.6rem;
     line-height: 2.4rem;
   }
+
   &--sm {
     font-size: 1.4rem;
     line-height: 1.6rem;
   }
+
   &--xs,
   &--xxs {
     font-size: 1.2rem;
     line-height: 1.6rem;
   }
+
   @media (max-width: 991.98px) {
     &--lg-mob {
       height: 48px;
       padding: 0 24px;
     }
+
     &--md-mob {
       height: 40px;
       padding: 0 24px;
     }
+
     &--sm-mob {
       height: 32px;
       padding: 0 20px;
     }
+
     &--ssm-mob {
       height: 32px;
       padding: 0 16px;
     }
+
     &--xs-mob {
       height: 28px;
       padding: 0 16px;
     }
+
     &--xxs-mob {
       height: 24px;
       padding: 0 12px;
     }
+
     &--lg-mob,
     &--md-mob {
       font-size: 1.6rem;
       line-height: 2.4rem;
     }
+
     &--sm-mob {
       font-size: 1.4rem;
       line-height: 1.6rem;
     }
+
     &--xs-mob,
     &--xxs-mob {
       font-size: 1.2rem;
@@ -108,12 +127,15 @@ button,
     border: 1px solid var(--aura-black);
     background: var(--aura-gradient-button);
     transition: border-color 0.35s ease-in-out;
+
     span {
       color: var(--aura-black);
     }
+
     &:hover {
       border: 1px solid transparent;
     }
+
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -125,10 +147,12 @@ button,
     transition: border-color 0.35s ease-in-out;
 
     transition: border-color 0.35s ease-in-out;
+
     span {
       color: var(--aura-white);
       transition: background 0.35s ease-in-out;
     }
+
     &--gradient {
       border: solid 1px transparent;
       background-image: linear-gradient(#000, #000),
@@ -137,13 +161,16 @@ button,
       background-clip: content-box, border-box;
       box-shadow: 2px 1000px 1px #141416 inset;
     }
+
     &__in-card {
       box-shadow: 2px 1000px 1px var(--aura-gray-10) inset !important;
     }
+
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
+
     &:not(.button-outline--gradient):hover {
       border-color: var(--aura-white);
     }
@@ -154,6 +181,7 @@ button,
       opacity: 1;
       background: url('../../icons/icons-svg/white/filter.svg') center no-repeat;
     }
+
     &:after {
       opacity: 0;
       background: url('../../icons/icons-svg/white/filter.svg') center no-repeat;
@@ -162,6 +190,7 @@ button,
 
   &.button-dropdown {
     position: relative;
+
     &:before,
     &:after {
       content: '';
@@ -172,60 +201,76 @@ button,
       width: 12px;
       height: 12px;
     }
+
     &.button--lg,
     &.button--md {
       padding-right: var(--spacer-11);
+
       &:before,
       &:after {
         right: 24px;
       }
     }
+
     &.button--sm {
       padding-right: 38px;
+
       &:before,
       &:after {
         right: 20px;
       }
     }
+
     &.button--xs {
       padding-right: 34px;
+
       &:before,
       &:after {
         right: 16px;
       }
     }
+
     &.button--xxs {
       padding-right: 30px;
+
       &:before,
       &:after {
         right: 12px;
       }
     }
+
     @media (max-width: 991.98px) {
       &.button--lg-mob,
       &.button--md-mob {
         padding-right: var(--spacer-11);
+
         &:before,
         &:after {
           right: 24px;
         }
       }
+
       &.button--sm-mob {
         padding-right: 38px;
+
         &:before,
         &:after {
           right: 20px;
         }
       }
+
       &.button--xs-mob {
         padding-right: 34px;
+
         &:before,
         &:after {
           right: 16px;
         }
       }
+
       &.button--xxs-mob {
         padding-right: 30px;
+
         &:before,
         &:after {
           right: 12px;
@@ -237,24 +282,29 @@ button,
       opacity: 1;
       background: url('../../icons/icons-svg/white/caret-down-white.svg') center no-repeat;
     }
+
     &:after {
       opacity: 0;
       background: url('../../icons/icons-svg/color/caret-down-gradient.svg') center no-repeat;
     }
+
     &.button-flat {
       &:before,
       &:after {
         background: url('../../icons/icons-svg/black/caret-down-black.svg') center no-repeat;
       }
     }
+
     &.button-outline--gradient:hover,
     &.button-outline--gradient[aria-expanded='true'] {
       &:before {
         opacity: 0;
       }
+
       &:after {
         opacity: 1;
       }
+
       span {
         background: var(--aura-gradient-button);
         -webkit-background-clip: text;
@@ -268,6 +318,7 @@ button,
     padding: 0;
     border-radius: 50%;
     background-color: var(--aura-gray-9);
+
     span {
       color: var(--aura-gray-3);
     }
@@ -282,9 +333,11 @@ button,
 
 .button-fixed {
   width: 100%;
+
   @media (min-width: 768px) {
     width: auto;
   }
+
   @media (max-width: 767.98px) {
     padding: 0;
   }
@@ -305,6 +358,7 @@ button,
   justify-content: center;
   cursor: pointer;
   transition: opacity 0.35s ease-in-out;
+
   &:after,
   &:before {
     content: '';
@@ -318,34 +372,41 @@ button,
     background-size: contain;
     transition: opacity 0.35s ease-in-out;
   }
+
   &:before {
     background: url('../../icons/icons-svg/basic/arrow-up.svg') center no-repeat;
     background-size: contain;
     opacity: 1;
   }
+
   &:after {
     background: url('../../icons/icons-svg/color/arrow-up.svg') center no-repeat;
     background-size: contain;
     opacity: 0;
   }
+
   @media (min-width: 992px) {
     &:hover {
       &:before {
         opacity: 0;
       }
+
       &:after {
         opacity: 1;
       }
     }
   }
+
   &.active {
     &:before {
       opacity: 0;
     }
+
     &:after {
       opacity: 1;
     }
   }
+
   &.show {
     opacity: 1;
   }
@@ -359,15 +420,18 @@ button,
   justify-content: center;
   background-color: var(--aura-gray-9);
   transition: background-color 0.35s ease-in-out;
+
   span {
     color: var(--aura-gray-4);
     font-size: 1.4rem;
     line-height: 1.8rem;
   }
+
   &:focus,
   &:hover,
   &.active {
     background-color: var(--aura-gray-10);
+
     span {
       background: var(--aura-gradient-button);
       -webkit-background-clip: text;
@@ -379,22 +443,27 @@ button,
 .button-tab-group {
   display: flex;
   align-items: center;
+
   .button-tab {
     border: 1px solid var(--aura-gray-8);
     flex-shrink: 0;
     flex-grow: 1;
+
     @media (min-width: 992px) {
       flex-shrink: 1;
       flex-grow: 0;
     }
   }
+
   .button-tab:first-child {
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
   }
+
   .button-tab:not(:last-child) {
     border-right: none;
   }
+
   .button-tab:last-child {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -407,10 +476,12 @@ button,
   border-radius: var(--spacer-1);
   display: flex;
   border: 1px solid var(--aura-gray-8);
+
   @media (max-width: 991.99px) {
     font-size: 1.4rem;
     line-height: 1.8rem;
   }
+
   button {
     padding: 0;
     width: 100px;
@@ -420,16 +491,29 @@ button,
     border-radius: var(--spacer-1);
     height: 32px;
     font-weight: 600;
+
     @media (max-width: 991.99px) {
       height: 32px;
       width: 100%;
     }
+
     background: transparent;
     color: var(--aura-gray-4);
     transition: all 0.35s ease-in-out;
+
     &.active {
       background: var(--aura-gray-10);
       color: var(--aura-white);
+    }
+
+    &.active-gradient {
+      background-color: var(--aura-gray-10);
+
+      span {
+        background: var(--aura-gradient-button);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
     }
   }
 }
@@ -440,6 +524,7 @@ button,
   display: flex;
   align-items: center;
   justify-content: center;
+
   &:hover {
     background-color: var(--aura-gray-9);
   }
@@ -451,11 +536,25 @@ button,
     display: flex;
     align-items: center;
   }
+
   .dropdown-split__arrow {
     padding: 0 10px;
     border-left: 2px solid var(--aura-gray-6);
     background-color: var(--aura-black);
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
+  }
+}
+
+.button-label {
+  height: 18px;
+  padding: 0 12px;
+  background: rgba(157, 161, 172, 0.2);
+  border-radius: 20px !important;
+  border: 2px solid var(--aura-gray-6) !important;
+  cursor: text !important;
+
+  @media (min-width: 991.98px) {
+    height: 24px;
   }
 }

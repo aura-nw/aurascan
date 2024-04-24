@@ -1,11 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TABS_TITLE_ACCOUNT } from 'src/app/core/constants/account.constant';
 import { TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-account-transaction',
@@ -23,7 +23,11 @@ export class AccountTransactionComponent implements OnInit {
   currentTab = TabsAccountLink.ExecutedTxs;
   lstTypeFilter = [];
 
-  constructor(private layout: BreakpointObserver, private route: ActivatedRoute, private location: Location) {}
+  constructor(
+    private layout: BreakpointObserver,
+    private route: ActivatedRoute,
+    private location: Location,
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -34,7 +38,7 @@ export class AccountTransactionComponent implements OnInit {
   }
 
   changeTab(value) {
-    this.location.replaceState('/account/' + this.address + '?tab=' + value);
+    this.location.replaceState('/address/' + this.address + '?tab=' + value);
     this.currentTab = value;
   }
 }

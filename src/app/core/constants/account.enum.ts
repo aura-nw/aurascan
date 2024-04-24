@@ -46,16 +46,31 @@ export enum WalletAcount {
 }
 
 export enum TabsAccount {
-  ExecutedTxs = 'Executed',
-  NativeTxs = 'Native/ibc Transfer',
-  FtsTxs = 'CW20 Transfer',
+  ExecutedTxs = 'Cosmos Executed Txn',
+  EVMExecutedTxs = 'EVM Executed Txn',
+  NativeTxs = 'Native/Ibc Transfer',
+  FtsTxs = 'Fungible Token Transfer',
   NftTxs = 'NFT Transfer',
 }
 
 export enum TabsAccountLink {
   ExecutedTxs = 'executed',
+  EVMExecutedTxs = 'evm-executed',
   NativeTxs = 'native-transfer',
-  FtsTxs = 'cw20-transfer',
+  FtsTxs = 'fungible-token-transfer',
+  NftTxs = 'nft-transfer',
+}
+
+export enum ETypeFtExport {
+  CW20 = 'cw20-transfer',
+  ERC20 = 'erc20-transfer'
+}
+
+export enum ExportFileName {
+  ExecutedTxs = 'cosmos-executed',
+  EVMExecutedTxs = 'evm-executed',
+  NativeTxs = 'native-ibc-transfer',
+  FtsTxs = 'fungible-token-transfer',
   NftTxs = 'nft-transfer',
 }
 
@@ -66,7 +81,7 @@ export enum StakeModeAccount {
   Vestings = 3,
 }
 
-// 
+//
 export enum EAccountType {
   BaseAccount = '/cosmos.auth.v1beta1.BaseAccount',
   PeriodicVestingAccount = 'cosmos-sdk/PeriodicVestingAccount',

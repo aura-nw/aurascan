@@ -1,67 +1,85 @@
-<div class="card-mob-simple">
+<div class="card-mob-account">
   <div
     *ngIf="title.label"
     class="d-flex justify-content-between align-items-center"
     [ngStyle]="{ 'margin-bottom': '6px' }">
     <div class="text--primary body {{ title.size ? 'title-' + title.size : '' }}" [copyBtn]="dataCard['tx_hash']">
-      <span
-        class="{{ title.titleClass ? title.titleClass : '' }}"
-        [routerLink]="['/transaction', dataCard['tx_hash']]"
-        >{{ title.label }}</span
-      >
-    </div>
-    <ng-container *ngIf="modeQuery === tabsData.ExecutedTxs">
-      <span class="caption {{ dataCard.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">
-        {{ dataCard.status | uppercase }}
+      <span class="{{ title.titleClass ? title.titleClass : '' }}" [routerLink]="['/tx', dataCard['tx_hash']]">
+        {{ title.label }}
       </span>
-    </ng-container>
+    </div>
+    <button
+      class="button button-pill button-outline caption-mob button-label"
+      *ngIf="modeQuery === tabsData.FtsTxs"
+      [routerLink]="tokenTypeInput === tokenType.ERC20 ? ['/tx', dataCard['tx_hash']] : null">
+      <span class="{{ tokenTypeInput === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
+        {{ tokenTypeInput === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
+      </span>
+    </button>
+    <button
+      class="button button-pill button-outline caption-mob button-label"
+      *ngIf="modeQuery === tabsData.NftTxs"
+      [routerLink]="tokenTypeInput === nftType.ERC721 ? ['/tx', dataCard['tx_hash']] : null">
+      <span class="{{ tokenTypeInput === nftType.ERC721 ? 'text--primary' : 'text--gray-2' }}">
+        {{ tokenTypeInput === nftType.ERC721 ? 'ERC721' : 'CW721' }}
+      </span>
+    </button>
   </div>
 
-  <div class="caption-mob fw-normal text--gray-light d-flex justify-content-between">
+  <div class="caption-mob fw-normal text--gray-light d-flex justify-content-between align-items-center">
     <div class="{{ modeQuery === tabsData.ExecutedTxs ? 'd-flex align-items-center' : '' }} ">
       <div class="d-flex align-items-center">
         <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
         <span>{{ dataCard.timestamp | customDateTime: 'Distance' }}</span>
       </div>
-      <div class="d-flex align-items-center" [ngClass]="modeQuery === tabsData.ExecutedTxs ? 'ml-6' : 'mt-1'">
+      <div class="d-flex align-items-center" [ngClass]="modeQuery === tabsData.ExecutedTxs ? 'ml-4' : 'mt-1'">
         <i class="ph ph-chat-circle-text mr-1 text--gray-4 body-mob"></i>
-        <span [class.line-claim]="modeQuery === tabsData.ExecutedTxs">{{ title.subLabelContent | ellipsis: 30 }}</span>
+        <span [class.line-claim]="modeQuery === tabsData.ExecutedTxs || modeQuery === tabsData.FtsTxs">
+          {{ (title.subLabelContent | ellipsis: 30) || dataCard.method }}
+        </span>
         <div *ngIf="dataCard.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
           +{{ dataCard.lstTypeTemp?.length - 1 }}
         </div>
       </div>
     </div>
     <div>
-      <ng-container *ngIf="modeQuery !== tabsData.ExecutedTxs">
-        <i
-          *ngIf="!dataCard.expand"
-          class="ph ph-caret-down text--white h3 icon-expand active"
-          (click)="expandData(dataCard)"></i>
-        <i
-          *ngIf="dataCard.expand"
-          class="ph ph-caret-up text--white h3 cursor-pointer"
-          (click)="dataCard.expand = false"></i>
-      </ng-container>
+      <i
+        *ngIf="!dataCard.expand"
+        class="ph ph-caret-down text--white h3 icon-expand active"
+        (click)="expandData(dataCard)"></i>
+      <i
+        *ngIf="dataCard.expand"
+        class="ph ph-caret-up text--white h3 cursor-pointer"
+        (click)="dataCard.expand = false"></i>
     </div>
   </div>
+  <ng-container *ngIf="modeQuery === tabsData.ExecutedTxs">
+    <span class="caption {{ dataCard.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">
+      {{ dataCard.status | uppercase }}
+    </span>
+  </ng-container>
 
-  <div *ngIf="content && content.length > 0">
-    <ng-container *ngIf="modeQuery === tabsData.ExecutedTxs">
-      <div class="d-flex justify-content-between small-body caption-mob mt-3">
-        <div *ngFor="let data of content; let i = index" class="col-6">
-          <div class="text--gray-4 fw-normal mb-1" *ngIf="data.label !== 'Expand'">{{ data.label }}</div>
+  <div
+    *ngIf="content?.length > 0 && modeQuery !== tabsData.FtsTxs && modeQuery === tabsData.ExecutedTxs"
+    [ngClass]="dataCard?.expand ? 'box-expand' : ''">
+    <div class="justify-content-between small-body caption-mob mt-3" *ngIf="dataCard?.expand">
+      <ng-container *ngFor="let data of content; let i = index">
+        <div class="d-flex justify-content-between mb-2">
+          <div class="text--gray-4 fw-normal" *ngIf="data.label !== 'Expand'">{{ data.label }}</div>
           <div
             *ngIf="data.info"
             class="{{ data.class ? data.class : 'text--gray-1' }} mb-0"
-            [ngStyle]="{ 'margin-top': '2px' }"
             [ngClass]="data.label === 'Result' && data['status'] === 'Fail' ? 'text--red-3' : ''"
             [innerHTML]="data.info"></div>
         </div>
-      </div>
-    </ng-container>
+      </ng-container>
+    </div>
   </div>
-
-  <div *ngIf="dataCard?.expand && modeQuery !== tabsData.ExecutedTxs" class="box-expand">
+  <!-- NFT transfer -->
+  <div
+    *ngIf="dataCard?.expand && modeQuery !== tabsData.ExecutedTxs && modeQuery !== tabsData.FtsTxs"
+    class="box-expand"
+    [style.max-height.px]="dataCard?.maximumExpanded * 46 + 16 * dataCard?.maximumExpanded">
     <div class="content-expand">
       <ng-container *ngFor="let item of dataCard.arrEvent">
         <div class="d-flex align-items-center justify-content-between item-expand">
@@ -75,7 +93,7 @@
                   [value]="item['address']"
                   [isEnableRouter]="!item['address']?.startsWith('Null')"
                   [linkRouter]="[
-                    (item['address'] || item['toAddress'] | isContract) ? '/contracts' : '/account',
+                    (item['address'] || item['toAddress'] | isContract) ? '/contracts' : '/address',
                     item['address'] || item['toAddress']
                   ]"
                   [maxCharacter]="10"></app-name-tag>
@@ -84,7 +102,7 @@
                 <a
                   *ngIf="!item['address']?.startsWith('Null')"
                   class="text--primary cursor-pointer block-link caption fw-normal"
-                  [routerLink]="[(item['address'] | isContract) ? '/contracts' : '/account', item['address']]">
+                  [routerLink]="[(item['address'] | isContract) ? '/contracts' : '/address', item['address']]">
                   {{ item['address'] | ellipsis: 5 : 5 }}
                 </a>
                 <span
@@ -124,10 +142,10 @@
               </div>
 
               <div class="ml-1 text--primary">
-                <a [routerLink]="['/tokens/token', item.linkDenom]" *ngIf="modeQuery !== tabsData.FtsTxs">
+                <a [routerLink]="['/token', item.linkDenom]" *ngIf="modeQuery !== tabsData.FtsTxs">
                   {{ item.denom || coinInfo.coinDenom | ellipsis: 19 }}
                 </a>
-                <a [routerLink]="['/tokens/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
+                <a [routerLink]="['/token', item.contractAddress]" *ngIf="modeQuery === tabsData.FtsTxs">
                   {{ item.denom | ellipsis: 19 }}
                 </a>
               </div>
@@ -145,11 +163,139 @@
               <i
                 [style]="'margin-top: 2px'"
                 class="ph-arrow-square-out-fill body-01-mob cursor-pointer mr-1 ml-2"
-                [routerLink]="['/tokens/token-nft/', item.contractAddress, item.tokenId]"></i>
+                [routerLink]="['/token/cw721', item.contractAddress, item.tokenId]"></i>
             </div>
           </div>
         </div>
       </ng-container>
     </div>
+  </div>
+
+  <!--  Fungible Token Transfer  -->
+
+  <div
+    *ngIf="dataCard?.expand && modeQuery === tabsData.FtsTxs"
+    class="box-expand"
+    [style.max-height.px]="dataCard?.maximumExpanded * 46 + 16 * dataCard?.maximumExpanded">
+    <div class="content-expand">
+      <ng-container *ngFor="let item of dataCard.arrEvent">
+        <!-- Cosmos -->
+        <ng-container *ngIf="tokenTypeInput !== tokenType.ERC20">
+          <div class="d-flex align-items-center justify-content-between item-expand mb-1">
+            <div class="d-flex align-items-center txt-top-expand">
+              <span class="caption fw-normal text--gray-4 txt-from-to">
+                {{ cosmosAddress === item.toAddress ? 'From:' : 'To:' }}
+              </span>
+              <ng-container>
+                <app-name-tag
+                  [value]="cosmosAddress"
+                  [isEnableRouter]="!cosmosAddress?.startsWith('Null')"
+                  [linkRouter]="[(cosmosAddress | isContract) ? '/contracts' : '/address', cosmosAddress]"
+                  [maxCharacter]="10"></app-name-tag>
+              </ng-container>
+            </div>
+            <div *ngIf="item.amount">
+              <div
+                class="item-show txt-top-expand justify-content-end {{
+                  cosmosAddress === item['toAddress'] ? 'text--green-3' : 'text--red-3'
+                }}">
+                {{ cosmosAddress === item['toAddress'] ? '+' : '-' }}
+                <div *ngIf="item.amount === 0">0</div>
+                <div
+                  *ngIf="item.amount !== 0 && (item.amount | lt: 0.001)"
+                  class="{{ cosmosAddress === item.toAddress ? 'text--green-3' : 'text--red-3' }}">
+                  {{ '< 0.001' }}
+                </div>
+                <div
+                  *ngIf="item.amount | gte: 0.001"
+                  [appBigNumber]="item.amount"
+                  [decimal]="0"
+                  class="{{ cosmosAddress === item.toAddress ? 'text--green-3' : 'text--red-3' }}"></div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between item-expand">
+            <div class="d-flex align-items-center">
+              <div>
+                <ng-container *ngIf="cosmosAddress !== item.toAddress">
+                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
+                  <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
+                </ng-container>
+                <ng-container *ngIf="cosmosAddress === item.toAddress">
+                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
+                  <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
+                </ng-container>
+              </div>
+            </div>
+            <div>
+              <span [appLinkDenom]="item.contractAddress">{{ item.denom }}</span>
+            </div>
+          </div>
+        </ng-container>
+        <!-- ERC20 -->
+        <ng-container *ngIf="tokenTypeInput === tokenType.ERC20">
+          <div class="d-flex align-items-center justify-content-between item-expand mb-1">
+            <div class="d-flex align-items-center txt-top-expand">
+              <span class="caption fw-normal text--gray-4 txt-from-to">
+                {{ evmAddress === item.to ? 'From:' : 'To:' }}
+              </span>
+              <ng-container>
+                <app-name-tag
+                  [value]="evmAddress === item.to ? item.from : item.to"
+                  [isEnableRouter]="!evmAddress?.startsWith('Null')"
+                  [linkRouter]="[(evmAddress | isContract) ? '/contracts' : '/address', evmAddress]"
+                  [maxCharacter]="10"
+                  [isShorterText]="true"></app-name-tag>
+              </ng-container>
+            </div>
+            <div *ngIf="item.amount">
+              <div
+                class="item-show txt-top-expand justify-content-end {{
+                  evmAddress === item['to'] ? 'text--green-3' : 'text--red-3'
+                }}">
+                {{ evmAddress === item['to'] ? '+' : '-' }}
+                <div *ngIf="item.amount === 0">0</div>
+                <div
+                  *ngIf="item.amount !== 0 && (item.amount | lt: 0.001)"
+                  class="{{ evmAddress === item.to ? 'text--green-3' : 'text--red-3' }}">
+                  {{ '< 0.001' }}
+                </div>
+                <div
+                  *ngIf="item.amount | gte: 0.001"
+                  [appBigNumber]="item.amount"
+                  [decimal]="0"
+                  class="{{ evmAddress === item.to ? 'text--green-3' : 'text--red-3' }}"></div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between item-expand">
+            <div class="d-flex align-items-center">
+              <div>
+                <ng-container *ngIf="evmAddress !== item.to">
+                  <img [src]="'assets/icons/icons-svg/color/tag-red.svg' | imageS3" alt="" width="14" height="14" />
+                  <span class="text--gray-4 ml-1 caption fw-normal">Sent</span>
+                </ng-container>
+                <ng-container *ngIf="evmAddress === item.to">
+                  <img [src]="'assets/icons/icons-svg/color/tag-green.svg' | imageS3" alt="" width="14" height="14" />
+                  <span class="text--gray-4 ml-1 caption fw-normal">Received</span>
+                </ng-container>
+              </div>
+            </div>
+            <div>
+              <span [appLinkDenom]="item.contractAddress">{{ item.denom }}</span>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+  <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="dataCard.arrEvent?.length > 5 && dataCard.expand">
+    <span
+      (click)="seeMoreData(dataCard)"
+      *ngIf="dataCard.maximumExpanded < dataCard.arrEvent?.length"
+      class="cursor-pointer mr-8"
+      >See more</span
+    >
+    <span (click)="collapseData(dataCard)" class="cursor-pointer">Collapse all</span>
   </div>
 </div>

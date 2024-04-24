@@ -1,0 +1,39 @@
+.card.card-proxy-contract {
+  width: 510px;
+  @media (max-width: 430px) {
+    max-height: 80vh;
+    width: 100%;
+  }
+
+  .card-header {
+    background-color: var(--aura-gray-9);
+  }
+
+  .card-body {
+    max-height: 80vh;
+    overflow-y: auto;
+    .box-proxy-content {
+      border-bottom: 1px solid var(--aura-gray-9);
+      padding: 24px;
+      .box-proxy-verify {
+        gap: 8px;
+        padding: 6px 12px;
+        width: fit-content;
+        position: relative;
+        border: 1px solid var(--aura-green-3);
+        border-radius: 8px;
+        font-size: 12px;
+        background: #273033;
+        width: 100%;
+        &.warning {
+          border: 1px solid #ffa237;
+          background: #3d3730;
+        }
+        &.error {
+          border: 1px solid var(--aura-danger);
+          background: #3e1c1c;
+        }
+      }
+    }
+  }
+}

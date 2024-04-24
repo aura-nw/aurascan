@@ -6,17 +6,10 @@
   padding-left: calc(var(--bs-gutter-x) * 0.5);
   overflow-y: auto;
   background-color: transparent;
+
   .txt-header {
     @media (max-width: 430px) {
       width: max-content;
     }
-  }
-}
-
-.box-block-tx {
-  @media (max-width: 415px) {
-    max-height: 465px;
-    overflow: auto;
-    padding-right: 4px;
   }
 }

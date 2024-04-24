@@ -1,5 +1,6 @@
 import { LENGTH_CHARACTER } from '../../constants/common.constant';
 import { bech32 } from 'bech32';
+import { EWalletType } from '../../constants/wallet.constant';
 
 export function isContract(adr: string, addressPrefix: string): boolean {
   if (adr?.startsWith(addressPrefix) && adr?.length === LENGTH_CHARACTER.CONTRACT) {
@@ -9,7 +10,14 @@ export function isContract(adr: string, addressPrefix: string): boolean {
 }
 
 export function isAddress(adr: string, addressPrefix: string): boolean {
-  if (adr?.startsWith(addressPrefix) && adr?.length === LENGTH_CHARACTER.ADDRESS) {
+  if (adr?.startsWith(addressPrefix) && adr?.length >= LENGTH_CHARACTER.ADDRESS) {
+    return true;
+  }
+  return false;
+}
+
+export function isEvmAddress(adr: string): boolean {
+  if (adr?.startsWith(EWalletType.EVM) && adr?.length === LENGTH_CHARACTER.EVM_ADDRESS) {
     return true;
   }
   return false;

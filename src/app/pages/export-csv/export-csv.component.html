@@ -49,15 +49,27 @@
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === TabsAccountLink.EVMExecutedTxs"
+                  (click)="changeTypeFilter(TabsAccountLink.EVMExecutedTxs)">
+                  <button type="button" class="button px-2">{{ TabsAccount.EVMExecutedTxs }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
                   [class.active]="dataType === TabsAccountLink.NativeTxs"
                   (click)="changeTypeFilter(TabsAccountLink.NativeTxs)">
                   <button type="button" class="button px-2">{{ TabsAccount.NativeTxs }}</button>
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
-                  [class.active]="dataType === TabsAccountLink.FtsTxs"
-                  (click)="changeTypeFilter(TabsAccountLink.FtsTxs)">
-                  <button type="button" class="button px-2">{{ TabsAccount.FtsTxs }}</button>
+                  [class.active]="dataType === ETypeFtExport.CW20"
+                  (click)="changeTypeFilter(ETypeFtExport.CW20)">
+                  <button type="button" class="button px-2">{{ typeFtDisplay.CW20 }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === ETypeFtExport.ERC20"
+                  (click)="changeTypeFilter(ETypeFtExport.ERC20)">
+                  <button type="button" class="button px-2">{{ typeFtDisplay.ERC20 }}</button>
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
@@ -72,25 +84,60 @@
       </div>
     </div>
 
-    <!-- Address -->
+    <!-- Cosmos Address -->
     <div class="row mb-6 align-items-center">
       <div class="col-12 col-lg-3 mb-4 mb-lg-0">
-        <span class="form-label body-02 text--gray-4 input-require">Address</span>
+        <span class="form-label body-02 text--gray-4 input-require">Cosmos Address</span>
       </div>
       <div class="col-12 col-lg-9">
         <div class="form-group">
-          <div class="input-group" [class.form-control--error]="false">
+          <div class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0">
             <input
               type="text"
               formControlName="address"
               placeholder="{{ prefix }}..."
+              class="input-address px-4 convert-address"
               name="inputAddress"
-              (input)="checkFormValid(); isError = false"
+              (blur)="setAddressOther(getAddress?.value, 'address')"
               autocomplete="off" />
+            <button
+              class="button button-xxs p-0 mr-4"
+              *ngIf="this.csvForm.get('address').value.length > 0 && this.csvForm.get('address').enabled"
+              type="button"
+              (click)="clearAddress()">
+              <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+            </button>
           </div>
-          <div *ngIf="getAddress?.value?.length > 0 && !isValidAddress" class="text--danger mt-2 caption fw-normal">
-            Invalid aura address format
+          <div *ngIf="!isValidAddress" class="text--danger mt-2 caption fw-normal">Invalid address format</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVM Address -->
+    <div class="row mb-6 align-items-center">
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
+        <span class="form-label body-02 text--gray-4 input-require">EVM Address</span>
+      </div>
+      <div class="col-12 col-lg-9">
+        <div class="form-group">
+          <div class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0">
+            <input
+              type="text"
+              formControlName="evmAddress"
+              placeholder="0x..."
+              class="input-address px-4 convert-address"
+              name="inputEvmAddress"
+              (blur)="setAddressOther(getEvmAddress?.value, 'evmAddress')"
+              autocomplete="off" />
+            <button
+              class="button button-xxs p-0 mr-4"
+              *ngIf="this.csvForm.get('evmAddress').value.length > 0 && this.csvForm.get('evmAddress').enabled"
+              type="button"
+              (click)="clearAddress()">
+              <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+            </button>
           </div>
+          <div *ngIf="!isValidEvmAddress" class="text--danger mt-2 caption fw-normal">Invalid address Evm format</div>
         </div>
       </div>
     </div>
@@ -117,7 +164,13 @@
               type="radio"
               value="filterRange"
               id="block"
-              [disabled]="!(!dataType || dataType === this.TabsAccountLink.ExecutedTxs)"
+              [disabled]="
+                !(
+                  !dataType ||
+                  dataType === this.TabsAccountLink.ExecutedTxs ||
+                  dataType === this.TabsAccountLink.EVMExecutedTxs
+                )
+              "
               class="radio-box radio-box--dark"
               [checked]="!isFilterDate"
               (change)="changeType()" />

@@ -1,15 +1,7 @@
-import { WALLET_PROVIDER } from "../constants/wallet.constant";
+import { WalletAccount } from '@cosmos-kit/core';
+import { JsonRpcSigner } from 'ethers';
+import { WALLET_PROVIDER } from '../constants/wallet.constant';
 
-export interface IWalletInfo {
-  name: WALLET_PROVIDER;
-  icon: string;
-  disableMobile?: boolean;
-}
-export type WalletStorage = {
-  provider: WALLET_PROVIDER;
-  chainId: string;
-  timestamp: number
-};
 export interface IBalances {
   balance: string;
   delegated: number;
@@ -30,8 +22,6 @@ export interface IBalances {
   balances: IBalance[];
   pagination: IPagination;
 }
-
-
 
 export interface IDelegation {
   delegator_address: string;
@@ -70,4 +60,11 @@ export interface IWalletDetail {
   unbonding: IUnbonding;
   stake_reward: IStakeReward;
   address: string;
+}
+
+export interface IMultichainWalletAccount {
+  evmAddress?: string;
+  address?: string;
+  cosmosAccount?: WalletAccount;
+  evmAccount?: JsonRpcSigner;
 }

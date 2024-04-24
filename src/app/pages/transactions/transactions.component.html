@@ -1,0 +1,195 @@
+<ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <app-pagetitle title="Cosmos Transactions" [displayInfo]="!breakpoint.value.matches"></app-pagetitle>
+  <section *ngIf="!loading" class="mt-4 mt-md-6">
+    <ng-container *ngIf="dataTx?.length > 0; else noValues">
+      <div class="card" *ngIf="!breakpoint.value.matches">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="aura-table tx">
+              <ng-container *ngFor="let template of templates; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+
+                  <td mat-cell *matCellDef="let data">
+                    <div>
+                      <ng-container [ngSwitch]="template.matColumnDef">
+                        <div *ngSwitchCase="'timestamp'">
+                          {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
+                        </div>
+                        <a
+                          *ngSwitchCase="'tx_hash'"
+                          [copyBtn]="data[template.matColumnDef]"
+                          class="text--primary cursor-pointer hash-link"
+                          [routerLink]="['/tx', data['tx_hash']]">
+                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                        </a>
+                        <ng-container *ngSwitchCase="'hash'">
+                          <a
+                            *ngIf="data[template.matColumnDef]"
+                            [copyBtn]="data[template.matColumnDef]?.toString()"
+                            class="text--primary cursor-pointer hash-link"
+                            [routerLink]="['/tx', data[template.matColumnDef]]">
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                          </a>
+                          <span *ngIf="!data.hash" class="text--white">-</span>
+                        </ng-container>
+                        <a
+                          *ngSwitchCase="'height'"
+                          class="text--primary cursor-pointer block-link"
+                          [routerLink]="['/block', data['height']]">
+                          {{ data[template.matColumnDef] }}
+                        </a>
+                        <div *ngSwitchCase="'type'" class="aura-status">
+                          <div
+                            class="cursor-pointer d-flex align-items-center"
+                            [appTooltip]="data.lstType | combineTxsMsg">
+                            {{ data[template.matColumnDef] | ellipsis: 35 }}
+                            <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                              +{{ data.lstType?.length - 1 }}
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'status'">
+                          <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                            <div *ngSwitchCase="'Success'" class="text--green-3">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                            <div *ngSwitchCase="'Fail'" class="text--red-3">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                            <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'fee'">
+                          <ng-container *ngIf="+data[template.matColumnDef] > 0">
+                            <span
+                              [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                              [decimalLengthTooltip]="12"
+                              *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
+                              {{ '<0.001' }}
+                            </span>
+                            <span
+                              *ngIf="data[template.matColumnDef] | balance: 0 | gte: 0.001"
+                              [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                              [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
+                              [appBigNumber]="data[template.matColumnDef]"
+                              [decimal]="0"></span>
+                            <span class="ml-1" appLinkDenom>{{ denom }}</span>
+                          </ng-container>
+                        </div>
+                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{ 'NO DATA' | translate }}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="breakpoint.value.matches">
+        <div *ngFor="let data of dataSource?.data">
+          <div class="custom-card-mob-simple card-explain body-01 mb-2 px-0">
+            <mat-expansion-panel class="px-3" hideToggle #panel [disabled]="true">
+              <mat-expansion-panel-header class="px-0" [collapsedHeight]="'68px'" [expandedHeight]="'68px'">
+                <mat-panel-title>
+                  <div>
+                    <a
+                      [copyBtn]="data?.tx_hash"
+                      class="text--primary cursor-pointer body-02"
+                      [routerLink]="['/tx', data?.tx_hash]">
+                      {{ data?.tx_hash | ellipsis: 8 : 8 }}
+                    </a>
+                    <div class="align-items-center d-flex mt-1">
+                      <div class="d-flex align-items-center">
+                        <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
+                        <span class="text--gray-light caption fw-normal">
+                          {{ data?.timestamp | customDateTime: 'Distance' }}
+                        </span>
+                      </div>
+                      <div class="d-flex align-items-center ml-5">
+                        <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                        <span class="line-claim text--gray-light caption fw-normal">
+                          {{ data?.type | ellipsis: 12 }}
+                        </span>
+                        <span *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                          +{{ data.lstType?.length - 1 }}
+                        </span>
+                      </div>
+                    </div>
+                    <div [ngSwitch]="data.status" class="text-uppercase mt-2 caption">
+                      <div *ngSwitchCase="'Success'" class="text--green-3">
+                        {{ data.status }}
+                      </div>
+                      <div *ngSwitchCase="'Fail'" class="text--red-3">
+                        {{ data.status }}
+                      </div>
+                      <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                        {{ data.status }}
+                      </div>
+                    </div>
+                  </div>
+                </mat-panel-title>
+                <div class="body-01 text--white d-flex align-items-center" (click)="panel.expanded = !panel.expanded">
+                  <i class="ph ph-caret-up" *ngIf="panel.expanded"></i>
+                  <i class="ph ph-caret-down" *ngIf="!panel.expanded"></i>
+                </div>
+              </mat-expansion-panel-header>
+              <div class="body-03">
+                <div class="divider divider-horizontal divider-lighter my-2"></div>
+                <div class="d-flex justify-content-between">
+                  <div class="text--gray-4">Fee</div>
+                  <div class="text--white d-flex align-items-center">
+                    <span class="mr-1">
+                      {{ data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0) }}
+                    </span>
+                    <a appLinkDenom>{{ denom }}</a>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="text--gray-4">Height</div>
+                  <a class="text--primary cursor-pointer block-link" [routerLink]="['/block', data['height']]">
+                    {{ data?.height }}
+                  </a>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <div class="text--gray-4">EVM Transaction</div>
+                  <a
+                    *ngIf="data?.hash"
+                    [copyBtn]="data.hash.toString()"
+                    class="text--primary cursor-pointer"
+                    [routerLink]="['/tx', data?.hash]">
+                    {{ data?.hash | ellipsis: 8 : 8 }}
+                  </a>
+                  <span *ngIf="!data.hash" class="text--white">-</span>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noValues>
+      <app-table-no-data [textNull]="errTxt"></app-table-no-data>
+    </ng-template>
+  </section>
+
+  <div *ngIf="loading">
+    <app-loading-sprint></app-loading-sprint>
+  </div>
+</ng-container>

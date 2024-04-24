@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { toHex, fromBase64 } from '@cosmjs/encoding';
 
 export function balanceOf(amount: string | number, decimal = 6): number {
   return +(new BigNumber(amount).toNumber() / Math.pow(10, decimal)).toFixed(decimal);
@@ -38,4 +39,11 @@ export function parseFullNumber(x) {
     }
   }
   return x;
+}
+
+export function toHexData(data: string) {
+  if (!data) {
+    return data;
+  }
+  return `0x${toHex(fromBase64(data))}`;
 }

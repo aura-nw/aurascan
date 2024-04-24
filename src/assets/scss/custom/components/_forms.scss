@@ -2,10 +2,10 @@
 // Forms.scss
 //
 
-[type="tel"],
-[type="url"],
-[type="email"],
-[type="number"] {
+[type='tel'],
+[type='url'],
+[type='email'],
+[type='number'] {
   &::placeholder {
     text-align: left /*rtl: right*/;
   }
@@ -22,6 +22,7 @@
   padding-left: 0;
   display: inline-block;
   padding-right: $form-check-padding-start;
+
   .form-check-input {
     float: right;
     margin-left: 0;
@@ -47,14 +48,14 @@
     &:checked {
       background-color: $card-bg !important;
 
-      &[type="checkbox"] {
+      &[type='checkbox'] {
         background-image: none;
       }
 
       &:after {
         position: absolute;
-        content: "\F012C";
-        font-family: "Material Design Icons";
+        content: '\F012C';
+        font-family: 'Material Design Icons';
         top: -4px !important;
         left: 1px; /*rtl: -4px */
         font-size: 16px;
@@ -78,13 +79,13 @@
     &:checked {
       background-color: $card-bg !important;
 
-      &[type="checkbox"] {
+      &[type='checkbox'] {
         background-image: none;
       }
 
       &:after {
         position: absolute;
-        content: "";
+        content: '';
         top: 3px !important;
         left: 3px;
         width: 5px;
@@ -112,6 +113,7 @@
       &:checked {
         border-color: $value;
         background-color: $value;
+
         &:after {
           background-color: $value;
         }
@@ -144,6 +146,7 @@
   font-size: 26px;
   min-height: 36px;
   line-height: 36px;
+
   .form-check-label {
     font-size: $font-size-base;
     vertical-align: middle;
@@ -154,7 +157,7 @@
   margin-bottom: 0px;
 }
 
-body[data-layout-mode="dark"] {
+body[data-layout-mode='dark'] {
   // Form Control
   .form-control {
     color: $gray-dark-500;
@@ -163,7 +166,7 @@ body[data-layout-mode="dark"] {
   }
 }
 
-body[data-layout-mode="dark"] {
+body[data-layout-mode='dark'] {
   // form-select
   .form-select {
     color: $gray-dark-500;
@@ -179,9 +182,11 @@ body[data-layout-mode="dark"] {
   .form-check-input {
     background-color: $gray-dark-300;
     border-color: rgba($white, 0.25);
+
     &:focus {
       border-color: 1px solid var(--aura-white) !important;
     }
+
     &:checked {
       background-color: $form-check-input-checked-bg-color;
       border-color: $form-check-input-checked-border-color;
@@ -208,6 +213,7 @@ body[data-layout-mode="dark"] {
       background-color: $gray-dark-300;
       color: $gray-dark-600;
     }
+
     &:hover:not(:disabled):not([readonly])::-webkit-file-upload-button {
       background-color: $gray-dark-300;
     }
@@ -219,12 +225,12 @@ body[data-layout-mode="dark"] {
     &::-webkit-slider-runnable-track {
       background-color: $gray-dark-300 !important;
     }
+
     &::-moz-range-track {
       background-color: $gray-dark-300 !important;
     }
   }
 }
-
 
 .form-check-input {
   margin-left: 0;
@@ -238,8 +244,9 @@ body[data-layout-mode="dark"] {
   cursor: text !important;
   padding: 0 var(--spacer-3);
   @media (min-width: 992px) {
-    height: 40px;    
+    height: 40px;
   }
+
   &::placeholder {
     color: var(--aura-gray-5);
   }

@@ -1,0 +1,41 @@
+<app-loading-sprint *ngIf="loading"></app-loading-sprint>
+<ng-container *ngIf="!loading && !errTxt && tokenDetail">
+  <div class="d-flex mb-4 mb-lg-5 align-items-center">
+    <h1 class="mb-0 text--white ml-2">
+      <div class="d-flex">
+        Token <span class="text--gray-5 break-word ml-2">{{ tokenDetail?.name }}</span>
+        <div class="status cursor-pointer">
+          <img
+            [src]="'assets/images/icons/CircleWavyCheck.svg' | imageS3"
+            alt=""
+            width="18"
+            height="18"
+            class="ml-1"
+            [appTooltip]="tokenDetail?.verify_text || 'Verified by Aura Network'"
+            *ngIf="tokenDetail?.verify_status === 'VERIFIED'" />
+        </div>
+      </div>
+    </h1>
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <app-token-overview *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-overview>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <app-token-summary
+        *ngIf="tokenDetail"
+        [tokenDetail]="tokenDetail"
+        [channelPath]="channelPath"></app-token-summary>
+    </div>
+  </div>
+
+  <app-token-content
+    *ngIf="tokenDetail"
+    [tokenDetail]="tokenDetail"
+    [contractAddress]="contractAddress"
+    [channelPath]="channelPath"
+    (hasMore)="getMoreTx($event)">
+  </app-token-content>
+</ng-container>
+<app-table-no-data *ngIf="!loading && errTxt" [textNull]="errTxt"></app-table-no-data>

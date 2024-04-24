@@ -25,7 +25,7 @@ import { Globals } from './global/global';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
+  TESTNET = ['auradev_1235-3', 'auradev_1236-2'];
   isTestnet = this.TESTNET.includes(this.environmentService.chainInfo?.chainId || '');
   isFirstLoad = true;
   user: IUser;

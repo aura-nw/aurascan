@@ -6,17 +6,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AccountTxType, TabsAccountLink } from 'src/app/core/constants/account.enum';
-import { LENGTH_CHARACTER, PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { AccountTxType, ETypeFtExport, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import {
+  LENGTH_CHARACTER,
+  NULL_ADDRESS,
+  PAGE_EVENT,
+  STORAGE_KEYS,
+  TIMEOUT_ERROR,
+} from 'src/app/core/constants/common.constant';
+import { ETokenCoinTypeBE, ETokenNFTTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_MULTI_VER, TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { LIST_TRANSACTION_FILTER, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { EFeature, TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import local from 'src/app/core/utils/storage/local';
-import { convertDataAccountTransaction } from 'src/app/global/global';
+import { convertDataAccountTransaction, mappingMethodName } from 'src/app/global/global';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -42,22 +52,43 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
   displayFilter = false;
   EFeature = EFeature;
+  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
 
   templatesExecute: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18 },
-    { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 12 },
+    { matColumnDef: 'status', headerCellDef: 'Result', headerWidth: 10 },
+    { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 17 },
+    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 15 },
-    { matColumnDef: 'fee', headerCellDef: 'Fee', headerWidth: 20 },
-    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 12 },
+    { matColumnDef: 'evmTx', headerCellDef: 'EVM Tx', headerWidth: 15, cssClass: 'pt-3' },
+  ];
+
+  templatesEvmExecute: Array<TableTemplate> = [
+    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn hash', headerWidth: 13 },
+    { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 11 },
+    { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 15 },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 15 },
+    { matColumnDef: 'evmAmount', headerCellDef: 'Amount', headerWidth: 11 },
+    { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 8, cssClass: 'pt-3' },
   ];
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18, cssClass: 'pt-4' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 25, cssClass: 'pt-0' },
-    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20, cssClass: 'pt-0' },
+  ];
+
+  templatesERCToken: Array<TableTemplate> = [
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
+    { matColumnDef: 'method', headerCellDef: 'Message', headerWidth: 14, cssClass: 'pt-4' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 20, cssClass: 'pt-0' },
   ];
 
   displayedColumns: string[];
@@ -84,7 +115,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   isSearch = false;
   minDate;
   maxDate;
-  linkToken = 'token-nft';
   typeTx = [AccountTxType.Sent, AccountTxType.Received];
   modeFilter = {
     date: 'date',
@@ -94,18 +124,28 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   };
   isSearchOther = false;
   countFilter = 0;
+  addressNative = '';
+  addressEvm = '';
+  tokenType = ETokenCoinTypeBE;
+  nftType = ETokenNFTTypeBE;
+  fungibleTokenType = ETokenCoinTypeBE.ERC20;
+  nonFungibleTokenType = ETokenNFTTypeBE.ERC721;
+
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-
-  denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  evmDecimal = this.environmentService.evmDecimal;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
-    private environmentService: EnvironmentService,
+    public environmentService: EnvironmentService,
+    public commonService: CommonService,
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
     private layout: BreakpointObserver,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -127,6 +167,14 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.currentAddress = params?.address;
+        const { accountAddress, accountEvmAddress } = transferAddress(
+          this.chainInfo.bech32Config.bech32PrefixAccAddr,
+          this.currentAddress,
+        );
+
+        this.addressNative = accountAddress;
+        this.addressEvm = accountEvmAddress;
+
         this.transactionLoading = true;
 
         this.dataSource = new MatTableDataSource();
@@ -319,12 +367,27 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
     switch (this.modeQuery) {
       case TabsAccountLink.ExecutedTxs:
+        payload.address = this.currentAddress = this.addressNative;
         payload.compositeKey = 'message.sender';
         this.templates = this.templatesExecute;
         this.displayedColumns = this.templatesExecute.map((dta) => dta.matColumnDef);
         this.getListTxByAddress(payload);
         break;
+      case TabsAccountLink.EVMExecutedTxs:
+        this.currentAddress = this.addressEvm;
+        payload.address = this.addressEvm?.toLowerCase();
+        payload.compositeKey = 'message.sender';
+        this.templates = this.templatesEvmExecute;
+        this.displayedColumns = this.templatesEvmExecute.map((dta) => dta.matColumnDef);
+        if (payload.address) {
+          this.getListEvmTxByAddress(payload);
+        } else {
+          this.dataSource.data = [];
+          this.transactionLoading = false;
+        }
+        break;
       case TabsAccountLink.NativeTxs:
+        payload.to = payload.from = this.currentAddress = this.addressNative;
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload.to = '_';
@@ -338,7 +401,13 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.getListTxNativeByAddress(payload);
         break;
       case TabsAccountLink.FtsTxs:
-        payload['sender'] = payload['receiver'] = address;
+        if (this.fungibleTokenType === this.tokenType.ERC20) {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressEvm;
+          this.templates = [...this.templatesERCToken];
+        } else {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressNative;
+          this.templates = [...this.templatesToken];
+        }
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload['receiver'] = '';
@@ -346,14 +415,26 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             payload['sender'] = '';
           }
         }
-        this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
+        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
-        this.getListFTByAddress(payload);
+        if (payload['sender']) {
+          this.getListFTByAddress(payload);
+        } else {
+          this.dataSource.data = [];
+          this.transactionLoading = false;
+        }
         break;
       case TabsAccountLink.NftTxs:
-        payload['sender'] = payload['receiver'] = address;
-        payload['isCw721'] = true;
+        if (this.nonFungibleTokenType === this.nftType.ERC721) {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressEvm;
+        } else {
+          payload['sender'] = payload['receiver'] = this.currentAddress = this.addressNative;
+          payload['isCw721'] = true;
+        }
+
+        // payload['sender'] = payload['receiver'] = address;
+        // payload['isCw721'] = true;
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload['receiver'] = '';
@@ -363,6 +444,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18, cssClass: 'pt-1' });
+        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         payload['limit'] = 100;
         this.getListNFTByAddress(payload);
@@ -404,6 +486,45 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  getListEvmTxByAddress(payload) {
+    this.userService
+      .getListEvmTxByAddress(payload)
+      .pipe(
+        switchMap((res) => {
+          const listTemp = res?.evm_transaction?.filter((j) => j.data?.length > 0)?.map((k) => k.data?.substring(0, 8));
+          const listMethodId = _.uniq(listTemp);
+          return this.transactionService.getListMappingName(listMethodId).pipe(
+            map((element) => {
+              if (res?.evm_transaction?.length > 0) {
+                res.evm_transaction.forEach((tx) => {
+                  const methodId = _.get(tx, 'data')?.substring(0, 8);
+                  tx['method'] = mappingMethodName(element, methodId);
+                });
+                return res;
+              }
+              return [];
+            }),
+          );
+        }),
+      )
+      .subscribe({
+        next: (data) => {
+          this.handleGetData(data);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
+  }
+
   getListTxNativeByAddress(payload) {
     this.userService.getListNativeTransfer(payload).subscribe({
       next: (data) => {
@@ -424,56 +545,144 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
   }
 
   getListFTByAddress(payload) {
-    this.userService.getListFTByAddress(payload).subscribe({
-      next: (data) => {
-        this.handleGetData(data);
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.transactionLoading = false;
-      },
-      complete: () => {
-        this.transactionLoading = false;
-      },
-    });
+    if (this.fungibleTokenType === ETokenCoinTypeBE.ERC20) {
+      this.userService
+        .getErc20TxByAddress(payload)
+        .pipe(
+          switchMap((res) => {
+            const listTemp = res?.evm_transaction
+              ?.filter((j) => j.data?.length > 0)
+              ?.map((k) => k.data?.substring(0, 8));
+            const listMethodId = _.uniq(listTemp);
+            return this.transactionService.getListMappingName(listMethodId).pipe(
+              map((element) => {
+                if (res?.evm_transaction?.length > 0) {
+                  res.evm_transaction.forEach((tx) => {
+                    const methodId = _.get(tx, 'data')?.substring(0, 8);
+                    tx['method'] = mappingMethodName(element, methodId);
+                  });
+                  return res;
+                }
+                return [];
+              }),
+            );
+          }),
+        )
+        .subscribe({
+          next: (data) => {
+            this.handleGetData(data);
+          },
+          error: (e) => {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.status + ' ' + e.statusText;
+            }
+            this.transactionLoading = false;
+          },
+          complete: () => {
+            this.transactionLoading = false;
+          },
+        });
+    } else {
+      this.userService.getCW20TxByAddress(payload).subscribe({
+        next: (data) => {
+          this.handleGetData(data);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
+    }
   }
 
   getListNFTByAddress(payload) {
-    this.userService.getListNFTByAddress(payload).subscribe({
-      next: (data) => {
-        this.handleGetData(data);
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.transactionLoading = false;
-      },
-      complete: () => {
-        this.transactionLoading = false;
-      },
-    });
+    if (this.nonFungibleTokenType === ETokenNFTTypeBE.ERC721) {
+      //TODO
+      this.transactionLoading = false;
+    } else {
+      this.userService.getListNFTByAddress(payload).subscribe({
+        next: (data) => {
+          this.handleGetData(data);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
+    }
   }
 
   handleGetData(data) {
-    if (data?.transaction?.length > 0) {
+    if (data?.transaction?.length > 0 || data?.evm_transaction?.length > 0) {
       this.nextKey = null;
-      if (data?.transaction?.length >= 100) {
-        this.nextKey = data?.transaction[data?.transaction?.length - 1]?.height;
+      const lstData = data?.transaction || data?.evm_transaction;
+      if (lstData?.length >= 100) {
+        this.nextKey = lstData[lstData?.length - 1]?.height;
       }
 
       let setReceive = false;
       if (this.modeQuery !== TabsAccountLink.ExecutedTxs && this.currentType !== AccountTxType.Sent) {
         setReceive = true;
       }
-
-      let txs = convertDataAccountTransaction(data, this.coinInfo, this.modeQuery, setReceive);
+      let txs = [];
+      if (this.modeQuery === TabsAccountLink.EVMExecutedTxs) {
+        txs = data.evm_transaction;
+        txs.forEach((element) => {
+          element.tx_hash = _.get(element, 'hash');
+          element.hash = _.get(element, 'transaction.hash');
+          element.from = _.get(element, 'from');
+          element.to = _.get(element, 'to');
+          element.timestamp = _.get(element, 'transaction.timestamp');
+          element.evmAmount = _.get(element, 'value') || 0;
+        });
+      } else {
+        if (this.modeQuery === TabsAccountLink.FtsTxs && this.fungibleTokenType === this.tokenType.ERC20) {
+          txs = data.evm_transaction;
+          txs.forEach((element) => {
+            element.tx_hash = _.get(element, 'hash');
+            element.timestamp = _.get(element, 'transaction.timestamp');
+            element.arrEvent = _.get(element, 'erc20_activities')?.map((item, index) => {
+              let from = _.get(item, 'from') || NULL_ADDRESS;
+              let to = _.get(item, 'to') || NULL_ADDRESS;
+              let denom = _.get(item, 'erc20_contract.symbol');
+              let amountTemp = _.get(item, 'amount');
+              let decimal = _.get(item, 'erc20_contract.decimal');
+              let amount = balanceOf(amountTemp || 0, +decimal);
+              let contractAddress = _.get(item, 'erc20_contract_address');
+              return { type: _.get(item, 'type'), from, to, amount, denom, contractAddress, amountTemp, decimal };
+            });
+            element.from = element.arrEvent[0]?.from;
+            element.to = element.arrEvent[0]?.to;
+            element.denom = element.arrEvent[0]?.denom;
+            element.amount = element.arrEvent[0]?.amount;
+            element.limit = 5;
+          });
+        } else {
+          txs = convertDataAccountTransaction(
+            data,
+            this.coinInfo,
+            this.modeQuery,
+            this.environmentService.getDecimals(),
+            setReceive,
+          );
+        }
+      }
 
       if (this.dataSource.data.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...txs];
@@ -485,8 +694,9 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
-
       this.pageData.length = this.dataSource.data.length;
+
+      this.expandData(this.dataSource.data[0], true);
     }
   }
 
@@ -494,12 +704,12 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     data.limit += 6;
   }
 
-  expandData(data) {
-    if (data.arrEvent?.length <= 1) {
+  expandData(data, isExpand?: boolean) {
+    if (data.arrEvent?.length <= 1 || !data) {
       return;
     }
     data.limit = 6;
-    data.expand = !data.expand;
+    data.expand = !data.expand || isExpand;
   }
 
   paginatorEmit(e: MatPaginator): void {
@@ -519,6 +729,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     const next = length <= (pageIndex + 2) * pageSize;
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
     this.pageData = e;
+
+    this.expandData(this.dataSource.data[pageIndex * pageSize], true);
 
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getTxsAddress(this.nextKey);
@@ -620,19 +832,43 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     this.nextKey = null;
     this.currentKey = null;
     this.pageData.pageSize = event;
+    this.pageData.pageIndex = 0;
     this.dataSource = new MatTableDataSource();
     this.getTxsAddress(this.nextKey);
   }
 
   linkExportPage() {
+    let exportType = this.modeQuery;
+    if (this.modeQuery === TabsAccountLink.FtsTxs) {
+      if (this.fungibleTokenType === ETokenCoinTypeBE.ERC20) {
+        exportType = ETypeFtExport.ERC20;
+      } else {
+        exportType = ETypeFtExport.CW20;
+      }
+    }
     local.setItem(
       STORAGE_KEYS.SET_DATA_EXPORT,
-      JSON.stringify({ address: this.currentAddress, exportType: this.modeQuery }),
+      JSON.stringify({ address: this.currentAddress || this.addressNative, exportType }),
     );
     this.router.navigate(['/export-csv']);
   }
 
   encodeData(data) {
     return encodeURIComponent(data);
+  }
+
+  changeTokenType(type: any): void {
+    if (this.modeQuery === TabsAccountLink.FtsTxs) {
+      this.fungibleTokenType = type;
+    } else {
+      this.nonFungibleTokenType = type;
+    }
+    this.dataSource.data = [];
+    this.pageData.length = 0;
+    this.pageData.pageIndex = 0;
+    this.nextKey = null;
+    this.currentKey = null;
+    this.transactionLoading = true;
+    this.getTxsAddress();
   }
 }

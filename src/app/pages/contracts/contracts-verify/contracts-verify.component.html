@@ -1,6 +1,9 @@
 <section class="contract-verify">
   <h1 class="text--white mb-2 mb-lg-0">Verify & Publish Code ID Source Code</h1>
-  <ng-container *ngIf="isExitCode">
+  <div *ngIf="loading">
+    <app-loading-sprint></app-loading-sprint>
+  </div>
+  <ng-container *ngIf="isExitCode && !loading">
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
     <div class="body-02 caption-mob fw-normal-mob text--gray-6">
       Source code verification provides transparency for users interacting with smart contracts
@@ -11,9 +14,6 @@
     </div>
     <div class="card mt-4">
       <div class="card-body">
-        <div *ngIf="loading">
-          <app-loading-sprint></app-loading-sprint>
-        </div>
         <div *ngIf="!loading">
           <!-- Contract Source Code -->
           <div *ngIf="currentStep === 'verify'">
@@ -156,7 +156,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="!isExitCode"
+  <ng-container *ngIf="!isExitCode && !loading"
     ><div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
     <div class="py-lg-20"></div>
   </ng-container>

@@ -29,7 +29,7 @@
             [decimal]="6"></div>
         </div>
         <span appLinkDenom>{{ denom }}</span>
-        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/account', contractDetail.address]">
+        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/address', contractDetail.address]">
           More info</a
         >
       </div>
@@ -53,7 +53,19 @@
         </div>
       </div>
       <div class="mt-3">
-        <div class="text--gray-4 caption fw-normal mb-1">Token Tracker</div>
+        <div class="d-flex align-items-center">
+          <div class="text--gray-4 caption fw-normal mb-1">Token Tracker</div>
+          <a
+            *ngIf="
+              contractDetail?.code?.type === contractRegisterType.CW20 ||
+              contractDetail?.code?.type === contractRegisterType.CW721 ||
+              contractDetail?.code?.type === contractRegisterType.CW4973
+            "
+            class="ml-1 p-0 button button--ssm mb-1"
+            [routerLink]="['/token/', contractDetail?.address]">
+            <i class="ph-arrow-square-out-fill text--primary body-01 h3-mob mb-0"></i>
+          </a>
+        </div>
         <div>
           <ng-container>
             <div
@@ -63,14 +75,12 @@
                 contractDetail?.cw20_contract?.name &&
                 contractDetail?.cw20_contract?.symbol
               ">
-              <a
-                class="text--primary break-word line-claim-v--des"
-                [routerLink]="['/tokens/token/', contractDetail?.address]">
+              <span class="text--white break-word line-claim-v--des">
                 {{ contractDetail | marketInfo: 'name' }} ({{ contractDetail | marketInfo: 'symbol' }})
-              </a>
-              <div class="cursor-pointer">
+              </span>
+              <div class="cursor-pointer ml-1">
                 <img
-                  [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                  [src]="'assets/images/icons/CircleWavyCheck.svg' | imageS3"
                   alt=""
                   width="18"
                   height="18"
@@ -79,16 +89,15 @@
                   *ngIf="verifiedStatus === 'VERIFIED'" />
               </div>
             </div>
-            <a
+            <span
               *ngIf="
                 contractDetail?.code?.type !== contractRegisterType.CW20 &&
                 contractDetail?.cw721_contract?.name &&
                 contractDetail?.cw721_contract?.symbol
               "
-              class="text--primary break-word line-claim-v--des"
-              [routerLink]="['/tokens/' + linkNft, contractDetail?.address]">
+              class="text--white break-word line-claim-v--des">
               {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
-            </a>
+            </span>
           </ng-container>
         </div>
       </div>

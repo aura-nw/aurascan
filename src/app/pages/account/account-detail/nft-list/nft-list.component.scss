@@ -77,6 +77,18 @@
       border-color: var(--aura-gray-8);
     }
   }
+
+  .button-switch-stage-nft {
+    height: 24px;
+  }
+
+  .button-switch-stage {
+    height: 32px;
+    width: 195px;
+    @media (min-width: 992px) {
+      width: 220px;
+    }
+  }
 }
 
 .dropdown-menu.filter-dropdown-collecttion {
