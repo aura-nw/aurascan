@@ -6,7 +6,7 @@ import {
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import BigNumber from 'bignumber.js';
-import { Contract, JsonFragment } from 'ethers';
+import { Contract, ethers, JsonFragment, parseEther } from 'ethers';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
@@ -143,9 +143,16 @@ export class EvmWriteComponent implements OnChanges {
       return;
     }
 
+    console.log(params);
+
     jsonFragment.isLoading = true;
 
-    contract[name]?.(...params)
+    contract[name]?.(...params, {
+      gasLimit: 250000,
+      gasPrice: 9000000000,
+      nonce: 0,
+      value: parseEther('1'),
+    })
       .then((res) => {
         jsonFragment.result = res;
         jsonFragment.isLoading = false;
