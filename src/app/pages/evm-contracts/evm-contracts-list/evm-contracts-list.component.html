@@ -129,7 +129,8 @@
                       <a
                         *ngIf="
                           data['type'] === EvmContractRegisterType.ERC20 ||
-                          data['type'] === EvmContractRegisterType.ERC721
+                          data['type'] === EvmContractRegisterType.ERC721 ||
+                          data['token_tracker']
                         "
                         class="ml-1 p-0 button button--ssm button-ghost"
                         [routerLink]="['/token', data['address']]">
