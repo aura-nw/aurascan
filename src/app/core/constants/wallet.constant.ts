@@ -40,3 +40,7 @@ export enum ELeapMode {
   Core = 'core',
   MobileWeb = 'mobile-web'
 }
+
+export enum EWalletType {
+  EVM = '0x',
+}

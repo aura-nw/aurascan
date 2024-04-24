@@ -1,4 +1,4 @@
-<h1 class="mb-4 mb-lg-6 text--white">Contracts</h1>
+<h1 class="mb-4 mb-lg-6 text--white">CosmWasm Contracts</h1>
 <app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
 <div class="d-lg-flex align-items-center justify-content-between" *ngIf="!errTxt && !isLoading">
   <div class="filter-group d-flex align-items-center flex-nowrap">
@@ -100,8 +100,8 @@
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
-                <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate" [style.min-width]="'150px'"></div>
+                <th mat-header-cell *matHeaderCellDef [style.min-width.px]="template?.headerWidth">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
                   <ng-container *ngIf="template.isNameTag">
@@ -163,17 +163,25 @@
                   </ng-container>
 
                   <ng-container *ngIf="template.matColumnDef === 'token_tracker'">
-                    <a *ngIf="data['token_tracker']" [appTooltip]="data['token_tracker']" [routerLink]="data.url">
-                      {{ data['token_tracker'] | ellipsis: 18 }}
-                    </a>
-                    <span
-                      *ngIf="
-                        !data['code']?.type ||
-                        (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
-                        (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
-                      ">
-                      -
-                    </span>
+                    <div class="d-flex align-items-center">
+                      <div *ngIf="data['token_tracker']" [appTooltip]="data['token_tracker']">
+                        {{ data['token_tracker'] | ellipsis: 18 }}
+                      </div>
+                      <span
+                        *ngIf="
+                          !data['code']?.type ||
+                          (data['code']?.type === ContractRegisterType.CW20 && !data['cw20_contract']?.name) ||
+                          (data['code']?.type === ContractRegisterType.CW721 && !data['cw721_contract']?.name)
+                        ">
+                        --
+                      </span>
+                      <a
+                        *ngIf="data['token_tracker']"
+                        class="ml-1 p-0 button button--ssm button-ghost"
+                        [routerLink]="data.url">
+                        <i class="ph-arrow-square-out-fill text--primary body-01 h3-mob mb-0"></i>
+                      </a>
+                    </div>
                   </ng-container>
                   <ng-container
                     *ngIf="

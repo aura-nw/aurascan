@@ -54,11 +54,14 @@ export const CHART_RANGE = {
   MONTH_12: '12M',
 };
 
-// Only aura address
+// Default is Aura address, config on EnvironmentService for other chain
 export const LENGTH_CHARACTER = {
   ADDRESS: 43,
+  EVM_ADDRESS: 42,
   CONTRACT: 63,
   TRANSACTION: 64,
+  IBC: 64,
+  EVM_TRANSACTION: 66,
 };
 
 export const NULL_ADDRESS = 'Null address';
@@ -73,7 +76,8 @@ export const COIN_TOKEN_TYPE = {
   NATIVE: 'native',
   IBC: 'ibc',
   CW20: 'cw20',
-}
+  ERC20: 'erc20',
+};
 
 export enum MEDIA_TYPE {
   IMG = 'img',
@@ -114,3 +118,12 @@ export const STORAGE_KEYS = {
 
 export const TITLE_LOGO = 'assets/images/logo/title-logo.png';
 export const MAX_LENGTH_NAME_TAG = 35;
+
+export enum EFileType {
+  Json = 'application/json',
+  Zip = 'application/x-zip-compressed',
+}
+
+export enum EMethodContract {
+  Creation = '60806040',
+}

@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { ETokenNFTTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
@@ -33,6 +33,8 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   totalValue = 0;
   textSearch = '';
   searchNotFound = false;
+  typeToken = '';
+  typeTokeList = ETokenNFTTypeBE;
   listCollection = [
     {
       label: 'All',
@@ -82,6 +84,14 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
       address: this.nftFilter || null,
     };
+
+    // TODO, set null list erc721
+    if (this.typeToken === ETokenNFTTypeBE.ERC721) {
+      this.pageData.length = 0;
+      this.searchNotFound = true;
+      this.nftList = [];
+      return;
+    }
 
     if (this.nftFilter) {
       if (this.textSearch.length === LENGTH_CHARACTER.CONTRACT && this.textSearch !== this.nftFilter) {
@@ -194,10 +204,6 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
     this.getNftData();
   }
 
-  handleRouterLink(link): void {
-    this.router.navigate([link]);
-  }
-
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
@@ -205,5 +211,10 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
 
   encodeData(data) {
     return encodeURIComponent(data);
+  }
+
+  changeType(type: string): void {
+    this.typeToken = type;
+    this.getNftData();
   }
 }

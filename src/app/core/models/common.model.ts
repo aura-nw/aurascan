@@ -9,6 +9,7 @@ export interface IResponsesSuccess<T> {
   data: T;
   meta: any;
 }
+
 export interface IResponsesError {
   error: {
     statusCode: number;
@@ -81,6 +82,9 @@ export enum EFeature {
   Cw20 = 'CW20',
   Cw721 = 'CW721',
   Cw4973 = 'CW4973',
+  Erc20 = 'ERC20',
+  Erc721 = 'ERC721',
+  Erc1155 = 'ERC1155',
   Statistics = 'STATISTICS',
   TopStatistics = 'TOP_STATISTICS',
   FeeGrant = 'FEE_GRANT',

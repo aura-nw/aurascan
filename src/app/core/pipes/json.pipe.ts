@@ -10,7 +10,12 @@ export class JsonPipe implements PipeTransform {
     if (_.get(args, '[0].checkType')) {
       return this.transformValue(value);
     }
-    return JsonPrettyPrint(value);
+
+    try {
+      return typeof value == 'object' ? JsonPrettyPrint(value) : value;
+    } catch (error) {
+      return value;
+    }
   }
 
   transformValue(value) {

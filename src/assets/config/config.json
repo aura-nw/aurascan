@@ -23,39 +23,9 @@
     "quotaSetPrivateName": 20,
     "quotaSetWatchList": 20,
     "quotaNotification": 100,
-    "coins": [
-      {
-        "name": "Test Aura",
-        "display": "TAURA",
-        "denom": "ibc/6DF434CD72825125ACECEA86BF4A15DCF7CA0DE257C7683AF2A550D2BE34F79D",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Test Aura 2",
-        "display": "TAURA",
-        "denom": "ibc/88157C3B5E7755BF1ED3756691F96DE13780973B7061BBCA837665D97666F75C",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Test Aura 3",
-        "display": "TAURA",
-        "denom": "ibc/2C4AFBABEC27A288296EEBD37D156B2F70E109697F7C5C0DC5DE33788B6282A8",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      },
-      {
-        "name": "Test Aura 4",
-        "display": "TAURA4",
-        "denom": "ibc/6DF434CD72825125ACECEA86BF4A15DCF7CA0DE257C7683AF2A550D2BE34F79D",
-        "decimal": 6,
-        "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-      }
-    ],
     "features": [],
     "chain_info": {
-      "chainId": "serenity-testnet-001",
+      "chainId": "auradev_1236-2",
       "chainName": "Aura serenity testnet",
       "rpc": "https://rpc.serenity.aura.network",
       "rest": "https://lcd.serenity.aura.network",
@@ -95,13 +65,37 @@
         "average": 0.0025,
         "high": 0.004
       },
-      "features": [
-        "ibc-transfer"
-      ],
+      "features": ["ibc-transfer"],
       "walletUrlForStaking": "https://serenity.aurascan.io/validators",
       "logo": "https://i.imgur.com/zi0mTYb.png",
       "explorer": "https://serenity.aurascan.io/",
       "beta": "false"
+    },
+    "evmChainInfo": {
+      "name": "Aura EVM Serenity",
+      "chain": "Aura-Serenity",
+      "rpc": "https://jsonrpc.serenity.aura.network",
+      "faucets": [""],
+      "nativeCurrency": {
+        "name": "test-Aura",
+        "symbol": "AURA",
+        "denom": "aAURA",
+        "decimals": 18
+      },
+      "infoURL": "https://aura.network",
+      "shortName": "aura-serenity",
+      "chainId": 1236,
+      "networkId": 1236,
+      "slip44": 1,
+      "icon": "",
+      "explorers": [
+        {
+          "name": "Aura Explorer (Aurascan)",
+          "url": "https://serenity.aurascan.io",
+          "standard": "none",
+          "icon": ""
+        }
+      ]
     }
   },
   "image": {
@@ -109,11 +103,11 @@
     "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/",
     "banner": [
       {
-        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/euphoria-assets/images/pages/banner_aurascan.png",
+        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/images/pages/banner_aurascan-2.png",
         "url": "https://beta.seekhype.io/"
       },
       {
-        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/euphoria-assets/images/pages/banner_aurascan-2.png",
+        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/images/pages/banner_aurascan-2.png",
         "url": "https://beta.seekhype.io/"
       }
     ]
@@ -124,9 +118,7 @@
     "ipfsDomain": "https://ipfs.io/",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": [
-        "aura-network"
-      ]
+      "ids": ["aura-network"]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -147,9 +139,7 @@
           "name": "Aurascan",
           "description": "Aura Network Explorer",
           "url": "https://serenity.aurascan.io/",
-          "icons": [
-            "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-          ]
+          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
         }
       }
     }

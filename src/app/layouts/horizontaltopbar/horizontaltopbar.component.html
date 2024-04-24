@@ -31,14 +31,14 @@
                 class="form-control"
                 placeholder="{{ 'HEADER.SEARCH' | translate }}"
                 [(ngModel)]="searchValue"
-                (keyup.enter)="handleSearch()"
+                (keyup.enter)="search()"
                 [ngModelOptions]="{ standalone: true }"
                 name="inputEmail"
                 autocomplete="off" />
               <button
                 type="submit"
                 class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
-                (click)="handleSearch()">
+                (click)="search()">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -61,21 +61,18 @@
   </div>
   <!-- App Search mobile-->
   <div class="app-search d-lg-none px-4 mt-4 pb-3" *ngIf="router.url !== '/login'">
-    <form (ngSubmit)="handleSearch()" class="aura-form single-input-field">
+    <form (ngSubmit)="search()" class="aura-form single-input-field">
       <div class="input-group">
         <input
           type="text"
           class="form-control"
           placeholder="{{ 'HEADER.SEARCH' | translate }}"
           [(ngModel)]="searchValue"
-          (keyup.enter)="handleSearch()"
+          (keyup.enter)="search()"
           [ngModelOptions]="{ standalone: true }"
           name="inputEmail"
           autocomplete="off" />
-        <button
-          type="submit"
-          class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
-          (click)="handleSearch()">
+        <button type="submit" class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}">
           <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
         </button>
         <button
@@ -100,8 +97,8 @@
               <a
                 class="nav-link d-flex align-items-center mb-0"
                 [routerLink]="item.link"
-                [class.active]="checkMenuActive(item.link)"
-                role="button">
+                role="button"
+                [routerLinkActiveMenu]="item">
                 <i class="ph-{{ item.icon }}"></i>
                 <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
               </a>
@@ -120,7 +117,7 @@
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
                         (click)="removeConfigCSV(subMenu)"
-                        [class.active]="checkMenuActive(subMenu.link)">
+                        [routerLinkActiveMenu]="subMenu">
                         <!-- Menu token has special icon -->
                         <i class="icon icon-nft text--white" *ngIf="subMenu.name === menuName.TokenCW721"></i>
                         <i class="icon icon-bound-token text--white" *ngIf="subMenu.name === menuName.TokenCW4973"></i>

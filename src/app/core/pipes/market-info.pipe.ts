@@ -27,12 +27,18 @@ export class MarketInfoPipe implements PipeTransform {
     }
 
     const tokenMarket = this.token.tokensMarket || [];
-    const { cw20_contract } = value;
+    const { cw20_contract, erc20_contract } = value;
     if (cw20_contract) {
       marketInfo = {
         logo: cw20_contract?.marketing_info?.logo?.url || this.defaultLogoToken,
         symbol: cw20_contract?.symbol || '',
         name: cw20_contract?.name || '',
+      };
+    } else if (erc20_contract) {
+      marketInfo = {
+        logo: erc20_contract?.marketing_info?.logo?.url || this.defaultLogoToken,
+        symbol: erc20_contract?.symbol || '',
+        name: erc20_contract?.name || '',
       };
     }
 
@@ -47,7 +53,7 @@ export class MarketInfoPipe implements PipeTransform {
           name: tokenCw20.name || marketInfo.name,
         };
       }
-    } else if (cw20_contract.ibc_denom) {
+    } else if (cw20_contract?.ibc_denom) {
       // ibc type
       const tokenIbc = tokenMarket?.find((t) => t.denom === cw20_contract.ibc_denom);
       if (tokenIbc) {
@@ -66,7 +72,11 @@ export class MarketInfoPipe implements PipeTransform {
 @Pipe({ name: 'ibcDenom' })
 export class IbcDenomPipe implements PipeTransform {
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
-  constructor(private commonService: CommonService, private environmentService: EnvironmentService) {}
+
+  constructor(
+    private commonService: CommonService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   transform(value: string, amount?: string): string {
     if (!value) return '';
@@ -82,6 +92,6 @@ export class IbcDenomPipe implements PipeTransform {
 
     return balance.lte(0)
       ? '-'
-      : balance.toFormat() + `<a class="text--primary ml-1" href='/tokens/token/${linkToken}'>${data['display']}</a>`;
+      : balance.toFormat() + `<a class="text--primary ml-1" href='/token/${linkToken}'>${data['display']}</a>`;
   }
 }

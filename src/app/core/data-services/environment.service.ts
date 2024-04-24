@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { WalletConnectOptions } from '@cosmos-kit/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Subject, lastValueFrom, takeUntil } from 'rxjs';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { TYPE_TRANSACTION } from '../constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../constants/transaction.enum';
 import { isMobileBrowser } from '../helpers/wallet';
@@ -38,6 +39,7 @@ export interface IConfiguration {
     }[];
     features: string[];
     chain_info: any;
+    evmChainInfo: any;
     cosmos_sdk_version?: string;
   };
   image: {
@@ -53,6 +55,7 @@ export interface IConfiguration {
     socket: string;
     ipfsDomain: string;
     googleClientId: string;
+    verifyContract: string;
     coingecko: {
       url: string;
       ids: string[];
@@ -93,8 +96,20 @@ export class EnvironmentService {
     return this.environment.nativeName || _.startCase(_.camelCase(this.chainInfo?.bech32Config?.bech32PrefixAccAddr));
   }
 
+  get bech32PrefixAccAddr() {
+    return _.get(this.configValue, 'chainConfig.chain_info.bech32Config.bech32PrefixAccAddr');
+  }
+
   get chainConfig() {
     return _.get(this.configValue, 'chainConfig');
+  }
+
+  get etherJsonRpc() {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.rpc');
+  }
+
+  get evmChainInfo() {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo');
   }
 
   get chainInfo() {
@@ -107,6 +122,10 @@ export class EnvironmentService {
 
   get coinDecimals() {
     return _.get(this.configValue, 'chainConfig.chain_info.currencies[0].coinDecimals');
+  }
+
+  get coinMinimalDenom() {
+    return _.get(this.configValue, 'chainConfig.chain_info.stakeCurrency.coinMinimalDenom');
   }
 
   get stakingTime() {
@@ -159,6 +178,18 @@ export class EnvironmentService {
     return _.get(this.configValue, 'api.walletConnect');
   }
 
+  get verifyContractUrl() {
+    return _.get(this.configValue, 'api.verifyContract');
+  }
+
+  get evmDenom(): string {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.nativeCurrency.denom');
+  }
+
+  get evmDecimal(): number {
+    return _.get(this.configValue, 'chainConfig.evmChainInfo.nativeCurrency.decimals');
+  }
+
   setLatestBlockHeight(value: string | number) {
     this.latestBlockHeight$.next(value);
   }
@@ -198,8 +229,28 @@ export class EnvironmentService {
       });
   }
 
+  configAddressLength() {
+    if (!this.bech32PrefixAccAddr) {
+      return;
+    }
+
+    const prefix: string = this.bech32PrefixAccAddr;
+
+    const ACCOUNT_SUFFIX_LENGTH = 39;
+    const CONTRACT_SUFFIX_LENGTH = 59;
+
+    // Set account lenght
+    const accountLenght = prefix.length + ACCOUNT_SUFFIX_LENGTH;
+    const contractLenght = prefix.length + CONTRACT_SUFFIX_LENGTH;
+
+    LENGTH_CHARACTER.ADDRESS = accountLenght;
+    LENGTH_CHARACTER.CONTRACT = contractLenght;
+  }
+
   async load(): Promise<void> {
     await this.loadConfig();
+    this.configAddressLength();
+
     await this.extendsTxType();
 
     this.getNodeInfo();
@@ -225,5 +276,18 @@ export class EnvironmentService {
         this.config.next(configuration);
       }
     });
+  }
+
+  getDecimals(denom?: string): number | { [key: string]: number } {
+    if (!(this.coinMinimalDenom && this.evmDenom)) {
+      return undefined;
+    }
+
+    const decimals = {
+      [this.coinMinimalDenom?.toLowerCase()]: this.coinDecimals,
+      [this.evmDenom?.toLowerCase()]: this.evmDecimal,
+    };
+
+    return denom ? decimals[denom.toLowerCase()] : decimals;
   }
 }

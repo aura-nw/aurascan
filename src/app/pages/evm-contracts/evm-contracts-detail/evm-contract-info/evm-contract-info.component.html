@@ -1,0 +1,79 @@
+<div *ngIf="contractDetail">
+  <div *ngIf="type === 'information'" class="card box-contract-overview mb-0 mb-lg-5">
+    <div
+      class="card__header d-flex align-items-center justify-content-between"
+      data-bs-toggle="collapse"
+      data-bs-target="#title2"
+      aria-controls="title2"
+      aria-expanded="false">
+      <h6 class="h4-mob mb-0 text--white fw-semibold">Information</h6>
+      <button class="button d-lg-none" type="button">
+        <i class="ph ph-caret-down text--white h3"></i>
+      </button>
+    </div>
+    <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
+    <div class="card__body body-02 body-mob collapse" id="title2">
+      <div class="">
+        <div class="text--gray-4 caption fw-normal mb-1">Public Name</div>
+        <app-name-tag
+          [value]="contractDetail?.address"
+          [mode]="ENameTag.Public"
+          [screen]="EScreen.Contract"
+          [fullText]="true">
+        </app-name-tag>
+      </div>
+
+      <div class="mt-3">
+        <div class="text--gray-4 caption fw-normal mb-1">Private Name Tag</div>
+        <app-name-tag [value]="contractDetail?.address" [mode]="ENameTag.Private" [screen]="EScreen.Contract">
+        </app-name-tag>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="type === 'moreInfo'" class="card box-contract-overview moreInfo mb-4 mb-lg-5">
+    <div
+      class="card__header d-flex align-items-center justify-content-between"
+      data-bs-toggle="collapse"
+      data-bs-target="#title3"
+      aria-controls="title3"
+      aria-expanded="false">
+      <h6 class="h4-mob mb-0 text--white fw-semibold">More Info</h6>
+      <button class="button d-lg-none" type="button">
+        <i class="ph ph-caret-down text--white h3"></i>
+      </button>
+    </div>
+    <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
+    <div class="card__body body-02 body-mob collapse" id="title3">
+      <div>
+        <div class="text--gray-4 caption fw-normal mb-1">Contract Type</div>
+        <div class="text--gray-light">{{ contractDetail.code?.type || contractDetail?.type || '-' }}</div>
+      </div>
+
+      <div class="mt-3">
+        <div class="text--gray-4 caption fw-normal mb-1">Contract Creator</div>
+        <div class="text--gray-light">
+          <span class="mr-1 mr-lg-2" *ngIf="contractDetail?.creator">
+            <app-name-tag
+              [value]="contractDetail?.creator"
+              [widthAuto]="true"
+              [linkRouter]="[
+                (contractDetail?.creator | isContract) ? '/contracts' : '/address',
+                contractDetail?.creator
+              ]">
+            </app-name-tag>
+          </span>
+          <span *ngIf="!contractDetail?.creator">-</span>
+          at txn
+          <a
+            *ngIf="contractDetail?.tx_hash"
+            class="text--primary ml-1 ml-lg-2"
+            [routerLink]="['/tx', contractDetail?.tx_hash]"
+            [copyBtn]="contractDetail?.tx_hash">
+            {{ contractDetail?.tx_hash | ellipsis: 6 : 6 }}
+          </a>
+          <span *ngIf="!contractDetail?.tx_hash">-</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

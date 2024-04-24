@@ -9,6 +9,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 
 @Component({
   selector: 'app-soulbound-token-create-popup',
@@ -23,6 +24,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
 
   network = this.environmentService.chainInfo;
   prefix = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr?.toLowerCase();
+  eWalletType = EWalletType;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

@@ -4,6 +4,9 @@ import * as _ from 'lodash';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { UserService } from './user.service';
+import { transferAddress } from '../utils/common/address-converter';
+import local from '../utils/storage/local';
+import { STORAGE_KEYS } from '../constants/common.constant';
 
 @Injectable({ providedIn: 'root' })
 export class NameTagService extends CommonService {
@@ -47,7 +50,7 @@ export class NameTagService extends CommonService {
   }
 
   findNameTagByAddress(address: string, isPrivate = true) {
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    const nameTag = this.findNameTag(address);
 
     let result = isPrivate && nameTag?.name_tag_private ? nameTag?.name_tag_private : nameTag?.name_tag;
 
@@ -76,7 +79,7 @@ export class NameTagService extends CommonService {
 
   findUrlByAddress(address: string) {
     let result = '';
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    const nameTag = this.findNameTag(address);
     if (nameTag?.enterpriseUrl?.length > 0) {
       result = nameTag?.enterpriseUrl;
     }
@@ -84,17 +87,30 @@ export class NameTagService extends CommonService {
   }
 
   isPublic(address: string): boolean {
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
-    return !!nameTag?.name_tag;
+    const nameTag = this.findNameTag(address);
+    return !!nameTag['name_tag'];
   }
 
   isPrivate(address: string): boolean {
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    const nameTag = this.findNameTag(address);
     return !!(nameTag?.isPrivate && nameTag?.name_tag_private);
   }
 
   checkDisplayTooltip(address: string): boolean {
-    const nameTag = this.listNameTag?.find((k) => k.address === address);
+    const nameTag = this.findNameTag(address);
     return !nameTag || nameTag?.name_tag === address;
+  }
+
+  findNameTag(address) {
+    if (this.listNameTag?.length === 0) {
+      this.listNameTag = local.getItem<[]>(STORAGE_KEYS.LIST_NAME_TAG);
+    }
+
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      address,
+    );
+    const nameTag = this.listNameTag?.find((k) => k.address === accountAddress || k.address === accountEvmAddress);
+    return nameTag;
   }
 }

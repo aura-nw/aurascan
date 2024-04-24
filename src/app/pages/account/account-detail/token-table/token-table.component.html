@@ -104,16 +104,14 @@
                     <img [appImg]="element?.image" [defaultImage]="defaultLogoAura" class="image-token" alt="" />
                   </div>
                   <div>
-                    <a
-                      class="d-flex align-items-center text-nowrap mr-3"
-                      [routerLink]="['/tokens/token', element.tokenUrl]">
+                    <a class="d-flex align-items-center text-nowrap mr-3" [routerLink]="['/token', element.tokenUrl]">
                       <div class="d-flex align-items-center">
                         <div class="ml-2 body-03 fw-semibold">
                           {{ element.name | ellipsis: 30 }}
                         </div>
                         <div class="cursor-pointer" [appTooltip]="element.verify_text || 'Verified by Aura Network'">
                           <img
-                            [src]="'assets/images/icons/circle-wavy-check.png' | imageS3"
+                            [src]="'assets/images/icons/CircleWavyCheck.svg' | imageS3"
                             alt=""
                             width="18"
                             height="18"
@@ -138,7 +136,10 @@
                     [value]="element.contract_address"
                     *ngIf="element.contract_address !== '-'"
                     [iconContract]="true"
-                    [linkRouter]="['/contracts', element.contract_address]">
+                    [linkRouter]="[
+                      element.type == COIN_TOKEN_TYPE.CW20 ? '/contracts' : '/evm-contracts',
+                      element.contract_address
+                    ]">
                   </app-name-tag>
                   <span *ngIf="element.contract_address === '-'">-</span>
                 </div>
@@ -220,8 +221,7 @@
                             [appTooltip]="{
                               priceAmount: element.value,
                               lt: 0.01,
-                              decimal: 0,
-                              multipliedBy: element.price
+                              decimal: 0
                             }"></span>
                         </ng-container>
                       </div>
@@ -256,11 +256,11 @@
       </ng-container>
     </div>
     <ng-template #noValues>
-      <div class="card mt-14" *ngIf="!assetsLoading">
+      <div class="card mt-lg-14 mt-8" *ngIf="!assetsLoading">
         <app-table-no-data [textNull]="errTxt || 'No coins & tokens'"></app-table-no-data>
       </div>
     </ng-template>
-    <div *ngIf="assetsLoading" class="mt-14">
+    <div *ngIf="assetsLoading" class="mt-lg-14 mt-8">
       <app-loading-sprint></app-loading-sprint>
     </div>
   </div>

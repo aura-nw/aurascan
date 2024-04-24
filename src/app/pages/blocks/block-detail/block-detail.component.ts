@@ -4,14 +4,14 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { map, of, switchMap } from 'rxjs';
+import { catchError, map, merge, of, switchMap } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { convertDataBlock, convertDataTransactionSimple } from '../../../../app/global/global';
+import { convertDataBlock, convertDataTransactionSimple, mappingMethodName } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -40,26 +40,44 @@ export class BlockDetailComponent implements OnInit {
     },
   ];
 
-  templates: Array<TableTemplate> = [
+  cosmosTemplates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Message' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'hash', headerCellDef: 'EVM Transaction' },
   ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any> = new MatTableDataSource();
+
+  evmTemplates: Array<TableTemplate> = [
+    { matColumnDef: 'tx_hash', headerCellDef: 'EVM Txn Hash' },
+    { matColumnDef: 'method', headerCellDef: 'Method' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'from', headerCellDef: 'From' },
+    { matColumnDef: 'to', headerCellDef: 'To' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'hash', headerCellDef: 'Cosmos Txn' },
+  ];
+  displayedCosmosCol: string[] = this.cosmosTemplates.map((dta) => dta.matColumnDef);
+  displayedEvmCol: string[] = this.evmTemplates.map((dta) => dta.matColumnDef);
+  dataSourceCosmos: MatTableDataSource<any> = new MatTableDataSource();
+  dataSourceEvm: MatTableDataSource<any> = new MatTableDataSource();
   dataTxs: any[];
   loading = true;
-  loadingTxs = true;
+  loadingCosmosTxs = true;
+  loadingEVMTxs = true;
   isRawData = false;
-  errTxt: string;
-  errTxtTxs: string;
+  errTxt = null;
+  errTxtCosmosTxs = null;
+  errTxtEvmTxs = null;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe();
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  evmDecimal = this.environmentService.evmDecimal;
 
   constructor(
     private route: ActivatedRoute,
@@ -115,43 +133,101 @@ export class BlockDetailComponent implements OnInit {
         }),
         switchMap(() => {
           this.loading = false;
-
-          const payload = {
-            limit: 100,
-            height: this.blockHeight,
-          };
-
-          return this.transactionService.getListTx(payload).pipe(
-            map((res) => {
-              if (res?.transaction?.length > 0) {
-                this.updateListTx(res?.transaction);
-              }
-
-              return true;
-            }),
-          );
+          let result = merge(this.getListCosmosTxn(), this.getListEVMTxn());
+          return result;
         }),
       )
       .subscribe({
-        next: () => {
-          this.loadingTxs = false;
-        },
+        next: () => {},
         error: (e) => {
-          if (e === this.NOT_FOUND) {
+          if (e.message === this.NOT_FOUND) {
             setTimeout(() => {
               this.getDetailByHeight();
             }, 10000);
+            this.errTxt = null;
+            this.loading = false;
           } else {
             if (e.name === TIMEOUT_ERROR) {
               this.errTxt = e.message;
             } else {
               this.errTxt = e.status + ' ' + e.statusText;
             }
-            this.loadingTxs = false;
             this.loading = false;
           }
         },
+        complete: () => {},
       });
+  }
+
+  getListCosmosTxn() {
+    const payload = {
+      limit: 100,
+      height: this.blockHeight,
+    };
+    return this.transactionService.getListTx(payload).pipe(
+      map((res) => {
+        if (res?.transaction?.length > 0) {
+          this.parseDataListCosmosTxn(res?.transaction);
+        }
+        this.loadingCosmosTxs = false;
+        return true;
+      }),
+      catchError((e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtCosmosTxs = e.message;
+        } else {
+          this.errTxtCosmosTxs = e.status + ' ' + e.statusText;
+        }
+        this.loadingCosmosTxs = false;
+        return of(null);
+      }),
+    );
+  }
+
+  getListEVMTxn() {
+    const payload = {
+      limit: 100,
+      height: this.blockHeight,
+    };
+    return this.transactionService.queryTransactionByEvmHash(payload).pipe(
+      switchMap((res) => {
+        const listTemp = res?.transaction
+          ?.filter((j) => j.evm_transaction.data?.length > 0)
+          ?.map((k) => k.evm_transaction.data?.substring(0, 8));
+        const listMethodId = _.uniq(listTemp);
+        return this.transactionService.getListMappingName(listMethodId).pipe(
+          map((element) => {
+            if (res?.transaction?.length > 0) {
+              return res.transaction.map((tx) => {
+                const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                return {
+                  ...tx,
+                  method: mappingMethodName(element, methodId),
+                };
+              });
+            }
+            return [];
+          }),
+        );
+      }),
+      map((res) => {
+        if (res?.length > 0) {
+          this.parseDataListEvmTxn(res);
+        }
+        this.loadingEVMTxs = false;
+
+        return true;
+      }),
+      catchError((e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxtEvmTxs = e.message;
+        } else {
+          this.errTxtEvmTxs = e.status + ' ' + e.statusText;
+        }
+        this.loadingEVMTxs = false;
+        return of(null);
+      }),
+    );
   }
 
   mappingBlockData(res) {
@@ -171,42 +247,34 @@ export class BlockDetailComponent implements OnInit {
     }
   }
 
-  checkAmountValue(amount: number, txHash: string) {
-    if (amount === 0) {
-      return '-';
-    } else {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    }
-  }
-
   changeType(type: boolean) {
     this.isRawData = type;
   }
 
-  handlePageEvent(e: any) {
-    this.pageData.pageIndex = e.pageIndex;
-    if (this.pageData) {
-      const { pageIndex, pageSize } = this.pageData;
-      const start = pageIndex * pageSize;
-      const end = start + pageSize;
-      this.dataTxs = this.dataSource.data.slice(start, end);
-    }
-  }
-
-  paginatorEmit(event): void {
-    this.dataSource.paginator = event;
-  }
-
-  updateListTx(txs) {
+  parseDataListCosmosTxn(txs) {
     let dataTempTx = {};
     dataTempTx['transaction'] = txs;
     if (txs.length > 0) {
-      txs = convertDataTransactionSimple(dataTempTx, this.coinInfo);
+      txs = convertDataTransactionSimple(dataTempTx, this.environmentService.getDecimals());
       dataTempTx['transaction'].forEach((k) => {
         this.blockDetail['gas_used'] += +k?.gas_used;
         this.blockDetail['gas_wanted'] += +k?.gas_wanted;
       });
-      this.dataSource.data = txs;
+      this.dataSourceCosmos.data = txs;
+    }
+  }
+
+  parseDataListEvmTxn(txs) {
+    if (txs.length > 0) {
+      this.dataSourceEvm.data = txs.map((tx) => {
+        return {
+          ...tx,
+          tx_hash: _.get(tx, 'evm_transaction.hash'),
+          from: _.get(tx, 'evm_transaction.from'),
+          to: _.get(tx, 'evm_transaction.to'),
+          amount: _.get(tx, 'transaction_messages[0].content.data.value') || 0,
+        };
+      });
     }
   }
 }

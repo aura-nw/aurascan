@@ -1,0 +1,35 @@
+::ng-deep .contact-qr-modal .modal-content {
+  padding-bottom: 48px !important;
+}
+
+.box-contract-info {
+  ::ng-deep .custom-position {
+    transform: translate(-25%, 3px) !important;
+  }
+}
+
+.button__icon {
+  @media (max-width: 991.99px) {
+    width: 20px;
+    height: 20px;
+  }
+  width: 15px;
+  height: 15px;
+}
+
+::ng-deep .contract__card-info .card {
+  @media (min-width: 991.98px) {
+    min-height: 247px;
+  }
+}
+
+.mb-haft {
+  margin-bottom: 1.5px;
+}
+
+@media (max-width: 414px) {
+  .btn-mobile {
+    border: 1px solid #717582;
+    border-radius: 8px;
+  }
+}

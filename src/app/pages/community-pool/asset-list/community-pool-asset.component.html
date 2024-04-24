@@ -100,7 +100,7 @@
                       info: (data.symbol ? data.symbol : chainName) | uppercase
                     }"
                     [tokenAmount]="{
-                      amount: data.amount,
+                      amount: data.amount | balance: data.decimal,
                       decimal: data.decimal,
                       isNative: data.isNative,
                       denom: data.denom

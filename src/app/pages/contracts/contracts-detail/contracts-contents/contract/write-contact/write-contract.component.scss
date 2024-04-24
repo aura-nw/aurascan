@@ -1,22 +1,12 @@
-.icon-connect {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: 8px;
-  background-color: var(--aura-danger);
-
-  &.connected {
-    background-color: var(--aura-green-3);
-  }
-}
-
 .divider.divider-vertical {
   min-height: 16px;
   margin: 0 16px;
 }
+
 input.form-check-input {
   color: var(--aura-gray-1);
 }
+
 .error-null {
   border: 2px solid var(--aura-red-3) !important;
 }
@@ -24,6 +14,7 @@ input.form-check-input {
 .btn-add-zero {
   width: 25px;
   height: 25px;
+
   .icon-add-zero {
     font-size: 15px;
     color: var(--aura-white);
