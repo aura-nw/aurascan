@@ -1,8 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Chain } from '@chain-registry/types';
 import { JsonObject, SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+
 import { EncodeObject } from '@cosmjs/proto-signing';
-import { Coin, StdFee } from '@cosmjs/stargate';
+import { Coin, StdFee, SigningStargateClient } from '@cosmjs/stargate';
 import {
   Actions,
   ChainWalletBase,
@@ -260,7 +261,7 @@ export class WalletService implements OnDestroy {
       const client = chainWallet?.clientMutable?.data as ExtendsWalletClient;
       const signer = await client?.client?.getOfflineSignerAuto(this._chain.chain_id);
 
-      return SigningCosmWasmClient.connectWithSigner(this.env.chainInfo.rpc, signer, {
+      return SigningStargateClient.connectWithSigner(this.env.chainInfo.rpc, signer, {
         gasPrice: getGasPriceByChain(this._chain),
       });
     } catch (error) {
@@ -281,6 +282,18 @@ export class WalletService implements OnDestroy {
     !wallet?.isActive && wallet?.activate();
 
     return wallet;
+  }
+
+  async vote(
+    signerAddress: string,
+    messages: any,
+    fee: StdFee | number | 'auto' = 'auto',
+    memo?: string,
+    timeoutHeight?: bigint,
+  ) {
+    let client = await this._getSigningCosmWasmClientAuto();
+
+    return client.signAndBroadcast(signerAddress, messages, fee, memo);
   }
 
   async signAndBroadcast(
