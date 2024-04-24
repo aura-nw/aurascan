@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import BigNumber from 'bignumber.js';
-import eruda from 'eruda';
 import * as _ from 'lodash';
 import { Subject, forkJoin, map, takeUntil } from 'rxjs';
 import { STORAGE_KEYS } from './core/constants/common.constant';
