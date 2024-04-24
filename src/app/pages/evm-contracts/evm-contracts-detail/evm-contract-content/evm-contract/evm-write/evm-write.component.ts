@@ -21,6 +21,7 @@ type JsonFragmentExtends = JsonFragment & {
   isValidate?: boolean;
   result?: string;
   isLoading?: boolean;
+  extendedInputs?: JsonFragmentExtends[];
 };
 
 @Component({
@@ -59,7 +60,8 @@ export class EvmWriteComponent implements OnChanges {
         ) || [];
 
       extendedAbi.forEach((abi) => {
-        const group = abi.inputs.reduce((prevValue, curValue) => {
+        const inputs = [...abi.inputs, { name: 'fund', type: 'uint256' }];
+        const group = inputs.reduce((prevValue, curValue) => {
           const control = this.fb.control('', Validators.required);
 
           return {
@@ -68,6 +70,7 @@ export class EvmWriteComponent implements OnChanges {
           };
         }, {});
 
+        abi['extendedInputs'] = inputs;
         abi['formGroup'] = this.fb.group(group);
       });
 
@@ -125,25 +128,25 @@ export class EvmWriteComponent implements OnChanges {
 
     jsonFragment.isValidate = true;
 
-    const { formGroup, inputs, name } = jsonFragment;
+    const { formGroup, extendedInputs, name } = jsonFragment;
 
     if (formGroup.invalid) {
       return;
     }
     const formControls = formGroup.controls;
 
-    const params = inputs?.map((i) => {
+    const listWithOutFund = extendedInputs?.filter((i) => i.name !== 'fund');
+    const params = listWithOutFund?.map((i) => {
       const value = formControls[i.name].value;
       return validateAndParsingInput(i, value); // TODO
     });
 
+    const fundAmount = formControls['fund']?.value || '0';
     const contract = this.createContract();
 
     if (!contract) {
       return;
     }
-
-    console.log(params);
 
     jsonFragment.isLoading = true;
 
@@ -151,7 +154,7 @@ export class EvmWriteComponent implements OnChanges {
       gasLimit: 250000,
       gasPrice: 9000000000,
       nonce: 0,
-      value: parseEther('1'),
+      value: parseEther(fundAmount),
     })
       .then((res) => {
         jsonFragment.result = res;
