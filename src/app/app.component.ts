@@ -25,8 +25,6 @@ import { Globals } from './global/global';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  TESTNET = ['auradev_1235-3', 'serenity-testnet-001'];
-  isTestnet = this.TESTNET.includes(this.environmentService.chainInfo?.chainId || '');
   isFirstLoad = true;
   user: IUser;
 
@@ -82,16 +80,6 @@ export class AppComponent implements OnInit, OnDestroy {
       //get list token market
       this.tokenService.getCoinData();
     }, 600000);
-
-    if (this.TESTNET) {
-      let el = document.createElement('div');
-      document.body.appendChild(el);
-
-      eruda.init({
-        container: el,
-        tool: ['console', 'elements', 'resources', 'network'],
-      });
-    }
   }
 
   getInfoCommon(): void {
