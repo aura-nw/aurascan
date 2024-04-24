@@ -15,7 +15,7 @@
   "chainConfig": {
     "stakingTime": "86400",
     "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
-    "blockTime": 4000,
+    "blockTime": 5000,
     "quotaSetPrivateName": 10,
     "quotaSetWatchList": 10,
     "quotaNotification": 100,
@@ -113,7 +113,7 @@
     "backend": "https://explorer-api.dev.aura.network/api/v1",
     "socket": "https://explorer-api.dev.aura.network",
     "ipfsDomain": "https://ipfs.io/",
-    "verifyContract": "https://evmos-verify.dev.aurascan.io/verify-contract/v1",
+    "verifyContract": "https://indexer-v2.dev.aurascan.io/verify-contract/v1",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
       "ids": ["aura-network"]
