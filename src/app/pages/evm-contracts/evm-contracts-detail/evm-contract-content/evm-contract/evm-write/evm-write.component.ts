@@ -62,7 +62,7 @@ export class EvmWriteComponent implements OnChanges {
       extendedAbi.forEach((abi) => {
         const inputs = [...abi.inputs, { name: 'fund', type: 'uint256' }];
         const group = inputs.reduce((prevValue, curValue) => {
-          const control = this.fb.control('', Validators.required);
+          const control = this.fb.control('', curValue.name === 'fund' ? null : Validators.required);
 
           return {
             ...prevValue,
@@ -150,10 +150,9 @@ export class EvmWriteComponent implements OnChanges {
 
     jsonFragment.isLoading = true;
     const x = await contract[name]?.estimateGas(...params).catch((e) => e);
-    const gasPrice = BigNumber(x).multipliedBy(BigNumber(10).pow(this.env.coinDecimals)).toFixed();
     contract[name]?.(...params, {
-      gasLimit: Number(x),
-      gasPrice: gasPrice,
+      gasLimit: Number(x) || 250_000,
+      gasPrice: 1_000_0000,
       value: parseEther(fundAmount),
     })
       .then((res) => {

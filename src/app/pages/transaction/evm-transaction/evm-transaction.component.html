@@ -11,6 +11,16 @@
 
     <div class="text--white mb-6">
       <!-- TODO: Error Box -->
+      <div class="box-error mb-4" *ngIf="errorMessage && transaction?.code != evmSuccessCode">
+        <div class="mb-1">
+          <div class="fw-semibold mb-1 body-01">Error:</div>
+          <span class="body" id="contentError" [class.line-claim-v]="!seeLess">{{ errorMessage }}</span>
+        </div>
+        <div *ngIf="isDisplayMore" class="cursor-pointer mt-1 w-auto txt-see-more">
+          <span (click)="seeLess = true" *ngIf="!seeLess">See more</span>
+          <span (click)="seeLess = false" *ngIf="seeLess">See less</span>
+        </div>
+      </div>
 
       <div class="body">
         <div>
@@ -37,7 +47,7 @@
             <div class="col-auto col-lg-10 d-flex align-items-center">
               <img
                 [src]="
-                  transaction?.code == codeTransaction.Success
+                  transaction?.code == evmSuccessCode
                     ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
                     : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
                 "
