@@ -63,7 +63,9 @@
           <a
             *ngIf="
               contractDetail?.type === contractRegisterType.ERC20 ||
-              contractDetail?.type === contractRegisterType.ERC721
+              contractDetail?.type === contractRegisterType.ERC721 ||
+              contractDetail?.erc20_contract?.name ||
+              contractDetail?.erc721_contract?.name
             "
             class="ml-1 p-0 button button--ssm mb-1"
             [routerLink]="['/token', contractDetail?.address]">
