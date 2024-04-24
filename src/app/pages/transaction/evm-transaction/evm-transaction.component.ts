@@ -57,6 +57,7 @@ export class EvmTransactionComponent implements OnChanges {
   codeTransaction = CodeTransaction;
   errorMessage = '';
   errTxt = null;
+  evmSuccessCode = 1;
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
@@ -160,11 +161,14 @@ export class EvmTransactionComponent implements OnChanges {
       });
     }
 
+    this.errorMessage = _.get(tx, 'evm_transaction.reason') || '';
+
     return {
       evm_hash: _.get(tx, 'evm_transaction.hash'),
       hash: tx['hash'],
-      status: _.get(tx, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail,
-      code: _.get(tx, 'code'),
+      status:
+        _.get(tx, 'evm_transaction.status') == this.evmSuccessCode ? StatusTransaction.Success : StatusTransaction.Fail,
+      code: _.get(tx, 'evm_transaction.status'),
       height: _.get(tx, 'height'),
       timestamp: _.get(tx, 'timestamp'),
       gasUsed: _.get(tx, 'gas_used'),
