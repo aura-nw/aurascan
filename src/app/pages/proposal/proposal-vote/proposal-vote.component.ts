@@ -51,11 +51,11 @@ export class ProposalVoteComponent {
 
     const msg = {
       typeUrl: TRANSACTION_TYPE_ENUM.Vote,
-      value: MsgVote.fromPartial({
+      value: {
         voter: account.address,
-        proposalId: this.data.id as any,
+        proposalId: this.data.id,
         option: this.chainVoteOption[this.keyVote],
-      }),
+      },
     };
 
     this.isLoading = true;
@@ -64,7 +64,7 @@ export class ProposalVoteComponent {
     const fee = await this.walletService.estimateFee([msg], 'cosmwasm', '', multiplier).catch(() => undefined);
 
     this.walletService
-      .vote(account.address, [msg], fee)
+      .signAndBroadcast(account.address, [msg], fee)
       .then((result) => {
         if (result?.transactionHash) {
           this.toastr.loading(result.transactionHash);

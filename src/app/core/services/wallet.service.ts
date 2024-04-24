@@ -284,18 +284,6 @@ export class WalletService implements OnDestroy {
     return wallet;
   }
 
-  async vote(
-    signerAddress: string,
-    messages: any,
-    fee: StdFee | number | 'auto' = 'auto',
-    memo?: string,
-    timeoutHeight?: bigint,
-  ) {
-    let client = await this._getSigningCosmWasmClientAuto();
-
-    return client.signAndBroadcast(signerAddress, messages, fee, memo);
-  }
-
   async signAndBroadcast(
     signerAddress: string,
     messages: EncodeObject[],
