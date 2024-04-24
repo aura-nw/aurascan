@@ -18,7 +18,7 @@
                   <div *ngSwitchCase="'from'">
                     <app-name-tag
                       *ngIf="data[template.matColumnDef]"
-                      [value]="data[template.matColumnDef]"
+                      [value]="data[template.matColumnDef]" [nameTagDark]="true"
                       [linkRouter]="['/evm-contracts', data[template.matColumnDef]]"
                       [iconContract]="true">
                     </app-name-tag>
@@ -27,7 +27,7 @@
                   <div *ngSwitchCase="'to'">
                     <app-name-tag
                       *ngIf="data[template.matColumnDef]"
-                      [value]="data[template.matColumnDef]"
+                      [value]="data[template.matColumnDef]" [nameTagDark]="true"
                       [linkRouter]="['/evm-contracts', data[template.matColumnDef]]"
                       [iconContract]="true">
                     </app-name-tag>
@@ -84,6 +84,7 @@
             <app-name-tag
               *ngIf="data.from"
               [value]="data.from"
+              [nameTagDark]="true"
               [linkRouter]="['/evm-contracts', data.from]"
               [iconContract]="true">
             </app-name-tag>
@@ -95,6 +96,7 @@
           <div class="text--white body-02">
             <app-name-tag
               *ngIf="data.to"
+              [nameTagDark]="true"
               [value]="data.to.toString()"
               [linkRouter]="['/evm-contracts', data.to]"
               [iconContract]="true">
