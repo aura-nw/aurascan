@@ -6,7 +6,7 @@ import {
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import BigNumber from 'bignumber.js';
-import { Contract, ethers, JsonFragment, parseEther } from 'ethers';
+import { Contract, JsonFragment, parseEther } from 'ethers';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
@@ -121,7 +121,7 @@ export class EvmWriteComponent implements OnChanges {
     this.walletService.getAccount();
   }
 
-  handleExecute(jsonFragment: JsonFragmentExtends) {
+  async handleExecute(jsonFragment: JsonFragmentExtends) {
     if (!jsonFragment) {
       return;
     }
@@ -149,11 +149,11 @@ export class EvmWriteComponent implements OnChanges {
     }
 
     jsonFragment.isLoading = true;
-
+    const x = await contract[name]?.estimateGas(...params).catch((e) => e);
+    const gasPrice = BigNumber(x).multipliedBy(BigNumber(10).pow(this.env.coinDecimals)).toFixed();
     contract[name]?.(...params, {
-      gasLimit: 250000,
-      gasPrice: 9000000000,
-      nonce: 0,
+      gasLimit: Number(x),
+      gasPrice: gasPrice,
       value: parseEther(fundAmount),
     })
       .then((res) => {
