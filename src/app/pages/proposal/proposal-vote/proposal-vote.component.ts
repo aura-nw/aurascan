@@ -51,11 +51,11 @@ export class ProposalVoteComponent {
 
     const msg = {
       typeUrl: TRANSACTION_TYPE_ENUM.Vote,
-      value: MsgVote.fromPartial({
+      value: {
         voter: account.address,
-        proposalId: BigInt(this.data.id),
+        proposalId: this.data.id,
         option: this.chainVoteOption[this.keyVote],
-      }),
+      },
     };
 
     this.isLoading = true;
