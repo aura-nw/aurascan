@@ -68,10 +68,12 @@
           </mat-expansion-panel-header>
 
           <form [formGroup]="jsonFragment.formGroup" class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
-            <ng-container *ngFor="let item of jsonFragment.inputs">
+            <ng-container *ngFor="let item of jsonFragment.extendedInputs">
               <div class="d-lg-block">
                 <div class="d-flex align-items-center mb-2">
-                  <span class="px-0 text--gray-1 body-02 input-require"> {{ item.name }} ({{ item.type }}) </span>
+                  <span class="px-0 text--gray-1 body-02 {{ item.name !== 'fund' ? 'input-require' : '' }}">
+                    {{ item.name }} ({{ item.type }})
+                  </span>
                   <button
                     class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
                     *ngIf="item.name == 'amount'"
@@ -87,9 +89,10 @@
                     [formControlName]="item.name"
                     style="height: auto"
                     placeholder="{{ item.name }} ({{ item.type }})"
-                    class="form-check-input input-require col-12 mb-4"
+                    class="form-check-input col-12 mb-4"
                     [ngClass]="{
-                      'error-null': control.invalid && jsonFragment.isValidate
+                      'error-null': control.invalid && jsonFragment.isValidate,
+                      'input-require': item.name !== 'fund'
                     }">
                   </textarea>
 

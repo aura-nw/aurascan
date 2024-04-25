@@ -6,7 +6,7 @@ import {
   MatLegacyDialogConfig as MatDialogConfig,
 } from '@angular/material/legacy-dialog';
 import BigNumber from 'bignumber.js';
-import { Contract, JsonFragment } from 'ethers';
+import { Contract, JsonFragment, parseEther } from 'ethers';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WRITE_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
@@ -21,6 +21,7 @@ type JsonFragmentExtends = JsonFragment & {
   isValidate?: boolean;
   result?: string;
   isLoading?: boolean;
+  extendedInputs?: JsonFragmentExtends[];
 };
 
 @Component({
@@ -59,8 +60,9 @@ export class EvmWriteComponent implements OnChanges {
         ) || [];
 
       extendedAbi.forEach((abi) => {
-        const group = abi.inputs.reduce((prevValue, curValue) => {
-          const control = this.fb.control('', Validators.required);
+        const inputs = [...abi.inputs, { name: 'fund', type: 'uint256' }];
+        const group = inputs.reduce((prevValue, curValue) => {
+          const control = this.fb.control('', curValue.name === 'fund' ? null : Validators.required);
 
           return {
             ...prevValue,
@@ -68,6 +70,7 @@ export class EvmWriteComponent implements OnChanges {
           };
         }, {});
 
+        abi['extendedInputs'] = inputs;
         abi['formGroup'] = this.fb.group(group);
       });
 
@@ -118,25 +121,27 @@ export class EvmWriteComponent implements OnChanges {
     this.walletService.getAccount();
   }
 
-  handleExecute(jsonFragment: JsonFragmentExtends) {
+  async handleExecute(jsonFragment: JsonFragmentExtends) {
     if (!jsonFragment) {
       return;
     }
 
     jsonFragment.isValidate = true;
 
-    const { formGroup, inputs, name } = jsonFragment;
+    const { formGroup, extendedInputs, name } = jsonFragment;
 
     if (formGroup.invalid) {
       return;
     }
     const formControls = formGroup.controls;
 
-    const params = inputs?.map((i) => {
+    const listWithOutFund = extendedInputs?.filter((i) => i.name !== 'fund');
+    const params = listWithOutFund?.map((i) => {
       const value = formControls[i.name].value;
       return validateAndParsingInput(i, value); // TODO
     });
 
+    const fundAmount = formControls['fund']?.value || '0';
     const contract = this.createContract();
 
     if (!contract) {
@@ -144,8 +149,12 @@ export class EvmWriteComponent implements OnChanges {
     }
 
     jsonFragment.isLoading = true;
-
-    contract[name]?.(...params)
+    const x = await contract[name]?.estimateGas(...params).catch((e) => e);
+    contract[name]?.(...params, {
+      gasLimit: Number(x) || 250_000,
+      gasPrice: 1_000_0000,
+      value: parseEther(fundAmount),
+    })
       .then((res) => {
         jsonFragment.result = res;
         jsonFragment.isLoading = false;
