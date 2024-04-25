@@ -155,7 +155,7 @@
       <div class="card-body p-0 overflow-hidden">
         <div class="d-xl-flex justify-content-between align-items-center">
           <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
-            {{ transaction['evm_hash'] ? 'NFT Transfer Comming soon' : 'NFT Transfer ' }}
+            {{ 'NFT Transfer ' }}
           </h5>
         </div>
         <div class="table-token" *ngIf="dataSourceNFTs.data.length > 0; else noValues">
@@ -262,8 +262,10 @@
         <ng-template #noValues>
           <div class="card card-nodata">
             <app-table-no-data
-              [textNull]="'No NFTs transfer activity due to this transaction'"
-              [img]="'assets/images/notFoundNFT.png'"
+              [textNull]="
+                transaction['evm_hash'] ? 'Comming Soon' : 'No NFTs transfer activity due to this transaction'
+              "
+              [img]="transaction['evm_hash'] ? 'assets/images/come-soon.png' : 'assets/images/notFoundNFT.png'"
               [class]="'img-height'"
               [classText]="'body'"></app-table-no-data>
           </div>
