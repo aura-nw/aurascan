@@ -8,7 +8,6 @@ import { LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.co
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token.constant';
 import { EModeToken, TokenTab } from 'src/app/core/constants/token.enum';
-import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
@@ -146,7 +145,10 @@ export class TokenContentComponent implements OnInit {
         ) {
           this.isSearchTx = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-        } else if (this.paramQuery?.length >= LENGTH_CHARACTER.ADDRESS && this.paramQuery?.startsWith(this.prefixAdd)) {
+        } else if (
+          this.paramQuery?.length >= LENGTH_CHARACTER.ADDRESS &&
+          (this.paramQuery?.startsWith(this.prefixAdd) || this.tokenDetail.modeToken === EModeToken?.IBCCoin)
+        ) {
           this.isSearchAddress = true;
           tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
           this.getInfoAddress(this.paramQuery);
