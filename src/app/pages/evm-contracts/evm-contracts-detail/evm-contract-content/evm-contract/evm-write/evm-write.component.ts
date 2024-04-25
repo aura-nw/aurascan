@@ -42,6 +42,7 @@ export class EvmWriteComponent implements OnChanges {
   wallet$: Observable<IMultichainWalletAccount> = this.walletService.walletAccount$;
   destroyed$ = new Subject<void>();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
+  denom = this.env.chainInfo.currencies[0].coinDenom;
 
   constructor(
     private walletService: WalletService,
@@ -60,7 +61,7 @@ export class EvmWriteComponent implements OnChanges {
         ) || [];
 
       extendedAbi.forEach((abi) => {
-        const inputs = [...abi.inputs, { name: 'fund', type: 'uint256' }];
+        const inputs = [...abi.inputs, { name: 'fund', type: this.denom }];
         const group = inputs.reduce((prevValue, curValue) => {
           const control = this.fb.control('', curValue.name === 'fund' ? null : Validators.required);
 

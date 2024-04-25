@@ -7,6 +7,15 @@
   word-break: break-word;
   font-size: 1.4rem;
   font-weight: 400;
-  margin: 0;
+  margin: 0px;
   line-height: 1.6rem !important;
+  .txt-see-more {
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--aura-gray-light);
+  }
+}
+
+#contentError.line-claim-v {
+  -webkit-line-clamp: 3;
 }
