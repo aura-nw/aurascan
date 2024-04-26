@@ -206,6 +206,9 @@
                                 [decimal]="0"></span>
                               <span class="ml-1" appLinkDenom>{{ denom }}</span>
                             </ng-container>
+                            <ng-container *ngIf="+data[template.matColumnDef] == 0">
+                              0<span class="ml-1" appLinkDenom>{{ denom }}</span>
+                            </ng-container>
                           </div>
                           <div *ngSwitchCase="'amount'">
                             <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
@@ -303,7 +306,12 @@
                       <div class="d-flex justify-content-between">
                         <div class="text--gray-4">Fee</div>
                         <div class="text--white d-flex align-items-center">
-                          <span class="mr-1">{{ data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0) }}</span>
+                          <span class="mr-1">
+                            <ng-container *ngIf="data.fee > 0">
+                              {{ data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0) }}
+                            </ng-container>
+                            <ng-container *ngIf="data.fee == 0">0</ng-container>
+                          </span>
                           <a appLinkDenom> {{ denom }}</a>
                         </div>
                       </div>

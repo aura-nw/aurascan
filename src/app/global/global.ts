@@ -179,7 +179,8 @@ export function convertDataTransaction(data, coinDecimals) {
     }
 
     // Get fee by evm denom and cosmos minimalDenom
-    const { amount, denom } = _.get(element, 'fee[0]') || _.get(element, 'data.auth_info.fee.amount[0]');
+    const { amount, denom } = _.get(element, 'fee[0]') ||
+      _.get(element, 'data.auth_info.fee.amount[0]') || { denom: Object.keys(coinDecimals)[0], amount: '0' };
     const fee = BigNumber(balanceOf(amount || 0, coinDecimals[denom?.toLowerCase()])).toFixed();
 
     const typeOrigin = _type;
@@ -412,7 +413,7 @@ export function convertDataTransactionSimple(data, coinDecimals) {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
     const txMessages = _.get(element, 'transaction_messages');
-    const txBodyMsgType = _.get(element, 'data[0][@type]');
+    const txBodyMsgType = _.get(element, 'transaction_messages[0].type');
     const hash = _.get(element, 'evm_transaction.hash');
 
     let type = '';
@@ -439,15 +440,11 @@ export function convertDataTransactionSimple(data, coinDecimals) {
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
     // Get fee by evm denom and cosmos minimalDenom
-    const { amount, denom } = _.get(element, 'fee[0]') || _.get(element, 'data.auth_info.fee.amount[0]');
+    const { amount, denom } = _.get(element, 'fee[0]') || { denom: Object.keys(coinDecimals)[0], amount: '0' };
     const fee = BigNumber(balanceOf(amount || 0, coinDecimals[denom?.toLowerCase()])).toFixed();
 
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
-    let tx = _.get(element, 'data.tx_response');
-    if (tx) {
-      tx['tx'] = _.get(element, 'data.tx');
-    }
 
     return {
       code,
@@ -457,7 +454,6 @@ export function convertDataTransactionSimple(data, coinDecimals) {
       fee,
       height,
       timestamp,
-      tx,
       hash,
       lstType: txMessages,
     };
