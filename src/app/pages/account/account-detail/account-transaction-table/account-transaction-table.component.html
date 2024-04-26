@@ -457,6 +457,9 @@
                           [decimal]="0"></span>
                         <span class="ml-1" appLinkDenom>{{ denom }}</span>
                       </ng-container>
+                      <ng-container *ngIf="+data[template.matColumnDef] == 0">
+                        0<span class="ml-1" appLinkDenom>{{ denom }}</span>
+                      </ng-container>
                     </div>
                     <div *ngSwitchCase="'amount'">
                       <ng-container *ngFor="let item of data.arrEvent; let index = index">
@@ -824,7 +827,7 @@
                 label: 'Fee',
                 class: 'text--gray-1 body-02-mob',
                 info:
-                  (data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0)) +
+                  (data.fee < 0.001 ? (data.fee == 0 ? '0' : '<0.001') : (data.fee | balance: 0)) +
                   ' <a class=text--primary href=' +
                   ('/token/' + coinInfo.coinMinimalDenom) +
                   '>' +
