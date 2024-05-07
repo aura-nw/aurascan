@@ -88,6 +88,7 @@ export enum MEDIA_TYPE {
 
 export const CW20_TRACKING = ['mint', 'burn', 'transfer', 'send', 'transfer_from', 'burn_from', 'send_from'];
 export const CW721_TRACKING = ['mint', 'burn', 'transfer_nft', 'send_nft'];
+export const ERC721_TRACKING = ['transfer'];
 
 export const MAX_NUMBER_INPUT = 100000000000000;
 export const NUMBER_ONLY_DECIMAL = '1.0-0';

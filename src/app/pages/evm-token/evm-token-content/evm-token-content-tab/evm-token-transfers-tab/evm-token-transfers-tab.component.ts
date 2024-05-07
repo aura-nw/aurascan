@@ -17,6 +17,7 @@ import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { mappingMethodName } from 'src/app/global/global';
+import { EWalletType } from '../../../../../core/constants/wallet.constant';
 
 @Component({
   selector: 'app-evm-token-transfers-tab',
@@ -90,7 +91,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     private router: Router,
     private transactionService: TransactionService,
     private nameTagService: NameTagService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.linkAddress = this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -143,10 +144,11 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     };
 
     if (this.keyWord) {
-      if (this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this?.keyWord.toUpperCase()) {
+      if (this.keyWord?.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
         payload['txHash'] = this.keyWord;
       } else {
-        if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+
+        if (this.keyWord?.length >= LENGTH_CHARACTER.EVM_ADDRESS && this.keyWord?.startsWith(EWalletType.EVM)) {
           payload['sender'] = this.addressNameTag || this.keyWord;
           payload['receiver'] = this.addressNameTag || this.keyWord;
         } else {
@@ -156,17 +158,18 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     }
 
     this.tokenService
-      .getCW721Transfer(payload)
+      .getERC721Transfer(payload)
       .pipe(
         switchMap((res) => {
-          const listTemp = res?.cw721_activity
+          const erc721Activities = res?.erc721_activity;
+          const listTemp = erc721Activities
             ?.filter((j) => j.evm_transaction?.data?.length > 0)
             ?.map((k) => k.evm_transaction?.data?.substring(0, 8));
           const listMethodId = _.uniq(listTemp);
           return this.transactionService.getListMappingName(listMethodId).pipe(
             map((element) => {
-              if (res?.cw721_activity?.length > 0) {
-                return res.cw721_activity.map((tx) => {
+              if (erc721Activities?.length > 0) {
+                return erc721Activities.map((tx) => {
                   const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
                   return {
                     ...tx,
@@ -191,15 +194,15 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
             }
 
             res.forEach((element) => {
-              element['tx_hash'] = element.tx.hash;
+              element['tx_hash'] = element.evm_transaction.hash;
               element['from_address'] = element.from || NULL_ADDRESS;
               element['to_address'] = element.to || NULL_ADDRESS;
-              element['token_id'] = element.cw721_token.token_id;
-              element['timestamp'] = element.tx.timestamp;
+              element['token_id'] = element.erc721_token.token_id;
+              element['timestamp'] = element.evm_transaction.transaction.timestamp;
               element['status'] =
-                element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-              element['type'] = getTypeTx(element.tx)?.type;
-              element['lstTypeTemp'] = _.get(element, 'tx.transaction_messages');
+                element.evm_transaction.transaction.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+              element['type'] = getTypeTx(element.evm_transaction)?.type;
+              element['lstTypeTemp'] = _.get(element, 'evm_transaction.transaction_message');
             });
 
             if (this.dataSource.data.length > 0 && !isReload) {
@@ -358,6 +361,6 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   goTo(data) {
-    this.router.navigate(['/token', this.contractAddress, this.encodeData(data)]);
+    this.router.navigate(['/token/evm/erc721', this.contractAddress, this.encodeData(data)]);
   }
 }

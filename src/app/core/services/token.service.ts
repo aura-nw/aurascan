@@ -211,6 +211,60 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListTokenNFTErc721(payload: {
+    limit: number;
+    offset: number;
+    contractAddress: string;
+    token_id: string;
+    owner: string;
+  }): Observable<any> {
+    const operationsDoc = `
+    query queryListInventoryErc721(
+      $contract_address: String
+      $limit: Int = 10
+      $tokenId: String = null
+      $owner: String = null
+      $offset: Int = 0
+    ) {
+      ${this.envDB} {
+        erc721_token(
+          limit: $limit
+          offset: $offset
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _nilike: "0x000000000%"}}
+          order_by: [{last_updated_height: desc}, {id: desc}]
+        ) {
+          id
+          token_id
+          owner
+          media_info
+          last_updated_height
+          created_at
+        }
+        erc721_token_aggregate(
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _nilike: "0x000000000%"}}
+        ) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload?.limit || 20,
+          offset: payload.offset,
+          contract_address: payload?.contractAddress,
+          tokenId: payload?.token_id,
+          owner: payload?.owner,
+        },
+        operationName: 'queryListInventoryErc721',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   countTotalTokenCW721(contract_address: string): Observable<any> {
     const operationsDoc = `
     query queryCountTotalToken721($contract_address: String) {
@@ -233,6 +287,32 @@ export class TokenService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
+
+  countTotalTokenERC721(contract_address: string): Observable<any> {
+    const operationsDoc = `
+    query queryCountTotalTokenErc721($contract_address: String) {
+      ${this.envDB} {
+        erc721_token_aggregate(
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, owner: {_nilike: "0x000000000%"}}
+        ) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          contract_address: contract_address,
+        },
+        operationName: 'queryCountTotalTokenErc721',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
 
   getListTokenHolder(limit: string | number, offset: string | number, contractAddress: string): Observable<any> {
     const operationsDoc = `query queryCW20ListHolder($address: String, $limit: Int, $offset: Int) {
@@ -384,6 +464,81 @@ export class TokenService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
+
+  getERC721Transfer(payload: {
+    isNFTDetail?: boolean;
+    contractAddr?: string;
+    sender?: string;
+    receiver?: string;
+    tokenId?: string;
+    idLte?: string;
+    txHash?: string;
+  }): Observable<any> {
+    let queryName = 'ERC721Transfer';
+    let queryActionNotIn = payload.isNFTDetail
+      ? ['']
+      : ['approve', 'instantiate', 'revoke', 'approve_all', 'revoke_all', ''];
+    const operationsDoc = `query ${queryName}(
+      $contractAddress: String = null
+      $actionNotIn: [String!] = null
+      $idLte: Int = null
+      $idGte: Int = null
+      $receiver: String = null
+      $sender: String = null
+      $tokenId: String = null
+      $txHash: String = null) {
+      ${this.envDB} {
+        erc721_activity(
+          where: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], erc721_contract: {evm_smart_contract: {address: {_eq: $contractAddress}}}, erc721_token: {token_id: {_eq: $tokenId}}, id: {_lte: $idLte, _gte: $idGte}, action: {_nin: $actionNotIn}, tx_hash: {_eq: $txHash}}
+          order_by: {id: desc}
+        ) {
+          id
+          action
+          from
+          to
+          sender
+          erc721_token {
+            token_id
+            erc721_contract {
+              evm_smart_contract {
+                address
+              }
+            }
+          }
+          evm_transaction {
+            hash
+            height
+            data
+            transaction {
+              code
+              timestamp
+            }
+            transaction_message {
+              content
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          contractAddress: payload.contractAddr,
+          actionNotIn: queryActionNotIn,
+          sender: payload.sender,
+          receiver: payload.receiver,
+          tokenId: payload.tokenId,
+          idLte: payload.idLte,
+          txHash: payload.txHash,
+        },
+        operationName: queryName,
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
 
   getCW20Transfer(payload): Observable<any> {
     const operationsDoc = `query queryListTxsCW20(
@@ -638,6 +793,38 @@ export class TokenService extends CommonService {
           address: payload.address?.toLowerCase(),
         },
         operationName: 'getEvmTokenDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getEvmNftDetail(payload: { address: string }): Observable<any> {
+    const operationsDoc = `
+    query getEvmNftDetail($address: String = null) {
+      ${this.envDB} {
+        evm_smart_contract(limit: 1, where: {address: {_eq: $address}}) {
+          id
+          address
+          creator
+          evm_contract_verifications(order_by: {id: desc}) {
+            status
+          }
+          erc721_contract {
+            name
+            symbol
+          }
+        }
+      }
+    }
+    `;
+
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: payload.address?.toLowerCase(),
+        },
+        operationName: 'getEvmNftDetail',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
