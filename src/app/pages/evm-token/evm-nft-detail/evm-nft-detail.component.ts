@@ -34,6 +34,9 @@ import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { EvmPopupShareComponent } from './evm-popup-share/evm-popup-share.component';
+import { map, switchMap } from 'rxjs';
+import { mappingMethodName } from '../../../global/global';
+import { TransactionService } from '../../../core/services/transaction.service';
 
 @Component({
   selector: 'app-nft-detail',
@@ -106,6 +109,7 @@ export class EvmNFTDetailComponent implements OnInit {
     public translate: TranslateService,
     private layout: BreakpointObserver,
     private tokenService: TokenService,
+    private transactionService: TransactionService
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -202,59 +206,84 @@ export class EvmNFTDetailComponent implements OnInit {
       isNFTDetail: true,
     };
 
-    this.tokenService.getERC721Transfer(payload).subscribe({
-      next: (res) => {
-        if (res) {
-          let txs = res.erc721_activity;
-          txs.forEach((element) => {
-            debugger
-            element['tx_hash'] = element.evm_transaction.hash;
-            element['from_address'] = element.from || NULL_ADDRESS;
-            element['to_address'] = element.to || NULL_ADDRESS;
-            element['token_id'] = element.erc721_token.token_id;
-            element['timestamp'] = element.evm_transaction.transaction.timestamp;
-            element['status'] =
-              element.evm_transaction.transaction.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.evm_transaction)?.type;
-            // if (
-            //   element['action'] === ModeExecuteTransaction.Approve ||
-            //   element['action'] === ModeExecuteTransaction.Revoke
-            // ) {
-            //   let msg = element?.tx.transaction_messages[0]?.content?.msg;
-            //   if (typeof msg === 'string') {
-            //     try {
-            //       msg = JSON.parse(msg);
-            //     } catch (e) { }
-            //   }
-            //   element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
-            // }
-            // if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
-            //   let dataDenom = this.commonService.mappingNameIBC(
-            //     element.tx.transaction_messages[0].content?.funds[0]?.denom,
-            //   );
-            //   element['price'] = balanceOf(
-            //     element.tx.transaction_messages[0].content.funds[0]?.amount,
-            //     dataDenom['decimals'],
-            //   );
-            //   element['denom'] = dataDenom['display'];
-            // }
-          });
-          this.dataSource.data = txs;
-          this.pageData.length = txs?.length;
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxtActivity = e.message;
-        } else {
-          this.errTxtActivity = e.status + ' ' + e.statusText;
-        }
-        this.loadingTable = false;
-      },
-      complete: () => {
-        this.loadingTable = false;
-      },
-    });
+    // this.tokenService.getERC721Transfer(payload)
+    this.tokenService
+      .getERC721Transfer(payload)
+      .pipe(
+        switchMap((res) => {
+          const erc721Activities = res?.erc721_activity;
+          const listTemp = erc721Activities
+            ?.filter((j) => j.evm_transaction?.data?.length > 0)
+            ?.map((k) => k.evm_transaction?.data?.substring(0, 8));
+          const listMethodId = _.uniq(listTemp);
+          return this.transactionService.getListMappingName(listMethodId).pipe(
+            map((element) => {
+              if (erc721Activities?.length > 0) {
+                return erc721Activities.map((tx) => {
+                  const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                  return {
+                    ...tx,
+                    type: mappingMethodName(element, methodId),
+                  };
+                });
+              }
+              return [];
+            }),
+          );
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            let txs = res;
+            txs.forEach((element) => {
+              element['tx_hash'] = element.evm_transaction.hash;
+              element['from_address'] = element.from || NULL_ADDRESS;
+              element['to_address'] = element.to || NULL_ADDRESS;
+              element['token_id'] = element.erc721_token.token_id;
+              element['timestamp'] = element.evm_transaction.transaction.timestamp;
+              element['status'] =
+                element.evm_transaction.transaction.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+              element['type'] = element?.type;
+              // if (
+              //   element['action'] === ModeExecuteTransaction.Approve ||
+              //   element['action'] === ModeExecuteTransaction.Revoke
+              // ) {
+              //   let msg = element?.tx.transaction_messages[0]?.content?.msg;
+              //   if (typeof msg === 'string') {
+              //     try {
+              //       msg = JSON.parse(msg);
+              //     } catch (e) { }
+              //   }
+              //   element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
+              // }
+              // if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
+              //   let dataDenom = this.commonService.mappingNameIBC(
+              //     element.tx.transaction_messages[0].content?.funds[0]?.denom,
+              //   );
+              //   element['price'] = balanceOf(
+              //     element.tx.transaction_messages[0].content.funds[0]?.amount,
+              //     dataDenom['decimals'],
+              //   );
+              //   element['denom'] = dataDenom['display'];
+              // }
+            });
+            this.dataSource.data = txs;
+            this.pageData.length = txs?.length;
+          }
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxtActivity = e.message;
+          } else {
+            this.errTxtActivity = e.status + ' ' + e.statusText;
+          }
+          this.loadingTable = false;
+        },
+        complete: () => {
+          this.loadingTable = false;
+        },
+      });
   }
 
   async unEquipSBT() {

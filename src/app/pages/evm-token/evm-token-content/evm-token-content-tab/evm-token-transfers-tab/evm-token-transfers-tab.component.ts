@@ -201,7 +201,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
               element['timestamp'] = element.evm_transaction.transaction.timestamp;
               element['status'] =
                 element.evm_transaction.transaction.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-              element['type'] = getTypeTx(element.evm_transaction)?.type;
+              element['type'] = element?.type;
               element['lstTypeTemp'] = _.get(element, 'evm_transaction.transaction_message');
             });
 
