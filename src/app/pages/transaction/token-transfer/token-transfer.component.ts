@@ -161,6 +161,10 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
     this.transactionService
       .getListEVMTransferFromTx(this.transaction['evm_hash'], this.transaction['height'])
       .subscribe((res) => {
+        if (res?.erc721_activity?.length > 0) {
+          const arrCW721 = res.erc721_activity;
+          this.dataSourceNFTs.data = arrCW721;
+        }
         if (res.erc20_activity?.length > 0 || coinTransfer?.length > 0) {
           this.dataSourceFTs.data = [...coinTransfer, ...(res.erc20_activity || [])];
 

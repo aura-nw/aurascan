@@ -8,6 +8,7 @@ import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/consta
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { EWalletType } from '../../../../../core/constants/wallet.constant';
 
 @Component({
   selector: 'app-evm-token-inventory-tab',
@@ -36,7 +37,7 @@ export class EvmTokenInventoryComponent implements OnInit {
     private environmentService: EnvironmentService,
     private router: Router,
     private layout: BreakpointObserver,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -60,25 +61,25 @@ export class EvmTokenInventoryComponent implements OnInit {
     };
 
     if (this.keyWord) {
-      if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+      if (this.keyWord?.length >= LENGTH_CHARACTER.EVM_ADDRESS && this.keyWord?.startsWith(EWalletType.EVM)) {
         payload.owner = this.keyWord;
       } else if (
-        !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
+        !(this.keyWord?.length === LENGTH_CHARACTER.EVM_TRANSACTION)
       ) {
         payload.token_id = this.keyWord;
       }
     }
 
-    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe({
+    this.tokenService.getListTokenNFTErc721(payload).subscribe({
       next: (res) => {
-        const asset = _.get(res, `cw721_token`);
+        const asset = _.get(res, `erc721_token`);
         if (asset.length > 0) {
           asset.forEach((element) => {
             element.contract_address = this.contractAddress;
           });
           this.nftData.data = asset;
         }
-        this.pageData.length = res?.cw721_token_aggregate?.aggregate?.count;
+        this.pageData.length = res?.erc721_token_aggregate?.aggregate?.count;
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {

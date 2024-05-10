@@ -159,7 +159,7 @@
                         data['to_address']?.startsWith('Null')
                       "
                       (click)="goTo(data['token_id'])">
-                      View NFT
+                      <span>View NFT</span>
                     </button>
                   </ng-container>
                   <ng-container *ngSwitchCase="'token_id'">
@@ -168,12 +168,13 @@
                     <span class="text--primary" *ngIf="data['status'] === 'Fail'">
                       {{ data[template.matColumnDef] | ellipsis: 12 }}
                     </span>
-                    <!-- <a
+                    <a
                       class="text--primary pr-lg-3"
-                      href="/{{ linkToken }}/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
+                      [routerLink]="['/token/evm', 'erc721', contractAddress]"
+                      [queryParams]="{ a: encodeData(data['token_id']) }"
                       *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
                       {{ data[template.matColumnDef] | ellipsis: 12 }}
-                    </a> -->
+                    </a>
                   </ng-container>
                   <ng-container *ngSwitchDefault>
                     {{ data[template.matColumnDef] }}

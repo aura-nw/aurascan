@@ -28,16 +28,24 @@ export class EvmTokenDetailComponent implements OnInit {
     private router: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
       if (data) {
-        const { contractAddress } = data;
+        const { contractAddress, type } = data;
 
         this.contractAddress = contractAddress;
-        this.getTokenDetail();
-        this.getAssetsDetail();
+        switch (type) {
+          case 'erc721':
+            this.getTokenDetailNFT()
+            break;
+          default:
+            this.getTokenDetail();
+            this.getAssetsDetail();
+            break;
+        }
+
       }
     });
   }
@@ -105,6 +113,36 @@ export class EvmTokenDetailComponent implements OnInit {
             };
             this.getAssetsDetail();
           });
+      },
+      error: (e) => {
+        if (e.name === TIMEOUT_ERROR) {
+          this.errTxt = e.message;
+        } else {
+          this.errTxt = e.status + ' ' + e.statusText;
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
+  }
+
+
+  getTokenDetailNFT(): void {
+    const payload = {
+      address: this.contractAddress,
+    };
+    this.tokenService.getEvmNftDetail(payload).subscribe({
+      next: (res) => {
+        const name = _.get(res, 'evm_smart_contract[0].erc721_contract.name');
+        let type = EvmContractRegisterType.ERC721;
+        const isNFTContract = true;
+        const contract_address = _.get(res, 'evm_smart_contract[0].address');
+
+        const modeToken = EModeEvmToken.ERCToken;
+        this.tokenDetail = { name, type, contract_address, isNFTContract, modeToken };
+        this.tokenDetail.contract_verification = _.get(res, 'evm_smart_contract[0].evm_contract_verifications[0].status', undefined);
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
