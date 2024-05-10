@@ -17,7 +17,7 @@ import {
   TIMEOUT_ERROR,
 } from 'src/app/core/constants/common.constant';
 import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
-import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractRegisterType, ContractVerifyType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
@@ -73,7 +73,7 @@ export class EvmNFTDetailComponent implements OnInit {
   currentKey: string;
   isError = false;
   sbType = SB_TYPE;
-  contractType = ContractRegisterType;
+  contractType = EvmContractRegisterType;
 
   animationUrl: string;
   imageUrl: string;
@@ -132,7 +132,7 @@ export class EvmNFTDetailComponent implements OnInit {
   }
 
   getNFTDetail() {
-    this.contractService.getNFTDetail(this.contractAddress, this.decodeData(this.nftId)).subscribe({
+    this.contractService.getNFTErc721Detail(this.contractAddress, this.decodeData(this.nftId)).subscribe({
       next: (res) => {
         res = res.data[0];
 
@@ -142,19 +142,20 @@ export class EvmNFTDetailComponent implements OnInit {
           return;
         }
 
-        res['type'] = res['type'] || ContractRegisterType.CW721;
+        res['type'] = _.get(res, 'erc721_contract.evm_smart_contract.type') || EvmContractRegisterType.ERC721;
 
         this.getDataTable();
 
         this.nftDetail = {
           ...res,
-          contract_address: res.address,
-          name: _.get(res.cw721_contract, 'name'),
-          owner: _.get(res.cw721_contract, 'cw721_tokens[0].owner'),
-          burned: _.get(res.cw721_contract, 'cw721_tokens[0].burned'),
-          token_id: _.get(res.cw721_contract, 'cw721_tokens[0].token_id'),
-          media_info: _.get(res.cw721_contract, 'cw721_tokens[0].media_info'),
-          verification_status: _.get(res.code, 'code_id_verifications[0].verification_status'),
+          contract_address: res.erc721_contract?.address,
+          name: _.get(res, 'erc721_contract.name'),
+          owner: res.owner,
+          creator: res.erc721_contract?.evm_smart_contract?.creator,
+          burned: res.owner?.startsWith('0x000000000'),
+          token_id: res.token_id,
+          media_info: res.media_info,
+          verification_status: _.get(res, 'erc721_contract.evm_smart_contract.evm_contract_verifications[0].status'),
         };
         this.nftType = checkTypeFile(this.nftDetail);
 
@@ -178,10 +179,7 @@ export class EvmNFTDetailComponent implements OnInit {
           this.imageUrl = this.nftDetail?.media_info?.onchain?.metadata?.image;
         }
 
-        if (res.type === ContractRegisterType.CW4973) {
-          this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail?.media_info?.onchain?.metadata?.name || '';
-        }
+
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
@@ -201,45 +199,45 @@ export class EvmNFTDetailComponent implements OnInit {
     let payload = {
       contractAddr: this.contractAddress,
       tokenId: this.decodeData(this.nftId),
-      isCW4973: this.isCW4973 ? true : false,
       isNFTDetail: true,
     };
 
-    this.tokenService.getCW721Transfer(payload).subscribe({
+    this.tokenService.getERC721Transfer(payload).subscribe({
       next: (res) => {
         if (res) {
-          let txs = res.cw721_activity;
+          let txs = res.erc721_activity;
           txs.forEach((element) => {
-            element['tx_hash'] = element.tx.hash;
+            debugger
+            element['tx_hash'] = element.evm_transaction.hash;
             element['from_address'] = element.from || NULL_ADDRESS;
             element['to_address'] = element.to || NULL_ADDRESS;
-            element['token_id'] = element.cw721_token.token_id;
-            element['timestamp'] = element.tx.timestamp;
+            element['token_id'] = element.erc721_token.token_id;
+            element['timestamp'] = element.evm_transaction.transaction.timestamp;
             element['status'] =
-              element.tx.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
-            element['type'] = getTypeTx(element.tx)?.type;
-            if (
-              element['action'] === ModeExecuteTransaction.Approve ||
-              element['action'] === ModeExecuteTransaction.Revoke
-            ) {
-              let msg = element?.tx.transaction_messages[0]?.content?.msg;
-              if (typeof msg === 'string') {
-                try {
-                  msg = JSON.parse(msg);
-                } catch (e) {}
-              }
-              element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
-            }
-            if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
-              let dataDenom = this.commonService.mappingNameIBC(
-                element.tx.transaction_messages[0].content?.funds[0]?.denom,
-              );
-              element['price'] = balanceOf(
-                element.tx.transaction_messages[0].content.funds[0]?.amount,
-                dataDenom['decimals'],
-              );
-              element['denom'] = dataDenom['display'];
-            }
+              element.evm_transaction.transaction.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+            element['type'] = getTypeTx(element.evm_transaction)?.type;
+            // if (
+            //   element['action'] === ModeExecuteTransaction.Approve ||
+            //   element['action'] === ModeExecuteTransaction.Revoke
+            // ) {
+            //   let msg = element?.tx.transaction_messages[0]?.content?.msg;
+            //   if (typeof msg === 'string') {
+            //     try {
+            //       msg = JSON.parse(msg);
+            //     } catch (e) { }
+            //   }
+            //   element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
+            // }
+            // if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
+            //   let dataDenom = this.commonService.mappingNameIBC(
+            //     element.tx.transaction_messages[0].content?.funds[0]?.denom,
+            //   );
+            //   element['price'] = balanceOf(
+            //     element.tx.transaction_messages[0].content.funds[0]?.amount,
+            //     dataDenom['decimals'],
+            //   );
+            //   element['denom'] = dataDenom['display'];
+            // }
           });
           this.dataSource.data = txs;
           this.pageData.length = txs?.length;

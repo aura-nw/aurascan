@@ -481,6 +481,48 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getNFTErc721Detail(address, tokenId): Observable<any> {
+    const contractDoc = `
+    query queryErc721Owner($address: String, $tokenId: String) {
+      ${this.envDB} { 
+        data: erc721_token(
+          where: {token_id: {_eq: $tokenId}, erc721_contract: {evm_smart_contract: {address: {_eq: $address}}}}
+        ) {
+          id
+          token_id
+          owner
+          media_info
+          erc721_contract {
+            name
+            symbol
+            address
+            evm_smart_contract {
+              code_hash
+              creator
+              address
+              evm_contract_verifications {
+                status
+                id
+              }
+              type
+            }
+          }
+        }
+      } 
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: contractDoc,
+        variables: {
+          address: address,
+          tokenId: tokenId,
+        },
+        operationName: 'queryErc721Owner',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getVerifyCodeStep(codeId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/verify-code-id/${codeId}`);
   }
