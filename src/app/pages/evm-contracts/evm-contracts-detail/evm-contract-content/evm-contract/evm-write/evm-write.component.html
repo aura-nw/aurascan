@@ -14,7 +14,7 @@
         <div
           *ngIf="ng.wallet"
           class="d-flex align-items-center box-connect-wallet justify-content-between justify-content-lg-start">
-          <div class="button button-pill button-outline button--xs caption fw-normal">
+          <!-- <div class="button button-pill button-outline button--xs caption fw-normal">
             <span class="icon-connect connected"></span>
             <span class="text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
               <span class="txt-wallet cursor-pointer" [routerLink]="['/address/', ng.wallet?.address]">
@@ -26,7 +26,12 @@
                 >]
               </span>
             </span>
-          </div>
+          </div> -->
+          <button [routerLink]="['/address/', ng.wallet?.address]"
+            class="button button-pill button--xs button-outline button-outline__in-card" *ngIf="ng.wallet?.address">
+            <span class="icon-connect connected"></span>
+            <span class="text--gray-1">Connected to Web3</span>
+          </button>
           <ng-container>
             <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
             <div
