@@ -16,12 +16,17 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
 import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
 
+type Error = {
+  code?: string;
+  message?: string
+}
 type JsonFragmentExtends = JsonFragment & {
   formGroup?: FormGroup;
   isValidate?: boolean;
   result?: string;
   isLoading?: boolean;
   extendedInputs?: JsonFragmentExtends[];
+  error?: Error;
 };
 
 @Component({
@@ -138,7 +143,7 @@ export class EvmWriteComponent implements OnChanges {
 
     const listWithOutFund = extendedInputs?.filter((i) => i.name !== 'fund');
     const params = listWithOutFund?.map((i) => {
-      const value = formControls[i.name].value;
+      const value = formControls[i.name].value?.trim();
       return validateAndParsingInput(i, value); // TODO
     });
 
@@ -150,6 +155,8 @@ export class EvmWriteComponent implements OnChanges {
     }
 
     jsonFragment.isLoading = true;
+    jsonFragment.result = undefined;
+    jsonFragment.error = undefined;
     const x = await contract[name]?.estimateGas(...params).catch((e) => e);
     contract[name]?.(...params, {
       gasLimit: Number(x) || 250_000,
@@ -160,11 +167,10 @@ export class EvmWriteComponent implements OnChanges {
         jsonFragment.result = res;
         jsonFragment.isLoading = false;
       })
-      .catch((e) => {
-        this.toastr.error(e);
-
+      .catch((error) => {
+        this.toastr.error(error);
         jsonFragment.isLoading = false;
-        jsonFragment.result = 'No Data';
+        jsonFragment.error = { code: error.code, message: error.message };
       });
   }
 
