@@ -76,6 +76,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   destroyed$ = new Subject<void>();
   linkAddress: string;
   addressNameTag = '';
+  searchToken: string;
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -98,6 +99,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.typeContract = this.tokenDetail?.type;
     this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       this.keyWord = params?.a || '';
+      this.searchToken = params?.t;
     });
 
     this.template = this.getTemplate();
@@ -143,7 +145,10 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
       idLte: nextKey,
     };
 
-    if (this.keyWord) {
+    if(this.searchToken){
+      payload['tokenId'] = this.searchToken;
+    }
+    else if (this.keyWord) {
       if (this.keyWord?.length === LENGTH_CHARACTER.EVM_TRANSACTION) {
         payload['txHash'] = this.keyWord;
       } else {

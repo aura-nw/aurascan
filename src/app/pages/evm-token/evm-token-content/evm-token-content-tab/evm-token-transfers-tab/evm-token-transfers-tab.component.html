@@ -171,7 +171,7 @@
                     <a
                       class="text--primary pr-lg-3"
                       [routerLink]="['/token/evm', 'erc721', contractAddress]"
-                      [queryParams]="{ a: encodeData(data['token_id']) }"
+                      [queryParams]="{ t: encodeData(data['token_id']) }"
                       *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
                       {{ data[template.matColumnDef] | ellipsis: 12 }}
                     </a>
