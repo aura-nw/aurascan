@@ -63,7 +63,7 @@ export class EvmTokenContentComponent implements OnInit {
     private tokenService: TokenService,
     private nameTagService: NameTagService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -95,10 +95,16 @@ export class EvmTokenContentComponent implements OnInit {
     this.tabsBackup = this.TABS;
 
     this.route.queryParams.subscribe((params) => {
-      this.paramQuery = params?.a || '';
-      this.searchTemp = this.paramQuery;
-      this.handleSearch();
-      this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
+      if (params?.t) {
+        this.paramQuery = params?.t;
+        this.searchTemp = this.paramQuery;
+        this.textSearch = this.searchTemp;
+      } else {
+        this.paramQuery = params?.a || '';
+        this.searchTemp = this.paramQuery;
+        this.handleSearch();
+        this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
+      }
     });
 
     if (local.getItem(STORAGE_KEYS.IS_VERIFY_TAB) == 'true') {
