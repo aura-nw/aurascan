@@ -27,13 +27,13 @@
         </mat-expansion-panel-header>
 
         <form [formGroup]="jsonFragment.formGroup" class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
-          <ng-container *ngFor="let item of jsonFragment.inputs">
-            <p class="px-0 mb-2 body-02" [class.input-require]="true">{{ item.name }} ({{ item.type }})</p>
-            <ng-container *ngIf="jsonFragment.formGroup.controls[item.name] as control">
+          <ng-container *ngFor="let item of jsonFragment.inputs; let idx = index">
+            <p class="px-0 mb-2 body-02" [class.input-require]="true">{{ item.name || idx}} ({{ item.type }})</p>
+            <ng-container *ngIf="jsonFragment.formGroup.controls[item.name || idx] as control">
               <input
                 #value
                 *ngIf="!item.type?.includes('boolean')"
-                [formControlName]="item.name"
+                [formControlName]="item.name || idx"
                 [ngClass]="{
                   'input-require': true,
                   'error-null': control.invalid && jsonFragment.isValidate
