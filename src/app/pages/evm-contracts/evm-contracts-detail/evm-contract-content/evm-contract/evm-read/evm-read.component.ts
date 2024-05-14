@@ -42,12 +42,11 @@ export class EvmReadComponent implements OnChanges {
         ) || [];
 
       extendedAbi.forEach((abi) => {
-        const group = abi.inputs.reduce((prevValue, curValue) => {
+        const group = abi.inputs.reduce((prevValue, curValue, idx) => {
           const control = this.fb.control('', Validators.required);
-
           return {
             ...prevValue,
-            [curValue.name]: control,
+            [curValue.name || idx]: control,
           };
         }, {});
 
@@ -122,8 +121,8 @@ export class EvmReadComponent implements OnChanges {
 
     const formControls = formGroup.controls;
 
-    const params = inputs?.map((i) => {
-      const value = formControls[i.name].value;
+    const params = inputs?.map((i, idx) => {
+      const value = formControls[i.name || idx].value;
       return validateAndParsingInput(i, value); // TODO
     });
 
