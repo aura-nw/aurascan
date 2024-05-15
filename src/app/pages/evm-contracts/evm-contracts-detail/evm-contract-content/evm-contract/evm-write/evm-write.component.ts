@@ -120,6 +120,7 @@ export class EvmWriteComponent implements OnChanges {
       ea.formGroup.reset();
       ea.isValidate = false;
       ea.result = undefined;
+      ea.error = undefined;
     });
   }
 
