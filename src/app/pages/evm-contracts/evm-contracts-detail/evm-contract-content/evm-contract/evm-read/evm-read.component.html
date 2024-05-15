@@ -28,7 +28,7 @@
 
         <form [formGroup]="jsonFragment.formGroup" class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
           <ng-container *ngFor="let item of jsonFragment.inputs; let idx = index">
-            <p class="px-0 mb-2 body-02" [class.input-require]="true">{{ item.name || idx}} ({{ item.type }})</p>
+            <p class="px-0 mb-2 body-02" [class.input-require]="true">{{ item.name}} ({{ item.type }})</p>
             <ng-container *ngIf="jsonFragment.formGroup.controls[item.name || idx] as control">
               <input
                 #value
@@ -45,6 +45,9 @@
           </ng-container>
 
           <div class="w-100 mb-2 px-0">
+            <div  class="text-sm text--danger mt-2 mb-4 fw-normal" *ngIf="jsonFragment.error && jsonFragment.error.code === 'INVALID_ARGUMENT'"> 
+                {{ jsonFragment.error.message }}
+            </div>
             <button
               *ngIf="jsonFragment.inputs?.length > 0"
               class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card text--white"
@@ -69,6 +72,16 @@
               width="20"
               height="20"
               *ngIf="jsonFragment.isLoading && jsonFragment.inputs?.length == 0" />
+
+          </div>
+          <div class="box-error-message mt-4 d-flex align-items-center w-fit-content text-sm" *ngIf="jsonFragment.error && jsonFragment.error.code !== 'INVALID_ARGUMENT'">
+            <img
+              [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
+              alt=""
+              class="mr-2"
+              width="16px"
+              height="16px" />
+            {{ jsonFragment.error.message }}
           </div>
 
           <div class="px-0">
