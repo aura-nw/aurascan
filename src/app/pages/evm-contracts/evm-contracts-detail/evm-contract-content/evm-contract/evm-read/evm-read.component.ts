@@ -6,11 +6,17 @@ import { READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { getEthersProvider } from 'src/app/core/utils/ethers';
 import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
 
+type Error = {
+  code?: string;
+  message?: string
+}
+
 type JsonFragmentExtends = JsonFragment & {
   formGroup?: FormGroup;
   isValidate?: boolean;
   result?: string;
   isLoading?: boolean;
+  error?: Error;
 };
 
 @Component({
@@ -42,12 +48,11 @@ export class EvmReadComponent implements OnChanges {
         ) || [];
 
       extendedAbi.forEach((abi) => {
-        const group = abi.inputs.reduce((prevValue, curValue) => {
+        const group = abi.inputs.reduce((prevValue, curValue, idx) => {
           const control = this.fb.control('', Validators.required);
-
           return {
             ...prevValue,
-            [curValue.name]: control,
+            [curValue.name || idx]: control,
           };
         }, {});
 
@@ -122,8 +127,8 @@ export class EvmReadComponent implements OnChanges {
 
     const formControls = formGroup.controls;
 
-    const params = inputs?.map((i) => {
-      const value = formControls[i.name].value;
+    const params = inputs?.map((i, idx) => {
+      const value = formControls[i.name || idx].value?.trim();
       return validateAndParsingInput(i, value); // TODO
     });
 
@@ -134,15 +139,17 @@ export class EvmReadComponent implements OnChanges {
     }
 
     jsonFragment.isLoading = true;
-
+    jsonFragment.result = undefined;
+    jsonFragment.error = undefined;
     contract[name]?.(...params)
       .then((res) => {
         jsonFragment.result = res;
         jsonFragment.isLoading = false;
+        jsonFragment.error = undefined;
       })
-      .catch(() => {
+      .catch((error) => {
         jsonFragment.isLoading = false;
-        jsonFragment.result = 'No Data';
+        jsonFragment.error = { code: error.code, message: error.message };
       });
   }
 
@@ -158,6 +165,7 @@ export class EvmReadComponent implements OnChanges {
       ea.formGroup.reset();
       ea.isValidate = false;
       ea.result = undefined;
+      ea.error = undefined;
     });
   }
 }
