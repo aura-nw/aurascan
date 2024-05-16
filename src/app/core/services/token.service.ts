@@ -140,6 +140,49 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListErc721Token(payload, textSearch: string = null): Observable<any> {
+    let queryUpdate = '';
+    if (this.commonService.isValidContract(textSearch)) {
+      queryUpdate = 'erc721_contract: {evm_smart_contract: {address: {_eq:' + textSearch + '}}}';
+    } else if (textSearch?.length > 0) {
+      textSearch = `"%` + textSearch + `%"`;
+      queryUpdate = 'erc721_contract: {name: {_ilike:' + textSearch + '}}';
+    }
+    let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
+    const operationsDoc = `
+    query queryListErc721($limit: Int = 10, $offset: Int = 0) {
+      ${this.envDB} {
+        list_token: erc721_stats(limit: $limit, offset: $offset ${querySort}, where: { ${queryUpdate} }) {
+          transfer_24h
+          total_activity
+          erc721_contract {
+            name
+            symbol
+            evm_smart_contract {
+              address
+            }
+          }
+        }
+        total_token: erc721_stats_aggregate (where: { ${queryUpdate} }) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 20,
+          offset: payload.offset || 0,
+        },
+        operationName: 'queryListErc721',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListTokenNFTFromIndexer(payload: {
     limit: number;
     offset: number;
@@ -477,7 +520,7 @@ export class TokenService extends CommonService {
     let queryName = 'ERC721Transfer';
     let queryActionNotIn = payload.isNFTDetail
       ? ['']
-      : ['approve', 'instantiate', 'revoke', 'approve_all', 'revoke_all', ''];
+      : ['approval', 'instantiate', 'revoke', 'approve_all', 'revoke_all', ''];
     const operationsDoc = `query ${queryName}(
       $contractAddress: String = null
       $actionNotIn: [String!] = null
