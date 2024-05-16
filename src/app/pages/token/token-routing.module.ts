@@ -29,7 +29,7 @@ const canMatchFn: CanMatchFn = (route, segments) => {
           return true; // Default, Show No Data screen
         }
 
-        const tr = router.createUrlTree(['/token', e.type.toLowerCase(), address.toLowerCase()], {
+        const tr = router.createUrlTree(['/token', e.type.toLowerCase(), address], {
           queryParams: currentQueryParams ? { ...currentQueryParams } : {},
         });
 
@@ -44,7 +44,7 @@ const canMatchFn: CanMatchFn = (route, segments) => {
           return true; // Default, Show No Data screen
         }
 
-        const tr = router.createUrlTree(['/token', 'evm', e.type.toLowerCase(), address.toLowerCase()], {
+        const tr = router.createUrlTree(['/token', 'evm', e.type.toLowerCase(), address], {
           queryParams: currentQueryParams ? { ...currentQueryParams } : {},
         });
 
