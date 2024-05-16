@@ -569,10 +569,10 @@ export class TokenService extends CommonService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          contractAddress: payload.contractAddr,
+          contractAddress: payload.contractAddr?.toLowerCase(),
           actionNotIn: queryActionNotIn,
-          sender: payload.sender,
-          receiver: payload.receiver,
+          sender: payload.sender?.toLowerCase(),
+          receiver: payload.receiver?.toLowerCase(),
           tokenId: payload.tokenId,
           idLte: payload.idLte,
           txHash: payload.txHash,
