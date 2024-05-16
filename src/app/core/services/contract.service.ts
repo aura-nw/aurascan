@@ -256,6 +256,27 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  findEvmContractList(listAddr: string[]) {
+    const operationsDoc = `
+    query findEvmContractList($listAddress: [String!] = null) {
+      ${this.envDB} {
+        evm_smart_contract(where: {address: {_in: $listAddress}}, limit: 40, offset: 0) {
+          address
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          listAddress: listAddr.map(i=> i?.toLowerCase())
+        },
+        operationName: 'findEvmContractList',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   loadContractDetail(contractAddress): Observable<any> {
     const contractDoc = `
     query queryContractDetail($contractAddress: String = null) {

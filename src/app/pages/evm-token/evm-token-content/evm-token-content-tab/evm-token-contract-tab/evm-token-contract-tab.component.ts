@@ -1,12 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { JsonFragment } from 'ethers';
 import * as _ from 'lodash';
-import { of, switchMap } from 'rxjs';
+import { Subject, map, of, switchMap, takeUntil } from 'rxjs';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { TokenContractType } from 'src/app/core/constants/token.enum';
+import { ContractType } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { getEthersProvider } from 'src/app/core/utils/ethers';
+import { EWalletType } from '../../../../../core/constants/wallet.constant';
+import local from '../../../../../core/utils/storage/local';
+import { STORAGE_KEYS } from '../../../../../core/constants/common.constant';
 
 @Component({
   selector: 'app-evm-token-contract-tab',
@@ -15,12 +19,13 @@ import { getEthersProvider } from 'src/app/core/utils/ethers';
 })
 export class EvmTokenContractTabComponent implements OnInit {
   @Input() contractAddress: string;
-  @Input() typeContract: string;
+  @Input() contractTypeData: string;
 
-  contractType = TokenContractType;
-  currentTab = this.contractType.ReadContract;
-  contractVerifyType = ContractVerifyType;
+  ContractType = ContractType;
+  ContractVerifyType = ContractVerifyType;
+  currentTab = this.ContractType.ReadContract;
   isLoading = true;
+  isWatchList = false;
 
   contractDetail;
   contractCode;
@@ -33,14 +38,57 @@ export class EvmTokenContractTabComponent implements OnInit {
     abi?: JsonFragment[];
   };
 
+  contract$ = this.route.paramMap.pipe(
+    map((data) => {
+      return data.get('contractAddress');
+    }),
+  );
+  destroyed$ = new Subject<void>();
+
   constructor(
+    private route: ActivatedRoute,
     private contractService: ContractService,
     private env: EnvironmentService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.getContractDetail();
+    this.contract$
+      .pipe(
+        switchMap((ca) => {
+          if (!ca) {
+            return of(null);
+          }
+          this.contractAddress = ca;
+          return this.contractService.queryEvmContractByAddress(ca);
+        }),
+        takeUntil(this.destroyed$),
+      )
+      .subscribe((res) => {
+        this.isLoading = false;
+
+        if (res) {
+          const evm_contract_verification = _.get(res, 'evm_contract_verification[0]') || {};
+          const evm_smart_contract = _.get(res, 'evm_smart_contract[0]') || {};
+
+          const contractDetail = {
+            ...evm_smart_contract,
+            ...evm_contract_verification,
+          };
+          this.contractService.setContract(contractDetail);
+        }
+      });
+
+    this.contractService.contractObservable.pipe(takeUntil(this.destroyed$)).subscribe({
+      next: (res) => {
+        this.contractDetail = {
+          ...res,
+          tx_hash: res.created_hash,
+          contract_hash: res.code_hash,
+        };
+      },
+    });
   }
+
 
   changeTab(tabId): void {
     this.currentTab = tabId;
@@ -62,75 +110,5 @@ export class EvmTokenContractTabComponent implements OnInit {
       });
   }
 
-  getContractDetail() {
-    this.contractService.queryEvmContractByAddress(this.contractAddress).subscribe({
-      next: (res) => {
-        if (res) {
-          const evm_contract_verification = _.get(res, 'evm_contract_verification[0]');
-          const evm_smart_contract = _.get(res, 'evm_smart_contract[0]') || {};
 
-          if (!evm_contract_verification) {
-            this.getContractCode();
-          } else {
-            this.contractDetail = {
-              ...evm_smart_contract,
-              ...evm_contract_verification,
-            };
-
-            this.isLoading = false;
-          }
-        }
-      },
-      error: () => {
-        this.isLoading = false;
-      },
-    });
-  }
-
-  getProxyContractAbi(address) {
-    this.contractService
-      .getProxyContractAbi(address)
-      .pipe(
-        switchMap((e) => {
-          const proxyHistories = _.get(e, 'evm_smart_contract[0].evm_proxy_histories');
-
-          if (proxyHistories) {
-            this.implementationContractDetail = {
-              proxyContract: proxyHistories[0]?.proxy_contract,
-              implementationContract: proxyHistories[0]?.implementation_contract,
-              previouslyRecordedContract: proxyHistories[1]?.implementation_contract,
-            };
-
-            return this.contractService.queryEvmContractByAddress(
-              this.implementationContractDetail.implementationContract,
-            );
-          }
-
-          return of(null);
-        }),
-      )
-      .subscribe((res) => {
-        const abi = _.get(res, 'evm_contract_verification[0].abi');
-        if (abi) {
-          this.implementationContractDetail['abi'] = abi as JsonFragment[];
-        }
-      });
-  }
-
-  loadProxyContractDetail() {
-    this.contractService.loadProxyContractDetail(this.contractAddress).subscribe((res) => {
-      if (res.implementation_contract) {
-        this.implementationContractAddress = res.implementation_contract;
-        this.getListContractInfo([res.implementation_contract]);
-      }
-    });
-  }
-
-  getListContractInfo(address) {
-    this.contractService.getListContractInfo(address).subscribe((res) => {
-      if (res?.evm_contract_verification?.length > 0) {
-        this.isImplementationVerified = res.evm_contract_verification[0]?.status;
-      }
-    });
-  }
 }

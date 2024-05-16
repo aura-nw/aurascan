@@ -18,6 +18,7 @@ import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { mappingMethodName } from 'src/app/global/global';
 import { EWalletType } from '../../../../../core/constants/wallet.constant';
+import { ContractService } from '../../../../../core/services/contract.service';
 
 @Component({
   selector: 'app-evm-token-transfers-tab',
@@ -77,6 +78,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   linkAddress: string;
   addressNameTag = '';
   searchToken: string;
+  smartContractList: string[];
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
@@ -92,6 +94,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     private router: Router,
     private transactionService: TransactionService,
     private nameTagService: NameTagService,
+    private contractService: ContractService,
   ) { }
 
   ngOnInit(): void {
@@ -145,7 +148,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
       idLte: nextKey,
     };
 
-    if(this.searchToken){
+    if (this.searchToken) {
       payload['tokenId'] = this.searchToken;
     }
     else if (this.keyWord) {
@@ -186,19 +189,40 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
             }),
           );
         }),
+      ).pipe(
+        switchMap((res) => {
+          let listAddr = []
+          res.forEach((element) => {
+            if (element.from) {
+              listAddr.push(element.from)
+            }
+            if (element.to) {
+              listAddr.push(element.to)
+            }
+          });
+          const listAddrUnique = _.uniq(listAddr);
+          return this.contractService.findEvmContractList(listAddrUnique).pipe(
+            map((r) => {
+              this.smartContractList = _.uniq((r?.evm_smart_contract || []).map(i => i?.address));
+              return { listTokens: res }
+            }),
+          );
+        }
+        ),
       )
       .subscribe({
         next: (res) => {
           if (res) {
             this.nextKey = null;
-            if (res?.length >= 100) {
-              this.nextKey = res[res.length - 1]['id'];
+            const listToken = res?.listTokens;
+            if (listToken?.length >= 100) {
+              this.nextKey = res[listToken.length - 1]['id'];
               this.hasMore.emit(true);
             } else {
               this.hasMore.emit(false);
             }
 
-            res.forEach((element) => {
+            listToken.forEach((element) => {
               element['tx_hash'] = element.evm_transaction.hash;
               element['from_address'] = element.from || NULL_ADDRESS;
               element['to_address'] = element.to || NULL_ADDRESS;
@@ -211,13 +235,14 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
             });
 
             if (this.dataSource.data.length > 0 && !isReload) {
-              this.dataSource.data = [...this.dataSource.data, ...res];
+              this.dataSource.data = [...this.dataSource.data, ...listToken];
             } else {
-              this.dataSource.data = [...res];
+              this.dataSource.data = [...listToken];
             }
 
             this.pageData.length = this.dataSource.data.length;
             this.tokenService.setTotalTransfer(this.pageData.length);
+
           }
         },
         error: (e) => {
@@ -367,5 +392,9 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   goTo(data) {
     this.router.navigate(['/token/evm/erc721', this.contractAddress, this.encodeData(data)]);
+  }
+  
+  isEvmSmartContract(addr) {
+    return this.smartContractList.filter(i => i === addr).length > 0;
   }
 }
