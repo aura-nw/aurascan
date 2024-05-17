@@ -9,12 +9,6 @@
         <div class="button-switch-stage button-fixed mt-lg-0">
           <button
             class="button button-switch-stage-nft body-04"
-            (click)="changeType('')"
-            [class.active]="typeToken === ''">
-            All types
-          </button>
-          <button
-            class="button button-switch-stage-nft body-04"
             (click)="changeType(typeTokeList.CW721)"
             [class.active]="typeToken === typeTokeList.CW721">
             CW721
@@ -112,13 +106,19 @@
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
                 <app-nft-card
-                  *ngIf="item"
+                  *ngIf="item && typeToken === typeTokeList.ERC721"
+                  [nftLink]="'/token/evm/erc721/' + item.contract_address + '/' + encodeData(item.token_id)"
+                  [nftItem]="item"
+                  nftId="{{ 'nft#' + i }}"
+                  [nftType]="getTypeFile(item)"></app-nft-card>
+                <app-nft-card
+                  *ngIf="item && typeToken === typeTokeList.CW721"
                   [nftLink]="'/token/cw721/' + item.contract_address + '/' + encodeData(item.token_id)"
                   [nftItem]="item"
                   nftId="{{ 'nft#' + i }}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
                 <div class="nft-cards__label">
-                  <span class="text--white">CW-721</span>
+                  <span class="text--white">{{ typeToken === typeTokeList.ERC721 ? 'ERC-721' : 'CW-721' }}</span>
                 </div>
                 <div class="nft__body">
                   <div class="nft__info d-flex">
@@ -131,7 +131,11 @@
                     <span class="mr-1 text--gray-1">Token ID:</span>
                     <span
                       class="text--primary hover-link"
-                      [routerLink]="['/token/cw721', item.contract_address, item.token_id]">
+                      [routerLink]="[
+                        typeToken === typeTokeList.ERC721 ? '/token/evm/erc721/' : '/token/cw721',
+                        item.contract_address,
+                        item.token_id
+                      ]">
                       <span *ngIf="!breakpoint.value.matches">{{ item.token_id | ellipsis: 10 }}</span>
                       <span *ngIf="breakpoint.value.matches">{{ item.token_id | ellipsis: 5 }}</span>
                     </span>
