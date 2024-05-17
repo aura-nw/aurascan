@@ -29,4 +29,5 @@ export enum EvmContractRegisterType {
   ERC20 = 'ERC20',
   ERC721 = 'ERC721',
   ERC1155 = 'ERC1155',
+  PROXY_EIP_1967 = 'PROXY_EIP_1967'
 }
