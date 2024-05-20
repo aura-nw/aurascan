@@ -209,7 +209,7 @@
                           [iconContract]="true"
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[
-                            '/evm-contracts',
+                            transaction['evm_hash'] ? '/evm-contracts' : '/contracts',
                             data?.cw721_contract?.smart_contract?.address ||
                               data?.erc721_contract?.evm_smart_contract?.address
                           ]">
@@ -223,6 +223,7 @@
                           From
                         </span>
                         <app-name-tag
+                          *ngIf="!transaction['evm_hash']"
                           [isEnableRouter]="!!data.from"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [iconContract]="data.from | isContract"
@@ -230,18 +231,39 @@
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[(data.from | isContract) ? '/contracts' : '/address', data.from]">
                         </app-name-tag>
+                        <app-name-tag
+                          *ngIf="transaction['evm_hash']"
+                          [isEnableRouter]="!!data.from"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [iconContract]="isEvmSmartContract(data.from)"
+                          [value]="data.from || nullAddress"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[isEvmSmartContract(data.from) ? '/evm-contracts' : '/address', data.from]">
+                        </app-name-tag>
                       </div>
                       <div class="d-flex align-items-center justify-content-between justify-content-lg-start">
                         <span class="caption fw-normal text--gray-4 mr-3 transfer-address-label d-inline-block">
                           To
                         </span>
                         <app-name-tag
+                          *ngIf="!transaction['evm_hash']"
                           [isEnableRouter]="!!data.to"
                           [iconContract]="data.to | isContract"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [value]="data.to || nullAddress"
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[(data.to | isContract) ? '/contracts' : '/address', data.to]"></app-name-tag>
+                        <app-name-tag
+                          *ngIf="transaction['evm_hash']"
+                          [isEnableRouter]="!!data.to"
+                          [iconContract]="isEvmSmartContract(data.to)"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [value]="data.to || nullAddress"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[
+                            isEvmSmartContract(data.to) ? '/evm-contracts' : '/address',
+                            data.to
+                          ]"></app-name-tag>
                       </div>
                     </div>
                     <ng-container *ngIf="!breakpoint.value.matches">
