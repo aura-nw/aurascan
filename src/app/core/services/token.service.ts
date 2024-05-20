@@ -419,6 +419,43 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListTokenHolderErc721(payload: { limit: string | number; offset?: string | number; contractAddress: string }) {
+    const operationsDoc = `
+    query queryListHolderErc721($contract_address: String, $limit: Int = 10, $offset: Int) {
+      ${this.envDB} {
+        view_count_holder_erc721(
+          limit: $limit
+          offset: $offset
+          where: {erc721_contract_address: {_eq: $contract_address}}
+          order_by: {count: desc}
+        ) {
+          count
+          erc721_contract_address
+          owner
+        }
+        view_count_holder_erc721_aggregate(
+          where: {erc721_contract_address: {_eq: $contract_address}}
+        ) {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload?.limit || 20,
+          offset: payload.offset || 0,
+          contract_address: payload?.contractAddress,
+        },
+        operationName: 'queryListHolderErc721',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListAssetCommunityPool() {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.DISTRIBUTION}`);
   }
