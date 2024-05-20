@@ -433,8 +433,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           payload['isCw721'] = true;
         }
 
-        // payload['sender'] = payload['receiver'] = address;
-        // payload['isCw721'] = true;
         if (this.transactionFilter.typeTransfer) {
           if (this.transactionFilter.typeTransfer === AccountTxType.Sent) {
             payload['receiver'] = '';
@@ -606,10 +604,24 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
 
   getListNFTByAddress(payload) {
     if (this.nonFungibleTokenType === ETokenNFTTypeBE.ERC721) {
-      //TODO
-      this.transactionLoading = false;
+      this.userService.getListERC721ByAddress(payload).subscribe({
+        next: (data) => {
+          this.handleGetData(data);
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.transactionLoading = false;
+        },
+        complete: () => {
+          this.transactionLoading = false;
+        },
+      });
     } else {
-      this.userService.getListNFTByAddress(payload).subscribe({
+      this.userService.getListCW721ByAddress(payload).subscribe({
         next: (data) => {
           this.handleGetData(data);
         },
@@ -674,6 +686,15 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
             element.limit = 5;
           });
         } else {
+          if (data.evm_transaction) {
+            const transactions = data.evm_transaction.map((tx) => ({
+              ...tx,
+              transaction_messages: [tx.transaction_messages],
+              timestamp: tx.transaction.timestamp,
+            }));
+            data.transaction = transactions;
+          }
+
           txs = convertDataAccountTransaction(
             data,
             this.coinInfo,
