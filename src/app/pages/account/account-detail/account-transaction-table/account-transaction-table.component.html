@@ -385,7 +385,6 @@
               <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
-
               <td
                 mat-cell
                 *matCellDef="let data; let idx = index"
@@ -767,7 +766,14 @@
                           <div class="item-show d-flex nft-column mb-2 justify-content-center">
                             <div class="justify-content-between tokenId">
                               <a
-                                *ngIf="item.tokenId"
+                                *ngIf="item.tokenId && nonFungibleTokenType === nftType.ERC721"
+                                [routerLink]="['/token/evm/erc721', data.contractAddress, encodeData(item.tokenId)]"
+                                [copyBtn]="item.tokenId"
+                                class="text--primary cursor-pointer">
+                                #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
+                              </a>
+                              <a
+                                *ngIf="item.tokenId && nonFungibleTokenType === nftType.CW721"
                                 [routerLink]="['/token/cw721', data.contractAddress, encodeData(item.tokenId)]"
                                 [copyBtn]="item.tokenId"
                                 class="text--primary cursor-pointer">
@@ -777,6 +783,14 @@
                             </div>
                             <div class="mt-1">
                               <app-name-tag
+                                *ngIf="nonFungibleTokenType === nftType.ERC721"
+                                [iconContract]="true"
+                                [linkRouter]="['/evm-contracts', item.contractAddress || currentAddress]"
+                                [isShorterText]="true"
+                                [value]="item.contractAddress"
+                                [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                              <app-name-tag
+                                *ngIf="nonFungibleTokenType === nftType.CW721"
                                 [iconContract]="true"
                                 [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
                                 [isShorterText]="true"

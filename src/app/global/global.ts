@@ -262,10 +262,10 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, coinDec
     const lstTypeTemp = _.get(element, 'transaction_messages');
     let type;
     if (lstTypeTemp) {
-      if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.GetReward) {
+      if (lstTypeTemp[0]?.['type'] === TRANSACTION_TYPE_ENUM.GetReward) {
         type = TypeTransaction.GetReward;
       } else if (lstTypeTemp?.length > 1) {
-        if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+        if (lstTypeTemp[0]?.['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
           type = TypeTransaction.MultiSend;
         } else {
           type = 'Multiple';

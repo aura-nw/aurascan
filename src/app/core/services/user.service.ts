@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { clearLocalData } from 'src/app/global/global';
-import { CW20_TRACKING, CW721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
+import { CW20_TRACKING, CW721_TRACKING, ERC721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IUser } from '../models/auth.models';
 import local from '../utils/storage/local';
@@ -357,7 +357,7 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListNFTByAddress(payload) {
+  getListCW721ByAddress(payload) {
     const operationsDoc = `
     query QueryCW721ListTX(
       $receiver: String = null
@@ -423,12 +423,96 @@ export class UserService {
           startTime: payload.startTime,
           endTime: payload.endTime,
           heightLT: payload.heightLT,
-          actionIn: payload.isNFTDetail ? null : !payload.isTransferTab ? CW721_TRACKING : null,
-          actionNotIn: payload.isNFTDetail ? null : payload.isTransferTab ? ['approve', 'instantiate', 'revoke'] : null,
+          actionIn: CW721_TRACKING,
+          actionNotIn: null,
           limit: payload.limit,
           neqCw4973: 'crates.io:cw4973',
         },
         operationName: 'QueryCW721ListTX',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListERC721ByAddress(payload) {
+    const operationsDoc = `
+    query QueryERC721ListTX(
+      $receiver: String = null
+      $sender: String = null
+      $startTime: timestamptz = null
+      $endTime: timestamptz = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $limit: Int = null
+      $neqCw4973: String
+      $actionIn: [String!] = null
+      $actionNotIn: [String!] = null
+    ) {
+      ${this.envDB} {
+        evm_transaction(
+          where: {
+            erc721_activities: {
+              _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }]
+              action: { _in: $actionIn, _nin: $actionNotIn }
+              erc721_contract: { name: { _neq: $neqCw4973 } }
+            }
+            transaction: {
+              timestamp: { _gte: $startTime, _lte: $endTime }
+            }
+            _and: { height: { _gt: $heightGT, _lt: $heightLT } }
+          }
+          order_by: [{ id: desc }, {height: desc}]
+          limit: $limit
+        ) {
+          gas_used: gas
+          hash
+          height
+          value
+          transaction {
+            timestamp
+          }
+          transaction_messages: transaction_message {
+            content
+            type
+          }
+          transaction_message {
+            content
+            type
+          }
+          cw721_activities: erc721_activities(
+            where: { _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }] }
+          ) {
+            action
+            from
+            to
+            sender
+            cw721_token: erc721_token {
+              token_id
+            }
+            cw721_contract: erc721_contract {
+              smart_contract: evm_smart_contract {
+                address
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          sender: payload.sender?.toLowerCase(),
+          receiver: payload.receiver?.toLowerCase(),
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+          heightLT: payload.heightLT,
+          actionIn: ERC721_TRACKING,
+          actionNotIn: null, //  ['approve', 'instantiate', 'revoke']
+          limit: payload.limit,
+          neqCw4973: 'crates.io:cw4973',
+        },
+        operationName: 'QueryERC721ListTX',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
