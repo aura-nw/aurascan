@@ -16,8 +16,7 @@ import {
   PAGE_EVENT,
   TIMEOUT_ERROR,
 } from 'src/app/core/constants/common.constant';
-import { TYPE_CW4973 } from 'src/app/core/constants/contract.constant';
-import { ContractRegisterType, ContractVerifyType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { ContractVerifyType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { CodeTransaction, ModeExecuteTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
@@ -30,7 +29,6 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile, getTypeTx } from 'src/app/core/utils/common/info-common';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
 import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { EvmPopupShareComponent } from './evm-popup-share/evm-popup-share.component';
@@ -95,6 +93,7 @@ export class EvmNFTDetailComponent implements OnInit {
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   network = this.environmentService.chainInfo;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  smartContractList = [];
 
   constructor(
     public commonService: CommonService,
@@ -109,7 +108,7 @@ export class EvmNFTDetailComponent implements OnInit {
     public translate: TranslateService,
     private layout: BreakpointObserver,
     private tokenService: TokenService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
   ) {
     this.breakpoint$.subscribe((state) => {
       if (state) {
@@ -182,8 +181,6 @@ export class EvmNFTDetailComponent implements OnInit {
         if (!this.imageUrl) {
           this.imageUrl = this.nftDetail?.media_info?.onchain?.metadata?.image;
         }
-
-
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
@@ -232,6 +229,26 @@ export class EvmNFTDetailComponent implements OnInit {
           );
         }),
       )
+      .pipe(
+        switchMap((res) => {
+          let listAddr = [];
+          res.forEach((element) => {
+            if (element.from) {
+              listAddr.push(element.from);
+            }
+            if (element.to) {
+              listAddr.push(element.to);
+            }
+          });
+          const listAddrUnique = _.uniq(listAddr);
+          return this.contractService.findEvmContractList(listAddrUnique).pipe(
+            map((r) => {
+              this.smartContractList = _.uniq((r?.evm_smart_contract || []).map((i) => i?.address));
+              return res;
+            }),
+          );
+        }),
+      )
       .subscribe({
         next: (res) => {
           if (res) {
@@ -243,7 +260,9 @@ export class EvmNFTDetailComponent implements OnInit {
               element['token_id'] = element.erc721_token.token_id;
               element['timestamp'] = element.evm_transaction.transaction.timestamp;
               element['status'] =
-                element.evm_transaction.transaction.code == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+                element.evm_transaction.transaction.code == CodeTransaction.Success
+                  ? StatusTransaction.Success
+                  : StatusTransaction.Fail;
               element['type'] = element?.type;
               // if (
               //   element['action'] === ModeExecuteTransaction.Approve ||
@@ -373,5 +392,9 @@ export class EvmNFTDetailComponent implements OnInit {
 
   decodeData(data) {
     return decodeURIComponent(data);
+  }
+
+  isEvmSmartContract(addr) {
+    return this.smartContractList.filter((i) => i === addr).length > 0;
   }
 }
