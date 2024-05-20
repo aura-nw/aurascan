@@ -58,10 +58,21 @@ export class EvmTokenOverviewComponent implements OnInit {
     });
   }
 
+  getHolderNFT() {
+    const payload = {
+      limit: 100,
+      contractAddress: this.tokenDetail?.contract_address,
+    };
+    this.tokenService.getListTokenHolderErc721(payload).subscribe((res) => {
+      this.tokenDetail['holder'] = res.view_count_holder_erc721_aggregate?.aggregate?.count || 0;
+    });
+  }
+
   getDataDetail() {
     if (this.tokenDetail.modeToken === EModeEvmToken.ERCToken) {
       if (this.tokenDetail?.type === EvmContractRegisterType.ERC721) {
         this.getTotalSupply();
+        this.getHolderNFT();
       }
     }
   }
