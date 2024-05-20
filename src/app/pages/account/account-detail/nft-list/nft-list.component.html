@@ -9,15 +9,15 @@
         <div class="button-switch-stage button-fixed mt-lg-0">
           <button
             class="button button-switch-stage-nft body-04"
-            (click)="changeType(typeTokeList.CW721)"
-            [class.active]="typeToken === typeTokeList.CW721">
-            CW721
-          </button>
-          <button
-            class="button button-switch-stage-nft body-04"
             (click)="changeType(typeTokeList.ERC721)"
             [class.active]="typeToken === typeTokeList.ERC721">
             ERC721
+          </button>
+          <button
+            class="button button-switch-stage-nft body-04"
+            (click)="changeType(typeTokeList.CW721)"
+            [class.active]="typeToken === typeTokeList.CW721">
+            CW721
           </button>
         </div>
       </div>

@@ -44,7 +44,7 @@ export class NonFungibleTokensComponent implements OnInit {
   destroy$ = new Subject<void>();
   isLoading = true;
   errTxt: string;
-  filterBy = 'CW721';
+  filterBy = 'ERC721';
 
   constructor(
     public translate: TranslateService,
@@ -84,7 +84,7 @@ export class NonFungibleTokensComponent implements OnInit {
       keySearch = addressNameTag;
     }
 
-    if(this.filterBy === 'ERC721'){
+    if (this.filterBy === 'ERC721') {
       this.tokenService.getListErc721Token(payload, keySearch).subscribe({
         next: (res) => {
           this.dataSource = new MatTableDataSource<any>(res.list_token);
@@ -102,8 +102,7 @@ export class NonFungibleTokensComponent implements OnInit {
           this.isLoading = false;
         },
       });
-    }
-    else if (this.filterBy === 'CW721'){
+    } else if (this.filterBy === 'CW721') {
       this.tokenService.getListCW721Token(payload, keySearch).subscribe({
         next: (res) => {
           this.dataSource = new MatTableDataSource<any>(res.list_token);
@@ -122,7 +121,6 @@ export class NonFungibleTokensComponent implements OnInit {
         },
       });
     }
-
   }
 
   onKeyUp() {

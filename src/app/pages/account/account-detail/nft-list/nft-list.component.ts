@@ -35,7 +35,7 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   totalValue = 0;
   textSearch = '';
   searchNotFound = false;
-  typeToken = ETokenNFTTypeBE.CW721 as string;
+  typeToken = ETokenNFTTypeBE.ERC721 as string;
   typeTokeList = ETokenNFTTypeBE;
   listCollection = [
     {
