@@ -27,8 +27,10 @@
               </span>
             </span>
           </div>
-          <button [routerLink]="['/address/', ng.wallet?.address] "
-            class="button button-pill button--xs button-outline button-outline__in-card" *ngIf="ng.wallet?.address && !ng.wallet?.cosmosAccount">
+          <button
+            [routerLink]="['/address/', ng.wallet?.address]"
+            class="button button-pill button--xs button-outline button-outline__in-card"
+            *ngIf="ng.wallet?.address && !ng.wallet?.cosmosAccount">
             <span class="icon-connect connected"></span>
             <span class="text--gray-1">Connected to Web3</span>
           </button>
@@ -128,7 +130,9 @@
             </ng-container>
 
             <div class="px-0">
-              <div  class="text-sm text--danger mt-2 mb-4 fw-normal" *ngIf="jsonFragment.error && jsonFragment.error.code === 'INVALID_ARGUMENT'"> 
+              <div
+                class="text-sm text--danger mt-2 mb-4 fw-normal"
+                *ngIf="jsonFragment.error && jsonFragment.error.code === 'INVALID_ARGUMENT'">
                 {{ jsonFragment.error.message }}
               </div>
               <button
@@ -148,14 +152,18 @@
               </button>
             </div>
 
-            <div class="box-error-message mt-4 d-flex align-items-center w-fit-content text-sm" *ngIf="jsonFragment.error && jsonFragment.error.code !== 'INVALID_ARGUMENT'">
+            <div
+              class="box-error-message mt-4 d-flex align-items-center w-fit-content text-sm"
+              *ngIf="jsonFragment.error && jsonFragment.error.code !== 'INVALID_ARGUMENT'">
               <img
                 [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
                 alt=""
                 class="mr-2"
                 width="16px"
                 height="16px" />
-              {{ jsonFragment.error.message }}
+              <div class="w-100 pr-4">
+                {{ jsonFragment.error.message }}
+              </div>
             </div>
 
             <div class="px-0">
