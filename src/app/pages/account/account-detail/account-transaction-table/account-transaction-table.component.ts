@@ -416,7 +416,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           }
         }
         this.templates.push({ matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 17, cssClass: 'pt-0' });
-        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         if (payload['sender']) {
           this.getListFTByAddress(payload);
@@ -442,7 +441,6 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         }
         this.templates = [...this.templatesToken];
         this.templates.push({ matColumnDef: 'nft', headerCellDef: 'NFT', headerWidth: 18, cssClass: 'pt-1' });
-        this.templates.push({ matColumnDef: 'tokenType', headerCellDef: 'Type', headerWidth: 8, cssClass: 'pt-4' });
         this.displayedColumns = this.templates.map((dta) => dta.matColumnDef);
         payload['limit'] = 100;
         this.getListNFTByAddress(payload);

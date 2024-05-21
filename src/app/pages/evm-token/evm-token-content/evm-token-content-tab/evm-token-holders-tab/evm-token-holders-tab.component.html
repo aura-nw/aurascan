@@ -39,15 +39,12 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'owner'">
                     <app-name-tag
-                      [iconContract]="data[template.matColumnDef] | isContract"
+                      [iconContract]="isEvmSmartContract(data[template.matColumnDef])"
                       [value]="data[template.matColumnDef]"
                       [fullText]="true"
                       [fullTextMob]="true"
                       [tooltipPosition]="'tooltip--right'"
-                      [linkRouter]="[
-                        this.typeContract && this.typeContract !== contractType.ERC20 ? '/nft' : '/token',
-                        linkAddress
-                      ]"
+                      [linkRouter]="['/token', linkAddress]"
                       [linkParams]="{ a: data[template.matColumnDef] }">
                     </app-name-tag>
                   </ng-container>
