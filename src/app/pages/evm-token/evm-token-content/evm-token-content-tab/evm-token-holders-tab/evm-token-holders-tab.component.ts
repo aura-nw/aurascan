@@ -3,7 +3,7 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute } from '@angular/router';
 import BigNumber from 'bignumber.js';
-import { map } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EModeEvmToken } from 'src/app/core/constants/token.enum';
@@ -11,6 +11,8 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { ContractService } from '../../../../../core/services/contract.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-evm-token-holders-tab',
@@ -60,14 +62,18 @@ export class EvmTokenHoldersTabComponent implements OnInit {
 
   chainInfo = this.environmentService.chainInfo;
 
+  smartContractList: string[];
+
   constructor(
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public commonService: CommonService,
     private route: ActivatedRoute,
+    private contractService: ContractService,
   ) { }
 
   ngOnInit(): void {
+    console.log("typeContract", this.typeContract);
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.getListData();
 
@@ -188,7 +194,25 @@ export class EvmTokenHoldersTabComponent implements OnInit {
       offset: this.pageData.pageSize * this.pageData.pageIndex,
       contractAddress: this.contractAddress,
     };
-    this.tokenService.getListTokenHolderErc721(payload).subscribe({
+    this.tokenService.getListTokenHolderErc721(payload).pipe(
+      switchMap((res) => {
+        let listAddr = []
+        res?.view_count_holder_erc721.forEach((element) => {
+          if (element.owner) {
+            listAddr.push(element.from)
+          }
+        });
+        const listAddrUnique = _.uniq(listAddr);
+        return this.contractService.findEvmContractList(listAddrUnique).pipe(
+          map((r) => {
+            this.smartContractList = _.uniq((r?.evm_smart_contract || []).map(i => i?.address));
+            return res
+          }),
+        );
+      }
+      ),
+    )   
+    .subscribe({
       next: (res) => {
         if (res?.view_count_holder_erc721?.length > 0) {
           this.totalHolder = res.view_count_holder_erc721_aggregate?.aggregate?.count;
@@ -229,5 +253,9 @@ export class EvmTokenHoldersTabComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  isEvmSmartContract(addr) {
+    return this.smartContractList.filter(i => i === addr).length > 0;
   }
 }
