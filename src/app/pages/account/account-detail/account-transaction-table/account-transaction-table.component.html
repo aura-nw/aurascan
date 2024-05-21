@@ -704,24 +704,6 @@
                         </div>
                       </ng-container>
                     </div>
-                    <div *ngSwitchCase="'tokenType'">
-                      <button
-                        *ngIf="modeQuery === tabsData.FtsTxs"
-                        class="button button-pill button-outline button-label caption cursor-pointer"
-                        [routerLink]="fungibleTokenType === tokenType.ERC20 ? ['/tx', data['tx_hash']] : null">
-                        <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
-                          {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
-                        </span>
-                      </button>
-                      <button
-                        *ngIf="modeQuery === tabsData.NftTxs"
-                        class="button button-pill button-outline button-label caption cursor-pointer"
-                        [routerLink]="nonFungibleTokenType === nftType.ERC721 ? ['/tx', data['tx_hash']] : null">
-                        <span class="{{ nonFungibleTokenType === nftType.ERC721 ? 'text--primary' : 'text--gray-2' }}">
-                          {{ nonFungibleTokenType === nftType.ERC721 ? 'ERC721' : 'CW721' }}
-                        </span>
-                      </button>
-                    </div>
                     <div *ngSwitchCase="'method'">
                       {{ data.method }}
                     </div>

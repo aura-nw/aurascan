@@ -211,8 +211,8 @@ export class EvmTokenContentComponent implements OnInit {
       token_id: null,
     };
 
-    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
-      this.infoSearch['balance'] = res.cw721_token_aggregate?.aggregate?.count || 0;
+    this.tokenService.getListTokenNFTErc721(payload).subscribe((res) => {
+      this.infoSearch['balance'] = res.erc721_token_aggregate?.aggregate?.count || 0;
     });
   }
 
