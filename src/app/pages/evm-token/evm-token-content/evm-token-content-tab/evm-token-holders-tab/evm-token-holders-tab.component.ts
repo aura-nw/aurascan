@@ -61,8 +61,7 @@ export class EvmTokenHoldersTabComponent implements OnInit {
   countTotal = 0;
 
   chainInfo = this.environmentService.chainInfo;
-
-  smartContractList: string[];
+  smartContractList: string[] = [];
 
   constructor(
     private tokenService: TokenService,
@@ -70,10 +69,9 @@ export class EvmTokenHoldersTabComponent implements OnInit {
     public commonService: CommonService,
     private route: ActivatedRoute,
     private contractService: ContractService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    console.log("typeContract", this.typeContract);
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     this.getListData();
 
@@ -87,7 +85,6 @@ export class EvmTokenHoldersTabComponent implements OnInit {
     } else {
       this.getDenomHolder();
     }
-
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -100,7 +97,6 @@ export class EvmTokenHoldersTabComponent implements OnInit {
       result = this.ERC721Templates;
     }
     return result;
-
   }
 
   paginatorEmit(event): void {
@@ -138,8 +134,8 @@ export class EvmTokenHoldersTabComponent implements OnInit {
               item.percent_hold =
                 +this.tokenDetail?.total_supply > 0
                   ? BigNumber(item.balance)
-                    .dividedBy(BigNumber(this.tokenDetail?.total_supply))
-                    .multipliedBy(100)
+                      .dividedBy(BigNumber(this.tokenDetail?.total_supply))
+                      .multipliedBy(100)
                   : 0;
               item.value =
                 BigNumber(item.balance)
@@ -172,7 +168,7 @@ export class EvmTokenHoldersTabComponent implements OnInit {
   }
 
   getTotalSupply() {
-    if(this.tokenDetail.num_tokens) return;
+    if (this.tokenDetail.num_tokens) return;
     this.tokenService.countTotalTokenERC721(this.contractAddress).subscribe((res) => {
       this.tokenDetail.num_tokens = res.erc721_token_aggregate?.aggregate?.count || 0;
     });
@@ -185,7 +181,7 @@ export class EvmTokenHoldersTabComponent implements OnInit {
     try {
       this.getTotalSupply();
       this.getHolderNFT();
-    } catch (error) { }
+    } catch (error) {}
   }
 
   getHolderNFT() {
@@ -194,68 +190,70 @@ export class EvmTokenHoldersTabComponent implements OnInit {
       offset: this.pageData.pageSize * this.pageData.pageIndex,
       contractAddress: this.contractAddress,
     };
-    this.tokenService.getListTokenHolderErc721(payload).pipe(
-      switchMap((res) => {
-        let listAddr = []
-        res?.view_count_holder_erc721.forEach((element) => {
-          if (element.owner) {
-            listAddr.push(element.from)
-          }
-        });
-        const listAddrUnique = _.uniq(listAddr);
-        return this.contractService.findEvmContractList(listAddrUnique).pipe(
-          map((r) => {
-            this.smartContractList = _.uniq((r?.evm_smart_contract || []).map(i => i?.address));
-            return res
-          }),
-        );
-      }
-      ),
-    )   
-    .subscribe({
-      next: (res) => {
-        if (res?.view_count_holder_erc721?.length > 0) {
-          this.totalHolder = res.view_count_holder_erc721_aggregate?.aggregate?.count;
-          if (this.totalHolder > this.numberTopHolder) {
-            this.pageData.length = this.numberTopHolder;
-          } else {
-            this.pageData.length = this.totalHolder;
-          }
-
+    this.tokenService
+      .getListTokenHolderErc721(payload)
+      .pipe(
+        switchMap((res) => {
+          let listAddr = [];
           res?.view_count_holder_erc721.forEach((element) => {
-            element['quantity'] = element.count;
+            if (element.owner) {
+              listAddr.push(element.from);
+            }
           });
+          const listAddrUnique = _.uniq(listAddr);
+          return this.contractService.findEvmContractList(listAddrUnique).pipe(
+            map((r) => {
+              this.smartContractList = _.uniq((r?.evm_smart_contract || []).map((i) => i?.address));
+              return res;
+            }),
+          );
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res?.view_count_holder_erc721?.length > 0) {
+            this.totalHolder = res.view_count_holder_erc721_aggregate?.aggregate?.count;
+            if (this.totalHolder > this.numberTopHolder) {
+              this.pageData.length = this.numberTopHolder;
+            } else {
+              this.pageData.length = this.totalHolder;
+            }
 
-          let topHolder = Math.max(...res?.view_count_holder_erc721.map((o) => o.quantity)) || 1;
-          this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
-          res?.view_count_holder_erc721.forEach((element) => {
-            element['value'] = 0;
-          });
-
-          if (this.tokenDetail.num_tokens) {
-            res?.view_count_holder_erc721.forEach((k) => {
-              k['percent_hold'] = (k.quantity / this.tokenDetail.num_tokens) * 100;
-              k['width_chart'] = (k.quantity / this.tokenDetail.num_tokens) * 100;
+            res?.view_count_holder_erc721.forEach((element) => {
+              element['quantity'] = element.count;
             });
+
+            let topHolder = Math.max(...res?.view_count_holder_erc721.map((o) => o.quantity)) || 1;
+            this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
+            res?.view_count_holder_erc721.forEach((element) => {
+              element['value'] = 0;
+            });
+
+            if (this.tokenDetail.num_tokens) {
+              res?.view_count_holder_erc721.forEach((k) => {
+                k['percent_hold'] = (k.quantity / this.tokenDetail.num_tokens) * 100;
+                k['width_chart'] = (k.quantity / this.tokenDetail.num_tokens) * 100;
+              });
+            }
+            this.dataSource = new MatTableDataSource<any>(res.view_count_holder_erc721);
           }
-          this.dataSource = new MatTableDataSource<any>(res.view_count_holder_erc721);
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 
   isEvmSmartContract(addr) {
-    return this.smartContractList.filter(i => i === addr).length > 0;
+    return this.smartContractList.filter((i) => i === addr).length > 0;
   }
 }
+
