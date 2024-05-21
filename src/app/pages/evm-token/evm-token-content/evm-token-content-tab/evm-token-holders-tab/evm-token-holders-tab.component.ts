@@ -232,7 +232,7 @@ export class EvmTokenHoldersTabComponent implements OnInit {
             if (this.tokenDetail.num_tokens) {
               res?.view_count_holder_erc721.forEach((k) => {
                 k['percent_hold'] = (k.quantity / this.tokenDetail.num_tokens) * 100;
-                k['width_chart'] = (k.quantity / this.tokenDetail.num_tokens) * 100;
+                k['width_chart'] = (k.quantity / this.numberTop) * 100;
               });
             }
             this.dataSource = new MatTableDataSource<any>(res.view_count_holder_erc721);

@@ -356,7 +356,6 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-
   getListTokenHolder(limit: string | number, offset: string | number, contractAddress: string): Observable<any> {
     const operationsDoc = `query queryCW20ListHolder($address: String, $limit: Int, $offset: Int) {
       ${this.envDB} {
@@ -426,7 +425,7 @@ export class TokenService extends CommonService {
         view_count_holder_erc721(
           limit: $limit
           offset: $offset
-          where: {erc721_contract_address: {_eq: $contract_address}}
+          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_nilike: "0x000000000%"}}
           order_by: {count: desc}
         ) {
           count
@@ -434,7 +433,7 @@ export class TokenService extends CommonService {
           owner
         }
         view_count_holder_erc721_aggregate(
-          where: {erc721_contract_address: {_eq: $contract_address}}
+          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_nilike: "0x000000000%"}}
         ) {
           aggregate {
             count
@@ -618,7 +617,6 @@ export class TokenService extends CommonService {
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
-
 
   getCW20Transfer(payload): Observable<any> {
     const operationsDoc = `query queryListTxsCW20(
@@ -896,7 +894,6 @@ export class TokenService extends CommonService {
       }
     }
     `;
-
 
     return this.http
       .post<any>(this.graphUrl, {
