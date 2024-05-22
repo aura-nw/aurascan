@@ -182,7 +182,7 @@ export class AccountService extends CommonService {
   }
 
   getAssetERC721ByOwner(payload): Observable<any> {
-    if (payload.keyword?.length >= LENGTH_CHARACTER.ADDRESS) {
+    if (payload.keyword?.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
       payload.contractAddress = payload.keyword;
     } else if (payload.keyword?.length > 0) {
       payload.token_id = payload.keyword;
