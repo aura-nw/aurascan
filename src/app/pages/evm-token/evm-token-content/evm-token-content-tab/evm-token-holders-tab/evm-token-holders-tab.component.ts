@@ -197,7 +197,7 @@ export class EvmTokenHoldersTabComponent implements OnInit {
           let listAddr = [];
           res?.view_count_holder_erc721.forEach((element) => {
             if (element.owner) {
-              listAddr.push(element.from);
+              listAddr.push(element.owner);
             }
           });
           const listAddrUnique = _.uniq(listAddr);
