@@ -191,7 +191,11 @@ export class TransactionService extends CommonService {
     const operationsDoc = `
     query QueryEvmTxOfContract( $limit: Int = null, $address: String = null) {
       ${this.envDB} {
-        evm_transaction(where: {evm_events: {address: {_eq: $address}}}, limit: $limit, order_by: {id: desc}) {
+        evm_transaction(
+          where: {_or: [{to: {_eq: $address}}, {evm_events: {address: {_eq: $address}}}]}
+          limit: $limit
+          order_by: {id: desc}
+        ) {
           from
           to
           hash
