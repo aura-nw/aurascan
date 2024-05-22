@@ -142,12 +142,10 @@ export class TokenService extends CommonService {
 
   getListErc721Token(payload, textSearch: string = null): Observable<any> {
     let queryUpdate = '';
-    if (this.commonService.isValidContract(textSearch)) {
-      queryUpdate = 'erc721_contract: {evm_smart_contract: {address: {_eq:' + textSearch + '}}}';
-    } else if (textSearch?.length > 0) {
-      textSearch = `"%` + textSearch + `%"`;
-      queryUpdate = 'erc721_contract: {name: {_ilike:' + textSearch + '}}';
+    if (textSearch?.length > 0) {
+      queryUpdate = `erc721_contract: { _or: [{name: {_ilike: "%${textSearch}%"}} ,  {evm_smart_contract: {address: {_eq: "${textSearch}" }}}]}`;
     }
+
     let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
     const operationsDoc = `
     query queryListErc721($limit: Int = 10, $offset: Int = 0) {
