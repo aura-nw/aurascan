@@ -203,7 +203,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
           return this.contractService.findEvmContractList(listAddrUnique).pipe(
             map((r) => {
               this.smartContractList = _.uniq((r?.evm_smart_contract || []).map((i) => i?.address));
-              return { listTokens: res };
+              return res;
             }),
           );
         }),
@@ -212,15 +212,14 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
         next: (res) => {
           if (res) {
             this.nextKey = null;
-            const listToken = res?.listTokens;
-            if (listToken?.length >= 100) {
-              this.nextKey = res[listToken.length - 1]['id'];
+            if (res?.length >= 100) {
+              this.nextKey = res[res.length - 1]['id'];
               this.hasMore.emit(true);
             } else {
               this.hasMore.emit(false);
             }
 
-            listToken.forEach((element) => {
+            res.forEach((element) => {
               element['tx_hash'] = element.evm_transaction.hash;
               element['from_address'] = element.from || NULL_ADDRESS;
               element['to_address'] = element.to || NULL_ADDRESS;
@@ -235,9 +234,9 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
             });
 
             if (this.dataSource.data.length > 0 && !isReload) {
-              this.dataSource.data = [...this.dataSource.data, ...listToken];
+              this.dataSource.data = [...this.dataSource.data, ...res];
             } else {
-              this.dataSource.data = [...listToken];
+              this.dataSource.data = [...res];
             }
 
             this.pageData.length = this.dataSource.data.length;
@@ -397,4 +396,3 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     return this.smartContractList.filter((i) => i === addr).length > 0;
   }
 }
-
