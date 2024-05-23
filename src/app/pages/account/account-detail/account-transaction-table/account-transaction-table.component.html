@@ -514,7 +514,8 @@
                                   ? [
                                       isEvmSmartContract(item.fromAddress || currentAddress)
                                         ? '/evm-contracts'
-                                        : '/address'
+                                        : '/address',
+                                      item.fromAddress || currentAddress
                                     ]
                                   : [
                                       (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
@@ -574,7 +575,8 @@
                                     ? [
                                         isEvmSmartContract(item.toAddress || currentAddress)
                                           ? '/evm-contracts'
-                                          : '/address'
+                                          : '/address',
+                                        item.toAddress || currentAddress
                                       ]
                                     : [
                                         (item.toAddress || currentAddress | isContract) ? '/contracts' : '/address',
