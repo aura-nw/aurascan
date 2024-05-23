@@ -18,8 +18,8 @@ import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/
 
 type Error = {
   code?: string;
-  message?: string
-}
+  message?: string;
+};
 type JsonFragmentExtends = JsonFragment & {
   formGroup?: FormGroup;
   isValidate?: boolean;
@@ -143,8 +143,12 @@ export class EvmWriteComponent implements OnChanges {
     const formControls = formGroup.controls;
 
     const listWithOutFund = extendedInputs?.filter((i) => i.name !== 'fund');
+    let paramsDes = [];
     const params = listWithOutFund?.map((i) => {
       const value = formControls[i.name].value?.trim();
+      if (i.type) {
+        paramsDes.push(i.type);
+      }
       return validateAndParsingInput(i, value); // TODO
     });
 
@@ -158,8 +162,10 @@ export class EvmWriteComponent implements OnChanges {
     jsonFragment.isLoading = true;
     jsonFragment.result = undefined;
     jsonFragment.error = undefined;
-    const x = await contract[name]?.estimateGas(...params).catch((e) => e);
-    contract[name]?.(...params, {
+
+    const nameContract = `${name}(${paramsDes.join(',')})`;
+    const x = await contract[nameContract]?.estimateGas(...params).catch((e) => e);
+    contract[nameContract]?.(...params, {
       gasLimit: Number(x) || 250_000,
       gasPrice: 1_000_0000,
       value: parseEther(fundAmount),
