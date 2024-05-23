@@ -43,8 +43,7 @@ const canMatchFn: CanMatchFn = (route, segments) => {
         if (!e) {
           return true; // Default, Show No Data screen
         }
-
-        const tr = router.createUrlTree(['/token', 'evm', e.type.toLowerCase(), address], {
+        const tr = router.createUrlTree(['/token', 'evm', e.type.toLowerCase(), address.toLowerCase()], {
           queryParams: currentQueryParams ? { ...currentQueryParams } : {},
         });
 

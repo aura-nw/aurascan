@@ -463,6 +463,7 @@ export class UserService {
           order_by: [{ id: desc }, {height: desc}]
           limit: $limit
         ) {
+          data,
           gas_used: gas
           hash
           height
@@ -478,18 +479,18 @@ export class UserService {
             content
             type
           }
-          cw721_activities: erc721_activities(
+          erc721_activities(
             where: { _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }] }
           ) {
             action
             from
             to
             sender
-            cw721_token: erc721_token {
+            erc721_token {
               token_id
             }
-            cw721_contract: erc721_contract {
-              smart_contract: evm_smart_contract {
+            erc721_contract {
+              evm_smart_contract {
                 address
               }
             }
