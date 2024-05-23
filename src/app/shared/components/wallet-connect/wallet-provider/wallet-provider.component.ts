@@ -105,7 +105,10 @@ export class WalletProviderComponent implements AfterViewInit {
 
           this.close();
         })
-        .catch(console.error);
+        .catch((_) => {
+          // catch if not installed metamask;
+          window.open(wallet?.downloadInfo, '_blank');
+        });
     }
   }
 
@@ -149,3 +152,4 @@ export class WalletProviderComponent implements AfterViewInit {
     this.onClose.emit(null);
   }
 }
+
