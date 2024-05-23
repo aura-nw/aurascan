@@ -508,11 +508,19 @@
                           <div class="item-show d-flex justify-content-between align-items-center">
                             <app-name-tag
                               [value]="item.fromAddress || currentAddress"
-                              [iconContract]="item.fromAddress || currentAddress | isContract"
-                              [linkRouter]="[
-                                (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
-                                item.fromAddress || currentAddress
-                              ]"
+                              [iconContract]="isEvmSmartContract(item.fromAddress || currentAddress)"
+                              [linkRouter]="
+                                nonFungibleTokenType === nftType.ERC721
+                                  ? [
+                                      isEvmSmartContract(item.fromAddress || currentAddress)
+                                        ? '/evm-contracts'
+                                        : '/address'
+                                    ]
+                                  : [
+                                      (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
+                                      item.fromAddress || currentAddress
+                                    ]
+                              "
                               [isEnableRouter]="
                                 !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                                 item.fromAddress !== currentAddress
@@ -560,11 +568,19 @@
                             <div [style]="'min-width: 148px'">
                               <app-name-tag
                                 [value]="item.toAddress || currentAddress"
-                                [linkRouter]="[
-                                  (item.toAddress || currentAddress | isContract) ? '/contracts' : '/address',
-                                  item.toAddress || currentAddress
-                                ]"
-                                [iconContract]="item.toAddress || currentAddress | isContract"
+                                [iconContract]="isEvmSmartContract(item.toAddress || currentAddress)"
+                                [linkRouter]="
+                                  nonFungibleTokenType === nftType.ERC721
+                                    ? [
+                                        isEvmSmartContract(item.toAddress || currentAddress)
+                                          ? '/evm-contracts'
+                                          : '/address'
+                                      ]
+                                    : [
+                                        (item.toAddress || currentAddress | isContract) ? '/contracts' : '/address',
+                                        item.toAddress || currentAddress
+                                      ]
+                                "
                                 [isEnableRouter]="
                                   !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                                   item.toAddress !== currentAddress
