@@ -79,7 +79,8 @@ export class NonFungibleTokensComponent implements OnInit {
     };
 
     let keySearch = this.textSearch;
-    const addressNameTag = this.nameTagService.findAddressByNameTag(keySearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(keySearch, this.filterBy === 'ERC721');
+
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
     }
