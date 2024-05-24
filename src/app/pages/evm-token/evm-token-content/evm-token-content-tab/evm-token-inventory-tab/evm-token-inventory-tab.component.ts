@@ -26,6 +26,7 @@ export class EvmTokenInventoryComponent implements OnInit {
   nftData = new MatTableDataSource<any>();
   contractAddress = '';
   keyWord = '';
+  searchToken = '';
   prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
   errTxt: string;
@@ -37,7 +38,7 @@ export class EvmTokenInventoryComponent implements OnInit {
     private environmentService: EnvironmentService,
     private router: Router,
     private layout: BreakpointObserver,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -46,6 +47,7 @@ export class EvmTokenInventoryComponent implements OnInit {
 
     this.route.queryParams.subscribe((params) => {
       this.keyWord = params?.a || '';
+      this.searchToken = params?.t;
     });
 
     this.getNftData();
@@ -60,12 +62,12 @@ export class EvmTokenInventoryComponent implements OnInit {
       token_id: null,
     };
 
-    if (this.keyWord) {
+    if (this.searchToken) {
+      payload['token_id'] = this.searchToken;
+    } else if (this.keyWord) {
       if (this.keyWord?.length >= LENGTH_CHARACTER.EVM_ADDRESS && this.keyWord?.startsWith(EWalletType.EVM)) {
         payload.owner = this.keyWord;
-      } else if (
-        !(this.keyWord?.length === LENGTH_CHARACTER.EVM_TRANSACTION)
-      ) {
+      } else if (!(this.keyWord?.length === LENGTH_CHARACTER.EVM_TRANSACTION)) {
         payload.token_id = this.keyWord;
       }
     }

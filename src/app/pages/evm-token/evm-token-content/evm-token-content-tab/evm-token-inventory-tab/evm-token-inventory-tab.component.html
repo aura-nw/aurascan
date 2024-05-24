@@ -25,7 +25,9 @@
                 <span class="small-text mr-1 text--gray-1">Token ID:</span>
                 <a
                   class="small-text text--primary hover-link"
-                  [routerLink]="['/token/evm/erc721', item.contract_address, encodeData(item.token_id)]">
+                  [routerLink]="['/token/evm/erc721', item.contract_address]"
+                  [queryParams]="{ t: encodeData(item.token_id) }">
+                  >
                   <span class="d-none d-lg-inline-block">{{ item.token_id | ellipsis: 8 : 8 }}</span>
                   <span class="d-inline-block d-lg-none">{{ item.token_id | ellipsis: 5 : 5 }}</span>
                 </a>
