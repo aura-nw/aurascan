@@ -77,7 +77,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   destroyed$ = new Subject<void>();
   linkAddress: string;
   addressNameTag = '';
-  searchToken: string;
+  searchToken = '';
   smartContractList: string[] = [];
 
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
