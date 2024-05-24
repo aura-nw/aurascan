@@ -75,7 +75,7 @@ export class NameTagService extends CommonService {
         tag = this.listNameTag?.find((k) => k.name_tag?.trim() === nameTag?.trim());
       }
 
-      if (nameTag) {
+      if (tag) {
         address = findEvmAddr ? tag?.evm_address : tag?.address;
       }
     }
