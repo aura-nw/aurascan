@@ -70,8 +70,7 @@ export class NameTagService extends CommonService {
       if (userEmail) {
         tag = this.listNameTag?.find((k) => k.name_tag_private?.trim() === nameTag?.trim());
       }
-
-      if (!address) {
+      if (!tag && !address) {
         tag = this.listNameTag?.find((k) => k.name_tag?.trim() === nameTag?.trim());
       }
 
