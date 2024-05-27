@@ -119,6 +119,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }).subscribe(({ publicName, privateName }) => {
         const listNameTag = publicName.data?.nameTags?.map((element) => {
           const address = _.get(element, 'address');
+          const evm_address = _.get(element, 'evm_address');
           const name_tag = _.get(element, 'name_tag');
           const enterpriseUrl = _.get(element, 'enterpriseUrl');
 
@@ -133,7 +134,7 @@ export class AppComponent implements OnInit, OnDestroy {
             isPrivate = true;
             id = privateData.id;
           }
-          return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
+          return { address, evm_address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
         });
 
         // get other data of private list
