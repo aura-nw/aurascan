@@ -66,7 +66,7 @@ export class NameTagService extends CommonService {
 
     let address = '';
     if (this.listNameTag?.length > 0) {
-      let tag: any = {};
+      let tag = undefined;
       if (userEmail) {
         tag = this.listNameTag?.find((k) => k.name_tag_private?.trim() === nameTag?.trim());
       }
