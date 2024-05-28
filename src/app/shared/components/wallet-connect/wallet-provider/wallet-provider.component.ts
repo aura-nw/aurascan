@@ -105,8 +105,10 @@ export class WalletProviderComponent implements AfterViewInit {
 
           this.close();
         })
-        .catch((_) => {
-          // catch if not installed metamask;
+        .catch((error) => {
+          // catch if installed metamask but it's need to handle login
+          if (error?.code) return;
+          // catch if not installed metamask
           window.open(wallet?.downloadInfo, '_blank');
         });
     }
