@@ -35,7 +35,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   noneNFTTemplates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true, headerWidth: 230 },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true, headerWidth: 170 },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
+    // { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 150 },
     { matColumnDef: 'from_address', headerCellDef: 'From', headerWidth: 250 },
     { matColumnDef: 'to_address', headerCellDef: 'To', headerWidth: 180 },
@@ -45,7 +45,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
   NFTTemplates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true, headerWidth: 230 },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true, headerWidth: 170 },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
+    // { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 150 },
     { matColumnDef: 'from_address', headerCellDef: 'From', headerWidth: 250 },
     { matColumnDef: 'to_address', headerCellDef: 'To', headerWidth: 180 },
