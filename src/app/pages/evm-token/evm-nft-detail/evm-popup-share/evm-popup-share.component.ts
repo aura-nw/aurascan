@@ -32,8 +32,8 @@ export class EvmPopupShareComponent implements OnInit {
       '';
   }
 
-  closeDialog(isConfirm = false) {
-    this.dialogRef.close(isConfirm);
+  closeDialog() {
+    this.dialogRef.close(true);
   }
 
   executeShareLink(mode) {
@@ -73,3 +73,4 @@ export class EvmPopupShareComponent implements OnInit {
     document.getElementById(item).classList.remove('icon--multi-color');
   }
 }
+
