@@ -88,6 +88,8 @@
       "networkId": 1236,
       "slip44": 1,
       "icon": "",
+      "stakeContract": "0x0000000000000000000000000000000000000800",
+      "claimContract": "0x0000000000000000000000000000000000000801",
       "explorers": [
         {
           "name": "Aura Explorer (Aurascan)",
