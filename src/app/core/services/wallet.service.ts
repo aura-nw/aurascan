@@ -339,6 +339,10 @@ export class WalletService implements OnDestroy {
     return null;
   }
 
+  getCosmosAccountOnly() {
+    return this.walletAccount; 
+  }
+
   getEvmAccount() {
     const account = this.walletAccount;
 
