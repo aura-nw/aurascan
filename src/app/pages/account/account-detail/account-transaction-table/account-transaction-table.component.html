@@ -385,7 +385,6 @@
               <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
-
               <td
                 mat-cell
                 *matCellDef="let data; let idx = index"
@@ -509,11 +508,20 @@
                           <div class="item-show d-flex justify-content-between align-items-center">
                             <app-name-tag
                               [value]="item.fromAddress || currentAddress"
-                              [iconContract]="item.fromAddress || currentAddress | isContract"
-                              [linkRouter]="[
-                                (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
-                                item.fromAddress || currentAddress
-                              ]"
+                              [iconContract]="isEvmSmartContract(item.fromAddress || currentAddress)"
+                              [linkRouter]="
+                                nonFungibleTokenType === nftType.ERC721
+                                  ? [
+                                      isEvmSmartContract(item.fromAddress || currentAddress)
+                                        ? '/evm-contracts'
+                                        : '/address',
+                                      item.fromAddress || currentAddress
+                                    ]
+                                  : [
+                                      (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
+                                      item.fromAddress || currentAddress
+                                    ]
+                              "
                               [isEnableRouter]="
                                 !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                                 item.fromAddress !== currentAddress
@@ -561,11 +569,20 @@
                             <div [style]="'min-width: 148px'">
                               <app-name-tag
                                 [value]="item.toAddress || currentAddress"
-                                [linkRouter]="[
-                                  (item.toAddress || currentAddress | isContract) ? '/contracts' : '/address',
-                                  item.toAddress || currentAddress
-                                ]"
-                                [iconContract]="item.toAddress || currentAddress | isContract"
+                                [iconContract]="isEvmSmartContract(item.toAddress || currentAddress)"
+                                [linkRouter]="
+                                  nonFungibleTokenType === nftType.ERC721
+                                    ? [
+                                        isEvmSmartContract(item.toAddress || currentAddress)
+                                          ? '/evm-contracts'
+                                          : '/address',
+                                        item.toAddress || currentAddress
+                                      ]
+                                    : [
+                                        (item.toAddress || currentAddress | isContract) ? '/contracts' : '/address',
+                                        item.toAddress || currentAddress
+                                      ]
+                                "
                                 [isEnableRouter]="
                                   !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
                                   item.toAddress !== currentAddress
@@ -705,24 +722,6 @@
                         </div>
                       </ng-container>
                     </div>
-                    <div *ngSwitchCase="'tokenType'">
-                      <button
-                        *ngIf="modeQuery === tabsData.FtsTxs"
-                        class="button button-pill button-outline button-label caption cursor-pointer"
-                        [routerLink]="fungibleTokenType === tokenType.ERC20 ? ['/tx', data['tx_hash']] : null">
-                        <span class="{{ fungibleTokenType === tokenType.ERC20 ? 'text--primary' : 'text--gray-2' }}">
-                          {{ fungibleTokenType === tokenType.ERC20 ? 'ERC20' : 'CW20' }}
-                        </span>
-                      </button>
-                      <button
-                        *ngIf="modeQuery === tabsData.NftTxs"
-                        class="button button-pill button-outline button-label caption cursor-pointer"
-                        [routerLink]="nonFungibleTokenType === nftType.ERC721 ? ['/tx', data['tx_hash']] : null">
-                        <span class="{{ nonFungibleTokenType === nftType.ERC721 ? 'text--primary' : 'text--gray-2' }}">
-                          {{ nonFungibleTokenType === nftType.ERC721 ? 'ERC721' : 'CW721' }}
-                        </span>
-                      </button>
-                    </div>
                     <div *ngSwitchCase="'method'">
                       {{ data.method }}
                     </div>
@@ -767,7 +766,14 @@
                           <div class="item-show d-flex nft-column mb-2 justify-content-center">
                             <div class="justify-content-between tokenId">
                               <a
-                                *ngIf="item.tokenId"
+                                *ngIf="item.tokenId && nonFungibleTokenType === nftType.ERC721"
+                                [routerLink]="['/token/evm/erc721', data.contractAddress, encodeData(item.tokenId)]"
+                                [copyBtn]="item.tokenId"
+                                class="text--primary cursor-pointer">
+                                #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
+                              </a>
+                              <a
+                                *ngIf="item.tokenId && nonFungibleTokenType === nftType.CW721"
                                 [routerLink]="['/token/cw721', data.contractAddress, encodeData(item.tokenId)]"
                                 [copyBtn]="item.tokenId"
                                 class="text--primary cursor-pointer">
@@ -777,6 +783,14 @@
                             </div>
                             <div class="mt-1">
                               <app-name-tag
+                                *ngIf="nonFungibleTokenType === nftType.ERC721"
+                                [iconContract]="true"
+                                [linkRouter]="['/evm-contracts', item.contractAddress || currentAddress]"
+                                [isShorterText]="true"
+                                [value]="item.contractAddress"
+                                [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                              <app-name-tag
+                                *ngIf="nonFungibleTokenType === nftType.CW721"
                                 [iconContract]="true"
                                 [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
                                 [isShorterText]="true"

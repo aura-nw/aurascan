@@ -262,10 +262,10 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, coinDec
     const lstTypeTemp = _.get(element, 'transaction_messages');
     let type;
     if (lstTypeTemp) {
-      if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.GetReward) {
+      if (lstTypeTemp[0]?.['type'] === TRANSACTION_TYPE_ENUM.GetReward) {
         type = TypeTransaction.GetReward;
       } else if (lstTypeTemp?.length > 1) {
-        if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+        if (lstTypeTemp[0]?.['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
           type = TypeTransaction.MultiSend;
         } else {
           type = 'Multiple';
@@ -348,19 +348,31 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, coinDec
         });
         break;
       case TabsAccountLink.NftTxs:
-        arrEvent = _.get(element, 'cw721_activities')?.map((item, index) => {
-          let { type, action } = getTypeTx(element);
-          let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
-          let toAddress = _.get(item, 'to') || _.get(item, 'cw721_contract.smart_contract.address') || NULL_ADDRESS;
-          if (action === 'burn') {
-            toAddress = NULL_ADDRESS;
-          }
+        if (element?.cw721_activities) {
+          arrEvent = _.get(element, 'cw721_activities')?.map((item) => {
+            let { type, action } = getTypeTx(element);
+            let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
+            let toAddress = _.get(item, 'to') || _.get(item, 'cw721_contract.smart_contract.address') || NULL_ADDRESS;
+            if (action === 'burn') {
+              toAddress = NULL_ADDRESS;
+            }
 
-          let contractAddress = _.get(item, 'cw721_contract.smart_contract.address');
-          let tokenId = _.get(item, 'cw721_token.token_id');
-          let eventAttr = element.event_attribute_index;
-          return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
-        });
+            let contractAddress = _.get(item, 'cw721_contract.smart_contract.address');
+            let tokenId = _.get(item, 'cw721_token.token_id');
+            let eventAttr = element.event_attribute_index;
+            return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
+          });
+        } else if (element?.erc721_activities) {
+          arrEvent = _.get(element, 'erc721_activities')?.map((item) => {
+            let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
+            let toAddress =
+              _.get(item, 'to') || _.get(item, 'erc721_contract.evm_smart_contract.address') || NULL_ADDRESS;
+            type = element?.type;
+            let contractAddress = _.get(item, 'erc721_contract.evm_smart_contract.address');
+            let tokenId = _.get(item, 'erc721_token.token_id');
+            return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
+          });
+        }
         break;
     }
 

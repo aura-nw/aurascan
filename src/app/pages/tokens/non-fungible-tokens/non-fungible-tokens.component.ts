@@ -44,6 +44,7 @@ export class NonFungibleTokensComponent implements OnInit {
   destroy$ = new Subject<void>();
   isLoading = true;
   errTxt: string;
+  filterBy = 'ERC721';
 
   constructor(
     public translate: TranslateService,
@@ -78,28 +79,49 @@ export class NonFungibleTokensComponent implements OnInit {
     };
 
     let keySearch = this.textSearch;
-    const addressNameTag = this.nameTagService.findAddressByNameTag(keySearch);
+    const addressNameTag = this.nameTagService.findAddressByNameTag(keySearch, this.filterBy === 'ERC721');
+
     if (addressNameTag?.length > 0) {
       keySearch = addressNameTag;
     }
 
-    this.tokenService.getListCW721Token(payload, keySearch).subscribe({
-      next: (res) => {
-        this.dataSource = new MatTableDataSource<any>(res.list_token);
-        this.pageData.length = res.total_token?.aggregate?.count;
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.isLoading = false;
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
+    if (this.filterBy === 'ERC721') {
+      this.tokenService.getListErc721Token(payload, keySearch).subscribe({
+        next: (res) => {
+          this.dataSource = new MatTableDataSource<any>(res.list_token);
+          this.pageData.length = res.total_token?.aggregate?.count;
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
+    } else if (this.filterBy === 'CW721') {
+      this.tokenService.getListCW721Token(payload, keySearch).subscribe({
+        next: (res) => {
+          this.dataSource = new MatTableDataSource<any>(res.list_token);
+          this.pageData.length = res.total_token?.aggregate?.count;
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
+    }
   }
 
   onKeyUp() {
@@ -123,5 +145,15 @@ export class NonFungibleTokensComponent implements OnInit {
     this.sortBy = sort.active;
     this.sortOrder = sort.direction;
     this.getTokenData();
+  }
+
+  resetFilterSearch() {
+    this.textSearch = '';
+    this.pageEvent(0);
+  }
+
+  filterButton(val: string) {
+    this.filterBy = val;
+    this.pageEvent(0);
   }
 }

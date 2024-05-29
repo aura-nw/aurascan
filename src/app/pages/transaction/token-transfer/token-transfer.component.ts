@@ -4,14 +4,16 @@ import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { NULL_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-token-transfer',
@@ -43,6 +45,7 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
   displayedColumnsNFTs: string[] = this.templatesNFTs.map((dta) => dta.matColumnDef);
   maxLengthSymbol = 20;
   ellipsisStringLength = 8;
+  smartContractList = [];
 
   coinInfo = this.environmentService.chainInfo.currencies[0];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -54,6 +57,7 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
     private transactionService: TransactionService,
     private layout: BreakpointObserver,
     private commonService: CommonService,
+    private contractService: ContractService,
     private ibcService: IBCService,
   ) {
     this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
@@ -160,7 +164,31 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
     let coinTransfer = [];
     this.transactionService
       .getListEVMTransferFromTx(this.transaction['evm_hash'], this.transaction['height'])
+      .pipe(
+        switchMap((res) => {
+          let listAddr = [];
+          (res.erc721_activity || []).forEach((element) => {
+            if (element.from) {
+              listAddr.push(element.from);
+            }
+            if (element.to) {
+              listAddr.push(element.to);
+            }
+          });
+          const listAddrUnique = _.uniq(listAddr);
+          return this.contractService.findEvmContractList(listAddrUnique).pipe(
+            map((r) => {
+              this.smartContractList = _.uniq((r?.evm_smart_contract || []).map((i) => i?.address));
+              return res;
+            }),
+          );
+        }),
+      )
       .subscribe((res) => {
+        if (res?.erc721_activity?.length > 0) {
+          const arrCW721 = res.erc721_activity;
+          this.dataSourceNFTs.data = arrCW721;
+        }
         if (res.erc20_activity?.length > 0 || coinTransfer?.length > 0) {
           this.dataSourceFTs.data = [...coinTransfer, ...(res.erc20_activity || [])];
 
@@ -178,5 +206,9 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
 
   encodeData(data) {
     return encodeURIComponent(data);
+  }
+
+  isEvmSmartContract(addr) {
+    return this.smartContractList.filter((i) => i === addr).length > 0;
   }
 }

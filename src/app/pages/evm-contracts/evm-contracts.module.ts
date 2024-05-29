@@ -66,7 +66,7 @@ import { PopupProxyContractComponent } from './evm-proxy-contracts-verify/popup-
     ContractTableModule,
     NgbNavModule,
   ],
-  exports: [EvmReadComponent, EvmWriteComponent],
+  exports: [EvmReadComponent, EvmWriteComponent, EvmContractComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
 })
 export class EvmContractsModule {}

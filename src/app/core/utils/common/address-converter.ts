@@ -102,7 +102,7 @@ export function transferAddress(prefix: string, address: string) {
     };
   }
 
-  if (address.startsWith(EWalletType.EVM)) {
+  if (address?.startsWith(EWalletType.EVM)) {
     return {
       accountEvmAddress: address?.toLowerCase(),
       accountAddress: convertEvmAddressToBech32Address(prefix, address),
@@ -122,3 +122,4 @@ export function getEvmChecksumAddress(address: string) {
     return address;
   }
 }
+

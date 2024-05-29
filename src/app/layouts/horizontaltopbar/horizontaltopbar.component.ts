@@ -156,7 +156,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     const address = transferAddress(this.prefixNormalAdd, nametag);
     return this.contractService.searchAddress(address).subscribe({
       next: (res) => {
-        if (res.evm_smart_contract?.length > 0) {
+        if (address?.accountEvmAddress && res.evm_smart_contract?.length > 0) {
           this.redirectPage('evm-contracts', address.accountEvmAddress);
         } else if (res?.account?.length > 0 || res.validator?.length > 0) {
           this.redirectPage(
@@ -165,6 +165,8 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
               ? this.searchValue
               : address.accountAddress,
           );
+        } else {
+          this.redirectPage('address', this.searchValue);
         }
       },
       error: (e) => {

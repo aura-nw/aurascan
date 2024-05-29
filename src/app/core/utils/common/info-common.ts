@@ -131,6 +131,7 @@ export function getSigningType(provider: WALLET_PROVIDER) {
 export function getTypeTx(element) {
   let type =
     _.get(element, "transaction_messages[0].content['@type']") ||
+    _.get(element, "transaction_message.content['@type']") ||
     _.get(element, "messages[0]['@type']") ||
     _.get(element, "messages[0].content['@type']");
   let action;

@@ -57,7 +57,7 @@ export class NameTagService extends CommonService {
     return result ? result : address;
   }
 
-  findAddressByNameTag(nameTag: string) {
+  findAddressByNameTag(nameTag: string, findEvmAddr = false) {
     if (!nameTag) {
       return '';
     }
@@ -66,12 +66,16 @@ export class NameTagService extends CommonService {
 
     let address = '';
     if (this.listNameTag?.length > 0) {
+      let tag = undefined;
       if (userEmail) {
-        address = this.listNameTag?.find((k) => k.name_tag_private?.trim() === nameTag?.trim())?.address || '';
+        tag = this.listNameTag?.find((k) => k.name_tag_private?.trim() === nameTag?.trim());
+      }
+      if (!tag && !address) {
+        tag = this.listNameTag?.find((k) => k.name_tag?.trim() === nameTag?.trim());
       }
 
-      if (!address) {
-        address = this.listNameTag?.find((k) => k.name_tag?.trim() === nameTag?.trim())?.address || '';
+      if (tag) {
+        address = findEvmAddr ? tag?.evm_address : tag?.address;
       }
     }
     return address;

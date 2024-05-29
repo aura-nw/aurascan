@@ -23,7 +23,7 @@ export class EvmTokenOverviewComponent implements OnInit {
     public tokenService: TokenService,
     private route: ActivatedRoute,
     public environmentService: EnvironmentService,
-  ) {}
+  ) { }
 
   ngOnDestroy(): void {
     this.tokenService.setTotalTransfer(null);
@@ -33,6 +33,8 @@ export class EvmTokenOverviewComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
+
+    this.getDataDetail();
 
     //set price change
     this.tokenDetail['change'] = this.tokenDetail['change'] || this.tokenDetail.priceChangePercentage24h;
@@ -46,7 +48,32 @@ export class EvmTokenOverviewComponent implements OnInit {
       this.tokenDetail.supplyAmount == 0
         ? BigNumber(0)
         : BigNumber(this.tokenDetail.supplyAmount)
-            .dividedBy(BigNumber(10).pow(this.tokenDetail.decimal))
-            .multipliedBy(this.tokenDetail.price);
+          .dividedBy(BigNumber(10).pow(this.tokenDetail.decimal))
+          .multipliedBy(this.tokenDetail.price);
+  }
+
+  getTotalSupply() {
+    this.tokenService.countTotalTokenERC721(this.tokenDetail?.contract_address).subscribe((res) => {
+      this.tokenDetail.num_tokens = res.erc721_token_aggregate?.aggregate?.count || this.tokenDetail.num_tokens || 0;
+    });
+  }
+
+  getHolderNFT() {
+    const payload = {
+      limit: 100,
+      contractAddress: this.tokenDetail?.contract_address,
+    };
+    this.tokenService.getListTokenHolderErc721(payload).subscribe((res) => {
+      this.tokenDetail['holder'] = res.view_count_holder_erc721_aggregate?.aggregate?.count || 0;
+    });
+  }
+
+  getDataDetail() {
+    if (this.tokenDetail.modeToken === EModeEvmToken.ERCToken) {
+      if (this.tokenDetail?.type === EvmContractRegisterType.ERC721) {
+        this.getTotalSupply();
+        this.getHolderNFT();
+      }
+    }
   }
 }

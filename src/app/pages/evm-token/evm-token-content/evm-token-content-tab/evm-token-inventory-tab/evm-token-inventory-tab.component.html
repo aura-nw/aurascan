@@ -18,15 +18,15 @@
               [nftItem]="item"
               [nftType]="getTypeFile(item)"
               nftId="{{ 'nft#' + i }}"
-              [nftLink]="'/token/cw721/' + item.contract_address + '/' + encodeData(item.token_id)">
+              [nftLink]="'/token/evm/erc721/' + item.contract_address + '/' + encodeData(item.token_id)">
             </app-nft-card>
             <div class="nft__body px-2 px-lg-3">
               <div class="nft__info">
                 <span class="small-text mr-1 text--gray-1">Token ID:</span>
                 <a
                   class="small-text text--primary hover-link"
-                  [routerLink]="['/token/cw721', item.contract_address]"
-                  [queryParams]="{ a: encodeData(item.token_id) }">
+                  [routerLink]="['/token/evm/erc721', item.contract_address]"
+                  [queryParams]="{ t: encodeData(item.token_id) }">
                   <span class="d-none d-lg-inline-block">{{ item.token_id | ellipsis: 8 : 8 }}</span>
                   <span class="d-inline-block d-lg-none">{{ item.token_id | ellipsis: 5 : 5 }}</span>
                 </a>
@@ -39,7 +39,7 @@
                 <a
                   *ngIf="breakpoint.value.matches"
                   [copyBtn]="item.owner"
-                  [btnClass]="['pl-1', 'mt-1']"
+                  [btnClass]="['pl-1']"
                   class="small-text text--primary d-lg-none hover-link"
                   [ngClass]="(item.owner | isPrivateNameTag) ? 'private-name-tag' : ''"
                   [routerLink]="['/token', item.contract_address]"
@@ -53,7 +53,7 @@
                 </a>
                 <app-name-tag
                   *ngIf="!breakpoint.value.matches"
-                  class="small-text text--primary hover-link mt-1"
+                  class="small-text text--primary hover-link"
                   [value]="item.owner"
                   [linkRouter]="['/token', item.contract_address]"
                   [linkParams]="{ a: item.owner }">

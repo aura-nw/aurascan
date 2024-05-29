@@ -121,6 +121,7 @@ export class EvmMessageComponent {
 
       this.arrTopicDecode[index] = arrTopicTemp;
     });
+    this.arrTopicDecode = [...this.arrTopicDecode]
   }
 
   getMethodName(methodId) {

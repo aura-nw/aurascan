@@ -9,6 +9,8 @@ import { LENGTH_CHARACTER, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/consta
 import { ETokenNFTTypeBE, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-nft-list',
@@ -33,7 +35,7 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   totalValue = 0;
   textSearch = '';
   searchNotFound = false;
-  typeToken = '';
+  typeToken = ETokenNFTTypeBE.ERC721 as string;
   typeTokeList = ETokenNFTTypeBE;
   listCollection = [
     {
@@ -49,7 +51,7 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private accountService: AccountService,
     private layout: BreakpointObserver,
-    private router: Router,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -85,11 +87,47 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
       address: this.nftFilter || null,
     };
 
-    // TODO, set null list erc721
     if (this.typeToken === ETokenNFTTypeBE.ERC721) {
-      this.pageData.length = 0;
-      this.searchNotFound = true;
-      this.nftList = [];
+      payload.owner = transferAddress(
+        this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
+        payload.owner,
+      ).accountEvmAddress;
+      this.accountService.getAssetERC721ByOwner(payload).subscribe({
+        next: (res) => {
+          if (res?.cw721_token?.length === 0) {
+            if (this.textSearch?.length > 0) {
+              this.searchNotFound = true;
+            }
+            this.pageData.length = 0;
+            this.nftList = [];
+            return;
+          }
+
+          this.nftList = res?.cw721_token;
+          this.nftList?.forEach((element) => {
+            element.contract_address = _.get(element, 'cw721_contract.smart_contract.address');
+            element.token_name = _.get(element, 'cw721_contract.name');
+            if (!this.searchValue) {
+              this.totalValue += element.price * +element.balance || 0;
+            }
+          });
+          this.totalValueNft.emit(this.totalValue);
+          this.accountService.countAssetERC721ByOwner(payload).subscribe((countData) => {
+            this.pageData.length = countData?.cw721_token_aggregate?.aggregate?.count || 0;
+          });
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
       return;
     }
 
@@ -145,7 +183,51 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
       owner: this.address,
     };
 
-    this.accountService.getListCollectionByOwner(payload).subscribe({
+    if (this.typeToken === ETokenNFTTypeBE.ERC721) {
+      payload.owner = transferAddress(
+        this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr,
+        payload.owner,
+      ).accountEvmAddress;
+      this.accountService.getListERC721CollectionByOwner(payload).subscribe({
+        next: (res) => {
+          if (res?.cw721_contract?.length > 0) {
+            this.listCollection = [
+              {
+                label: 'All',
+                quantity: 0,
+                address: '',
+              },
+            ];
+            res.cw721_contract?.forEach((item) => {
+              this.listCollection?.push({
+                label: item.name,
+                quantity: item.cw721_tokens_aggregate.aggregate.count,
+                address: item.smart_contract.address,
+              });
+            });
+
+            this.accountService.countListERC721CollectionByOwner(payload).subscribe((countData) => {
+              this.listCollection[0].quantity = countData?.cw721_token_aggregate?.aggregate?.count;
+              this.setNFTFilter(this.listCollection[0]);
+            });
+          } else {
+            this.listCollection = [this.listCollection[0]];
+            this.listCollection[0].quantity = 0;
+            this.setNFTFilter(this.listCollection[0]);
+          }
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+        },
+      });
+      return;
+    }
+
+    this.accountService.getListCw721CollectionByOwner(payload).subscribe({
       next: (res) => {
         if (res?.cw721_contract?.length > 0) {
           this.listCollection = [
@@ -163,10 +245,14 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
             });
           });
 
-          this.accountService.countListCollectionByOwner(payload).subscribe((countData) => {
+          this.accountService.countListCw721CollectionByOwner(payload).subscribe((countData) => {
             this.listCollection[0].quantity = countData?.cw721_token_aggregate?.aggregate?.count;
             this.setNFTFilter(this.listCollection[0]);
           });
+        } else {
+          this.listCollection = [this.listCollection[0]];
+          this.listCollection[0].quantity = 0;
+          this.setNFTFilter(this.listCollection[0]);
         }
       },
       error: (e) => {
@@ -216,5 +302,6 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
   changeType(type: string): void {
     this.typeToken = type;
     this.getNftData();
+    this.getListCollection();
   }
 }

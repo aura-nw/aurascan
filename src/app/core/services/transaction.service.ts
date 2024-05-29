@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CW20_TRACKING, CW721_TRACKING } from '../constants/common.constant';
+import { CW20_TRACKING, CW721_TRACKING, ERC721_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -191,7 +191,11 @@ export class TransactionService extends CommonService {
     const operationsDoc = `
     query QueryEvmTxOfContract( $limit: Int = null, $address: String = null) {
       ${this.envDB} {
-        evm_transaction(where: {evm_events: {address: {_eq: $address}}}, limit: $limit, order_by: {id: desc}) {
+        evm_transaction(
+          where: {_or: [{to: {_eq: $address}}, {evm_events: {address: {_eq: $address}}}]}
+          limit: $limit
+          order_by: {id: desc}
+        ) {
           from
           to
           hash
@@ -682,7 +686,7 @@ export class TransactionService extends CommonService {
     const operationsDoc = `
     query EvmTxTransferDetail(
       $listFilterCW20: [String!] = null
-      $listFilterCW721: [String!] = null
+      $listFilterErc721: [String!] = null
       $txHash: String = null
       $msgTypeNotIn: [String!] = null
       $compositeKeyIn: [String!] = null
@@ -704,6 +708,27 @@ export class TransactionService extends CommonService {
             name
           }
         }
+        erc721_activity(
+          where: {tx_hash: {_eq: $txHash}, action: {_in: $listFilterErc721}, erc721_token: {token_id: {_is_null: false}}}
+        ) {
+          action
+          from
+          to
+          erc721_token {
+            token_id
+          }
+          erc721_contract {
+            evm_smart_contract {
+              address
+            }
+          }
+          # smart_contract_event {
+          #   smart_contract_event_attributes {
+          #     value
+          #     key
+          #   }
+          # }
+        }
       }
     }
     `;
@@ -714,7 +739,7 @@ export class TransactionService extends CommonService {
           txHash: hash,
           // compositeKeyIn: ['coin_spent.spender', 'coin_received.receiver', 'coin_spent.amount', 'coin_received.amount'],
           listFilterCW20: CW20_TRACKING,
-          // listFilterCW721: CW721_TRACKING,
+          listFilterErc721: ERC721_TRACKING,
           // heightLTE: height,
           // heightGTE: height,
         },

@@ -14,7 +14,7 @@
         <div
           *ngIf="ng.wallet"
           class="d-flex align-items-center box-connect-wallet justify-content-between justify-content-lg-start">
-          <div class="button button-pill button-outline button--xs caption fw-normal">
+          <div *ngIf="ng.wallet?.cosmosAccount" class="button button-pill button-outline button--xs caption fw-normal">
             <span class="icon-connect connected"></span>
             <span class="text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
               <span class="txt-wallet cursor-pointer" [routerLink]="['/address/', ng.wallet?.address]">
@@ -27,6 +27,13 @@
               </span>
             </span>
           </div>
+          <button
+            [routerLink]="['/address/', ng.wallet?.address]"
+            class="button button-pill button--xs button-outline button-outline__in-card"
+            *ngIf="ng.wallet?.address && !ng.wallet?.cosmosAccount">
+            <span class="icon-connect connected"></span>
+            <span class="text--gray-1">Connected to Web3</span>
+          </button>
           <ng-container>
             <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
             <div
@@ -123,6 +130,11 @@
             </ng-container>
 
             <div class="px-0">
+              <div
+                class="text-sm text--danger mt-2 mb-4 fw-normal"
+                *ngIf="jsonFragment.error && jsonFragment.error.code === 'INVALID_ARGUMENT'">
+                {{ jsonFragment.error.message }}
+              </div>
               <button
                 class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
                 type="button"
@@ -138,6 +150,20 @@
 
                 <span>Write</span>
               </button>
+            </div>
+
+            <div
+              class="box-error-message mt-4 d-flex align-items-center w-fit-content text-sm"
+              *ngIf="jsonFragment.error && jsonFragment.error.code !== 'INVALID_ARGUMENT'">
+              <img
+                [src]="'assets/icons/icons-svg/white/icon-error-login.svg' | imageS3"
+                alt=""
+                class="mr-2"
+                width="16px"
+                height="16px" />
+              <div class="w-100 pr-4">
+                {{ jsonFragment.error.message }}
+              </div>
             </div>
 
             <div class="px-0">

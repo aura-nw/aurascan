@@ -2,7 +2,8 @@
   <app-loading-sprint></app-loading-sprint>
 </div>
 
-<ng-container *ngIf="nftDetail && (nftDetail.type === contractType.CW721 || nftDetail.type === contractType.CW4973)">
+<ng-container
+  *ngIf="nftDetail && (nftDetail.type === contractType.ERC721 || nftDetail.type === contractType.PROXY_EIP_1967)">
   <div class="text--white">
     <div class="d-lg-none">
       <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap break-word">
@@ -166,7 +167,10 @@
                   [value]="nftDetail?.owner"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [linkRouter]="[(nftDetail?.owner | isContract) ? '/contracts' : '/address', nftDetail?.owner]"
+                  [linkRouter]="[
+                    isEvmSmartContract(nftDetail?.owner) ? '/evm-contracts' : '/address',
+                    nftDetail?.owner
+                  ]"
                   [maxCharacter]="11">
                 </app-name-tag>
               </div>
@@ -176,7 +180,7 @@
               <div class="d-flex align-items-center position-relative">
                 <app-name-tag
                   [value]="nftDetail?.contract_address"
-                  [linkRouter]="['/contracts', nftDetail?.contract_address]"
+                  [linkRouter]="['/evm-contracts', nftDetail?.contract_address]"
                   [fullText]="true"
                   [widthAuto]="true"
                   [isVerified]="nftDetail['verification_status'] === ContractVerifyType.Verified"
@@ -187,10 +191,14 @@
               <div class="label-detail text--gray-5">Creator:</div>
               <div class="d-flex align-items-center">
                 <app-name-tag
+                  *ngIf="nftDetail?.creator"
                   [value]="nftDetail?.creator"
                   [fullText]="true"
                   [widthAuto]="true"
-                  [linkRouter]="[(nftDetail?.creator | isContract) ? '/contracts' : '/address', nftDetail?.creator]"
+                  [linkRouter]="[
+                    isEvmSmartContract(nftDetail?.creator) ? '/evm-contracts' : '/address',
+                    nftDetail?.creator
+                  ]"
                   [maxCharacter]="11">
                 </app-name-tag>
               </div>
@@ -211,7 +219,7 @@
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Token Standard:</div>
               <div class="text--gray-1 fw-normal-mob">
-                {{ isSoulBound ? 'CW-4973' : 'CW-721' }}
+                {{ 'ERC-721' }}
               </div>
             </div>
           </div>
@@ -338,10 +346,10 @@
                         *ngIf="data[template.matColumnDef]"
                         [value]="data[template.matColumnDef]"
                         [linkRouter]="[
-                          (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
+                          isEvmSmartContract(data[template.matColumnDef]) ? '/evm-contracts' : '/address',
                           data[template.matColumnDef]
                         ]"
-                        [iconContract]="data[template.matColumnDef] | isContract"
+                        [iconContract]="isEvmSmartContract(data[template.matColumnDef])"
                         [isEnableRouter]="data.modeExecute !== modeExecuteTransaction.Mint">
                       </app-name-tag>
                     </ng-container>
@@ -370,10 +378,10 @@
                       "
                       [value]="data[template.matColumnDef]"
                       [linkRouter]="[
-                        (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
+                        isEvmSmartContract(data[template.matColumnDef]) ? '/evm-contracts' : '/address',
                         data[template.matColumnDef]
                       ]"
-                      [iconContract]="data[template.matColumnDef] | isContract">
+                      [iconContract]="isEvmSmartContract(data[template.matColumnDef])">
                     </app-name-tag>
                   </ng-container>
                 </ng-container>
