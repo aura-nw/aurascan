@@ -41,9 +41,25 @@
                     <ng-container *ngIf="data[template.matColumnDef]">
                       <ng-container *ngIf="template.isNameTag">
                         <app-name-tag
+                          *ngIf="template.matColumnDef !== 'from' && template.matColumnDef !== 'to'"
                           [value]="data[template.matColumnDef]"
                           [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
-                          [iconContract]="data[template.matColumnDef] | isContract"
+                          [isEnableRouter]="
+                            data[template.matColumnDef] !== contractInfo?.contractsAddress?.toLowerCase()
+                          "></app-name-tag>
+                        <app-name-tag
+                          *ngIf="template.matColumnDef === 'from'"
+                          [value]="data[template.matColumnDef]"
+                          [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
+                          [iconContract]="data['fromIsEvmContract']"
+                          [isEnableRouter]="
+                            data[template.matColumnDef] !== contractInfo?.contractsAddress?.toLowerCase()
+                          "></app-name-tag>
+                        <app-name-tag
+                          *ngIf="template.matColumnDef === 'to'"
+                          [value]="data[template.matColumnDef]"
+                          [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
+                          [iconContract]="data['toIsEvmContract']"
                           [isEnableRouter]="
                             data[template.matColumnDef] !== contractInfo?.contractsAddress?.toLowerCase()
                           "></app-name-tag>
