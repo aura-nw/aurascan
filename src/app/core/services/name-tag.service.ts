@@ -81,6 +81,28 @@ export class NameTagService extends CommonService {
     return address;
   }
 
+  findAddressListByNameTag(nameTag: string, findEvmAddr = false) {
+    if (!nameTag) {
+      return [];
+    }
+
+    const userEmail = this.userService.getCurrentUser()?.email;
+    let listAddress: string[] = [];
+    if (this.listNameTag?.length > 0) {
+      if (userEmail) {
+        const tag = this.listNameTag?.find((k) => k.name_tag_private?.trim() === nameTag?.trim());
+        if (tag) {
+          listAddress.push(findEvmAddr ? tag?.evm_address : tag?.address);
+        }
+      }
+      const tag = this.listNameTag?.find((k) => k.name_tag?.trim() === nameTag?.trim());
+      if (tag) {
+        listAddress.push(findEvmAddr ? tag?.evm_address : tag?.address);
+      }
+    }
+    return listAddress;
+  }
+
   findUrlByAddress(address: string) {
     let result = '';
     const nameTag = this.findNameTag(address);
