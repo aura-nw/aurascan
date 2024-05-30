@@ -76,12 +76,18 @@
           <div
             class="d-flex align-items-center"
             *ngIf="
-              contractDetail?.type !== contractRegisterType.ERC721 &&
-              contractDetail?.erc20_contract?.name &&
-              contractDetail?.erc20_contract?.symbol
+              (contractDetail?.erc20_contract?.name && contractDetail?.erc20_contract?.symbol) ||
+              (contractDetail?.erc721_contract?.name && contractDetail?.erc721_contract?.symbol)
             ">
-            <a class="text--white break-word line-claim-v--des">
+            <a
+              class="text--white break-word line-claim-v--des"
+              *ngIf="contractDetail?.erc20_contract?.name && contractDetail?.erc20_contract?.symbol">
               {{ contractDetail.erc20_contract?.name }} ({{ contractDetail.erc20_contract?.symbol }})
+            </a>
+            <a
+              class="text--white break-word line-claim-v--des"
+              *ngIf="contractDetail?.erc721_contract?.name && contractDetail?.erc721_contract?.symbol">
+              {{ contractDetail.erc721_contract?.name }} ({{ contractDetail.erc721_contract?.symbol }})
             </a>
             <div class="cursor-pointer">
               <img
@@ -94,16 +100,6 @@
                 *ngIf="verifiedStatus === 'VERIFIED'" />
             </div>
           </div>
-          <a
-            *ngIf="
-              contractDetail?.type === contractRegisterType.ERC721 &&
-              contractDetail?.cw721_contract?.name &&
-              contractDetail?.cw721_contract?.symbol
-            "
-            class="text--primary break-word line-claim-v--des"
-            [routerLink]="['/token', contractDetail?.address]">
-            {{ contractDetail?.cw721_contract?.name }} ({{ contractDetail?.cw721_contract?.symbol }})
-          </a>
         </div>
       </div>
     </div>
