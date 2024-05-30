@@ -140,10 +140,10 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListErc721Token(payload, textSearch: string = null): Observable<any> {
+  getListErc721Token(payload, textSearch: string = null, address: string = null): Observable<any> {
     let queryUpdate = '';
     if (textSearch?.length > 0) {
-      queryUpdate = `erc721_contract: { _or: [{name: {_ilike: "%${textSearch}%"}} ,  {evm_smart_contract: {address: {_eq: "${textSearch}" }}}]}`;
+      queryUpdate = `erc721_contract: { _or: [{name: {_ilike: "%${textSearch}%"}} ,  {evm_smart_contract: {address: {_in: ${address} }}}]}`;
     }
 
     let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
