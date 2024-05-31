@@ -1,295 +1,606 @@
-<div *ngIf="loading" class="m-auto mt-10">
-  <app-loading-sprint></app-loading-sprint>
-</div>
+<ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div *ngIf="loading" class="m-auto mt-10">
+    <app-loading-sprint></app-loading-sprint>
+  </div>
+  <ng-container *ngIf="!loading">
+    <ng-container *ngIf="blockDetail; else noValues">
+      <app-pagetitle title="Details for Block #{{ blockHeight || blockDetail?.height }}"></app-pagetitle>
+      <!-- Tabs -->
+      <ul
+        ngbNav
+        #customNav="ngbNav"
+        [activeId]="isRawData ? 1 : 0"
+        class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
+        <ng-container *ngFor="let tab of TAB; index as index">
+          <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
+            <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
+              <span>{{ tab.value }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+      <!-- Information -->
+      <div class="card text--white mt-4 pt-lg-6">
+        <ng-container *ngIf="!isRawData && !breakpoint.value.matches">
+          <h2 class="card-header mb-0 text--white py-0">Information</h2>
+        </ng-container>
+        <ng-container *ngIf="isRawData && !breakpoint.value.matches">
+          <div>
+            <h2
+              class="card-header mb-0 text--white pr-4 py-0"
+              [copyBtn]="blockDetail?.json_data | json"
+              [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
+              Raw Data
+            </h2>
+          </div>
+        </ng-container>
 
-<ng-container *ngIf="!loading">
-  <ng-container *ngIf="blockDetail; else noValues">
-    <app-pagetitle title="Details for Block #{{ blockHeight || blockDetail?.height }}"></app-pagetitle>
-    <!-- Tabs -->
-    <ul
-      ngbNav
-      #customNav="ngbNav"
-      [activeId]="isRawData ? 1 : 0"
-      class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
-      <ng-container *ngFor="let tab of TAB; index as index">
-        <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
-          <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
-            <span>{{ tab.value }}</span>
-          </a>
-        </li>
-      </ng-container>
-    </ul>
-
-    <div class="card text--white mt-4 pt-lg-6" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-      <ng-container *ngIf="!isRawData && !breakpoint.value.matches">
-        <h2 class="card-header mb-0 text--white py-0">Information</h2>
-      </ng-container>
-      <ng-container *ngIf="isRawData && !breakpoint.value.matches">
-        <div>
-          <h2
-            class="card-header mb-0 text--white pr-4 py-0"
-            [copyBtn]="blockDetail?.json_data | json"
-            [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
-            Raw Data
-          </h2>
-        </div>
-      </ng-container>
-
-      <div class="card-body body">
-        <div class="d-lg-none mb-4">
-          <ng-container *ngIf="!isRawData && breakpoint.value.matches">
-            <h2 class="mb-4 text--white py-0">Information</h2>
-          </ng-container>
-          <ng-container *ngIf="isRawData && breakpoint.value.matches">
-            <div>
-              <h2
-                class="text--white m-0 mr-4 py-0"
-                [copyBtn]="blockDetail?.json_data | json"
-                [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
-                Raw Data
-              </h2>
-            </div>
-          </ng-container>
-          <!-- Tabs -->
-          <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
-            <ng-container *ngFor="let tab of TAB; index as index">
-              <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
-                <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
-                  <span>{{ tab.value }}</span>
-                </a>
-              </li>
+        <div class="card-body body">
+          <div class="d-lg-none mb-4">
+            <ng-container *ngIf="!isRawData && breakpoint.value.matches">
+              <h2 class="mb-4 text--white py-0">Information</h2>
             </ng-container>
-          </ul>
-        </div>
-        <ng-container *ngIf="!isRawData">
-          <div *ngIf="!loading" [ngClass]="{ 'card-info': breakpoint.value.matches }">
-            <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
-              <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.chainid }}</div>
-            </div>
-            <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Height</div>
-              <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.height }}</div>
-            </div>
-            <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
-              <div class="col-auto col-lg-9 text-end text-lg-start text--gray-1 d-lg-flex align-items-center">
-                <div>{{ blockDetail?.timestamp | customDateTime: 'Distance' }}</div>
-                <div class="d-flex align-items-center ml-1">
-                  <span class="d-none d-lg-block">(</span>
-                  <span>{{ blockDetail?.timestamp | customDateTime: 'DateOnly' }}</span>
-                  <div class="divider divider-vertical divider-lighter mx-2"></div>
-                  <span>{{ blockDetail?.timestamp | customDateTime: 'TimeOnly' }}</span>
-                  <span class="d-none d-lg-block">)</span>
+            <ng-container *ngIf="isRawData && breakpoint.value.matches">
+              <div>
+                <h2
+                  class="text--white m-0 mr-4 py-0"
+                  [copyBtn]="blockDetail?.json_data | json"
+                  [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle']">
+                  Raw Data
+                </h2>
+              </div>
+            </ng-container>
+            <!-- Tabs -->
+            <ul
+              ngbNav
+              #customNav="ngbNav"
+              [activeId]="isRawData ? 1 : 0"
+              class="aura-nav-tabs nav-tabs nav-tabs-custom">
+              <ng-container *ngFor="let tab of TAB; index as index">
+                <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
+                  <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
+                    <span>{{ tab.value }}</span>
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+          <ng-container *ngIf="!isRawData">
+            <div *ngIf="!loading" [ngClass]="{ 'card-info': breakpoint.value.matches }">
+              <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
+                <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
+                <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.chainid }}</div>
+              </div>
+              <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
+                <div class="col-auto col-lg-3 text--gray-4">Height</div>
+                <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.height }}</div>
+              </div>
+              <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
+                <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
+                <div class="col-auto col-lg-9 text-end text-lg-start text--gray-1 d-lg-flex align-items-center">
+                  <div>{{ blockDetail?.timestamp | customDateTime: 'Distance' }}</div>
+                  <div class="d-flex align-items-center ml-1">
+                    <span class="d-none d-lg-block">(</span>
+                    <span>{{ blockDetail?.timestamp | customDateTime: 'DateOnly' }}</span>
+                    <div class="divider divider-vertical divider-lighter mx-2"></div>
+                    <span>{{ blockDetail?.timestamp | customDateTime: 'TimeOnly' }}</span>
+                    <span class="d-none d-lg-block">)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
+                <div class="col-auto col-lg-3 text--gray-4">Block Hash</div>
+                <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.block_hash }}</div>
+              </div>
+              <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
+                <div class="col-auto col-lg-3 text--gray-4">Number of Tx</div>
+                <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.num_txs }}</div>
+              </div>
+              <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
+                <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
+                  <div>Gas</div>
+                  <div class="ml-md-1">(used / wanted)</div>
+                </div>
+                <div class="col-auto col-lg-9 mb-0 text--gray-1">
+                  {{ blockDetail?.gas_used | number }} / {{ blockDetail?.gas_wanted | number }}
+                </div>
+              </div>
+              <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
+                <div class="col-auto col-lg-3 text--gray-4">Block Round</div>
+                <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.round | number }}</div>
+              </div>
+              <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
+                <div class="col-auto col-lg-3 text--gray-4">Proposer</div>
+                <div class="col-auto col-lg-9 text--primary mb-0">
+                  <a class="text--primary" routerLink="/validators/{{ blockDetail?.operator_address }}">
+                    {{ blockDetail?.proposer }}
+                  </a>
                 </div>
               </div>
             </div>
-            <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Block Hash</div>
-              <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.block_hash }}</div>
-            </div>
-            <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Number of Tx</div>
-              <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.num_txs }}</div>
-            </div>
-            <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
-                <div>Gas</div>
-                <div class="ml-md-1">(used / wanted)</div>
-              </div>
-              <div class="col-auto col-lg-9 mb-0 text--gray-1">
-                {{ blockDetail?.gas_used | number }} / {{ blockDetail?.gas_wanted | number }}
-              </div>
-            </div>
-            <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Block Round</div>
-              <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.round | number }}</div>
-            </div>
-            <div class="row mb-2 body-02 body-01-mob justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-3 text--gray-4">Proposer</div>
-              <div class="col-auto col-lg-9 text--primary mb-0">
-                <a class="text--primary" routerLink="/validators/{{ blockDetail?.operator_address }}">
-                  {{ blockDetail?.proposer }}
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="card-body body" *ngIf="loading">
-            <app-loading-sprint></app-loading-sprint>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="isRawData">
-          <ng-container *ngIf="blockDetail?.json_data; else noValues">
-            <div class="body">
-              <pre
-                id="json"
-                class="raw-content body-03 text--gray-1 px-4"
-                [innerHtml]="blockDetail?.json_data | appJson"></pre>
+            <div class="card-body body" *ngIf="loading">
+              <app-loading-sprint></app-loading-sprint>
             </div>
           </ng-container>
-        </ng-container>
+          <ng-container *ngIf="isRawData">
+            <ng-container *ngIf="blockDetail?.json_data; else noValues">
+              <div class="body">
+                <pre
+                  id="json"
+                  class="raw-content body-03 text--gray-1 px-4"
+                  [innerHtml]="blockDetail?.json_data | appJson"></pre>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
       </div>
-    </div>
-    <div *ngIf="loadingTxs">
-      <app-loading-sprint></app-loading-sprint>
-    </div>
-    <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
-      <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
-      <div class="card-body body">
-        <ng-container *ngIf="!loadingTxs && dataSource?.data?.length > 0; else noValue">
-          <div class="table-responsive d-none d-lg-block" style="max-height: 600px">
-            <table mat-table [dataSource]="dataSource" class="aura-table keep-header">
-              <ng-container *ngFor="let template of templates; index as i">
-                <ng-container [matColumnDef]="template.matColumnDef">
-                  <th mat-header-cell *matHeaderCellDef>
-                    <div [innerHTML]="template.headerCellDef | translate"></div>
-                  </th>
+      <div *ngIf="loadingCosmosTxs">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
+      <!-- Cosmos Transactions -->
+      <div class="card text--gray-1" *ngIf="!loadingCosmosTxs && !isRawData">
+        <h2 class="card-header mb-0 text--white pb-0">Cosmos Transactions</h2>
+        <div class="card-body body">
+          <ng-container *ngIf="!loadingCosmosTxs && dataSourceCosmos?.data?.length > 0; else noValue">
+            <div class="table-responsive" style="max-height: 600px" *ngIf="!breakpoint.value.matches">
+              <table mat-table [dataSource]="dataSourceCosmos" class="aura-table keep-header">
+                <ng-container *ngFor="let template of cosmosTemplates; index as i">
+                  <ng-container [matColumnDef]="template.matColumnDef">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
 
-                  <td mat-cell *matCellDef="let data">
-                    <div>
-                      <ng-container [ngSwitch]="template.matColumnDef">
-                        <div *ngSwitchCase="'timestamp'">
-                          {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
-                        </div>
-                        <a
-                          *ngSwitchCase="'tx_hash'"
-                          class="text--primary cursor-pointer hash-link"
-                          [copyBtn]="data['tx_hash']"
-                          [routerLink]="['/transaction', data['tx_hash']]">
-                          {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
-                        </a>
-                        <a
-                          *ngSwitchCase="'height'"
-                          class="text--primary cursor-pointer block-link"
-                          [routerLink]="['/blocks', data['height']]">
-                          {{ data[template.matColumnDef] }}
-                        </a>
-                        <div *ngSwitchCase="'type'" class="g-type aura-status">
-                          <div class="d-flex" [appTooltip]="data.lstType | combineTxsMsg">
+                    <td mat-cell *matCellDef="let data">
+                      <div>
+                        <ng-container [ngSwitch]="template.matColumnDef">
+                          <div *ngSwitchCase="'timestamp'">
+                            {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
+                          </div>
+                          <a
+                            *ngSwitchCase="'tx_hash'"
+                            class="text--primary cursor-pointer hash-link"
+                            [copyBtn]="data['tx_hash']"
+                            [routerLink]="['/tx', data['tx_hash']]">
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                          </a>
+                          <a
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer block-link"
+                            [routerLink]="['/block', data['height']]">
                             {{ data[template.matColumnDef] }}
-                            <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
-                              +{{ data.lstType?.length - 1 }}
+                          </a>
+                          <div *ngSwitchCase="'type'" class="g-type aura-status">
+                            <div class="d-flex" [appTooltip]="data.lstType | combineTxsMsg">
+                              {{ data[template.matColumnDef] }}
+                              <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                                +{{ data.lstType?.length - 1 }}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div *ngSwitchCase="'status'">
-                          <div [ngSwitch]="data[template.matColumnDef]">
+                          <div *ngSwitchCase="'status'">
+                            <div [ngSwitch]="data[template.matColumnDef]">
+                              <div *ngSwitchCase="'Success'" class="text--green-3">
+                                {{ data[template.matColumnDef] | uppercase }}
+                              </div>
+                              <div *ngSwitchCase="'Fail'" class="text--red-3">
+                                {{ data[template.matColumnDef] | uppercase }}
+                              </div>
+                              <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                                {{ data[template.matColumnDef] | uppercase }}
+                              </div>
+                            </div>
+                          </div>
+                          <div *ngSwitchCase="'fee'">
+                            <ng-container *ngIf="+data[template.matColumnDef] > 0">
+                              <span
+                                [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                                [decimalLengthTooltip]="12"
+                                *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
+                                {{ '<0.001' }}
+                              </span>
+                              <span
+                                *ngIf="data[template.matColumnDef] | balance: 0 | gte: 0.001"
+                                [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                                [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
+                                [appBigNumber]="data[template.matColumnDef]"
+                                [decimal]="0"></span>
+                              <span class="ml-1" appLinkDenom>{{ denom }}</span>
+                            </ng-container>
+                            <ng-container *ngIf="+data[template.matColumnDef] == 0">
+                              0<span class="ml-1" appLinkDenom>{{ denom }}</span>
+                            </ng-container>
+                          </div>
+                          <div *ngSwitchCase="'amount'">
+                            <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
+                              <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
+                              <span class="ml-1" [appLinkDenom]="data?.denom">{{ data?.denom | ibcDenom }}</span>
+                            </ng-container>
+                            <ng-template #displayNonNumber>
+                              <span *ngIf="!data[template.matColumnDef]"> - </span>
+                              <a
+                                *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
+                                class="text--primary cursor-pointer"
+                                [routerLink]="['/tx', data['tx_hash']]">
+                                More
+                              </a>
+                            </ng-template>
+                          </div>
+                          <div *ngSwitchCase="'hash'">
+                            <a
+                              *ngIf="data[template.matColumnDef]"
+                              [copyBtn]="data[template.matColumnDef].toString()"
+                              class="text--primary cursor-pointer"
+                              [routerLink]="['/tx', data[template.matColumnDef]]">
+                              {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                            </a>
+                            <span *ngIf="!data[template.matColumnDef]" class="text--white">-</span>
+                          </div>
+                          <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        </ng-container>
+                      </div>
+                    </td>
+                  </ng-container>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedCosmosCol"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedCosmosCol"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell g-no-data" colspan="9999">
+                    {{ 'NO DATA' | translate }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div *ngIf="breakpoint.value.matches">
+              <div *ngFor="let data of dataSourceCosmos?.data">
+                <div class="custom-card-mob-simple card-explain body-01 mb-2 px-0">
+                  <mat-expansion-panel class="px-3" hideToggle #panel [disabled]="true">
+                    <mat-expansion-panel-header class="px-0" [collapsedHeight]="'68px'" [expandedHeight]="'68px'">
+                      <mat-panel-title>
+                        <div>
+                          <a
+                            [copyBtn]="data?.tx_hash"
+                            class="text--primary cursor-pointer body-02"
+                            [routerLink]="['/tx', data?.tx_hash]">
+                            {{ data?.tx_hash | ellipsis: 8 : 8 }}
+                          </a>
+                          <div class="align-items-center d-flex mt-1">
+                            <div class="d-flex align-items-center">
+                              <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
+                              <span class="text--gray-light caption fw-normal">{{
+                                data?.timestamp | customDateTime: 'Distance'
+                              }}</span>
+                            </div>
+                            <div class="d-flex align-items-center ml-5">
+                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                              <span class="line-claim text--gray-light caption fw-normal">{{
+                                data?.type | ellipsis: 12
+                              }}</span>
+                              <span *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4"
+                                >+{{ data.lstType?.length - 1 }}</span
+                              >
+                            </div>
+                          </div>
+                          <div [ngSwitch]="data.status" class="text-uppercase mt-2 caption">
                             <div *ngSwitchCase="'Success'" class="text--green-3">
-                              {{ data[template.matColumnDef] | uppercase }}
+                              {{ data.status }}
                             </div>
                             <div *ngSwitchCase="'Fail'" class="text--red-3">
-                              {{ data[template.matColumnDef] | uppercase }}
+                              {{ data.status }}
                             </div>
                             <div *ngSwitchCase="'Pending'" class="text--yellow-3">
-                              {{ data[template.matColumnDef] | uppercase }}
+                              {{ data.status }}
                             </div>
                           </div>
                         </div>
-                        <div *ngSwitchCase="'fee'">
-                          {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                          <span appLinkDenom>{{ denom }}</span>
+                      </mat-panel-title>
+                      <div
+                        class="body-01 text--white d-flex align-items-center"
+                        (click)="panel.expanded = !panel.expanded">
+                        <i class="ph ph-caret-up" *ngIf="panel.expanded"></i>
+                        <i class="ph ph-caret-down" *ngIf="!panel.expanded"></i>
+                      </div>
+                    </mat-expansion-panel-header>
+                    <div class="body-03">
+                      <div class="divider divider-horizontal divider-lighter my-2"></div>
+                      <div class="d-flex justify-content-between">
+                        <div class="text--gray-4">Fee</div>
+                        <div class="text--white d-flex align-items-center">
+                          <span class="mr-1">
+                            <ng-container *ngIf="data.fee > 0">
+                              {{ data.fee < 0.001 ? '<0.001' : (data.fee | balance: 0) }}
+                            </ng-container>
+                            <ng-container *ngIf="data.fee == 0">0</ng-container>
+                          </span>
+                          <a appLinkDenom> {{ denom }}</a>
                         </div>
-                        <div *ngSwitchCase="'amount'">
-                          <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                            <span [appBigNumber]="data[template.matColumnDef]" [decimal]="0"></span>
-                            <span class="ml-1" [appLinkDenom]="data?.denom">{{ data?.denom | ibcDenom }}</span>
-                          </ng-container>
-                          <ng-template #displayNonNumber>
-                            <span *ngIf="!data[template.matColumnDef]"> - </span>
-                            <a
-                              *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/transaction', data['tx_hash']]">
-                              More
-                            </a>
-                          </ng-template>
-                        </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                      </ng-container>
+                      </div>
+                      <div class="d-flex justify-content-between mt-2">
+                        <div class="text--gray-4">Height</div>
+                        <a class="text--primary cursor-pointer block-link" [routerLink]="['/block', data['height']]">
+                          {{ data?.height }}
+                        </a>
+                      </div>
+                      <div class="d-flex justify-content-between mt-2">
+                        <div class="text--gray-4">EVM Transaction</div>
+                        <a
+                          *ngIf="data?.hash"
+                          [copyBtn]="data.hash.toString()"
+                          class="text--primary cursor-pointer"
+                          [routerLink]="['/tx', data?.hash]">
+                          {{ data?.hash | ellipsis: 8 : 8 }}
+                        </a>
+                        <span *ngIf="!data.hash" class="text--white">-</span>
+                      </div>
                     </div>
-                  </td>
-                </ng-container>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-              <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell g-no-data" colspan="9999">
-                  {{ 'NO DATA' | translate }}
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div class="d-lg-none box-block-tx" *ngIf="dataSource?.data?.length > 0">
-            <app-card-mob-simple
-              *ngFor="let data of dataSource.data"
-              [dataCard]="data"
-              [title]="{
-                size: 'md',
-                label: data.tx_hash | ellipsis: 6 : 6,
-                subLabelContent: data.type,
-                subLabelClass: 'label__status',
-                status: data.code,
-                link: '/transaction/' + data.tx_hash
-              }"
-              [content]="[
-                {
-                  label: 'Fee',
-                  info:
-                    (+data.fee | mask: 'separator.6') +
-                    ' <a class=text--primary href=' +
-                    ('/tokens/token/' + coinInfo.coinMinimalDenom) +
-                    '>' +
-                    denom +
-                    '</a>'
-                },
-                { label: 'Time', info: (data.timestamp | customDateTime: 'DateTime') }
-              ]"></app-card-mob-simple>
-          </div>
-        </ng-container>
-        <ng-template #noValue>
-          <app-table-no-data *ngIf="!loadingTxs" [textNull]="errTxtTxs"></app-table-no-data>
-        </ng-template>
-      </div>
-    </div>
-
-    <!-- Event Log -->
-    <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
-      <h2 class="card-header mb-0 text--white pb-0">Events</h2>
-      <div class="card-body body">
-        <div class="col-12 text--gray-1 box-event-log border-radius--sm">
-          <div class="item-event-log">
-            <mat-expansion-panel
-              class="custom-expansion-panel"
-              hideToggle
-              *ngFor="let item of blockDetail?.events; first as isFirst; let i = index"
-              [expanded]="isFirst">
-              <mat-expansion-panel-header class="content-contract">
-                <mat-panel-title class="item-content body-02 text--gray-1">
-                  <div class="txt-header caption fw-normal text--white">
-                    {{ item.type }}
-                  </div>
-                </mat-panel-title>
-                <mat-panel-description></mat-panel-description>
-              </mat-expansion-panel-header>
-
-              <div class="content-log">
-                <ng-container *ngFor="let data of item?.attributes; let idx = index">
-                  <div class="ml-5 mb-2 row">
-                    <span class="col-12 col-lg-3 text--gray-4 body-02 fw-normal">{{ data.key }}</span>
-                    <span class="col-12 col-lg-9 body-01 break-all"> {{ data.value }} </span>
-                  </div>
-                </ng-container>
+                  </mat-expansion-panel>
+                </div>
               </div>
-            </mat-expansion-panel>
+            </div>
+          </ng-container>
+          <ng-template #noValue>
+            <app-table-no-data *ngIf="!loadingCosmosTxs" [textNull]="errTxtCosmosTxs"></app-table-no-data>
+          </ng-template>
+        </div>
+      </div>
+      <!-- EVM Transactions -->
+      <div class="card text--gray-1" *ngIf="!loadingEVMTxs && !isRawData">
+        <h2 class="card-header mb-0 text--white pb-0">EVM Transactions</h2>
+        <div class="card-body body">
+          <ng-container *ngIf="!loadingEVMTxs && dataSourceEvm?.data?.length > 0; else noValue">
+            <div class="table-responsive" style="max-height: 600px" *ngIf="!breakpoint.value.matches">
+              <table mat-table [dataSource]="dataSourceEvm" class="aura-table keep-header">
+                <ng-container *ngFor="let template of evmTemplates; index as i">
+                  <ng-container [matColumnDef]="template.matColumnDef">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+
+                    <td mat-cell *matCellDef="let data">
+                      <div>
+                        <ng-container [ngSwitch]="template.matColumnDef">
+                          <div *ngSwitchCase="'timestamp'">
+                            {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
+                          </div>
+                          <a
+                            *ngSwitchCase="'tx_hash'"
+                            class="text--primary cursor-pointer hash-link"
+                            [copyBtn]="data['tx_hash']"
+                            [routerLink]="['/tx', data['tx_hash']]">
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                          </a>
+                          <a
+                            *ngSwitchCase="'hash'"
+                            class="text--primary cursor-pointer hash-link"
+                            [copyBtn]="data['hash']"
+                            [routerLink]="['/tx', data['hash']]">
+                            {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                          </a>
+                          <a
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer block-link"
+                            [routerLink]="['/block', data['height']]">
+                            {{ data[template.matColumnDef] }}
+                          </a>
+                          <div *ngSwitchCase="'method'" class="g-type aura-status">
+                            <div class="d-flex" [appTooltip]="data.lstType | combineTxsMsg">
+                              {{ data[template.matColumnDef] }}
+                              <div *ngIf="data.lstType?.length > 1" class="ml-1 text--gray-4">
+                                +{{ data.lstType?.length - 1 }}
+                              </div>
+                            </div>
+                          </div>
+                          <ng-container *ngSwitchCase="'from'">
+                            <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
+                            </app-name-tag>
+                            <span *ngIf="!data[template.matColumnDef]">-</span>
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'to'">
+                            <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
+                            </app-name-tag>
+                            <span *ngIf="!data[template.matColumnDef]">-</span>
+                          </ng-container>
+                          <div *ngSwitchCase="'amount'">
+                            <ng-container *ngIf="!data['contractAddress']">
+                              <span
+                                *ngIf="data[template.matColumnDef] | balance: evmDecimal | lt: 0.001"
+                                [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: evmDecimal }">
+                                {{ (data[template.matColumnDef] | balance: evmDecimal) == 0 ? 0 : '<0.001' }}
+                              </span>
+                              <span
+                                [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: evmDecimal }"
+                                [class.cursor-text]="data[template.matColumnDef] | balance: evmDecimal | lt: 1000000"
+                                *ngIf="data[template.matColumnDef] | balance: evmDecimal | gte: 0.001"
+                                [appBigNumber]="data[template.matColumnDef]"
+                                [decimal]="evmDecimal"></span>
+                              <a appLinkDenom> {{ denom }}</a>
+                            </ng-container>
+                            <ng-container *ngIf="data['contractAddress']">
+                              <span
+                                *ngIf="data[template.matColumnDef] | balance: data['tokenDecimal'] | lt: 0.001"
+                                [appTooltip]="{
+                                  priceAmount: data[template.matColumnDef],
+                                  decimal: data['tokenDecimal']
+                                }">
+                                {{ (data[template.matColumnDef] | balance: data['tokenDecimal']) == 0 ? 0 : '<0.001' }}
+                              </span>
+                              <span
+                                [appTooltip]="{
+                                  priceAmount: data[template.matColumnDef],
+                                  decimal: data['tokenDecimal']
+                                }"
+                                [class.cursor-text]="
+                                  data[template.matColumnDef] | balance: data['tokenDecimal'] | lt: 1000000
+                                "
+                                *ngIf="data[template.matColumnDef] | balance: data['tokenDecimal'] | gte: 0.001"
+                                [appBigNumber]="data[template.matColumnDef]"
+                                [decimal]="data['tokenDecimal']"></span>
+                              <a [appLinkDenom]="data['contractAddress']"> {{ data['tokenSymbol'] }}</a>
+                            </ng-container>
+                          </div>
+                          <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        </ng-container>
+                      </div>
+                    </td>
+                  </ng-container>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedEvmCol"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedEvmCol"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell g-no-data" colspan="9999">
+                    {{ 'NO DATA' | translate }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div *ngIf="breakpoint.value.matches">
+              <div *ngFor="let data of dataSourceEvm?.data">
+                <div class="custom-card-mob-simple card-explain body-01 mb-2 px-0">
+                  <mat-expansion-panel class="px-3" hideToggle #panel2 [disabled]="true">
+                    <mat-expansion-panel-header class="px-0">
+                      <mat-panel-title>
+                        <div>
+                          <a
+                            [copyBtn]="data?.tx_hash"
+                            class="text--primary cursor-pointer body-02"
+                            [routerLink]="['/tx', data?.tx_hash]">
+                            {{ data?.tx_hash | ellipsis: 8 : 8 }}
+                          </a>
+                          <div class="align-items-center d-flex mt-1">
+                            <div class="d-flex align-items-center">
+                              <i class="ph ph-clock mr-1 text--gray-4 body-mob"></i>
+                              <span class="text--gray-light caption fw-normal">
+                                {{ data?.timestamp | customDateTime: 'Distance' }}
+                              </span>
+                            </div>
+                            <div class="d-flex align-items-center ml-5">
+                              <img [src]="'assets/icons/icons-svg/basic/comment.svg' | imageS3" alt="" class="mr-1" />
+                              <span class="line-claim text--gray-light caption fw-normal">
+                                {{ data?.method }}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-panel-title>
+                      <div
+                        class="body-01 text--white d-flex align-items-center"
+                        (click)="panel2.expanded = !panel2.expanded">
+                        <i class="ph ph-caret-up" *ngIf="panel2.expanded"></i>
+                        <i class="ph ph-caret-down" *ngIf="!panel2.expanded"></i>
+                      </div>
+                    </mat-expansion-panel-header>
+                    <div class="body-03">
+                      <div class="divider divider-horizontal divider-lighter my-2"></div>
+                      <div class="d-flex justify-content-between">
+                        <div class="text--gray-4">Height</div>
+                        <a class="text--primary cursor-pointer block-link" [routerLink]="['/block', data['height']]">
+                          {{ data?.height }}
+                        </a>
+                      </div>
+                      <div class="d-flex justify-content-between mt-2">
+                        <div class="text--gray-4">Amount</div>
+                        <div class="text--white">
+                          <ng-container *ngIf="!data['contractAddress']">
+                            <span
+                              *ngIf="data.amount | balance: evmDecimal | lt: 0.001"
+                              [appTooltip]="{ priceAmount: data.amount, decimal: evmDecimal }">
+                              {{ (data.amount | balance: evmDecimal) == 0 ? 0 : '<0.001' }}
+                            </span>
+                            <span
+                              [appTooltip]="{ priceAmount: data.amount, decimal: evmDecimal }"
+                              [class.cursor-text]="data.amount | balance: evmDecimal | lt: 1000000"
+                              *ngIf="data.amount | balance: evmDecimal | gte: 0.001"
+                              [appBigNumber]="data.amount"
+                              [decimal]="evmDecimal"></span>
+                            <a appLinkDenom> {{ denom }}</a>
+                          </ng-container>
+                          <ng-container *ngIf="data['contractAddress']">
+                            <span
+                              *ngIf="data.amount | balance: data['tokenDecimal'] | lt: 0.001"
+                              [appTooltip]="{ priceAmount: data.amount, decimal: data['tokenDecimal'] }">
+                              {{ (data.amount | balance: data['tokenDecimal']) == 0 ? 0 : '<0.001' }}
+                            </span>
+                            <span
+                              [appTooltip]="{ priceAmount: data.amount, decimal: data['tokenDecimal'] }"
+                              [class.cursor-text]="data.amount | balance: data['tokenDecimal'] | lt: 1000000"
+                              *ngIf="data.amount | balance: data['tokenDecimal'] | gte: 0.001"
+                              [appBigNumber]="data.amount"
+                              [decimal]="data['tokenDecimal']"></span>
+                            <a [appLinkDenom]="data['contractAddress']"> {{ data['tokenSymbol'] }}</a>
+                          </ng-container>
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-between mt-2">
+                        <div class="text--gray-4">From</div>
+                        <app-name-tag [value]="data?.from" *ngIf="data?.from" [nameTagDark]="true"></app-name-tag>
+                        <span *ngIf="!data?.from">-</span>
+                      </div>
+                      <div class="d-flex justify-content-between mt-2">
+                        <div class="text--gray-4">To</div>
+                        <app-name-tag [value]="data?.to" *ngIf="data?.to" [nameTagDark]="true"></app-name-tag>
+                        <span *ngIf="!data?.to">-</span>
+                      </div>
+                      <div class="d-flex justify-content-between mt-2">
+                        <div class="text--gray-4">Cosmos Txn</div>
+                        <a
+                          *ngIf="data?.hash"
+                          [copyBtn]="data.hash"
+                          class="text--primary cursor-pointer"
+                          [routerLink]="['/tx', data?.hash]">
+                          {{ data?.hash | ellipsis: 8 : 8 }}
+                        </a>
+                        <span *ngIf="!data.hash" class="text--white">-</span>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #noValue>
+            <app-table-no-data *ngIf="!loadingEVMTxs" [textNull]="errTxtEvmTxs"></app-table-no-data>
+          </ng-template>
+        </div>
+      </div>
+      <!-- Event Log -->
+      <div class="card text--gray-1" *ngIf="!loadingCosmosTxs && !isRawData">
+        <h2 class="card-header mb-0 text--white pb-0">Events</h2>
+        <div class="card-body body">
+          <div class="col-12 text--gray-1 box-event-log border-radius--sm">
+            <div class="item-event-log">
+              <mat-expansion-panel
+                class="custom-expansion-panel"
+                hideToggle
+                *ngFor="let item of blockDetail?.events; first as isFirst; let i = index"
+                [expanded]="isFirst">
+                <mat-expansion-panel-header class="content-contract">
+                  <mat-panel-title class="item-content body-02 text--gray-1">
+                    <div class="txt-header caption fw-normal text--white">
+                      {{ item.type }}
+                    </div>
+                  </mat-panel-title>
+                  <mat-panel-description></mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="content-log">
+                  <ng-container *ngFor="let data of item?.attributes; let idx = index">
+                    <div class="ml-5 mb-2 row">
+                      <span class="col-12 col-lg-3 text--gray-4 body-02 fw-normal">{{ data.key }}</span>
+                      <span class="col-12 col-lg-9 body-01 break-all"> {{ data.value }} </span>
+                    </div>
+                  </ng-container>
+                </div>
+              </mat-expansion-panel>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </ng-container>
+  <ng-template #noValues>
+    <app-loading-sprint *ngIf="loading"></app-loading-sprint>
+    <app-table-no-data *ngIf="!loading && errTxt" [textNull]="errTxt"></app-table-no-data>
+    <app-table-no-data *ngIf="!loading && errTxt === null"></app-table-no-data>
+  </ng-template>
 </ng-container>
-
-<ng-template #noValues>
-  <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-  <app-table-no-data *ngIf="!loading" [textNull]="errTxt || errTxtTxs"></app-table-no-data>
-</ng-template>

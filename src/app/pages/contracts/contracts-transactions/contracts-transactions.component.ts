@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import * as _ from 'lodash';
+import { Subject, map, switchMap } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { CONTRACT_TABLE_TEMPLATES, EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ITableContract } from 'src/app/core/models/contract.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { convertDataTransaction } from 'src/app/global/global';
+import { convertDataTransaction, mappingMethodName } from 'src/app/global/global';
 
 @Component({
   selector: 'app-contracts-transactions',
@@ -47,6 +49,7 @@ export class ContractsTransactionsComponent implements OnInit {
     limit: 100,
   };
   errTxt: string;
+  EWalletType = EWalletType;
   coinInfo = this.environmentService.chainInfo.currencies[0];
 
   constructor(
@@ -67,6 +70,7 @@ export class ContractsTransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
+
     this.payload['value'] = this.contractAddress;
     this.contractInfo.contractsAddress = this.contractAddress;
     this.getData();
@@ -108,29 +112,82 @@ export class ContractsTransactionsComponent implements OnInit {
       this.isLoadingTX = false;
       return;
     }
+
     this.payload['heightLT'] = nextKey;
-    this.transactionService.getListTxCondition(this.payload).subscribe({
-      next: (data) => {
-        if (data) {
-          this.getListData(data, isReload);
-        }
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.isLoadingTX = false;
-      },
-      complete: () => {
-        this.isLoadingTX = false;
-      },
-    });
+    if (this.contractAddress.startsWith(EWalletType.EVM)) {
+      this.payload['address'] = this.contractAddress.toLowerCase();
+      this.templates = EVM_CONTRACT_TABLE_TEMPLATES;
+      this.transactionService
+        .getListEvmContractTxByAddress(this.payload)
+        .pipe(
+          switchMap((txsRes) => {
+            const listTemp = txsRes?.evm_transaction
+              ?.filter((j) => j.data?.length > 0)
+              ?.map((k) => k.data?.substring(0, 8));
+            const listMethodId = _.uniq(listTemp);
+            return this.transactionService.getListMappingName(listMethodId).pipe(
+              map((res) => {
+                if (txsRes?.evm_transaction?.length > 0) {
+                  return txsRes.evm_transaction.map((tx) => {
+                    const methodId = _.get(tx, 'data')?.substring(0, 8);
+                    return {
+                      ...tx,
+                      tx_hash: _.get(tx, 'hash'),
+                      hash: _.get(tx, 'transaction.hash'),
+                      method: mappingMethodName(res, methodId),
+                      from: _.get(tx, 'from'),
+                      to: _.get(tx, 'to'),
+                      timestamp: _.get(tx, 'transaction.timestamp'),
+                      evmAmount: _.get(tx, 'value'),
+                    };
+                  });
+                }
+                return [];
+              }),
+            );
+          }),
+        )
+        .subscribe({
+          next: (res) => {
+            this.contractTransaction['data'] = res;
+            this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
+          },
+          error: (e) => {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.status + ' ' + e.statusText;
+            }
+            this.isLoadingTX = false;
+          },
+          complete: () => {
+            this.isLoadingTX = false;
+          },
+        });
+    } else {
+      this.transactionService.getListTxCondition(this.payload).subscribe({
+        next: (data) => {
+          if (data) {
+            this.getListData(data, isReload);
+          }
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
+          this.isLoadingTX = false;
+        },
+        complete: () => {
+          this.isLoadingTX = false;
+        },
+      });
+    }
   }
 
   getListOutgoing(isReload = false) {
-    this.payload['actionEq'] = "execute";
+    this.payload['actionEq'] = 'execute';
     this.transactionService.getListOutgoing(this.payload).subscribe({
       next: (data) => {
         if (data) {
@@ -152,7 +209,7 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   getListData(data, isReload = false) {
-    const txsExecute = convertDataTransaction(data, this.coinInfo);
+    const txsExecute = convertDataTransaction(data, this.environmentService.getDecimals());
     if (data.transaction?.length > 0) {
       this.nextKey = null;
       if (txsExecute.length >= 100) {

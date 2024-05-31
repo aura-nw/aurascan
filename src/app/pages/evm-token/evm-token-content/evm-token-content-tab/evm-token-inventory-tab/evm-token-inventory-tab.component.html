@@ -1,0 +1,77 @@
+<span class="body-02 caption-mob fw-normal-mob text--gray-5">
+  A total of {{ pageData?.length | number }} token{{ pageData?.length > 1 ? 's' : '' }} found
+</span>
+<div *ngIf="loading" class="m-auto mt-10">
+  <app-loading-sprint></app-loading-sprint>
+</div>
+<!-- Table -->
+<ng-container *ngIf="pageData?.length > 0; else noValues">
+  <div class="mt-2 mt-lg-4 box-nft">
+    <div
+      class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+      id="nft-cards"
+      *ngIf="!loading">
+      <div class="nft-cards__col col" *ngFor="let item of nftData.data; let i = index">
+        <div class="nft-cards__item-border">
+          <div class="nft-cards__item">
+            <app-nft-card
+              [nftItem]="item"
+              [nftType]="getTypeFile(item)"
+              nftId="{{ 'nft#' + i }}"
+              [nftLink]="'/token/evm/erc721/' + item.contract_address + '/' + encodeData(item.token_id)">
+            </app-nft-card>
+            <div class="nft__body px-2 px-lg-3">
+              <div class="nft__info">
+                <span class="small-text mr-1 text--gray-1">Token ID:</span>
+                <a
+                  class="small-text text--primary hover-link"
+                  [routerLink]="['/token/evm/erc721', item.contract_address]"
+                  [queryParams]="{ t: encodeData(item.token_id) }">
+                  <span class="d-none d-lg-inline-block">{{ item.token_id | ellipsis: 8 : 8 }}</span>
+                  <span class="d-inline-block d-lg-none">{{ item.token_id | ellipsis: 5 : 5 }}</span>
+                </a>
+              </div>
+              <div
+                class="mt-1 nft__info d-flex align-items-center"
+                *ngIf="{ value: breakpoint$ | async } as breakpoint"
+                [ngClass]="!(item.owner | nameTagTooltipPipe) ? 'name-tag-mob' : ''">
+                <span class="small-text mr-1 text--gray-1">Owner:</span>
+                <a
+                  *ngIf="breakpoint.value.matches"
+                  [copyBtn]="item.owner"
+                  [btnClass]="['pl-1']"
+                  class="small-text text--primary d-lg-none hover-link"
+                  [ngClass]="(item.owner | isPrivateNameTag) ? 'private-name-tag' : ''"
+                  [routerLink]="['/token', item.contract_address]"
+                  [queryParams]="{ a: item.owner }">
+                  <ng-container *ngIf="!(item.owner | nameTagTooltipPipe)">
+                    {{ item.owner | nameTag | ellipsis: 6 }}
+                  </ng-container>
+                  <ng-container *ngIf="item.owner | nameTagTooltipPipe">
+                    {{ item.owner | nameTag | ellipsis: 5 : 5 }}
+                  </ng-container>
+                </a>
+                <app-name-tag
+                  *ngIf="!breakpoint.value.matches"
+                  class="small-text text--primary hover-link"
+                  [value]="item.owner"
+                  [linkRouter]="['/token', item.contract_address]"
+                  [linkParams]="{ a: item.owner }">
+                </app-name-tag>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<div class="mt-6 d-flex justify-content-center justify-content-md-end">
+  <app-custom-paginator
+    [paginator]="pageData"
+    [length]="pageData.length"
+    (pageChange)="pageEvent($event)"></app-custom-paginator>
+</div>
+<ng-template #noValues>
+  <app-table-no-data *ngIf="!loading" [textNull]="errTxt"></app-table-no-data>
+</ng-template>

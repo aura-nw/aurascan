@@ -24,7 +24,7 @@ export const MAT_DATE_FORMATS_VALUE = {
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json?v=' + Date.now());
 }
 
 export const NG_PROGRESS_MODULE_CONFIG: NgProgressConfig = {

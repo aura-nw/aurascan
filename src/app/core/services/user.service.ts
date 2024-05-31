@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { clearLocalData } from 'src/app/global/global';
-import { CW20_TRACKING, CW721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
+import { CW20_TRACKING, CW721_TRACKING, ERC721_TRACKING, STORAGE_KEYS } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IUser } from '../models/auth.models';
 import local from '../utils/storage/local';
-import { CommonService } from './common.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -100,7 +99,7 @@ export class UserService {
 
   getListTxByAddress(payload) {
     const operationsDoc = `
-    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderId: order_by = desc, $address: String = null) {
+    query QueryTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $listTxMsgType: [String!] = null, $listTxMsgTypeNotIn: [String!] = null, $heightGT: Int = null, $heightLT: Int = null, $orderId: order_by = desc, $address: String! = null) {
       ${this.envDB} {
         transaction(where: {timestamp: {_lte: $endTime, _gte: $startTime}, transaction_messages: {type: {_in: $listTxMsgType, _nin: $listTxMsgTypeNotIn}, sender: {_eq: $address}}, _and: [{height: {_gt: $heightGT, _lt: $heightLT}}]}, limit: $limit, order_by: {id: $orderId}) {
           hash
@@ -111,6 +110,9 @@ export class UserService {
           transaction_messages {
             type
             content
+          }
+          evm_transaction{
+            hash
           }
         }
       }
@@ -130,6 +132,43 @@ export class UserService {
           endTime: payload.endTime,
         },
         operationName: 'QueryTxOfAccount',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListEvmTxByAddress(payload) {
+    const operationsDoc = `
+    query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $orderId: order_by = desc, $address: String! = null) {
+      ${this.envDB} {
+        evm_transaction(where: {from: {_eq: $address}, transaction: {timestamp: {_gt: $startTime, _lt: $endTime}}}, limit: $limit, order_by: {id: $orderId}) {
+          data
+          from
+          to
+          hash
+          height
+          value
+          erc20_activities {
+            amount
+          }
+          transaction {
+            timestamp
+            hash
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          limit: payload.limit || 40,
+          address: payload.address,
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+        },
+        operationName: 'QueryEvmTxOfAccount',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
@@ -185,8 +224,8 @@ export class UserService {
         query: operationsDoc,
         variables: {
           limit: payload.limit || 100,
-          from: payload.from,
-          to: payload.to,
+          from: payload.from?.toLowerCase(),
+          to: payload.to?.toLowerCase(),
           height_lt: payload.heightLT,
           msg_types_in: payload.listTxMsgTypeNotIn?.length > 0 ? null : payload.listTxMsgType,
           msg_types_nin: payload.listTxMsgTypeNotIn,
@@ -198,7 +237,7 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListFTByAddress(payload) {
+  getCW20TxByAddress(payload) {
     const operationsDoc = `
     query QueryCW20ListTX(
       $receiver: String = null, 
@@ -265,7 +304,60 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListNFTByAddress(payload) {
+  getErc20TxByAddress(payload) {
+    const operationsDoc = `
+    query QueryERC20ListTX(
+      $from: String = null
+      $to: String = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $actionIn: [String!] = null
+      $actionNotIn: [String!] = null
+      $startTime: timestamptz = null
+      $endTime: timestamptz = null
+      $limit: Int = 100) {
+      ${this.envDB} {
+        evm_transaction(where: {erc20_activities: {_or: [{from: {_eq: $from}}, {to: {_eq: $to}}], height: {_gt: $heightGT, _lt: $heightLT}, action: {_in: $actionIn, _nin: $actionNotIn}}, transaction: {timestamp: {_lte: $endTime, _gte: $startTime}}}, limit: $limit, order_by: {id: desc}) {
+          data
+          hash
+          transaction {
+            timestamp
+          }
+          erc20_activities(where: {action: {_in: $actionIn, _nin: $actionNotIn} , _or: [{from: {_eq: $from}}, {to: {_eq: $to}}]}) {
+            from
+            to
+            tx_hash
+            action
+            amount
+            erc20_contract {
+              symbol
+              address
+              decimal
+            }
+            erc20_contract_address
+            height
+          }
+        }
+      }
+    } `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          from: payload.sender?.toLowerCase(),
+          to: payload.receiver?.toLowerCase(),
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+          heightLT: payload.heightLT,
+          actionIn: CW20_TRACKING,
+          actionNotIn: null,
+        },
+        operationName: 'QueryERC20ListTX',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListCW721ByAddress(payload) {
     const operationsDoc = `
     query QueryCW721ListTX(
       $receiver: String = null
@@ -326,17 +418,102 @@ export class UserService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: {
-          sender: payload.sender,
-          receiver: payload.receiver,
+          sender: payload.sender?.toLowerCase(),
+          receiver: payload.receiver?.toLowerCase(),
           startTime: payload.startTime,
           endTime: payload.endTime,
           heightLT: payload.heightLT,
-          actionIn: payload.isNFTDetail ? null : !payload.isTransferTab ? CW721_TRACKING : null,
-          actionNotIn: payload.isNFTDetail ? null : payload.isTransferTab ? ['approve', 'instantiate', 'revoke'] : null,
+          actionIn: CW721_TRACKING,
+          actionNotIn: null,
           limit: payload.limit,
           neqCw4973: 'crates.io:cw4973',
         },
         operationName: 'QueryCW721ListTX',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListERC721ByAddress(payload) {
+    const operationsDoc = `
+    query QueryERC721ListTX(
+      $receiver: String = null
+      $sender: String = null
+      $startTime: timestamptz = null
+      $endTime: timestamptz = null
+      $heightGT: Int = null
+      $heightLT: Int = null
+      $limit: Int = null
+      $neqCw4973: String
+      $actionIn: [String!] = null
+      $actionNotIn: [String!] = null
+    ) {
+      ${this.envDB} {
+        evm_transaction(
+          where: {
+            erc721_activities: {
+              _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }]
+              action: { _in: $actionIn, _nin: $actionNotIn }
+              erc721_contract: { name: { _neq: $neqCw4973 } }
+            }
+            transaction: {
+              timestamp: { _gte: $startTime, _lte: $endTime }
+            }
+            _and: { height: { _gt: $heightGT, _lt: $heightLT } }
+          }
+          order_by: [{ id: desc }, {height: desc}]
+          limit: $limit
+        ) {
+          data,
+          gas_used: gas
+          hash
+          height
+          value
+          transaction {
+            timestamp
+          }
+          transaction_messages: transaction_message {
+            content
+            type
+          }
+          transaction_message {
+            content
+            type
+          }
+          erc721_activities(
+            where: { _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }] }
+          ) {
+            action
+            from
+            to
+            sender
+            erc721_token {
+              token_id
+            }
+            erc721_contract {
+              evm_smart_contract {
+                address
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          sender: payload.sender?.toLowerCase(),
+          receiver: payload.receiver?.toLowerCase(),
+          startTime: payload.startTime,
+          endTime: payload.endTime,
+          heightLT: payload.heightLT,
+          actionIn: ERC721_TRACKING,
+          actionNotIn: null, //  ['approve', 'instantiate', 'revoke']
+          limit: payload.limit,
+          neqCw4973: 'crates.io:cw4973',
+        },
+        operationName: 'QueryERC721ListTX',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

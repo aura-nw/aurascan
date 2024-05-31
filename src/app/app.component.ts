@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import BigNumber from 'bignumber.js';
-import eruda from 'eruda';
 import * as _ from 'lodash';
 import { Subject, forkJoin, map, takeUntil } from 'rxjs';
 import { STORAGE_KEYS } from './core/constants/common.constant';
@@ -25,8 +24,6 @@ import { Globals } from './global/global';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  TESTNET = ['aura-testnet-2', 'serenity-testnet-001'];
-  isTestnet = this.TESTNET.includes(this.environmentService.chainInfo?.chainId || '');
   isFirstLoad = true;
   user: IUser;
 
@@ -82,16 +79,6 @@ export class AppComponent implements OnInit, OnDestroy {
       //get list token market
       this.tokenService.getCoinData();
     }, 600000);
-
-    if (this.isTestnet) {
-      let el = document.createElement('div');
-      document.body.appendChild(el);
-
-      eruda.init({
-        container: el,
-        tool: ['console', 'elements', 'resources', 'network'],
-      });
-    }
   }
 
   getInfoCommon(): void {
@@ -132,6 +119,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }).subscribe(({ publicName, privateName }) => {
         const listNameTag = publicName.data?.nameTags?.map((element) => {
           const address = _.get(element, 'address');
+          const evm_address = _.get(element, 'evm_address');
           const name_tag = _.get(element, 'name_tag');
           const enterpriseUrl = _.get(element, 'enterpriseUrl');
 
@@ -146,7 +134,7 @@ export class AppComponent implements OnInit, OnDestroy {
             isPrivate = true;
             id = privateData.id;
           }
-          return { address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
+          return { address, evm_address, name_tag, isPrivate, enterpriseUrl, name_tag_private, id };
         });
 
         // get other data of private list

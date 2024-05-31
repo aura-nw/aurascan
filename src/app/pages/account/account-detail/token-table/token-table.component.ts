@@ -9,6 +9,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
@@ -25,6 +26,8 @@ export class TokenTableComponent implements OnChanges {
   textSearch = '';
   searchValue = '';
   errTxt: string;
+
+  COIN_TOKEN_TYPE = COIN_TOKEN_TYPE;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'contractAddress', headerCellDef: 'contractAddress' },
@@ -54,6 +57,11 @@ export class TokenTableComponent implements OnChanges {
       value: COIN_TOKEN_TYPE.CW20,
       quantity: 0,
     },
+    {
+      label: ETokenCoinType.ERC20,
+      value: COIN_TOKEN_TYPE.ERC20,
+      quantity: 0,
+    },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -72,6 +80,7 @@ export class TokenTableComponent implements OnChanges {
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinMiniDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
+  chainInfo = this.environmentService.chainInfo;
   image_s3 = this.environmentService.imageUrl;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
 
@@ -89,10 +98,13 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
+    const { accountAddress } = transferAddress(this.chainInfo.bech32Config.bech32PrefixAccAddr, this.address);
+
     const payload = {
-      account_address: this.address,
+      account_address: accountAddress?.toLowerCase(),
       keyword: this.textSearch,
     };
+
     if (this.dataTable?.length > 0) {
       let searchList;
       // Filter type token
@@ -184,7 +196,7 @@ export class TokenTableComponent implements OnChanges {
             if (e.error?.error?.statusCode) {
               this.errTxt = e.error?.error?.statusCode + ' ' + e.error?.error?.message;
             } else {
-              this.errTxt = e.error?.message;
+              this.errTxt = e.error?.message || e.message;
             }
           }
           this.assetsLoading = false;

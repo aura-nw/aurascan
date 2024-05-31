@@ -1,16 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/common.constant';
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
-
 @Component({
   selector: 'app-horizontaltopbar',
   templateUrl: './horizontaltopbar.component.html',
@@ -22,23 +24,24 @@ import { MenuItem } from './menu.model';
  */
 export class HorizontaltopbarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = MENU;
-
   searchValue = null;
   pageTitle = null;
   menuName = MenuName;
   menuLink = [];
   currentAddress = null;
   userEmail: string;
+  destroy$ = new Subject();
 
   prefixValAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixValAddr;
   prefixNormalAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
 
-  destroy$ = new Subject();
+  search$ = new BehaviorSubject(null);
 
   constructor(
     public router: Router,
     public translate: TranslateService,
     private transactionService: TransactionService,
+    private contractService: ContractService,
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
@@ -57,6 +60,10 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.userService.user$?.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
       this.userEmail = currentUser ? currentUser.email : null;
     });
+
+    this.search$.pipe(debounceTime(100), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((data) => {
+      this.handleSearch();
+    });
   }
 
   checkFeatures() {
@@ -68,18 +75,16 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
           let isEnabledMenu = false;
           item.subItems.forEach((subItem) => {
             const featureName = subItem.featureName;
-
             const foundIndex = features.findIndex((item) => item === featureName);
 
             // If have featureName, check disable
-            subItem.disabled = featureName ? (foundIndex < 0 ? true : false) : false;
-
+            subItem.disabled = featureName ? foundIndex < 0 : false;
             isEnabledMenu = subItem.disabled ? true : isEnabledMenu;
           });
         } else {
           const featureName = item.featureName;
           const foundIndex = features.findIndex((item) => item === featureName);
-          item.disabled = foundIndex < 0 ? true : false;
+          item.disabled = foundIndex < 0;
         }
       });
     }
@@ -91,44 +96,112 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
       : this.environmentService.environment.label.desktop;
   }
 
-  async handleSearch() {
+  search() {
+    this.search$.next(this.searchValue);
+  }
+
+  handleSearch() {
+    this.searchValue = this.searchValue?.trim();
+    if (!this.searchValue) return;
+
     const VALIDATORS = {
       HASHRULE: /^[A-Za-z0-9]/,
     };
-    const regexRule = VALIDATORS.HASHRULE;
-    if (this.searchValue) {
-      this.searchValue = this.searchValue.trim();
-      const addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
-      if (addressNameTag?.length > 0) {
-        let urlLink = addressNameTag.length === LENGTH_CHARACTER.CONTRACT ? 'contracts' : 'account';
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate([urlLink, addressNameTag]);
-        });
-      }
 
-      let isNumber = /^\d+$/.test(this.searchValue);
-      if (regexRule.test(this.searchValue)) {
-        //check is start with 'aura' and length >= normal address
-        if (this.searchValue.startsWith(this.prefixNormalAdd) && this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
-          if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
-            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['contracts', this.searchValue]);
-            });
-          } else {
-            let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
-            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-              this.router.navigate([urlLink, this.searchValue]);
-            });
-          }
-        } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
-          this.getTxhDetail(this.searchValue);
-        } else if (isNumber) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['blocks', this.searchValue]);
-          });
-        }
+    if (!VALIDATORS.HASHRULE.test(this.searchValue)) return;
+
+    let addressNameTag = this.nameTagService.findAddressByNameTag(this.searchValue);
+
+    if (!addressNameTag && this.contractService.isValidAddress(this.searchValue)) {
+      if (this.searchValue.startsWith(this.prefixValAdd)) {
+        return this.redirectPage('validators', this.searchValue);
+      } else if (this.searchValue?.length === LENGTH_CHARACTER.CONTRACT) {
+        // case cosmos contract
+        return this.redirectPage('contracts', this.searchValue);
+      } else {
+        addressNameTag = this.searchValue;
       }
     }
+
+    if (!addressNameTag && this.contractService.isValidContract(this.searchValue)) {
+      addressNameTag = this.searchValue;
+    }
+
+    if (
+      !addressNameTag &&
+      this.searchValue.startsWith(EWalletType.EVM) &&
+      this.searchValue.length === LENGTH_CHARACTER.EVM_ADDRESS
+    ) {
+      addressNameTag = this.searchValue;
+    }
+
+    if (addressNameTag) {
+      return this.searchAddressByNameTag(addressNameTag);
+    } else {
+      if (
+        this.searchValue.startsWith(EWalletType.EVM) &&
+        this.searchValue.length === LENGTH_CHARACTER.EVM_TRANSACTION
+      ) {
+        return this.getEvmTxnDetail(this.searchValue);
+      } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
+        return this.getTxhDetail(this.searchValue);
+      } else if (this.isBlock(this.searchValue)) {
+        return this.redirectPage('block', this.searchValue);
+      }
+    }
+  }
+
+  searchAddressByNameTag(nametag) {
+    // get address by nameTag
+    const address = transferAddress(this.prefixNormalAdd, nametag);
+    return this.contractService.searchAddress(address).subscribe({
+      next: (res) => {
+        if (address?.accountEvmAddress && res.evm_smart_contract?.length > 0) {
+          this.redirectPage('evm-contracts', address.accountEvmAddress);
+        } else if (res?.account?.length > 0 || res.validator?.length > 0) {
+          this.redirectPage(
+            'address',
+            this.searchValue == address.accountEvmAddress || this.searchValue == address.accountAddress
+              ? this.searchValue
+              : address.accountAddress,
+          );
+        } else {
+          this.redirectPage('address', this.searchValue);
+        }
+      },
+      error: (e) => {
+        this.searchValue = '';
+      },
+    });
+  }
+
+  isBlock(value) {
+    return /^\d+$/.test(value);
+  }
+
+  redirectPage(urlLink: string, value: string | number) {
+    this.router.navigate([urlLink, value]);
+
+    this.searchValue = '';
+  }
+
+  getEvmTxnDetail(value): void {
+    const payload = {
+      limit: 1,
+      hash: decodeURI(value),
+    };
+    this.transactionService.queryTransactionByEvmHash(payload).subscribe({
+      next: (res) => {
+        if (res?.transaction?.length > 0) {
+          this.redirectPage('tx', value);
+        } else {
+          this.searchValue = '';
+        }
+      },
+      error: (e) => {
+        this.searchValue = '';
+      },
+    });
   }
 
   getTxhDetail(value): void {
@@ -139,9 +212,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.transactionService.getListTx(payload).subscribe(
       (res) => {
         if (res?.transaction?.length > 0) {
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['transaction', this.searchValue]);
-          });
+          this.redirectPage('tx', value);
         } else {
           this.searchValue = '';
         }
@@ -164,58 +235,6 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
         this.menuLink.push(arr);
       }
     }
-  }
-
-  checkMenuActive(menuLink: string) {
-    if ((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
-      return true;
-    }
-
-    if (!menuLink.includes('/tokens')) {
-      if (menuLink === '/' + this.router.url.split('/')[1] && this.router.url.includes(menuLink)) {
-        return true;
-      }
-    }
-
-    if (menuLink === '/tokens' && (this.router.url == '/tokens' || this.router.url.includes('/tokens/token/'))) {
-      return true;
-    }
-
-    if (
-      menuLink === '/tokens/tokens-nft' &&
-      (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
-    ) {
-      return true;
-    }
-
-    if (
-      menuLink === '/tokens/token-abt' &&
-      (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
-    ) {
-      return true;
-    }
-
-    if (
-      menuLink === '/statistics/charts-stats' &&
-      (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
-    ) {
-      return true;
-    }
-
-    if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
-      return true;
-    }
-
-    if (
-      menuLink === '/code-ids' &&
-      (this.router.url == '/code-ids' ||
-        this.router.url.includes('/code-ids/detail/') ||
-        this.router.url.includes('/code-ids/verify/'))
-    ) {
-      return true;
-    }
-
-    return false;
   }
 
   removeConfigCSV(data) {

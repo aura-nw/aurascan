@@ -77,6 +77,18 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('confirmPassword');
   }
 
+  changeEmail() {
+    this.checkEmail = true;
+    this.isError = false;
+    this.getEmail.setValue(this.getEmail.value.trim());
+  }
+
+  changePass() {
+    this.checkPassword = true;
+    this.isError = false;
+    this.getPassword.setValue(this.getPassword.value.trim());
+  }
+
   formInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,10}$')]],

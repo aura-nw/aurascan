@@ -1,0 +1,107 @@
+<div class="card box-contract-overview mb-0 mb-lg-5 dropdown">
+  <div
+    class="card__header d-flex align-items-center justify-content-between"
+    data-bs-toggle="collapse"
+    data-bs-target="#title1"
+    aria-controls="title1"
+    aria-expanded="false">
+    <h6 class="h4-mob mb-0 text--white fw-semibold">Contract Overview</h6>
+    <button class="button d-lg-none" type="button">
+      <i class="ph ph-caret-down text--white h3"></i>
+    </button>
+  </div>
+  <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
+  <div class="card__body body-02 body-mob collapse" id="title1">
+    <div>
+      <div class="text--gray-4 caption fw-normal mb-1">{{ chainName | uppercase }} Balance</div>
+      <div class="d-flex align-items-center">
+        <div class="text--gray-light mr-1">
+          <div *ngIf="contractBalance == 0">0</div>
+          <div
+            [appTooltip]="{ priceAmount: contractBalance, decimal }"
+            *ngIf="contractBalance != 0 && (contractBalance | balance: decimal : true).lt(0.001)">
+            {{ '<0.001' }}
+          </div>
+          <div
+            *ngIf="(contractBalance | balance: decimal : true).gte(0.001)"
+            [appTooltip]="{ priceAmount: contractBalance, decimal: decimal }"
+            [appBigNumber]="contractBalance"
+            [decimal]="decimal"></div>
+        </div>
+
+        <span appLinkDenom>{{ denom }}</span>
+
+        <a class="text--primary text-decoration-underline ml-1" [routerLink]="['/address', contractDetail.address]">
+          More info
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <div class="text--gray-4 caption fw-normal mb-1">Value</div>
+      <div class="text--gray-light d-flex">
+        <div class="d-flex">
+          <div *ngIf="contractValue == 0">$0.00</div>
+          <div *ngIf="contractValue != 0">
+            <span *ngIf="contractValue | lt: 0.01" [appTooltip]="{ priceAmount: contractValue, decimal: 0 }">
+              {{ '< $0.01' }}
+            </span>
+            <span *ngIf="contractValue | gte: 0.01" [appTooltip]="{ priceAmount: contractValue, decimal: 0 }">
+              $<span [appBigNumber]="contractValue" [decimal]="0"></span>
+            </span>
+          </div>
+
+          <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
+            (${{ +tokenService.nativePrice | mask: 'separator.6' }}/{{ denom | uppercase }})
+          </span>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <div class="d-flex align-items-center">
+          <div class="text--gray-4 caption fw-normal mb-1">Token Tracker</div>
+          <a
+            *ngIf="
+              contractDetail?.type === contractRegisterType.ERC20 ||
+              contractDetail?.type === contractRegisterType.ERC721 ||
+              contractDetail?.erc20_contract?.name ||
+              contractDetail?.erc721_contract?.name
+            "
+            class="ml-1 p-0 button button--ssm mb-1"
+            [routerLink]="['/token', contractDetail?.address]">
+            <i class="ph-arrow-square-out-fill text--primary body-01 h3-mob mb-0"></i>
+          </a>
+        </div>
+        <div>
+          <div
+            class="d-flex align-items-center"
+            *ngIf="
+              (contractDetail?.erc20_contract?.name && contractDetail?.erc20_contract?.symbol) ||
+              (contractDetail?.erc721_contract?.name && contractDetail?.erc721_contract?.symbol)
+            ">
+            <a
+              class="text--white break-word line-claim-v--des"
+              *ngIf="contractDetail?.erc20_contract?.name && contractDetail?.erc20_contract?.symbol">
+              {{ contractDetail.erc20_contract?.name }} ({{ contractDetail.erc20_contract?.symbol }})
+            </a>
+            <a
+              class="text--white break-word line-claim-v--des"
+              *ngIf="contractDetail?.erc721_contract?.name && contractDetail?.erc721_contract?.symbol">
+              {{ contractDetail.erc721_contract?.name }} ({{ contractDetail.erc721_contract?.symbol }})
+            </a>
+            <div class="cursor-pointer">
+              <img
+                [src]="'assets/images/icons/CircleWavyCheck.svg' | imageS3"
+                alt=""
+                width="18"
+                height="18"
+                class="ml-1 mb-1"
+                [appTooltip]="verifiedText || 'Verified by Aura Network'"
+                *ngIf="verifiedStatus === 'VERIFIED'" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,640 +1,895 @@
-<div class="d-lg-none d-block mb-4">
-  <div class="d-flex align-items-center justify-content-end">
-    <button
-      *ngIf="
-        ((transactionFilter.startDate && transactionFilter.endDate) ||
-          transactionFilter.typeTransfer ||
-          transactionFilter.type) &&
-        displayFilter
-      "
-      class="button button-link body-01 px-0 mr-4 d-lg-none"
-      (click)="clearFilter(modeFilter.all)">
-      <span class="text-nowrap">Clear all</span>
-    </button>
-    <button
-      (click)="displayFilter = !displayFilter"
-      class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4"
-      type="button">
-      <i class="ph ph-funnel-simple text--white mr-2 body-01"></i>
-      <span>Filter</span>
-      <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object" [class.noti--pill]="true">
-        {{ countFilter }}
-      </span>
-    </button>
-    <button
-      [appFeature]="EFeature.ExportCsv"
-      class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4 ml-4"
-      type="button"
-      (click)="linkExportPage()">
-      <i class="ph ph-export text--white mr-2 body-01"></i>
-      <span>Export CSV</span>
-    </button>
-  </div>
+<ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div
-    class="caption fw-normal text--gray-5 {{
-      !transactionLoading && !displayType && !displayFilter ? 'visible mt-3' : 'invisible'
-    }}">
-    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-    found
-  </div>
-</div>
-<div class="d-flex justify-content-between align-items-center" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
-  <div class="d-none d-lg-block text--gray-5" *ngIf="!transactionLoading && !displayFilter">
-    {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-    found
-  </div>
-  <div *ngIf="displayType">
-    <div class="d-flex d-lg-none align-items-center">
-      <div class="dropdown aura-dropdown">
-        <button id="delegateAction1" data-bs-toggle="dropdown" class="btn-select-type p-0">
-          <span>{{ currentType }}</span>
-          <i class="ph ph-caret-down text--white body cursor-pointer ml-2"></i>
-        </button>
-        <ul
-          class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm"
-          aria-labelledby="delegateAction1">
-          <li
-            *ngFor="let item of typeTx; let i = index"
-            (click)="changeType(item)"
-            class="dropdown-item cursor-pointer">
-            <span>{{ item }}</span>
-          </li>
-        </ul>
-      </div>
+    class="d-flex align-items-center mb-lg-1 mb-4 justify-content-between token-filter"
+    *ngIf="modeQuery === tabsData.FtsTxs">
+    <div class="button-switch-stage button-fixed mt-lg-0">
+      <button
+        class="button body border-radius--sm"
+        (click)="changeTokenType(tokenType.ERC20)"
+        [class.active-gradient]="fungibleTokenType === tokenType.ERC20">
+        <span>ERC20</span>
+      </button>
+      <button
+        class="button body border-radius--sm"
+        (click)="changeTokenType(tokenType.CW20)"
+        [class.active-gradient]="fungibleTokenType === tokenType.CW20">
+        <span>CW20</span>
+      </button>
     </div>
   </div>
-  <div class="mb-0 text--gray-5 caption-mob fw-normal filter-contain">
-    <div class="box-filter txs-filter-panel d-flex align-items-center mb-4 mb-lg-0" *ngIf="displayFilter">
-      <div class="d-flex align-items-center">
-        <div class="dropdown aura-dropdown btn-item body" [class.menu-hidden]="transactionFilter.endDate">
-          <div
-            [style]="'width: 225px'"
-            class="align-items-center d-flex justify-content-between calendar-contain border-sm border-gray-8 border-radius--sm cursor-pointer"
-            (click)="datePickerClickTrigger()">
-            <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
-              <input
-                class="cursor-pointer"
-                matStartDate
-                placeholder="Start date"
-                [(ngModel)]="transactionFilter.startDate"
-                readonly />
-              <input
-                matEndDate
-                placeholder="End date"
-                [(ngModel)]="transactionFilter.endDate"
-                class="pl-3 cursor-pointer"
-                readonly
-                (ngModelChange)="searchType()" />
-            </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true" id="datepicker-toggle">
-              <mat-icon matDatepickerToggleIcon class="d-flex align-items-center">
-                <i
-                  *ngIf="!picker.opened && !transactionFilter.startDate"
-                  matIconSuffix
-                  class="ph ph-caret-down text--white body icon-expand"></i>
-                <i
-                  *ngIf="picker.opened && !transactionFilter.startDate"
-                  matIconSuffix
-                  class="ph ph-caret-up text--white body cursor-pointer"></i>
-                <img
-                  *ngIf="transactionFilter.startDate"
-                  [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
-                  alt=""
-                  width="24"
-                  height="24"
-                  (click)="clearFilter(modeFilter.date)" />
-              </mat-icon>
-            </mat-datepicker-toggle>
-            <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
-          </div>
-        </div>
-        <div
-          *ngIf="transactionFilter.startDate && transactionFilter.endDate"
-          class="filter-result cursor-pointer"
-          (click)="datePickerClickTrigger()"
-          id="filter-result-date">
-          <span>{{ transactionFilter.startDate | date: 'MM/dd/yyyy' }}</span>
-          <span class="mx-1">-</span>
-          <span>{{ transactionFilter.endDate | date: 'MM/dd/yyyy' }}</span>
-          <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.date)"></i>
-        </div>
-        <div class="dropdown aura-dropdown btn-item ml-6 flex-shrink-0" *ngIf="modeQuery !== tabsData.ExecutedTxs">
-          <button
-            [style]="'min-width: max-content'"
-            class="input-group align-items-center d-flex justify-content-between cursor-pointer btn-tns"
-            type="button"
-            id="typeTransfer"
-            [class.filter-result]="transactionFilter.typeTransfer"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            #trigger>
-            <span class="body">
-              <ng-container *ngIf="!transactionFilter.typeTransfer"> Asset Transfer Type </ng-container>
-              <span *ngIf="transactionFilter.typeTransfer?.length > 0">{{ transactionFilter.typeTransfer }} </span>
-            </span>
-            <div class="ml-1 d-flex align-items-center">
-              <ng-container *ngIf="!transactionFilter.typeTransfer">
-                <i class="ph ph-caret-down text--white body"></i>
-                <i class="ph ph-caret-up text--white body"></i>
-              </ng-container>
-              <ng-container *ngIf="transactionFilter.typeTransfer">
-                <i (click)="clearFilter(modeFilter.type); trigger.click()" class="ph-thin ph-x cursor-pointer body">
-                </i>
-              </ng-container>
-            </div>
+  <div
+    class="d-flex align-items-center mb-lg-1 mb-4 justify-content-between token-filter"
+    *ngIf="modeQuery === tabsData.NftTxs">
+    <div class="button-switch-stage button-fixed mt-lg-0">
+      <button
+        class="button body border-radius--sm"
+        (click)="changeTokenType(nftType.ERC721)"
+        [class.active-gradient]="nonFungibleTokenType === nftType.ERC721">
+        <span>ERC721</span>
+      </button>
+      <button
+        class="button body border-radius--sm"
+        (click)="changeTokenType(nftType.CW721)"
+        [class.active-gradient]="nonFungibleTokenType === nftType.CW721">
+        <span>CW721</span>
+      </button>
+    </div>
+  </div>
+  <div class="mb-4" *ngIf="breakpoint.value.matches">
+    <div class="d-flex align-items-center justify-content-end">
+      <button
+        *ngIf="
+          ((transactionFilter.startDate && transactionFilter.endDate) ||
+            transactionFilter.typeTransfer ||
+            transactionFilter.type) &&
+          displayFilter
+        "
+        class="button button-link body-01 px-0 mr-4 d-lg-none"
+        (click)="clearFilter(modeFilter.all)">
+        <span class="text-nowrap">Clear all</span>
+      </button>
+      <button
+        *ngIf="modeQuery !== tabsData.EVMExecutedTxs"
+        (click)="displayFilter = !displayFilter"
+        class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4"
+        type="button">
+        <i class="ph ph-funnel-simple text--white mr-2 body-01"></i>
+        <span>Filter</span>
+        <span *ngIf="countFilter > 0" class="nft__unclaimed-noti caption aura-tooltip-object" [class.noti--pill]="true">
+          {{ countFilter }}
+        </span>
+      </button>
+      <button
+        [appFeature]="EFeature.ExportCsv"
+        class="button button-pill button--xs button-outline button-outline__in-card button-filter px-4 ml-4"
+        type="button"
+        (click)="linkExportPage()">
+        <i class="ph ph-export text--white mr-2 body-01"></i>
+        <span>Export CSV</span>
+      </button>
+    </div>
+    <div
+      class="caption fw-normal text--gray-5 {{
+        !transactionLoading && !displayType && !displayFilter ? 'visible mt-3' : 'invisible'
+      }}">
+      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+      found
+    </div>
+  </div>
+  <div class="d-flex justify-content-between align-items-center" [ngClass]="displayType ? 'mb-3' : 'mb-4'">
+    <div class="text--gray-5" *ngIf="!transactionLoading && !displayFilter && !breakpoint.value.matches">
+      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+      found
+    </div>
+    <div *ngIf="displayType">
+      <div class="d-flex d-lg-none align-items-center">
+        <div class="dropdown aura-dropdown">
+          <button id="delegateAction1" data-bs-toggle="dropdown" class="btn-select-type p-0">
+            <span>{{ currentType }}</span>
+            <i class="ph ph-caret-down text--white body cursor-pointer ml-2"></i>
           </button>
-          <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
-            <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
-              <button type="button" class="button p-0">All type</button>
-            </li>
-            <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Sent)">
-              <button type="button" class="button p-0">Sent</button>
-            </li>
-            <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Received)">
-              <button type="button" class="button p-0">Receive</button>
+          <ul
+            class="dropdown-menu aura-dropdown-menu filter-dropdown border-sm border-gray-9 border-radius--sm"
+            aria-labelledby="delegateAction1">
+            <li
+              *ngFor="let item of typeTx; let i = index"
+              (click)="changeType(item)"
+              class="dropdown-item cursor-pointer">
+              <span>{{ item }}</span>
             </li>
           </ul>
         </div>
-
-        <div *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs" class="ml-6">
-          <button
-            #tnxTypeMenuBtn
-            (menuClosed)="initTnxFilterPanel()"
-            [matMenuTriggerFor]="tnxTypeMenu"
-            [style]="'min-width: 155px'"
-            class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-mess"
-            [class.menu-hidden]="transactionFilter.type"
-            type="button">
-            <span class="body line-claim"> Message type </span>
-            <div class="ml-3 mt-1">
-              <i *ngIf="!transactionFilter.startDate" class="ph ph-caret-down text--white body icon-expand"></i>
-              <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
-            </div>
-          </button>
-          <div
-            class="filter-result cursor-pointer"
-            id="filter-result-mess"
-            (click)="tnxTypeMenuBtn.click(); initTnxFilterPanel()"
-            *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
-            {{ checkAll ? 'All' : transactionFilter.type?.length || 1 }} Msg Types selected
-            <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.msgType)"></i>
-          </div>
-          <mat-menu
-            #tnxTypeMenu="matMenu"
-            class="aura-menu-panel tnx-type-panel text--white mt-2 p-2"
-            [yPosition]="'above'">
+      </div>
+    </div>
+    <div class="mb-0 text--gray-5 caption-mob fw-normal filter-contain">
+      <div class="box-filter txs-filter-panel d-flex align-items-center mb-4 mb-lg-0" *ngIf="displayFilter">
+        <div class="d-flex align-items-center">
+          <div class="dropdown aura-dropdown btn-item body" [class.menu-hidden]="transactionFilter.endDate">
             <div
-              class="aura-form single-input-field py-2 px-2"
-              (click)="$event.stopPropagation()"
-              (keydown)="$event.stopPropagation()">
-              <div
-                class="input-group tnx-type-search mb-2"
-                (click)="$event.stopPropagation()"
-                (keydown)="$event.stopPropagation()">
+              [style]="'width: 225px'"
+              class="align-items-center d-flex justify-content-between calendar-contain border-sm border-gray-8 border-radius--sm cursor-pointer"
+              (click)="datePickerClickTrigger()">
+              <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
                 <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Search for message type"
-                  [(ngModel)]="transactionTypeKeyWord"
-                  [ngModelOptions]="{ standalone: true }"
-                  (ngModelChange)="searchTransactionType()"
-                  name="search"
-                  autocomplete="off" />
-                <button
-                  type="submit"
-                  class="btn-search {{ transactionTypeKeyWord && transactionTypeKeyWord?.length > 0 ? 'd-none' : '' }}">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-                </button>
-                <button
-                  type="reset"
-                  class="btn-reset cursor-pointer {{
-                    !transactionTypeKeyWord || (transactionTypeKeyWord && transactionTypeKeyWord?.length === 0)
-                      ? 'd-none'
-                      : ''
-                  }}"
-                  (click)="clearFilterSearch(false)">
+                  class="cursor-pointer"
+                  matStartDate
+                  placeholder="Start date"
+                  [(ngModel)]="transactionFilter.startDate"
+                  readonly />
+                <input
+                  matEndDate
+                  placeholder="End date"
+                  [(ngModel)]="transactionFilter.endDate"
+                  class="pl-3 cursor-pointer"
+                  readonly
+                  (ngModelChange)="searchType()" />
+              </mat-date-range-input>
+              <mat-datepicker-toggle matIconSuffix [for]="picker" [disableRipple]="true" id="datepicker-toggle">
+                <mat-icon matDatepickerToggleIcon class="d-flex align-items-center">
+                  <i
+                    *ngIf="!picker.opened && !transactionFilter.startDate"
+                    matIconSuffix
+                    class="ph ph-caret-down text--white body icon-expand"></i>
+                  <i
+                    *ngIf="picker.opened && !transactionFilter.startDate"
+                    matIconSuffix
+                    class="ph ph-caret-up text--white body cursor-pointer"></i>
                   <img
+                    *ngIf="transactionFilter.startDate"
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
                     alt=""
                     width="24"
-                    height="24" />
-                </button>
+                    height="24"
+                    (click)="clearFilter(modeFilter.date)" />
+                </mat-icon>
+              </mat-datepicker-toggle>
+              <mat-date-range-picker #picker [yPosition]="'below'"></mat-date-range-picker>
+            </div>
+          </div>
+          <div
+            *ngIf="transactionFilter.startDate && transactionFilter.endDate"
+            class="filter-result cursor-pointer"
+            (click)="datePickerClickTrigger()"
+            id="filter-result-date">
+            <span>{{ transactionFilter.startDate | date: 'MM/dd/yyyy' }}</span>
+            <span class="mx-1">-</span>
+            <span>{{ transactionFilter.endDate | date: 'MM/dd/yyyy' }}</span>
+            <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.date)"></i>
+          </div>
+          <div class="dropdown aura-dropdown btn-item ml-6 flex-shrink-0" *ngIf="modeQuery !== tabsData.ExecutedTxs">
+            <button
+              [style]="'min-width: max-content'"
+              class="input-group align-items-center d-flex justify-content-between cursor-pointer btn-tns"
+              type="button"
+              id="typeTransfer"
+              [class.filter-result]="transactionFilter.typeTransfer"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              #trigger>
+              <span class="body">
+                <ng-container *ngIf="!transactionFilter.typeTransfer"> Asset Transfer Type </ng-container>
+                <span *ngIf="transactionFilter.typeTransfer?.length > 0">{{ transactionFilter.typeTransfer }} </span>
+              </span>
+              <div class="ml-1 d-flex align-items-center">
+                <ng-container *ngIf="!transactionFilter.typeTransfer">
+                  <i class="ph ph-caret-down text--white body"></i>
+                  <i class="ph ph-caret-up text--white body"></i>
+                </ng-container>
+                <ng-container *ngIf="transactionFilter.typeTransfer">
+                  <i (click)="clearFilter(modeFilter.type); trigger.click()" class="ph-thin ph-x cursor-pointer body">
+                  </i>
+                </ng-container>
               </div>
+            </button>
+            <ul class="dropdown-menu aura-dropdown-menu" id="typeAction" #typeAction>
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter('All type')">
+                <button type="button" class="button p-0">All type</button>
+              </li>
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Sent)">
+                <button type="button" class="button p-0">Sent</button>
+              </li>
+              <li class="dropdown-item cursor-pointer py-2 body" (click)="changeTypeFilter(accountTxType.Received)">
+                <button type="button" class="button p-0">Receive</button>
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="modeQuery !== tabsData.FtsTxs && modeQuery !== tabsData.NftTxs" class="ml-6">
+            <button
+              #tnxTypeMenuBtn
+              (menuClosed)="initTnxFilterPanel()"
+              [matMenuTriggerFor]="tnxTypeMenu"
+              [style]="'min-width: 155px'"
+              class="input-group align-items-center d-flex justify-content-between text--white cursor-pointer btn-mess"
+              [class.menu-hidden]="transactionFilter.type"
+              type="button">
+              <span class="body line-claim"> Message type </span>
+              <div class="ml-3 mt-1">
+                <i *ngIf="!transactionFilter.startDate" class="ph ph-caret-down text--white body icon-expand"></i>
+                <i *ngIf="transactionFilter.startDate" class="ph ph-caret-up text--white body cursor-pointer"></i>
+              </div>
+            </button>
+            <div
+              class="filter-result cursor-pointer"
+              id="filter-result-mess"
+              (click)="tnxTypeMenuBtn.click(); initTnxFilterPanel()"
+              *ngIf="transactionFilter.type?.length > 0 || isSearchOther">
+              {{ checkAll ? 'All' : transactionFilter.type?.length || 1 }} Msg Types selected
+              <i class="ph-thin ph-x cursor-pointer body ml-1" (click)="clearFilter(modeFilter.msgType)"></i>
+            </div>
+            <mat-menu
+              #tnxTypeMenu="matMenu"
+              class="aura-menu-panel tnx-type-panel text--white mt-2 p-2"
+              [yPosition]="'above'">
               <div
-                class="tag-filter-box d-flex align-items-center"
-                [class.has-result]="listTypeSelectedTemp?.length > 0"
+                class="aura-form single-input-field py-2 px-2"
                 (click)="$event.stopPropagation()"
                 (keydown)="$event.stopPropagation()">
-                <span *ngIf="listTypeSelectedTemp?.length === 0">Selected Items ...</span>
-                <div class="filter-result" *ngFor="let type of listTypeSelectedTemp">
-                  <span class="caption">{{ type.value }}</span>
-                  <i class="ph-thin ph-x cursor-pointer ml-1 body-02" (click)="removeFilterType(type)"></i>
-                </div>
-              </div>
-              <div>
                 <div
-                  class="form-group d-flex align-items-center tnx-filter-item mx-2"
+                  class="input-group tnx-type-search mb-2"
                   (click)="$event.stopPropagation()"
                   (keydown)="$event.stopPropagation()">
                   <input
-                    type="checkbox"
-                    id="all"
-                    [checked]="checkAll"
-                    (change)="onChangeTnxFilterType($event, 'all')"
-                    class="check-box check-box--dark" />
-                  <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
+                    type="text"
+                    class="form-control"
+                    placeholder="Search for message type"
+                    [(ngModel)]="transactionTypeKeyWord"
+                    [ngModelOptions]="{ standalone: true }"
+                    (ngModelChange)="searchTransactionType()"
+                    name="search"
+                    autocomplete="off" />
+                  <button
+                    type="submit"
+                    class="btn-search {{
+                      transactionTypeKeyWord && transactionTypeKeyWord?.length > 0 ? 'd-none' : ''
+                    }}">
+                    <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                  </button>
+                  <button
+                    type="reset"
+                    class="btn-reset cursor-pointer {{
+                      !transactionTypeKeyWord || (transactionTypeKeyWord && transactionTypeKeyWord?.length === 0)
+                        ? 'd-none'
+                        : ''
+                    }}"
+                    (click)="clearFilterSearch(false)">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
+                      alt=""
+                      width="24"
+                      height="24" />
+                  </button>
                 </div>
-                <div class="divider divider-horizontal my-2"></div>
-                <div class="tnx-filter-box" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
-                  <div
-                    *ngFor="let type of tnxType; let i = index"
-                    class="form-group d-flex align-items-center tnx-filter-item mx-2">
-                    <input
-                      type="checkbox"
-                      [checked]="checkedTnx(type)"
-                      id="type-{{ i }}"
-                      (change)="onChangeTnxFilterType($event, type)"
-                      class="check-box check-box--dark" />
-                    <label for="type-{{ i }}" class="ml-2 mb-0 text-justify pl-1"> {{ type.value }} </label>
+                <div
+                  class="tag-filter-box d-flex align-items-center"
+                  [class.has-result]="listTypeSelectedTemp?.length > 0"
+                  (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()">
+                  <span *ngIf="listTypeSelectedTemp?.length === 0">Selected Items ...</span>
+                  <div class="filter-result" *ngFor="let type of listTypeSelectedTemp">
+                    <span class="caption">{{ type.value }}</span>
+                    <i class="ph-thin ph-x cursor-pointer ml-1 body-02" (click)="removeFilterType(type)"></i>
                   </div>
                 </div>
+                <div>
+                  <div
+                    class="form-group d-flex align-items-center tnx-filter-item mx-2"
+                    (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation()">
+                    <input
+                      type="checkbox"
+                      id="all"
+                      [checked]="checkAll"
+                      (change)="onChangeTnxFilterType($event, 'all')"
+                      class="check-box check-box--dark" />
+                    <label for="all" class="ml-2 mb-0 text-justify pl-1"> All </label>
+                  </div>
+                  <div class="divider divider-horizontal my-2"></div>
+                  <div class="tnx-filter-box" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+                    <div
+                      *ngFor="let type of tnxType; let i = index"
+                      class="form-group d-flex align-items-center tnx-filter-item mx-2">
+                      <input
+                        type="checkbox"
+                        [checked]="checkedTnx(type)"
+                        id="type-{{ i }}"
+                        (change)="onChangeTnxFilterType($event, type)"
+                        class="check-box check-box--dark" />
+                      <label for="type-{{ i }}" class="ml-2 mb-0 text-justify pl-1"> {{ type.value }} </label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="panel__btn-group px-4 d-flex align-items-center justify-content-end"
+                  (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()">
+                  <button
+                    class="button button--xlg button-outline button-outline__in-card button-pill"
+                    (click)="
+                      transactionFilter?.type?.length === 0 ? resetMsgTypeCheckbox() : clearFilter(modeFilter.msgType);
+                      tnxTypeMenuBtn.click()
+                    "
+                    type="button">
+                    <span>Reset</span>
+                  </button>
+                  <button
+                    class="button button--xlg button-outline button-outline__in-card button-pill ml-4"
+                    type="button"
+                    [disabled]="listTypeSelectedTemp?.length === 0"
+                    (click)="executeFilterType(); tnxTypeMenuBtn.click()">
+                    <span>Select</span>
+                  </button>
+                </div>
               </div>
-              <div
-                class="panel__btn-group px-4 d-flex align-items-center justify-content-end"
-                (click)="$event.stopPropagation()"
-                (keydown)="$event.stopPropagation()">
-                <button
-                  class="button button--xlg button-outline button-outline__in-card button-pill"
-                  (click)="
-                    transactionFilter?.type?.length === 0 ? resetMsgTypeCheckbox() : clearFilter(modeFilter.msgType);
-                    tnxTypeMenuBtn.click()
-                  "
-                  type="button">
-                  <span>Reset</span>
-                </button>
-                <button
-                  class="button button--xlg button-outline button-outline__in-card button-pill ml-4"
-                  type="button"
-                  [disabled]="listTypeSelectedTemp?.length === 0"
-                  (click)="executeFilterType(); tnxTypeMenuBtn.click()">
-                  <span>Select</span>
-                </button>
-              </div>
-            </div>
-          </mat-menu>
+            </mat-menu>
+          </div>
+        </div>
+        <div
+          *ngIf="
+            (transactionFilter.startDate && transactionFilter.endDate) ||
+            transactionFilter.typeTransfer ||
+            transactionFilter.type
+          "
+          class="d-none d-lg-flex align-items-center">
+          <div class="divider divider-vertical mx-6"></div>
+          <button class="button button-link body-01 px-0" (click)="clearFilter(modeFilter.all)">
+            <span>Clear all</span>
+          </button>
         </div>
       </div>
-      <div
-        *ngIf="
-          (transactionFilter.startDate && transactionFilter.endDate) ||
-          transactionFilter.typeTransfer ||
-          transactionFilter.type
-        "
-        class="d-none d-lg-flex align-items-center">
-        <div class="divider divider-vertical mx-6"></div>
-        <button class="button button-link body-01 px-0" (click)="clearFilter(modeFilter.all)">
-          <span>Clear all</span>
-        </button>
-      </div>
+    </div>
+    <div *ngIf="!breakpoint.value.matches">
+      <button
+        *ngIf="modeQuery !== tabsData.EVMExecutedTxs"
+        (click)="displayFilter = !displayFilter"
+        class="button button-pill button--sm button-outline button-outline__in-card button-filter"
+        type="button">
+        <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
+        <span>Filter</span>
+        <span
+          *ngIf="countFilter > 0"
+          class="nft__unclaimed-noti caption aura-tooltip-object text--white"
+          [class.noti--pill]="true">
+          {{ countFilter }}
+        </span>
+      </button>
+      <button
+        [appFeature]="EFeature.ExportCsv"
+        class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4 ml-6"
+        type="button"
+        (click)="linkExportPage()">
+        <i class="ph ph-export text--white mr-2 body-01"></i>
+        <span>Export CSV</span>
+      </button>
     </div>
   </div>
-  <div class="d-none d-lg-block">
-    <button
-      (click)="displayFilter = !displayFilter"
-      class="button button-pill button--sm button-outline button-outline__in-card button-filter"
-      type="button">
-      <i class="ph ph-funnel-simple text--white mr-lg-2 body-01"></i>
-      <span>Filter</span>
-      <span
-        *ngIf="countFilter > 0"
-        class="nft__unclaimed-noti caption aura-tooltip-object text--white"
-        [class.noti--pill]="true">
-        {{ countFilter }}
-      </span>
-    </button>
-    <button
-      [appFeature]="EFeature.ExportCsv"
-      class="button button-pill button--sm button-outline button-outline__in-card button-filter px-4 ml-6"
-      type="button"
-      (click)="linkExportPage()">
-      <i class="ph ph-export text--white mr-2 body-01"></i>
-      <span>Export CSV</span>
-    </button>
+  <div class="box-filter__desc text--gray-5">
+    <div
+      class="mb-4 caption-mob"
+      *ngIf="!transactionLoading && !displayType && displayFilter && breakpoint.value.matches">
+      {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
+      found
+    </div>
   </div>
-</div>
-<div class="box-filter__desc text--gray-5">
-  <div class="d-lg-none mb-4 caption-mob" *ngIf="!transactionLoading && !displayType && displayFilter">
+  <div *ngIf="!transactionLoading && displayFilter && !breakpoint.value.matches" class="text--gray-5 mb-3">
     {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
     found
   </div>
-</div>
-<div *ngIf="!transactionLoading && displayFilter" class="d-none d-lg-block text--gray-5 mb-3">
-  {{ nextKey ? 'More than' : 'A total of' }} {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }}
-  found
-</div>
 
-<ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-  <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
-    <div class="table-responsive" *ngIf="!breakpoint.value.matches">
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        class="aura-table account-transaction-table"
-        [ngClass]="modeQuery !== tabsData.ExecutedTxs ? 'table-transfer' : ''">
-        <ng-container *ngFor="let template of templates; index as i">
-          <ng-container [matColumnDef]="template.matColumnDef">
-            <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-
-            <td
-              mat-cell
-              *matCellDef="let data; let idx = index"
-              class="{{ template?.cssClass }}"
-              [class.tab-nft]="modeQuery === tabsData.NftTxs">
-              <div>
-                <ng-container [ngSwitch]="template.matColumnDef">
-                  <div *ngSwitchCase="'timestamp'">
-                    {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
-                  </div>
-                  <a
-                    *ngSwitchCase="'tx_hash'"
-                    class="text--primary cursor-pointer hash-link"
-                    [routerLink]="['/transaction', data['tx_hash']]"
-                    [copyBtn]="data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
-                  </a>
-                  <a
-                    *ngSwitchCase="'height'"
-                    class="text--primary cursor-pointer block-link"
-                    [routerLink]="['/blocks', data['height']]">
-                    {{ data[template.matColumnDef] }}
-                  </a>
-                  <div *ngSwitchCase="'expand'">
-                    <i
-                      *ngIf="!data.expand"
-                      class="ph ph-caret-down text--gray-6 h3 icon-expand"
-                      (click)="expandData(data)"
-                      [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
-                    <i
-                      *ngIf="data.expand"
-                      class="ph ph-caret-up text--white h3 cursor-pointer"
-                      (click)="data.expand = false"></i>
-                  </div>
-                  <div *ngSwitchCase="'type'">
-                    <div class="status cursor-pointer d-flex" [appTooltip]="data.lstTypeTemp | combineTxsMsg">
-                      {{ data[template.matColumnDef] | ellipsis: 22 }}
-                      <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
-                        +{{ data.lstTypeTemp?.length - 1 }}
-                      </div>
+  <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+    <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
+      <div class="table-responsive" *ngIf="!breakpoint.value.matches">
+        <table mat-table [dataSource]="dataSource" class="aura-table account-transaction-table">
+          <ng-container *ngFor="let template of templates; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef">
+              <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data; let idx = index"
+                class="{{ template?.cssClass }}"
+                [class.tab-nft]="modeQuery === tabsData.NftTxs">
+                <div>
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <div *ngSwitchCase="'timestamp'">
+                      {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                     </div>
-                  </div>
-                  <div *ngSwitchCase="'status'">
-                    <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
-                      <div *ngSwitchCase="'Success'" class="text--green-3">
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'Fail'" class="text--red-3">
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'Pending'" class="text--yellow-3">
-                        {{ data[template.matColumnDef] }}
-                      </div>
+                    <a
+                      *ngSwitchCase="'tx_hash'"
+                      class="text--primary cursor-pointer hash-link"
+                      [routerLink]="['/tx', data[template.matColumnDef]]"
+                      [copyBtn]="data[template.matColumnDef]">
+                      {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                    </a>
+                    <a
+                      *ngSwitchCase="'height'"
+                      class="text--primary cursor-pointer block-link"
+                      [routerLink]="['/block', data['height']]">
+                      {{ data[template.matColumnDef] }}
+                    </a>
+                    <div *ngSwitchCase="'expand'">
+                      <i
+                        *ngIf="!data.expand"
+                        class="ph ph-caret-down text--gray-6 h3 icon-expand"
+                        (click)="expandData(data)"
+                        [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
+                      <i
+                        *ngIf="data.expand"
+                        class="ph ph-caret-up text--white h3 cursor-pointer"
+                        (click)="data.expand = false"></i>
                     </div>
-                  </div>
-                  <div *ngSwitchCase="'fee'">
-                    {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                    <span appLinkDenom>{{ denom }}</span>
-                  </div>
-                  <div *ngSwitchCase="'amount'">
-                    <ng-container *ngFor="let item of data.arrEvent; let index = index">
-                      <div
-                        class="explain-data"
-                        [class.show-detail]="data.expand || index === 0"
-                        *ngIf="index < data.limit">
-                        <div class="item-show d-flex align-items-center">
-                          <div *ngIf="+item.amountTemp === 0">0</div>
-                          <div
-                            [appTooltip]="{ priceAmount: item.amountTemp, decimal: item.decimal }"
-                            *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
-                            {{ '<0.001' }}
-                          </div>
-                          <div
-                            [appTooltip]="{ priceAmount: item.amountTemp, decimal: item.decimal }"
-                            [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
-                            *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
-                            [appBigNumber]="item.amountTemp"
-                            [decimal]="item.decimal"></div>
-                          <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
-                            <div
-                              *ngIf="modeQuery !== tabsData.FtsTxs"
-                              [appTooltip]="item.denom !== denom ? item.denomOrigin : null"
-                              [classTooltip]="'tooltip--left'"
-                              [class.aura-tooltip-object]="item.denom !== denom"
-                              [appLinkDenom]="item.denomOrigin">
-                              {{ item.denom | ellipsis: 19 }}
-                            </div>
-                            <a
-                              class=""
-                              [routerLink]="['/tokens/token', item.contractAddress]"
-                              *ngIf="modeQuery === tabsData.FtsTxs">
-                              {{ item.denom | ellipsis: 19 }}
-                            </a>
-                          </span>
+                    <div *ngSwitchCase="'type'">
+                      <div class="status cursor-pointer d-flex" [appTooltip]="data.lstTypeTemp | combineTxsMsg">
+                        {{ data[template.matColumnDef] | ellipsis: 22 }}
+                        <div *ngIf="data.lstTypeTemp?.length > 1" class="ml-1 text--gray-4">
+                          +{{ data.lstTypeTemp?.length - 1 }}
                         </div>
                       </div>
-                    </ng-container>
-                  </div>
-                  <div *ngSwitchCase="'fromAddress'">
-                    <ng-container *ngFor="let item of data.arrEvent; let index = index">
-                      <div
-                        class="explain-data"
-                        [class.show-detail]="data.expand || index === 0"
-                        *ngIf="index < data.limit">
-                        <div class="item-show d-flex justify-content-between align-items-center">
-                          <app-name-tag
-                            [value]="item.fromAddress || currentAddress"
-                            [iconContract]="item.fromAddress || currentAddress | isContract"
-                            [linkRouter]="[
-                              (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/account',
-                              item.fromAddress || currentAddress
-                            ]"
-                            [isEnableRouter]="
-                              !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                              item.fromAddress !== currentAddress
-                            ">
-                          </app-name-tag>
-                          <div class="box-token-transfer d-flex mr-8">
-                            <span
-                              class="token-transfer-status d-inline-flex align-items-center caption"
-                              [ngClass]="{ 'status-out': item['toAddress'] !== currentAddress }">
-                              <ng-container *ngIf="item['toAddress'] === currentAddress"> IN </ng-container>
-                              <ng-container *ngIf="item['toAddress'] !== currentAddress"> OUT </ng-container>
+                    </div>
+                    <div *ngSwitchCase="'status'">
+                      <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                        <div *ngSwitchCase="'Success'" class="text--green-3">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'Fail'" class="text--red-3">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngSwitchCase="'fee'">
+                      <ng-container *ngIf="+data[template.matColumnDef] > 0">
+                        <span
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                          [decimalLengthTooltip]="12"
+                          *ngIf="data[template.matColumnDef] | balance: 0 | lt: 0.001">
+                          {{ '<0.001' }}
+                        </span>
+                        <span
+                          *ngIf="data[template.matColumnDef] | balance: 0 | gte: 0.001"
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: 0 }"
+                          [class.cursor-text]="data[template.matColumnDef] | balance: 0 | lt: 1000000"
+                          [appBigNumber]="data[template.matColumnDef]"
+                          [decimal]="0"></span>
+                        <span class="ml-1" appLinkDenom>{{ denom }}</span>
+                      </ng-container>
+                      <ng-container *ngIf="+data[template.matColumnDef] == 0">
+                        0<span class="ml-1" appLinkDenom>{{ denom }}</span>
+                      </ng-container>
+                    </div>
+                    <div *ngSwitchCase="'amount'">
+                      <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                        <div
+                          class="explain-data"
+                          [class.show-detail]="data.expand || index === 0"
+                          *ngIf="index < data.limit">
+                          <div class="item-show d-flex align-items-center">
+                            <div *ngIf="+item.amountTemp === 0">0</div>
+                            <div
+                              [appTooltip]="{ priceAmount: item.amountTemp, decimal: item.decimal }"
+                              *ngIf="+item.amountTemp !== 0 && (item.amountTemp | balance: item.decimal | lt: 0.001)">
+                              {{ '<0.001' }}
+                            </div>
+                            <div
+                              [appTooltip]="{ priceAmount: item.amountTemp, decimal: item.decimal }"
+                              [class.cursor-text]="item.amountTemp | balance: item.decimal | lt: 1000000"
+                              *ngIf="item.amountTemp | balance: item.decimal | gte: 0.001"
+                              [appBigNumber]="item.amountTemp"
+                              [decimal]="item.decimal"></div>
+                            <span class="ml-1" [class.text--primary]="(item.denom || denom) !== coinInfo.coinDenom">
+                              <div
+                                *ngIf="modeQuery !== tabsData.FtsTxs"
+                                [appTooltip]="item.denom !== denom ? item.denomOrigin : null"
+                                [classTooltip]="'tooltip--left'"
+                                [class.aura-tooltip-object]="item.denom !== denom"
+                                [appLinkDenom]="item.denomOrigin">
+                                {{ item.denom | ellipsis: 19 }}
+                              </div>
+                              <a
+                                class=""
+                                [routerLink]="['/token', item.contractAddress]"
+                                *ngIf="modeQuery === tabsData.FtsTxs">
+                                {{ item.denom | ellipsis: 19 }}
+                              </a>
                             </span>
                           </div>
                         </div>
-                      </div>
-                    </ng-container>
-                    <div class="mt-3 mb-4 caption fw-normal d-lg-none" *ngIf="data.expand">
-                      <span
-                        (click)="seeMoreData(data)"
-                        *ngIf="data.limit < data.arrEvent?.length"
-                        class="cursor-pointer mr-8"
-                        >See more</span
-                      >
-                      <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
+                      </ng-container>
                     </div>
-                    <div class="mt-3 mb-4 caption fw-normal d-lg-flex" *ngIf="data.arrEvent?.length > 1 && data.expand">
-                      <span
-                        (click)="seeMoreData(data)"
-                        *ngIf="data.limit < data.arrEvent?.length"
-                        class="cursor-pointer mr-8"
-                        >See more</span
-                      >
-                      <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
-                    </div>
-                  </div>
-                  <div *ngSwitchCase="'toAddress'">
-                    <ng-container *ngFor="let item of data.arrEvent; let index = index">
-                      <div
-                        class="explain-data"
-                        [class.show-detail]="data.expand || index === 0"
-                        *ngIf="index < data.limit">
-                        <div class="item-show d-flex align-items-center">
-                          <div [style]="'min-width: 148px'">
+                    <div *ngSwitchCase="'fromAddress'">
+                      <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                        <div
+                          class="explain-data"
+                          [class.show-detail]="data.expand || index === 0"
+                          *ngIf="index < data.limit">
+                          <div class="item-show d-flex justify-content-between align-items-center">
                             <app-name-tag
-                              [value]="item.toAddress || currentAddress"
-                              [linkRouter]="[
-                                (item.toAddress || currentAddress | isContract) ? '/contracts' : '/account',
-                                item.toAddress || currentAddress
-                              ]"
-                              [iconContract]="item.toAddress || currentAddress | isContract"
+                              [value]="item.fromAddress || currentAddress"
+                              [iconContract]="isEvmSmartContract(item.fromAddress || currentAddress)"
+                              [linkRouter]="
+                                nonFungibleTokenType === nftType.ERC721
+                                  ? [
+                                      isEvmSmartContract(item.fromAddress || currentAddress)
+                                        ? '/evm-contracts'
+                                        : '/address',
+                                      item.fromAddress || currentAddress
+                                    ]
+                                  : [
+                                      (item.fromAddress || currentAddress | isContract) ? '/contracts' : '/address',
+                                      item.fromAddress || currentAddress
+                                    ]
+                              "
                               [isEnableRouter]="
-                                !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
-                                item.toAddress !== currentAddress
+                                !(item.fromAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                                item.fromAddress !== currentAddress
                               ">
                             </app-name-tag>
-                          </div>
-                          <ng-container *ngIf="index === 0">
-                            <div
-                              class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
-                              (click)="expandData(data)"
-                              *ngIf="data.arrEvent?.length > 1">
-                              <ng-container *ngIf="data.arrEvent?.length > 100"> >99</ng-container>
-                              <ng-container *ngIf="data.arrEvent?.length <= 100">
-                                +{{ data.arrEvent?.length - 1 }}
-                              </ng-container>
-                              <i
-                                *ngIf="!data.expand"
-                                class="ph ph-caret-down text--gray-6 icon-expand ml-1"
-                                [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
-                              <i *ngIf="data.expand" class="ph ph-caret-up text--white cursor-pointer ml-1"></i>
+                            <div class="box-token-transfer d-flex mr-8">
+                              <span
+                                class="token-transfer-status d-inline-flex align-items-center caption"
+                                [ngClass]="{ 'status-out': item['toAddress'] !== currentAddress }">
+                                <ng-container *ngIf="item['toAddress'] === currentAddress"> IN </ng-container>
+                                <ng-container *ngIf="item['toAddress'] !== currentAddress"> OUT </ng-container>
+                              </span>
                             </div>
-                          </ng-container>
+                          </div>
                         </div>
+                      </ng-container>
+                      <div class="mt-3 mb-4 caption fw-normal d-lg-none" *ngIf="data.expand">
+                        <span
+                          (click)="seeMoreData(data)"
+                          *ngIf="data.limit < data.arrEvent?.length"
+                          class="cursor-pointer mr-8"
+                          >See more</span
+                        >
+                        <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                       </div>
-                    </ng-container>
-                  </div>
-                  <div *ngSwitchCase="'nft'">
-                    <ng-container *ngFor="let item of data.arrEvent; let index = index">
                       <div
-                        class="explain-data"
-                        [class.show-detail]="data.expand || index === 0"
-                        *ngIf="index < data.limit">
-                        <div class="item-show d-flex nft-column mb-2 justify-content-center">
-                          <div class="justify-content-between tokenId">
-                            <a
-                              *ngIf="item.tokenId"
-                              [routerLink]="['/tokens/' + linkToken, data.contractAddress, encodeData(item.tokenId)]"
-                              [copyBtn]="item.tokenId"
-                              class="text--primary cursor-pointer">
-                              #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
-                            </a>
-                            <ng-container *ngIf="!item.tokenId">-</ng-container>
-                          </div>
-                          <div class="mt-1">
-                            <app-name-tag
-                              [iconContract]="true"
-                              [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
-                              [isShorterText]="true"
-                              [value]="item.contractAddress"
-                              [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                        class="mt-3 mb-4 caption fw-normal d-lg-flex"
+                        *ngIf="data.arrEvent?.length > 1 && data.expand">
+                        <span
+                          (click)="seeMoreData(data)"
+                          *ngIf="data.limit < data.arrEvent?.length"
+                          class="cursor-pointer mr-8"
+                          >See more</span
+                        >
+                        <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
+                      </div>
+                    </div>
+                    <div *ngSwitchCase="'toAddress'">
+                      <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                        <div
+                          class="explain-data"
+                          [class.show-detail]="data.expand || index === 0"
+                          *ngIf="index < data.limit">
+                          <div class="item-show d-flex align-items-center">
+                            <div [style]="'min-width: 148px'">
+                              <app-name-tag
+                                [value]="item.toAddress || currentAddress"
+                                [iconContract]="isEvmSmartContract(item.toAddress || currentAddress)"
+                                [linkRouter]="
+                                  nonFungibleTokenType === nftType.ERC721
+                                    ? [
+                                        isEvmSmartContract(item.toAddress || currentAddress)
+                                          ? '/evm-contracts'
+                                          : '/address',
+                                        item.toAddress || currentAddress
+                                      ]
+                                    : [
+                                        (item.toAddress || currentAddress | isContract) ? '/contracts' : '/address',
+                                        item.toAddress || currentAddress
+                                      ]
+                                "
+                                [isEnableRouter]="
+                                  !(item.toAddress?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                                  item.toAddress !== currentAddress
+                                ">
+                              </app-name-tag>
+                            </div>
+                            <ng-container *ngIf="index === 0">
+                              <div
+                                class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
+                                (click)="expandData(data)"
+                                *ngIf="data.arrEvent?.length > 1">
+                                <ng-container *ngIf="data.arrEvent?.length > 100"> >99</ng-container>
+                                <ng-container *ngIf="data.arrEvent?.length <= 100">
+                                  +{{ data.arrEvent?.length - 1 }}
+                                </ng-container>
+                                <i
+                                  *ngIf="!data.expand"
+                                  class="ph ph-caret-down text--gray-6 icon-expand ml-1"
+                                  [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
+                                <i *ngIf="data.expand" class="ph ph-caret-up text--white cursor-pointer ml-1"></i>
+                              </div>
+                            </ng-container>
                           </div>
                         </div>
-                      </div>
-                    </ng-container>
-                  </div>
-                  <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                </ng-container>
-              </div>
-            </td>
+                      </ng-container>
+                    </div>
+                    <div
+                      *ngSwitchCase="
+                        template.matColumnDef === 'from' || template.matColumnDef === 'to' ? template.matColumnDef : ''
+                      ">
+                      <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">
+                        <app-name-tag
+                          *ngIf="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef]"
+                          [linkRouter]="[
+                            (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
+                            data[template.matColumnDef]
+                          ]"
+                          [iconContract]="data[template.matColumnDef] | isContract"
+                          [isEnableRouter]="
+                            !data[template.matColumnDef]?.startsWith('Null') &&
+                            data[template.matColumnDef] !== currentAddress
+                          ">
+                        </app-name-tag>
+                        <span *ngIf="!data[template.matColumnDef]">-</span>
+                      </ng-container>
+                      <ng-container *ngIf="modeQuery === tabsData.FtsTxs && template.matColumnDef === 'to'">
+                        <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                          <div
+                            class="explain-data"
+                            [class.show-detail]="data.expand || index === 0"
+                            *ngIf="index < data.limit">
+                            <div class="item-show d-flex align-items-center">
+                              <div [style]="'min-width: 148px'">
+                                <app-name-tag
+                                  [value]="item.to || currentAddress"
+                                  [linkRouter]="[
+                                    (item.to || currentAddress | isContract) ? '/contracts' : '/address',
+                                    item.to || currentAddress
+                                  ]"
+                                  [iconContract]="item.to || currentAddress | isContract"
+                                  [isEnableRouter]="
+                                    !(item.to?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                                    item.to !== currentAddress
+                                  ">
+                                </app-name-tag>
+                              </div>
+                              <ng-container *ngIf="index === 0">
+                                <div
+                                  class="box-number d-flex align-items-center cursor-pointer ml-3 border-sm border-gray-8"
+                                  (click)="expandData(data)"
+                                  *ngIf="data.arrEvent?.length > 1">
+                                  <ng-container *ngIf="data.arrEvent?.length > 100"> >99</ng-container>
+                                  <ng-container *ngIf="data.arrEvent?.length <= 100">
+                                    +{{ data.arrEvent?.length - 1 }}
+                                  </ng-container>
+                                  <i
+                                    *ngIf="!data.expand"
+                                    class="ph ph-caret-down text--gray-6 icon-expand ml-1"
+                                    [ngClass]="data.arrEvent?.length > 1 ? 'active' : ''"></i>
+                                  <i *ngIf="data.expand" class="ph ph-caret-up text--white cursor-pointer ml-1"></i>
+                                </div>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngIf="modeQuery === tabsData.FtsTxs && template.matColumnDef === 'from'">
+                        <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                          <div
+                            class="explain-data"
+                            [class.show-detail]="data.expand || index === 0"
+                            *ngIf="index < data.limit">
+                            <div class="item-show d-flex justify-content-between align-items-center">
+                              <app-name-tag
+                                [value]="item.from || currentAddress"
+                                [iconContract]="item.from || currentAddress | isContract"
+                                [linkRouter]="[
+                                  (item.from || currentAddress | isContract) ? '/contracts' : '/address',
+                                  item.from || currentAddress
+                                ]"
+                                [isEnableRouter]="
+                                  !(item.from?.startsWith('Null') || currentAddress?.startsWith('Null')) &&
+                                  item.from !== currentAddress
+                                ">
+                              </app-name-tag>
+                              <div class="box-token-transfer d-flex mr-8">
+                                <span
+                                  class="token-transfer-status d-inline-flex align-items-center caption"
+                                  [ngClass]="{ 'status-out': item['to'] !== currentAddress }">
+                                  <ng-container *ngIf="item['to'] === currentAddress"> IN </ng-container>
+                                  <ng-container *ngIf="item['to'] !== currentAddress"> OUT </ng-container>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <div class="mt-3 mb-4 caption fw-normal d-lg-none" *ngIf="data.expand">
+                          <span
+                            (click)="seeMoreData(data)"
+                            *ngIf="data.limit < data.arrEvent?.length"
+                            class="cursor-pointer mr-8"
+                            >See more</span
+                          >
+                          <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
+                        </div>
+                        <div
+                          class="mt-3 mb-4 caption fw-normal d-lg-flex"
+                          *ngIf="data.arrEvent?.length > 1 && data.expand">
+                          <span
+                            (click)="seeMoreData(data)"
+                            *ngIf="data.limit < data.arrEvent?.length"
+                            class="cursor-pointer mr-8"
+                            >See more</span
+                          >
+                          <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <div *ngSwitchCase="'method'">
+                      {{ data.method }}
+                    </div>
+                    <div *ngSwitchCase="'evmAmount'">
+                      <span
+                        *ngIf="data[template.matColumnDef] | balance: evmDecimal | lt: 0.001"
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: evmDecimal }">
+                        {{ (data[template.matColumnDef] | balance: evmDecimal) == 0 ? 0 : '<0.001' }}
+                      </span>
+                      <span
+                        [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: evmDecimal }"
+                        [class.cursor-text]="data[template.matColumnDef] | balance: evmDecimal | lt: 1000000"
+                        *ngIf="data[template.matColumnDef] | balance: evmDecimal | gte: 0.001"
+                        [appBigNumber]="data[template.matColumnDef]"
+                        [decimal]="evmDecimal"></span>
+                      <span appLinkDenom> {{ denom }}</span>
+                    </div>
+                    <div *ngSwitchCase="'evmTx'">
+                      <a
+                        *ngIf="data[template.matColumnDef]"
+                        [routerLink]="['/tx', data[template.matColumnDef]]"
+                        [copyBtn]="data[template.matColumnDef]"
+                        class="ml-2 p-0 button button--ssm d-inline-flex">
+                        {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
+                      </a>
+                      <span *ngIf="!data[template.matColumnDef]">{{ '-' }}</span>
+                    </div>
+                    <div *ngSwitchCase="'hash'">
+                      <a
+                        [routerLink]="['/tx', data[template.matColumnDef]]"
+                        target="_blank"
+                        class="ml-2 p-0 button button--ssm button-ghost d-inline-flex">
+                        <i class="ph-arrow-square-out-fill text--white body-01 h1-mob mb-0"></i>
+                      </a>
+                    </div>
+                    <div *ngSwitchCase="'nft'">
+                      <ng-container *ngFor="let item of data.arrEvent; let index = index">
+                        <div
+                          class="explain-data"
+                          [class.show-detail]="data.expand || index === 0"
+                          *ngIf="index < data.limit">
+                          <div class="item-show d-flex nft-column mb-2 justify-content-center">
+                            <div class="justify-content-between tokenId">
+                              <a
+                                *ngIf="item.tokenId && nonFungibleTokenType === nftType.ERC721"
+                                [routerLink]="['/token/evm/erc721', data.contractAddress, encodeData(item.tokenId)]"
+                                [copyBtn]="item.tokenId"
+                                class="text--primary cursor-pointer">
+                                #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
+                              </a>
+                              <a
+                                *ngIf="item.tokenId && nonFungibleTokenType === nftType.CW721"
+                                [routerLink]="['/token/cw721', data.contractAddress, encodeData(item.tokenId)]"
+                                [copyBtn]="item.tokenId"
+                                class="text--primary cursor-pointer">
+                                #{{ item.tokenId | ellipsis: (item.tokenId?.length > 8 ? 5 : 8) }}
+                              </a>
+                              <ng-container *ngIf="!item.tokenId">-</ng-container>
+                            </div>
+                            <div class="mt-1">
+                              <app-name-tag
+                                *ngIf="nonFungibleTokenType === nftType.ERC721"
+                                [iconContract]="true"
+                                [linkRouter]="['/evm-contracts', item.contractAddress || currentAddress]"
+                                [isShorterText]="true"
+                                [value]="item.contractAddress"
+                                [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                              <app-name-tag
+                                *ngIf="nonFungibleTokenType === nftType.CW721"
+                                [iconContract]="true"
+                                [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
+                                [isShorterText]="true"
+                                [value]="item.contractAddress"
+                                [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
           </ng-container>
-        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="row-tx"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell g-no-data pt-8" colspan="9999">
-            <app-loading-sprint></app-loading-sprint>
-          </td>
-        </tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="row-tx"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data pt-8" colspan="9999">
+              <app-loading-sprint></app-loading-sprint>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="breakpoint.value.matches">
+        <ng-container *ngIf="modeQuery != tabsData.EVMExecutedTxs">
+          <app-card-mob-account
+            *ngFor="let data of dataSourceMobile; first as isFirst"
+            [link]="'/tx/' + data.tx_hash"
+            [dataCard]="data"
+            [modeQuery]="modeQuery"
+            [currentAddress]="currentAddress"
+            [currentType]="currentType"
+            [expand]="isFirst"
+            [tokenTypeInput]="modeQuery === tabsData.FtsTxs ? fungibleTokenType : nonFungibleTokenType"
+            [title]="{
+              size: 'md',
+              titleClass: 'body-02-mob',
+              label: data.tx_hash || data.evm_hash | ellipsis: 8 : 8,
+              subLabelContent: data.type,
+              subLabelClass: 'btn-mob',
+              status: data.code
+            }"
+            [content]="[
+              {
+                label: 'Fee',
+                class: 'text--gray-1 body-02-mob',
+                info:
+                  (data.fee < 0.001 ? (data.fee == 0 ? '0' : '<0.001') : (data.fee | balance: 0)) +
+                  ' <a class=text--primary href=' +
+                  ('/token/' + coinInfo.coinMinimalDenom) +
+                  '>' +
+                  denom +
+                  '</a>'
+              },
+              {
+                label: 'Height',
+                class: 'text--gray-1 body-02-mob',
+                info: '<a class=text--primary href=' + ('/block/' + data.height) + '>' + data.height + '</a>'
+              },
+              {
+                label: 'EVM Transaction',
+                class: 'text--gray-1 body-02-mob',
+                info: data.evmTx
+                  ? '<a class=text--primary href=' +
+                    ('/tx/' + data.evmTx) +
+                    '>' +
+                    (data.evmTx | ellipsis: 8 : 8) +
+                    '</a>'
+                  : '-'
+              }
+            ]"></app-card-mob-account>
+        </ng-container>
+        <ng-container *ngIf="modeQuery == tabsData.EVMExecutedTxs">
+          <app-card-mob-executed-evm [dataSource]="dataSourceMobile"></app-card-mob-executed-evm>
+        </ng-container>
+      </div>
+      <app-paginator
+        [length]="pageData.length"
+        [pageSize]="pageData.pageSize"
+        (paginator)="paginatorEmit($event)"
+        (pageEvent)="pageEvent($event)"
+        (pageChangeRecord)="pageChangeRecord($event)"
+        [showSelectRecord]="true">
+      </app-paginator>
     </div>
-    <div *ngIf="breakpoint.value.matches">
-      <app-card-mob-account
-        *ngFor="let data of dataSourceMobile; first as isFirst"
-        [link]="'/transaction/' + data.tx_hash"
-        [dataCard]="data"
-        [modeQuery]="modeQuery"
-        [currentAddress]="currentAddress"
-        [currentType]="currentType"
-        [expand]="isFirst"
-        [title]="{
-          size: 'md',
-          titleClass: 'body-02-mob',
-          label: data.tx_hash | ellipsis: 8 : 8,
-          subLabelContent: data.type,
-          subLabelClass: 'btn-mob',
-          status: data.code
-        }"
-        [content]="[
-          {
-            label: 'Height',
-            class: 'text--gray-1 body-02-mob fw-semibold',
-            info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
-          },
-          {
-            label: 'Fee',
-            class: 'text--gray-1 body-02-mob',
-            info:
-              (+data.fee | mask: 'separator.6') +
-              ' <a class=text--primary href=' +
-              ('/tokens/token/' + coinInfo.coinMinimalDenom) +
-              '>' +
-              denom +
-              '</a>'
-          }
-        ]"></app-card-mob-account>
+  </ng-container>
+  <ng-template #noValues>
+    <div class="noData">
+      <app-table-no-data *ngIf="!transactionLoading && !isSearch && !errTxt"></app-table-no-data>
+      <app-table-no-data *ngIf="errTxt" [textNull]="errTxt"></app-table-no-data>
+      <app-table-no-data
+        *ngIf="!transactionLoading && isSearch && !errTxt"
+        textNull="No data with this type of message"></app-table-no-data>
     </div>
-    <app-paginator
-      [length]="pageData.length"
-      [pageSize]="pageData.pageSize"
-      (paginator)="paginatorEmit($event)"
-      (pageEvent)="pageEvent($event)"
-      (pageChangeRecord)="pageChangeRecord($event)"
-      [showSelectRecord]="true">
-    </app-paginator>
+  </ng-template>
+  <div *ngIf="transactionLoading" class="noData">
+    <app-loading-sprint></app-loading-sprint>
   </div>
 </ng-container>
-<ng-template #noValues>
-  <div class="noData">
-    <app-table-no-data *ngIf="!transactionLoading && !isSearch && !errTxt"></app-table-no-data>
-    <app-table-no-data *ngIf="errTxt" [textNull]="errTxt"></app-table-no-data>
-    <app-table-no-data
-      *ngIf="!transactionLoading && isSearch && !errTxt"
-      textNull="No data with this type of message"></app-table-no-data>
-  </div>
-</ng-template>
-<div *ngIf="transactionLoading" class="noData">
-  <app-loading-sprint></app-loading-sprint>
-</div>

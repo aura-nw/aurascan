@@ -1,0 +1,7 @@
+<app-loading-sprint class="mt-10" *ngIf="isLoading"></app-loading-sprint>
+<div class="box-contract text-white" *ngIf="!isLoading">
+  <div class="mt-5">
+    <app-evm-contract [contractTypeData]="contractDetail?.status || 'UNVERIFIED'" [contractsAddress]="contractAddress">
+    </app-evm-contract>
+  </div>
+</div>

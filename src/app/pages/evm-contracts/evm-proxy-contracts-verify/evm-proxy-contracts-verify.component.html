@@ -1,0 +1,65 @@
+<section class="contract-verify col-12 col-lg-6">
+  <h1 class="text--white mb-4">Proxy Contract Verification</h1>
+  <div class="box-proxy d-flex align-items-center">
+    <span class="body-02 fw-semibold text--green-3">Automated Proxy Implementation Verification</span>
+  </div>
+
+  <div class="text--white my-lg-12 my-6 body-04">
+    This page facilitates the association of proxy contracts with their corresponding implementation ABIs and contracts,
+    enhancing user interaction and awareness of the associated contract that the proxy contract is linking with.
+
+    <div class="mt-6">
+      <div class="warning-wrapper d-flex align-items-start">
+        <img src="assets/icons/icons-svg/color/warning.svg" alt="warning" />
+        <span class="text--white ml-2">
+          Disclaimer: The automated process utilizes programmatic heuristics that may lack accuracy. Exercise caution
+          when interacting with EVM contracts.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-lg-6">
+    <div class="col-12">
+      <div class="form-group">
+        <label for="address" class="form-label text--gray-4 body-02">
+          Please enter the Proxy Contract Address you would like to verify
+        </label>
+        <input
+          type="text"
+          class="form-control form-check-input body mt-0 text--gray-1 mt-1"
+          id="address"
+          [(ngModel)]="contractAddress"
+          (ngModelChange)="validAddress()" />
+        <div
+          class="error text--danger mt-1 {{
+            contractAddress?.length > 0 && !isValidAddress ? 'visible' : 'invisible'
+          }}">
+          Invalid Address!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center justify-content-lg-end align-items-center mb-6">
+    <button
+      class="button button--xlg button-pill button-outline button-fixed px-1 px-sm-6"
+      type="button"
+      (click)="clearInput()">
+      <span>Reset</span>
+    </button>
+    <button
+      class="button button--xlg button-pill button-outline button-outline--gradient button-fixed ml-4 px-1 px-sm-6"
+      type="submit"
+      [disabled]="isVerifying || !isValidAddress"
+      (click)="verifyProxyContract()">
+      <img
+        [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+        alt=""
+        width="20"
+        height="20"
+        *ngIf="isVerifying" />
+      <span>Verify</span>
+    </button>
+  </div>
+</section>

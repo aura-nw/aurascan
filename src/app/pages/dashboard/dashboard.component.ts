@@ -260,7 +260,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (res) => {
         this.dataSourceTx.data = [];
         if (res?.transaction?.length > 0) {
-          const txs = convertDataTransactionSimple(res, this.coinInfo);
+          const txs = convertDataTransactionSimple(res, this.environmentService.getDecimals());
 
           if (this.dataSourceTx.data.length > 0) {
             this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];

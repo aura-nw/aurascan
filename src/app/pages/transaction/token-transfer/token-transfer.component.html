@@ -1,0 +1,316 @@
+<div class="row" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <section class="col-12 col-lg-6 card-h-100 mb-4 mb-lg-0">
+    <div class="card mb-0 transfer-card">
+      <div class="card-body p-0 overflow-hidden">
+        <div class="d-xl-flex justify-content-between align-items-center">
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
+            {{ transaction['evm_hash'] ? 'ERC20 Transfer' : 'Fungible Token Transfer' }}
+          </h5>
+        </div>
+        <div class="table-token" *ngIf="dataSourceFTs?.data?.length > 0; else noFTValues">
+          <table mat-table [dataSource]="dataSourceFTs" class="aura-table none-header">
+            <ng-container *ngFor="let template of templatesFTs; index as i">
+              <ng-container [matColumnDef]="template.matColumnDef">
+                <th *matHeaderCellDef></th>
+                <td
+                  mat-cell
+                  *matCellDef="let data"
+                  class="py-1"
+                  [class.hide-td]="i === 1 && breakpoint.value.matches"
+                  [class.text-end]="i === 2"
+                  [class.pr-5]="i === 2">
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <div *ngSwitchCase="'assets'">
+                      <div class="d-flex align-items-center">
+                        <img
+                          class="rounded-circle"
+                          [appImg]="data | marketInfo: 'logo'"
+                          width="20"
+                          height="20"
+                          alt="" />
+                        <div class="ml-2 ml-sm-3 d-flex transfer-token-info">
+                          <ng-container *ngIf="data | marketInfo: 'symbol'">
+                            <span
+                              [appTooltip]="data | marketInfo: 'symbol'"
+                              class="caption-mob text-sm mb-1"
+                              [appLinkDenom]="
+                                (data | marketInfo: 'symbol') == coinInfo.coinDenom
+                                  ? coinInfo.coinMinimalDenom
+                                  : data?.cw20_contract?.ibc_denom ||
+                                    data?.erc20_contract?.evm_smart_contract?.address ||
+                                    data?.cw20_contract?.smart_contract?.address
+                              "
+                              [isDisable]="
+                                (data | marketInfo: 'symbol') != coinInfo.coinDenom &&
+                                !data?.cw20_contract?.ibc_denom &&
+                                !data?.cw20_contract?.smart_contract?.address &&
+                                !data?.erc20_contract?.symbol
+                              ">
+                              {{
+                                (data | marketInfo: 'symbol')
+                                  ? (data | marketInfo: 'symbol' | ellipsis: maxLengthSymbol)
+                                  : data?.erc20_contract?.evm_smart_contract?.address
+                              }}
+                            </span>
+                          </ng-container>
+                          <span
+                            *ngIf="!(data | marketInfo: 'symbol') && data?.erc20_contract?.evm_smart_contract?.address"
+                            [appLinkDenom]="data?.erc20_contract?.evm_smart_contract?.address">
+                            {{ data?.erc20_contract?.evm_smart_contract?.address | ellipsis: 8 : 8 }}
+                          </span>
+
+                          <span *ngIf="!breakpoint.value.matches" class="body-02">
+                            {{ data | marketInfo: 'name' | ellipsis: 20 }}
+                          </span>
+                          <ng-container *ngIf="breakpoint.value.matches">
+                            <span
+                              class="aura-tooltip-object caption-mob fw-normal"
+                              *ngIf="data.amount | balance: data.decimal | lt: 0.001">
+                              {{ '<0.001' }}
+                            </span>
+                            <span
+                              *ngIf="data.amount | balance: data.decimal | gte: 0.001"
+                              class="body-02"
+                              [appBigNumber]="data.amount"
+                              [decimal]="data.decimal"></span>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="!breakpoint.value.matches">
+                      <div *ngSwitchCase="'amount'" class="d-flex transfer-token-info w-fit-content">
+                        <span class="caption fw-normal text--gray-4 mb-1">Amount</span>
+                        <div
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: data.decimal }"
+                          *ngIf="data[template.matColumnDef] | balance: data.decimal | lt: 0.001">
+                          {{ '<0.001' }}
+                        </div>
+
+                        <div
+                          class="body-02"
+                          *ngIf="data[template.matColumnDef] | balance: data.decimal | gte: 0.001"
+                          [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: data.decimal }"
+                          [class.cursor-text]="data[template.matColumnDef] | balance: data.decimal | lt: 1000000"
+                          [appBigNumber]="data[template.matColumnDef]"
+                          [decimal]="data.decimal"></div>
+                      </div>
+                    </ng-container>
+
+                    <div *ngSwitchCase="'transfer'" class="d-inline-block transfer-address">
+                      <div class="mb-1 text-start d-flex align-items-center justify-content-between">
+                        <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block mr-lg-2">
+                          From
+                        </span>
+                        <app-name-tag
+                          [isEnableRouter]="!!data.from"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [iconContract]="data.from | isContract"
+                          [value]="data.from || nullAddress"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[(data.from | isContract) ? '/contracts' : '/address', data.from]">
+                        </app-name-tag>
+                      </div>
+                      <div class="text-start d-flex align-items-center justify-content-between">
+                        <span class="caption fw-normal text--gray-4 mr-1 transfer-address-label d-inline-block mr-lg-2">
+                          To
+                        </span>
+                        <app-name-tag
+                          [isEnableRouter]="!!data.to"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [iconContract]="data.to | isContract"
+                          [value]="data.to || nullAddress"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[(data.to | isContract) ? '/contracts' : '/address', data.to]">
+                        </app-name-tag>
+                      </div>
+                    </div>
+                  </ng-container>
+                </td>
+              </ng-container>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsFTs"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsFTs"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{ 'NO DATA' | translate }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <ng-template #noFTValues>
+          <div class="card card-nodata">
+            <app-table-no-data
+              [textNull]="'No FTs transfer activity due to this transaction'"
+              [img]="'assets/images/notFoundNFT.png'"
+              [class]="'img-height'"
+              [classText]="'body'"></app-table-no-data>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+  <section class="col-12 col-lg-6 card-h-100 mb-4 mb-lg-0">
+    <div class="card mb-0 transfer-card">
+      <div class="card-body p-0 overflow-hidden">
+        <div class="d-xl-flex justify-content-between align-items-center">
+          <h5 class="card-header w-100 card-header-gray text--gray-light-2 mb-0 py-4">
+            {{ 'NFT Transfer ' }}
+          </h5>
+        </div>
+        <div class="table-token" *ngIf="dataSourceNFTs.data.length > 0; else noValues">
+          <table mat-table [dataSource]="dataSourceNFTs" class="aura-table nft-list none-header">
+            <ng-container *ngFor="let template of templatesNFTs; index as i">
+              <ng-container [matColumnDef]="template.matColumnDef">
+                <th *matHeaderCellDef></th>
+                <td
+                  mat-cell
+                  *matCellDef="let data"
+                  class="py-1"
+                  [class.pr-5]="i === 1"
+                  [class.hide-td]="i === 2 && breakpoint.value.matches">
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <ng-container *ngSwitchCase="'nft'">
+                      <div class="d-flex transfer-token-info">
+                        <div *ngIf="!breakpoint.value.matches" class="mb-1 d-flex align-items-center">
+                          <span class="caption fw-normal text--gray-4 mr-1 text-nowrap">Token ID</span>
+                          <span
+                            class="line-claim w-100"
+                            [copyBtn]="data?.cw721_token?.token_id || data?.erc721_token?.token_id"
+                            >#{{ data?.cw721_token?.token_id || data?.erc721_token?.token_id | ellipsis: 10 }}</span
+                          >
+                        </div>
+                        <div *ngIf="breakpoint.value.matches" class="d-flex mb-1">
+                          <span
+                            class="line-claim token-id"
+                            [copyBtn]="data?.cw721_token?.token_id || data?.erc721_token?.token_id"
+                            >#{{ data?.cw721_token?.token_id || data?.erc721_token?.token_id }}</span
+                          >
+                          <div
+                            *ngIf="breakpoint.value.matches"
+                            class="ml-2 d-flex align-items-center"
+                            (click)="
+                              navigateToNFTDetail(
+                                data?.cw721_contract?.smart_contract?.address ||
+                                  data?.erc721_contract?.evm_smart_contract?.address,
+                                data?.cw721_token?.token_id || data?.erc721_token?.token_id
+                              )
+                            ">
+                            <i class="ph-arrow-square-out-fill text--gray-1 body-01 h5-mob mb-0"></i>
+                          </div>
+                        </div>
+                        <app-name-tag
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [isEnableRouter]="true"
+                          [value]="
+                            data?.cw721_contract?.smart_contract?.address ||
+                            data?.erc721_contract?.evm_smart_contract?.address
+                          "
+                          [iconContract]="true"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[
+                            transaction['evm_hash'] ? '/evm-contracts' : '/contracts',
+                            data?.cw721_contract?.smart_contract?.address ||
+                              data?.erc721_contract?.evm_smart_contract?.address
+                          ]">
+                        </app-name-tag>
+                      </div>
+                    </ng-container>
+
+                    <div *ngSwitchCase="'transfer'">
+                      <div class="mb-1 d-flex align-items-center justify-content-between justify-content-lg-start">
+                        <span class="caption fw-normal text--gray-4 mr-3 transfer-address-label d-inline-block">
+                          From
+                        </span>
+                        <app-name-tag
+                          *ngIf="!transaction['evm_hash']"
+                          [isEnableRouter]="!!data.from"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [iconContract]="data.from | isContract"
+                          [value]="data.from || nullAddress"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[(data.from | isContract) ? '/contracts' : '/address', data.from]">
+                        </app-name-tag>
+                        <app-name-tag
+                          *ngIf="transaction['evm_hash']"
+                          [isEnableRouter]="!!data.from"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [iconContract]="isEvmSmartContract(data.from)"
+                          [value]="data.from || nullAddress"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[isEvmSmartContract(data.from) ? '/evm-contracts' : '/address', data.from]">
+                        </app-name-tag>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-between justify-content-lg-start">
+                        <span class="caption fw-normal text--gray-4 mr-3 transfer-address-label d-inline-block">
+                          To
+                        </span>
+                        <app-name-tag
+                          *ngIf="!transaction['evm_hash']"
+                          [isEnableRouter]="!!data.to"
+                          [iconContract]="data.to | isContract"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [value]="data.to || nullAddress"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[(data.to | isContract) ? '/contracts' : '/address', data.to]"></app-name-tag>
+                        <app-name-tag
+                          *ngIf="transaction['evm_hash']"
+                          [isEnableRouter]="!!data.to"
+                          [iconContract]="isEvmSmartContract(data.to)"
+                          [maxCharacter]="breakpoint.value.matches ? 6 : 16"
+                          [value]="data.to || nullAddress"
+                          [isShorterText]="breakpoint.value.matches"
+                          [linkRouter]="[
+                            isEvmSmartContract(data.to) ? '/evm-contracts' : '/address',
+                            data.to
+                          ]"></app-name-tag>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="!breakpoint.value.matches">
+                      <div *ngSwitchCase="'action'" class="text-end">
+                        <button
+                          class="button button--sm button-outline button-outline__in-card button-pill"
+                          [routerLink]="
+                            data?.cw721_contract
+                              ? [
+                                  '/token/cw721',
+                                  data?.cw721_contract?.smart_contract?.address,
+                                  encodeData(data?.cw721_token?.token_id)
+                                ]
+                              : [
+                                  '/token/evm/erc721',
+                                  data?.erc721_contract?.evm_smart_contract?.address,
+                                  encodeData(data?.erc721_token?.token_id)
+                                ]
+                          ">
+                          <span>NFT</span>
+                        </button>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </td>
+              </ng-container>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsNFTs"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsNFTs"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{ 'NO DATA' | translate }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <ng-template #noValues>
+          <div class="card card-nodata">
+            <app-table-no-data
+              [textNull]="'No NFTs transfer activity due to this transaction'"
+              [img]="'assets/images/notFoundNFT.png'"
+              [class]="'img-height'"
+              [classText]="'body'"></app-table-no-data>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+</div>

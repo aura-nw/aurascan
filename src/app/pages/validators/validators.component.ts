@@ -5,12 +5,12 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import BigNumber from 'bignumber.js';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { MsgBeginRedelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
+import { Contract, parseEther } from 'ethers';
 import * as _ from 'lodash';
-import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Subscription, of } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import {
   MAX_NUMBER_INPUT,
   NUMBER_2_DIGIT,
@@ -31,6 +31,8 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { balanceOf, getBalance } from 'src/app/core/utils/common/parsing';
 import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
+import { stakeAbi } from './stakeAbi';
+import { TransactionService } from '../../core/services/transaction.service';
 
 @Component({
   selector: 'app-validators',
@@ -105,6 +107,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   dataUserDelegate;
   loadingData = true;
   errTxt: string;
+  contract: Contract;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -114,6 +117,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   chainInfo = this.environmentService.chainInfo;
   denom = this.chainInfo.currencies[0].coinDenom;
   coinMinimalDenom = this.chainInfo.currencies[0].coinMinimalDenom;
+  stakeContractAddr = this.environmentService.evmChainInfo.stakeContract;
+  claimContractAddr = this.environmentService.evmChainInfo.claimContract;
 
   constructor(
     private validatorService: ValidatorService,
@@ -127,22 +132,22 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
     private proposalService: ProposalService,
+    private transactionService: TransactionService,
   ) {}
 
   async ngOnInit() {
     this.getCountProposal();
-    this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe({
-      next: (account) => {
-        if (account) {
-          this.dataDelegate = null;
-          this.lstUndelegate = null;
-          this.userAddress = account.address;
-          this.getDataWallet();
-        } else {
-          this.userAddress = null;
-        }
-      },
+    this.walletService.walletAccount$.subscribe((wallet) => {
+      if (wallet) {
+        this.dataDelegate = null;
+        this.lstUndelegate = null;
+        this.userAddress = wallet.address;
+        this.getDataWallet();
+      } else {
+        this.userAddress = null;
+      }
     });
+
     this.getList();
     this._routerSubscription = this.router.events.subscribe(() => {
       if (this.modalReference) {
@@ -161,6 +166,22 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (this.timerUnSub) {
       this.timerUnSub.unsubscribe();
     }
+  }
+
+  createContract(contractAddr, evmAccount) {
+    try {
+      let contract = new Contract(contractAddr, stakeAbi, evmAccount);
+
+      if (contract) {
+        this.contract = contract;
+
+        return this.contract;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
   }
 
   getList(): void {
@@ -366,6 +387,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         };
 
         this.dataDelegate.validatorDetail = this.validatorDetail;
+
+        //stakingToken
         this.clicked = false;
         this.isExceedAmount = false;
         this.errorExceedAmount = false;
@@ -490,34 +513,67 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.errorExceedAmount = false;
   }
 
-  handleDelegate() {
+  async handleDelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
       this.isLoading = true;
 
-      const msg = {
-        delegatorAddress: this.userAddress,
-        validatorAddress: this.validatorDetail.validator_address,
-        amount: {
-          amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-          denom: this.coinMinimalDenom,
-        },
-      };
+      const account = this.walletService.getCosmosAccountOnly();
+      if (!account) {
+        return;
+      }
+      if (account?.cosmosAccount) {
+        const msg = {
+          delegatorAddress: this.userAddress,
+          validatorAddress: this.validatorDetail.validator_address,
+          amount: {
+            amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
+            denom: this.coinMinimalDenom,
+          },
+        };
 
-      this.walletService
-        .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount, 'auto')
-        .then((broadcastResult) => {
-          let error = undefined;
-          if (broadcastResult?.code != 0) {
-            error = broadcastResult;
-          }
+        this.walletService
+          .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount, 'auto')
+          .then((broadcastResult) => {
+            let error = undefined;
+            if (broadcastResult?.code != 0) {
+              error = broadcastResult;
+            }
 
-          this.checkTxStatusOnchain({ success: broadcastResult, error });
+            this.checkTxStatusOnchain({ success: broadcastResult, error });
+          })
+          .catch((error) => {
+            console.log('🐛 error: ', error);
+            this.checkTxStatusOnchain({ error });
+          });
+      } else {
+        const contract = this.createContract(this.stakeContractAddr, account.evmAccount);
+
+        if (!contract) {
+          return;
+        }
+        const nameContract = 'delegate';
+        const params = [
+          account.evmAddress,
+          this.validatorDetail.validator_address,
+          (this.amountFormat * Math.pow(10, 18)).toFixed(0),
+        ];
+        const x = await contract[nameContract]?.estimateGas(...params).catch((e) => e);
+
+        contract[nameContract]?.(...params, {
+          gasLimit: Number(x) || 250_000,
+          gasPrice: 1_000_0000,
+          value: parseEther('0'),
         })
-        .catch((error) => {
-          console.log('🐛 error: ', error);
-          this.checkTxStatusOnchain({ error });
-        });
+          .then((res) => {
+            let error = undefined;
+            this.checkTxStatusOnchain({ success: res, error });
+          })
+          .catch((error) => {
+            console.log('🐛 error: ', error);
+            this.checkTxStatusOnchain({ error });
+          });
+      }
     }
   }
 
@@ -527,19 +583,81 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.isClaimRewardLoading = true;
         this.isLoading = true;
 
-        const msg = this.lstValidatorData.map((vd) => ({
-          typeUrl: TRANSACTION_TYPE_ENUM.GetReward,
-          value: MsgWithdrawDelegatorReward.fromPartial({
-            validatorAddress: vd.validator_address,
-            delegatorAddress: this.userAddress,
-          }),
-        }));
+        const account = this.walletService.getCosmosAccountOnly();
+        if (!account) {
+          return;
+        }
+        if (account?.cosmosAccount) {
+          const msg = this.lstValidatorData.map((vd) => ({
+            typeUrl: TRANSACTION_TYPE_ENUM.GetReward,
+            value: MsgWithdrawDelegatorReward.fromPartial({
+              validatorAddress: vd.validator_address,
+              delegatorAddress: this.userAddress,
+            }),
+          }));
 
-        const revokeMultiplier = 1.7; // revoke multiplier - NOT FOR ALL
-        const fee = await this.walletService.estimateFee(msg, 'cosmwasm', '', revokeMultiplier);
+          const revokeMultiplier = 1.7; // revoke multiplier - NOT FOR ALL
+          const fee = await this.walletService.estimateFee(msg, 'cosmwasm', '', revokeMultiplier);
+
+          this.walletService
+            .signAndBroadcast(this.userAddress, msg, fee || 'auto')
+            .then((broadcastResult) => {
+              let error = undefined;
+              if (broadcastResult?.code != 0) {
+                error = broadcastResult;
+              }
+
+              this.checkTxStatusOnchain({ success: broadcastResult, error });
+            })
+            .catch((error) => {
+              this.checkTxStatusOnchain({ error });
+            });
+        } else {
+          const contract = this.createContract(this.claimContractAddr, account.evmAccount);
+
+          if (!contract) {
+            return;
+          }
+          const nameContract = 'claimRewards';
+
+          const params = [account.evmAddress, this.dataSource?.data.length.toString()];
+          const x = await contract[nameContract]?.estimateGas(...params).catch((e) => e);
+          contract[nameContract]?.(...params, {
+            gasLimit: Number(x) || 250_000,
+            gasPrice: 1_000_0000,
+            value: parseEther('0'),
+          })
+            .then((res) => {
+              let error = undefined;
+              this.checkTxStatusOnchain({ success: res, error });
+            })
+            .catch((error) => {
+              this.checkTxStatusOnchain({ error });
+            });
+        }
+      } catch (error) {
+        console.error('Claim Error: ', error);
+      }
+    }
+  }
+
+  async handleUndelegate() {
+    this.checkAmountStaking();
+    if (!this.isExceedAmount && this.amountFormat > 0) {
+      this.isLoading = true;
+
+      const account = this.walletService.getCosmosAccountOnly();
+      if (!account) {
+        return;
+      }
+      if (account?.cosmosAccount) {
+        const amount = {
+          amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
+          denom: this.coinMinimalDenom,
+        };
 
         this.walletService
-          .signAndBroadcast(this.userAddress, msg, fee || 'auto')
+          .undelegateTokens(this.userAddress, this.validatorDetail.validator_address, amount)
           .then((broadcastResult) => {
             let error = undefined;
             if (broadcastResult?.code != 0) {
@@ -551,68 +669,100 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           .catch((error) => {
             this.checkTxStatusOnchain({ error });
           });
-      } catch (error) {
-        console.error('Claim Error: ', error);
+      } else {
+        const contract = this.createContract(this.stakeContractAddr, account.evmAccount);
+
+        if (!contract) {
+          return;
+        }
+        const nameContract = 'undelegate';
+        const params = [
+          account.evmAddress,
+          this.validatorDetail.validator_address,
+          (this.amountFormat * Math.pow(10, 18)).toFixed(0),
+        ];
+        const x = await contract[nameContract]?.estimateGas(...params).catch((e) => e);
+
+        contract[nameContract]?.(...params, {
+          gasLimit: Number(x) || 250_000,
+          gasPrice: 1_000_0000,
+          value: parseEther('0'),
+        })
+          .then((res) => {
+            let error = undefined;
+            this.checkTxStatusOnchain({ success: res, error });
+          })
+          .catch((error) => {
+            this.checkTxStatusOnchain({ error });
+          });
       }
     }
   }
 
-  handleUndelegate() {
-    this.checkAmountStaking();
-    if (!this.isExceedAmount && this.amountFormat > 0) {
-      this.isLoading = true;
-      const amount = {
-        amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-        denom: this.coinMinimalDenom,
-      };
-
-      this.walletService
-        .undelegateTokens(this.userAddress, this.validatorDetail.validator_address, amount)
-        .then((broadcastResult) => {
-          let error = undefined;
-          if (broadcastResult?.code != 0) {
-            error = broadcastResult;
-          }
-
-          this.checkTxStatusOnchain({ success: broadcastResult, error });
-        })
-        .catch((error) => {
-          this.checkTxStatusOnchain({ error });
-        });
-    }
-  }
-
-  handleRedelegate() {
+  async handleRedelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
       this.isLoading = true;
 
-      const msg = {
-        typeUrl: TRANSACTION_TYPE_ENUM.Redelegate,
-        value: MsgBeginRedelegate.fromPartial({
-          delegatorAddress: this.userAddress,
-          validatorSrcAddress: this.validatorDetail.validator_address,
-          validatorDstAddress: this.selectedValidator,
-          amount: {
-            amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-            denom: this.coinMinimalDenom,
-          },
-        }),
-      };
+      const account = this.walletService.getCosmosAccountOnly();
+      if (!account) {
+        return;
+      }
+      if (account?.cosmosAccount) {
+        const msg = {
+          typeUrl: TRANSACTION_TYPE_ENUM.Redelegate,
+          value: MsgBeginRedelegate.fromPartial({
+            delegatorAddress: this.userAddress,
+            validatorSrcAddress: this.validatorDetail.validator_address,
+            validatorDstAddress: this.selectedValidator,
+            amount: {
+              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
+              denom: this.coinMinimalDenom,
+            },
+          }),
+        };
 
-      this.walletService
-        .signAndBroadcast(this.userAddress, [msg])
-        .then((broadcastResult) => {
-          let error = undefined;
-          if (broadcastResult?.code != 0) {
-            error = broadcastResult;
-          }
+        this.walletService
+          .signAndBroadcast(this.userAddress, [msg])
+          .then((broadcastResult) => {
+            let error = undefined;
+            if (broadcastResult?.code != 0) {
+              error = broadcastResult;
+            }
 
-          this.checkTxStatusOnchain({ success: broadcastResult, error });
+            this.checkTxStatusOnchain({ success: broadcastResult, error });
+          })
+          .catch((error) => {
+            this.checkTxStatusOnchain({ error });
+          });
+      } else {
+        const contract = this.createContract(this.stakeContractAddr, account.evmAccount);
+
+        if (!contract) {
+          return;
+        }
+        const nameContract = 'redelegate';
+        const params = [
+          account.evmAddress,
+          this.validatorDetail.validator_address,
+          this.selectedValidator,
+          (this.amountFormat * Math.pow(10, 18)).toFixed(0),
+        ];
+        const x = await contract[nameContract]?.estimateGas(...params).catch((e) => e);
+
+        contract[nameContract]?.(...params, {
+          gasLimit: Number(x) || 250_000,
+          gasPrice: 1_000_0000,
+          value: parseEther('0'),
         })
-        .catch((error) => {
-          this.checkTxStatusOnchain({ error });
-        });
+          .then((res) => {
+            let error = undefined;
+            this.checkTxStatusOnchain({ success: res, error });
+          })
+          .catch((error) => {
+            this.checkTxStatusOnchain({ error });
+          });
+      }
     }
   }
 
@@ -678,22 +828,51 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.resetData();
     } else {
       const hash = success?.transactionHash;
+      const evmHash = success?.hash;
       this.isLoading = false;
       this.modalReference?.close();
 
-      if (!hash) {
+      if (!hash && !evmHash) {
         return;
       }
+      if (hash) {
+        this.toastr.loading(hash);
 
-      this.toastr.loading(hash);
+        setTimeout(() => {
+          this.mappingErrorService.checkDetailTx(hash).then(() => {
+            this.getList();
+            this.getDataWallet();
+          });
+          this.resetData();
+        }, TIME_OUT_CALL_API);
+      } else {
+        this.toastr.loading(evmHash);
 
-      setTimeout(() => {
-        this.mappingErrorService.checkDetailTx(hash).then(() => {
-          this.getList();
-          this.getDataWallet();
-        });
-        this.resetData();
-      }, TIME_OUT_CALL_API);
+        setTimeout(() => {
+          const payload = {
+            limit: 1,
+            hash: evmHash,
+          };
+          this.transactionService
+            .queryTransactionByEvmHash(payload)
+            .pipe(
+              switchMap((response) => {
+                const txData = _.get(response, 'transaction[0]');
+                return this.mappingErrorService.checkDetailTx(txData?.hash);
+              }),
+            )
+            .subscribe({
+              next: (res) => {
+                this.getList();
+                this.getDataWallet();
+              },
+              error: (e) => {},
+              complete: () => {},
+            });
+
+          this.resetData();
+        }, TIME_OUT_CALL_API);
+      }
     }
   }
 

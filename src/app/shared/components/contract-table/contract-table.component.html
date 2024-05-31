@@ -16,7 +16,7 @@
       <button
         class="button button--xs button--sm-mob button-pill button-outline button-outline__in-card mr-4"
         *ngIf="contractInfo.viewAll"
-        [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
+        (click)="navigateToViewAll()">
         <span>View all</span>
       </button>
       <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)" [currentLabel]="label"></app-dropdown>
@@ -41,11 +41,27 @@
                     <ng-container *ngIf="data[template.matColumnDef]">
                       <ng-container *ngIf="template.isNameTag">
                         <app-name-tag
+                          *ngIf="template.matColumnDef !== 'from' && template.matColumnDef !== 'to'"
                           [value]="data[template.matColumnDef]"
                           [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
-                          [iconContract]="data[template.matColumnDef] | isContract"
                           [isEnableRouter]="
-                            data[template.matColumnDef] !== contractInfo?.contractsAddress
+                            data[template.matColumnDef] !== contractInfo?.contractsAddress?.toLowerCase()
+                          "></app-name-tag>
+                        <app-name-tag
+                          *ngIf="template.matColumnDef === 'from'"
+                          [value]="data[template.matColumnDef]"
+                          [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
+                          [iconContract]="data['fromIsEvmContract']"
+                          [isEnableRouter]="
+                            data[template.matColumnDef] !== contractInfo?.contractsAddress?.toLowerCase()
+                          "></app-name-tag>
+                        <app-name-tag
+                          *ngIf="template.matColumnDef === 'to'"
+                          [value]="data[template.matColumnDef]"
+                          [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
+                          [iconContract]="data['toIsEvmContract']"
+                          [isEnableRouter]="
+                            data[template.matColumnDef] !== contractInfo?.contractsAddress?.toLowerCase()
                           "></app-name-tag>
                       </ng-container>
                       <ng-container *ngIf="!template.isNameTag">
@@ -63,18 +79,22 @@
                       </ng-container>
                     </ng-container>
                   </ng-container>
+
                   <ng-container *ngSwitchCase="'status'">
-                    <div
-                      class="aura-status d-flex align-items-center"
-                      [appTooltip]="data.lst_type | combineTxsMsg"
-                      *ngIf="data[template.matColumnDef]">
-                      <div [ngClass]="'status-' + data[template.matColumnDef]?.toUpperCase()">
-                        {{ data[template.matColumnDef] }}
+                    <ng-container *ngIf="data[template.matColumnDef]">
+                      <div
+                        class="aura-status d-flex align-items-center"
+                        [appTooltip]="data.lst_type | combineTxsMsg"
+                        *ngIf="data.lst_type?.length > 0">
+                        <div [ngClass]="'status-' + data[template.matColumnDef]?.toUpperCase()">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngIf="data.lst_type?.length > 1" class="ml-1 text--gray-4">
+                          +{{ data.lst_type?.length - 1 }}
+                        </div>
                       </div>
-                      <div *ngIf="data.lst_type?.length > 1" class="ml-1 text--gray-4">
-                        +{{ data.lst_type?.length - 1 }}
-                      </div>
-                    </div>
+                      <div *ngIf="data.lst_type?.length == 0 || !data.lst_type">{{ data[template.matColumnDef] }}</div>
+                    </ng-container>
                   </ng-container>
                   <ng-container *ngSwitchCase="'result'">
                     <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
@@ -89,15 +109,28 @@
                       </div>
                     </div>
                   </ng-container>
+                  <ng-container *ngSwitchCase="'amount'">
+                    <span
+                      *ngIf="data[template.matColumnDef] | balance: evmDecimal | lt: 0.001"
+                      [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: evmDecimal }">
+                      {{ (data[template.matColumnDef] | balance: evmDecimal) == 0 ? 0 : '<0.001' }}
+                    </span>
+                    <span
+                      [appTooltip]="{ priceAmount: data[template.matColumnDef], decimal: evmDecimal }"
+                      [class.cursor-text]="data[template.matColumnDef] | balance: evmDecimal | lt: 1000000"
+                      *ngIf="data[template.matColumnDef] | balance: evmDecimal | gte: 0.001"
+                      [appBigNumber]="data[template.matColumnDef]"
+                      [decimal]="evmDecimal"></span>
+                    <span class="ml-1" appLinkDenom> {{ denom }}</span>
+                  </ng-container>
                   <ng-container *ngSwitchCase="'numb'">
                     {{ data[template.matColumnDef] | mask: 'separator.6' }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'time-distance'">
-                    {{ data[template.matColumnDef] | dfnsFormatDistanceToNowStrictPure }}
+                    {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                   </ng-container>
                   <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                 </ng-container>
-                <div class="d-inline" *ngIf="template?.suffix" [innerHTML]="template.suffix"></div>
               </td>
             </ng-container>
           </ng-container>

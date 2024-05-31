@@ -12,12 +12,12 @@
     <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
       <div class="button button-pill button-outline button-outline--gradient button--xs caption fw-normal">
         <span class="icon-connect connected"></span>
-        <span class="fw-semibold fw-normal-mob text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
-          <span class="txt-wallet cursor-pointer" [routerLink]="['/account/', ng.wallet?.address]">
-            <ng-container *ngIf="ng.wallet?.username">
-              {{ ng.wallet?.username | ellipsis: 16 }}
+        <span class="text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
+          <span class="txt-wallet cursor-pointer" [routerLink]="['/address/', ng.wallet?.address]">
+            <ng-container *ngIf="ng.wallet?.cosmosAccount?.username">
+              {{ ng.wallet?.cosmosAccount?.username | ellipsis: 16 }}
             </ng-container>
-            <ng-container *ngIf="!ng.wallet?.username">
+            <ng-container *ngIf="!ng.wallet?.cosmosAccount?.username">
               {{ ng.wallet?.address | ellipsis: 8 : 8 }}
             </ng-container>
           </span>
@@ -31,7 +31,7 @@
           alt=""
           width="18px"
           height="18px"
-          class="ml-1"/>
+          class="ml-1" />
       </div>
     </div>
   </ng-container>

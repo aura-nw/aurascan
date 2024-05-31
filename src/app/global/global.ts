@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TabsAccountLink } from '../core/constants/account.enum';
-import { LENGTH_CHARACTER, NULL_ADDRESS, STORAGE_KEYS } from '../core/constants/common.constant';
+import { EMethodContract, LENGTH_CHARACTER, NULL_ADDRESS, STORAGE_KEYS } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -14,6 +14,7 @@ import { CommonDataDto } from '../core/models/common.model';
 import { convertTxNative, getTypeTx } from '../core/utils/common/info-common';
 import { balanceOf } from '../core/utils/common/parsing';
 import local from '../core/utils/storage/local';
+import BigNumber from 'bignumber.js';
 
 Injectable();
 
@@ -151,7 +152,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
   return [fromAddress, toAddress, value, method, tokenId, modeExecute];
 }
 
-export function convertDataTransaction(data, coinInfo) {
+export function convertDataTransaction(data, coinDecimals) {
   const txs = _.get(data, 'transaction').map((element) => {
     if (element['data']) {
       if (!element['data']['body'] && !element['data']['linkS3']) {
@@ -177,9 +178,10 @@ export function convertDataTransaction(data, coinInfo) {
       });
     }
 
-    const fee = balanceOf(
-      _.get(element, 'fee[0].amount') || _.get(element, 'data.auth_info.fee.amount[0].amount') || 0,
-    ).toFixed(coinInfo.coinDecimals);
+    // Get fee by evm denom and cosmos minimalDenom
+    const { amount, denom } = _.get(element, 'fee[0]') ||
+      _.get(element, 'data.auth_info.fee.amount[0]') || { denom: Object.keys(coinDecimals)[0], amount: '0' };
+    const fee = BigNumber(balanceOf(amount || 0, coinDecimals[denom?.toLowerCase()])).toFixed();
 
     const typeOrigin = _type;
     let type = _.find(TYPE_TRANSACTION, { label: _type })?.value || _type.split('.').pop();
@@ -252,7 +254,7 @@ export function convertDataBlock(data) {
   return block;
 }
 
-export function convertDataAccountTransaction(data, coinInfo, modeQuery, setReceive = false) {
+export function convertDataAccountTransaction(data, coinInfo, modeQuery, coinDecimals?: any, setReceive = false) {
   const txs = _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
@@ -260,10 +262,10 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     const lstTypeTemp = _.get(element, 'transaction_messages');
     let type;
     if (lstTypeTemp) {
-      if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.GetReward) {
+      if (lstTypeTemp[0]?.['type'] === TRANSACTION_TYPE_ENUM.GetReward) {
         type = TypeTransaction.GetReward;
       } else if (lstTypeTemp?.length > 1) {
-        if (lstTypeTemp[0]['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
+        if (lstTypeTemp[0]?.['type'] === TRANSACTION_TYPE_ENUM.MultiSend) {
           type = TypeTransaction.MultiSend;
         } else {
           type = 'Multiple';
@@ -281,7 +283,15 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    const fee = balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals);
+    // Get fee by evm denom and cosmos minimalDenom
+    const { amount: feeAmount, denom: feeDenom } = _.get(element, 'fee[0]') ||
+      _.get(element, 'data.auth_info.fee.amount[0]') || {
+        amount: 0,
+        denom: '',
+      };
+
+    const fee = BigNumber(balanceOf(feeAmount || 0, coinDecimals[feeDenom?.toLowerCase()])).toFixed();
+
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
     let limit = 5;
@@ -292,10 +302,12 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
     let contractAddress;
     let action;
     let eventAttr;
+    let evmTx;
 
     switch (modeQuery) {
       case TabsAccountLink.ExecutedTxs:
         type = getTypeTx(element)?.type;
+        evmTx = _.get(element, 'evm_transaction.hash');
         break;
       case TabsAccountLink.NativeTxs:
         let arrTemp = [];
@@ -336,19 +348,31 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
         });
         break;
       case TabsAccountLink.NftTxs:
-        arrEvent = _.get(element, 'cw721_activities')?.map((item, index) => {
-          let { type, action } = getTypeTx(element);
-          let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
-          let toAddress = _.get(item, 'to') || _.get(item, 'cw721_contract.smart_contract.address') || NULL_ADDRESS;
-          if (action === 'burn') {
-            toAddress = NULL_ADDRESS;
-          }
+        if (element?.cw721_activities) {
+          arrEvent = _.get(element, 'cw721_activities')?.map((item) => {
+            let { type, action } = getTypeTx(element);
+            let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
+            let toAddress = _.get(item, 'to') || _.get(item, 'cw721_contract.smart_contract.address') || NULL_ADDRESS;
+            if (action === 'burn') {
+              toAddress = NULL_ADDRESS;
+            }
 
-          let contractAddress = _.get(item, 'cw721_contract.smart_contract.address');
-          let tokenId = _.get(item, 'cw721_token.token_id');
-          let eventAttr = element.event_attribute_index;
-          return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
-        });
+            let contractAddress = _.get(item, 'cw721_contract.smart_contract.address');
+            let tokenId = _.get(item, 'cw721_token.token_id');
+            let eventAttr = element.event_attribute_index;
+            return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
+          });
+        } else if (element?.erc721_activities) {
+          arrEvent = _.get(element, 'erc721_activities')?.map((item) => {
+            let fromAddress = _.get(item, 'from') || NULL_ADDRESS;
+            let toAddress =
+              _.get(item, 'to') || _.get(item, 'erc721_contract.evm_smart_contract.address') || NULL_ADDRESS;
+            type = element?.type;
+            let contractAddress = _.get(item, 'erc721_contract.evm_smart_contract.address');
+            let tokenId = _.get(item, 'erc721_token.token_id');
+            return { type, fromAddress, toAddress, tokenId, contractAddress, eventAttr };
+          });
+        }
         break;
     }
 
@@ -377,7 +401,6 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       type,
       status,
       amount,
-      fee,
       height,
       timestamp,
       denom,
@@ -385,22 +408,25 @@ export function convertDataAccountTransaction(data, coinInfo, modeQuery, setRece
       toAddress,
       tokenId,
       contractAddress,
+      fee,
       arrEvent,
       limit,
       action,
       eventAttr,
       lstTypeTemp,
+      evmTx,
     };
   });
   return txs;
 }
 
-export function convertDataTransactionSimple(data, coinInfo) {
+export function convertDataTransactionSimple(data, coinDecimals) {
   return _.get(data, 'transaction').map((element) => {
     const code = _.get(element, 'code');
     const tx_hash = _.get(element, 'hash');
     const txMessages = _.get(element, 'transaction_messages');
-    const txBodyMsgType = _.get(element, 'data[0][@type]');
+    const txBodyMsgType = _.get(element, 'transaction_messages[0].type');
+    const hash = _.get(element, 'evm_transaction.hash');
 
     let type = '';
     if (txMessages?.length > 0) {
@@ -414,24 +440,23 @@ export function convertDataTransactionSimple(data, coinInfo) {
           type = 'Contract: ' + action;
         } catch {}
       }
-
-      if (type?.startsWith('Msg')) {
-        type = type?.replace('Msg', '');
-      }
     } else {
       type = txBodyMsgType?.split('.').pop();
+    }
+
+    if (type?.startsWith('Msg')) {
+      type = type?.replace('Msg', '');
     }
 
     const status =
       _.get(element, 'code') == CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
 
-    const fee = balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals);
+    // Get fee by evm denom and cosmos minimalDenom
+    const { amount, denom } = _.get(element, 'fee[0]') || { denom: Object.keys(coinDecimals)[0], amount: '0' };
+    const fee = BigNumber(balanceOf(amount || 0, coinDecimals[denom?.toLowerCase()])).toFixed();
+
     const height = _.get(element, 'height');
     const timestamp = _.get(element, 'timestamp');
-    let tx = _.get(element, 'data.tx_response');
-    if (tx) {
-      tx['tx'] = _.get(element, 'data.tx');
-    }
 
     return {
       code,
@@ -441,7 +466,7 @@ export function convertDataTransactionSimple(data, coinInfo) {
       fee,
       height,
       timestamp,
-      tx,
+      hash,
       lstType: txMessages,
     };
   });
@@ -470,7 +495,7 @@ export function convertTxIBC(data, coinInfo) {
       status,
       from_address: _.get(data, 'sender'),
       to_address: _.get(data, 'receiver'),
-      fee: balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals).toFixed(coinInfo.coinDecimals),
+      fee: BigNumber(balanceOf(_.get(element, 'fee[0].amount') || 0, coinInfo.coinDecimals)).toFixed(),
       height: _.get(element, 'height'),
       timestamp: _.get(element, 'timestamp'),
       amount,
@@ -480,4 +505,18 @@ export function convertTxIBC(data, coinInfo) {
     };
   });
   return txs;
+}
+
+export function titleCaseWord(word: string) {
+  if (!word) return word;
+  return word[0].toUpperCase() + word.substr(1);
+}
+
+export function mappingMethodName(lstMapping, codeId) {
+  // check is type Create Contract
+  if (EMethodContract.Creation === codeId) {
+    return 'Create Contract';
+  }
+
+  return lstMapping[codeId] || codeId || 'Send';
 }

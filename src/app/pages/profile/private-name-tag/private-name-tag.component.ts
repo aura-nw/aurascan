@@ -8,17 +8,20 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { STORAGE_KEYS, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, STORAGE_KEYS, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import {
+  transferAddress
+} from 'src/app/core/utils/common/address-converter';
+import local from 'src/app/core/utils/storage/local';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PopupCommonComponent } from 'src/app/shared/components/popup-common/popup-common.component';
 import { PopupNameTagComponent } from './popup-name-tag/popup-name-tag.component';
-import local from 'src/app/core/utils/storage/local';
 
 @Component({
   selector: 'app-private-name-tag',
@@ -29,13 +32,14 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
 
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 8 },
-    { matColumnDef: 'address', headerCellDef: 'Address', headerWidth: 12 },
-    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 6 },
-    { matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 12 },
-    { matColumnDef: 'createdAt', headerCellDef: 'Added Time', headerWidth: 10 },
-    { matColumnDef: 'updatedAt', headerCellDef: 'Updated Time', headerWidth: 10 },
-    { matColumnDef: 'action', headerCellDef: '', headerWidth: 8 },
+    { matColumnDef: 'favorite', headerCellDef: 'Fav', headerWidth: 65 },
+    { matColumnDef: 'cosmosAddress', headerCellDef: 'Cosmos Add', headerWidth: 145 },
+    { matColumnDef: 'evmAddress', headerCellDef: 'EVM Add', headerWidth: 120 },
+    { matColumnDef: 'type', headerCellDef: 'Type', headerWidth: 80 },
+    { matColumnDef: 'name_tag', headerCellDef: 'Private Name Tag', headerWidth: 260 },
+    { matColumnDef: 'createdAt', headerCellDef: 'Added Time', headerWidth: 150 },
+    { matColumnDef: 'updatedAt', headerCellDef: 'Updated Time', headerWidth: 150 },
+    { matColumnDef: 'action', headerCellDef: '', headerWidth: 82 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   countFav = 0;
@@ -51,8 +55,10 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
   dataSourceMobile = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   quota = this.environmentService.chainConfig.quotaSetPrivateName;
+  prefixAdd = this.environmentService.chainInfo.bech32Config.bech32PrefixAccAddr;
   isLoading = true;
   errTxt: string;
+  chainInfo = this.environmentService.chainInfo;
 
   constructor(
     public commonService: CommonService,
@@ -61,6 +67,7 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
     private toastr: NgxToastrService,
     private environmentService: EnvironmentService,
   ) {}
+
   ngAfterViewInit(): void {
     const dataNameTag = local.getItem(STORAGE_KEYS.SET_ADDRESS_NAME_TAG);
     if (dataNameTag && dataNameTag !== 'undefined') {
@@ -113,9 +120,16 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
             this.countFav = 1;
           }
         }
-        res.data?.forEach((element) => {
-          element['type'] = this.commonService.isValidContract(element.address) ? 'contract' : 'account';
-        });
+        if (res.data.length > 0) {
+          res.data.forEach((data) => {
+            const { accountAddress, accountEvmAddress } = transferAddress(
+              this.chainInfo.bech32Config.bech32PrefixAccAddr,
+              data.address,
+            );
+            data.cosmosAddress = accountAddress;
+            data.evmAddress = accountEvmAddress;
+          });
+        }
         this.dataSource.data = res.data;
         this.pageData.length = res?.meta?.count || 0;
 
@@ -224,8 +238,14 @@ export class PrivateNameTagComponent implements OnInit, OnDestroy, AfterViewInit
     this.getListPrivateName();
   }
 
-  urlType(address) {
-    return this.commonService.isValidContract(address) ? '/contracts' : '/account';
+  urlType(data, address) {
+    let result = '/address/';
+    let linkAddress = address;
+    if (data.type === 'contract') {
+      result = data?.evmAddress ? '/evm-contracts/' : '/contracts/';
+      linkAddress = data?.evmAddress || linkAddress;
+    }
+    return [result, linkAddress];
   }
 
   async storeListNameTag() {

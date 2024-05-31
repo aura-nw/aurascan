@@ -1,16 +1,21 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { EVM_CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, ITableContract } from 'src/app/core/models/contract.model';
+import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
-import { getTypeTx } from 'src/app/core/utils/common/info-common';
-import * as _ from 'lodash';
+import { ContractService } from '../../../core/services/contract.service';
+import { map } from 'rxjs';
 
 export interface TableData {
   txHash: string;
@@ -20,12 +25,23 @@ export interface TableData {
   time: Date;
   from: string;
   to?: string;
-  // label: string;
   value?: number;
   fee: number;
   gas_used?: number;
   gas_wanted?: number;
   lst_type?: Array<any>;
+}
+
+export interface EvmTableData {
+  txHash: string;
+  method: string;
+  height: number;
+  time: Date;
+  from: string;
+  to?: string;
+  amount?: number;
+  fromIsEvmContract?: boolean;
+  toIsEvmContract?: boolean;
 }
 
 @Component({
@@ -57,26 +73,48 @@ export class ContractTableComponent implements OnInit, OnChanges {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  evmDecimal = this.environmentService.evmDecimal;
   isLoading = true;
   isMoreTx = false;
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
 
+  timerRefress: any;
+
   constructor(
     public translate: TranslateService,
     private environmentService: EnvironmentService,
+    private router: Router,
+    private contractService: ContractService,
   ) {}
 
   ngOnChanges(): void {
-    if (this.dataList?.data) {
-      this.getListContractTransaction();
-      this.loadTableData();
-    } else {
-      this.isLoading = false;
-    }
+    this.getListTransaction();
   }
 
   ngOnInit(): void {
     this.displayedColumns = this.templates?.map((dta) => dta.matColumnDef);
+    this.timerRefress = setInterval(() => {
+      if (this.pageData.pageIndex === 1) {
+        this.getListTransaction();
+      }
+    }, 30000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timerRefress);
+  }
+
+  getListTransaction() {
+    if (this.dataList?.data) {
+      if (this.contractInfo.contractsAddress.startsWith(EWalletType.EVM)) {
+        this.getListEVMContractTransaction();
+      } else {
+        this.getListContractTransaction();
+      }
+      this.loadTableData();
+    } else {
+      this.isLoading = false;
+    }
   }
 
   loadTableData() {
@@ -112,6 +150,49 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   pageEvent(event) {
     this.onChangePage.emit(event);
+  }
+
+  getListEVMContractTransaction(): void {
+    this.contractInfo.count = this.dataList?.count || 0;
+    let listAddr = [];
+
+    const ret = this.dataList?.data?.map((contract) => {
+      const tableDta: EvmTableData = {
+        txHash: _.get(contract, 'tx_hash'),
+        method: _.get(contract, 'method'),
+        from: _.get(contract, 'from'),
+        height: _.get(contract, 'height'),
+        to: _.get(contract, 'to'),
+        time: _.get(contract, 'timestamp'),
+        amount: _.get(contract, 'evmAmount'),
+      };
+      listAddr.push(tableDta.from);
+      listAddr.push(tableDta.to);
+      return tableDta;
+    });
+
+    const listAddrUnique = _.uniq(listAddr);
+    this.contractService.findEvmContractList(listAddrUnique).subscribe({
+      next: (res) => {
+        const smartContractList = _.uniq((res?.evm_smart_contract || []).map((i) => i?.address));
+        const trans = ret.map((i: EvmTableData) => ({
+          ...i,
+          toIsEvmContract: smartContractList.filter((s) => s === i.to).length > 0,
+          fromIsEvmContract: smartContractList.filter((s) => s === i.from).length > 0,
+        }));
+        this.transactionTableData = trans;
+        this.loadTableData();
+        if (trans) {
+          this.isLoading = false;
+        } else {
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 2000);
+        }
+      },
+      error: (e) => {},
+      complete: () => {},
+    });
   }
 
   getListContractTransaction(): void {
@@ -169,6 +250,14 @@ export class ContractTableComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this.isLoading = false;
       }, 2000);
+    }
+  }
+
+  navigateToViewAll() {
+    if (this.contractInfo.contractsAddress.startsWith(EWalletType.EVM)) {
+      this.router.navigate([`/evm-contracts/transactions`, this.contractInfo.contractsAddress]);
+    } else {
+      this.router.navigate([`/contracts/transactions`, this.contractInfo.contractsAddress]);
     }
   }
 }

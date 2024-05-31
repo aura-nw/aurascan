@@ -1,218 +1,252 @@
 <div class="card card-watchlist">
-  <div class="card-header card-header--no-radius">
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="h2 h3-mob mb-0 text--white w-100 fw-700 fw-semibold-mob">
-        {{ isEditMode ? 'Edit address in' : 'Add address to' }} watchlist
+  <form [formGroup]="watchlistForm" (ngSubmit)="onSubmit()" *ngIf="watchlistForm" autocomplete="off">
+    <div class="card-header card-header--no-radius">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="h2 h3-mob mb-0 text--white w-100 fw-700 fw-semibold-mob">
+          {{ isEditMode ? 'Edit address in' : 'Add address to' }} watchlist
+        </div>
+        <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
       </div>
-      <i class="ph ph-x h2 cursor-pointer text--white" (click)="closeDialog()"></i>
     </div>
-  </div>
-  <div class="card-body p-lg-0">
-    <form
-      [formGroup]="watchlistForm"
-      (ngSubmit)="onSubmit()"
-      *ngIf="watchlistForm"
-      class="aura-form single-input-field watchlist-form"
-      autocomplete="off">
-      <!-- General -->
-      <div class="box-content">
-        <div class="h5 text--white mb-4">General information</div>
-        <mat-slide-toggle (click)="changeFavorite()" formControlName="favorite">
-          <span>Set favorite in watchlist</span>
-        </mat-slide-toggle>
-        <!-- Type -->
-        <div class="row mt-4">
-          <div class="col-lg-3 col-12">
-            <label class="form-label mb-0">Type</label>
-          </div>
-          <div class="col-auto">
-            <div class="d-flex align-items-center">
-              <div class="form-group d-flex align-items-center">
-                <input
-                  type="radio"
-                  value="account"
-                  id="account"
-                  class="radio-box radio-box--dark"
-                  [checked]="isAccount"
-                  [disabled]="isEditMode"
-                  (change)="changeType(true)" />
-                <label for="account" class="ml-2 mb-0 text-justify">Account</label>
-              </div>
-              <div class="form-group d-flex align-items-center ml-8">
-                <input
-                  type="radio"
-                  value="contract"
-                  id="contract"
-                  class="radio-box radio-box--dark"
-                  [checked]="isContract"
-                  [disabled]="isEditMode"
-                  (change)="changeType(false)" />
-                <label for="contract" class="ml-2 mb-0 text-justify">Contract</label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Address -->
-        <div class="row mt-4">
-          <div class="col-lg-3 col-12" [ngClass]="!isEditMode ? 'mt-3' : ''">
-            <label class="form-label">Address</label>
-          </div>
-          <div class="col-lg-9 col-12">
-            <div class="input-group form-check-input pr-0" *ngIf="!isEditMode">
-              <input
-                type="text"
-                formControlName="address"
-                placeholder="{{ chainName }}..."
-                class="input-address"
-                (change)="checkNameTag()"
-                (input)="checkFormValid(); isError = false"
-                autocomplete="off" />
-            </div>
-            <span *ngIf="isEditMode">{{ getAddress.value }}</span>
-            <div
-              *ngIf="getAddress?.value?.length > 0 && !isValidAddress && (isAccount || isContract)"
-              class="text--danger mt-2 caption fw-normal">
-              Invalid {{ chainName }} address format
-            </div>
-          </div>
-        </div>
-
-        <!-- Public Name Tag -->
-        <div class="row mt-4">
-          <div class="col-lg-3 col-12">
-            <label class="form-label">Public Name Tag</label>
-          </div>
-          <div
-            class="col-auto"
-            [ngClass]="publicNameTag?.length > 0 && publicNameTag != '-' ? 'box-name-tag ml-2' : ''">
-            <span class="line-claim w-100">
-              {{ publicNameTag }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Private Name Tag -->
-        <div class="row mt-4 align-items-center">
-          <div class="col-lg-3 col-12">
-            <label class="form-label">Private Name Tag</label>
-          </div>
-          <div
-            class="col-auto"
-            [ngClass]="privateNameTag?.length > 0 && privateNameTag != '-' ? 'private-name-tag ml-2' : ''">
-            <span class="line-claim w-100">
-              {{ privateNameTag }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Personal Note -->
-        <div class="row mt-4">
-          <div class="col-lg-3 col-12 mt-2">
-            <label class="form-label">Personal Note (Optional)</label>
-          </div>
-          <div class="col-lg-9 col-12">
-            <textarea
-              rows="5"
-              matInput
-              formControlName="note"
-              (blur)="checkFormValid(); isError = false"
-              [maxLength]="maxLengthNote"
-              placeholder="Enter note"
-              class="form-check-input col-12 text-area txt-note"
-              style="height: auto"></textarea>
-          </div>
-        </div>
-        <div class="d-flex offset-lg-3 text--gray-4 mt-2 caption fw-normal font-italic">
-          <div class="ml-lg-1">
-            Character limit: {{ watchlistForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br />
-            A personal note of this address. Kindly note that DO NOT input any passwords or private key here
-          </div>
-        </div>
-      </div>
-      <!-- Notification -->
-      <div class="box-content">
-        <div class="row">
-          <span class="h5 text--white mb-1">Notification</span>
-          <span class="caption fw-normal text--gray-4 mb-2">
-            Kindly note that we only support to save notifications for 1 month.
-          </span>
-          <mat-slide-toggle [checked]="getTracking.value" (change)="changeTracking()">
-            <span>Notification Mode</span>
+    <div class="card-body p-lg-0">
+      <div class="aura-form single-input-field watchlist-form">
+        <!-- General -->
+        <div class="box-content">
+          <div class="h5 text--white mb-4">General information</div>
+          <mat-slide-toggle (click)="changeFavorite()" formControlName="favorite">
+            <span>Set favorite in watchlist</span>
           </mat-slide-toggle>
-        </div>
-        <div class="box-noti-toggle d-flex mt-2" *ngIf="!isTracking">
-          <i class="ph ph-info mr-1 body-01"></i>
-          <span class="text--gray-2 caption fw-normal">
-            Turn on the Notification Mode to adjust the Tracking activity group.</span
-          >
-        </div>
-        <!-- Activities group -->
-        <div class="row mt-lg-4 mt-0">
-          <span class="caption fw-normal text--gray-3 col-lg-3 col-12 mt-4 mb-2">Tracking activity group</span>
-          <div class="col-lg-9 d-flex flex-column activities-group py-3 px-3" formGroupName="settings">
-            <ng-container *ngFor="let itemTracking of listTracking">
-              <div
-                class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
-                [ngClass]="!isTracking ? 'opacity-disable' : ''">
-                <input
-                  type="checkbox"
-                  id="{{ itemTracking.key }}"
-                  class="check-box"
-                  [ngClass]="isTracking ? 'check-box--dark' : 'check-box--disable'"
-                  [disabled]="!isTracking"
-                  [checked]="settingObj[itemTracking.key]"
-                  (change)="onChangeTnxFilterType($event, itemTracking.key)" />
-                <label for="{{ itemTracking.key }}" class="ml-2 mb-0 text-justify pl-1">
-                  {{ itemTracking.value }}
-                </label>
+          <!-- Type -->
+          <div class="row mt-4">
+            <div class="col-lg-3 col-12">
+              <label class="form-label mb-0">Type</label>
+            </div>
+            <div class="col-auto">
+              <div class="d-flex align-items-center">
+                <div class="form-group d-flex align-items-center">
+                  <input
+                    type="radio"
+                    value="account"
+                    id="account"
+                    class="radio-box radio-box--dark"
+                    [checked]="isAccount"
+                    [disabled]="isEditMode"
+                    (change)="changeType(true)" />
+                  <label for="account" class="ml-2 mb-0 text-justify">Account</label>
+                </div>
+                <div class="form-group d-flex align-items-center ml-8">
+                  <input
+                    type="radio"
+                    value="contract"
+                    id="contract"
+                    class="radio-box radio-box--dark"
+                    [checked]="isContract"
+                    [disabled]="isEditMode"
+                    (change)="changeType(false)" />
+                  <label for="contract" class="ml-2 mb-0 text-justify">Contract</label>
+                </div>
               </div>
-              <mat-slide-toggle
-                [checked]="reStakeSent"
-                (change)="reStakeSent = !reStakeSent; checkFormValid()"
-                [disabled]="
-                  (itemTracking.key === lstTrackingName.nativeCoinSent && !settingObj.nativeCoinSent) || !isTracking
-                "
-                [ngClass]="
-                  (itemTracking.key === lstTrackingName.nativeCoinSent && !settingObj.nativeCoinSent) || !isTracking
-                    ? 'mode-disable'
-                    : ''
-                "
-                class="ml-4 mb-2"
-                *ngIf="itemTracking.key === lstTrackingName.nativeCoinSent">
-                <span class="txt-disable">Inactive noti with Auto restake messages</span>
-              </mat-slide-toggle>
-              <mat-slide-toggle
-                [checked]="reStakeReceiver"
-                (change)="reStakeReceiver = !reStakeReceiver; checkFormValid()"
-                [ngClass]="
-                  (itemTracking.key === lstTrackingName.nativeCoinReceived && !settingObj.nativeCoinReceived) ||
-                  !isTracking
-                    ? 'mode-disable'
-                    : ''
-                "
-                [disabled]="
-                  (itemTracking.key === lstTrackingName.nativeCoinReceived && !settingObj.nativeCoinReceived) ||
-                  !isTracking
-                "
-                class="ml-4 mb-2"
-                *ngIf="itemTracking.key === lstTrackingName.nativeCoinReceived">
-                <span class="txt-disable">Inactive noti with Auto restake messages</span>
-              </mat-slide-toggle>
-            </ng-container>
+            </div>
+          </div>
+
+          <!-- Cosmos Address -->
+          <div class="row mt-4 align-items-center">
+            <div class="col-lg-3 col-12">
+              <label class="form-label">Cosmos Address</label>
+            </div>
+            <div class="col-lg-9 col-12">
+              <div
+                class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0"
+                *ngIf="!isEditMode">
+                <input
+                  type="text"
+                  formControlName="address"
+                  placeholder="{{ chainName }}..."
+                  class="input-address px-4 convert-address"
+                  (blur)="changeAddress('address')"
+                  (input)="isError = false"
+                  autocomplete="off" />
+                <button
+                  class="button button-xxs p-0 mr-4"
+                  *ngIf="
+                    this.watchlistForm.get('address').value.length > 0 && this.watchlistForm.get('address').enabled
+                  "
+                  type="button"
+                  (click)="resetAddress()">
+                  <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+                </button>
+              </div>
+              <span *ngIf="isEditMode">{{ watchlistForm.get('address').value || '-' }}</span>
+            </div>
+          </div>
+
+          <!-- EVM Address -->
+          <div class="row mt-4 align-items-center">
+            <div class="col-lg-3 col-12">
+              <label class="form-label">EVM Address</label>
+            </div>
+            <div class="col-lg-9 col-12">
+              <div
+                class="input-group form-check-input overflow-hidden d-flex justify-content-between px-0"
+                *ngIf="!isEditMode">
+                <input
+                  type="text"
+                  formControlName="evmAddress"
+                  placeholder="{{ eWalletType.EVM }}..."
+                  class="input-address px-4 convert-address"
+                  (input)="isError = false"
+                  (blur)="changeAddress('evmAddress')"
+                  autocomplete="off" />
+                <button
+                  class="button button-xxs p-0 mr-4"
+                  *ngIf="
+                    this.watchlistForm.get('evmAddress').value.length > 0 &&
+                    this.watchlistForm.get('evmAddress').enabled
+                  "
+                  type="button"
+                  (click)="resetAddress()">
+                  <i class="ph-fill ph-x-circle text--white cursor-pointer h3"></i>
+                </button>
+              </div>
+              <span *ngIf="isEditMode">{{ watchlistForm.get('evmAddress').value || '-' }}</span>
+            </div>
+          </div>
+
+          <!-- Public Name Tag -->
+          <div class="row mt-4">
+            <div class="col-lg-3 col-12">
+              <label class="form-label">Public Name Tag</label>
+            </div>
+            <div
+              class="col-auto"
+              [ngClass]="publicNameTag?.length > 0 && publicNameTag != '-' ? 'box-name-tag ml-2' : ''">
+              <span class="line-claim w-100">
+                {{ publicNameTag }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Private Name Tag -->
+          <div class="row mt-4 align-items-center">
+            <div class="col-lg-3 col-12">
+              <label class="form-label">Private Name Tag</label>
+            </div>
+            <div
+              class="col-auto"
+              [ngClass]="privateNameTag?.length > 0 && privateNameTag != '-' ? 'private-name-tag ml-2' : ''">
+              <span class="line-claim w-100">
+                {{ privateNameTag }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Personal Note -->
+          <div class="row mt-4">
+            <div class="col-lg-3 col-12 mt-2">
+              <label class="form-label">Personal Note (Optional)</label>
+            </div>
+            <div class="col-lg-9 col-12">
+              <textarea
+                rows="5"
+                matInput
+                formControlName="note"
+                [maxLength]="maxLengthNote"
+                placeholder="Enter note"
+                class="form-check-input col-12 text-area txt-note"
+                style="height: auto"></textarea>
+            </div>
+          </div>
+          <div class="d-flex offset-lg-3 text--gray-4 mt-2 caption fw-normal font-italic">
+            <div class="ml-lg-1">
+              Character limit: {{ watchlistForm.value.note?.length || 0 }}/{{ maxLengthNote }}<br />
+              A personal note of this address. Kindly note that DO NOT input any passwords or private key here
+            </div>
           </div>
         </div>
-        <div class="mt-4 text--gray-4 caption fw-normal">All fields are required except Personal Note</div>
+        <!-- Notification -->
+        <div class="box-content">
+          <div class="row">
+            <span class="h5 text--white mb-1">Notification</span>
+            <span class="caption fw-normal text--gray-4 mb-2">
+              Kindly note that we only support to save notifications for 1 month.
+            </span>
+            <mat-slide-toggle [checked]="getTracking.value" (change)="changeTracking()">
+              <span>Notification Mode</span>
+            </mat-slide-toggle>
+          </div>
+          <div class="box-noti-toggle d-flex mt-2" *ngIf="!isTracking">
+            <i class="ph ph-info mr-1 body-01"></i>
+            <span class="text--gray-2 caption fw-normal">
+              Turn on the Notification Mode to adjust the Tracking activity group.</span
+            >
+          </div>
+          <!-- Activities group -->
+          <div class="row mt-lg-4 mt-0">
+            <span class="caption fw-normal text--gray-3 col-lg-3 col-12 mt-4 mb-2">Tracking activity group</span>
+            <div class="col-lg-9 d-flex flex-column activities-group py-3 px-3" formGroupName="settings">
+              <ng-container *ngFor="let itemTracking of listTracking">
+                <div
+                  class="form-group d-flex align-items-center tnx-filter-item mx-2 mb-2"
+                  [ngClass]="!isTracking ? 'opacity-disable' : ''">
+                  <input
+                    type="checkbox"
+                    id="{{ itemTracking.key }}"
+                    class="check-box"
+                    [ngClass]="isTracking ? 'check-box--dark' : 'check-box--disable'"
+                    [disabled]="!isTracking"
+                    [checked]="settingObj[itemTracking.key]"
+                    (change)="onChangeTnxFilterType($event, itemTracking.key)" />
+                  <label for="{{ itemTracking.key }}" class="ml-2 mb-0 text-justify pl-1">
+                    {{ itemTracking.value }}
+                  </label>
+                </div>
+                <mat-slide-toggle
+                  [checked]="reStakeSent"
+                  (change)="reStakeSent = !reStakeSent; checkFormValid()"
+                  [disabled]="
+                    (itemTracking.key === lstTrackingName.nativeCoinSent && !settingObj.nativeCoinSent) || !isTracking
+                  "
+                  [ngClass]="
+                    (itemTracking.key === lstTrackingName.nativeCoinSent && !settingObj.nativeCoinSent) || !isTracking
+                      ? 'mode-disable'
+                      : ''
+                  "
+                  class="ml-4 mb-2"
+                  *ngIf="itemTracking.key === lstTrackingName.nativeCoinSent">
+                  <span class="txt-disable">Inactive noti with Auto restake messages</span>
+                </mat-slide-toggle>
+                <mat-slide-toggle
+                  [checked]="reStakeReceiver"
+                  (change)="reStakeReceiver = !reStakeReceiver; checkFormValid()"
+                  [ngClass]="
+                    (itemTracking.key === lstTrackingName.nativeCoinReceived && !settingObj.nativeCoinReceived) ||
+                    !isTracking
+                      ? 'mode-disable'
+                      : ''
+                  "
+                  [disabled]="
+                    (itemTracking.key === lstTrackingName.nativeCoinReceived && !settingObj.nativeCoinReceived) ||
+                    !isTracking
+                  "
+                  class="ml-4 mb-2"
+                  *ngIf="itemTracking.key === lstTrackingName.nativeCoinReceived">
+                  <span class="txt-disable">Inactive noti with Auto restake messages</span>
+                </mat-slide-toggle>
+              </ng-container>
+            </div>
+          </div>
+          <div class="mt-4 text--gray-4 caption fw-normal">All fields are required except Personal Note</div>
+        </div>
+        <!-- button group -->
+        <div class="d-lg-none d-block" [class.safari-device]="isSafari">
+          <ng-container *ngTemplateOutlet="btnGroup"></ng-container>
+        </div>
       </div>
-      <!-- button group -->
-      <div class="d-lg-none d-block" [class.safari-device]="isSafari">
-        <ng-container *ngTemplateOutlet="btnGroup"></ng-container>
-      </div>
-    </form>
-  </div>
-  <div class="card-footer card-footer--no-radius d-none d-lg-block">
-    <ng-container *ngTemplateOutlet="btnGroup"></ng-container>
-  </div>
+    </div>
+    <div class="card-footer card-footer--no-radius d-none d-lg-block">
+      <ng-container *ngTemplateOutlet="btnGroup"></ng-container>
+    </div>
+  </form>
 </div>
 
 <ng-template #btnGroup>
@@ -222,8 +256,7 @@
     </button>
     <button
       class="button button--md button-outline button-pill button-flat ml-4 btn btn-create"
-      type="button"
-      (click)="onSubmit()"
+      type="submit"
       [disabled]="!formValid || isError">
       <span class="text--black">
         {{ isEditMode ? 'Update' : 'Add' }}

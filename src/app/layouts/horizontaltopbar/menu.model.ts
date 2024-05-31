@@ -11,4 +11,5 @@ export interface MenuItem {
   name?: string;
   disabled?: boolean;
   featureName?: EFeature;
+  activeString?: string | string[];
 }

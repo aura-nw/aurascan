@@ -1,4 +1,11 @@
-import { ACCOUNT_TYPE_ENUM, ACCOUNT_WALLET_COLOR_ENUM, TabsAccount, TabsAccountLink, TypeAccount, WalletAcount } from './account.enum';
+import {
+  ACCOUNT_TYPE_ENUM,
+  ACCOUNT_WALLET_COLOR_ENUM,
+  TabsAccount,
+  TabsAccountLink,
+  TypeAccount,
+  WalletAcount
+} from './account.enum';
 
 export const TYPE_ACCOUNT = [
   { label: ACCOUNT_TYPE_ENUM.All, value: TypeAccount.All },
@@ -19,6 +26,7 @@ export const ACCOUNT_WALLET_COLOR = [
 
 export const TABS_TITLE_ACCOUNT = [
   { label: TabsAccount.ExecutedTxs, value: TabsAccountLink.ExecutedTxs },
+  { label: TabsAccount.EVMExecutedTxs, value: TabsAccountLink.EVMExecutedTxs },
   { label: TabsAccount.NativeTxs, value: TabsAccountLink.NativeTxs },
   { label: TabsAccount.FtsTxs, value: TabsAccountLink.FtsTxs },
   { label: TabsAccount.NftTxs, value: TabsAccountLink.NftTxs },

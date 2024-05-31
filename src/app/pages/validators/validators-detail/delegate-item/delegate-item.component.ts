@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Contract, parseEther } from 'ethers';
 import { MAX_NUMBER_INPUT, NUMBER_2_DIGIT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -9,6 +10,10 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { parseError } from 'src/app/core/utils/cosmoskit/helpers/errors';
+import { stakeAbi } from '../../stakeAbi';
+import { TransactionService } from '../../../../core/services/transaction.service';
+import * as _ from 'lodash';
+import { switchMap } from 'rxjs/internal/operators/switchMap';
 
 @Component({
   selector: 'app-delegate-item',
@@ -41,6 +46,9 @@ export class DelegateItemComponent implements OnInit {
   chainInfo = this.environmentService.chainInfo;
   coinMinimalDenom = this.environmentService.chainInfo.currencies[0].coinMinimalDenom;
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
+  stakeContractAddr = this.environmentService.evmChainInfo.stakeContract;
+
+  contract: Contract;
 
   constructor(
     private walletService: WalletService,
@@ -50,6 +58,7 @@ export class DelegateItemComponent implements OnInit {
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
     private validatorService: ValidatorService,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -155,34 +164,82 @@ export class DelegateItemComponent implements OnInit {
       this.modalReference.close('Close click');
     }
   }
+  createContract(contractAddr, evmAccount) {
+    try {
+      let contract = new Contract(contractAddr, stakeAbi, evmAccount);
 
-  handleStaking() {
+      if (contract) {
+        this.contract = contract;
+
+        return this.contract;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
+  }
+
+  async handleStaking() {
     this.isValidAmount();
     if (!this.isExceedAmount && !this.isValidatorJail && this.amountFormat > 0) {
       this.isLoading = true;
 
-      const msg = {
-        delegatorAddress: this.userAddress,
-        validatorAddress: this.currentValidatorDetail?.operator_address,
-        amount: {
-          amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-          denom: this.coinMinimalDenom,
-        },
-      };
+      const account = this.walletService.getCosmosAccountOnly();
+      if (!account) {
+        return;
+      }
+      if (account?.cosmosAccount) {
+        const msg = {
+          delegatorAddress: this.userAddress,
+          validatorAddress: this.currentValidatorDetail?.operator_address,
+          amount: {
+            amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
+            denom: this.coinMinimalDenom,
+          },
+        };
 
-      this.walletService
-        .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount)
-        .then((broadcastResult) => {
-          let error = undefined;
-          if (broadcastResult?.code != 0) {
-            error = broadcastResult;
-          }
+        this.walletService
+          .delegateTokens(msg.delegatorAddress, msg.validatorAddress, msg.amount)
+          .then((broadcastResult) => {
+            let error = undefined;
+            if (broadcastResult?.code != 0) {
+              error = broadcastResult;
+            }
 
-          this.checkTxStatusOnchain({ success: broadcastResult, error });
+            this.checkTxStatusOnchain({ success: broadcastResult, error });
+          })
+          .catch((error) => {
+            this.checkTxStatusOnchain({ error });
+          });
+      } else {
+        const contract = this.createContract(this.stakeContractAddr, account.evmAccount);
+
+        if (!contract) {
+          return;
+        }
+        const nameContract = 'delegate';
+        const params = [
+          account.evmAddress,
+          this.currentValidatorDetail?.operator_address,
+          (this.amountFormat * Math.pow(10, 18)).toFixed(0),
+        ];
+        const x = await contract[nameContract]?.estimateGas(...params).catch((e) => e);
+
+        contract[nameContract]?.(...params, {
+          gasLimit: Number(x) || 250_000,
+          gasPrice: 1_000_0000,
+          value: parseEther('0'),
         })
-        .catch((error) => {
-          this.checkTxStatusOnchain({ error });
-        });
+          .then((res) => {
+            let error = undefined;
+
+            this.checkTxStatusOnchain({ success: res, error });
+          })
+          .catch((error) => {
+            this.checkTxStatusOnchain({ error });
+          });
+      }
     }
   }
 
@@ -218,20 +275,47 @@ export class DelegateItemComponent implements OnInit {
       this.resetData();
     } else {
       const hash = success?.transactionHash;
+      const evmHash = success?.hash;
       this.isLoading = false;
 
-      if (!hash) {
+      if (!hash && !evmHash) {
         return;
       }
+      if (hash) {
+        this.toastr.loading(hash);
 
-      this.toastr.loading(hash);
+        setTimeout(() => {
+          this.mappingErrorService.checkDetailTx(hash).then(() => {
+            this.reloadData.emit();
+          });
+          this.resetData();
+        }, TIME_OUT_CALL_API);
+      } else {
+        this.toastr.loading(evmHash);
 
-      setTimeout(() => {
-        this.mappingErrorService.checkDetailTx(hash).then(() => {
-          this.reloadData.emit();
-        });
-        this.resetData();
-      }, TIME_OUT_CALL_API);
+        setTimeout(() => {
+          const payload = {
+            limit: 1,
+            hash: evmHash,
+          };
+          this.transactionService
+            .queryTransactionByEvmHash(payload)
+            .pipe(
+              switchMap((response) => {
+                const txData = _.get(response, 'transaction[0]');
+                return this.mappingErrorService.checkDetailTx(txData?.hash);
+              }),
+            )
+            .subscribe({
+              next: () => {
+                this.reloadData.emit();
+              },
+              error: (e) => {},
+              complete: () => {},
+            });
+          this.resetData();
+        }, TIME_OUT_CALL_API);
+      }
     }
   }
 
