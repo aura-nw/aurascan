@@ -165,10 +165,6 @@ export class DelegateItemComponent implements OnInit {
     }
   }
   createContract(contractAddr, evmAccount) {
-    if (this.contract) {
-      return this.contract;
-    }
-
     try {
       let contract = new Contract(contractAddr, stakeAbi, evmAccount);
 

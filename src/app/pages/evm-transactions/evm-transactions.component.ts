@@ -8,6 +8,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { mappingMethodName } from 'src/app/global/global';
+import { ContractService } from '../../core/services/contract.service';
 
 @Component({
   selector: 'app-evm-transactions',
@@ -40,6 +41,7 @@ export class EvmTransactionsComponent {
     private layout: BreakpointObserver,
     private transactionService: TransactionService,
     private env: EnvironmentService,
+    private contractService: ContractService,
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +52,7 @@ export class EvmTransactionsComponent {
     const payload = {
       limit: this.maxPageSize,
     };
-
+    let listAddr = [];
     this.transactionService
       .queryEvmTransactionList(payload)
       .pipe(
@@ -59,22 +61,44 @@ export class EvmTransactionsComponent {
             ?.filter((j) => j.evm_transaction.data?.length > 0)
             ?.map((k) => k.evm_transaction.data?.substring(0, 8));
           const listMethodId = _.uniq(listTemp);
+
           return this.transactionService.getListMappingName(listMethodId).pipe(
             map((element) => {
               if (res?.transaction?.length > 0) {
                 return res.transaction.map((tx) => {
                   const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
+                  const from = _.get(tx, 'evm_transaction.from');
+                  const to = _.get(tx, 'evm_transaction.to');
+                  listAddr.push(from);
+                  listAddr.push(to);
+
                   return {
                     ...tx,
                     evm_hash: _.get(tx, 'evm_transaction.hash'),
                     type: mappingMethodName(element, methodId),
-                    from: _.get(tx, 'evm_transaction.from'),
-                    to: _.get(tx, 'evm_transaction.to'),
+                    from: from,
+                    to: to,
                     amount: _.get(tx, 'evm_transaction.value'),
                   };
                 });
               }
               return [];
+            }),
+          );
+        }),
+      )
+      .pipe(
+        switchMap((res) => {
+          const listAddrUnique = _.uniq(listAddr).filter((i) => !!i);
+          return this.contractService.findEvmContractList(listAddrUnique).pipe(
+            map((r) => {
+              const smartContractList = _.uniq((r?.evm_smart_contract || []).map((i) => i?.address));
+              const trans = res.map((i: any) => ({
+                ...i,
+                toIsEvmContract: smartContractList.filter((s) => s === i.to).length > 0,
+                fromIsEvmContract: smartContractList.filter((s) => s === i.from).length > 0,
+              }));
+              return trans;
             }),
           );
         }),
