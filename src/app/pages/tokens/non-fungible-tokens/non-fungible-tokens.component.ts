@@ -79,14 +79,18 @@ export class NonFungibleTokensComponent implements OnInit {
     };
 
     let keySearch = this.textSearch;
-    const addressNameTag = this.nameTagService.findAddressByNameTag(keySearch, this.filterBy === 'ERC721');
-
-    if (addressNameTag?.length > 0) {
-      keySearch = addressNameTag;
-    }
 
     if (this.filterBy === 'ERC721') {
-      this.tokenService.getListErc721Token(payload, keySearch).subscribe({
+      const listAddress = this.nameTagService.findAddressListByNameTag(keySearch, this.filterBy === 'ERC721');
+      let tagAddress = '[]';
+      if (listAddress?.length > 0) {
+        tagAddress = '';
+        listAddress.forEach((addr) => {
+          tagAddress += `"${addr}",`;
+        });
+        tagAddress = `[${tagAddress}]`;
+      }
+      this.tokenService.getListErc721Token(payload, keySearch, tagAddress).subscribe({
         next: (res) => {
           this.dataSource = new MatTableDataSource<any>(res.list_token);
           this.pageData.length = res.total_token?.aggregate?.count;
@@ -104,6 +108,11 @@ export class NonFungibleTokensComponent implements OnInit {
         },
       });
     } else if (this.filterBy === 'CW721') {
+      const addressNameTag = this.nameTagService.findAddressByNameTag(keySearch);
+
+      if (addressNameTag?.length > 0) {
+        keySearch = addressNameTag;
+      }
       this.tokenService.getListCW721Token(payload, keySearch).subscribe({
         next: (res) => {
           this.dataSource = new MatTableDataSource<any>(res.list_token);

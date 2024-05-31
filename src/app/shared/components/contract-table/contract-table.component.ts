@@ -14,6 +14,8 @@ import { DROPDOWN_ELEMENT, ITableContract } from 'src/app/core/models/contract.m
 import { getTypeTx } from 'src/app/core/utils/common/info-common';
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import { ContractService } from '../../../core/services/contract.service';
+import { map } from 'rxjs';
 
 export interface TableData {
   txHash: string;
@@ -38,6 +40,8 @@ export interface EvmTableData {
   from: string;
   to?: string;
   amount?: number;
+  fromIsEvmContract?: boolean;
+  toIsEvmContract?: boolean;
 }
 
 @Component({
@@ -78,6 +82,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
     public translate: TranslateService,
     private environmentService: EnvironmentService,
     private router: Router,
+    private contractService: ContractService,
   ) {}
 
   ngOnChanges(): void {
@@ -134,6 +139,8 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   getListEVMContractTransaction(): void {
     this.contractInfo.count = this.dataList?.count || 0;
+    let listAddr = [];
+
     const ret = this.dataList?.data?.map((contract) => {
       const tableDta: EvmTableData = {
         txHash: _.get(contract, 'tx_hash'),
@@ -144,16 +151,33 @@ export class ContractTableComponent implements OnInit, OnChanges {
         time: _.get(contract, 'timestamp'),
         amount: _.get(contract, 'evmAmount'),
       };
+      listAddr.push(tableDta.from);
+      listAddr.push(tableDta.to);
       return tableDta;
     });
-    this.transactionTableData = ret;
-    if (ret) {
-      this.isLoading = false;
-    } else {
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 2000);
-    }
+
+    const listAddrUnique = _.uniq(listAddr);
+    this.contractService.findEvmContractList(listAddrUnique).subscribe({
+      next: (res) => {
+        const smartContractList = _.uniq((res?.evm_smart_contract || []).map((i) => i?.address));
+        const trans = ret.map((i: EvmTableData) => ({
+          ...i,
+          toIsEvmContract: smartContractList.filter((s) => s === i.to).length > 0,
+          fromIsEvmContract: smartContractList.filter((s) => s === i.from).length > 0,
+        }));
+        this.transactionTableData = trans;
+        this.loadTableData();
+        if (trans) {
+          this.isLoading = false;
+        } else {
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 2000);
+        }
+      },
+      error: (e) => {},
+      complete: () => {},
+    });
   }
 
   getListContractTransaction(): void {
