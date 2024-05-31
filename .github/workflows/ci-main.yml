@@ -14,13 +14,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # runs-on: self-hosted
-    if: github.actor == 'hoangthanh212' || github.actor == 'nhphuc2411' 
+    if: github.actor == 'hoangthanh212' || github.actor == 'nhphuc2411' || github.actor == 'kienvc' 
     steps:
       - uses: actions/checkout@v2
       - name: Set environment variable
         run: |
           echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/explorer-frontend:${{ inputs.version }} >> $GITHUB_ENV
-          echo REPO_MANIFEST_NAME=gitops >> $GITHUB_ENV
+          echo REPO_MANIFEST_NAME=gitops-prod >> $GITHUB_ENV
           echo REPO_MANIFEST_URL=github.com/aura-nw/gitops-prod.git >> $GITHUB_ENV
           echo REPO_MANIFEST_BRANCH=master >> $GITHUB_ENV
           echo REPO_MANIFEST_ENV_MAIN=./clusters/k8s-xstaxy/explorer >> $GITHUB_ENV

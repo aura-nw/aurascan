@@ -154,4 +154,3 @@ export class WalletProviderComponent implements AfterViewInit {
     this.onClose.emit(null);
   }
 }
-
