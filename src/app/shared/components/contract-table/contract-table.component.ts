@@ -78,6 +78,8 @@ export class ContractTableComponent implements OnInit, OnChanges {
   isMoreTx = false;
   lengthAddress = LENGTH_CHARACTER.ADDRESS;
 
+  timerRefress: any;
+
   constructor(
     public translate: TranslateService,
     private environmentService: EnvironmentService,
@@ -86,6 +88,23 @@ export class ContractTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(): void {
+    this.getListTransaction();
+  }
+
+  ngOnInit(): void {
+    this.displayedColumns = this.templates?.map((dta) => dta.matColumnDef);
+    this.timerRefress = setInterval(() => {
+      if (this.pageData.pageIndex === 1) {
+        this.getListTransaction();
+      }
+    }, 30000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timerRefress);
+  }
+
+  getListTransaction() {
     if (this.dataList?.data) {
       if (this.contractInfo.contractsAddress.startsWith(EWalletType.EVM)) {
         this.getListEVMContractTransaction();
@@ -96,10 +115,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
     } else {
       this.isLoading = false;
     }
-  }
-
-  ngOnInit(): void {
-    this.displayedColumns = this.templates?.map((dta) => dta.matColumnDef);
   }
 
   loadTableData() {
