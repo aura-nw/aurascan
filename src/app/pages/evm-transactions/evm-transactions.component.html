@@ -1,5 +1,5 @@
 <ng-container class="evm-transaction" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <app-pagetitle title="EVM Transactions" [displayInfo]="!breakpoint.value.matches"></app-pagetitle>
+  <app-pagetitle title="EVM Transactions 2" [displayInfo]="!breakpoint.value.matches"></app-pagetitle>
   <section *ngIf="!loading" class="mt-4 mt-md-6">
     <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
       <div class="card" *ngIf="!breakpoint.value.matches">
@@ -27,12 +27,19 @@
                         {{ data.type }}
                       </div>
                       <ng-container *ngSwitchCase="'from'">
-                        <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
+                        <app-name-tag
+                          [value]="data[template.matColumnDef]"
+                          *ngIf="data[template.matColumnDef]"
+                          [iconContract]="data['fromIsEvmContract']">
                         </app-name-tag>
+                        11
                         <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to'">
-                        <app-name-tag [value]="data[template.matColumnDef]" *ngIf="data[template.matColumnDef]">
+                        <app-name-tag
+                          [value]="data[template.matColumnDef]"
+                          *ngIf="data[template.matColumnDef]"
+                          [iconContract]="data['toIsEvmContract']">
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>

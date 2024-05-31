@@ -169,10 +169,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   createContract(contractAddr, evmAccount) {
-    if (this.contract) {
-      return this.contract;
-    }
-
     try {
       let contract = new Contract(contractAddr, stakeAbi, evmAccount);
 
