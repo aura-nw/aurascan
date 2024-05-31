@@ -1,0 +1,39 @@
+name: CI main
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+    inputs:
+      version:
+        type: string
+        description: Release version
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # runs-on: self-hosted
+    if: github.actor == 'hoangthanh212' || github.actor == 'nhphuc2411' 
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set environment variable
+        run: |
+          echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/explorer-frontend:${{ inputs.version }} >> $GITHUB_ENV
+          echo REPO_MANIFEST_NAME=gitops >> $GITHUB_ENV
+          echo REPO_MANIFEST_URL=github.com/aura-nw/gitops-prod.git >> $GITHUB_ENV
+          echo REPO_MANIFEST_BRANCH=master >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_MAIN=./clusters/k8s-xstaxy/explorer >> $GITHUB_ENV
+          echo REPO_MANIFEST_TAG_IMAGE=image_explorer_frontend >> $GITHUB_ENV
+      - name: Build the Docker image and push it to the registry
+        env:
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod 777 -R ./ci
+          ./ci/build.sh
+      - name: Update manifest
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.REGISTRY_PASSWORD }}
+        run: |
+          ./ci/updateManifest.sh
