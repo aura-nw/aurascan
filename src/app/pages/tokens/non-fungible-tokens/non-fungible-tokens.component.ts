@@ -82,13 +82,13 @@ export class NonFungibleTokensComponent implements OnInit {
 
     if (this.filterBy === 'ERC721') {
       const listAddress = this.nameTagService.findAddressListByNameTag(keySearch, this.filterBy === 'ERC721');
-      let tagAddress = '[]';
+      let tagAddress = `["${keySearch}"]`;
       if (listAddress?.length > 0) {
         tagAddress = '';
         listAddress.forEach((addr) => {
           tagAddress += `"${addr}",`;
         });
-        tagAddress = `[${tagAddress}]`;
+        tagAddress = `[${tagAddress}"${keySearch}"]`;
       }
       this.tokenService.getListErc721Token(payload, keySearch, tagAddress).subscribe({
         next: (res) => {
