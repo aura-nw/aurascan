@@ -5,11 +5,12 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { getEthersProvider } from 'src/app/core/utils/ethers';
 import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
+import { WalletService } from '../../../../../../core/services/wallet.service';
 
 type Error = {
   code?: string;
-  message?: string
-}
+  message?: string;
+};
 
 type JsonFragmentExtends = JsonFragment & {
   formGroup?: FormGroup;
@@ -38,6 +39,7 @@ export class EvmReadComponent implements OnChanges {
   constructor(
     private environmentService: EnvironmentService,
     private fb: FormBuilder,
+    private walletService: WalletService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -112,7 +114,7 @@ export class EvmReadComponent implements OnChanges {
     }
   }
 
-  handleQueryContract(jsonFragment: JsonFragmentExtends) {
+  async handleQueryContract(jsonFragment: JsonFragmentExtends) {
     if (!jsonFragment) {
       return;
     }
@@ -131,6 +133,13 @@ export class EvmReadComponent implements OnChanges {
       const value = formControls[i.name || idx].value?.trim();
       return validateAndParsingInput(i, value); // TODO
     });
+
+    const isCorrectEvmChain = await this.walletService.isCorrectEvmChain();
+    if (!isCorrectEvmChain) {
+      jsonFragment.isLoading = false;
+      jsonFragment.error = { code: '4001', message: 'User rejected the request.' };
+      return;
+    }
 
     const contract = this.createContract();
 
