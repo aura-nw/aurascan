@@ -164,8 +164,12 @@ export class DelegateItemComponent implements OnInit {
       this.modalReference.close('Close click');
     }
   }
-  createContract(contractAddr, evmAccount) {
+  async createContract(contractAddr, evmAccount) {
     try {
+      const isCorrectEvmChain = await this.walletService.isCorrectEvmChain();
+      if (!isCorrectEvmChain) {
+        return null;
+      }
       let contract = new Contract(contractAddr, stakeAbi, evmAccount);
 
       if (contract) {
@@ -213,7 +217,7 @@ export class DelegateItemComponent implements OnInit {
             this.checkTxStatusOnchain({ error });
           });
       } else {
-        const contract = this.createContract(this.stakeContractAddr, account.evmAccount);
+        const contract = await this.createContract(this.stakeContractAddr, account.evmAccount);
 
         if (!contract) {
           return;

@@ -27,7 +27,7 @@ import { getGasPriceByChain } from '../utils/cosmoskit/helpers/gas';
 import { ExtendsWalletClient } from '../utils/cosmoskit/wallets';
 import { wallets as leapMetamask } from '../utils/cosmoskit/wallets/leap-metamask-cosmos-snap';
 import { getSigner } from '../utils/ethers/ethers';
-import { addNetwork, checkNetwork } from '../utils/ethers/utils';
+import { addNetwork, checkNetwork, getMetamask } from '../utils/ethers/utils';
 import local from '../utils/storage/local';
 
 @Injectable({
@@ -340,7 +340,7 @@ export class WalletService implements OnDestroy {
   }
 
   getCosmosAccountOnly() {
-    return this.walletAccount; 
+    return this.walletAccount;
   }
 
   getEvmAccount() {
@@ -414,7 +414,10 @@ export class WalletService implements OnDestroy {
     const network = await checkNetwork(this.env.evmChainInfo.chainId);
 
     if (!network) {
-      await addNetwork(this.env.evmChainInfo);
+      const isCorrectEvmChain = await this.isCorrectEvmChain();
+      if (!isCorrectEvmChain) {
+        return;
+      }
     }
 
     getSigner(this.env.etherJsonRpc).then((signer) => {
@@ -431,6 +434,31 @@ export class WalletService implements OnDestroy {
         local.setItem(STORAGE_KEY.CURRENT_EVM_WALLET, this.walletAccount);
       }
     });
+  }
+
+  async isCorrectEvmChain() {
+    const network = await checkNetwork(this.env.evmChainInfo.chainId);
+
+    if (!network) {
+      const metamask = getMetamask();
+      const chainId = '0x' + this.env.evmChainInfo.chainId.toString(16);
+      try {
+        await metamask // Or window.ethereum if you don't support EIP-6963.
+          .request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: chainId }],
+          });
+      } catch (switchError: any) {
+        if (switchError.code === 4902) {
+          // This error code indicates that the chain has not been added to MetaMask.
+          await addNetwork(this.env.evmChainInfo);
+        } else if (switchError.code === 4001) {
+          // This error code : "User rejected the request."
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   parseAddress(address: string) {

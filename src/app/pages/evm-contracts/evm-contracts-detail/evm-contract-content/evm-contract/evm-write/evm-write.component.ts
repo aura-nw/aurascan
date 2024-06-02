@@ -153,6 +153,14 @@ export class EvmWriteComponent implements OnChanges {
     });
 
     const fundAmount = formControls['fund']?.value || '0';
+
+    const isCorrectEvmChain = await this.walletService.isCorrectEvmChain();
+    if (!isCorrectEvmChain) {
+      jsonFragment.isLoading = false;
+      jsonFragment.error = { code: '4001', message: 'User rejected the request.' };
+      return;
+    }
+
     const contract = this.createContract();
 
     if (!contract) {
