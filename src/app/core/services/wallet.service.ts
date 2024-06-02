@@ -146,7 +146,7 @@ export class WalletService implements OnDestroy {
     await this._walletManager.onMounted();
 
     this.accountChangeEvent();
-
+    this.evmAccountChangeEvent();
     return 'SUCCESS';
   }
 
@@ -245,6 +245,19 @@ export class WalletService implements OnDestroy {
             };
           }
         });
+    });
+  }
+
+  evmAccountChangeEvent() {
+    (window as any).ethereum.on('accountsChanged', () => {
+      setTimeout(() => {
+        this.connectToChain();
+      }, 1000);
+    });
+    (window as any).ethereum.on('chainChanged', () => {
+      setTimeout(() => {
+        this.connectToChain();
+      }, 1000);
     });
   }
 
@@ -414,8 +427,8 @@ export class WalletService implements OnDestroy {
     const network = await checkNetwork(this.env.evmChainInfo.chainId);
 
     if (!network) {
-      const isCorrectEvmChain = await this.isCorrectEvmChain();
-      if (!isCorrectEvmChain) {
+      const connected = await this.connectToChain();
+      if (!connected) {
         return;
       }
     }
@@ -436,7 +449,7 @@ export class WalletService implements OnDestroy {
     });
   }
 
-  async isCorrectEvmChain() {
+  async connectToChain() {
     const network = await checkNetwork(this.env.evmChainInfo.chainId);
 
     if (!network) {
