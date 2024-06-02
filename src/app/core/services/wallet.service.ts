@@ -146,7 +146,7 @@ export class WalletService implements OnDestroy {
     await this._walletManager.onMounted();
 
     this.accountChangeEvent();
-    this.evmAccountChangeEvent();
+    this.evmChangeEvent();
     return 'SUCCESS';
   }
 
@@ -248,17 +248,15 @@ export class WalletService implements OnDestroy {
     });
   }
 
-  evmAccountChangeEvent() {
-    (window as any).ethereum.on('accountsChanged', () => {
-      setTimeout(() => {
+  evmChangeEvent() {
+    const reconnect = () => {
+      const timeoutId = setTimeout(() => {
+        clearTimeout(timeoutId);
         this.connectToChain();
       }, 1000);
-    });
-    (window as any).ethereum.on('chainChanged', () => {
-      setTimeout(() => {
-        this.connectToChain();
-      }, 1000);
-    });
+    };
+    (window as any).ethereum.on('accountsChanged', reconnect);
+    (window as any).ethereum.on('chainChanged', reconnect);
   }
 
   private async _getSigningCosmWasmClientAuto() {
