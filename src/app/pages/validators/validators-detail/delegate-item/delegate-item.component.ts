@@ -166,8 +166,8 @@ export class DelegateItemComponent implements OnInit {
   }
   async createContract(contractAddr, evmAccount) {
     try {
-      const isCorrectEvmChain = await this.walletService.isCorrectEvmChain();
-      if (!isCorrectEvmChain) {
+      const connected = await this.walletService.connectToChain();
+      if (!connected) {
         return null;
       }
       let contract = new Contract(contractAddr, stakeAbi, evmAccount);
