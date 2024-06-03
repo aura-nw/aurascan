@@ -31,9 +31,12 @@ export async function addNetwork(chain) {
       chain.explorers && chain.explorers.length > 0 && chain.explorers[0].url ? chain.explorers[0].url : chain.infoURL,
     ],
   };
-
-  return metamask.request({
-    method: 'wallet_addEthereumChain',
-    params: [params],
-  });
+  try {
+    await metamask.request({
+      method: 'wallet_addEthereumChain',
+      params: [params],
+    });
+  } catch (addError) {
+    console.error(addError);
+  }
 }
