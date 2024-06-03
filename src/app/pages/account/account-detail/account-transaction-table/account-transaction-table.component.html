@@ -507,7 +507,7 @@
                           *ngIf="index < data.limit">
                           <div class="item-show d-flex justify-content-between align-items-center">
                             <app-name-tag
-                              [value]="item.fromAddress || currentAddress"
+                              [value]="item.fromAddress || currentAddress | beautyAddress"
                               [iconContract]="isEvmSmartContract(item.fromAddress || currentAddress)"
                               [linkRouter]="
                                 nonFungibleTokenType === nftType.ERC721
@@ -568,7 +568,7 @@
                           <div class="item-show d-flex align-items-center">
                             <div [style]="'min-width: 148px'">
                               <app-name-tag
-                                [value]="item.toAddress || currentAddress"
+                                [value]="item.toAddress || currentAddress | beautyAddress"
                                 [iconContract]="isEvmSmartContract(item.toAddress || currentAddress)"
                                 [linkRouter]="
                                   nonFungibleTokenType === nftType.ERC721
@@ -616,7 +616,7 @@
                       <ng-container *ngIf="modeQuery !== tabsData.FtsTxs">
                         <app-name-tag
                           *ngIf="data[template.matColumnDef]"
-                          [value]="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef] | beautyAddress"
                           [linkRouter]="[
                             (data[template.matColumnDef] | isContract) ? '/contracts' : '/address',
                             data[template.matColumnDef]
@@ -638,7 +638,7 @@
                             <div class="item-show d-flex align-items-center">
                               <div [style]="'min-width: 148px'">
                                 <app-name-tag
-                                  [value]="item.to || currentAddress"
+                                  [value]="item.to || currentAddress | beautyAddress"
                                   [linkRouter]="[
                                     (item.to || currentAddress | isContract) ? '/contracts' : '/address',
                                     item.to || currentAddress
@@ -678,7 +678,7 @@
                             *ngIf="index < data.limit">
                             <div class="item-show d-flex justify-content-between align-items-center">
                               <app-name-tag
-                                [value]="item.from || currentAddress"
+                                [value]="item.from || currentAddress | beautyAddress"
                                 [iconContract]="item.from || currentAddress | isContract"
                                 [linkRouter]="[
                                   (item.from || currentAddress | isContract) ? '/contracts' : '/address',
@@ -787,14 +787,14 @@
                                 [iconContract]="true"
                                 [linkRouter]="['/evm-contracts', item.contractAddress || currentAddress]"
                                 [isShorterText]="true"
-                                [value]="item.contractAddress"
+                                [value]="item.contractAddress | beautyAddress"
                                 [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                               <app-name-tag
                                 *ngIf="nonFungibleTokenType === nftType.CW721"
                                 [iconContract]="true"
                                 [linkRouter]="['/contracts', item.contractAddress || currentAddress]"
                                 [isShorterText]="true"
-                                [value]="item.contractAddress"
+                                [value]="item.contractAddress | beautyAddress"
                                 [isEnableRouter]="!item.contractAddress?.startsWith('Null')"></app-name-tag>
                             </div>
                           </div>

@@ -112,7 +112,7 @@
                           *ngIf="data['contract_verification'] === ContractVerifyType.Verified" />
                       </div>
                       <app-name-tag
-                        [value]="data[template.matColumnDef]"
+                        [value]="data[template.matColumnDef] | beautyAddress"
                         [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                         [maxCharacter]="12"
                         [tooltipPosition]="'tooltip--right'"></app-name-tag>
@@ -140,7 +140,7 @@
                     <ng-container *ngSwitchCase="'creator'">
                       <app-name-tag
                         *ngIf="data[template.matColumnDef]"
-                        [value]="data[template.matColumnDef]"
+                        [value]="data[template.matColumnDef] | beautyAddress"
                         [linkRouter]="[template.isUrl, data[template.matColumnDef]]"
                         [maxCharacter]="12"
                         [tooltipPosition]="'tooltip--right'"></app-name-tag>

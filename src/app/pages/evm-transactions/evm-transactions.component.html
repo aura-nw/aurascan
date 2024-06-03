@@ -28,7 +28,7 @@
                       </div>
                       <ng-container *ngSwitchCase="'from'">
                         <app-name-tag
-                          [value]="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef] | beautyAddress"
                           *ngIf="data[template.matColumnDef]"
                           [iconContract]="data['fromIsEvmContract']">
                         </app-name-tag>
@@ -36,7 +36,7 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'to'">
                         <app-name-tag
-                          [value]="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef] | beautyAddress"
                           *ngIf="data[template.matColumnDef]"
                           [iconContract]="data['toIsEvmContract']">
                         </app-name-tag>
@@ -61,7 +61,7 @@
                           [appBigNumber]="data[template.matColumnDef]"
                           [decimal]="decimal"></span>
                         <a appLinkDenom> {{ denom }}</a>
-                        <a [appLinkDenom]="data['contractAddress'] | appEvmAddress"> {{ data['tokenSymbol'] }}</a>
+                        <a [appLinkDenom]="data['contractAddress'] | beautyAddress"> {{ data['tokenSymbol'] }}</a>
                       </div>
                       <div *ngSwitchCase="'hash'" class="text-center">
                         <a

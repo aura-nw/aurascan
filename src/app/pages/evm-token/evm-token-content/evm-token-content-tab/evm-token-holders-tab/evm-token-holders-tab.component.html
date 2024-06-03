@@ -40,7 +40,7 @@
                   <ng-container *ngSwitchCase="'owner'">
                     <app-name-tag
                       [iconContract]="isEvmSmartContract(data[template.matColumnDef])"
-                      [value]="data[template.matColumnDef]"
+                      [value]="data[template.matColumnDef] | beautyAddress"
                       [fullText]="true"
                       [fullTextMob]="true"
                       [tooltipPosition]="'tooltip--right'"
