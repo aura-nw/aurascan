@@ -113,6 +113,7 @@ export class CosmosTransactionComponent implements OnChanges {
       gas_used: _.get(res, 'transaction[0].gas_used'),
       gas_wanted: _.get(res, 'transaction[0].gas_wanted'),
       raw_log: _.get(res, 'transaction[0].data.tx_response.raw_log'),
+      fee_payer: _.get(res, 'transaction[0].data.tx.auth_info.fee.payer'),
       type: this.transaction.typeOrigin,
     };
 
@@ -140,3 +141,4 @@ export class CosmosTransactionComponent implements OnChanges {
     this.isRawData = type;
   }
 }
+
