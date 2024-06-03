@@ -168,8 +168,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  createContract(contractAddr, evmAccount) {
+  async createContract(contractAddr, evmAccount) {
     try {
+      const connected = await this.walletService.connectToChain();
+      if (!connected) {
+        return null;
+      }
+
       let contract = new Contract(contractAddr, stakeAbi, evmAccount);
 
       if (contract) {
@@ -547,7 +552,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.checkTxStatusOnchain({ error });
           });
       } else {
-        const contract = this.createContract(this.stakeContractAddr, account.evmAccount);
+        const contract = await this.createContract(this.stakeContractAddr, account.evmAccount);
 
         if (!contract) {
           return;
@@ -613,7 +618,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               this.checkTxStatusOnchain({ error });
             });
         } else {
-          const contract = this.createContract(this.claimContractAddr, account.evmAccount);
+          const contract = await this.createContract(this.claimContractAddr, account.evmAccount);
 
           if (!contract) {
             return;
@@ -670,7 +675,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.checkTxStatusOnchain({ error });
           });
       } else {
-        const contract = this.createContract(this.stakeContractAddr, account.evmAccount);
+        const contract = await this.createContract(this.stakeContractAddr, account.evmAccount);
 
         if (!contract) {
           return;
@@ -736,7 +741,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.checkTxStatusOnchain({ error });
           });
       } else {
-        const contract = this.createContract(this.stakeContractAddr, account.evmAccount);
+        const contract = await this.createContract(this.stakeContractAddr, account.evmAccount);
 
         if (!contract) {
           return;
