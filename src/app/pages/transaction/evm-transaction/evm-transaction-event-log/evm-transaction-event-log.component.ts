@@ -26,3 +26,4 @@ export class EvmTransactionEventLogComponent implements OnInit {
     }
   }
 }
+

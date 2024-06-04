@@ -19,7 +19,7 @@
 
     <div class="d-flex flex-wrap mb-3">
       <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
-        {{ 'Topics' }}
+        Topics
       </div>
       <div class="col-12 col-lg-11 d-flex flex-column gap-2">
         <ng-container *ngFor="let top of eventLog.topics; index as idx">
@@ -29,8 +29,8 @@
               <div class="{{ arrTopicDecode[index]?.length > 0 && arrTopicDecode[index][idx] ? '' : 'mt-1' }}">
                 {{ top }}
               </div>
-              <div *ngIf="arrTopicDecode[index]?.length > 0 && arrTopicDecode[index][idx]">
-                {{ arrTopicDecode[index][idx] }}
+              <div class="mt-1 event-log-msg" *ngIf="arrTopicDecode[index]?.length > 0 && arrTopicDecode[index][idx]"
+                [innerHTML]="arrTopicDecode[index][idx] | highlight_function">
               </div>
             </div>
           </div>
