@@ -454,18 +454,22 @@ export class WalletService implements OnDestroy {
       const metamask = getMetamask();
       const chainId = '0x' + this.env.evmChainInfo.chainId.toString(16);
       try {
-        await metamask // Or window.ethereum if you don't support EIP-6963.
-          .request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: chainId }],
-          });
+        await metamask.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chainId }],
+        });
       } catch (switchError: any) {
-        if (switchError.code === 4902) {
-          // This error code indicates that the chain has not been added to MetaMask.
-          await addNetwork(this.env.evmChainInfo);
-        } else if (switchError.code === 4001) {
-          // This error code : "User rejected the request."
-          return false;
+        switch (switchError.code) {
+          case 4902:
+            // This error code indicates that the chain has not been added to MetaMask.
+            await addNetwork(this.env.evmChainInfo);
+            break;
+          case 4001:
+            // This error code : "User rejected the request."
+            return false;
+          case -32002:
+            // This error code : "Request of type 'wallet_switchEthereumChain' already pending"
+            return false;
         }
       }
     }
