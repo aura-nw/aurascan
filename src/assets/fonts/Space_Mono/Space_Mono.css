@@ -1,0 +1,27 @@
+@font-face {
+    font-family: SpaceMono;
+    src: url('SpaceMono-Regular.ttf');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: SpaceMono;
+    src: url('SpaceMono-Italic.ttf');
+    font-style: italic;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: SpaceMono;
+    src: url('SpaceMono-Bold.ttf');
+    font-style: normal;
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: SpaceMono;
+    src: url('SpaceMono-BoldItalic.ttf');
+    font-style: italic;
+    font-weight: 700;
+}
