@@ -7,7 +7,6 @@ import { EWalletType } from '../constants/wallet.constant';
 })
 export class EvmAddressPipe implements PipeTransform {
   transform(value: string): string {
-    console.log(value, getEvmChecksumAddress(value));
     if (!value?.startsWith(EWalletType.EVM)) return value;
 
     return getEvmChecksumAddress(value);
