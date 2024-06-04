@@ -13,14 +13,19 @@ export class HighlightFunctionPipe implements PipeTransform {
 
     parameters.map((item) => {
       const [dataType, modifier, name] = item?.split(' ') || [];
-      const dataTypeHTML = dataType ? `<span style="color: var(--aura-green-3)">${dataType}</span>` : '';
-      const modifierHTML = modifier
-        ? `<span style="color: ${!name ? 'var(--aura-red-3)' : 'var(--aura-gray-3)'}">${modifier}</span>`
+      const dataTypeHTML = dataType
+        ? `<span style="color: var(--aura-green-3); font-family: inherit">${dataType}</span>`
         : '';
-      const nameHTML = name ? `<span style="color: var(--aura-red-3)">${name}</span>` : '';
+      const modifierHTML = modifier
+        ? `<span style="color: ${
+            !name ? 'var(--aura-red-3)' : 'var(--aura-gray-3)'
+          }; font-family: inherit">${modifier}</span>`
+        : '';
+      const nameHTML = name ? `<span style="color: var(--aura-red-3); font-family: inherit">${name}</span>` : '';
 
       replacedValue = replacedValue?.replace(item, `${dataTypeHTML} ${modifierHTML} ${nameHTML}`);
     });
     return this.sanitizer.bypassSecurityTrustHtml(replacedValue);
   }
 }
+
