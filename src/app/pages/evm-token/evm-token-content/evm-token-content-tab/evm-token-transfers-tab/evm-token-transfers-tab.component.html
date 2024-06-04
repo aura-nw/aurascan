@@ -107,7 +107,7 @@
                           ">
                           <app-name-tag
                             *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]"
-                            [value]="data[template.matColumnDef]"
+                            [value]="data[template.matColumnDef] | beautyAddress"
                             [linkRouter]="['/token', linkAddress]"
                             [linkParams]="{ a: data[template.matColumnDef] }"
                             [iconContract]="isEvmSmartContract(data[template.matColumnDef])"
@@ -138,7 +138,7 @@
                     <div [style.min-width]="'210px'">
                       <app-name-tag
                         *ngIf="data[template.matColumnDef]"
-                        [value]="data[template.matColumnDef]"
+                        [value]="data[template.matColumnDef] | beautyAddress"
                         [iconContract]="isEvmSmartContract(data[template.matColumnDef])"
                         [maxCharacter]="15"
                         [isEnableRouter]="!data[template.matColumnDef]?.startsWith('Null')"

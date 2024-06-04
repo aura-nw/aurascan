@@ -25,7 +25,7 @@
     </div>
     <div class="d-lg-flex align-items-center mb-4 body-01 body-mob" *ngIf="accountEvmAddress">
       <div class="text--gray-4 title-address mb-1 mb-lg-0">EVM Address:</div>
-      <span [copyBtn]="accountEvmAddress" class="break-word">{{ accountEvmAddress }} </span>
+      <span [copyBtn]="accountEvmAddress" class="break-word">{{ accountEvmAddress | beautyAddress }} </span>
     </div>
   </div>
   <!-- Summary info -->
