@@ -13,6 +13,7 @@ import { BalancePipe, FormatDigitPipe, GtPipe, GtePipe, LtPipe, LtePipe } from '
 import { ObjectKeysPipe } from './object-keys.pipe';
 import { CombineTxsMsgPipe, EllipsisPipe } from './string.pipe';
 import { NameTagTooltipPipe } from './tooltip.pipe';
+import { HighlightFunctionPipe } from './highlight-function.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -40,6 +41,7 @@ import { NameTagTooltipPipe } from './tooltip.pipe';
     ObjectKeysPipe,
     CapacityPipe,
     EvmAddressPipe,
+    HighlightFunctionPipe,
   ],
   exports: [
     JsonPipe,
@@ -65,7 +67,9 @@ import { NameTagTooltipPipe } from './tooltip.pipe';
     ObjectKeysPipe,
     CapacityPipe,
     EvmAddressPipe,
+    HighlightFunctionPipe,
   ],
   providers: [],
 })
 export class CustomPipeModule {}
+
