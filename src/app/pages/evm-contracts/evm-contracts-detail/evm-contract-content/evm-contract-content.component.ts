@@ -167,6 +167,7 @@ export class EvmContractContentComponent implements OnInit, OnDestroy {
           next: (res) => {
             this.contractTransaction['data'] = res;
             this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
+            this.contractTransaction = {...this.contractTransaction};
           },
           error: (e) => {
             if (e.name === TIMEOUT_ERROR) {

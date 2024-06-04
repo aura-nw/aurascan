@@ -118,6 +118,10 @@
                     element.cw721_contract?.smart_contract?.address ||
                     element.erc721_contract?.evm_smart_contract?.address
                   "
+                  [iconContract]="
+                    element.cw721_contract?.smart_contract?.address ||
+                    element.erc721_contract?.evm_smart_contract?.address
+                  "
                   [linkRouter]="[
                     element.cw721_contract ? '/contracts' : '/evm-contracts',
                     element.cw721_contract?.smart_contract?.address ||
