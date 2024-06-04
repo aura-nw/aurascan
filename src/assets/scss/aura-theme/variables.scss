@@ -71,5 +71,6 @@
   /* Opacity color */
   --transparent-bg-2: rgba(255, 255, 255, 0.3);
   --transparent-bg-3: rgba(255, 255, 255, 0.8);
+  --font-space-mono : 'Space Mono', sans-serif;
   @include spacer-variables();
 }
