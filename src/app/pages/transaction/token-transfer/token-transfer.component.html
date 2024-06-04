@@ -105,7 +105,7 @@
                           [isEnableRouter]="!!data.from"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [iconContract]="data.from | isContract"
-                          [value]="data.from || nullAddress"
+                          [value]="data.from || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[(data.from | isContract) ? '/contracts' : '/address', data.from]">
                         </app-name-tag>
@@ -118,7 +118,7 @@
                           [isEnableRouter]="!!data.to"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [iconContract]="data.to | isContract"
-                          [value]="data.to || nullAddress"
+                          [value]="data.to || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[(data.to | isContract) ? '/contracts' : '/address', data.to]">
                         </app-name-tag>
@@ -204,7 +204,7 @@
                           [isEnableRouter]="true"
                           [value]="
                             data?.cw721_contract?.smart_contract?.address ||
-                            data?.erc721_contract?.evm_smart_contract?.address
+                              data?.erc721_contract?.evm_smart_contract?.address | beautyAddress
                           "
                           [iconContract]="true"
                           [isShorterText]="breakpoint.value.matches"
@@ -227,7 +227,7 @@
                           [isEnableRouter]="!!data.from"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [iconContract]="data.from | isContract"
-                          [value]="data.from || nullAddress"
+                          [value]="data.from || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[(data.from | isContract) ? '/contracts' : '/address', data.from]">
                         </app-name-tag>
@@ -236,7 +236,7 @@
                           [isEnableRouter]="!!data.from"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [iconContract]="isEvmSmartContract(data.from)"
-                          [value]="data.from || nullAddress"
+                          [value]="data.from || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[isEvmSmartContract(data.from) ? '/evm-contracts' : '/address', data.from]">
                         </app-name-tag>
@@ -250,7 +250,7 @@
                           [isEnableRouter]="!!data.to"
                           [iconContract]="data.to | isContract"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
-                          [value]="data.to || nullAddress"
+                          [value]="data.to || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[(data.to | isContract) ? '/contracts' : '/address', data.to]"></app-name-tag>
                         <app-name-tag
@@ -258,7 +258,7 @@
                           [isEnableRouter]="!!data.to"
                           [iconContract]="isEvmSmartContract(data.to)"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
-                          [value]="data.to || nullAddress"
+                          [value]="data.to || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
                           [linkRouter]="[
                             isEvmSmartContract(data.to) ? '/evm-contracts' : '/address',
