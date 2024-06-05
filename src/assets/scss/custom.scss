@@ -459,3 +459,9 @@ input:-webkit-autofill:active {
     margin-left: 0;
   }
 }
+
+.font-space-mono {
+  font-family: var(--font-space-mono);
+  font-size: 14px;
+  line-height: 18px;
+}
