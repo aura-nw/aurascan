@@ -480,3 +480,4 @@ export class WalletService implements OnDestroy {
     return transferAddress(this.env.chainInfo.bech32Config.bech32PrefixAccAddr, address);
   }
 }
+
