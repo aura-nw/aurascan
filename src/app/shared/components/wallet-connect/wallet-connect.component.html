@@ -1,15 +1,12 @@
 <div class="wallet-connect-container">
   <ng-container *ngIf="{ wallet: wallet$ | async } as ng">
-    <button
-      (click)="openWalletPopup()"
-      *ngIf="!ng.wallet"
-      type="button"
+    <button (click)="openWalletPopup()" *ngIf="!ng.wallet" type="button"
       class="button button-pill button-outline button-outline--gradient caption fw-normal cursor-pointer">
       <span class="icon-connect"></span>
       <span class="text--white">Connect Wallet</span>
     </button>
 
-    <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
+    <div *ngIf="ng.wallet" class="d-flex align-items-center  box-connect-wallet">
       <div class="button button-pill button-outline button-outline--gradient button--xs caption fw-normal">
         <span class="icon-connect connected"></span>
         <span class="text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
@@ -26,13 +23,14 @@
       <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
       <div class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center" (click)="disconnect()">
         <span class="txt-disconnect">Disconnect</span>
-        <img
-          [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
-          alt=""
-          width="18px"
-          height="18px"
+        <img [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3" alt="" width="18px" height="18px"
           class="ml-1" />
       </div>
+    </div>
+    <div *ngIf="ng.wallet?.cosmosAccount || ng.wallet?.evmAccount" class="connection-info mt-1">
+      <img [src]="'assets/icons/icons-svg/white/info.svg'" alt="warning">
+      <span>{{ng.wallet?.cosmosAccount ? "Aura Cosmos connected!." : ng.wallet?.evmAccount ? "Aura EVM connected!" :
+        ""}}</span>
     </div>
   </ng-container>
 </div>

@@ -11,6 +11,7 @@ export class CopyButtonDirective implements OnChanges {
   @Input() isDisableCopy: boolean = false;
   @Input() btnClass: string[];
   @Input() iconClass: string[];
+  @Input() tooltipText?: string;
   button;
   tooltip;
 
@@ -26,6 +27,18 @@ export class CopyButtonDirective implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (this.tooltipText) {
+      this.button.addEventListener('mouseover', () => {
+        this.handleTooltipPosition();
+        this.tooltip?.classList?.add('show');
+        this.tooltip.innerHTML = this.tooltipText;
+      });
+      this.button.addEventListener('mouseleave', () => {
+        this.handleTooltipPosition();
+        this.tooltip?.classList?.remove('show');
+      });
+    }
+
     if (this.isDisableCopy || !this.copyBtn || this.copyBtn === NULL_ADDRESS || this.button) {
       return;
     }
@@ -48,7 +61,6 @@ export class CopyButtonDirective implements OnChanges {
     contain.appendChild(element);
     // tooltip
     this.tooltip = document.createElement('div');
-    this.tooltip.innerHTML = 'Copied!';
     this.tooltip.classList.add('tooltip-copy');
     if (!this.copyText) {
       const icon = document.createElement('i');
@@ -72,9 +84,9 @@ export class CopyButtonDirective implements OnChanges {
     this.button.addEventListener('click', () => {
       if (this.tooltip) {
         // set position
-        this.tooltip.style.top = this.commonService.getOffSet(this.button).top - 8 + 'px';
-        this.tooltip.style.left = this.commonService.getOffSet(this.button).left + 'px';
+        this.handleTooltipPosition();
       }
+      this.tooltip.innerHTML = 'Copied!';
       this.tooltip.classList.add('show');
       this.copyMessage();
       setTimeout(() => {
@@ -82,6 +94,12 @@ export class CopyButtonDirective implements OnChanges {
       }, 1000);
     });
   }
+
+  handleTooltipPosition = () => {
+    const { top, left } = this.commonService.getOffSet(this.button);
+    this.tooltip.style.top = top - 8 + 'px';
+    this.tooltip.style.left = left + 'px';
+  };
 
   copyMessage() {
     const content = this.copyBtn;
@@ -93,3 +111,4 @@ export class CopyButtonDirective implements OnChanges {
     document.body.removeChild(dummy);
   }
 }
+

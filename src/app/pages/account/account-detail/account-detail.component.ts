@@ -68,6 +68,9 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   ENameTag = ENameTag;
   accountEvmAddress = '';
+  walletType: 'cosmos' | 'evm' | '';
+  tooltipCosmosText: string;
+  tooltipEvmText: string;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -102,6 +105,15 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     this.walletService.walletAccount$.pipe(takeUntil(this.destroyed$)).subscribe((wallet) => {
       if (wallet) {
         this.connectedAddress = wallet.address;
+        if (wallet?.cosmosAccount) {
+          this.walletType = 'cosmos';
+          this.tooltipEvmText = this.accountEvmAddress;
+        } else if (wallet?.evmAccount) {
+          this.walletType = 'evm';
+          this.tooltipCosmosText = this.accountAddress;
+        } else this.walletType = '';
+
+        console.log(this.walletType && this.walletType !== 'evm' ? this.accountEvmAddress : null);
       }
       this.getSBTPick();
       this.getTotalSBT();
@@ -289,3 +301,4 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 }
+

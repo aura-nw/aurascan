@@ -2,30 +2,38 @@
   <div class="mb-1 mb-md-6">
     <div class="d-flex d-block align-items-center">
       <span class="h2 fw-700 text--white mr-lg-5 mr-2">Account</span>
-      <a
-        [routerLink]="[
+      <a [routerLink]="[
           accountEvmAddress ? '/evm-contracts' : '/contracts',
           accountEvmAddress ? accountEvmAddress : accountAddress
-        ]"
-        *ngIf="isContractAddress"
-        [appTooltip]="'Go to Contract Details'"
+        ]" *ngIf="isContractAddress" [appTooltip]="'Go to Contract Details'"
         class="contract-label text--primary body-04 mr-5">
         Contract
       </a>
-      <i
-        class="ph ph-star body-01"
+      <i class="ph ph-star body-01"
         [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'"
-        (click)="handleWatchList()"
-        [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
+        (click)="handleWatchList()" [ngClass]="isWatchList ? 'ph-star-fill text--yellow-2' : 'text--white'"></i>
     </div>
 
     <div class="d-lg-flex align-items-center mb-lg-2 mb-3 mt-3 body-01 body-mob">
       <div class="text--gray-4 title-address mb-1 mb-lg-0">Cosmos Address:</div>
-      <span [copyBtn]="accountAddress" class="break-word">{{ accountAddress }} </span>
+      <span [copyBtn]="accountAddress" [tooltipText]="tooltipCosmosText" class="break-word">
+        <span *ngIf="walletType !== 'evm'">{{ accountAddress }}</span>
+        <div *ngIf="walletType && walletType !== 'cosmos'" class="warning">
+          <img class="warning-icon" [src]="'assets/icons/icons-svg/color/warning.svg' | imageS3" alt="warning">
+          <span>This Cosmos address is unable to interact with CosWasm address</span>
+        </div>
+      </span>
+
     </div>
     <div class="d-lg-flex align-items-center mb-4 body-01 body-mob" *ngIf="accountEvmAddress">
       <div class="text--gray-4 title-address mb-1 mb-lg-0">EVM Address:</div>
-      <span [copyBtn]="accountEvmAddress" class="break-word">{{ accountEvmAddress | beautyAddress }} </span>
+      <span [copyBtn]="accountEvmAddress" [tooltipText]="tooltipEvmText" class="break-word">
+        <span *ngIf="walletType !== 'cosmos'">{{ accountEvmAddress | beautyAddress }}</span>
+        <div *ngIf="walletType && walletType !== 'evm'" class="warning">
+          <img class="warning-icon" [src]="'assets/icons/icons-svg/color/warning.svg' | imageS3" alt="warning">
+          <span>This EVM address is unable to interact with the Aura EVM contract.</span>
+        </div>
+      </span>
     </div>
   </div>
   <!-- Summary info -->
@@ -48,34 +56,21 @@
             <div>
               <div class="body mb-1 text--white">Total Value</div>
               <div class="h1 mb-0 fw-700 mb-0 text--white">
-                <span
-                  *ngIf="totalValue.lt(0.01)"
+                <span *ngIf="totalValue.lt(0.01)"
                   [appTooltip]="!totalValue.eq(0) ? (totalValue.toFixed() | mask: 'separator') : null">
-                  {{ totalValue.eq(0) ? '$0' : '< $0.01' }}
-                </span>
-                <span
-                  [appTooltip]="
+                  {{ totalValue.eq(0) ? '$0' : '< $0.01' }} </span>
+                    <span [appTooltip]="
                     totalValue.gte(0.01) && totalValue.lt(1000000) ? null : (totalValue.toFixed() | mask: 'separator.6')
-                  "
-                  [class.cursor-text]="totalValue.gte(0.01) && totalValue.lt(1000000)"
-                  *ngIf="!isNoData && totalValue.gte(0.01)">
-                  $<span [decimal]="0" [appBigNumber]="totalValue.toFixed() || 0"></span>
-                </span>
+                  " [class.cursor-text]="totalValue.gte(0.01) && totalValue.lt(1000000)"
+                      *ngIf="!isNoData && totalValue.gte(0.01)">
+                      $<span [decimal]="0" [appBigNumber]="totalValue.toFixed() || 0"></span>
+                    </span>
               </div>
-              <img
-                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                alt=""
-                class="ml-10"
-                width="20"
-                height="20"
-                *ngIf="isNoData" />
+              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="ml-10" width="20"
+                height="20" *ngIf="isNoData" />
             </div>
             <div class="button button--md button-circle ml-1 d-lg-none">
-              <img
-                [src]="'assets/icons/icons-svg/white/qr-code.svg' | imageS3"
-                alt=""
-                width="36px"
-                height="36px"
+              <img [src]="'assets/icons/icons-svg/white/qr-code.svg' | imageS3" alt="" width="36px" height="36px"
                 (click)="viewQrAddress(modalManage)" />
             </div>
           </div>
@@ -85,11 +80,8 @@
     <div class="col-12 col-lg-9">
       <div class="card card-h-100">
         <div class="px-4 py-4 px-lg-6 py-lg-6">
-          <app-token-table
-            [address]="accountAddress"
-            (totalAssets)="totalAssets = $event"
-            (totalValue)="totalValueToken = $event"
-            *ngIf="!isNoData"></app-token-table>
+          <app-token-table [address]="accountAddress" (totalAssets)="totalAssets = $event"
+            (totalValue)="totalValueToken = $event" *ngIf="!isNoData"></app-token-table>
           <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
         </div>
       </div>
@@ -100,11 +92,7 @@
     <ng-template #modalManage let-modal>
       <div class="box-address">
         <div class="text-end mb-4">
-          <img
-            [src]="'assets/images/icons/close-popup.png' | imageS3"
-            alt=""
-            width="14"
-            height="14"
+          <img [src]="'assets/images/icons/close-popup.png' | imageS3" alt="" width="14" height="14"
             (click)="closePopup()" />
         </div>
         <app-qr [address]="accountAddress || ''"></app-qr>
@@ -115,36 +103,23 @@
 
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!--SBT  -->
-  <div
-    class="card"
-    *ngIf="
+  <div class="card" *ngIf="
       (totalSBTPick > 0 || (accountAddress === connectedAddress && totalSBT > 0)) &&
       commonService.isValidAddress(accountAddress)
-    "
-    [appFeature]="EFeature.Cw4973">
+    " [appFeature]="EFeature.Cw4973">
     <div class="px-4 py-4 pt-xl-6 pb-xl-6 px-xl-0">
-      <app-soulbound-feature-tokens
-        [extend]="true"
-        (totalSBTPick)="totalSBTPick = $event"
-        [displayManage]="true"
-        [accountAddress]="accountAddress"
-        [reloadAPI]="false"
-        [isAccountDetail]="true"></app-soulbound-feature-tokens>
+      <app-soulbound-feature-tokens [extend]="true" (totalSBTPick)="totalSBTPick = $event" [displayManage]="true"
+        [accountAddress]="accountAddress" [reloadAPI]="false" [isAccountDetail]="true"></app-soulbound-feature-tokens>
     </div>
   </div>
 
   <!-- NFT -->
-  <app-nft-list
-    [address]="accountAddress"
-    (totalValueNft)="totalValueNft = $event"
+  <app-nft-list [address]="accountAddress" (totalValueNft)="totalValueNft = $event"
     [appFeature]="EFeature.Cw721"></app-nft-list>
 
   <!-- Staking-->
-  <app-account-stake
-    *ngIf="currentAccountDetail"
-    [chartOptions]="chartOptions"
-    [chartCustomOptions]="chartCustomOptions"
-    [currentAccountDetail]="currentAccountDetail"></app-account-stake>
+  <app-account-stake *ngIf="currentAccountDetail" [chartOptions]="chartOptions"
+    [chartCustomOptions]="chartCustomOptions" [currentAccountDetail]="currentAccountDetail"></app-account-stake>
 
   <!-- Transaction List-->
   <app-account-transaction [address]="currentUrlAddress"></app-account-transaction>
