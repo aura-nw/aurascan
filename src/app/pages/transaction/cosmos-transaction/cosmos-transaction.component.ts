@@ -108,14 +108,12 @@ export class CosmosTransactionComponent implements OnChanges {
 
     this.transaction = txs[0];
 
-    const eventsTx = txs[0]?.tx?.events?.filter((item) => item.type === 'tx');
+    const eventsTx = txs[0]?.tx?.events?.find((item) => item?.type === 'message');
+
     let feePayer = '';
-    eventsTx?.forEach(
-      (item) =>
-        item?.attributes?.forEach((attr) => {
-          if (attr?.key === 'fee_payer') feePayer = attr?.value;
-        }),
-    );
+    eventsTx?.attributes?.forEach((attr) => {
+      if (attr?.key === 'sender') feePayer = attr?.value;
+    });
 
     this.transaction = {
       ...this.transaction,
