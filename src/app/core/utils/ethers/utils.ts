@@ -40,3 +40,4 @@ export async function addNetwork(chain) {
     console.error(addError);
   }
 }
+
