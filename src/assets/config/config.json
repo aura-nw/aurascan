@@ -118,7 +118,9 @@
     "verifyContract": "https://indexer-v2.dev.aurascan.io/verify-contract/v1",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": ["aura-network"]
+      "ids": [
+        "aura-network"
+      ]
     },
     "google": {
       "url": "apps.googleusercontent.com",

@@ -69,7 +69,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   ENameTag = ENameTag;
   accountEvmAddress = '';
-  walletType: 'cosmos' | 'evm' | '';
+  firstTransactionFrom: 'cosmos' | 'evm' | '';
   tooltipCosmosText: string;
   tooltipEvmText: string;
   chainInfo = this.environmentService.chainInfo;
@@ -149,13 +149,13 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
             if ((!hasCosmosTx && !hasEvmTx) || firstCosmosTxTimestamp === firstEvmTxTimestamp) return;
 
             if (!hasCosmosTx) {
-              this.walletType = 'evm';
+              this.firstTransactionFrom = 'evm';
               this.tooltipCosmosText = accountAddress;
               return;
             }
 
             if (!hasEvmTx) {
-              this.walletType = 'cosmos';
+              this.firstTransactionFrom = 'cosmos';
               this.tooltipEvmText = accountEvmAddress;
               return;
             }
@@ -164,10 +164,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
             const evmTimestamp = new Date(firstEvmTxTimestamp);
 
             if (isBefore(cosmosTimestamp, evmTimestamp)) {
-              this.walletType = 'cosmos';
+              this.firstTransactionFrom = 'cosmos';
               this.tooltipEvmText = accountEvmAddress;
             } else {
-              this.walletType = 'evm';
+              this.firstTransactionFrom = 'evm';
               this.tooltipCosmosText = accountAddress;
             }
           },
