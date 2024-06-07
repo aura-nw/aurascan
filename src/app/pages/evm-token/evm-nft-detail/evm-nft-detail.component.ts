@@ -51,7 +51,7 @@ export class EvmNFTDetailComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
+    // { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
