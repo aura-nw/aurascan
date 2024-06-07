@@ -130,6 +130,7 @@ export class UserService {
           listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
           startTime: payload.startTime,
           endTime: payload.endTime,
+          orderId: payload?.orderBy,
         },
         operationName: 'QueryTxOfAccount',
       })
@@ -518,3 +519,4 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }
+

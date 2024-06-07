@@ -124,6 +124,28 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
         this.getAccountDetail();
         this.checkWatchList();
+
+        const payload = {
+          limit: 1,
+          address: accountAddress,
+          orderBy: 'asc',
+        };
+
+        this.userService.getListTxByAddress(payload).subscribe({
+          next: (data: { transaction: any[] }) => {
+            if (data?.transaction?.length === 0) return;
+
+            const tx = data?.transaction[0];
+
+            if (!tx.evm_transaction) {
+              this.walletType = 'cosmos';
+              this.tooltipEvmText = accountEvmAddress;
+            } else {
+              this.walletType = 'evm';
+              this.tooltipCosmosText = accountAddress;
+            }
+          },
+        });
       }
     });
   }
