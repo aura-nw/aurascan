@@ -136,6 +136,37 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getFirstTxFromAddress(payload) {
+    const operationsDoc = `
+    query QueryFirstTxFromAddress($address: String!) {
+       ${this.envDB} {
+        first_cosmos_tx: transaction(
+          where: {transaction_messages: {type: {_nregex: "(evm)"}, sender: { _eq: $address}}}
+          limit: 1
+          order_by: {timestamp: asc}
+        ) {
+          timestamp
+        }
+        first_evm_tx: transaction(
+          where: {transaction_messages: {type: {_regex: "(evm)"}, sender: { _eq: $address}}}
+          limit: 1
+          order_by: {timestamp: asc}
+        ) {
+          timestamp
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: payload,
+        operationName: 'QueryFirstTxFromAddress',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : {})));
+  }
+
   getListEvmTxByAddress(payload) {
     const operationsDoc = `
     query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $orderId: order_by = desc, $address: String! = null) {
@@ -518,3 +549,4 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }
+

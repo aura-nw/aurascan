@@ -5,10 +5,12 @@ import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import BigNumber from 'bignumber.js';
+import { isBefore, isEqual } from 'date-fns';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EFeature } from 'src/app/core/models/common.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -21,7 +23,6 @@ import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constant
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
-import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -68,6 +69,9 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   ENameTag = ENameTag;
   accountEvmAddress = '';
+  firstTransactionFrom: 'cosmos' | 'evm' | '';
+  tooltipCosmosText: string;
+  tooltipEvmText: string;
   chainInfo = this.environmentService.chainInfo;
 
   constructor(
@@ -124,6 +128,50 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
         this.getAccountDetail();
         this.checkWatchList();
+
+        const payload = {
+          address: accountAddress,
+        };
+        // 1: cả 2 đều k có ===> hiển thị như bt
+        // 2: cosmos không có => hiển thị warning cho cosmos
+        // 3: evm không có => hiển thị warning cho evm
+        // 4: cả 2 đều có và timestamp bằng nhau thì hiển thị như bt
+        // 5: cả 2 đều có check theo timestamp thằng nào mới hơn thì hiển thị warning cho thằng đó
+        this.userService.getFirstTxFromAddress(payload).subscribe({
+          next: (data: { first_cosmos_tx?: [{ timestamp: string }]; first_evm_tx?: [{ timestamp: string }] } = {}) => {
+            const { first_cosmos_tx, first_evm_tx } = data || {};
+            const firstCosmosTxTimestamp = first_cosmos_tx?.[0]?.timestamp;
+            const firstEvmTxTimestamp = first_evm_tx?.[0]?.timestamp;
+
+            const hasCosmosTx = firstCosmosTxTimestamp !== undefined;
+            const hasEvmTx = firstEvmTxTimestamp !== undefined;
+
+            if ((!hasCosmosTx && !hasEvmTx) || firstCosmosTxTimestamp === firstEvmTxTimestamp) return;
+
+            if (!hasCosmosTx) {
+              this.firstTransactionFrom = 'evm';
+              this.tooltipCosmosText = accountAddress;
+              return;
+            }
+
+            if (!hasEvmTx) {
+              this.firstTransactionFrom = 'cosmos';
+              this.tooltipEvmText = accountEvmAddress;
+              return;
+            }
+
+            const cosmosTimestamp = new Date(firstCosmosTxTimestamp);
+            const evmTimestamp = new Date(firstEvmTxTimestamp);
+
+            if (isBefore(cosmosTimestamp, evmTimestamp)) {
+              this.firstTransactionFrom = 'cosmos';
+              this.tooltipEvmText = accountEvmAddress;
+            } else {
+              this.firstTransactionFrom = 'evm';
+              this.tooltipCosmosText = accountAddress;
+            }
+          },
+        });
       }
     });
   }
@@ -289,3 +337,4 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 }
+
