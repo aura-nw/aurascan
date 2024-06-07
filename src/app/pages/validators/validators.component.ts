@@ -172,6 +172,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     try {
       const connected = await this.walletService.connectToChain();
       if (!connected) {
+        this.isLoading = false;
+        this.isHandleStake = false;
+        this.toastr.error(`Please switch to ${this.environmentService.evmChainInfo.chain} chain.`);
         return null;
       }
 
