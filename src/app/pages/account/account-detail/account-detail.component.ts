@@ -132,19 +132,36 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         const payload = {
           address: accountAddress,
         };
+        // 1: cả 2 đều k có ===> hiển thị như bt
+        // 2: cosmos không có => hiển thị warning cho cosmos
+        // 3: evm không có => hiển thị warning cho evm
+        // 4: cả 2 đều có và timestamp bằng nhau thì hiển thị như bt
+        // 5: cả 2 đều có check theo timestamp thằng nào mới hơn thì hiển thị warning cho thằng đó
+        this.userService.getFirstTxFromAddress(payload).subscribe({
+          next: (data: { first_cosmos_tx?: [{ timestamp: string }]; first_evm_tx?: [{ timestamp: string }] } = {}) => {
+            const { first_cosmos_tx, first_evm_tx } = data || {};
+            const lastCosmosLength = first_cosmos_tx?.length;
+            const lastEvmLength = first_evm_tx?.length;
+            console.log(first_evm_tx?.[0]?.timestamp, first_cosmos_tx?.[0]?.timestamp, data);
 
-        this.userService.getOldestTxByAddress(payload).subscribe({
-          next: (data: { transaction: any[] }) => {
-            if (data?.transaction?.length === 0) return;
-
-            const tx = data?.transaction[0];
-
-            if (!tx.evm_transaction) {
-              this.walletType = 'cosmos';
-              this.tooltipEvmText = accountEvmAddress;
+            if (!lastCosmosLength && !lastEvmLength) return;
+            else if (lastCosmosLength && lastEvmLength) {
+              if (isEqual(new Date(first_cosmos_tx?.[0]?.timestamp), new Date(first_evm_tx?.[0]?.timestamp))) return;
+              else if (isBefore(new Date(first_cosmos_tx?.[0]?.timestamp), new Date(first_evm_tx?.[0]?.timestamp))) {
+                this.walletType = 'cosmos';
+                this.tooltipEvmText = accountEvmAddress;
+              } else {
+                this.walletType = 'evm';
+                this.tooltipCosmosText = accountAddress;
+              }
             } else {
-              this.walletType = 'evm';
-              this.tooltipCosmosText = accountAddress;
+              if (lastCosmosLength) {
+                this.walletType = 'cosmos';
+                this.tooltipEvmText = accountEvmAddress;
+              } else {
+                this.walletType = 'evm';
+                this.tooltipCosmosText = accountAddress;
+              }
             }
           },
         });
