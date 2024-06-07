@@ -1,5 +1,15 @@
 .wallet-connect-container {
   margin-bottom: 22px;
+
+  .connection-info {
+    span {
+      margin-left: 4px;
+      color: var(--aura-gray-2);
+      font-size: 12px;
+      line-height: 16px;
+    }
+  }
+  
   @media (max-width: 414px) {
     margin-bottom: 16px;
   }
