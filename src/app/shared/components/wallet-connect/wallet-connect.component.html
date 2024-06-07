@@ -34,5 +34,10 @@
           class="ml-1" />
       </div>
     </div>
+    <div *ngIf="ng.wallet?.cosmosAccount || ng.wallet?.evmAccount" class="connection-info mt-1">
+      <img [src]="'assets/icons/icons-svg/white/info.svg'" alt="warning">
+      <span>{{ng.wallet?.cosmosAccount ? "Aura Cosmos connected!." : ng.wallet?.evmAccount ? "Aura EVM connected!" :
+        ""}}</span>
+    </div>
   </ng-container>
 </div>
