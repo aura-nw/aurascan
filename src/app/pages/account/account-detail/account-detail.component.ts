@@ -140,28 +140,35 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.userService.getFirstTxFromAddress(payload).subscribe({
           next: (data: { first_cosmos_tx?: [{ timestamp: string }]; first_evm_tx?: [{ timestamp: string }] } = {}) => {
             const { first_cosmos_tx, first_evm_tx } = data || {};
-            const lastCosmosLength = first_cosmos_tx?.length;
-            const lastEvmLength = first_evm_tx?.length;
-            console.log(first_evm_tx?.[0]?.timestamp, first_cosmos_tx?.[0]?.timestamp, data);
+            const firstCosmosTxTimestamp = first_cosmos_tx?.[0]?.timestamp;
+            const firstEvmTxTimestamp = first_evm_tx?.[0]?.timestamp;
 
-            if (!lastCosmosLength && !lastEvmLength) return;
-            else if (lastCosmosLength && lastEvmLength) {
-              if (isEqual(new Date(first_cosmos_tx?.[0]?.timestamp), new Date(first_evm_tx?.[0]?.timestamp))) return;
-              else if (isBefore(new Date(first_cosmos_tx?.[0]?.timestamp), new Date(first_evm_tx?.[0]?.timestamp))) {
-                this.walletType = 'cosmos';
-                this.tooltipEvmText = accountEvmAddress;
-              } else {
-                this.walletType = 'evm';
-                this.tooltipCosmosText = accountAddress;
-              }
+            const hasCosmosTx = firstCosmosTxTimestamp !== undefined;
+            const hasEvmTx = firstEvmTxTimestamp !== undefined;
+
+            if ((!hasCosmosTx && !hasEvmTx) || firstCosmosTxTimestamp === firstEvmTxTimestamp) return;
+
+            if (!hasCosmosTx) {
+              this.walletType = 'evm';
+              this.tooltipCosmosText = accountAddress;
+              return;
+            }
+
+            if (!hasEvmTx) {
+              this.walletType = 'cosmos';
+              this.tooltipEvmText = accountEvmAddress;
+              return;
+            }
+
+            const cosmosTimestamp = new Date(firstCosmosTxTimestamp);
+            const evmTimestamp = new Date(firstEvmTxTimestamp);
+
+            if (isBefore(cosmosTimestamp, evmTimestamp)) {
+              this.walletType = 'cosmos';
+              this.tooltipEvmText = accountEvmAddress;
             } else {
-              if (lastCosmosLength) {
-                this.walletType = 'cosmos';
-                this.tooltipEvmText = accountEvmAddress;
-              } else {
-                this.walletType = 'evm';
-                this.tooltipCosmosText = accountAddress;
-              }
+              this.walletType = 'evm';
+              this.tooltipCosmosText = accountAddress;
             }
           },
         });
