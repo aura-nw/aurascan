@@ -130,12 +130,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.checkWatchList();
 
         const payload = {
-          limit: 1,
           address: accountAddress,
-          orderBy: 'asc',
         };
 
-        this.userService.getListTxByAddress(payload).subscribe({
+        this.userService.getOldestTxByAddress(payload).subscribe({
           next: (data: { transaction: any[] }) => {
             if (data?.transaction?.length === 0) return;
 
