@@ -134,6 +134,16 @@ export class EvmReadComponent implements OnChanges {
       return validateAndParsingInput(i, value); // TODO
     });
 
+    const errorParams = params.map((i) => i.error).filter((f) => f);
+    if (errorParams.length > 0) {
+      jsonFragment.isLoading = false;
+      jsonFragment.error = {
+        code: 'INVALID_ARGUMENT',
+        message: errorParams.join(' '),
+      };
+      return;
+    }
+
     const connected = await this.walletService.connectToChain();
     if (!connected) {
       jsonFragment.isLoading = false;
@@ -153,7 +163,9 @@ export class EvmReadComponent implements OnChanges {
     jsonFragment.isLoading = true;
     jsonFragment.result = undefined;
     jsonFragment.error = undefined;
-    contract[name]?.(...params)
+    const paramsData = params.map((i) => i.value);
+
+    contract[name]?.(...paramsData)
       .then((res) => {
         jsonFragment.result = res;
         jsonFragment.isLoading = false;
