@@ -21,10 +21,7 @@ import { WalletDialogComponent } from './wallet-dialog/wallet-dialog.component';
 })
 export class WalletConnectComponent implements OnInit {
   CHAIN_ID = this.env.chainId;
-<<<<<<< HEAD
-=======
   walletType: 'cosmos' | 'evm' | '';
->>>>>>> c1906e2e3 (resolved conflict 2)
   signerOptions = {
     signingCosmwasm: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
     signingStargate: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),

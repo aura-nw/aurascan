@@ -28,10 +28,8 @@
     <div class="d-lg-flex align-items-center mb-4 body-01 body-mob" *ngIf="accountEvmAddress">
       <div class="text--gray-4 title-address mb-1 mb-lg-0">EVM Address:</div>
       <span [copyBtn]="accountEvmAddress" [tooltipText]="tooltipEvmText" class="break-word">
-<<<<<<< HEAD
         <span *ngIf="firstTransactionFrom !== 'cosmos'">{{ accountEvmAddress | beautyAddress }}</span>
         <div *ngIf="firstTransactionFrom && firstTransactionFrom !== 'evm'" class="warning">
-=======
         <span *ngIf="walletType !== 'cosmos'">{{ accountEvmAddress | beautyAddress }}</span>
         </div>
       </span>
