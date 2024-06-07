@@ -136,14 +136,22 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getOldestTxByAddress(payload) {
+  getFirstTxFromAddress(payload) {
     const operationsDoc = `
-    query QueryTxOfAccount($address: String! = "", $limit: Int = 1, $orderId: order_by = asc) {
-      ${this.envDB} {
-        transaction(where: {transaction_messages: {sender: {_eq: $address}}}, limit: $limit, order_by: {id: $orderId}) {
-          evm_transaction{
-            hash
-          }
+    query QueryFirstTxFromAddress($address: String!) {
+       ${this.envDB} {
+        first_cosmos_tx: transaction(
+          where: {transaction_messages: {type: {_nregex: "(evm)"}, sender: { _eq: $address}}}
+          limit: 1
+          order_by: {timestamp: asc}
+        ) {
+          timestamp
+        }
+        first_evm_tx: transaction(
+          where: {transaction_messages: {type: {_regex: "(evm)"}, sender: { _eq: $address}}}
+          limit: 1
+          order_by: {timestamp: asc}
+        ) {
           timestamp
         }
       }
@@ -154,9 +162,9 @@ export class UserService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: payload,
-        operationName: 'QueryTxOfAccount',
+        operationName: 'QueryFirstTxFromAddress',
       })
-      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : [])));
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : {})));
   }
 
   getListEvmTxByAddress(payload) {
