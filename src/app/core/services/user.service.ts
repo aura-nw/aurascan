@@ -130,11 +130,33 @@ export class UserService {
           listTxMsgTypeNotIn: payload.listTxMsgTypeNotIn,
           startTime: payload.startTime,
           endTime: payload.endTime,
-          orderId: payload?.orderBy,
         },
         operationName: 'QueryTxOfAccount',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getOldestTxByAddress(payload) {
+    const operationsDoc = `
+    query QueryTxOfAccount($address: String! = "", $limit: Int = 1, $orderId: order_by = asc) {
+      ${this.envDB} {
+        transaction(where: {transaction_messages: {sender: {_eq: $address}}}, limit: $limit, order_by: {id: $orderId}) {
+          evm_transaction{
+            hash
+          }
+          timestamp
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: payload,
+        operationName: 'QueryTxOfAccount',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : [])));
   }
 
   getListEvmTxByAddress(payload) {
