@@ -130,44 +130,22 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.checkWatchList();
 
         const payload = {
+          limit: 1,
           address: accountAddress,
+          orderBy: 'asc',
         };
-        // 1: cả 2 đều k có ===> hiển thị như bt
-        // 2: cosmos không có => hiển thị warning cho cosmos
-        // 3: evm không có => hiển thị warning cho evm
-        // 4: cả 2 đều có và timestamp bằng nhau thì hiển thị như bt
-        // 5: cả 2 đều có check theo timestamp thằng nào mới hơn thì hiển thị warning cho thằng đó
-        this.userService.getFirstTxFromAddress(payload).subscribe({
-          next: (data: { first_cosmos_tx?: [{ timestamp: string }]; first_evm_tx?: [{ timestamp: string }] } = {}) => {
-            const { first_cosmos_tx, first_evm_tx } = data || {};
-            const firstCosmosTxTimestamp = first_cosmos_tx?.[0]?.timestamp;
-            const firstEvmTxTimestamp = first_evm_tx?.[0]?.timestamp;
 
-            const hasCosmosTx = firstCosmosTxTimestamp !== undefined;
-            const hasEvmTx = firstEvmTxTimestamp !== undefined;
+        this.userService.getListTxByAddress(payload).subscribe({
+          next: (data: { transaction: any[] }) => {
+            if (data?.transaction?.length === 0) return;
 
-            if ((!hasCosmosTx && !hasEvmTx) || firstCosmosTxTimestamp === firstEvmTxTimestamp) return;
+            const tx = data?.transaction[0];
 
-            if (!hasCosmosTx) {
-              this.firstTransactionFrom = 'evm';
-              this.tooltipCosmosText = accountAddress;
-              return;
-            }
-
-            if (!hasEvmTx) {
-              this.firstTransactionFrom = 'cosmos';
-              this.tooltipEvmText = accountEvmAddress;
-              return;
-            }
-
-            const cosmosTimestamp = new Date(firstCosmosTxTimestamp);
-            const evmTimestamp = new Date(firstEvmTxTimestamp);
-
-            if (isBefore(cosmosTimestamp, evmTimestamp)) {
-              this.firstTransactionFrom = 'cosmos';
+            if (!tx.evm_transaction) {
+              this.walletType = 'cosmos';
               this.tooltipEvmText = accountEvmAddress;
             } else {
-              this.firstTransactionFrom = 'evm';
+              this.walletType = 'evm';
               this.tooltipCosmosText = accountAddress;
             }
           },
