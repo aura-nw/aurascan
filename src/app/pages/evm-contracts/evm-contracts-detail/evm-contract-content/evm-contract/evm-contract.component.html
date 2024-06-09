@@ -122,7 +122,7 @@
           class="mr-2" />
         <div>
           Are you the contract creator?
-          <a class="text--primary" [routerLink]="['verify']"> Verify and Publish </a>
+          <a class="text--primary" [routerLink]="['/evm-contracts', contractsAddress, 'verify']"> Verify and Publish</a>
           your contract source code today!
         </div>
       </div>
@@ -135,7 +135,9 @@
           class="mr-2" />
         <div>
           In case this is proxy contract, verify
-          <a class="text--primary" [routerLink]="['proxy-verify']"> Is this a proxy </a>
+          <a class="text--primary" [routerLink]="['/evm-contracts', contractsAddress, 'proxy-verify']">
+            Is this a proxy
+          </a>
           or not?
         </div>
       </div>
