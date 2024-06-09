@@ -29,9 +29,10 @@ export class EvmTransactionsComponent {
     { matColumnDef: 'method', headerCellDef: 'Method', headerWidth: 216 },
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 110 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 136 },
-    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 214 },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 200 },
+    { matColumnDef: 'arrow', headerCellDef: ' ', headerWidth: 28 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 214 },
-    { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 176 },
+    { matColumnDef: 'amount', headerCellDef: 'Amount', headerWidth: 136 },
     { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 108 },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);

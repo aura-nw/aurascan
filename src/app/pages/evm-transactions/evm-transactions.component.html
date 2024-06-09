@@ -34,6 +34,9 @@
                         </app-name-tag>
                         <span *ngIf="!data[template.matColumnDef]">-</span>
                       </ng-container>
+                      <ng-container *ngSwitchCase="'arrow'">
+                        <img [src]="'assets/icons/icons-svg/basic/arrow-circle-right.svg'" alt="" class="mr-1" />
+                      </ng-container>
                       <ng-container *ngSwitchCase="'to'">
                         <app-name-tag
                           [value]="data[template.matColumnDef] | beautyAddress"
