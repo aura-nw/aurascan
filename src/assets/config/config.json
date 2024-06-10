@@ -14,9 +14,7 @@
   },
   "chainConfig": {
     "stakingTime": "86400",
-    "excludedAddresses": [
-      "aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"
-    ],
+    "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
     "blockTime": 5000,
     "quotaSetPrivateName": 10,
     "quotaSetWatchList": 10,
@@ -63,9 +61,7 @@
         "average": 0.0025,
         "high": 0.004
       },
-      "features": [
-        "ibc-transfer"
-      ],
+      "features": ["ibc-transfer"],
       "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
       "logo": "https://i.imgur.com/zi0mTYb.png",
       "explorer": "https://explorer.dev.aura.network/",
@@ -75,9 +71,7 @@
       "name": "Aura EVM Devnet",
       "chain": "Aura-Dev",
       "rpc": "https://jsonrpc.dev.aura.network",
-      "faucets": [
-        ""
-      ],
+      "faucets": [""],
       "nativeCurrency": {
         "name": "test-Aura",
         "symbol": "tAURA",
@@ -124,9 +118,7 @@
     "verifyContract": "https://indexer-v2.dev.aurascan.io/verify-contract/v1",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
-      "ids": [
-        "aura-network"
-      ]
+      "ids": ["aura-network"]
     },
     "google": {
       "url": "apps.googleusercontent.com",
@@ -147,9 +139,7 @@
           "name": "Aurascan",
           "description": "Aura Network Explorer",
           "url": "https://explorer.dev.aurascan.io/",
-          "icons": [
-            "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-          ]
+          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
         }
       }
     }
