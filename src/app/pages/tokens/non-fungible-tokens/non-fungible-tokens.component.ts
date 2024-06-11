@@ -13,6 +13,7 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../core/models/common.model';
+import { isEvmAddress } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-non-fungible-tokens',
@@ -78,7 +79,7 @@ export class NonFungibleTokensComponent implements OnInit {
       sort_order: this.sortOrder,
     };
 
-    let keySearch = this.textSearch;
+    let keySearch = isEvmAddress(this.textSearch) ? this.textSearch.toLowerCase() : this.textSearch;
 
     if (this.filterBy === 'ERC721') {
       const listAddress = this.nameTagService.findAddressListByNameTag(keySearch, this.filterBy === 'ERC721');
