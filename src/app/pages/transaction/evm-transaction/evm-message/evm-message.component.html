@@ -6,11 +6,14 @@
     <div class="col-auto col-lg-10 text--gray-1">{{ method }}</div>
   </div>
 
-  <div class="row mb-3 body justify-content-between justify-content-lg-start align-items-center"
+  <div
+    class="row mb-3 body justify-content-between justify-content-lg-start align-items-center"
     *ngIf="transaction?.contractAddress > 0">
     <div class="col-auto col-lg-2 text--gray-4">Contract Address</div>
     <div class="col-auto col-lg-10">
-      <app-name-tag [value]="transaction?.contractAddress?.toLowerCase()" [fullText]="true"
+      <app-name-tag
+        [value]="transaction?.contractAddress | beautyAddress"
+        [fullText]="true"
         [linkRouter]="['/evm-contracts', transaction?.contractAddress?.toLowerCase()]"
         [iconContract]="true"></app-name-tag>
     </div>
@@ -22,19 +25,25 @@
     </div>
     <div class="col-12 col-lg-10">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
-        <button class="button body-04 {{ isCreateContract ? 'text--gray-7 pe-none' : '' }}"
-          (click)="changeType(inputDataType.RAW)" [class.active-gradient]="typeInput === inputDataType.RAW"
+        <button
+          class="button body-04 {{ isCreateContract ? 'text--gray-7 pe-none' : '' }}"
+          (click)="changeType(inputDataType.RAW)"
+          [class.active-gradient]="typeInput === inputDataType.RAW"
           [disabled]="isCreateContract">
           <span>{{ inputDataType.RAW }}</span>
         </button>
-        <button class="button body-04 {{
+        <button
+          class="button body-04 {{
             !isContractVerified || isCreateContract ? 'text--gray-7 pe-none' : ''
-          }} active-gradient" (click)="changeType(inputDataType.DECODED)"
+          }} active-gradient"
+          (click)="changeType(inputDataType.DECODED)"
           [class.active-gradient]="typeInput === inputDataType.DECODED"
           [disabled]="!isContractVerified || isCreateContract">
           <span>{{ inputDataType.DECODED }}</span>
         </button>
-        <button class="button body-04 active-gradient" (click)="changeType(inputDataType.ORIGINAL)"
+        <button
+          class="button body-04 active-gradient"
+          (click)="changeType(inputDataType.ORIGINAL)"
           [class.active-gradient]="typeInput === inputDataType.ORIGINAL">
           <span>{{ inputDataType.ORIGINAL }}</span>
         </button>
@@ -94,8 +103,11 @@
           </ng-container>
         </div>
 
-        <div class="log-data break-word font-space-mono" *ngIf="typeInput === inputDataType.ORIGINAL"
-          [appExpandable]="transaction?.inputData" [maxCharVisible]="500">
+        <div
+          class="log-data break-word font-space-mono"
+          *ngIf="typeInput === inputDataType.ORIGINAL"
+          [appExpandable]="transaction?.inputData"
+          [maxCharVisible]="500">
           {{ transaction?.inputData }}
         </div>
       </div>
@@ -105,11 +117,17 @@
   <div class="d-flex flex-wrap mb-3">
     <div class="col-12 mb-2 mb-lg-0 text--gray-4 body">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
-        <button type="button" (click)="isLog = true" class="button body-04 border-radius--sm"
+        <button
+          type="button"
+          (click)="isLog = true"
+          class="button body-04 border-radius--sm"
           [class.active-gradient]="isLog">
           <span>{{ 'Event log' }}</span>
         </button>
-        <button type="button" (click)="isLog = false" class="button body-04 border-radius--sm"
+        <button
+          type="button"
+          (click)="isLog = false"
+          class="button body-04 border-radius--sm"
           [class.active-gradient]="!isLog">
           <span>Internal Transactions</span>
         </button>
@@ -120,8 +138,11 @@
         <div *ngIf="eventLog?.length > 0; else noValue">
           <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog?.length }})</div>
           <div class="">
-            <app-evm-transaction-event-log *ngFor="let log of eventLog; index as idx" [eventLog]="log"
-              [arrTopicDecode]="arrTopicDecode" [index]="idx">
+            <app-evm-transaction-event-log
+              *ngFor="let log of eventLog; index as idx"
+              [eventLog]="log"
+              [arrTopicDecode]="arrTopicDecode"
+              [index]="idx">
             </app-evm-transaction-event-log>
           </div>
         </div>
