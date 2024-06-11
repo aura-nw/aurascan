@@ -9,6 +9,7 @@ import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from 'src/app/core/constants/token
 import { EModeToken, TokenTab } from 'src/app/core/constants/token.enum';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { EvmAddressPipe } from 'src/app/core/pipes/evm-address.pipe';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
@@ -63,7 +64,8 @@ export class EvmTokenContentComponent implements OnInit {
     private tokenService: TokenService,
     private nameTagService: NameTagService,
     private router: Router,
-  ) { }
+    private beautyAddress: EvmAddressPipe,
+  ) {}
 
   ngOnInit(): void {
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -130,11 +132,12 @@ export class EvmTokenContentComponent implements OnInit {
         this.chainInfo.bech32Config.bech32PrefixAccAddr,
         addressNameTag || this.searchTemp,
       );
-      this.searchTemp = accountEvmAddress || addressNameTag || this.textSearch;
+      const evmAddress = this.searchTemp || this.beautyAddress.transform(accountEvmAddress);
+      this.searchTemp = evmAddress || addressNameTag || this.textSearch;
 
       if (!queryParams && this.searchTemp?.length > 0) {
         this.redirectPage(`/token/${this.linkAddress}`, {
-          a: this.searchTemp,
+          a: this.beautyAddress.transform(this.searchTemp),
         });
       }
 

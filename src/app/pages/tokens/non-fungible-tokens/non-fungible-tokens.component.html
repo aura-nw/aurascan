@@ -116,7 +116,7 @@
                 <app-name-tag
                   [value]="
                     element.cw721_contract?.smart_contract?.address ||
-                    element.erc721_contract?.evm_smart_contract?.address
+                      element.erc721_contract?.evm_smart_contract?.address | beautyAddress
                   "
                   [iconContract]="
                     element.cw721_contract?.smart_contract?.address ||
