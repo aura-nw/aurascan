@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build --aot=true --output-hashing=all",
     "build:production": "ng build --aot=true --output-hashing=all --configuration production",
+    "featureflags": "node scripts/encryptFeatureFlags.mjs dev",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
