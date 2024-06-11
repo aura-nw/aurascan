@@ -217,21 +217,11 @@ export class EvmNFTDetailComponent implements OnInit {
           return this.transactionService.getListMappingName(listMethodId).pipe(
             map((element) => {
               if (erc721Activities?.length > 0) {
-                return erc721Activities.map((tx, idx) => {
+                return erc721Activities.map((tx) => {
                   const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
-                  let methodType = mappingMethodName(element, methodId);
-
-                  if (methodType === 'Burn') {
-                    if (idx > 0 && erc721Activities[idx - 1].tempType === 'Burn') {
-                      methodType = 'Approval';
-                    } else {
-                      methodType = 'Transfer';
-                      tx.tempType = 'Burn';
-                    }
-                  }
                   return {
                     ...tx,
-                    type: methodType,
+                    type: mappingMethodName(element, methodId),
                   };
                 });
               }
