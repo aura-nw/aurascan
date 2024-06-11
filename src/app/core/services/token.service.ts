@@ -553,11 +553,12 @@ export class TokenService extends CommonService {
     txHash?: string;
   }): Observable<any> {
     let queryName = 'ERC721Transfer';
-    const queryActionIn = ['transfer'];
-
+    let queryActionNotIn = payload.isNFTDetail
+      ? ['']
+      : ['approval', 'instantiate', 'revoke', 'approve_all', 'revoke_all', ''];
     const operationsDoc = `query ${queryName}(
       $contractAddress: String = null
-      $actionIn: [String!] = null
+      $actionNotIn: [String!] = null
       $idLte: Int = null
       $idGte: Int = null
       $receiver: String = null
@@ -566,7 +567,7 @@ export class TokenService extends CommonService {
       $txHash: String = null) {
       ${this.envDB} {
         erc721_activity(
-          where: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], erc721_contract: {evm_smart_contract: {address: {_eq: $contractAddress}}}, erc721_token: {token_id: {_eq: $tokenId}}, id: {_lte: $idLte, _gte: $idGte}, action: {_in: $actionIn}, tx_hash: {_eq: $txHash}}
+          where: {_or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], erc721_contract: {evm_smart_contract: {address: {_eq: $contractAddress}}}, erc721_token: {token_id: {_eq: $tokenId}}, id: {_lte: $idLte, _gte: $idGte}, action: {_nin: $actionNotIn}, tx_hash: {_eq: $txHash}}
           order_by: {id: desc}
         ) {
           id
@@ -604,7 +605,7 @@ export class TokenService extends CommonService {
         query: operationsDoc,
         variables: {
           contractAddress: payload.contractAddr?.toLowerCase(),
-          actionIn: queryActionIn,
+          actionNotIn: queryActionNotIn,
           sender: payload.sender?.toLowerCase(),
           receiver: payload.receiver?.toLowerCase(),
           tokenId: payload.tokenId,
