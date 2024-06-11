@@ -5,8 +5,11 @@
         <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
         FILTER BY TOKEN TXN HASH
       </p>
-      <a class="text--primary body-02 break-word" [copyBtn]="textSearch" [routerLink]="['/tx', textSearch]">
-        {{ textSearch }}
+      <a
+        class="text--primary body-02 break-word"
+        [copyBtn]="textSearch | beautyAddress"
+        [routerLink]="['/tx', textSearch]">
+        {{ textSearch | beautyAddress }}
       </a>
     </div>
     <div *ngIf="!isSearchTx && isSearchAddress" class="card main-tab py-3 py-lg-4 px-4">
@@ -24,8 +27,8 @@
           <div class="mt-2">
             <app-name-tag
               [iconContract]="textSearch | isContract"
-              [value]="textSearch"
-              [linkRouter]="[(textSearch | isContract) ? '/contracts' : '/address', textSearch]"
+              [value]="textSearch | beautyAddress"
+              [linkRouter]="[(textSearch | isContract) ? '/contracts' : '/address', textSearch | beautyAddress]"
               [fullText]="true"
               [widthAuto]="true"
               [maxCharacter]="30"

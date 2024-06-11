@@ -9,7 +9,7 @@
         }}</span>
       </div>
       <div class="d-flex align-items-center">
-        <div class="btn-mobile ml-4 ml-lg-2" [copyBtn]="contractAddress"></div>
+        <div class="btn-mobile ml-4 ml-lg-2" [copyBtn]="contractAddress | beautyAddress"></div>
         <div
           class="btn-mobile ml-4 ml-lg-2"
           [appTooltip]="isWatchList ? 'Remove this address from your watch list' : 'Add this address to my watch list'">
