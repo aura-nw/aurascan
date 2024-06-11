@@ -8,6 +8,7 @@ import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { TOKEN_EVM_BURNT } from '../constants/token.constant';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -271,7 +272,7 @@ export class TokenService extends CommonService {
         erc721_token(
           limit: $limit
           offset: $offset
-          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _nilike: "0x000000000%"}}
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _neq: "${TOKEN_EVM_BURNT}"}}
           order_by: [{last_updated_height: desc}, {id: desc}]
         ) {
           id
@@ -282,7 +283,7 @@ export class TokenService extends CommonService {
           created_at
         }
         erc721_token_aggregate(
-          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _nilike: "0x000000000%"}}
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _neq: "${TOKEN_EVM_BURNT}"}}
         ) {
           aggregate {
             count
@@ -334,7 +335,7 @@ export class TokenService extends CommonService {
     query queryCountTotalTokenErc721($contract_address: String) {
       ${this.envDB} {
         erc721_token_aggregate(
-          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, owner: {_nilike: "0x000000000%"}}
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, owner: {_neq: "${TOKEN_EVM_BURNT}"}}
         ) {
           aggregate {
             count
@@ -423,7 +424,7 @@ export class TokenService extends CommonService {
         view_count_holder_erc721(
           limit: $limit
           offset: $offset
-          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_nilike: "0x000000000%"}}
+          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_neq: "${TOKEN_EVM_BURNT}"}}
           order_by: {count: desc}
         ) {
           count
@@ -431,7 +432,7 @@ export class TokenService extends CommonService {
           owner
         }
         view_count_holder_erc721_aggregate(
-          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_nilike: "0x000000000%"}}
+          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_neq: "${TOKEN_EVM_BURNT}"}}
         ) {
           aggregate {
             count
