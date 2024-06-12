@@ -668,7 +668,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     } else {
       this.userService.getListCW721ByAddress(payload).subscribe({
         next: (data) => {
-          this.handleGetData({ data });
+          this.handleGetData(data);
         },
         error: (e) => {
           if (e.name === TIMEOUT_ERROR) {
