@@ -143,7 +143,7 @@ export class TransactionService extends CommonService {
       ${this.envDB} {
         transaction(
           limit: $limit
-          order_by: [{ height: $order}],
+          order_by: [{ id: $order}],
           where: {evm_transaction: {hash: {_is_null: false}}}
         ) {
           id
