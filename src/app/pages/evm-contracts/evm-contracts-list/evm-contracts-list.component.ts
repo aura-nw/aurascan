@@ -81,7 +81,7 @@ export class EvmContractsListComponent implements OnInit, OnDestroy {
         if (res?.evm_smart_contract?.length) {
           res?.evm_smart_contract.forEach((item) => {
             item.contract_verification = _.get(item, 'evm_contract_verifications[0].status');
-            item.token_tracker = _.get(item, 'erc20_contract.name');
+            item.token_tracker = _.get(item, 'erc20_contract.name') || _.get(item, 'erc721_contract.name');
           });
           this.dataSource.data = res.evm_smart_contract;
           this.pageData.length = res.evm_smart_contract_aggregate?.aggregate?.count;
