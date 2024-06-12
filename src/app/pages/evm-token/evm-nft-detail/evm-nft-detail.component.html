@@ -162,7 +162,7 @@
             <h2 class="mb-0 h5-mob text--white card__ntf-detail-item" id="popupCopy">Details</h2>
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Owner:</div>
-              <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner && !nftDetail?.burned">
+              <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner">
                 <app-name-tag
                   [value]="nftDetail?.owner"
                   [fullText]="true"

@@ -27,7 +27,7 @@ import { getGasPriceByChain } from '../utils/cosmoskit/helpers/gas';
 import { ExtendsWalletClient } from '../utils/cosmoskit/wallets';
 import { wallets as leapMetamask } from '../utils/cosmoskit/wallets/leap-metamask-cosmos-snap';
 import { getSigner } from '../utils/ethers/ethers';
-import { addNetwork, checkNetwork } from '../utils/ethers/utils';
+import { addNetwork, checkNetwork, getMetamask } from '../utils/ethers/utils';
 import local from '../utils/storage/local';
 
 @Injectable({
@@ -146,7 +146,7 @@ export class WalletService implements OnDestroy {
     await this._walletManager.onMounted();
 
     this.accountChangeEvent();
-
+    this.evmChangeEvent();
     return 'SUCCESS';
   }
 
@@ -248,6 +248,17 @@ export class WalletService implements OnDestroy {
     });
   }
 
+  evmChangeEvent() {
+    const reconnect = () => {
+      const timeoutId = setTimeout(() => {
+        clearTimeout(timeoutId);
+        this.connectToChain();
+      }, 1000);
+    };
+    (window as any).ethereum?.on('accountsChanged', reconnect);
+    (window as any).ethereum?.on('chainChanged', reconnect);
+  }
+
   private async _getSigningCosmWasmClientAuto() {
     let _walletName = localStorage.getItem(STORAGE_KEY.CURRENT_WALLET);
     const chainWallet = this._walletManager.getMainWallet(_walletName);
@@ -340,7 +351,7 @@ export class WalletService implements OnDestroy {
   }
 
   getCosmosAccountOnly() {
-    return this.walletAccount; 
+    return this.walletAccount;
   }
 
   getEvmAccount() {
@@ -411,10 +422,9 @@ export class WalletService implements OnDestroy {
   }
 
   async connectEvmWallet() {
-    const network = await checkNetwork(this.env.evmChainInfo.chainId);
-
-    if (!network) {
-      await addNetwork(this.env.evmChainInfo);
+    const connected = await this.connectToChain();
+    if (!connected) {
+      return;
     }
 
     getSigner(this.env.etherJsonRpc).then((signer) => {
@@ -431,6 +441,32 @@ export class WalletService implements OnDestroy {
         local.setItem(STORAGE_KEY.CURRENT_EVM_WALLET, this.walletAccount);
       }
     });
+  }
+
+  async connectToChain() {
+    const metamask = getMetamask();
+    const chainId = '0x' + this.env.evmChainInfo.chainId.toString(16);
+    try {
+      await metamask.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chainId }],
+      });
+    } catch (switchError: any) {
+      switch (switchError.code) {
+        case 4902:
+          // This error code indicates that the chain has not been added to MetaMask.
+          await addNetwork(this.env.evmChainInfo);
+          break;
+        case 4001:
+          // This error code : "User rejected the request."
+          return false;
+        case -32002:
+          // This error code : "Request of type 'wallet_switchEthereumChain' already pending"
+          return false;
+      }
+    }
+
+    return true;
   }
 
   parseAddress(address: string) {

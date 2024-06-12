@@ -5,11 +5,12 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { READ_STATE_MUTABILITY } from 'src/app/core/models/evm-contract.model';
 import { getEthersProvider } from 'src/app/core/utils/ethers';
 import { validateAndParsingInput } from 'src/app/core/utils/ethers/validate';
+import { WalletService } from '../../../../../../core/services/wallet.service';
 
 type Error = {
   code?: string;
-  message?: string
-}
+  message?: string;
+};
 
 type JsonFragmentExtends = JsonFragment & {
   formGroup?: FormGroup;
@@ -38,6 +39,7 @@ export class EvmReadComponent implements OnChanges {
   constructor(
     private environmentService: EnvironmentService,
     private fb: FormBuilder,
+    private walletService: WalletService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -112,7 +114,7 @@ export class EvmReadComponent implements OnChanges {
     }
   }
 
-  handleQueryContract(jsonFragment: JsonFragmentExtends) {
+  async handleQueryContract(jsonFragment: JsonFragmentExtends) {
     if (!jsonFragment) {
       return;
     }
@@ -132,6 +134,26 @@ export class EvmReadComponent implements OnChanges {
       return validateAndParsingInput(i, value); // TODO
     });
 
+    const errorParams = params.map((i) => i.error).filter((f) => f);
+    if (errorParams.length > 0) {
+      jsonFragment.isLoading = false;
+      jsonFragment.error = {
+        code: 'INVALID_ARGUMENT',
+        message: errorParams.join(' '),
+      };
+      return;
+    }
+
+    const connected = await this.walletService.connectToChain();
+    if (!connected) {
+      jsonFragment.isLoading = false;
+      jsonFragment.error = {
+        code: 'error',
+        message: `Please switch to ${this.environmentService.evmChainInfo.chain} chain.`,
+      };
+      return;
+    }
+
     const contract = this.createContract();
 
     if (!contract) {
@@ -141,7 +163,9 @@ export class EvmReadComponent implements OnChanges {
     jsonFragment.isLoading = true;
     jsonFragment.result = undefined;
     jsonFragment.error = undefined;
-    contract[name]?.(...params)
+    const paramsData = params.map((i) => i.value);
+
+    contract[name]?.(...paramsData)
       .then((res) => {
         jsonFragment.result = res;
         jsonFragment.isLoading = false;

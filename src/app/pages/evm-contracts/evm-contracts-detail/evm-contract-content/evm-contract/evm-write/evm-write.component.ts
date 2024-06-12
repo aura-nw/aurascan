@@ -152,7 +152,26 @@ export class EvmWriteComponent implements OnChanges {
       return validateAndParsingInput(i, value); // TODO
     });
 
+    const errorParams = params.map((i) => i.error).filter((f) => f);
+    if (errorParams.length > 0) {
+      jsonFragment.isLoading = false;
+      jsonFragment.error = {
+        code: 'INVALID_ARGUMENT',
+        message: errorParams.join(' '),
+      };
+      return;
+    }
+
     const fundAmount = formControls['fund']?.value || '0';
+
+    const connected = await this.walletService.connectToChain();
+
+    if (!connected) {
+      jsonFragment.isLoading = false;
+      jsonFragment.error = { code: 'error', message: `Please switch to ${this.env.evmChainInfo.chain} chain.` };
+      return;
+    }
+
     const contract = this.createContract();
 
     if (!contract) {
@@ -163,9 +182,10 @@ export class EvmWriteComponent implements OnChanges {
     jsonFragment.result = undefined;
     jsonFragment.error = undefined;
 
+    const paramsData = params.map((i) => i.value);
     const nameContract = `${name}(${paramsDes.join(',')})`;
-    const x = await contract[nameContract]?.estimateGas(...params).catch((e) => e);
-    contract[nameContract]?.(...params, {
+    const x = await contract[nameContract]?.estimateGas(...paramsData).catch((e) => e);
+    contract[nameContract]?.(...paramsData, {
       gasLimit: Number(x) || 250_000,
       gasPrice: 1_000_0000,
       value: parseEther(fundAmount),

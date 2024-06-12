@@ -43,6 +43,7 @@ $minia-theme: mat.define-dark-theme((color: (primary: $minia-primary,
 // Custom Aura Theme
 @import "assets/fonts/AuraIcon/aura-icon.css";
 @import "assets/fonts/Inter/Inter.css";
+@import "assets/fonts/Space_Mono/Space_Mono.css";
 @import "assets/scss/aura-theme/variables";
 @import "assets/scss/aura-theme/reboot";
 @import "assets/scss/aura-theme/button";

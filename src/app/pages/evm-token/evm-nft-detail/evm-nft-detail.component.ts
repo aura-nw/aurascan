@@ -35,6 +35,7 @@ import { EvmPopupShareComponent } from './evm-popup-share/evm-popup-share.compon
 import { map, switchMap } from 'rxjs';
 import { mappingMethodName } from '../../../global/global';
 import { TransactionService } from '../../../core/services/transaction.service';
+import { TOKEN_EVM_BURNT } from '../../../core/constants/token.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -51,7 +52,7 @@ export class EvmNFTDetailComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
+    // { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
@@ -155,7 +156,7 @@ export class EvmNFTDetailComponent implements OnInit {
           name: _.get(res, 'erc721_contract.name'),
           owner: res.owner,
           creator: res.erc721_contract?.evm_smart_contract?.creator,
-          burned: res.owner?.startsWith('0x000000000'),
+          burned: res.owner === TOKEN_EVM_BURNT,
           token_id: res.token_id,
           media_info: res.media_info,
           verification_status: _.get(res, 'erc721_contract.evm_smart_contract.evm_contract_verifications[0].status'),
