@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # runs-on: self-hosted
-    if: github.actor == 'hoangthanh212' || github.actor == 'nhphuc2411' || github.actor == 'kienvc' 
+    if: github.actor == 'hoangthanh212' || github.actor == 'duonghb53' || github.actor == 'kienvc' 
     steps:
       - uses: actions/checkout@v2
       - name: Set environment variable
