@@ -14,6 +14,7 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
+import { ITokenInfo } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-evm-token-content',
@@ -23,11 +24,12 @@ import local from 'src/app/core/utils/storage/local';
 export class EvmTokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
+  @Input() tokenMoreInformation?: ITokenInfo;
   @Output() hasMore = new EventEmitter<any>();
 
-  tabStaking = [TokenTab.Holders];
-  tabIBC = [TokenTab.Transfers, TokenTab.Holders];
-  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract];
+  tabStaking = [TokenTab.Holders, TokenTab.Info];
+  tabIBC = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info];
+  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract, TokenTab.Info];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Contract];
   TABS = [];
   paramQuery = '';
@@ -231,3 +233,4 @@ export class EvmTokenContentComponent implements OnInit {
       .toFixed();
   }
 }
+

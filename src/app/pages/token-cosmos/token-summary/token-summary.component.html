@@ -7,16 +7,12 @@
             <span class="text--white">Profile Summary </span>
           </div>
           <div class="dropdown aura-dropdown">
-            <ul
-              class="dropdown-menu aura-dropdown-menu token-summary-more"
-              *ngIf="!tokenDetail.isNFTContract"
+            <ul class="dropdown-menu aura-dropdown-menu token-summary-more" *ngIf="!tokenDetail.isNFTContract"
               aria-labelledby="token-summary-more">
               <li class="dropdown-item cursor-pointer">Add token to Web3</li>
               <li class="dropdown-item cursor-pointer">Update Name Tag</li>
             </ul>
-            <ul
-              class="dropdown-menu aura-dropdown-menu token-summary-more"
-              *ngIf="tokenDetail.isNFTContract"
+            <ul class="dropdown-menu aura-dropdown-menu token-summary-more" *ngIf="tokenDetail.isNFTContract"
               aria-labelledby="token-summary-more">
               <li class="dropdown-item cursor-pointer">Add token to Web3</li>
               <li class="dropdown-item cursor-pointer">Update Token Info</li>
@@ -33,10 +29,8 @@
           <div class="d-flex align-items-center py-2">
             <div class="first-col text--gray-5">Contract:</div>
             <div class="break-word">
-              <app-name-tag
-                [value]="tokenDetail?.contract_address || tokenDetail?.denom"
-                [linkRouter]="['/contracts', tokenDetail?.contract_address]"
-                [fullText]="true"></app-name-tag>
+              <app-name-tag [value]="tokenDetail?.contract_address || tokenDetail?.denom"
+                [linkRouter]="['/contracts', tokenDetail?.contract_address]" [fullText]="true"></app-name-tag>
             </div>
           </div>
         </td>
@@ -108,16 +102,24 @@
     <tr>
       <td colspan="2">
         <div class="d-flex align-items-center py-2">
-          <div class="first-col text--gray-5">Official Site:</div>
-          <div>-</div>
+          <span class="first-col text--gray-5">Official Site:</span>
+          <a *ngIf="tokenMoreInformation?.officialSite" [href]="tokenMoreInformation?.officialSite" target="_blank"
+            rel="noopener noreferrer" class="text--primary">{{tokenMoreInformation?.officialSite}}</a>
         </div>
       </td>
     </tr>
     <tr>
       <td colspan="2">
         <div class="d-flex align-items-center py-2">
-          <div class="first-col text--gray-5 mb-1">Social Profiles:</div>
-          <div>-</div>
+          <div class="first-col text--gray-5">
+            Social Profiles:
+          </div>
+          <div class="socials" *ngIf="tokenMoreInformation?.socialProfiles?.length">
+            <a *ngFor="let item of tokenMoreInformation?.socialProfiles" [href]="item?.url" target="_blank"
+              rel="noopener noreferrer">
+              <img [src]="item?.icon" alt="social-media">
+            </a>
+          </div>
         </div>
       </td>
     </tr>

@@ -13,6 +13,8 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { ITokenInfo } from 'src/app/interfaces';
+import { UtilsSharedFunction } from 'src/app/shared/function';
 
 @Component({
   selector: 'app-token-detail',
@@ -27,6 +29,7 @@ export class TokenDetailComponent implements OnInit {
   errTxt: string;
   EModeToken = EModeToken;
   channelPath: any;
+  tokenMoreInformation?: ITokenInfo;
 
   chainInfo = this.environmentService.chainInfo;
   excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
@@ -38,6 +41,7 @@ export class TokenDetailComponent implements OnInit {
     private contractService: ContractService,
     private ibcService: IBCService,
     private datePipe: DatePipe,
+    private utils: UtilsSharedFunction,
   ) {}
 
   ngOnInit(): void {
@@ -111,6 +115,8 @@ export class TokenDetailComponent implements OnInit {
           this.loading = false;
         },
       });
+
+    this.utils.handleGetTokenInfo(this.contractAddress, (res) => (this.tokenMoreInformation = res));
   }
 
   getTokenDetail(): void {
@@ -148,6 +154,8 @@ export class TokenDetailComponent implements OnInit {
               (token.tokenHolderStatistics[1].totalHolder * 100) / token.tokenHolderStatistics[0]?.totalHolder - 100;
           }
         }
+
+        this.tokenMoreInformation = this.utils.handleGetTokenRes(token);
 
         this.tokenDetail = {
           ...token,
@@ -221,3 +229,4 @@ export class TokenDetailComponent implements OnInit {
     });
   }
 }
+
