@@ -11,7 +11,7 @@ if (args.length < 3) {
 
 const env = args[2];
 
-const envs = { dev: 'dev', serenity: 'serenity', euphoria: 'euphoria', mainnet: 'mainnet' };
+const envs = { develop: 'dev', serenity: 'serenity', euphoria: 'euphoria', main: 'mainnet' };
 const getEnv = () => {
   return envs[env] || 'dev';
 };
