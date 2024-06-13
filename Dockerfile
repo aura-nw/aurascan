@@ -11,7 +11,7 @@ COPY . /data/app
 ENV NG_APP_VERSION=$SHORT_SHA_COMMIT
 
 RUN npm install && npm cache clean --force
-RUN nnode scripts/encryptFeatureFlags.mjs  $ENVIRONMENT
+RUN node scripts/encryptFeatureFlags.mjs $ENVIRONMENT
 RUN npm run build --aot --output-hashing=all
 
 FROM nginx:1.15
