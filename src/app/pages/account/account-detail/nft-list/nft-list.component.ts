@@ -11,6 +11,7 @@ import { AccountService } from 'src/app/core/services/account.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { isEvmAddress } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-nft-list',
@@ -82,7 +83,7 @@ export class NftListComponent implements OnInit, OnChanges, OnDestroy {
     const payload = {
       owner: this.address,
       limit: this.pageData.pageSize,
-      keyword: this.textSearch,
+      keyword: isEvmAddress(this.textSearch) ? this.textSearch?.toLowerCase() : this.textSearch,
       offset: (this.pageData.pageIndex - 1) * this.pageData.pageSize,
       address: this.nftFilter || null,
     };
