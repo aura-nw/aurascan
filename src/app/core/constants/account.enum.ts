@@ -63,15 +63,22 @@ export enum TabsAccountLink {
 
 export enum ETypeFtExport {
   CW20 = 'cw20-transfer',
-  ERC20 = 'erc20-transfer'
+  ERC20 = 'erc20-transfer',
+}
+
+export enum ETypeNftExport {
+  CW721 = 'cw721-transfer',
+  ERC721 = 'erc721-transfer',
 }
 
 export enum ExportFileName {
   ExecutedTxs = 'cosmos-executed',
   EVMExecutedTxs = 'evm-executed',
   NativeTxs = 'native-ibc-transfer',
-  FtsTxs = 'fungible-token-transfer',
-  NftTxs = 'nft-transfer',
+  CW20FtsTxs = 'cw20-transfer',
+  ERC20FtsTxs = 'erc20-transfer',
+  CW721NftTxs = 'cw721-transfer',
+  ERC721NftTxs = 'erc721-transfer',
 }
 
 export enum StakeModeAccount {
