@@ -9,6 +9,7 @@ import { ExpandableContentDirective } from './expandable-content.directive';
 import { TooltipCustomizeDirective } from 'src/app/core/directives/tooltip-customize.directive';
 import { DragDropDirective } from './drag-drop.directive';
 import { RouterLinkActiveMenuDirective } from './routerLinkActiveMenu.directive';
+import { FeatureFlagDirective } from './feature-flag.directive';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { RouterLinkActiveMenuDirective } from './routerLinkActiveMenu.directive'
     BigNumberDirective,
     ImageDirective,
     FeatureDirective,
+    FeatureFlagDirective,
     LinkDenomDirective,
     CopyButtonDirective,
     ExpandableContentDirective,
@@ -29,6 +31,7 @@ import { RouterLinkActiveMenuDirective } from './routerLinkActiveMenu.directive'
     BigNumberDirective,
     ImageDirective,
     FeatureDirective,
+    FeatureFlagDirective,
     LinkDenomDirective,
     CopyButtonDirective,
     ExpandableContentDirective,
