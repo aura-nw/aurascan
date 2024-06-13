@@ -5,7 +5,7 @@
       <div class="d-flex">
         Token <span class="text--gray-5 break-word ml-2">{{ tokenDetail?.name }}</span>
         <div class="status cursor-pointer">
-          <img
+           <img
             [src]="'assets/images/icons/CircleWavyCheck.svg' | imageS3"
             alt=""
             width="18"
@@ -24,9 +24,10 @@
 
     <div class="col-12 col-lg-6">
       <app-token-summary
-        *ngIf="tokenDetail"
-        [tokenDetail]="tokenDetail"
-        [channelPath]="channelPath"></app-token-summary>
+      *ngIf="tokenDetail"
+      [tokenDetail]="tokenDetail"
+      [tokenMoreInformation]="tokenMoreInformation"
+      [channelPath]="channelPath"></app-token-summary>
     </div>
   </div>
 
@@ -34,6 +35,7 @@
     *ngIf="tokenDetail"
     [tokenDetail]="tokenDetail"
     [contractAddress]="contractAddress"
+    [tokenMoreInformation]="tokenMoreInformation"
     [channelPath]="channelPath"
     (hasMore)="getMoreTx($event)">
   </app-token-content>

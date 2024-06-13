@@ -33,7 +33,7 @@
             </app-name-tag>
           </div>
         </div>
-        <div
+        <div 
           class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
             tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3'
           }}">
@@ -165,8 +165,10 @@
     <app-token-inventory-tab
       *ngIf="currentTab === tokenTab.Inventory"
       [typeContract]="tokenDetail?.type"></app-token-inventory-tab>
-    <app-token-info-tab *ngIf="currentTab === tokenTab.Info"></app-token-info-tab>
-    <app-token-contract-tab
+    <app-token-info-tab
+      *ngIf="currentTab === tokenTab.Info"
+      [overviewInfo]="tokenMoreInformation?.overviewInfo"></app-token-info-tab>
+    <app-token-contract-tab 
       *ngIf="currentTab === tokenTab.Contract"
       [contractAddress]="contractAddress"
       [typeContract]="tokenDetail?.type"></app-token-contract-tab>
