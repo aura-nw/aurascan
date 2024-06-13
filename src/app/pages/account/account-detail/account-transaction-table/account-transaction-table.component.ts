@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
-import { AccountTxType, ETypeFtExport, TabsAccountLink } from 'src/app/core/constants/account.enum';
+import { AccountTxType, ETypeFtExport, ETypeNftExport, TabsAccountLink } from 'src/app/core/constants/account.enum';
 import {
   LENGTH_CHARACTER,
   NULL_ADDRESS,
@@ -913,6 +913,13 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
         exportType = ETypeFtExport.CW20;
       }
     }
+    if (this.modeQuery === TabsAccountLink.NftTxs) {
+      if (this.nonFungibleTokenType === ETokenNFTTypeBE.CW721) {
+        exportType = ETypeNftExport.CW721;
+      } else {
+        exportType = ETypeNftExport.ERC721;
+      }
+    }
     local.setItem(
       STORAGE_KEYS.SET_DATA_EXPORT,
       JSON.stringify({ address: this.currentAddress || this.addressNative, exportType }),
@@ -943,4 +950,3 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     return this.smartContractList.filter((i) => i === addr).length > 0;
   }
 }
-
