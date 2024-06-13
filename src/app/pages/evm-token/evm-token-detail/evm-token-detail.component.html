@@ -5,12 +5,7 @@
       <div class="d-flex">
         Token <span class="text--gray-5 break-word ml-2">{{ tokenDetail?.name }}</span>
         <div class="status cursor-pointer">
-          <img
-            [src]="'assets/images/icons/CircleWavyCheck.svg' | imageS3"
-            alt=""
-            width="18"
-            height="18"
-            class="ml-1"
+          <img [src]="'assets/images/icons/CircleWavyCheck.svg' | imageS3" alt="" width="18" height="18" class="ml-1"
             [appTooltip]="tokenDetail?.verify_text || 'Verified by Aura Network'"
             *ngIf="tokenDetail?.verify_status === 'VERIFIED'" />
         </div>
@@ -23,7 +18,8 @@
     </div>
 
     <div class="col-12 col-lg-6">
-      <app-evm-token-summary *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-evm-token-summary>
+      <app-evm-token-summary *ngIf="tokenDetail" [tokenDetail]="tokenDetail"
+        [tokenMoreInformation]="tokenMoreInformation"></app-evm-token-summary>
     </div>
   </div>
 

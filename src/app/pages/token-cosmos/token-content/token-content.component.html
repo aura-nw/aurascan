@@ -2,7 +2,7 @@
   <section class="text--white">
     <div *ngIf="isSearchTx" class="px-4 py-4 py-lg-3 card border-none">
       <p class="caption d-flex align-item-center mb-1">
-        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px"/>
+        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
         FILTER BY TOKEN TXN HASH
       </p>
       <a class="text--primary body-02 break-word" [copyBtn]="textSearch" [routerLink]="['/tx', textSearch]">
@@ -13,23 +13,14 @@
       <div class="row">
         <div class="col-12 col-lg-5 py-3 py-lg-0">
           <div class="caption d-flex align-item-center mb-1 mb-lg-0">
-            <img
-              [src]="'assets/images/icons/token-holder.png' | imageS3"
-              class="mr-2"
-              alt=""
-              width="18px"
-              height="18px"/>
+            <img [src]="'assets/images/icons/token-holder.png' | imageS3" class="mr-2" alt="" width="18px"
+              height="18px" />
             FILTER BY ADDRESS
           </div>
           <div class="mt-2">
-            <app-name-tag
-              [iconContract]="textSearch | isContract"
-              [value]="textSearch"
-              [linkRouter]="[(textSearch | isContract) ? '/contracts' : '/address', textSearch]"
-              [fullText]="true"
-              [widthAuto]="true"
-              [maxCharacter]="30"
-              [tooltipPosition]="'tooltip--right'">
+            <app-name-tag [iconContract]="textSearch | isContract" [value]="textSearch"
+              [linkRouter]="[(textSearch | isContract) ? '/contracts' : '/address', textSearch]" [fullText]="true"
+              [widthAuto]="true" [maxCharacter]="30" [tooltipPosition]="'tooltip--right'">
             </app-name-tag>
           </div>
         </div>
@@ -40,18 +31,14 @@
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <ng-container *ngIf="!tokenDetail?.isNFTContract">
             <span *ngIf="infoSearch['balance'] == 0 || !infoSearch['balance']">0</span>
-            <span
-              [appTooltip]="{ priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals }"
+            <span [appTooltip]="{ priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals }"
               *ngIf="(infoSearch['balance'] | balance: tokenDetail.decimals | lt: 0.001) && infoSearch['balance'] != 0">
-              {{ '<0.001' }}
-            </span>
-            <span
-              *ngIf="infoSearch['balance'] | balance: tokenDetail.decimals | gte: 0.001"
-              [class.cursor-text]="infoSearch['balance'] | balance: tokenDetail.decimals | lt: 1000000"
-              [appTooltip]="{ priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals }"
-              [appBigNumber]="infoSearch['balance']"
-              [decimal]="tokenDetail.decimals"></span>
-            {{ tokenDetail.symbol || tokenDetail.name }}
+              {{ '<0.001' }} </span>
+                <span *ngIf="infoSearch['balance'] | balance: tokenDetail.decimals | gte: 0.001"
+                  [class.cursor-text]="infoSearch['balance'] | balance: tokenDetail.decimals | lt: 1000000"
+                  [appTooltip]="{ priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals }"
+                  [appBigNumber]="infoSearch['balance']" [decimal]="tokenDetail.decimals"></span>
+                {{ tokenDetail.symbol || tokenDetail.name }}
           </ng-container>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>
@@ -59,30 +46,21 @@
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
           <ng-container *ngIf="infoSearch.value | gt: 0; else zeroValue">
             <span *ngIf="infoSearch['value'] | lt: 0.01" [appTooltip]="infoSearch['value']?.toString()">
-              {{ '< $0.01' }}
-            </span>
-            <span
-              *ngIf="infoSearch['value'] | gt: 0.01"
-              [class.cursor-text]="infoSearch['value'] | lt: 1000000"
-              [appTooltip]="{ priceAmount: infoSearch['value'] }"
-              [appBigNumber]="infoSearch['balance']"
-              [decimal]="tokenDetail.decimals"
-              [tokenPrice]="tokenDetail.price"></span>
-            (
-            <span *ngIf="infoSearch['balance']">
-              <span *ngIf="infoSearch['valueAura'] | lt: 0.001" [appTooltip]="{ priceAmount: infoSearch['valueAura'] }">
-                {{ '<0.001' }}
-              </span>
-              <span
-                *ngIf="infoSearch['valueAura'] | gt: 0.001"
-                [class.cursor-text]="infoSearch['valueAura'] | gte: 1000000"
-                [appBigNumber]="infoSearch['balance']"
-                [appTooltip]="{ priceAmount: infoSearch['valueAura'] }"
-                [decimal]="tokenDetail.decimals"
-                [auraValue]="true"
-                [tokenPrice]="tokenDetail.price"></span>
-            </span>
-            {{ coinInfo['coinDenom'] }})
+              {{ '< $0.01' }} </span>
+                <span *ngIf="infoSearch['value'] | gt: 0.01" [class.cursor-text]="infoSearch['value'] | lt: 1000000"
+                  [appTooltip]="{ priceAmount: infoSearch['value'] }" [appBigNumber]="infoSearch['balance']"
+                  [decimal]="tokenDetail.decimals" [tokenPrice]="tokenDetail.price"></span>
+                (
+                <span *ngIf="infoSearch['balance']">
+                  <span *ngIf="infoSearch['valueAura'] | lt: 0.001"
+                    [appTooltip]="{ priceAmount: infoSearch['valueAura'] }">
+                    {{ '<0.001' }} </span>
+                      <span *ngIf="infoSearch['valueAura'] | gt: 0.001"
+                        [class.cursor-text]="infoSearch['valueAura'] | gte: 1000000"
+                        [appBigNumber]="infoSearch['balance']" [appTooltip]="{ priceAmount: infoSearch['valueAura'] }"
+                        [decimal]="tokenDetail.decimals" [auraValue]="true" [tokenPrice]="tokenDetail.price"></span>
+                  </span>
+                  {{ coinInfo['coinDenom'] }})
           </ng-container>
         </div>
       </div>
@@ -91,79 +69,50 @@
 </ng-container>
 <section class="card mt-2 p-4" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="d-lg-flex justify-content-between align-items-end tab-wrapper tab-token">
-    <ul
-      ngbNav
-      #customNav="ngbNav"
-      [activeId]="activeTabID"
+    <ul ngbNav #customNav="ngbNav" [activeId]="activeTabID"
       class="aura-nav-tabs nav-tabs nav-tabs-custom col-lg-8 mb-4 mb-lg-0">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)" class="verify-contract">
             <span class="text-capitalize">{{ tab.value }}</span>
-            <img
-              class="ml-2"
+            <img class="ml-2"
               *ngIf="tab.key === tokenTab.Contract && tokenDetail.contract_verification === contractVerifyType.Verified"
-              [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-              alt="contract_verification"
-              width="16px"
-              height="16px"/>
+              [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="contract_verification" width="16px"
+              height="16px" />
           </a>
         </li>
       </ng-container>
     </ul>
     <div class="d-lg-flex align-item-center justify-content-end mb-3 mb-lg-0">
-      <form
-        (ngSubmit)="handleSearch()"
-        class="aura-form single-input-field search-form"
-        *ngIf="
+      <form (ngSubmit)="handleSearch()" class="aura-form single-input-field search-form" *ngIf="
           !breakpoint.value.matches ||
           (breakpoint.value.matches && (currentTab === tokenTab.Transfers || currentTab === tokenTab.Holders))
         ">
         <div class="input-group">
-          <input
-            type="text"
-            class="form-control aura-form"
-            [placeholder]="textPlaceHolder"
-            [(ngModel)]="searchTemp"
-            [maxLength]="maxLengthSearch"
-            name="search"
-            (keyup.enter)="handleSearch()"
-            [disabled]="paramQuery?.length > 0"
-            autocomplete="off"/>
+          <input type="text" class="form-control aura-form" [placeholder]="textPlaceHolder" [(ngModel)]="searchTemp"
+            [maxLength]="maxLengthSearch" name="search" (keyup.enter)="handleSearch()"
+            [disabled]="paramQuery?.length > 0" autocomplete="off" />
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
-          <button
-            type="reset"
-            class="cursor-pointer btn-reset {{
+          <button type="reset" class="cursor-pointer btn-reset {{
               !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : ''
-            }}"
-            (click)="resetSearch()">
-            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+            }}" (click)="resetSearch()">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
       </form>
     </div>
   </div>
   <div class="mt-lg-3">
-    <app-token-transfers-tab
-      *ngIf="currentTab === tokenTab.Transfers"
-      [tokenDetail]="tokenDetail"
-      [keyWord]="textSearch"
-      [isSearchAddress]="isSearchAddress"
-      [decimalValue]="tokenDetail?.decimals || 0"
-      [channelPath]="channelPath"
-      (hasMore)="getMoreTx($event)">
+    <app-token-transfers-tab *ngIf="currentTab === tokenTab.Transfers" [tokenDetail]="tokenDetail"
+      [keyWord]="textSearch" [isSearchAddress]="isSearchAddress" [decimalValue]="tokenDetail?.decimals || 0"
+      [channelPath]="channelPath" (hasMore)="getMoreTx($event)">
     </app-token-transfers-tab>
-    <app-token-holders-tab
-      *ngIf="currentTab === tokenTab.Holders"
-      [decimalValue]="tokenDetail?.decimals || 0"
-      [keyWord]="textSearch"
-      [tokenDetail]="tokenDetail"
-      [typeContract]="tokenDetail?.type"
+    <app-token-holders-tab *ngIf="currentTab === tokenTab.Holders" [decimalValue]="tokenDetail?.decimals || 0"
+      [keyWord]="textSearch" [tokenDetail]="tokenDetail" [typeContract]="tokenDetail?.type"
       [contractAddress]="contractAddress"></app-token-holders-tab>
-    <app-token-inventory-tab
-      *ngIf="currentTab === tokenTab.Inventory"
+    <app-token-inventory-tab *ngIf="currentTab === tokenTab.Inventory"
       [typeContract]="tokenDetail?.type"></app-token-inventory-tab>
     <app-token-info-tab
       *ngIf="currentTab === tokenTab.Info"
