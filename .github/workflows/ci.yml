@@ -14,6 +14,7 @@ jobs:
       - name: Set environment variable
         run: |
           SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
+          echo SHORT_SHA_COMMIT=${SHORT_SHA_COMMIT} >> $GITHUB_ENV
           echo ENVIRONMENT=${GITHUB_REF_NAME} >> $GITHUB_ENV
           echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/explorer-frontend:${GITHUB_REF_NAME}_${SHORT_SHA_COMMIT} >> $GITHUB_ENV
           echo REPO_MANIFEST_NAME=gitops >> $GITHUB_ENV
