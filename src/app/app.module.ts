@@ -28,6 +28,8 @@ import { MediaExpandModule } from './shared/components/media-expand/media-expand
 import { NgHttpCachingLocalStorage, NgHttpCachingModule, NgHttpCachingStrategy } from 'ng-http-caching';
 import { CommonDirectiveModule } from './core/directives/common-directive.module';
 import { ChainInfoInterceptor } from './core/helpers/chain-info.interceptor';
+import { FeatureFlagService } from './core/data-services/feature-flag.service';
+
 initializeApp(environment.firebaseConfig);
 
 @NgModule({
@@ -64,6 +66,13 @@ initializeApp(environment.firebaseConfig);
       useFactory: (environmentService: EnvironmentService) => () => environmentService.load(),
       multi: true,
       deps: [EnvironmentService],
+    },
+    FeatureFlagService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (featureFlagService: FeatureFlagService) => () => featureFlagService.load(),
+      multi: true,
+      deps: [FeatureFlagService],
     },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
