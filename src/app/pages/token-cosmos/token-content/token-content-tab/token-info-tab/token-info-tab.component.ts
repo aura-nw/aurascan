@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-token-info-tab',
@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TokenInfoTabComponent implements OnInit {
   constructor() {}
-
+  @Input() overviewInfo?: string;
   ngOnInit(): void {}
 }
+

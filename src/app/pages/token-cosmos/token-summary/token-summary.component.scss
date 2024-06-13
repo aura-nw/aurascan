@@ -7,6 +7,21 @@
       padding: 0 var(--spacer-4);
     }
   }
+
+  .socials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 20px;
+
+    img {
+      min-width: 16px;
+      max-width: 16px;
+      min-height: 16px;
+      max-width: 16px;
+      object-fit: cover;
+    }
+  }
 }
 .first-col {
   min-width: 120px;

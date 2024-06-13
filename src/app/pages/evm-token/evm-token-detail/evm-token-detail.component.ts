@@ -7,6 +7,8 @@ import { ContractRegisterType, EvmContractRegisterType } from 'src/app/core/cons
 import { EModeEvmToken, EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { ITokenInfo } from 'src/app/interfaces';
+import { UtilsSharedFunction } from 'src/app/shared/function';
 
 @Component({
   selector: 'app-evm-token-detail',
@@ -20,6 +22,7 @@ export class EvmTokenDetailComponent implements OnInit {
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
+  tokenMoreInformation?: ITokenInfo;
 
   chainInfo = this.environmentService.chainInfo;
   excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
@@ -28,7 +31,8 @@ export class EvmTokenDetailComponent implements OnInit {
     private router: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
-  ) { }
+    private utils: UtilsSharedFunction,
+  ) {}
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
@@ -38,14 +42,13 @@ export class EvmTokenDetailComponent implements OnInit {
         this.contractAddress = contractAddress;
         switch (type) {
           case 'erc721':
-            this.getTokenDetailNFT()
+            this.getTokenDetailNFT();
             break;
           default:
             this.getTokenDetail();
             this.getAssetsDetail();
             break;
         }
-
       }
     });
   }
@@ -81,6 +84,7 @@ export class EvmTokenDetailComponent implements OnInit {
     const payload = {
       address: this.contractAddress,
     };
+
     this.tokenService.getEvmTokenDetail(payload).subscribe({
       next: (res) => {
         const token = res.erc20_contract[0];
@@ -109,7 +113,7 @@ export class EvmTokenDetailComponent implements OnInit {
               price: tokenMarket?.currentPrice || 0,
               priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
               verify_text: tokenMarket?.verifyText || '',
-              verify_status: tokenMarket?.verifyStatus || ''
+              verify_status: tokenMarket?.verifyStatus || '',
             };
             this.getAssetsDetail();
           });
@@ -126,8 +130,9 @@ export class EvmTokenDetailComponent implements OnInit {
         this.loading = false;
       },
     });
-  }
 
+    this.utils.handleGetTokenInfo(this.contractAddress, (res) => (this.tokenMoreInformation = res));
+  }
 
   getTokenDetailNFT(): void {
     const payload = {
@@ -142,7 +147,11 @@ export class EvmTokenDetailComponent implements OnInit {
 
         const modeToken = EModeEvmToken.ERCToken;
         this.tokenDetail = { name, type, contract_address, isNFTContract, modeToken };
-        this.tokenDetail.contract_verification = _.get(res, 'evm_smart_contract[0].evm_contract_verifications[0].status', undefined);
+        this.tokenDetail.contract_verification = _.get(
+          res,
+          'evm_smart_contract[0].evm_contract_verifications[0].status',
+          undefined,
+        );
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
@@ -162,3 +171,4 @@ export class EvmTokenDetailComponent implements OnInit {
     this.tokenDetail['hasMoreTx'] = event;
   }
 }
+
