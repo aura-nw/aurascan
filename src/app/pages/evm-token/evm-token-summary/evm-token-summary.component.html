@@ -7,12 +7,16 @@
             <span class="text--white">Profile Summary </span>
           </div>
           <div class="dropdown aura-dropdown">
-            <ul class="dropdown-menu aura-dropdown-menu token-summary-more" *ngIf="!tokenDetail.isNFTContract"
+            <ul
+              class="dropdown-menu aura-dropdown-menu token-summary-more"
+              *ngIf="!tokenDetail.isNFTContract"
               aria-labelledby="token-summary-more">
               <li class="dropdown-item cursor-pointer">Add token to Web3</li>
               <li class="dropdown-item cursor-pointer">Update Name Tag</li>
             </ul>
-            <ul class="dropdown-menu aura-dropdown-menu token-summary-more" *ngIf="tokenDetail.isNFTContract"
+            <ul
+              class="dropdown-menu aura-dropdown-menu token-summary-more"
+              *ngIf="tokenDetail.isNFTContract"
               aria-labelledby="token-summary-more">
               <li class="dropdown-item cursor-pointer">Add token to Web3</li>
               <li class="dropdown-item cursor-pointer">Update Token Info</li>
@@ -28,9 +32,11 @@
         <div class="d-flex align-items-center py-2">
           <div class="first-col text--gray-5">Contract:</div>
           <div class="break-word">
-            <app-name-tag [value]="tokenDetail?.contract_address || tokenDetail?.denom | beautyAddress"
+            <app-name-tag
+              [value]="tokenDetail?.contract_address || tokenDetail?.denom | beautyAddress"
               [iconContract]="tokenDetail?.contract_address"
-              [linkRouter]="['/evm-contracts', tokenDetail?.contract_address]" [fullText]="true"></app-name-tag>
+              [linkRouter]="['/evm-contracts', tokenDetail?.contract_address]"
+              [fullText]="true"></app-name-tag>
           </div>
         </div>
       </td>
