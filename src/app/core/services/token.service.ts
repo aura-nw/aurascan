@@ -9,7 +9,6 @@ import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 import { SOCIAL_MEDIA, TOKEN_EVM_BURNT } from '../constants/token.constant';
-import { ITokenInfo } from 'src/app/interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -964,7 +963,7 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  handleConvertSocialMedia(socialProfiles: { [key: string]: string }) {
+  mappingSocialProfiles(socialProfiles: { [key: string]: string }) {
     if (!socialProfiles) return [];
 
     return Object.keys(socialProfiles)
@@ -977,12 +976,4 @@ export class TokenService extends CommonService {
         };
       });
   }
-
-  handleConvertTokenInfo = (res): ITokenInfo => {
-    return {
-      officialSite: res?.officialSite,
-      overviewInfo: res?.overviewInfo,
-      socialProfiles: this.handleConvertSocialMedia(res?.socialProfiles),
-    };
-  };
 }

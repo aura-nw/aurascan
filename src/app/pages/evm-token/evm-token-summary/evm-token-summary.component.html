@@ -54,8 +54,8 @@
       <td colspan="2">
         <div class="d-flex align-items-center py-2">
           <span class="first-col text--gray-5">Official Site:</span>
-          <a *ngIf="tokenMoreInformation?.officialSite" [href]="tokenMoreInformation?.officialSite" target="_blank"
-            rel="noopener noreferrer" class="text--primary">{{tokenMoreInformation?.officialSite}}</a>
+          <a *ngIf="tokenDetail?.officialSite" [href]="tokenDetail?.officialSite" target="_blank"
+            rel="noopener noreferrer" class="text--primary">{{tokenDetail?.officialSite}}</a>
         </div>
       </td>
     </tr>
@@ -65,8 +65,8 @@
           <div class="first-col text--gray-5">
             Social Profiles:
           </div>
-          <div class="socials" *ngIf="tokenMoreInformation?.socialProfiles?.length">
-            <a *ngFor="let item of tokenMoreInformation?.socialProfiles" [href]="item?.url" target="_blank"
+          <div class="socials" *ngIf="tokenDetail?.socialProfiles?.length">
+            <a *ngFor="let item of tokenDetail?.socialProfiles" [href]="item?.url" target="_blank"
               rel="noopener noreferrer">
               <img [src]="item?.icon" alt="social-media">
             </a>

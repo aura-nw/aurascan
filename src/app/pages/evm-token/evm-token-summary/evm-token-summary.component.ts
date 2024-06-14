@@ -4,7 +4,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ProjectDetail } from 'src/app/core/models/project';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
-import { ITokenInfo } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-evm-token-summary',
@@ -13,7 +12,6 @@ import { ITokenInfo } from 'src/app/interfaces';
 })
 export class EvmTokenSummaryComponent implements OnInit {
   @Input() tokenDetail: any;
-  @Input() tokenMoreInformation?: ITokenInfo;
 
   projectDetail: ProjectDetail;
   EModeToken = EModeToken;

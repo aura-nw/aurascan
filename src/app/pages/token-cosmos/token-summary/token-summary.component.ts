@@ -7,7 +7,6 @@ import { ProjectDetail } from 'src/app/core/models/project';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { Globals } from 'src/app/global/global';
-import { ITokenInfo } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-token-summary',
@@ -17,7 +16,6 @@ import { ITokenInfo } from 'src/app/interfaces';
 export class TokenSummaryComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() channelPath: any;
-  @Input() tokenMoreInformation?: ITokenInfo;
 
   projectDetail: ProjectDetail;
   EModeToken = EModeToken;

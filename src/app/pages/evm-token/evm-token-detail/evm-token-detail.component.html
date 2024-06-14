@@ -23,8 +23,7 @@
     </div>
 
     <div class="col-12 col-lg-6">
-      <app-evm-token-summary *ngIf="tokenDetail" [tokenDetail]="tokenDetail"
-        [tokenMoreInformation]="tokenMoreInformation"></app-evm-token-summary>
+      <app-evm-token-summary *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-evm-token-summary>
     </div>
   </div>
 
@@ -32,7 +31,6 @@
     *ngIf="tokenDetail"
     [tokenDetail]="tokenDetail"
     [contractAddress]="contractAddress"
-    [tokenMoreInformation]="tokenMoreInformation"
     (hasMore)="getMoreTx($event)">
   </app-evm-token-content>
 </ng-container>
