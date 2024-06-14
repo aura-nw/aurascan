@@ -8,7 +8,6 @@ import { EModeEvmToken, EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { ITokenInfo } from 'src/app/interfaces';
-import { UtilsSharedFunction } from 'src/app/shared/function';
 
 @Component({
   selector: 'app-evm-token-detail',
@@ -31,7 +30,6 @@ export class EvmTokenDetailComponent implements OnInit {
     private router: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
-    private utils: UtilsSharedFunction,
   ) {}
 
   ngOnInit(): void {
@@ -131,7 +129,11 @@ export class EvmTokenDetailComponent implements OnInit {
       },
     });
 
-    this.utils.handleGetTokenInfo(this.contractAddress, (res) => (this.tokenMoreInformation = res));
+    this.tokenService.getTokenDetail(this.contractAddress).subscribe({
+      next: (res) => {
+        this.tokenMoreInformation = this.tokenService.handleConvertTokenInfo(res);
+      }
+    });
   }
 
   getTokenDetailNFT(): void {

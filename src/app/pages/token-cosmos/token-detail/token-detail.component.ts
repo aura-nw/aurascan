@@ -14,7 +14,6 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { ITokenInfo } from 'src/app/interfaces';
-import { UtilsSharedFunction } from 'src/app/shared/function';
 
 @Component({
   selector: 'app-token-detail',
@@ -41,7 +40,6 @@ export class TokenDetailComponent implements OnInit {
     private contractService: ContractService,
     private ibcService: IBCService,
     private datePipe: DatePipe,
-    private utils: UtilsSharedFunction,
   ) {}
 
   ngOnInit(): void {
@@ -115,8 +113,11 @@ export class TokenDetailComponent implements OnInit {
           this.loading = false;
         },
       });
-
-    this.utils.handleGetTokenInfo(this.contractAddress, (res) => (this.tokenMoreInformation = res));
+      this.tokenService.getTokenDetail(this.contractAddress).subscribe({
+        next: (res) => {
+          this.tokenMoreInformation = this.tokenService.handleConvertTokenInfo(res);
+        }
+      });
   }
 
   getTokenDetail(): void {
@@ -155,7 +156,7 @@ export class TokenDetailComponent implements OnInit {
           }
         }
 
-        this.tokenMoreInformation = this.utils.handleGetTokenRes(token);
+        this.tokenMoreInformation = this.tokenService.handleConvertTokenInfo(token);
 
         this.tokenDetail = {
           ...token,
