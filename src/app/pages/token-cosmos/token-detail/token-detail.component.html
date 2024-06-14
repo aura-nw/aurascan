@@ -26,7 +26,6 @@
       <app-token-summary
       *ngIf="tokenDetail"
       [tokenDetail]="tokenDetail"
-      [tokenMoreInformation]="tokenMoreInformation"
       [channelPath]="channelPath"></app-token-summary>
     </div>
   </div>
@@ -35,7 +34,6 @@
     *ngIf="tokenDetail"
     [tokenDetail]="tokenDetail"
     [contractAddress]="contractAddress"
-    [tokenMoreInformation]="tokenMoreInformation"
     [channelPath]="channelPath"
     (hasMore)="getMoreTx($event)">
   </app-token-content>

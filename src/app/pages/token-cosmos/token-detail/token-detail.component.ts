@@ -13,7 +13,6 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { ITokenInfo } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-token-detail',
@@ -23,12 +22,11 @@ import { ITokenInfo } from 'src/app/interfaces';
 export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
-  tokenDetail: any;
+  tokenDetail: any = {};
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
   channelPath: any;
-  tokenMoreInformation?: ITokenInfo;
 
   chainInfo = this.environmentService.chainInfo;
   excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
@@ -97,7 +95,10 @@ export class TokenDetailComponent implements OnInit {
                 token.supplyAmount = BigNumber(token.cw20_contract?.total_supply).dividedBy(
                   BigNumber(10).pow(token.decimals),
                 );
-                this.tokenDetail = token;
+                token.officialSite = tokenMarket?.officialSite;
+                token.overviewInfo = tokenMarket?.overviewInfo;
+                token.socialProfiles = this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles);
+                this.tokenDetail = token;                
               });
           }
         },
@@ -112,11 +113,6 @@ export class TokenDetailComponent implements OnInit {
         complete: () => {
           this.loading = false;
         },
-      });
-      this.tokenService.getTokenDetail(this.contractAddress).subscribe({
-        next: (res) => {
-          this.tokenMoreInformation = this.tokenService.handleConvertTokenInfo(res);
-        }
       });
   }
 
@@ -156,8 +152,6 @@ export class TokenDetailComponent implements OnInit {
           }
         }
 
-        this.tokenMoreInformation = this.tokenService.handleConvertTokenInfo(token);
-
         this.tokenDetail = {
           ...token,
           type,
@@ -171,8 +165,9 @@ export class TokenDetailComponent implements OnInit {
           denomHash: token.denom,
           verify_status: token.verifyStatus,
           verify_text: token.verifyText,
+          socialProfiles: this.tokenService.mappingSocialProfiles(token?.socialProfiles),
         };
-
+        
         if (this.contractAddress !== this.chainInfo?.currencies[0].coinMinimalDenom) {
           this.getInfoTokenIBC(this.tokenDetail.denom);
         }

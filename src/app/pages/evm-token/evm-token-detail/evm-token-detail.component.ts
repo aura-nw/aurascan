@@ -7,7 +7,6 @@ import { ContractRegisterType, EvmContractRegisterType } from 'src/app/core/cons
 import { EModeEvmToken, EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { ITokenInfo } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-evm-token-detail',
@@ -17,11 +16,10 @@ import { ITokenInfo } from 'src/app/interfaces';
 export class EvmTokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
-  tokenDetail: any;
+  tokenDetail: any = {};
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
-  tokenMoreInformation?: ITokenInfo;
 
   chainInfo = this.environmentService.chainInfo;
   excludedAddresses = this.environmentService.chainConfig.excludedAddresses;
@@ -99,7 +97,6 @@ export class EvmTokenDetailComponent implements OnInit {
           )
           .subscribe((item) => {
             const tokenMarket = item.find((element) => element.denom === token?.address);
-
             this.tokenDetail = {
               ...token,
               supplyAmount: token.total_supply,
@@ -112,6 +109,9 @@ export class EvmTokenDetailComponent implements OnInit {
               priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
               verify_text: tokenMarket?.verifyText || '',
               verify_status: tokenMarket?.verifyStatus || '',
+              officialSite : tokenMarket?.officialSite,
+              overviewInfo : tokenMarket?.overviewInfo,
+              socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles)
             };
             this.getAssetsDetail();
           });
@@ -127,12 +127,6 @@ export class EvmTokenDetailComponent implements OnInit {
       complete: () => {
         this.loading = false;
       },
-    });
-
-    this.tokenService.getTokenDetail(this.contractAddress).subscribe({
-      next: (res) => {
-        this.tokenMoreInformation = this.tokenService.handleConvertTokenInfo(res);
-      }
     });
   }
 

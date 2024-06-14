@@ -167,7 +167,7 @@
       [typeContract]="tokenDetail?.type"></app-token-inventory-tab>
     <app-token-info-tab
       *ngIf="currentTab === tokenTab.Info"
-      [overviewInfo]="tokenMoreInformation?.overviewInfo"></app-token-info-tab>
+      [overviewInfo]="tokenDetail?.overviewInfo"></app-token-info-tab>
     <app-token-contract-tab 
       *ngIf="currentTab === tokenTab.Contract"
       [contractAddress]="contractAddress"
