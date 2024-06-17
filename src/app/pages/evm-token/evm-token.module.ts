@@ -33,6 +33,7 @@ import { EvmTokenDetailComponent } from './evm-token-detail/evm-token-detail.com
 import { EvmTokenOverviewComponent } from './evm-token-overview/evm-token-overview.component';
 import { EvmTokenRoutingModule } from './evm-token-routing.module';
 import { EvmTokenSummaryComponent } from './evm-token-summary/evm-token-summary.component';
+import { EvmAddressPipe } from 'src/app/core/pipes/evm-address.pipe';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,6 @@ import { EvmTokenSummaryComponent } from './evm-token-summary/evm-token-summary.
     ClipboardModule,
     EvmContractsModule,
   ],
-  providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
+  providers: [provideEnvironmentNgxMask(MASK_CONFIG), EvmAddressPipe],
 })
 export class EvmTokenModule {}

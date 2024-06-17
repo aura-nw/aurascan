@@ -26,9 +26,9 @@ export class TokenContentComponent implements OnInit {
   @Input() channelPath: any;
   @Output() hasMore = new EventEmitter<any>();
 
-  tabStaking = [TokenTab.Holders];
-  tabIBC = [TokenTab.Transfers, TokenTab.Holders];
-  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract];
+  tabStaking = [TokenTab.Holders, TokenTab.Info];
+  tabIBC = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info];
+  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract, TokenTab.Info];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Contract];
   TABS = [];
   paramQuery = '';
@@ -254,3 +254,4 @@ export class TokenContentComponent implements OnInit {
       .toFixed();
   }
 }
+

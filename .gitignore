@@ -6,3 +6,4 @@ dist
 .idea/workspace.xml
 .vscode/settings.json
 *.orig
+/src/assets/config/feature-flags.json

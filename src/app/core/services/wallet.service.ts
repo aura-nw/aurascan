@@ -255,8 +255,8 @@ export class WalletService implements OnDestroy {
         this.connectToChain();
       }, 1000);
     };
-    (window as any).ethereum.on('accountsChanged', reconnect);
-    (window as any).ethereum.on('chainChanged', reconnect);
+    (window as any).ethereum?.on('accountsChanged', reconnect);
+    (window as any).ethereum?.on('chainChanged', reconnect);
   }
 
   private async _getSigningCosmWasmClientAuto() {
@@ -422,13 +422,9 @@ export class WalletService implements OnDestroy {
   }
 
   async connectEvmWallet() {
-    const network = await checkNetwork(this.env.evmChainInfo.chainId);
-
-    if (!network) {
-      const connected = await this.connectToChain();
-      if (!connected) {
-        return;
-      }
+    const connected = await this.connectToChain();
+    if (!connected) {
+      return;
     }
 
     getSigner(this.env.etherJsonRpc).then((signer) => {
@@ -448,31 +444,28 @@ export class WalletService implements OnDestroy {
   }
 
   async connectToChain() {
-    const network = await checkNetwork(this.env.evmChainInfo.chainId);
-
-    if (!network) {
-      const metamask = getMetamask();
-      const chainId = '0x' + this.env.evmChainInfo.chainId.toString(16);
-      try {
-        await metamask.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: chainId }],
-        });
-      } catch (switchError: any) {
-        switch (switchError.code) {
-          case 4902:
-            // This error code indicates that the chain has not been added to MetaMask.
-            await addNetwork(this.env.evmChainInfo);
-            break;
-          case 4001:
-            // This error code : "User rejected the request."
-            return false;
-          case -32002:
-            // This error code : "Request of type 'wallet_switchEthereumChain' already pending"
-            return false;
-        }
+    const metamask = getMetamask();
+    const chainId = '0x' + this.env.evmChainInfo.chainId.toString(16);
+    try {
+      await metamask.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chainId }],
+      });
+    } catch (switchError: any) {
+      switch (switchError.code) {
+        case 4902:
+          // This error code indicates that the chain has not been added to MetaMask.
+          await addNetwork(this.env.evmChainInfo);
+          break;
+        case 4001:
+          // This error code : "User rejected the request."
+          return false;
+        case -32002:
+          // This error code : "Request of type 'wallet_switchEthereumChain' already pending"
+          return false;
       }
     }
+
     return true;
   }
 

@@ -22,7 +22,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
-  tokenDetail: any;
+  tokenDetail: any = {};
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
@@ -95,7 +95,10 @@ export class TokenDetailComponent implements OnInit {
                 token.supplyAmount = BigNumber(token.cw20_contract?.total_supply).dividedBy(
                   BigNumber(10).pow(token.decimals),
                 );
-                this.tokenDetail = token;
+                token.officialSite = tokenMarket?.officialSite;
+                token.overviewInfo = tokenMarket?.overviewInfo;
+                token.socialProfiles = this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles);
+                this.tokenDetail = token;                
               });
           }
         },
@@ -162,8 +165,9 @@ export class TokenDetailComponent implements OnInit {
           denomHash: token.denom,
           verify_status: token.verifyStatus,
           verify_text: token.verifyText,
+          socialProfiles: this.tokenService.mappingSocialProfiles(token?.socialProfiles),
         };
-
+        
         if (this.contractAddress !== this.chainInfo?.currencies[0].coinMinimalDenom) {
           this.getInfoTokenIBC(this.tokenDetail.denom);
         }
@@ -221,3 +225,4 @@ export class TokenDetailComponent implements OnInit {
     });
   }
 }
+

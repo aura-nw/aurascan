@@ -210,6 +210,10 @@ export class ContractService extends CommonService {
             symbol
             name
           }
+          erc721_contract {
+            symbol
+            name
+          }
           evm_contract_verifications(limit: 1, where: {status: {_eq:"SUCCESS"}}){
             status
           }

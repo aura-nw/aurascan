@@ -35,6 +35,7 @@ import { EvmPopupShareComponent } from './evm-popup-share/evm-popup-share.compon
 import { map, switchMap } from 'rxjs';
 import { mappingMethodName } from '../../../global/global';
 import { TransactionService } from '../../../core/services/transaction.service';
+import { TOKEN_EVM_BURNT } from '../../../core/constants/token.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -50,8 +51,8 @@ export class EvmNFTDetailComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
-    { matColumnDef: 'type', headerCellDef: 'Method' },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'type', headerCellDef: 'Event' },
+    // { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
@@ -155,7 +156,7 @@ export class EvmNFTDetailComponent implements OnInit {
           name: _.get(res, 'erc721_contract.name'),
           owner: res.owner,
           creator: res.erc721_contract?.evm_smart_contract?.creator,
-          burned: res.owner?.startsWith('0x000000000'),
+          burned: res.owner === TOKEN_EVM_BURNT,
           token_id: res.token_id,
           media_info: res.media_info,
           verification_status: _.get(res, 'erc721_contract.evm_smart_contract.evm_contract_verifications[0].status'),
@@ -203,36 +204,13 @@ export class EvmNFTDetailComponent implements OnInit {
       isNFTDetail: true,
     };
 
-    // this.tokenService.getERC721Transfer(payload)
     this.tokenService
       .getERC721Transfer(payload)
       .pipe(
         switchMap((res) => {
           const erc721Activities = res?.erc721_activity;
-          const listTemp = erc721Activities
-            ?.filter((j) => j.evm_transaction?.data?.length > 0)
-            ?.map((k) => k.evm_transaction?.data?.substring(0, 8));
-          const listMethodId = _.uniq(listTemp);
-          return this.transactionService.getListMappingName(listMethodId).pipe(
-            map((element) => {
-              if (erc721Activities?.length > 0) {
-                return erc721Activities.map((tx) => {
-                  const methodId = _.get(tx, 'evm_transaction.data')?.substring(0, 8);
-                  return {
-                    ...tx,
-                    type: mappingMethodName(element, methodId),
-                  };
-                });
-              }
-              return [];
-            }),
-          );
-        }),
-      )
-      .pipe(
-        switchMap((res) => {
           let listAddr = [];
-          res.forEach((element) => {
+          erc721Activities.forEach((element) => {
             if (element.from) {
               listAddr.push(element.from);
             }
@@ -244,7 +222,7 @@ export class EvmNFTDetailComponent implements OnInit {
           return this.contractService.findEvmContractList(listAddrUnique).pipe(
             map((r) => {
               this.smartContractList = _.uniq((r?.evm_smart_contract || []).map((i) => i?.address));
-              return res;
+              return erc721Activities;
             }),
           );
         }),
@@ -263,29 +241,7 @@ export class EvmNFTDetailComponent implements OnInit {
                 element.evm_transaction.transaction.code == CodeTransaction.Success
                   ? StatusTransaction.Success
                   : StatusTransaction.Fail;
-              element['type'] = element?.type;
-              // if (
-              //   element['action'] === ModeExecuteTransaction.Approve ||
-              //   element['action'] === ModeExecuteTransaction.Revoke
-              // ) {
-              //   let msg = element?.tx.transaction_messages[0]?.content?.msg;
-              //   if (typeof msg === 'string') {
-              //     try {
-              //       msg = JSON.parse(msg);
-              //     } catch (e) { }
-              //   }
-              //   element['to_address'] = msg[Object.keys(msg)[0]]?.spender;
-              // }
-              // if (element.tx.transaction_messages[0].content?.funds?.length > 0) {
-              //   let dataDenom = this.commonService.mappingNameIBC(
-              //     element.tx.transaction_messages[0].content?.funds[0]?.denom,
-              //   );
-              //   element['price'] = balanceOf(
-              //     element.tx.transaction_messages[0].content.funds[0]?.amount,
-              //     dataDenom['decimals'],
-              //   );
-              //   element['denom'] = dataDenom['display'];
-              // }
+              element['type'] = element?.action;
             });
             this.dataSource.data = txs;
             this.pageData.length = txs?.length;
