@@ -73,9 +73,15 @@
                 </li>
                 <li
                   class="dropdown-item cursor-pointer py-2 body"
-                  [class.active]="dataType === TabsAccountLink.NftTxs"
-                  (click)="changeTypeFilter(TabsAccountLink.NftTxs)">
-                  <button type="button" class="button px-2">{{ TabsAccount.NftTxs }}</button>
+                  [class.active]="dataType === ETypeNftExport.CW721"
+                  (click)="changeTypeFilter(ETypeNftExport.CW721)">
+                  <button type="button" class="button px-2">{{ typeNftDisplay.CW721 }}</button>
+                </li>
+                <li
+                  class="dropdown-item cursor-pointer py-2 body"
+                  [class.active]="dataType === ETypeNftExport.ERC721"
+                  (click)="changeTypeFilter(ETypeNftExport.ERC721)">
+                  <button type="button" class="button px-2">{{ typeNftDisplay.ERC721 }}</button>
                 </li>
               </div>
             </ul>

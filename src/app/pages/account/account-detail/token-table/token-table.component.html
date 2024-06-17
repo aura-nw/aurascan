@@ -133,7 +133,7 @@
                 <div class="d-flex flex-column">
                   <span class="text--gray-4 caption fw-normal">Contract</span>
                   <app-name-tag
-                    [value]="element.contract_address"
+                    [value]="element.contract_address | beautyAddress"
                     *ngIf="element.contract_address !== '-'"
                     [iconContract]="true"
                     [linkRouter]="[

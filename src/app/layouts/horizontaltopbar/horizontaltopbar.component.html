@@ -17,7 +17,10 @@
               </figure>
             </a>
           </div>
-          <div class="page-title ml-2 fw-normal-mob" *ngIf="pageTitle">{{ pageTitle }}</div>
+          <div class="page-title ml-2 fw-normal-mob" *ngIf="pageTitle">
+            {{ pageTitle }}
+            <div class="d-none" [featureFlag]="'DevTest'">DEV test feature flags</div>
+          </div>
           <div class="divider divider-vertical mx-6 ml-xl-12 mr-xl-0 d-none d-lg-block" *ngIf="pageTitle"></div>
         </div>
       </div>

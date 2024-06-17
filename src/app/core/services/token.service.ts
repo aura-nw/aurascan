@@ -8,6 +8,7 @@ import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { TOKEN_EVM_BURNT } from '../constants/token.constant';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -140,28 +141,27 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListErc721Token(payload, textSearch: string = null, address: string = null): Observable<any> {
-    let queryUpdate = '';
-    if (textSearch?.length > 0) {
-      queryUpdate = `erc721_contract: { _or: [{name: {_ilike: "%${textSearch}%"}} ,  {evm_smart_contract: {address: {_in: ${address} }}}]}`;
-    }
-
-    let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
+  getListErc721Token(payload, textSearch: string = null, addressIn: string[] = []): Observable<any> {
+    let querySort = `order_by: [{erc721_stat: {${payload.sort_column}: ${payload.sort_order}_nulls_last}}, {id: desc}]`;
+    let queryWhere = `where: {_or: [{address: {_in: $addressIn}}, {name: {_ilike: "%${textSearch}%"}}]}`;
     const operationsDoc = `
-    query queryListErc721($limit: Int = 10, $offset: Int = 0) {
+    query queryListErc721($limit: Int = 10, $offset: Int = 0, $addressIn: [String!] = null) {
       ${this.envDB} {
-        list_token: erc721_stats(limit: $limit, offset: $offset ${querySort}, where: { ${queryUpdate} }) {
-          transfer_24h
-          total_activity
-          erc721_contract {
-            name
-            symbol
-            evm_smart_contract {
-              address
-            }
+        list_token: erc721_contract(
+          limit: $limit
+          offset: $offset
+          ${querySort}
+          ${queryWhere}
+        ) {
+          address
+          name
+          symbol
+          erc721_stat {
+            total_activity
+            transfer_24h
           }
         }
-        total_token: erc721_stats_aggregate (where: { ${queryUpdate} }) {
+        total_token: erc721_contract_aggregate (${queryWhere}) {
           aggregate {
             count
           }
@@ -175,6 +175,7 @@ export class TokenService extends CommonService {
         variables: {
           limit: payload.limit || 20,
           offset: payload.offset || 0,
+          addressIn: addressIn,
         },
         operationName: 'queryListErc721',
       })
@@ -271,7 +272,7 @@ export class TokenService extends CommonService {
         erc721_token(
           limit: $limit
           offset: $offset
-          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _nilike: "0x000000000%"}}
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _neq: "${TOKEN_EVM_BURNT}"}}
           order_by: [{last_updated_height: desc}, {id: desc}]
         ) {
           id
@@ -282,7 +283,7 @@ export class TokenService extends CommonService {
           created_at
         }
         erc721_token_aggregate(
-          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _nilike: "0x000000000%"}}
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, token_id: {_eq: $tokenId}, owner: {_eq: $owner, _neq: "${TOKEN_EVM_BURNT}"}}
         ) {
           aggregate {
             count
@@ -334,7 +335,7 @@ export class TokenService extends CommonService {
     query queryCountTotalTokenErc721($contract_address: String) {
       ${this.envDB} {
         erc721_token_aggregate(
-          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, owner: {_nilike: "0x000000000%"}}
+          where: {erc721_contract: {evm_smart_contract: {address: {_eq: $contract_address}}}, owner: {_neq: "${TOKEN_EVM_BURNT}"}}
         ) {
           aggregate {
             count
@@ -423,7 +424,7 @@ export class TokenService extends CommonService {
         view_count_holder_erc721(
           limit: $limit
           offset: $offset
-          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_nilike: "0x000000000%"}}
+          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_neq: "${TOKEN_EVM_BURNT}"}}
           order_by: {count: desc}
         ) {
           count
@@ -431,7 +432,7 @@ export class TokenService extends CommonService {
           owner
         }
         view_count_holder_erc721_aggregate(
-          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_nilike: "0x000000000%"}}
+          where: {erc721_contract_address: {_eq: $contract_address}, owner: {_neq: "${TOKEN_EVM_BURNT}"}}
         ) {
           aggregate {
             count

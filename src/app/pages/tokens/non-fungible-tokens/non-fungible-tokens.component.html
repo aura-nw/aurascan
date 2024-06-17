@@ -92,15 +92,11 @@
                 <div class="d-flex">
                   <div>
                     <a
-                      [routerLink]="[
-                        '/token',
-                        element.cw721_contract?.smart_contract?.address ||
-                          element?.erc721_contract?.evm_smart_contract?.address
-                      ]"
+                      [routerLink]="['/token', element.cw721_contract?.smart_contract?.address || element?.address]"
                       class="text--primary text-nowrap">
-                      {{ element.cw721_contract?.name || element.erc721_contract?.name | ellipsis: 30 }}
-                      <span *ngIf="element.cw721_contract?.symbol || element.erc721_contract?.symbol"
-                        >({{ element.cw721_contract?.symbol || element.erc721_contract?.symbol | ellipsis: 10 }})</span
+                      {{ element.cw721_contract?.name || element?.name | ellipsis: 30 }}
+                      <span *ngIf="element.cw721_contract?.symbol || element?.symbol"
+                        >({{ element.cw721_contract?.symbol || element?.symbol | ellipsis: 10 }})</span
                       >
                     </a>
                     <div class="body-02 fw-normal caption-mob mb-0 text--gray-6 pr-5 desc">
@@ -114,18 +110,11 @@
               <th mat-header-cell *matHeaderCellDef>Contract</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <app-name-tag
-                  [value]="
-                    element.cw721_contract?.smart_contract?.address ||
-                    element.erc721_contract?.evm_smart_contract?.address
-                  "
-                  [iconContract]="
-                    element.cw721_contract?.smart_contract?.address ||
-                    element.erc721_contract?.evm_smart_contract?.address
-                  "
+                  [value]="element.cw721_contract?.smart_contract?.address || element.address | beautyAddress"
+                  [iconContract]="element.cw721_contract?.smart_contract?.address || element?.address"
                   [linkRouter]="[
                     element.cw721_contract ? '/contracts' : '/evm-contracts',
-                    element.cw721_contract?.smart_contract?.address ||
-                      element.erc721_contract?.evm_smart_contract?.address
+                    element.cw721_contract?.smart_contract?.address || element?.address
                   ]">
                 </app-name-tag>
               </td>
@@ -133,14 +122,16 @@
             <ng-container matColumnDef="total_activity">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Activities</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                {{ element.total_activity | number }}
+                <ng-container *ngIf="element.total_activity || element?.erc721_stat?.total_activity; else noData">
+                  {{ element.total_activity || element?.erc721_stat?.total_activity | number }}
+                </ng-container>
               </td>
             </ng-container>
             <ng-container matColumnDef="transfer_24h">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Transfers (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <ng-container *ngIf="element.transfer_24h; else noData">
-                  {{ element.transfer_24h | number }}
+                <ng-container *ngIf="element.transfer_24h || element?.erc721_stat?.transfer_24h; else noData">
+                  {{ element.transfer_24h || element?.erc721_stat?.transfer_24h | number }}
                 </ng-container>
               </td>
             </ng-container>

@@ -129,6 +129,9 @@
                   <ng-container *ngSwitchCase="'time-distance'">
                     {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
                   </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'arrow'">
+                    <img [src]="'assets/icons/icons-svg/basic/arrow-circle-right.svg'" alt="" class="mr-1" />
+                  </ng-container>
                   <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                 </ng-container>
               </td>
