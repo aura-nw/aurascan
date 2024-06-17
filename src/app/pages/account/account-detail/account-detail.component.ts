@@ -5,7 +5,6 @@ import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import BigNumber from 'bignumber.js';
-import { isBefore, isEqual } from 'date-fns';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -130,45 +129,22 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.checkWatchList();
 
         const payload = {
-          address: accountAddress,
+          cosmos_address: accountAddress,
+          evm_address: accountEvmAddress,
         };
-        // 1: cả 2 đều k có ===> hiển thị như bt
-        // 2: cosmos không có => hiển thị warning cho cosmos
-        // 3: evm không có => hiển thị warning cho evm
-        // 4: cả 2 đều có và timestamp bằng nhau thì hiển thị như bt
-        // 5: cả 2 đều có check theo timestamp thằng nào mới hơn thì hiển thị warning cho thằng đó
-        this.userService.getFirstTxFromAddress(payload).subscribe({
-          next: (data: { first_cosmos_tx?: [{ timestamp: string }]; first_evm_tx?: [{ timestamp: string }] } = {}) => {
-            const { first_cosmos_tx, first_evm_tx } = data || {};
-            const firstCosmosTxTimestamp = first_cosmos_tx?.[0]?.timestamp;
-            const firstEvmTxTimestamp = first_evm_tx?.[0]?.timestamp;
-
-            const hasCosmosTx = firstCosmosTxTimestamp !== undefined;
-            const hasEvmTx = firstEvmTxTimestamp !== undefined;
-
-            if ((!hasCosmosTx && !hasEvmTx) || firstCosmosTxTimestamp === firstEvmTxTimestamp) return;
-
-            if (!hasCosmosTx) {
+        this.userService.getLatestCosmosAndEvmTxOfAddress(payload).subscribe({
+          next: (data: { cosmos_tx?: object[]; evm_tx?: object[] } = {}) => {
+            const { cosmos_tx, evm_tx } = data;
+            if(evm_tx?.length){
               this.firstTransactionFrom = 'evm';
               this.tooltipCosmosText = accountAddress;
               return;
             }
 
-            if (!hasEvmTx) {
+            if(cosmos_tx?.length){
               this.firstTransactionFrom = 'cosmos';
               this.tooltipEvmText = accountEvmAddress;
               return;
-            }
-
-            const cosmosTimestamp = new Date(firstCosmosTxTimestamp);
-            const evmTimestamp = new Date(firstEvmTxTimestamp);
-
-            if (isBefore(cosmosTimestamp, evmTimestamp)) {
-              this.firstTransactionFrom = 'cosmos';
-              this.tooltipEvmText = accountEvmAddress;
-            } else {
-              this.firstTransactionFrom = 'evm';
-              this.tooltipCosmosText = accountAddress;
             }
           },
         });
