@@ -559,6 +559,9 @@
                         <span (click)="expandData(data)" class="cursor-pointer">Collapse all</span>
                       </div>
                     </div>
+                    <ng-container *ngSwitchCase="'arrow'">
+                      <img [src]="'assets/icons/icons-svg/basic/arrow-circle-right.svg'" alt="" />
+                    </ng-container>
                     <div *ngSwitchCase="'toAddress'">
                       <ng-container *ngFor="let item of data.arrEvent; let index = index">
                         <div
