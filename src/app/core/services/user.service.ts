@@ -136,28 +136,24 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getLatestCosmosAndEvmTxOfAddress(payload) {
-    const operationsDoc = `
-      query QueryLatestCosmosAndEvmTxOfAddress($cosmos_address: String, $evm_address: String) {
+  getAccountInfoOfAddress(payload) {
+  const operationsDoc = `
+    query QueryAccountInfo($address: String!) {
       ${this.envDB} {
-        cosmos_tx: transaction_message(
-          limit: 1
-          where: {sender: {_eq: $cosmos_address}, type: {_nregex: "(evm)"}}
-        ) {
-          id
-          sender
-        }
-        evm_tx: evm_transaction(limit: 1, where: {from: {_eq: $evm_address}}) {
-          from
+        account(where: {address: {_eq: $address}}){
+          type
+          sequence
+          pubkey
         }
       }
     }
-    `
+    `;
+
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: payload,
-        operationName: 'QueryLatestCosmosAndEvmTxOfAddress',
+        operationName: 'QueryAccountInfo',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : {})));
   }
