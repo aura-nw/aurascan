@@ -136,33 +136,28 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getFirstTxFromAddress(payload) {
+  getLatestCosmosAndEvmTxOfAddress(payload) {
     const operationsDoc = `
-    query QueryFirstTxFromAddress($address: String!) {
-       ${this.envDB} {
-        first_cosmos_tx: transaction(
-          where: {transaction_messages: {type: {_nregex: "(evm)"}, sender: { _eq: $address}}}
+      query QueryLatestCosmosAndEvmTxOfAddress($cosmos_address: String, $evm_address: String) {
+      ${this.envDB} {
+        cosmos_tx: transaction_message(
           limit: 1
-          order_by: {timestamp: asc}
+          where: {sender: {_eq: $cosmos_address}, type: {_nregex: "(evm)"}}
         ) {
-          timestamp
+          id
+          sender
         }
-        first_evm_tx: transaction(
-          where: {transaction_messages: {type: {_regex: "(evm)"}, sender: { _eq: $address}}}
-          limit: 1
-          order_by: {timestamp: asc}
-        ) {
-          timestamp
+        evm_tx: evm_transaction(limit: 1, where: {from: {_eq: $evm_address}}) {
+          from
         }
       }
     }
-    `;
-
+    `
     return this.http
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: payload,
-        operationName: 'QueryFirstTxFromAddress',
+        operationName: 'QueryLatestCosmosAndEvmTxOfAddress',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : {})));
   }
