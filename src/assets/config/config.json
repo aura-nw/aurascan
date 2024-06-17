@@ -14,13 +14,7 @@
   },
   "chainConfig": {
     "stakingTime": "86400",
-<<<<<<< Updated upstream
     "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
-=======
-    "excludedAddresses": [
-      "aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"
-    ],
->>>>>>> Stashed changes
     "blockTime": 5000,
     "quotaSetPrivateName": 10,
     "quotaSetWatchList": 10,
@@ -67,13 +61,7 @@
         "average": 0.0025,
         "high": 0.004
       },
-<<<<<<< Updated upstream
       "features": ["ibc-transfer"],
-=======
-      "features": [
-        "ibc-transfer"
-      ],
->>>>>>> Stashed changes
       "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
       "logo": "https://i.imgur.com/zi0mTYb.png",
       "explorer": "https://explorer.dev.aura.network/",
@@ -83,13 +71,7 @@
       "name": "Aura EVM Devnet",
       "chain": "Aura-Dev",
       "rpc": "https://jsonrpc.dev.aura.network",
-<<<<<<< Updated upstream
       "faucets": [""],
-=======
-      "faucets": [
-        ""
-      ],
->>>>>>> Stashed changes
       "nativeCurrency": {
         "name": "test-Aura",
         "symbol": "tAURA",
@@ -159,13 +141,7 @@
           "name": "Aurascan",
           "description": "Aura Network Explorer",
           "url": "https://explorer.dev.aurascan.io/",
-<<<<<<< Updated upstream
           "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
-=======
-          "icons": [
-            "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
-          ]
->>>>>>> Stashed changes
         }
       }
     }
