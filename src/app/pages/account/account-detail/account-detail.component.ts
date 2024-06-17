@@ -16,7 +16,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
+import { ACCOUNT_TYPE, ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
@@ -68,7 +68,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   ENameTag = ENameTag;
   accountEvmAddress = '';
-  firstTransactionFrom: 'cosmos' | 'evm' | '';
+  transactionFrom: 'cosmos' | 'evm' | '';
   tooltipCosmosText: string;
   tooltipEvmText: string;
   chainInfo = this.environmentService.chainInfo;
@@ -129,20 +129,24 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.checkWatchList();
 
         const payload = {
-          cosmos_address: accountAddress,
-          evm_address: accountEvmAddress,
+          address: accountAddress,
         };
-        this.userService.getLatestCosmosAndEvmTxOfAddress(payload).subscribe({
-          next: (data: { cosmos_tx?: object[]; evm_tx?: object[] } = {}) => {
-            const { cosmos_tx, evm_tx } = data;
-            if(evm_tx?.length){
-              this.firstTransactionFrom = 'evm';
+        this.userService.getAccountInfoOfAddress(payload).subscribe({
+          next: (data: { account?: {type?: string; sequence?: number; pubkey?: object}[] } = {}) => {
+            const { account } = data;
+
+            if(!account?.length) return;
+  
+            const { type, sequence, pubkey = {} } = account[0] || {};
+
+            if (type !== ACCOUNT_TYPE || !sequence) return;
+
+            if(!Object.keys(pubkey)?.length){
+              this.transactionFrom = 'evm';
               this.tooltipCosmosText = accountAddress;
               return;
-            }
-
-            if(cosmos_tx?.length){
-              this.firstTransactionFrom = 'cosmos';
+            }else {
+              this.transactionFrom = 'cosmos';
               this.tooltipEvmText = accountEvmAddress;
               return;
             }

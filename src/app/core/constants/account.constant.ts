@@ -31,3 +31,5 @@ export const TABS_TITLE_ACCOUNT = [
   { label: TabsAccount.FtsTxs, value: TabsAccountLink.FtsTxs },
   { label: TabsAccount.NftTxs, value: TabsAccountLink.NftTxs },
 ];
+
+export const ACCOUNT_TYPE = "/cosmos.auth.v1beta1.BaseAccount";
