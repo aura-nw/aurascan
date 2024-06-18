@@ -16,7 +16,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { ACCOUNT_TYPE, ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
+import { COSMOS_ACCOUNT_MESSAGE_TYPE, ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
@@ -68,7 +68,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   ENameTag = ENameTag;
   accountEvmAddress = '';
-  transactionFrom: 'cosmos' | 'evm' | '';
+  accountType: 'cosmos' | 'evm' | '';
   tooltipCosmosText: string;
   tooltipEvmText: string;
   chainInfo = this.environmentService.chainInfo;
@@ -139,14 +139,14 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   
             const { type, sequence, pubkey = {} } = account[0] || {};
 
-            if (type !== ACCOUNT_TYPE || !sequence) return;
+            if (type !== COSMOS_ACCOUNT_MESSAGE_TYPE || !sequence) return;
 
             if(!Object.keys(pubkey)?.length){
-              this.transactionFrom = 'evm';
+              this.accountType = 'evm';
               this.tooltipCosmosText = accountAddress;
               return;
             }else {
-              this.transactionFrom = 'cosmos';
+              this.accountType = 'cosmos';
               this.tooltipEvmText = accountEvmAddress;
               return;
             }

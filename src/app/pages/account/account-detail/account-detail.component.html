@@ -17,8 +17,8 @@
     <div class="d-lg-flex align-items-center mb-lg-2 mb-3 mt-3 body-01 body-mob">
       <div class="text--gray-4 title-address mb-1 mb-lg-0">Cosmos Address:</div>
       <span [copyBtn]="accountAddress" [tooltipText]="tooltipCosmosText" class="break-word">
-        <span *ngIf="transactionFrom !== 'evm'">{{ accountAddress }}</span>
-        <div *ngIf="transactionFrom && transactionFrom !== 'cosmos'" class="warning">
+        <span *ngIf="accountType !== 'evm'">{{ accountAddress }}</span>
+        <div *ngIf="accountType && accountType !== 'cosmos'" class="warning">
           <img class="warning-icon" [src]="'assets/icons/icons-svg/color/warning.svg' | imageS3" alt="warning">
           <span>This Cosmos address is unable to interact with CosWasm address</span>
         </div>
@@ -28,8 +28,8 @@
     <div class="d-lg-flex align-items-center mb-4 body-01 body-mob" *ngIf="accountEvmAddress">
       <div class="text--gray-4 title-address mb-1 mb-lg-0">EVM Address:</div>
       <span [copyBtn]="accountEvmAddress" [tooltipText]="tooltipEvmText" class="break-word">
-        <span *ngIf="transactionFrom !== 'cosmos'">{{ accountEvmAddress | beautyAddress }}</span>
-        <div *ngIf="transactionFrom && transactionFrom !== 'evm'" class="warning">
+        <span *ngIf="accountType !== 'cosmos'">{{ accountEvmAddress | beautyAddress }}</span>
+        <div *ngIf="accountType && accountType !== 'evm'" class="warning">
           <img class="warning-icon" [src]="'assets/icons/icons-svg/color/warning.svg' | imageS3" alt="warning">
           <span>This EVM address is unable to interact with the Aura EVM contract.</span>
         </div>
