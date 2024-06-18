@@ -235,4 +235,8 @@ export class WriteContractComponent implements OnInit {
       }
     });
   }
+
+  disconnect() {
+    this.walletService.disconnect();
+  }
 }
