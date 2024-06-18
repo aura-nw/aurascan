@@ -142,7 +142,9 @@ export class TokenService extends CommonService {
   }
 
   getListErc721Token(payload, textSearch: string = null, addressIn: string[] = []): Observable<any> {
-    let querySort = `order_by: [{erc721_stat: {${payload.sort_column}: ${payload.sort_order}_nulls_last}}, {id: desc}]`;
+    let querySort = `order_by: [{erc721_stat: {${payload.sort_column}: ${
+      payload.sort_order === 'asc' ? 'asc_nulls_first' : 'desc_nulls_last'
+    } }}, {id: desc}]`;
     let queryWhere = `where: {_or: [{address: {_in: $addressIn}}, {name: {_ilike: "%${textSearch}%"}}]}`;
     const operationsDoc = `
     query queryListErc721($limit: Int = 10, $offset: Int = 0, $addressIn: [String!] = null) {
