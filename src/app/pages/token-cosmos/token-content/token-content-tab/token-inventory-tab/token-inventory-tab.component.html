@@ -53,7 +53,7 @@
                 </a>
                 <app-name-tag
                   *ngIf="!breakpoint.value.matches"
-                  class="small-text text--primary hover-link mt-1"
+                  class="small-text text--primary hover-link"
                   [value]="item.owner"
                   [linkRouter]="['/token', 'cw721', item.contract_address]"
                   [linkParams]="{ a: item.owner }">
