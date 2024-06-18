@@ -136,23 +136,14 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getFirstTxFromAddress(payload) {
-    const operationsDoc = `
-    query QueryFirstTxFromAddress($address: String!) {
-       ${this.envDB} {
-        first_cosmos_tx: transaction(
-          where: {transaction_messages: {type: {_nregex: "(evm)"}, sender: { _eq: $address}}}
-          limit: 1
-          order_by: {timestamp: asc}
-        ) {
-          timestamp
-        }
-        first_evm_tx: transaction(
-          where: {transaction_messages: {type: {_regex: "(evm)"}, sender: { _eq: $address}}}
-          limit: 1
-          order_by: {timestamp: asc}
-        ) {
-          timestamp
+  getAccountInfoOfAddress(payload) {
+  const operationsDoc = `
+    query QueryAccountInfo($address: String!) {
+      ${this.envDB} {
+        account(where: {address: {_eq: $address}}){
+          type
+          sequence
+          pubkey
         }
       }
     }
@@ -162,7 +153,7 @@ export class UserService {
       .post<any>(this.graphUrl, {
         query: operationsDoc,
         variables: payload,
-        operationName: 'QueryFirstTxFromAddress',
+        operationName: 'QueryAccountInfo',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : {})));
   }

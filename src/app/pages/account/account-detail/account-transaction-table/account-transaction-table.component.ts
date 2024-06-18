@@ -953,3 +953,4 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     return this.smartContractList.filter((i) => i === addr).length > 0;
   }
 }
+
