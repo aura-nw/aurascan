@@ -8,7 +8,7 @@ import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { TOKEN_EVM_BURNT } from '../constants/token.constant';
+import { SOCIAL_MEDIA, TOKEN_EVM_BURNT } from '../constants/token.constant';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -963,5 +963,19 @@ export class TokenService extends CommonService {
         operationName: 'queryListTxsERC20',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  mappingSocialProfiles(socialProfiles: { [key: string]: string }) {
+    if (!socialProfiles) return [];
+
+    return Object.keys(socialProfiles)
+      ?.filter((key) => socialProfiles[key])
+      ?.map((key) => {
+        return {
+          name: SOCIAL_MEDIA[key]?.name,
+          icon: SOCIAL_MEDIA[key]?.icon,
+          url: socialProfiles[key],
+        };
+      });
   }
 }
