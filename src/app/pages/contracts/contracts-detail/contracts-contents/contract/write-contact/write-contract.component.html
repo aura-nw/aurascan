@@ -1,5 +1,9 @@
 <ng-container *ngIf="root; else noValues">
-  <div class="d-flex justify-content-between align-items-center">
+  <div
+    [ngClass]="{
+      'd-flex justify-content-between align-items-center':
+        !environmentService.isMobile || (environmentService.isMobile && !userAddress)
+    }">
     <div class="my-t mb-1 mb-lg-3 small-text d-flex align-items-center box-connect-wallet">
       <button
         (click)="connectWallet()"
@@ -28,7 +32,9 @@
         </div>
       </ng-container>
     </div>
-    <div class="caption fw-normal-mob d-flex align-items-center">
+    <div
+      class="caption fw-normal-mob d-flex align-items-center"
+      [ngClass]="{ 'justify-content-end': environmentService.isMobile && userAddress }">
       <span class="cursor-pointer text--primary" (click)="expandMenu()">
         <ng-container *ngIf="!isExpand">Expand all</ng-container>
         <ng-container *ngIf="isExpand">Collapse all</ng-container>
