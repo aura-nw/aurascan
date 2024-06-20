@@ -7,12 +7,22 @@ export class HighlightFunctionPipe implements PipeTransform {
   transform(value: string) {
     if (!value) return null;
     let replacedValue = value;
-    const parametersPattern = /\(([^)]+)\)/;
-    const parametersMatch = value.match(parametersPattern);
-    const parameters = parametersMatch ? parametersMatch[1]?.split(',')?.map((param) => param?.trim()) : [];
 
-    parameters.map((item) => {
-      const [dataType, modifier, name] = item?.split(' ') || [];
+    const parametersPattern = /\([^)]+\)/g;
+    const matches = value.match(parametersPattern);
+
+    if (!matches) {
+      return [];
+    }
+    const parameters = matches
+      .map((match) => match.replace(/[()]/g, '').trim())
+      ?.join(', ')
+      ?.split(',');
+
+    parameters.forEach((item) => {
+      const params = item?.trim();
+      const [dataType, modifier, name] = params?.split(' ') || [];
+
       const dataTypeHTML = dataType
         ? `<span style="color: var(--aura-green-3); font-family: inherit">${dataType}</span>`
         : '';
@@ -23,9 +33,14 @@ export class HighlightFunctionPipe implements PipeTransform {
         : '';
       const nameHTML = name ? `<span style="color: var(--aura-red-3); font-family: inherit">${name}</span>` : '';
 
-      replacedValue = replacedValue?.replace(item, `${dataTypeHTML} ${modifierHTML} ${nameHTML}`);
+      let html = '';
+      if (dataTypeHTML) html += `${dataTypeHTML}`;
+      if (modifierHTML) html += ` ${modifierHTML}`;
+      if (nameHTML) html += `${name ? ' ' : ''}${nameHTML}`;
+      if (!html) return null;
+
+      replacedValue = replacedValue?.replace(new RegExp(`\\b${params}\\b`), html);
     });
     return this.sanitizer.bypassSecurityTrustHtml(replacedValue);
   }
 }
-
