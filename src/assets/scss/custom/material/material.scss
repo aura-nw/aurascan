@@ -9,7 +9,7 @@ $custom-typography: mat-typography-config(
 @include angular-material-typography($custom-typography);
 * {
   font-family: 'Inter', Roboto, 'Helvetica Neue', sans-serif;
-  font-variant-ligatures: no-contextual !important;
+  font-variant-ligatures: no-common-ligatures;
 }
 
 .mat-table {
