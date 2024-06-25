@@ -98,7 +98,7 @@ export class TokenDetailComponent implements OnInit {
                 token.officialSite = tokenMarket?.officialSite;
                 token.overviewInfo = tokenMarket?.overviewInfo;
                 token.socialProfiles = this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles);
-                this.tokenDetail = token;                
+                this.tokenDetail = token;
               });
           }
         },
@@ -167,7 +167,7 @@ export class TokenDetailComponent implements OnInit {
           verify_text: token.verifyText,
           socialProfiles: this.tokenService.mappingSocialProfiles(token?.socialProfiles),
         };
-        
+
         if (this.contractAddress !== this.chainInfo?.currencies[0].coinMinimalDenom) {
           this.getInfoTokenIBC(this.tokenDetail.denom);
         }
@@ -225,4 +225,3 @@ export class TokenDetailComponent implements OnInit {
     });
   }
 }
-

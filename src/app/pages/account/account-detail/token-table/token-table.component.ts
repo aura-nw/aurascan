@@ -98,10 +98,13 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
-    const { accountAddress } = transferAddress(this.chainInfo.bech32Config.bech32PrefixAccAddr, this.address);
-
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      this.address,
+    );
     const payload = {
       account_address: accountAddress?.toLowerCase(),
+      evm_address: accountEvmAddress?.toLowerCase(),
       keyword: this.textSearch,
     };
 
@@ -189,6 +192,7 @@ export class TokenTableComponent implements OnChanges {
             this.pageData.length = 0;
             this.dataSource.data = [];
           }
+
           this.totalAssets.emit(this.pageData?.length || 0);
           this.totalValue.emit(res?.totalValue);
           this.setTokenFilter(this.listTokenType[0]);
