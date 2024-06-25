@@ -1,5 +1,7 @@
 .box-token-info {
   table.aura-basic-table {
+    table-layout: fixed;
+    
     tr,
     td {
       color: var(--aura-contract);
