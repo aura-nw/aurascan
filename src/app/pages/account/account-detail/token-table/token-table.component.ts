@@ -2,15 +2,25 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { Contract } from 'ethers';
 import * as _ from 'lodash';
 import { COIN_TOKEN_TYPE, PAGE_EVENT, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
-import { ETokenCoinType, MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import {
+  ETokenCoinType,
+  MAX_LENGTH_SEARCH_TOKEN,
+  USDC_ADDRESS,
+  USDC_COIN_ID,
+  USDC_TOKEN,
+} from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { getEthersProvider } from 'src/app/core/utils/ethers';
+import { ERC20_ABI } from './ABI/erc20-abi';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-token-table',
@@ -86,6 +96,7 @@ export class TokenTableComponent implements OnChanges {
 
   constructor(
     private accountService: AccountService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     private nameTagService: NameTagService,
@@ -98,8 +109,10 @@ export class TokenTableComponent implements OnChanges {
   }
 
   getListToken() {
-    const { accountAddress } = transferAddress(this.chainInfo.bech32Config.bech32PrefixAccAddr, this.address);
-
+    const { accountAddress, accountEvmAddress } = transferAddress(
+      this.chainInfo.bech32Config.bech32PrefixAccAddr,
+      this.address,
+    );
     const payload = {
       account_address: accountAddress?.toLowerCase(),
       keyword: this.textSearch,
@@ -141,7 +154,7 @@ export class TokenTableComponent implements OnChanges {
       this.dataSource.data = [...searchList];
     } else {
       this.accountService.getAssetCW20ByOwner(payload).subscribe({
-        next: (res) => {
+        next: async (res) => {
           let data: any;
           if (res?.data?.length > 0) {
             let lstToken = _.get(res, 'data').map((element) => {
@@ -185,6 +198,11 @@ export class TokenTableComponent implements OnChanges {
             this.pageData.length = 0;
             this.dataSource.data = [];
           }
+          const USDC = await this.getUSDCToken(accountEvmAddress.toLowerCase());
+          const dataSource = this.dataSource.data;
+          dataSource.push(USDC);
+          this.dataSource.data = dataSource;
+
           this.totalAssets.emit(this.pageData?.length || 0);
           this.totalValue.emit(res?.totalValue);
           this.setTokenFilter(this.listTokenType[0]);
@@ -226,5 +244,50 @@ export class TokenTableComponent implements OnChanges {
     this.textSearch = '';
     this.searchValue = '';
     this.searchToken();
+  }
+
+  createContract() {
+    try {
+      const provider = getEthersProvider(this.environmentService.etherJsonRpc);
+
+      let contract = new Contract(USDC_ADDRESS, ERC20_ABI, provider);
+      return contract;
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
+  }
+
+  async getUSDCToken(address: string) {
+    const contract = this.createContract();
+    const balance = await contract.balanceOf(address);
+    const name = await contract.name();
+    const symbol = await contract.symbol();
+    const USDCMarket = this.tokenService.tokensMarket?.find((item) => item.coinId === USDC_COIN_ID);
+
+    const token = {
+      ...USDC_TOKEN,
+      change: null,
+      isValueUp: true,
+      type: USDCMarket?.type,
+      tokenUrl: USDC_ADDRESS,
+      name: name?.toString(),
+      symbol: symbol?.toString(),
+      denom: USDCMarket?.denom,
+      decimals: USDCMarket?.decimal,
+      price: USDCMarket?.currentPrice,
+      balance: Number(balance?.toString()),
+      priceChangePercentage24h: USDCMarket?.priceChangePercentage24h,
+      value: Number(USDCMarket?.currentPrice) * Number(balance?.toString()),
+    };
+
+    token.change = token.priceChangePercentage24h;
+    if (token.change !== '-' && token.change < 0) {
+      token.isValueUp = false;
+      token.change = Number(token.change.toString().substring(1));
+    }
+
+    return token;
   }
 }
