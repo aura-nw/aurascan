@@ -26,9 +26,9 @@ export class TokenContentComponent implements OnInit {
   @Input() channelPath: any;
   @Output() hasMore = new EventEmitter<any>();
 
-  tabStaking = [TokenTab.Holders, TokenTab.Info];
-  tabIBC = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info];
-  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract, TokenTab.Info];
+  tabStaking = [TokenTab.Holders];
+  tabIBC = [TokenTab.Transfers, TokenTab.Holders];
+  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Contract];
   TABS = [];
   paramQuery = '';
@@ -97,12 +97,19 @@ export class TokenContentComponent implements OnInit {
       key: tab.key,
     }));
     this.tabsBackup = this.TABS;
-
+    
     this.route.queryParams.subscribe((params) => {
       this.paramQuery = params?.a || '';
       this.searchTemp = this.paramQuery;
       this.handleSearch();
       this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
+
+      if(!this.paramQuery) {
+        this.TABS.push({
+          key: TokenTab.Info,
+          value: 'Info',
+        },)
+      }
     });
 
     if (local.getItem(STORAGE_KEYS.IS_VERIFY_TAB) == 'true') {
