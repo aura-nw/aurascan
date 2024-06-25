@@ -211,12 +211,13 @@ export class ApiCw20TokenService {
   parseNativeToken(account, coinsMarkets) {
     const nativeId = this.env.coingecko.ids[0];
     const coinMarket = coinsMarkets.find((coin) => coin.coinId === nativeId);
+
     return {
       name: this.env.chainName,
       symbol: this.currencies.coinDenom,
       decimals: this.currencies.coinDecimals,
       denom: this.currencies.coinMinimalDenom,
-      image: this.currencies.coinImageUrl,
+      image: this.currencies.coinImageUrl || coinMarket?.image,
       contract_address: '-',
       balance: account.data.total,
       price: coinMarket?.currentPrice || 0,
