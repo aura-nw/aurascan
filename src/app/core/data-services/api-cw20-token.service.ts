@@ -136,7 +136,7 @@ export class ApiCw20TokenService {
       ...token,
       change: null,
       isValueUp: true,
-      type: USDCMarket?.type,
+      type: COIN_TOKEN_TYPE.CW20,
       tokenUrl: USDC_ADDRESS,
       denom: USDCMarket?.denom,
       decimals: USDCMarket?.decimal,
