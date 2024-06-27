@@ -1,16 +1,9 @@
 <div class="message-container text--white">
-  <div class="row mb-4 mb-lg-2 body justify-content-between justify-content-lg-start">
-    <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4 body">
-      {{ 'Method' }}
-    </div>
-    <div class="col-12 col-lg-10 text--gray-1">{{ method }}</div>
-  </div>
-
   <div
     class="row mb-3 body justify-content-between justify-content-lg-start align-items-center"
     *ngIf="transaction?.contractAddress > 0">
     <div class="col-auto col-lg-2 text--gray-4">Contract Address</div>
-    <div class="col-auto col-lg-10">
+    <div class="col-auto">
       <app-name-tag
         [value]="transaction?.contractAddress | beautyAddress"
         [fullText]="true"
@@ -18,12 +11,8 @@
         [iconContract]="true"></app-name-tag>
     </div>
   </div>
-
   <div class="d-flex flex-wrap mb-4" *ngIf="transaction?.inputData">
-    <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4 body">
-      {{ 'Input Data' }}
-    </div>
-    <div class="col-12 col-lg-10">
+    <div class="col-12">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
         <button
           class="button body-04 {{ isCreateContract ? 'text--gray-7 pe-none' : '' }}"
@@ -139,10 +128,11 @@
           <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog?.length }})</div>
           <div class="">
             <app-evm-transaction-event-log
-              *ngFor="let log of eventLog; index as idx"
-              [eventLog]="log"
+              *ngFor="let topic of topicsDecoded; let i = index"
+              [eventLog]="eventLog[i]"
               [arrTopicDecode]="arrTopicDecode"
-              [index]="idx">
+              [topicsDecoded]="topic"
+              [index]="i">
             </app-evm-transaction-event-log>
           </div>
         </div>
