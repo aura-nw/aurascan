@@ -41,9 +41,9 @@ export class EvmMessageComponent {
   isContractVerified = false;
   isCreateContract = false;
   arrTopicDecode = [];
-  interfaceCoder: Interface;
   contractAddressAbi = '';
   topicsDecoded = [];
+  abiContractData = [];
 
   constructor(
     private transactionService: TransactionService,
@@ -59,51 +59,45 @@ export class EvmMessageComponent {
       this.typeInput = this.inputDataType.ORIGINAL;
     }
     this.getMethodName(this.inputDataRaw['methodId']);
-    this.getProxyContractAbi(this.transaction?.to);
+    this.getAbiList();
   }
 
   changeType(data) {
     this.typeInput = data;
   }
 
-  getProxyContractAbi(address) {
-    this.contractAddressAbi = this.transaction?.to;
-    this.contractService.getProxyContractAbi(address).subscribe({
-      next: (res) => {
-        this.contractAddressAbi =
-          _.get(res, 'evm_smart_contract[0].evm_proxy_histories[0].implementation_contract') || this.contractAddressAbi;
-      },
-      complete: () => {
-        this.getDataDecoded();
-      },
-    });
-  }
+  getAbiList() {
+    let listContract = this.transaction.eventLog.map((i) => i.address?.toLowerCase());
+    listContract = _.uniq(listContract);
 
-  getDataDecoded() {
-    if (!this.contractAddressAbi) {
-      return;
-    }
-
-    this.transactionService.getAbiContract(this.contractAddressAbi?.toLowerCase()).subscribe((res) => {
-      if (res?.evm_contract_verification?.length > 0 && res.evm_contract_verification[0]?.abi) {
+    this.transactionService.getListAbiContract(listContract).subscribe((res) => {
+      if (res?.evm_contract_verification?.length > 0) {
         this.isContractVerified = true;
         this.isDecoded = true;
-        this.interfaceCoder = new Interface(res.evm_contract_verification[0].abi);
+        this.abiContractData = res?.evm_contract_verification.map((i) => ({
+          contractAddress: i.contract_address,
+          abi: i.abi,
+          interfaceCoder: new Interface(i.abi),
+        }));
 
-        const value = parseEther('1.0');
-        const rawData = this.interfaceCoder.parseTransaction({ data: '0x' + this.transaction?.inputData, value });
-        if (rawData?.fragment?.inputs?.length > 0) {
-          this.getListTopicDecode();
-          this.inputDataRaw['name'] =
-            this.interfaceCoder.getFunction(rawData?.fragment?.name)?.format() || rawData.name;
-          this.inputDataDecoded['name'] = rawData.name;
-          this.inputDataDecoded['params'] = rawData?.fragment?.inputs.map((item, index) => {
-            return {
-              name: item.name,
-              type: item.type,
-              value: rawData.args[index],
-            };
-          });
+        const abiInfo = this.abiContractData.find((f) => f.contractAddress === this.transaction?.to);
+        if (abiInfo.abi) {
+          const value = parseEther('1.0');
+          const rawData = abiInfo.interfaceCoder.parseTransaction({ data: '0x' + this.transaction?.inputData, value });
+          if (rawData?.fragment?.inputs?.length > 0) {
+            this.getListTopicDecode();
+
+            this.inputDataRaw['name'] =
+              abiInfo.interfaceCoder.getFunction(rawData?.fragment?.name)?.format() || rawData.name;
+            this.inputDataDecoded['name'] = rawData.name;
+            this.inputDataDecoded['params'] = rawData?.fragment?.inputs.map((item, index) => {
+              return {
+                name: item.name,
+                type: item.type,
+                value: rawData.args[index],
+              };
+            });
+          }
         }
       }
     });
@@ -113,11 +107,6 @@ export class EvmMessageComponent {
     this.transaction.eventLog.forEach((element, index) => {
       let arrTopicTemp = element?.evm_signature_mapping_topic || [];
       try {
-        const paramsDecode = this.interfaceCoder.parseLog({
-          topics: element.topics?.filter((f) => f),
-          data: `0x${this.transaction?.inputData}`,
-        });
-
         let decoded = [
           {
             index: 0,
@@ -125,28 +114,38 @@ export class EvmMessageComponent {
             value: element.topics[0],
           },
         ];
-        
-        if (paramsDecode?.fragment?.inputs?.length > 0) {
-          const param = paramsDecode?.fragment?.inputs.map((item, index) => {
-            return {
-              index: index + 1,
-              name: item.name,
-              type: item.type,
-              isAllowSwitchDecode: true,
-              value: element.topics[index + 1],
-              decode: paramsDecode.args[index]?.toString(),
-            };
+
+        const abiInfo = this.abiContractData.find((f) => f.contractAddress === element.address);
+        if (abiInfo.abi) {
+          console.log(`0x${element.data || this.transaction?.inputData}`, element.data, this.transaction?.inputData);
+          const paramsDecode = abiInfo.interfaceCoder.parseLog({
+            topics: element.topics?.filter((f) => f),
+            data: `0x${element.data || this.transaction?.inputData}`,
           });
-          decoded = [...decoded, ...param];
+
+          if (paramsDecode?.fragment?.inputs?.length > 0) {
+            const param = paramsDecode?.fragment?.inputs.map((item, idx) => {
+              return {
+                index: index + 1,
+                name: item.name,
+                type: item.type,
+                isAllowSwitchDecode: true,
+                value: element.topics[index + 1],
+                decode: paramsDecode.args[index]?.toString(),
+              };
+            });
+            console.log('param-', index, ': ', param);
+            decoded = [...decoded, ...param];
+          }
         }
-        
         this.topicsDecoded[index] = decoded;
       } catch (e) {
+        console.log(e);
       }
 
       this.arrTopicDecode[index] = arrTopicTemp;
-      
     });
+    this.arrTopicDecode = [...this.arrTopicDecode];
   }
 
   getMethodName(methodId) {
