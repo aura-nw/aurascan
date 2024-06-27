@@ -43,6 +43,7 @@ export class EvmMessageComponent {
   arrTopicDecode = [];
   interfaceCoder: Interface;
   contractAddressAbi = '';
+  topicsDecoded = [];
 
   constructor(
     private transactionService: TransactionService,
@@ -112,16 +113,40 @@ export class EvmMessageComponent {
     this.transaction.eventLog.forEach((element, index) => {
       let arrTopicTemp = element?.evm_signature_mapping_topic || [];
       try {
-        const arrTemp =
-          this.interfaceCoder
-            .decodeEventLog(element.topic0, `0x${this.transaction?.inputData}`, element.topics)
-            .toArray() || [];
-        arrTopicTemp = [...this.arrTopicDecode[index], ...arrTemp];
-      } catch (e) {}
+        const paramsDecode = this.interfaceCoder.parseLog({
+          topics: element.topics?.filter((f) => f),
+          data: `0x${this.transaction?.inputData}`,
+        });
+
+        let decoded = [
+          {
+            index: 0,
+            decode: arrTopicTemp?.[0],
+            value: element.topics[0],
+          },
+        ];
+        
+        if (paramsDecode?.fragment?.inputs?.length > 0) {
+          const param = paramsDecode?.fragment?.inputs.map((item, index) => {
+            return {
+              index: index + 1,
+              name: item.name,
+              type: item.type,
+              isAllowSwitchDecode: true,
+              value: element.topics[index + 1],
+              decode: paramsDecode.args[index]?.toString(),
+            };
+          });
+          decoded = [...decoded, ...param];
+        }
+        
+        this.topicsDecoded[index] = decoded;
+      } catch (e) {
+      }
 
       this.arrTopicDecode[index] = arrTopicTemp;
+      
     });
-    this.arrTopicDecode = [...this.arrTopicDecode]
   }
 
   getMethodName(methodId) {
