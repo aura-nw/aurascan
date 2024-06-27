@@ -100,4 +100,11 @@
   ::-webkit-scrollbar {
     height: 6px;
   }
+
+  .memo {
+    min-height: 160px;
+    height: max-content;
+    width: 100%;
+    background-color: var(--aura-gray-9);
+  }
 }
