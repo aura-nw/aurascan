@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-evm-transaction-event-log',
@@ -8,6 +8,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 })
 export class EvmTransactionEventLogComponent implements OnInit {
   @Input() arrTopicDecode;
+  @Input() topicsDecoded;
   @Input() eventLog: {
     id: number;
     contractName?: string;
@@ -26,4 +27,3 @@ export class EvmTransactionEventLogComponent implements OnInit {
     }
   }
 }
-
