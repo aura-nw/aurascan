@@ -24,6 +24,7 @@ export class EvmMessageComponent {
       data: string;
     }[];
     data: string;
+    dataDecoded?: string;
   }[];
 
   inputDataType = {
@@ -133,13 +134,13 @@ export class EvmMessageComponent {
                 isAllowSwitchDecode: true,
                 value: element.topics[idx + 1],
                 decode: paramsDecode.args[idx]?.toString(),
+                indexed: item.indexed,
               };
             });
-            console.log('param-', index, ': ', param);
+            const dataDecoded = param.filter(f=> !f.indexed).map(i=> i.decode).join(", ");
+            element.dataDecoded = dataDecoded;
             decoded = [...decoded, ...param];
           }
-          const dataDecoded = abiInfo?.interfaceCoder.decodeEventLog(paramsDecode?.name, `0x${element.data}`);
-          console.log("data decoded",dataDecoded, paramsDecode);
         }
         this.topicsDecoded[index] = decoded;
 
