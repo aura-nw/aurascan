@@ -95,9 +95,6 @@ export class TokenDetailComponent implements OnInit {
                 token.supplyAmount = BigNumber(token.cw20_contract?.total_supply).dividedBy(
                   BigNumber(10).pow(token.decimals),
                 );
-                token.officialSite = tokenMarket?.officialSite;
-                token.overviewInfo = tokenMarket?.overviewInfo;
-                token.socialProfiles = this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles);
                 this.tokenDetail = token;
               });
           }
