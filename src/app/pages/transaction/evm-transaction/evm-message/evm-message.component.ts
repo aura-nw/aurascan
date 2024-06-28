@@ -119,9 +119,13 @@ export class EvmMessageComponent {
                 name: item.name,
                 type: item.type,
                 value: paramsDecode.args[idx],
+                indexed: item.indexed
               };
             });
-            console.log('param-', index, ': ', param);
+            const decodeData = param.filter(f=> !f.indexed).map(i=> i.value).join(",");
+
+            console.log('param topic-', index, ': ', param.filter(f=> f.indexed));
+            console.log('param data-', index, ': ', decodeData );
           }
         }
       } catch (e) {}
