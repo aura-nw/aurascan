@@ -43,7 +43,7 @@
         <app-decode-message
           index="Value" 
           [value]="eventLog.data" 
-          decode="wait for minutes"
+          [decode]="eventLog.dataDecoded"
           [isAllowSwitchDecode]="true"
           [isHighlight]="true"></app-decode-message>
       </div>
