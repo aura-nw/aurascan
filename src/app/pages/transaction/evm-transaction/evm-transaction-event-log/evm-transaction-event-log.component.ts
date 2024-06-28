@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
   styleUrls: ['./evm-transaction-event-log.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EvmTransactionEventLogComponent implements OnInit {
+export class EvmTransactionEventLogComponent {
   @Input() arrTopicDecode;
   @Input() topicsDecoded;
   @Input() eventLog: {
@@ -20,10 +20,4 @@ export class EvmTransactionEventLogComponent implements OnInit {
     data: string;
   };
   @Input() index;
-
-  ngOnInit(): void {
-    if (this.eventLog?.data) {
-      this.eventLog['data'] = this.eventLog?.data.replace('\\x', '');
-    }
-  }
 }

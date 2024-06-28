@@ -117,28 +117,32 @@ export class EvmMessageComponent {
 
         const abiInfo = this.abiContractData.find((f) => f.contractAddress === element.address);
         if (abiInfo.abi) {
-          console.log(`0x${element.data || this.transaction?.inputData}`, element.data, this.transaction?.inputData);
+          element.data = element?.data?.replace('\\x', '');
           const paramsDecode = abiInfo.interfaceCoder.parseLog({
             topics: element.topics?.filter((f) => f),
             data: `0x${element.data || this.transaction?.inputData}`,
           });
-
+          
           if (paramsDecode?.fragment?.inputs?.length > 0) {
             const param = paramsDecode?.fragment?.inputs.map((item, idx) => {
               return {
                 index: index + 1,
                 name: item.name,
                 type: item.type,
+                isLink: item.type === 'address' ? true : false,
                 isAllowSwitchDecode: true,
-                value: element.topics[index + 1],
-                decode: paramsDecode.args[index]?.toString(),
+                value: element.topics[idx + 1],
+                decode: paramsDecode.args[idx]?.toString(),
               };
             });
             console.log('param-', index, ': ', param);
             decoded = [...decoded, ...param];
           }
+          const dataDecoded = abiInfo?.interfaceCoder.decodeEventLog(paramsDecode?.name, `0x${element.data}`);
+          console.log("data decoded",dataDecoded, paramsDecode);
         }
         this.topicsDecoded[index] = decoded;
+
       } catch (e) {
         console.log(e);
       }
