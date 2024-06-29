@@ -127,7 +127,7 @@ export class EvmMessageComponent {
           if (paramsDecode?.fragment?.inputs?.length > 0) {
             const param = paramsDecode?.fragment?.inputs.map((item, idx) => {
               return {
-                index: index + 1,
+                index: idx + 1,
                 name: item.name,
                 type: item.type,
                 isLink: item.type === 'address' ? true : false,
