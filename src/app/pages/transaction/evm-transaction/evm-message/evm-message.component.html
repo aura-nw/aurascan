@@ -130,7 +130,6 @@
             <app-evm-transaction-event-log
               *ngFor="let topic of topicsDecoded; let i = index"
               [eventLog]="eventLog[i]"
-              [arrTopicDecode]="arrTopicDecode"
               [topicsDecoded]="topic"
               [index]="i">
             </app-evm-transaction-event-log>

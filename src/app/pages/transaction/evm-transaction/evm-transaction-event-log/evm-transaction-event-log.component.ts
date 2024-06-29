@@ -7,7 +7,6 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EvmTransactionEventLogComponent {
-  @Input() arrTopicDecode;
   @Input() topicsDecoded;
   @Input() eventLog: {
     id: number;

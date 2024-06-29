@@ -106,24 +106,29 @@ export class EvmMessageComponent {
 
   getListTopicDecode() {
     this.transaction.eventLog.forEach((element, index) => {
-      let arrTopicTemp = element?.evm_signature_mapping_topic || [];
       try {
-        let decoded = [
-          {
-            index: 0,
-            decode: arrTopicTemp?.[0],
-            value: element.topics[0],
-          },
-        ];
+        let decoded = [];
 
         const abiInfo = this.abiContractData.find((f) => f.contractAddress === element.address);
+
         if (abiInfo.abi) {
           element.data = element?.data?.replace('\\x', '');
           const paramsDecode = abiInfo.interfaceCoder.parseLog({
             topics: element.topics?.filter((f) => f),
             data: `0x${element.data || this.transaction?.inputData}`,
           });
-          
+
+          const params = paramsDecode?.fragment?.inputs.map((i) => `${i.type} ${i.indexed ? 'indexed' : ''} ${i.name}`);
+          const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${params.join(', ')})`;
+
+          decoded = [
+            {
+              index: 0,
+              decode: decodeTopic0,
+              value: element.topics[0],
+            },
+          ];
+
           if (paramsDecode?.fragment?.inputs?.length > 0) {
             const param = paramsDecode?.fragment?.inputs.map((item, idx) => {
               return {
@@ -137,20 +142,19 @@ export class EvmMessageComponent {
                 indexed: item.indexed,
               };
             });
-            const dataDecoded = param.filter(f=> !f.indexed).map(i=> i.decode).join(", ");
+            const dataDecoded = param
+              .filter((f) => !f.indexed)
+              .map((i) => i.decode)
+              .join(', ');
             element.dataDecoded = dataDecoded;
             decoded = [...decoded, ...param];
           }
         }
         this.topicsDecoded[index] = decoded;
-
       } catch (e) {
         console.log(e);
       }
-
-      this.arrTopicDecode[index] = arrTopicTemp;
     });
-    this.arrTopicDecode = [...this.arrTopicDecode];
   }
 
   getMethodName(methodId) {
