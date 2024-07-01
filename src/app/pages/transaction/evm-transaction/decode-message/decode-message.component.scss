@@ -1,0 +1,56 @@
+.decode-message {
+    .data{
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    .name {
+        border-radius: 6px;
+        padding: 4px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #B4B8C0;
+        border: 1px solid var(--aura-gray-6);
+        background: var(--aura-gray-9);
+        font-weight: 600;
+        font-size: 12px;
+        white-space: nowrap;
+        margin: 0;
+    }
+    button.button {
+        background-color: #494C58;
+        padding-left: 6px;
+        padding-right: 25px;
+        font-size: 12px;
+        line-height: 16px;
+        bottom: 1px;
+        top: -1px;
+    }
+
+    .button.button-dropdown.button--sm:before,
+    .button.button-dropdown.button--sm:after {
+        right: 5px;        
+    }
+
+    .dropdown-menu.aura-dropdown-menu{
+        top: 0px;
+        margin-top: 0px;
+    }
+
+    .dropdown-item.cursor-pointer {
+        padding: 0 4px;
+        margin-top: 2px;
+        
+        button{
+            background-color: transparent;
+        }
+    }
+
+    .highlight {
+        max-width: 98%;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background-color: var(--aura-gray-10);
+      }
+}
