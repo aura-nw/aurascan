@@ -1,0 +1,32 @@
+<div class="decode-message d-flex justify-content-start align-items-start col-12 d-flex gap-2" [class]="!isMobile ? 'flex-nowrap' : 'flex-wrap'">
+    <div class="d-flex gap-2 justify-content-center align-items-start flex-nowrap">
+        <p class="name">
+            {{index}} <span *ngIf="name">: {{name}}</span>
+        </p>
+        <div *ngIf="isAllowSwitchDecode" class="dropdown aura-dropdown mr-4 btn-item">
+            <button style="height: 26px; min-width: max-content;"
+                class="button button--sm button--md-mob button-pill button-outline button-dropdown w-100" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <span>{{type}}</span>
+            </button>
+            <ul class="dropdown-menu aura-dropdown-menu">
+                <li (click)="onHex()" class="dropdown-item cursor-pointer" [class.active]="type === 'Hex'">
+                    <button type="button" class="button p-0">Hex</button>
+                </li>
+                <li (click)="onDecode()" class="dropdown-item cursor-pointer" [class.active]="type === 'Decode'">
+                    <button type="button" class="button p-0">Decode</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div *ngIf="!isAllowSwitchDecode" class="data flex-grow-1 font-space-mono">
+        <p class="mb-1 font-space-mono">{{value}}</p>
+        <p class="mb-0 font-space-mono" [innerHTML]="decode | highlight_function"></p>
+    </div>
+    <div *ngIf="isAllowSwitchDecode" class="data flex-grow-1 font-space-mono" [class]="isHighlight ? 'highlight' : ''">
+        <a *ngIf="isLink && type === 'Decode'" class="text--primary" routerLink="/address/{{ data }}">
+            {{data}}
+        </a>
+        <span *ngIf="!isLink || type === 'Hex'">{{data}}</span>
+    </div>
+</div>
