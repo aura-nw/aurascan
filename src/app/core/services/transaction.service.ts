@@ -776,6 +776,34 @@ export class TransactionService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getListAbiContract(addressList: string[]) {
+    const operationsDoc = `
+    query getListAbiContract($address: [String] = null) {
+      ${this.envDB} {
+        evm_contract_verification(where: {contract_address: {_in: $address}, status: {_eq: "SUCCESS"}}, order_by: {id: desc}) {
+          contract_address
+          created_at
+          creator_tx_hash
+          id
+          status
+          updated_at
+          abi
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: addressList,
+        },
+        operationName: 'getListAbiContract',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   getListMappingName(methodId: any): Observable<any> {
     const operationsDoc = `
     query queryListNameMethod($limit: Int = 100, $methodId: [String!] = null) {

@@ -22,31 +22,30 @@
         Topics
       </div>
       <div class="col-12 col-lg-11 d-flex flex-column gap-2">
-        <ng-container *ngFor="let top of eventLog.topics; index as idx">
-          <div class="d-flex gap-2 item-topic" *ngIf="top">
-            <div class="event-number secondary flex-shrink-0 font-space-mono">{{ idx }}</div>
-            <div class="flex-grow-1 topic align-items-center">
-              <div
-                class="font-space-mono {{ arrTopicDecode[index]?.length > 0 && arrTopicDecode[index][idx] ? '' : 'mt-1' }}">
-                {{ top }}
-              </div>
-              <div class="mt-1 event-log-msg font-space-mono"
-                *ngIf="arrTopicDecode[index]?.length > 0 && arrTopicDecode[index][idx]"
-                [innerHTML]="arrTopicDecode[index][idx] | highlight_function">
-              </div>
-            </div>
-          </div>
+        <ng-container *ngFor="let topic of topicsDecoded; index as idx">
+          <app-decode-message
+            *ngIf="topic?.value"
+            [index]="topic?.index"
+            [name]="topic?.name"
+            [isLink]="topic?.isLink"
+            [isAllowSwitchDecode]="topic?.isAllowSwitchDecode"
+            [value]="topic?.value"
+            [decode]="topic?.decode"></app-decode-message>
         </ng-container>
       </div>
     </div>
 
     <div class="d-flex flex-wrap mb-3" *ngIf="eventLog.data">
       <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
-        {{ 'Data' }}
+        Data
       </div>
       <div class="col-12 col-lg-11">
-        <!-- <div class="mb-1">Value {{ eventLog.data }}</div> -->
-        <div class="highlight font-space-mono">{{ eventLog.data }}</div>
+        <app-decode-message
+          index="Value" 
+          [value]="eventLog.data" 
+          [decode]="eventLog.dataDecoded"
+          [isAllowSwitchDecode]="true"
+          [isHighlight]="true"></app-decode-message>
       </div>
     </div>
   </div>
