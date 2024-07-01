@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { filter, take } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { USDC_ADDRESS, USDC_COIN_ID } from 'src/app/core/constants/token.constant';
 import { EModeEvmToken, EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -96,7 +97,11 @@ export class EvmTokenDetailComponent implements OnInit {
             take(1),
           )
           .subscribe((item) => {
-            const tokenMarket = item.find((element) => element.denom === token?.address);
+            
+            let tokenMarket = null;
+            if(token?.address === USDC_ADDRESS) tokenMarket = item.find((element) => element.coinId === USDC_COIN_ID);
+            else tokenMarket = item.find((element) => element.denom === token?.address);
+
             this.tokenDetail = {
               ...token,
               supplyAmount: token.total_supply,
