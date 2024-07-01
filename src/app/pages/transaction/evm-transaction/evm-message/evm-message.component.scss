@@ -16,7 +16,6 @@
     border-radius: 8px;
     padding: 12px;
     max-height: 558px;
-    overflow: auto;
     @media (min-width: 992px) {
       max-height: 330px;
       padding: 12px 16px;
@@ -99,5 +98,12 @@
 
   ::-webkit-scrollbar {
     height: 6px;
+  }
+
+  .memo {
+    min-height: 160px;
+    height: max-content;
+    width: 100%;
+    background-color: var(--aura-gray-9);
   }
 }
