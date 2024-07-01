@@ -5,13 +5,13 @@ section.account-detail {
       padding: 8px;
       border-radius: 8px;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
 
       span {
         font-size: 12px;
         line-height: 16px;
         color: #CCD0D5;
-        margin-left: 2px;
+        margin-left: 4px;
       }
     }
 
