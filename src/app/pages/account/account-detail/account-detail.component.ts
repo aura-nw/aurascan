@@ -16,7 +16,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { COSMOS_ACCOUNT_MESSAGE_TYPE, ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
+import { COSMOS_ACCOUNT_MESSAGE_TYPE, ACCOUNT_WALLET_COLOR, COSMOS_WARNING_MESSAGE, EVM_WARNING_MESSAGE } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
@@ -154,11 +154,11 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
             if(!Object.keys(pubkey)?.length){
               this.accountType = 'evm';
-              this.tooltipCosmosText = accountAddress;
+              this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
               return;
             }else {
               this.accountType = 'cosmos';
-              this.tooltipEvmText = accountEvmAddress;
+              this.tooltipEvmText = EVM_WARNING_MESSAGE;
               return;
             }
           },
