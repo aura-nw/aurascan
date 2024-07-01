@@ -8,7 +8,7 @@ import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { TOKEN_EVM_BURNT } from '../constants/token.constant';
+import { SOCIAL_MEDIA, TOKEN_EVM_BURNT } from '../constants/token.constant';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -142,7 +142,9 @@ export class TokenService extends CommonService {
   }
 
   getListErc721Token(payload, textSearch: string = null, addressIn: string[] = []): Observable<any> {
-    let querySort = `order_by: [{erc721_stat: {${payload.sort_column}: ${payload.sort_order}_nulls_last}}, {id: desc}]`;
+    let querySort = `order_by: [{erc721_stat: {${payload.sort_column}: ${
+      payload.sort_order === 'asc' ? 'asc_nulls_first' : 'desc_nulls_last'
+    } }}, {id: desc}]`;
     let queryWhere = `where: {_or: [{address: {_in: $addressIn}}, {name: {_ilike: "%${textSearch}%"}}]}`;
     const operationsDoc = `
     query queryListErc721($limit: Int = 10, $offset: Int = 0, $addressIn: [String!] = null) {
@@ -961,5 +963,19 @@ export class TokenService extends CommonService {
         operationName: 'queryListTxsERC20',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  mappingSocialProfiles(socialProfiles: { [key: string]: string }) {
+    if (!socialProfiles) return [];
+
+    return Object.keys(socialProfiles)
+      ?.filter((key) => socialProfiles[key])
+      ?.map((key) => {
+        return {
+          name: SOCIAL_MEDIA[key]?.name,
+          icon: SOCIAL_MEDIA[key]?.icon,
+          url: socialProfiles[key],
+        };
+      });
   }
 }

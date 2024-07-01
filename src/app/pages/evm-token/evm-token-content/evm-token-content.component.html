@@ -36,14 +36,13 @@
             </app-name-tag>
           </div>
         </div>
-        <div
-          class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
+        <div class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
             tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3'
           }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <ng-container *ngIf="!tokenDetail?.isNFTContract">
             <span *ngIf="infoSearch['balance'] == 0 || !infoSearch['balance']">0</span>
-            <span
+            <span 
               [appTooltip]="{ priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals }"
               *ngIf="(infoSearch['balance'] | balance: tokenDetail.decimals | lt: 0.001) && infoSearch['balance'] != 0">
               {{ '<0.001' }}
@@ -167,9 +166,11 @@
     <app-evm-token-inventory-tab
       *ngIf="currentTab === tokenTab.Inventory"
       [typeContract]="tokenDetail?.type"></app-evm-token-inventory-tab>
-    <app-evm-token-info-tab *ngIf="currentTab === tokenTab.Info"></app-evm-token-info-tab>
-    <app-evm-token-contract-tab
-      *ngIf="currentTab === tokenTab.Contract"
+    <app-evm-token-info-tab 
+      *ngIf="currentTab === tokenTab.Info"
+      [overviewInfo]="tokenDetail?.overviewInfo"></app-evm-token-info-tab>
+    <app-evm-token-contract-tab 
+      *ngIf="currentTab === tokenTab.Contract" 
       [contractAddress]="contractAddress"
       [contractTypeData]="tokenDetail?.type"></app-evm-token-contract-tab>
   </div>
