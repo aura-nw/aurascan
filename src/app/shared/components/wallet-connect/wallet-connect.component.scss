@@ -9,7 +9,7 @@
       line-height: 16px;
     }
   }
-  
+
   @media (max-width: 414px) {
     margin-bottom: 16px;
   }
@@ -21,29 +21,4 @@
   height: 32px;
   border: 1px solid var(--aura-gray-9);
   cursor: unset;
-}
-
-.box-connect-wallet {
-  .divider-vertical {
-    height: 32px;
-  }
-
-  .aura-tooltip-object {
-    background: none;
-  }
-
-  .txt-wallet,
-  .txt-disconnect:hover {
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
-  .txt-disconnect:hover {
-    color: var(--aura-blue-4);
-  }
-
-  @media (max-width: 992px) {
-    width: 100%;
-    justify-content: space-between;
-  }
 }

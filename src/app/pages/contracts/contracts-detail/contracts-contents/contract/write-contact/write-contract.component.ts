@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
 import { IMultichainWalletAccount } from 'src/app/core/models/wallet';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -30,6 +31,7 @@ export class WriteContractComponent implements OnInit {
   root: any[];
 
   constructor(
+    public environmentService: EnvironmentService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private translate: TranslateService,
@@ -234,5 +236,9 @@ export class WriteContractComponent implements OnInit {
         msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
       }
     });
+  }
+
+  disconnect() {
+    this.walletService.disconnect();
   }
 }
