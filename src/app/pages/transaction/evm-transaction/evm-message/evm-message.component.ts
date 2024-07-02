@@ -124,7 +124,15 @@ export class EvmMessageComponent {
             data: `0x${element.data || this.transaction?.inputData}`,
           });
 
-          const params = paramsDecode?.fragment?.inputs.map((i) => `${i.type} ${i.indexed ? 'indexed' : ''} ${i.name}`);
+          const params = paramsDecode?.fragment?.inputs.map((i) => {
+            const { type, indexed, name } = i;
+            let param = '';
+            if(type) param += type;
+            if(indexed) param += ' indexed';
+            if(name) param += ` ${name}`;
+
+            return param;
+          });
           const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${params.join(', ')})`;
 
           decoded = [
