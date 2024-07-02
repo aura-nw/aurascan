@@ -33,6 +33,7 @@ export class HighlightFunctionPipe implements PipeTransform {
           name: paramParts?.[3]?.trim()
       };
   });
+    
   params.map((item) => {
       const {dataType, modifier, name} = item;
       
@@ -47,7 +48,7 @@ export class HighlightFunctionPipe implements PipeTransform {
       const nameHTML = name ? `<span style="color: var(--aura-red-3); font-family: inherit">${name}</span>` : '';
    
       const replaceValue = Object.values(item)?.filter(Boolean)?.join(" ");
-      // replacedValueHtml = replacedValueHtml?.replace(replaceValue, `${dataTypeHTML} ${modifierHTML} ${nameHTML}`);
+      replacedValueHtml = replacedValueHtml?.replace(replaceValue, `${dataTypeHTML} ${modifierHTML} ${nameHTML}`);
     });
     return this.sanitizer.bypassSecurityTrustHtml(replacedValueHtml);
   }
