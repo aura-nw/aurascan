@@ -49,3 +49,16 @@ export enum ETokenNFTTypeBE {
 }
 
 export const TOKEN_EVM_BURNT = '0x0000000000000000000000000000000000000000';
+
+export const USDC_ADDRESS = '0x80b5a32e4f032b2a058b4f29ec95eefeeb87adcd';
+export const USDC_COIN_ID = 'tether';
+export const USDC_TOKEN = {
+  name: '',
+  symbol: '',
+  decimals: 0,
+  denom: '-',
+  contract_address: USDC_ADDRESS,
+  balance: 0,
+  price: '',
+  value: 0,
+};

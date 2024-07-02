@@ -4,12 +4,15 @@ import BigNumber from 'bignumber.js';
 import * as _ from 'lodash';
 import { filter, forkJoin, map, take } from 'rxjs';
 import { COIN_TOKEN_TYPE } from '../constants/common.constant';
-import { ETokenCoinTypeBE } from '../constants/token.constant';
+import { ETokenCoinTypeBE, USDC_ADDRESS, USDC_COIN_ID, USDC_TOKEN } from '../constants/token.constant';
 import { TokenService } from '../services/token.service';
 import { balanceOf, getBalance } from '../utils/common/parsing';
 import { ApiAccountService } from './api-account.service';
 import { EnvironmentService } from './environment.service';
 import { CW20_TOKENS_TEMPLATE, ERC20_TOKENS_TEMPLATE } from './template';
+import { getEthersProvider } from '../utils/ethers';
+import { ERC20_ABI } from 'src/app/pages/account/account-detail/token-table/ABI/erc20-abi';
+import { Contract } from 'ethers';
 
 export interface IAsset {
   name: string;
@@ -45,18 +48,19 @@ export class ApiCw20TokenService {
     private tokenService: TokenService,
   ) {}
 
-  getByOwner(address: string) {
+  getByOwner(address: string, evmAddress: string) {
     return forkJoin([
       this.queryCw20TokenByOwner(address),
       this.queryERC20TokenByOwner(address),
       this.apiAccount.getAccountByAddress(address, true),
+      this.getUSDCToken(evmAddress),
       this.tokenService.tokensMarket$.pipe(
         filter((data) => _.isArray(data)),
         take(1),
       ),
     ]).pipe(
       map((data) => {
-        const [cw20Tokens, erc20Tokens, account, coinsMarkets] = data;
+        const [cw20Tokens, erc20Tokens, account, USDCToken, coinsMarkets] = data;
 
         const nativeToken = this.parseNativeToken(account, coinsMarkets);
 
@@ -70,6 +74,15 @@ export class ApiCw20TokenService {
         const tokens = [...ibcTokenBalances, ...cw20TokenList, ...erc20TokenList].filter((token) =>
           BigNumber(token.balance).gt(0),
         );
+
+        const usdcCoin = this.parseUSDCToken(USDCToken, coinsMarkets);
+
+        const idx = tokens?.findIndex((f) => f.contract_address?.toLowerCase() === USDC_ADDRESS);
+        if (idx >= 0) {
+          tokens[idx] = usdcCoin;
+        } else {
+          tokens.push(usdcCoin);
+        }
 
         const allTokens = [nativeToken, ...tokens];
 
@@ -86,6 +99,52 @@ export class ApiCw20TokenService {
         return { data: allTokens, meta: { count: allTokens.length }, totalValue };
       }),
     );
+  }
+
+  createContract() {
+    try {
+      const provider = getEthersProvider(this.env.etherJsonRpc);
+
+      let contract = new Contract(USDC_ADDRESS, ERC20_ABI, provider);
+      return contract;
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
+  }
+
+  async getUSDCToken(address: string) {
+    const contract = this.createContract();
+    const balance = await contract.balanceOf(address);
+    const name = await contract.name();
+    const symbol = await contract.symbol();
+    const decimals = await contract.decimals();
+    
+    return {
+      ...USDC_TOKEN,
+      tokenUrl: USDC_ADDRESS,
+      name: name?.toString(),
+      symbol: symbol?.toString(),
+      balance: Number(balance?.toString()),
+      decimals: Number(decimals?.toString()),
+    };
+  }
+
+  parseUSDCToken(token, coinsMarkets) {
+    const USDCMarket = coinsMarkets?.find((item) => item.coinId === USDC_COIN_ID);
+
+    return {
+      ...token,
+      change: null,
+      isValueUp: true,
+      type: COIN_TOKEN_TYPE.ERC20,
+      tokenUrl: USDC_ADDRESS,
+      denom: USDC_ADDRESS,
+      price: USDCMarket?.currentPrice,
+      priceChangePercentage24h: USDCMarket?.priceChangePercentage24h,
+      value: Number(USDCMarket?.currentPrice) * token?.balance,
+    };
   }
 
   parseErc20Tokens(tokens, coinsMarkets) {
