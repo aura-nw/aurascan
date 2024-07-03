@@ -220,6 +220,28 @@ export class EvmMessageComponent {
     this.arrTopicDecode = [...this.arrTopicDecode];
   }
 
+  getFunctionColor(inputs: any[]) {
+    return inputs?.map((i, index) => {
+      const { type, indexed, name } = i;
+      let param = '';
+      if(type) param += type;
+      if(indexed) param += ' indexed';
+      if(name) param += ` ${name}`;
+
+      const dataTypeHTML = type
+        ? `<span style="color: var(--aura-green-3); font-family: inherit">${type}</span>`
+        : '';
+      const modifierHTML = indexed
+        ? `<span style="color: ${
+            !name ? 'var(--aura-red-3)' : 'var(--aura-gray-3)'
+          }; font-family: inherit">indexed</span>`
+        : '';
+      const nameHTML = name ? `<span style="color: var(--aura-red-3); font-family: inherit">${name}</span>` : '';
+      
+      return `${index > 0 ? ' ' : ''}${dataTypeHTML} ${modifierHTML} ${nameHTML}`;
+    })
+  }
+
   getListTopicDecode() {
     this.transaction.eventLog.forEach((element, index) => {
       let arrTopicTemp = element?.evm_signature_mapping_topic || [];
