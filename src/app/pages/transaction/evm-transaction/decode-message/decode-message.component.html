@@ -40,7 +40,7 @@
             </div>
             <div *ngIf="type === 'Decode'">
                 <div *ngFor="let item of data" class="data-item">
-                    <p class="font-space-mono">{{item?.name}}</p>
+                    <p class="font-space-mono item-name">{{item?.name}}</p>
                     <a *ngIf="item?.isLink" class="text--primary" routerLink="/address/{{ item?.decode }}">
                         {{item?.decode}}
                     </a>
