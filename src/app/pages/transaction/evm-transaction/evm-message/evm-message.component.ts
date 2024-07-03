@@ -43,12 +43,14 @@ export class EvmMessageComponent {
   isCreateContract = false;
   arrTopicDecode = [];
   contractAddressAbi = '';
+  contractAddressAbiList = [];
   topicsDecoded = [];
   abiContractData = [];
 
   constructor(
     private transactionService: TransactionService,
     public env: EnvironmentService,
+    private contractService: ContractService
   ) {}
 
   ngOnInit(): void {
@@ -59,36 +61,63 @@ export class EvmMessageComponent {
       this.typeInput = this.inputDataType.ORIGINAL;
     }
     this.getMethodName(this.inputDataRaw['methodId']);
-    this.getAbiList();
+    this.getProxyContractAbi();
   }
 
   changeType(data) {
     this.typeInput = data;
   }
 
-  getAbiList() {
+  getProxyContractAbi() {
     let listContract = this.transaction.eventLog.map((i) => i.address?.toLowerCase());
+    listContract.push(this.transaction?.to?.toLowerCase());
     listContract = _.uniq(listContract);
+    this.contractService.getListProxyAbi(listContract).subscribe({
+      next: (res) => {
+        this.contractAddressAbiList = res?.evm_smart_contract?.map((item) => {
+          return {
+            implementation_contract: _.get(item, 'evm_proxy_histories[0].implementation_contract') || item?.address,
+            address: item?.address,
+          };
+        });
+      },
+      complete: () => {
+        this.getAbiList();
+      },
+    });
+  }
 
-    this.transactionService.getListAbiContract(listContract).subscribe((res) => {
+  getAbiList() {
+    if (this.contractAddressAbiList.length === 0) {
+      return;
+    }
+    const implementationContractList = this.contractAddressAbiList.map((i) => i.implementation_contract);
+    
+    this.transactionService.getListAbiContract(implementationContractList).subscribe((res) => {
+      
       if (res?.evm_contract_verification?.length > 0) {
         this.isContractVerified = true;
         this.isDecoded = true;
         this.abiContractData = res?.evm_contract_verification.map((i) => ({
-          contractAddress: i.contract_address,
+          contractAddress: this.contractAddressAbiList.find((f) => f.implementation_contract === i.contract_address)
+            ?.address,
+          implementationContractAddr: i.contract_address,
           abi: i.abi,
           interfaceCoder: new Interface(i.abi),
         }));
 
         const abiInfo = this.abiContractData.find((f) => f.contractAddress === this.transaction?.to);
+        
         if (abiInfo.abi) {
           const value = parseEther('1.0');
           const rawData = abiInfo.interfaceCoder.parseTransaction({ data: '0x' + this.transaction?.inputData, value });
+          debugger
           if (rawData?.fragment?.inputs?.length > 0) {
             this.getListTopicDecode();
 
             this.inputDataRaw['name'] =
               abiInfo.interfaceCoder.getFunction(rawData?.fragment?.name)?.format() || rawData.name;
+              
             this.inputDataDecoded['name'] = rawData.name;
             this.inputDataDecoded['params'] = rawData?.fragment?.inputs.map((item, index) => {
               return {
@@ -109,17 +138,27 @@ export class EvmMessageComponent {
       let arrTopicTemp = element?.evm_signature_mapping_topic || [];
       try {
         const abiInfo = this.abiContractData.find((f) => f.contractAddress === element.address);
-        if (abiInfo.abi) {
+        let decoded = [];
+        if (!abiInfo?.abi) {
+          let arrTopicTemp = element?.evm_signature_mapping_topic || [];
+          decoded = [
+            {
+              index: 0,
+              decode: arrTopicTemp[0],
+              value: element.topics[0],
+            },
+          ];
+        } else {
           element.data = element?.data?.replace('\\x', '');
           const paramsDecode = abiInfo.interfaceCoder.parseLog({
             topics: element.topics?.filter((f) => f),
             data: `0x${element.data || this.transaction?.inputData}`,
           });
-          
+
           const params = paramsDecode?.fragment?.inputs.map((i) => `${i.type} ${i.indexed ? 'indexed' : ''} ${i.name}`);
           const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${params.join(', ')})`;
 
-          let decoded = [
+          decoded = [
             {
               index: 0,
               decode: decodeTopic0,
@@ -157,9 +196,7 @@ export class EvmMessageComponent {
           }
           this.topicsDecoded[index] = decoded;
         }
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
       this.arrTopicDecode[index] = arrTopicTemp;
     });
     this.arrTopicDecode = [...this.arrTopicDecode];

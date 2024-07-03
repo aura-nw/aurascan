@@ -63,6 +63,12 @@
             display: grid;
             column-gap: 20px;
             grid-template-columns: minmax(100px, max-content) 1fr;
+
+            .item-name {
+                color: #9DA1AC;
+                font-size: 12px;
+                line-height: 16px;
+            }
         }
     }
 
