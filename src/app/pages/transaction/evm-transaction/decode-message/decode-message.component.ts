@@ -7,15 +7,16 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
   styleUrls: ['./decode-message.component.scss'],
 })
 export class DecodeMessageComponent implements OnInit {
-  @Input() index: number | string;
+  @Input() index?: number;
   @Input() isLink?: boolean;
   @Input() name?: string;
   @Input() isAllowSwitchDecode?: boolean;
   @Input() value: string;
   @Input() decode: string;
   @Input() isHighlight?: boolean;
+  @Input() isDataField?: boolean;
 
-  data = '';
+  data: string | any[] = '';
   type: 'Decode' | 'Hex' = 'Hex';
   isMobile = false;
 
@@ -25,9 +26,43 @@ export class DecodeMessageComponent implements OnInit {
     this.isMobile = this.environmentService.isMobile;
     this.data = this.value;
   }
-  onDecode() {
+  onDecode(field?: string) {
     this.type = 'Decode';
-    this.data = this.decode;
+    console.log(this.decode);
+    if(field !== 'data'){
+      this.data = this.decode;
+      return;
+    }
+
+    this.data = Array.isArray(this.decode) && this.decode?.map(item => {
+      if(item?.type !== 'tuple') {
+        return {
+          ...item,
+          isArray: false,
+        }
+      }
+      if(item?.type === 'tuple') {
+        const links = item?.decode?.split(',')?.map(item => {
+          if(item?.startsWith('0x')) {
+            return {
+              name: item,
+              isLink: true,
+            }
+          }
+          return {
+            name : item,
+            isLink : false
+          }
+        });
+        return {
+          ...item,
+          isArray: true,
+          decode: links
+        }
+      }
+    })
+    console.log(this.data);
+    
   }
 
   onHex() {

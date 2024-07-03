@@ -16,6 +16,7 @@
     border-radius: 8px;
     padding: 12px;
     max-height: 558px;
+    overflow-y: auto;
     @media (min-width: 992px) {
       max-height: 330px;
       padding: 12px 16px;

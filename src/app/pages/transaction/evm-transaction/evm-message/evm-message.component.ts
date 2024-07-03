@@ -49,7 +49,6 @@ export class EvmMessageComponent {
   constructor(
     private transactionService: TransactionService,
     public env: EnvironmentService,
-    private contractService: ContractService,
   ) {}
 
   ngOnInit(): void {
@@ -106,16 +105,9 @@ export class EvmMessageComponent {
 
   getListTopicDecode() {
     this.transaction.eventLog.forEach((element, index) => {
+      
       let arrTopicTemp = element?.evm_signature_mapping_topic || [];
       try {
-        let decoded = [
-          {
-            index: 0,
-            decode: arrTopicTemp?.[0],
-            value: element.topics[0],
-          },
-        ];
-
         const abiInfo = this.abiContractData.find((f) => f.contractAddress === element.address);
         if (abiInfo.abi) {
           element.data = element?.data?.replace('\\x', '');
@@ -124,30 +116,50 @@ export class EvmMessageComponent {
             data: `0x${element.data || this.transaction?.inputData}`,
           });
           
-          if (paramsDecode?.fragment?.inputs?.length > 0) {
-            const param = paramsDecode?.fragment?.inputs.map((item, idx) => {
-              return {
-                index: index + 1,
+          const params = paramsDecode?.fragment?.inputs.map((i) => `${i.type} ${i.indexed ? 'indexed' : ''} ${i.name}`);
+          const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${params.join(', ')})`;
+
+          let decoded = [
+            {
+              index: 0,
+              decode: decodeTopic0,
+              value: element.topics[0],
+            },
+          ];
+          
+          const inputs = paramsDecode?.fragment?.inputs
+          if (inputs?.length > 0) {
+            const params = [];
+            const data = [];
+            let currentParamIndex = 0;
+            
+            inputs?.forEach((item, idx) => {              
+              const param = {
                 name: item.name,
                 type: item.type,
                 isLink: item.type === 'address' ? true : false,
-                isAllowSwitchDecode: true,
-                value: element.topics[idx + 1],
                 decode: paramsDecode.args[idx]?.toString(),
-                indexed: item.indexed,
-              };
+              }
+              if(item?.indexed) {
+                param["indexed"] = item.indexed;
+                param["index"] = idx + 1;
+                param["isAllowSwitchDecode"] = true;
+                param["value"] = element.topics[currentParamIndex + 1],
+                currentParamIndex += 1;
+                params.push(param);
+              }else {
+                data.push(param);
+              }
             });
-            const dataDecoded = param.filter(f=> !f.indexed).map(i=> i.decode).join(", ");
-            element.dataDecoded = dataDecoded;
-            decoded = [...decoded, ...param];
+            
+            element.dataDecoded = data;
+            decoded = [...decoded, ...params];
           }
+          this.topicsDecoded[index] = decoded;
         }
-        this.topicsDecoded[index] = decoded;
-
       } catch (e) {
         console.log(e);
       }
-
       this.arrTopicDecode[index] = arrTopicTemp;
     });
     this.arrTopicDecode = [...this.arrTopicDecode];
