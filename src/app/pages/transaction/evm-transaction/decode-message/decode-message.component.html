@@ -1,9 +1,10 @@
-<div class="decode-message d-flex justify-content-start align-items-start col-12 d-flex gap-2" [class]="!isMobile ? 'flex-nowrap' : 'flex-wrap'">
-    <div class="d-flex gap-2 justify-content-center align-items-start flex-nowrap">
+<div *ngIf="!isDataField" class="decode-message d-flex justify-content-start align-items-start col-12 d-flex gap-3"
+    [class]="!isMobile ? 'flex-nowrap' : 'flex-wrap'">
+    <div class="param-field d-flex gap-3 justify-content-center align-items-start flex-nowrap">
         <p class="name">
             {{index}} <span *ngIf="name">: {{name}}</span>
         </p>
-        <div *ngIf="isAllowSwitchDecode" class="dropdown aura-dropdown mr-4 btn-item">
+        <div *ngIf="isAllowSwitchDecode" class="dropdown aura-dropdown btn-item">
             <button style="height: 26px; min-width: max-content;"
                 class="button button--sm button--md-mob button-pill button-outline button-dropdown w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,5 +29,50 @@
             {{data}}
         </a>
         <span *ngIf="!isLink || type === 'Hex'">{{data}}</span>
+    </div>
+</div>
+
+<div class="decode-message">
+    <div *ngIf="isDataField" class="d-flex align-items-start highlight">
+        <div class="flex-grow-1 data-field-msg">
+            <div *ngIf="type === 'Hex'">
+                <p class="font-space-mono">{{data}}</p>
+            </div>
+            <div *ngIf="type === 'Decode'">
+                <div *ngFor="let item of data" class="data-item">
+                    <p class="font-space-mono">{{item?.name}}</p>
+                    <a *ngIf="item?.isLink" class="text--primary" routerLink="/address/{{ item?.decode }}">
+                        {{item?.decode}}
+                    </a>
+                    <div *ngIf="!item?.isLink">
+                        <div *ngIf="item?.type === 'tuple'" class="d-flex flex-wrap gap-2 align-items-center">
+                            <div *ngFor="let dataDecoded of item?.decode">
+                                <a *ngIf="dataDecoded?.isLink" class="text--primary" routerLink="/address/{{ dataDecoded?.name }}">
+                                    {{dataDecoded?.name}}
+                                </a>
+                                <p *ngIf="!dataDecoded?.isLink" class="font-space-mono" >{{dataDecoded?.name}}</p>
+                            </div>
+                        </div>
+                        <div *ngIf="item?.type !== 'tuple'">
+                            <p class="font-space-mono" >{{item?.decode}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="button-container">
+            <button
+                class="button-data body-04 button-dec"
+                [class.active]="type === 'Decode'"
+                (click)="onDecode('data')">
+                <span>Dec</span>
+            </button>
+            <button 
+                class="button-data body-04 button-hex"
+                [class.active]="type === 'Hex'"
+                (click)="onHex()">
+                <span>Hex</span>
+            </button>
+        </div>
     </div>
 </div>
