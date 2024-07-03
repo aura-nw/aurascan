@@ -44,6 +44,7 @@ export class EvmMessageComponent {
   isCreateContract = false;
   arrTopicDecode = [];
   contractAddressAbi = '';
+  contractAddressAbiList = [];
   topicsDecoded = [];
   abiContractData = [];
 
@@ -54,9 +55,9 @@ export class EvmMessageComponent {
   ) {}
 
   ngOnInit(): void {
-    if(!this.isEvmContract){
+    if (!this.isEvmContract) {
       this.typeInput = this.inputDataType.DECODED;
-      if(!this.transaction?.memo) this.typeInput = this.inputDataType.ORIGINAL;
+      if (!this.transaction?.memo) this.typeInput = this.inputDataType.ORIGINAL;
     } else this.typeInput = this.inputDataType.RAW;
 
     this.inputDataRaw['methodId'] = this.transaction?.inputData?.substring(0, 8);
@@ -66,23 +67,45 @@ export class EvmMessageComponent {
       this.typeInput = this.inputDataType.ORIGINAL;
     }
     this.getMethodName(this.inputDataRaw['methodId']);
-    this.getAbiList();
+    this.getProxyContractAbi();
   }
 
   changeType(data) {
     this.typeInput = data;
   }
 
-  getAbiList() {
+  getProxyContractAbi() {
     let listContract = this.transaction.eventLog.map((i) => i.address?.toLowerCase());
+    listContract.push(this.transaction?.to?.toLowerCase());
     listContract = _.uniq(listContract);
+    this.contractService.getListProxyAbi(listContract).subscribe({
+      next: (res) => {
+        this.contractAddressAbiList = res?.evm_smart_contract?.map((item) => {
+          return {
+            implementation_contract: _.get(item, 'evm_proxy_histories[0].implementation_contract') || item?.address,
+            address: item?.address,
+          };
+        });
+      },
+      complete: () => {
+        this.getAbiList();
+      },
+    });
+  }
 
-    this.transactionService.getListAbiContract(listContract).subscribe((res) => {
+  getAbiList() {
+    if (this.contractAddressAbiList.length === 0) {
+      return;
+    }
+    const implementationContractList = this.contractAddressAbiList.map((i) => i.implementation_contract);
+    this.transactionService.getListAbiContract(implementationContractList).subscribe((res) => {
       if (res?.evm_contract_verification?.length > 0) {
         this.isContractVerified = true;
         this.isDecoded = true;
         this.abiContractData = res?.evm_contract_verification.map((i) => ({
-          contractAddress: i.contract_address,
+          contractAddress: this.contractAddressAbiList.find((f) => f.implementation_contract === i.contract_address)
+            ?.address,
+          implementationContractAddr: i.contract_address,
           abi: i.abi,
           interfaceCoder: new Interface(i.abi),
         }));
@@ -116,8 +139,16 @@ export class EvmMessageComponent {
         let decoded = [];
 
         const abiInfo = this.abiContractData.find((f) => f.contractAddress === element.address);
-
-        if (abiInfo.abi) {
+        if (!abiInfo?.abi) {
+          let arrTopicTemp = element?.evm_signature_mapping_topic || [];
+          decoded = [
+            {
+              index: 0,
+              decode: arrTopicTemp[0],
+              value: element.topics[0],
+            },
+          ];
+        } else {
           element.data = element?.data?.replace('\\x', '');
           const paramsDecode = abiInfo.interfaceCoder.parseLog({
             topics: element.topics?.filter((f) => f),
