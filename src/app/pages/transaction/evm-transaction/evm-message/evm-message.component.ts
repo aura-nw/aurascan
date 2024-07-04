@@ -77,7 +77,7 @@ export class EvmMessageComponent {
   getProxyContractAbi() {
     let listContract = this.transaction.eventLog.map((i) => i.address?.toLowerCase());
     listContract.push(this.transaction?.to?.toLowerCase());
-    listContract = _.uniq(listContract);
+    listContract = _.uniq(listContract.filter((i) => i));
     this.contractService.getListProxyAbi(listContract).subscribe({
       next: (res) => {
         this.contractAddressAbiList = res?.evm_smart_contract?.map((item) => {
