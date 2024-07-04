@@ -1,10 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-interface IDecodeData {
-  name: string;
-  decode: string;
-  isLink: boolean;
-}
 @Component({
   selector: 'app-decode-message',
   templateUrl: './decode-message.component.html',

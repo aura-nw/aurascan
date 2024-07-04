@@ -119,13 +119,15 @@ export class ApiCw20TokenService {
     const balance = await contract.balanceOf(address);
     const name = await contract.name();
     const symbol = await contract.symbol();
-
+    const decimals = await contract.decimals();
+    
     return {
       ...USDC_TOKEN,
       tokenUrl: USDC_ADDRESS,
       name: name?.toString(),
       symbol: symbol?.toString(),
       balance: Number(balance?.toString()),
+      decimals: Number(decimals?.toString()),
     };
   }
 
@@ -139,7 +141,6 @@ export class ApiCw20TokenService {
       type: COIN_TOKEN_TYPE.ERC20,
       tokenUrl: USDC_ADDRESS,
       denom: USDC_ADDRESS,
-      decimals: USDCMarket?.decimal,
       price: USDCMarket?.currentPrice,
       priceChangePercentage24h: USDCMarket?.priceChangePercentage24h,
       value: Number(USDCMarket?.currentPrice) * token?.balance,
