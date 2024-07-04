@@ -127,8 +127,6 @@ export class EvmTransactionsComponent {
       )
       .subscribe({
         next: (res) => {
-          console.log({res});
-          
           this.dataSource.data = res;
         },
         error: (e) => {

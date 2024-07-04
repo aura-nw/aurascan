@@ -34,11 +34,11 @@
         <button
           *ngIf="isEvmContract || (!isEvmContract && transaction?.memo)"
           class="button body-04 {{
-            ((!isContractVerified || isCreateContract) && isEvmContract) ? 'text--gray-7 pe-none' : ''
+            !isContractVerified || isCreateContract ? 'text--gray-7 pe-none' : ''
           }} active-gradient"
           (click)="changeType(inputDataType.DECODED)"
           [class.active-gradient]="typeInput === inputDataType.DECODED"
-          [disabled]="((!isContractVerified || isCreateContract) && isEvmContract)">
+          [disabled]="!isContractVerified || isCreateContract">
           <span>{{ inputDataType.DECODED }}</span>
         </button>
         <button
@@ -49,7 +49,7 @@
         </button>
       </div>
 
-      <div class="box-data log-content mb-3">
+      <div class="box-data log-content mb-3 overflow-auto">
         <div class="log-data body-02 break-word" *ngIf="typeInput === inputDataType.RAW && isEvmContract">
           <div *ngIf="inputDataRaw['methodId']" class="font-space-mono">MethodId: {{ inputDataRaw['methodId'] }}</div>
           <p *ngIf="inputDataRaw['name']" class="font-space-mono">Method name: {{ inputDataRaw['name'] }}</p>
@@ -108,7 +108,7 @@
         </div>
 
         <div
-          class="log-data break-word font-space-mono"
+          class="log-data break-word font-space-mono overflow-auto"
           *ngIf="typeInput === inputDataType.ORIGINAL"
           [appExpandable]="transaction?.inputData"
           [maxCharVisible]="500">
@@ -133,7 +133,7 @@
           (click)="isLog = false"
           class="button body-04 border-radius--sm"
           [class.active-gradient]="!isLog">
-          <span>Internal Transactions</span>
+          <span>Internal Txns</span>
         </button>
       </div>
     </div>
@@ -145,6 +145,7 @@
             <app-evm-transaction-event-log
               *ngFor="let topic of topicsDecoded; let i = index"
               [eventLog]="eventLog[i]"
+              [arrTopicDecode]="arrTopicDecode"
               [topicsDecoded]="topic"
               [index]="i">
             </app-evm-transaction-event-log>
@@ -154,7 +155,7 @@
           <app-table-no-data></app-table-no-data>
         </ng-template>
       </div>
-      <div class="box-data box mt-2" *ngIf="!isLog">
+      <div class="box-data box mt-2 overflow-auto" *ngIf="!isLog">
         <app-evm-internal-transactions
           [dataTable]="transaction.evm_internal_transactions"></app-evm-internal-transactions>
       </div>

@@ -700,6 +700,33 @@ export class ContractService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  
+  getListProxyAbi(addressList: string[]) {
+    const query = `query ListProxyContractDetail($address: [String] = null) {
+      ${this.envDB} {
+        evm_smart_contract(where: {address: {_in: $address}}) {
+          address
+          evm_proxy_histories(order_by: {block_height: desc}, where: {implementation_contract: {_is_null: false}}) {
+            proxy_contract
+            implementation_contract
+            block_height
+          }
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: query,
+        variables: {
+          address: addressList,
+        },
+        operationName: 'ListProxyContractDetail',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
   queryTokenByContractAddress(address: string) {
     if (address.toLowerCase() == this.environmentService.coinMinimalDenom) {
       return of({
