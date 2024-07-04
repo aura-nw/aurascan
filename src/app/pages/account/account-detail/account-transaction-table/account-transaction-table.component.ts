@@ -485,6 +485,17 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  getEvmContractList(addrs?: string[], cb?: (res?: {evm_smart_contract : {address: string}[]} ) => void) {
+    if (addrs) {
+      const listAddrUnique = _.uniq(addrs);
+      this.contractService.findEvmContractList(listAddrUnique).subscribe({
+        next: (res) => {
+          cb(res)
+        },
+      });
+    }
+  }
+
   getListEvmTxByAddress(payload) {
     this.userService
       .getListEvmTxByAddress(payload)
@@ -495,10 +506,18 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
           return this.transactionService.getListMappingName(listMethodId).pipe(
             map((element) => {
               if (res?.evm_transaction?.length > 0) {
-                res.evm_transaction.forEach((tx) => {
-                  const methodId = _.get(tx, 'data')?.substring(0, 8);
-                  tx['method'] = mappingMethodName(element, methodId);
-                });
+                  const addrs = res?.evm_transaction?.map((tx) => tx?.to)?.filter(Boolean);
+                  this.getEvmContractList( _.uniq(addrs), (evmList) => {
+                    res.evm_transaction.forEach((tx) => {
+                      const methodId = _.get(tx, 'data')?.substring(0, 8);
+                      const isEvmContract = evmList?.evm_smart_contract?.some((evm) => evm?.address === tx?.to)
+                      let method = mappingMethodName(element, methodId)
+                      if(!isEvmContract) method = 'Send';
+                      if(!tx?.to) method = 'Create Contract';
+                      
+                      tx['method'] = method;
+                    });
+                  })
                 return res;
               }
               return [];
