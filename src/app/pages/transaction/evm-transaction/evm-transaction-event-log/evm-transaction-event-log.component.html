@@ -41,7 +41,7 @@
       </div>
       <div class="col-12 col-lg-11">
         <app-decode-message
-          index="Value" 
+          [isDataField]="true"
           [value]="eventLog.data" 
           [decode]="eventLog.dataDecoded"
           [isAllowSwitchDecode]="true"
