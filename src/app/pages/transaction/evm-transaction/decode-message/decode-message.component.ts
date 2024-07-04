@@ -1,13 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-
+interface IDecodeData {
+  name: string;
+  decode: string;
+  isLink: boolean;
+}
 @Component({
   selector: 'app-decode-message',
   templateUrl: './decode-message.component.html',
   styleUrls: ['./decode-message.component.scss'],
 })
 export class DecodeMessageComponent implements OnInit {
-  @Input() index?: number;
+  @Input() index?: string;
   @Input() isLink?: boolean;
   @Input() name?: string;
   @Input() isAllowSwitchDecode?: boolean;
@@ -28,7 +32,6 @@ export class DecodeMessageComponent implements OnInit {
   }
   onDecode(field?: string) {
     this.type = 'Decode';
-    console.log(this.decode);
     if(field !== 'data'){
       this.data = this.decode;
       return;

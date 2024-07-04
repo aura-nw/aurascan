@@ -62,6 +62,7 @@
         .data-item {
             display: grid;
             column-gap: 20px;
+            row-gap: 6px;
             grid-template-columns: minmax(100px, max-content) 1fr;
 
             .item-name {

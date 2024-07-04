@@ -19,6 +19,7 @@ export class EvmTransactionEventLogComponent {
     }[];
     data: string;
     dataDecoded?: string;
+    // decodeData?: any[]
   };
   @Input() index;
 }
