@@ -23,15 +23,15 @@
             </ul>
         </div>
     </div>
-    <div *ngIf="!isAllowSwitchDecode" class="data flex-grow-1 font-space-mono">
+    <div *ngIf="!isAllowSwitchDecode" class="data flex-grow-1">
         <p class="mb-1 font-space-mono">{{value}}</p>
         <p class="mb-0 font-space-mono" [innerHTML]="decode | highlight_function"></p>
     </div>
-    <div *ngIf="isAllowSwitchDecode" class="data flex-grow-1 font-space-mono" [class]="isHighlight ? 'highlight' : ''">
-        <a *ngIf="isLink && type === 'Decode'" class="text--primary" routerLink="/address/{{ data }}">
+    <div *ngIf="isAllowSwitchDecode" class="data flex-grow-1" [class]="isHighlight ? 'highlight' : ''">
+        <a *ngIf="isLink && type === 'Decode'" class="text--primary font-space-mono" routerLink="/address/{{ data }}">
             {{data}}
         </a>
-        <span *ngIf="!isLink || type === 'Hex'">{{data}}</span>
+        <span class="font-space-mono" *ngIf="!isLink || type === 'Hex'">{{data}}</span>
     </div>
 </div>
 <div class="decode-message">
@@ -43,21 +43,21 @@
             <div *ngIf="type === 'Decode'">
                 <div class="data-item">
                     <ng-container *ngFor="let item of data">
-                        <p class="font-space-mono item-name">{{item?.name}}</p>
-                        <a *ngIf="item?.isLink" class="text--primary" routerLink="/address/{{ item?.decode }}">
+                        <p class="item-name">{{item?.name}}</p>
+                        <a *ngIf="item?.isLink" class="text--primary font-space-mono" routerLink="/address/{{ item?.decode }}">
                             {{item?.decode}}
                         </a>
-                        <div *ngIf="!item?.isLink">
+                        <div *ngIf="!item?.isLink" class="font-space-mono">
                             <div *ngIf="item?.type === 'tuple'" class="d-flex flex-wrap gap-2 align-items-center">
                                 <div *ngFor="let dataDecoded of item?.decode">
-                                    <a *ngIf="dataDecoded?.isLink" class="text--primary" routerLink="/address/{{ dataDecoded?.name }}">
+                                    <a ngClass="font-space-mono" *ngIf="dataDecoded?.isLink" class="text--primary" routerLink="/address/{{ dataDecoded?.name }}">
                                         {{dataDecoded?.name}}
                                     </a>
-                                    <p *ngIf="!dataDecoded?.isLink" class="font-space-mono" >{{dataDecoded?.name}}</p>
+                                    <p class="font-space-mono" *ngIf="!dataDecoded?.isLink" >{{dataDecoded?.name}}</p>
                                 </div>
                             </div>
                             <div *ngIf="item?.type !== 'tuple'">
-                                <p class="font-space-mono" >{{item?.decode}}</p>
+                                <p class="font-space-mono">{{item?.decode}}</p>
                             </div>
                         </div>
                     </ng-container>

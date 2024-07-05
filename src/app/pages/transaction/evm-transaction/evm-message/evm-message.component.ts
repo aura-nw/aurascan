@@ -146,6 +146,14 @@ export class EvmMessageComponent {
     }));
   }
 
+  mappingFunctionName(item){
+    const {type, indexed, name} = item;
+    let param = type;
+    if (!indexed) param = `${type} ${name}`
+    else param = `${type} indexed ${name}`
+    return param;
+  }
+
   getListTopicDecode() {
     this.transaction.eventLog.forEach((element, index) => {
       
@@ -166,7 +174,7 @@ export class EvmMessageComponent {
 
           if(!paramsDecode) decoded = this.mappingTopics(element)
           else {
-            const params = paramsDecode?.fragment?.inputs.map((i) => `${i.type} ${i.indexed ? 'indexed' : ''} ${i.name}`);
+            const params = paramsDecode?.fragment?.inputs.map(this.mappingFunctionName);
             const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${params.join(', ')})`;
   
             decoded = [
@@ -183,7 +191,13 @@ export class EvmMessageComponent {
               const data = [];
               let currentParamIndex = 0;
               
-              inputs?.forEach((item, idx) => {              
+              inputs?.forEach((item, idx) => {
+                if(item?.type === "tuple") {
+                  const tupleType = `(${item?.components?.map(this.mappingFunctionName)?.join(', ')}) ${item?.name}`;
+                  const replaceTuple = new RegExp(`\\b${item?.type} ${item?.name}\\b`, 'g');
+                  decoded[0].decode = decoded[0]?.decode?.replace(replaceTuple, tupleType);
+                } 
+                
                 const param = {
                   indexed: item?.indexed,
                   name: item.name,
@@ -207,6 +221,8 @@ export class EvmMessageComponent {
               decoded = [...decoded, ...params];
             }}
         }
+        console.log(decoded);
+        
         this.topicsDecoded[index] = decoded;
       } catch (e) {}
       this.arrTopicDecode[index] = arrTopicTemp;
