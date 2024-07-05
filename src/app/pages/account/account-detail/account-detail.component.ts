@@ -140,7 +140,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
             const { type, sequence, pubkey = {} } = account[0] || {};
 
             if (!type && !sequence) return;
-            console.log( type, sequence, pubkey);
             
             if (type === EVM_ACCOUNT_MESSAGE_TYPE) {
               this.accountType = 'evm';

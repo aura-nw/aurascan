@@ -1,9 +1,9 @@
 {
   "environment": {
-      "name": "serenity",
+      "name": "euphoria",
       "label": {
-          "desktop": "Serenity Testnet (v0.8.0)",
-          "mobile": "Serenity Testnet"
+          "desktop": "Euphoria Testnet Network (v0.8.1)",
+          "mobile": "Euphoria Testnet"
       },
       "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
       "notice": {
@@ -13,22 +13,22 @@
       "nativeName": "Aura"
   },
   "chainConfig": {
-      "stakingTime": "86400",
+      "stakingTime": "172800",
       "excludedAddresses": [
           "aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw",
-          "aura1z9whsygd9hdquamn84vs76uy8ytatnw28aff3m",
-          "aura1752fawv92g2c9eegqedj5689gevgscsc0y7stk"
+          "aura1h9ckdkrca4xp95nxemaxs4m6y8jqtt52eyv7je",
+          "aura1gr5unjftq7s983uhxe9csumgqsn828lkv5g0mt"
       ],
-      "blockTime": 2000,
+      "blockTime": 5000,
       "quotaSetPrivateName": 20,
       "quotaSetWatchList": 20,
       "quotaNotification": 100,
       "features": [],
       "chain_info": {
-          "chainId": "auradev_1236-2",
-          "chainName": "Aura serenity testnet",
-          "rpc": "https://rpc.serenity.aura.network",
-          "rest": "https://lcd.serenity.aura.network",
+          "chainId": "aura_6321-3",
+          "chainName": "Aura Euphoria testnet",
+          "rpc": "https://rpc.euphoria.aura.network",
+          "rest": "https://lcd.euphoria.aura.network",
           "bip44": {
               "coinType": 118
           },
@@ -42,21 +42,21 @@
           },
           "currencies": [
               {
-                  "coinDenom": "AURA",
-                  "coinMinimalDenom": "uaura",
+                  "coinDenom": "EAURA",
+                  "coinMinimalDenom": "ueaura",
                   "coinDecimals": 6
               }
           ],
           "feeCurrencies": [
               {
-                  "coinDenom": "AURA",
-                  "coinMinimalDenom": "uaura",
+                  "coinDenom": "EAURA",
+                  "coinMinimalDenom": "ueaura",
                   "coinDecimals": 6
               }
           ],
           "stakeCurrency": {
-              "coinDenom": "AURA",
-              "coinMinimalDenom": "uaura",
+              "coinDenom": "EAURA",
+              "coinMinimalDenom": "ueaura",
               "coinDecimals": 6
           },
           "coinType": 118,
@@ -68,28 +68,26 @@
           "features": [
               "ibc-transfer"
           ],
-          "walletUrlForStaking": "https://serenity.aurascan.io/validators",
+          "walletUrlForStaking": "https://euphoria.aurascan.io/validators",
           "logo": "https://i.imgur.com/zi0mTYb.png",
-          "explorer": "https://serenity.aurascan.io/",
+          "explorer": "https://euphoria.aurascan.io/",
           "beta": "false"
       },
       "evmChainInfo": {
-          "name": "Aura EVM Serenity",
-          "chain": "Aura-Serenity",
-          "rpc": "https://jsonrpc.serenity.aura.network",
-          "faucets": [
-              ""
-          ],
+          "name": "Aura EVM Euphoria",
+          "chain": "Aura-Euphoria",
+          "rpc": "https://jsonrpc.euphoria.aura.network",
+          "faucets": [],
           "nativeCurrency": {
-              "name": "test-Aura",
-              "symbol": "AURA",
-              "denom": "aAURA",
+              "name": "test-EAura",
+              "symbol": "eAURA",
+              "denom": "aeaura",
               "decimals": 18
           },
           "infoURL": "https://aura.network",
-          "shortName": "aura-serenity",
-          "chainId": 1236,
-          "networkId": 1236,
+          "shortName": "aura-euphoria",
+          "chainId": 6321,
+          "networkId": 6321,
           "slip44": 1,
           "icon": "",
           "stakeContract": "0x0000000000000000000000000000000000000800",
@@ -97,8 +95,8 @@
           "explorers": [
               {
                   "name": "Aura Explorer (Aurascan)",
-                  "url": "https://serenity.aurascan.io",
-                  "standard": "none",
+                  "url": "https://euphoria.aurascan.io",
+                  "standard": "EIP3091",
                   "icon": ""
               }
           ]
@@ -106,23 +104,23 @@
   },
   "image": {
       "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
-      "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/",
+      "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/euphoria-assets/",
       "banner": [
           {
-              "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/images/pages/banner_aurascan-2.png",
+              "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/euphoria-assets/images/pages/banner_aurascan.png",
               "url": "https://beta.seekhype.io/"
           },
           {
-              "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/images/pages/banner_aurascan-2.png",
+              "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/euphoria-assets/images/pages/banner_aurascan-2.png",
               "url": "https://beta.seekhype.io/"
           }
       ]
   },
   "api": {
-      "backend": "https://serenity-api.aurascan.io/api/v1",
-      "socket": "https://serenity-api.aurascan.io",
+      "backend": "https://euphoria-api.aurascan.io/api/v1",
+      "socket": "https://euphoria-api.aurascan.io",
       "ipfsDomain": "https://ipfs.io/",
-      "verifyContract": "https://indexer-v2.dev.aurascan.io/verify-contract/v1",
+      "verifyContract": "https://indexer-v2.staging.aurascan.io/verify-contract/v1",
       "coingecko": {
           "url": "https://api.coingecko.com/api/v3",
           "ids": [
@@ -135,10 +133,10 @@
           "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc"
       },
       "horoscope": {
-          "url": "https://indexer-v2.dev.aurascan.io/api",
+          "url": "https://indexer-v2.staging.aurascan.io/api",
           "graphql": "/v2/graphql",
           "rest": "/v2",
-          "chain": "serenity"
+          "chain": "euphoria"
       },
       "walletConnect": {
           "signClient": {
@@ -147,7 +145,7 @@
               "metadata": {
                   "name": "Aurascan",
                   "description": "Aura Network Explorer",
-                  "url": "https://serenity.aurascan.io/",
+                  "url": "https://euphoria.aurascan.io/",
                   "icons": [
                       "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"
                   ]
