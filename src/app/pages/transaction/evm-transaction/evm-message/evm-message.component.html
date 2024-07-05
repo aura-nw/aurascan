@@ -35,11 +35,11 @@
         <button
           *ngIf="isEvmContract || (!isEvmContract && transaction?.memo)"
           class="button body-04 {{
-            ((!isContractVerified || isCreateContract) && isEvmContract) ? 'text--gray-7 pe-none' : ''
+            (!isContractVerified || isCreateContract) && isEvmContract ? 'text--gray-7 pe-none' : ''
           }} active-gradient"
           (click)="changeType(inputDataType.DECODED)"
           [class.active-gradient]="typeInput === inputDataType.DECODED"
-          [disabled]="((!isContractVerified || isCreateContract) && isEvmContract)">
+          [disabled]="(!isContractVerified || isCreateContract) && isEvmContract">
           <span>{{ inputDataType.DECODED }}</span>
         </button>
         <button
