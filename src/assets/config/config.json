@@ -1,147 +1,147 @@
 {
-  "environment": {
-    "name": "develop",
-    "label": {
-      "desktop": "Develop Testnet Network",
-      "mobile": "Develop Testnet"
-    },
-    "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
-    "notice": {
-      "content": null,
-      "url": null
-    },
-    "nativeName": "Aura"
-  },
-  "chainConfig": {
-    "stakingTime": "86400",
-    "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
-    "blockTime": 5000,
-    "quotaSetPrivateName": 10,
-    "quotaSetWatchList": 10,
-    "quotaNotification": 100,
-    "features": [],
-    "chain_info": {
-      "chainId": "auradev_1235-3",
-      "chainName": "aura devnet",
-      "rpc": "https://rpc.dev.aura.network",
-      "rest": "https://lcd.dev.aura.network",
-      "bip44": {
-        "coinType": 118
+    "environment": {
+      "name": "develop",
+      "label": {
+        "desktop": "Develop Testnet Network",
+        "mobile": "Develop Testnet"
       },
-      "bech32Config": {
-        "bech32PrefixAccAddr": "aura",
-        "bech32PrefixAccPub": "aurapub",
-        "bech32PrefixValAddr": "auravaloper",
-        "bech32PrefixValPub": "auravaloperpub",
-        "bech32PrefixConsAddr": "auravalcons",
-        "bech32PrefixConsPub": "auravalconspub"
+      "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
+      "notice": {
+        "content": null,
+        "url": null
       },
-      "currencies": [
-        {
+      "nativeName": "Aura"
+    },
+    "chainConfig": {
+      "stakingTime": "86400",
+      "excludedAddresses": ["aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw"],
+      "blockTime": 5000,
+      "quotaSetPrivateName": 10,
+      "quotaSetWatchList": 10,
+      "quotaNotification": 100,
+      "features": [],
+      "chain_info": {
+        "chainId": "auradev_1235-3",
+        "chainName": "aura devnet",
+        "rpc": "https://rpc.dev.aura.network",
+        "rest": "https://lcd.dev.aura.network",
+        "bip44": {
+          "coinType": 118
+        },
+        "bech32Config": {
+          "bech32PrefixAccAddr": "aura",
+          "bech32PrefixAccPub": "aurapub",
+          "bech32PrefixValAddr": "auravaloper",
+          "bech32PrefixValPub": "auravaloperpub",
+          "bech32PrefixConsAddr": "auravalcons",
+          "bech32PrefixConsPub": "auravalconspub"
+        },
+        "currencies": [
+          {
+            "coinDenom": "TAURA",
+            "coinMinimalDenom": "utaura",
+            "coinDecimals": 6
+          }
+        ],
+        "feeCurrencies": [
+          {
+            "coinDenom": "TAURA",
+            "coinMinimalDenom": "utaura",
+            "coinDecimals": 6
+          }
+        ],
+        "stakeCurrency": {
           "coinDenom": "TAURA",
           "coinMinimalDenom": "utaura",
           "coinDecimals": 6
-        }
-      ],
-      "feeCurrencies": [
-        {
-          "coinDenom": "TAURA",
-          "coinMinimalDenom": "utaura",
-          "coinDecimals": 6
-        }
-      ],
-      "stakeCurrency": {
-        "coinDenom": "TAURA",
-        "coinMinimalDenom": "utaura",
-        "coinDecimals": 6
+        },
+        "coinType": 118,
+        "gasPriceStep": {
+          "low": 0.001,
+          "average": 0.0025,
+          "high": 0.004
+        },
+        "features": ["ibc-transfer"],
+        "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
+        "logo": "https://i.imgur.com/zi0mTYb.png",
+        "explorer": "https://explorer.dev.aura.network/",
+        "beta": "false"
       },
-      "coinType": 118,
-      "gasPriceStep": {
-        "low": 0.001,
-        "average": 0.0025,
-        "high": 0.004
-      },
-      "features": ["ibc-transfer"],
-      "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
-      "logo": "https://i.imgur.com/zi0mTYb.png",
-      "explorer": "https://explorer.dev.aura.network/",
-      "beta": "false"
+      "evmChainInfo": {
+        "name": "Aura EVM Devnet",
+        "chain": "Aura-Dev",
+        "rpc": "https://jsonrpc.dev.aura.network",
+        "faucets": [""],
+        "nativeCurrency": {
+          "name": "test-Aura",
+          "symbol": "tAURA",
+          "denom": "atAURA",
+          "decimals": 18
+        },
+        "infoURL": "https://aura.network",
+        "shortName": "aura-devnet",
+        "chainId": 1235,
+        "networkId": 1235,
+        "slip44": 1,
+        "icon": "",
+        "stakeContract": "0x0000000000000000000000000000000000000800",
+        "claimContract": "0x0000000000000000000000000000000000000801",
+        "explorers": [
+          {
+            "name": "Aura Explorer (Aurascan)",
+            "url": "https://explorer.dev.aura.network",
+            "standard": "none",
+            "icon": ""
+          }
+        ]
+      }
     },
-    "evmChainInfo": {
-      "name": "Aura EVM Devnet",
-      "chain": "Aura-Dev",
-      "rpc": "https://jsonrpc.dev.aura.network",
-      "faucets": [""],
-      "nativeCurrency": {
-        "name": "test-Aura",
-        "symbol": "tAURA",
-        "denom": "atAURA",
-        "decimals": 18
-      },
-      "infoURL": "https://aura.network",
-      "shortName": "aura-devnet",
-      "chainId": 1235,
-      "networkId": 1235,
-      "slip44": 1,
-      "icon": "",
-      "stakeContract": "0x0000000000000000000000000000000000000800",
-      "claimContract": "0x0000000000000000000000000000000000000801",
-      "explorers": [
+    "etherJsonRpc": "https://jsonrpc.dev.aura.network",
+    "image": {
+      "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
+      "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
+      "banner": [
         {
-          "name": "Aura Explorer (Aurascan)",
-          "url": "https://explorer.dev.aura.network",
-          "standard": "none",
-          "icon": ""
+          "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan.png",
+          "url": "https://beta.seekhype.io/"
+        },
+        {
+          "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan-2.png",
+          "url": "https://beta.seekhype.io/"
         }
       ]
-    }
-  },
-  "etherJsonRpc": "https://jsonrpc.dev.aura.network",
-  "image": {
-    "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
-    "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/",
-    "banner": [
-      {
-        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan.png",
-        "url": "https://beta.seekhype.io/"
+    },
+    "api": {
+      "backend": "https://explorer-api.dev.aura.network/api/v1",
+      "socket": "https://explorer-api.dev.aura.network",
+      "ipfsDomain": "https://ipfs.io/",
+      "verifyContract": "https://indexer-v2.dev.aurascan.io/verify-contract/v1",
+      "coingecko": {
+        "url": "https://api.coingecko.com/api/v3",
+        "ids": ["aura-network"]
       },
-      {
-        "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/images/pages/banner_aurascan-2.png",
-        "url": "https://beta.seekhype.io/"
-      }
-    ]
-  },
-  "api": {
-    "backend": "https://explorer-api.dev.aura.network/api/v1",
-    "socket": "https://explorer-api.dev.aura.network",
-    "ipfsDomain": "https://ipfs.io/",
-    "verifyContract": "https://indexer-v2.dev.aurascan.io/verify-contract/v1",
-    "coingecko": {
-      "url": "https://api.coingecko.com/api/v3",
-      "ids": ["aura-network"]
-    },
-    "google": {
-      "url": "apps.googleusercontent.com",
-      "clientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08",
-      "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc"
-    },
-    "horoscope": {
-      "url": "https://indexer-v2.dev.aurascan.io/api",
-      "graphql": "/v2/graphql",
-      "rest": "/v2",
-      "chain": "auratestnet"
-    },
-    "walletConnect": {
-      "signClient": {
-        "projectId": "ae69ca1df362a7183412731fb570a54b",
-        "relayUrl": "wss://relay.walletconnect.org",
-        "metadata": {
-          "name": "Aurascan",
-          "description": "Aura Network Explorer",
-          "url": "https://explorer.dev.aurascan.io/",
-          "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
+      "google": {
+        "url": "apps.googleusercontent.com",
+        "clientId": "3465782004-hp7u6vlitgs109rl0emrsf1oc7bjvu08",
+        "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc"
+      },
+      "horoscope": {
+        "url": "https://indexer-v2.dev.aurascan.io/api",
+        "graphql": "/v2/graphql",
+        "rest": "/v2",
+        "chain": "auratestnet"
+      },
+      "walletConnect": {
+        "signClient": {
+          "projectId": "ae69ca1df362a7183412731fb570a54b",
+          "relayUrl": "wss://relay.walletconnect.org",
+          "metadata": {
+            "name": "Aurascan",
+            "description": "Aura Network Explorer",
+            "url": "https://explorer.dev.aurascan.io/",
+            "icons": ["https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png"]
+          }
         }
       }
     }
   }
-}
