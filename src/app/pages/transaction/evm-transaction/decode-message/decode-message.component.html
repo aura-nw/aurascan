@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <div class="button-container">
+        <div *ngIf="isAllowSwitchDecode" class="button-container">
             <button
                 class="button-data body-04 button-dec"
                 [class.active]="type === 'Decode'"
