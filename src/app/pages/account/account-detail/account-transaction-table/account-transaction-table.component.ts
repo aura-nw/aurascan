@@ -515,8 +515,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
                       const methodId = _.get(tx, 'data')?.substring(0, 8);
                       const isEvmContract = evmList?.evm_smart_contract?.some((evm) => evm?.address === tx?.to)
                       let method = mappingMethodName(element, methodId)
+
                       if (tx?.to && !isEvmContract) method = 'Send';
-                      
                       tx['method'] = method;
                     });
                   })
