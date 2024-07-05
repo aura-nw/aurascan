@@ -500,7 +500,10 @@ export class UserService {
             type
           }
           erc721_activities(
-            where: { _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }] }
+            where: {
+              _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }]
+              action: { _in: $actionIn, _nin: $actionNotIn }
+            }
           ) {
             action
             from
