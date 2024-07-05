@@ -37,7 +37,6 @@ export class EvmTransactionsComponent {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
-  smartContractList: string[] = [];
 
   constructor(
     private layout: BreakpointObserver,
@@ -48,19 +47,6 @@ export class EvmTransactionsComponent {
 
   ngOnInit(): void {
     this.getListTx();
-  }
-
-  getEvmContractList(addrs?: string[]) {
-    return new Promise<{ evm_smart_contract: { address: string }[] }>((resolve) => {
-      if (addrs) {
-        const listAddrUnique = _.uniq(addrs);
-        this.contractService.findEvmContractList(listAddrUnique).subscribe({
-          next: (res) => {
-            resolve(res);
-          },
-        });
-      }
-    });
   }
 
   getListTx(): void {
@@ -127,8 +113,6 @@ export class EvmTransactionsComponent {
       )
       .subscribe({
         next: (res) => {
-          console.log({res});
-          
           this.dataSource.data = res;
         },
         error: (e) => {
