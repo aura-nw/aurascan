@@ -60,8 +60,6 @@ export class DecodeMessageComponent implements OnInit {
         }
       }
     })
-    console.log(this.data);
-    
   }
 
   onHex() {
