@@ -96,8 +96,8 @@ export class EvmTransactionsComponent {
               const trans = res.map((i: any) => {
 
                 const toIsEvmContract = smartContractList.filter((s) => s === i.to)?.length > 0;
-                let type = !toIsEvmContract ? 'Send' : i?.type;
-                if(i?.type === EMethodContract.Creation) type = 'Create Contract';
+                let type = i?.type;
+                if (i?.to && !toIsEvmContract) type = 'Send';
                 
                 return { 
                   ...i,
