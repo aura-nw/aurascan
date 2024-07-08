@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 import { map, switchMap } from 'rxjs';
-import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
+import { EMethodContract, TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
@@ -72,7 +72,6 @@ export class EvmTransactionsComponent {
                   const to = _.get(tx, 'evm_transaction.to');
                   listAddr.push(from);
                   listAddr.push(to);
-
                   return {
                     ...tx,
                     evm_hash: _.get(tx, 'evm_transaction.hash'),
@@ -94,11 +93,19 @@ export class EvmTransactionsComponent {
           return this.contractService.findEvmContractList(listAddrUnique).pipe(
             map((r) => {
               const smartContractList = _.uniq((r?.evm_smart_contract || []).map((i) => i?.address));
-              const trans = res.map((i: any) => ({
-                ...i,
-                toIsEvmContract: smartContractList.filter((s) => s === i.to).length > 0,
-                fromIsEvmContract: smartContractList.filter((s) => s === i.from).length > 0,
-              }));
+              const trans = res.map((i: any) => {
+
+                const toIsEvmContract = smartContractList.filter((s) => s === i.to)?.length > 0;
+                let type = i?.type;
+                if (i?.to && !toIsEvmContract) type = 'Send';
+                
+                return { 
+                  ...i,
+                  type,  
+                  toIsEvmContract,
+                  fromIsEvmContract: smartContractList.filter((s) => s === i.from).length > 0,
+                }
+              });
               return trans;
             }),
           );

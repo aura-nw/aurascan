@@ -244,11 +244,13 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       type: 'text/csv;charset=utf-8',
     });
 
+    const evmAddressTypes = [TabsAccountLink.EVMExecutedTxs, ETypeFtExport.ERC20, ETypeNftExport.ERC721];
+    const address = evmAddressTypes.includes(payload.dataType) ? payload.evmAddress : payload.address;
     const fileName =
       'export-account-' +
       (payload.dataType === TabsAccountLink.NativeTxs ? 'native-ibc-transfer' : nameTab) +
       '-' +
-      payload.address +
+      address +
       '.csv';
     saveAs(data, fileName);
     this.isDownload = false;

@@ -77,8 +77,6 @@
   }
 
   .box-decoded {
-    padding: 8px 12px;
-
     .decoded-header {
       border-bottom: 1px solid var(--aura-gray-6);
     }
@@ -98,5 +96,11 @@
 
   ::-webkit-scrollbar {
     height: 6px;
+  }
+
+  .memo {
+    height: max-content;
+    width: 100%;
+    background-color: var(--aura-gray-9);
   }
 }
