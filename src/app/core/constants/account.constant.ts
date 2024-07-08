@@ -31,3 +31,7 @@ export const TABS_TITLE_ACCOUNT = [
   { label: TabsAccount.FtsTxs, value: TabsAccountLink.FtsTxs },
   { label: TabsAccount.NftTxs, value: TabsAccountLink.NftTxs },
 ];
+
+export const EVM_ACCOUNT_MESSAGE_TYPE = "'/ethermint.types.v1.EthAccount'";
+export const COSMOS_WARNING_MESSAGE = "An account created by a EVM wallet (such as Metamask, Rabby, etc.) cannot be used to sign Cosmos transactions."
+export const EVM_WARNING_MESSAGE = "An account created by a Cosmos wallet (such as Keplr, Leap,...) cannot be used to sign EVM transactions."

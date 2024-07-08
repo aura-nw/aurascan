@@ -15,6 +15,7 @@ import { mappingMethodName } from 'src/app/global/global';
 export class EvmMessageComponent {
   @Input() title: string;
   @Input() transaction: any;
+  @Input() isEvmContract: boolean;
   @Input() eventLog: {
     id: number;
     contractName?: string;
@@ -51,6 +52,11 @@ export class EvmMessageComponent {
   ) {}
 
   ngOnInit(): void {
+    if(!this.isEvmContract){
+      this.typeInput = this.inputDataType.DECODED;
+      if(!this.transaction?.memo) this.typeInput = this.inputDataType.ORIGINAL;
+    } else this.typeInput = this.inputDataType.RAW;
+
     this.inputDataRaw['methodId'] = this.transaction?.inputData?.substring(0, 8);
     this.inputDataRaw['arrList'] = this.transaction?.inputData?.slice(8).match(/.{1,64}/g);
     if (this.inputDataRaw['methodId'] === EMethodContract.Creation) {
@@ -127,6 +133,9 @@ export class EvmMessageComponent {
   getMethodName(methodId) {
     this.transactionService.getListMappingName(methodId).subscribe((res) => {
       this.method = mappingMethodName(res, methodId);
+      if(!this.isEvmContract) this.method = 'Send';
+      if(!this.transaction?.to) this.method = 'Create Contract';
+
     });
   }
 }

@@ -1,11 +1,10 @@
 <div class="message-container text--white">
-  <div class="row mb-2 body justify-content-between justify-content-lg-start">
+  <div *ngIf="isCreateContract" class="row mb-2 body justify-content-between justify-content-lg-start">
     <div class="col-auto col-lg-2 text--gray-4">
       {{ 'Method' }}
     </div>
     <div class="col-auto col-lg-10 text--gray-1">{{ method }}</div>
   </div>
-
   <div
     class="row mb-3 body justify-content-between justify-content-lg-start align-items-center"
     *ngIf="transaction?.contractAddress > 0">
@@ -20,12 +19,13 @@
   </div>
 
   <div class="d-flex flex-wrap mb-4" *ngIf="transaction?.inputData">
-    <div class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4 body">
+    <div *ngIf="isCreateContract" class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4 body">
       {{ 'Input Data' }}
     </div>
-    <div class="col-12 col-lg-10">
+    <div class="col-12 {{isCreateContract ? 'col-lg-10' : ''}}">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
         <button
+          *ngIf="isEvmContract"
           class="button body-04 {{ isCreateContract ? 'text--gray-7 pe-none' : '' }}"
           (click)="changeType(inputDataType.RAW)"
           [class.active-gradient]="typeInput === inputDataType.RAW"
@@ -33,12 +33,13 @@
           <span>{{ inputDataType.RAW }}</span>
         </button>
         <button
+          *ngIf="isEvmContract || (!isEvmContract && transaction?.memo)"
           class="button body-04 {{
-            !isContractVerified || isCreateContract ? 'text--gray-7 pe-none' : ''
+            (!isContractVerified || isCreateContract) && isEvmContract ? 'text--gray-7 pe-none' : ''
           }} active-gradient"
           (click)="changeType(inputDataType.DECODED)"
           [class.active-gradient]="typeInput === inputDataType.DECODED"
-          [disabled]="!isContractVerified || isCreateContract">
+          [disabled]="(!isContractVerified || isCreateContract) && isEvmContract">
           <span>{{ inputDataType.DECODED }}</span>
         </button>
         <button
@@ -50,7 +51,7 @@
       </div>
 
       <div class="box-data log-content mb-3">
-        <div class="log-data body-02 break-word" *ngIf="typeInput === inputDataType.RAW">
+        <div class="log-data body-02 break-word" *ngIf="typeInput === inputDataType.RAW && isEvmContract">
           <div *ngIf="inputDataRaw['methodId']" class="font-space-mono">MethodId: {{ inputDataRaw['methodId'] }}</div>
           <p *ngIf="inputDataRaw['name']" class="font-space-mono">Method name: {{ inputDataRaw['name'] }}</p>
           <ng-container *ngIf="inputDataRaw['arrList']?.length > 0">
@@ -68,39 +69,43 @@
         </div>
 
         <div class="log-data body-02 break-word box-decoded overflow-auto" *ngIf="typeInput === inputDataType.DECODED">
-          <ng-container *ngIf="!env.isMobile">
-            <div class="row pb-3 text--gray-4 body-01 fw-semibold decoded-header">
-              <div class="col-1 pl-4">#</div>
-              <div class="col-3">Name</div>
-              <div class="col-3">Type</div>
-              <div class="col-5">Data</div>
-            </div>
-            <ng-container *ngFor="let item of inputDataDecoded['params']; index as index">
-              <div class="row item-decoded text--gray-1">
-                <div class="col-1 pl-4 font-space-mono">{{ index }}</div>
-                <div class="col-3 font-space-mono">{{ item.name }}</div>
-                <div class="col-3 font-space-mono">{{ item.type }}</div>
-                <div class="col-5 text-wrap font-space-mono">
-                  {{ item.value }}
+          <ng-container *ngIf="isEvmContract">
+            <ng-container *ngIf="!env.isMobile">
+              <div class="row pb-3 text--gray-4 body-01 fw-semibold decoded-header">
+                <div class="col-1 pl-4">#</div>
+                <div class="col-3">Name</div>
+                <div class="col-3">Type</div>
+                <div class="col-5">Data</div>
+              </div>
+              <ng-container *ngFor="let item of inputDataDecoded['params']; index as index">
+                <div class="row item-decoded text--gray-1">
+                  <div class="col-1 pl-4 font-space-mono">{{ index }}</div>
+                  <div class="col-3 font-space-mono">{{ item.name }}</div>
+                  <div class="col-3 font-space-mono">{{ item.type }}</div>
+                  <div class="col-5 text-wrap font-space-mono">
+                    {{ item.value }}
+                  </div>
                 </div>
-              </div>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="env.isMobile">
+              <ng-container *ngFor="let item of inputDataDecoded['params']; index as index">
+                <div class="row item-decoded text--gray-1">
+                  <div class="text--gray-4 body-04">Name</div>
+                  <p>{{ item.name }}</p>
+                  <div class="text--gray-4 body-04">Type</div>
+                  <p class="">{{ item.type }}</p>
+                  <div class="text--gray-4 body-04">Data</div>
+                  <p class="text-wrap">
+                    {{ item.value }}
+                  </p>
+                </div>
+              </ng-container>
             </ng-container>
           </ng-container>
-
-          <ng-container *ngIf="env.isMobile">
-            <ng-container *ngFor="let item of inputDataDecoded['params']; index as index">
-              <div class="row item-decoded text--gray-1">
-                <div class="text--gray-4 body-04">Name</div>
-                <p>{{ item.name }}</p>
-                <div class="text--gray-4 body-04">Type</div>
-                <p class="">{{ item.type }}</p>
-                <div class="text--gray-4 body-04">Data</div>
-                <p class="text-wrap">
-                  {{ item.value }}
-                </p>
-              </div>
-            </ng-container>
-          </ng-container>
+          <div *ngIf="!isEvmContract" class="memo">
+            <p class="mb-0 font-space-mono">{{ transaction?.memo }}</p>
+          </div>
         </div>
 
         <div

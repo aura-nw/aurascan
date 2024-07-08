@@ -5,7 +5,6 @@ import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import BigNumber from 'bignumber.js';
-import { isBefore, isEqual } from 'date-fns';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -17,7 +16,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR, COSMOS_WARNING_MESSAGE, EVM_WARNING_MESSAGE, EVM_ACCOUNT_MESSAGE_TYPE } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
@@ -69,7 +68,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   ENameTag = ENameTag;
   accountEvmAddress = '';
-  firstTransactionFrom: 'cosmos' | 'evm' | '';
+  accountType: 'cosmos' | 'evm' | '';
   tooltipCosmosText: string;
   tooltipEvmText: string;
   chainInfo = this.environmentService.chainInfo;
@@ -132,43 +131,29 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         const payload = {
           address: accountAddress,
         };
-        // 1: cả 2 đều k có ===> hiển thị như bt
-        // 2: cosmos không có => hiển thị warning cho cosmos
-        // 3: evm không có => hiển thị warning cho evm
-        // 4: cả 2 đều có và timestamp bằng nhau thì hiển thị như bt
-        // 5: cả 2 đều có check theo timestamp thằng nào mới hơn thì hiển thị warning cho thằng đó
-        this.userService.getFirstTxFromAddress(payload).subscribe({
-          next: (data: { first_cosmos_tx?: [{ timestamp: string }]; first_evm_tx?: [{ timestamp: string }] } = {}) => {
-            const { first_cosmos_tx, first_evm_tx } = data || {};
-            const firstCosmosTxTimestamp = first_cosmos_tx?.[0]?.timestamp;
-            const firstEvmTxTimestamp = first_evm_tx?.[0]?.timestamp;
+        this.userService.getAccountInfoOfAddress(payload).subscribe({
+          next: (data: { account?: {type?: any; sequence?: number; pubkey?: object}[] } = {}) => {
+            const { account } = data;
 
-            const hasCosmosTx = firstCosmosTxTimestamp !== undefined;
-            const hasEvmTx = firstEvmTxTimestamp !== undefined;
+            if(!account?.length) return;
+  
+            const { type, sequence, pubkey = {} } = account[0] || {};
 
-            if ((!hasCosmosTx && !hasEvmTx) || firstCosmosTxTimestamp === firstEvmTxTimestamp) return;
-
-            if (!hasCosmosTx) {
-              this.firstTransactionFrom = 'evm';
-              this.tooltipCosmosText = accountAddress;
+            if (!type && !sequence) return;
+            
+            if (type === EVM_ACCOUNT_MESSAGE_TYPE) {
+              this.accountType = 'evm';
+              this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
               return;
             }
-
-            if (!hasEvmTx) {
-              this.firstTransactionFrom = 'cosmos';
-              this.tooltipEvmText = accountEvmAddress;
+            if(!Object.keys(pubkey)?.length) {
+              this.accountType = 'evm';
+              this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
               return;
-            }
-
-            const cosmosTimestamp = new Date(firstCosmosTxTimestamp);
-            const evmTimestamp = new Date(firstEvmTxTimestamp);
-
-            if (isBefore(cosmosTimestamp, evmTimestamp)) {
-              this.firstTransactionFrom = 'cosmos';
-              this.tooltipEvmText = accountEvmAddress;
-            } else {
-              this.firstTransactionFrom = 'evm';
-              this.tooltipCosmosText = accountAddress;
+            }else {
+              this.accountType = 'cosmos';
+              this.tooltipEvmText = EVM_WARNING_MESSAGE;
+              return;
             }
           },
         });
