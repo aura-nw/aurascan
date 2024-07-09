@@ -110,6 +110,7 @@ export class TokenContentComponent implements OnInit {
           value: 'Info',
         },)
       }
+      this.tabsBackup = this.TABS;
     });
 
     if (local.getItem(STORAGE_KEYS.IS_VERIFY_TAB) == 'true') {
