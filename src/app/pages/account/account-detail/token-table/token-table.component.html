@@ -208,8 +208,8 @@
                   <span class="text--gray-4 caption fw-normal">Value</span>
                   <span *ngIf="element.price > 0; else defaultValues">
                     <div *ngIf="element.contract_address === '-'">
-                      <div *ngIf="element.value == 0">$0.00</div>
-                      <div *ngIf="element.value != 0">
+                      <div *ngIf="element.value | eq: '0'">$0.00</div>
+                      <div *ngIf="element.value | gt: '0'">
                         <div *ngIf="element.value | lt: '0.01'" [appTooltip]="{ priceAmount: element.value, lt: 0.01 }">
                           {{ '< $0.01' }}
                         </div>
@@ -228,8 +228,8 @@
                     </div>
 
                     <div *ngIf="element.contract_address !== '-'">
-                      <div *ngIf="element.value === 0">0</div>
-                      <div *ngIf="element.value != 0">
+                      <div *ngIf="element.value | eq: '0'">0</div>
+                      <div *ngIf="element.value | gt: '0'">
                         <div *ngIf="element.value | lt: '0.01'" [appTooltip]="{ priceAmount: element.value, lt: 0.01 }">
                           {{ '< $0.01' }}
                         </div>

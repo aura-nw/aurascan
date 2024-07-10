@@ -9,7 +9,7 @@ import { ImageURLPipe, ReplaceIpfsPipe } from './image.pipe';
 import { JsonPipe } from './json.pipe';
 import { IbcDenomPipe, MarketInfoPipe } from './market-info.pipe';
 import { IsPrivateNameTagPipe, IsPublicNameTagPipe, NameTagPipe } from './name-tag.pipe';
-import { BalancePipe, FormatDigitPipe, GtPipe, GtePipe, LtPipe, LtePipe } from './number.pipe';
+import { BalancePipe, EqPipe, FormatDigitPipe, GtPipe, GtePipe, LtPipe, LtePipe } from './number.pipe';
 import { ObjectKeysPipe } from './object-keys.pipe';
 import { CombineTxsMsgPipe, EllipsisPipe } from './string.pipe';
 import { NameTagTooltipPipe } from './tooltip.pipe';
@@ -33,6 +33,7 @@ import { HighlightFunctionPipe } from './highlight-function.pipe';
     LtePipe,
     GtPipe,
     LtPipe,
+    EqPipe,
     IbcDenomPipe,
     EllipsisPipe,
     CustomTimeDatePipe,
@@ -59,6 +60,7 @@ import { HighlightFunctionPipe } from './highlight-function.pipe';
     LtePipe,
     GtPipe,
     LtPipe,
+    EqPipe,
     IbcDenomPipe,
     EllipsisPipe,
     CustomTimeDatePipe,
