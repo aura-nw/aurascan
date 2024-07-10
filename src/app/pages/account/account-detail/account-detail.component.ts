@@ -146,7 +146,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
               this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
               return;
             }
-            if(!Object.keys(pubkey)?.length) {
+            if(!pubkey || !Object.keys(pubkey)?.length) {
               this.accountType = 'evm';
               this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
               return;
