@@ -51,13 +51,29 @@ export enum ETokenNFTTypeBE {
 export const TOKEN_EVM_BURNT = '0x0000000000000000000000000000000000000000';
 
 export const SOCIAL_MEDIA = {
-  github: {
-    name: 'github',
-    icon: 'assets/icons/icons-svg/basic/github.svg',
+  youtube: {
+    name: 'youtube',
+    icon: 'assets/icons/icons-svg/basic/youtube.svg',
   },
   twitter: {
     name: 'twitter',
     icon: 'assets/icons/icons-svg/basic/twitter.svg',
+  },
+  discord: {
+    name: 'discord',
+    icon: 'assets/icons/icons-svg/basic/discord.svg',
+  },
+  telegram: {
+    name: 'telegram',
+    icon: 'assets/icons/icons-svg/basic/telegram.svg',
+  },
+  linkedin: {
+    name: 'linkedin',
+    icon: 'assets/icons/icons-svg/basic/linkedIn.svg',
+  },
+  github: {
+    name: 'github',
+    icon: 'assets/icons/icons-svg/basic/github.svg',
   },
   facebook: {
     name: 'facebook',
@@ -67,25 +83,9 @@ export const SOCIAL_MEDIA = {
     name: 'medium',
     icon: 'assets/icons/icons-svg/basic/medium.svg',
   },
-  telegram: {
-    name: 'telegram',
-    icon: 'assets/icons/icons-svg/basic/telegram.svg',
-  },
-  youtube: {
-    name: 'youtube',
-    icon: 'assets/icons/icons-svg/basic/youtube.svg',
-  },
   otherWebsite: {
     name: 'otherWebsite',
     icon: 'assets/icons/icons-svg/basic/global.svg',
-  },
-  discord: {
-    name: 'discord',
-    icon: 'assets/icons/icons-svg/basic/discord.svg',
-  },
-  linkedin: {
-    name: 'linkedin',
-    icon: 'assets/icons/icons-svg/basic/linkedIn.svg',
   },
 };
 

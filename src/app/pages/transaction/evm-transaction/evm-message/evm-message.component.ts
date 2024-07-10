@@ -136,6 +136,24 @@ export class EvmMessageComponent {
     });
   }
 
+  mappingTopics(element){
+    element['isAllowSwitchDecodeDataField'] = false;
+    return element?.topics?.map((i, tidx) => ({
+      index: tidx,
+      decode: '',
+      value: i,
+      isAllowSwitchDecode: false,
+    }));
+  }
+
+  mappingFunctionName(item){
+    const {type, indexed, name} = item;
+    let param = type;
+    if (!indexed) param = `${type} ${name}`
+    else param = `${type} indexed ${name}`
+    return param;
+  }
+
   getListTopicDecode() {
     this.transaction.eventLog.forEach((element, index) => {
       
@@ -143,61 +161,67 @@ export class EvmMessageComponent {
       try {
         const abiInfo = this.abiContractData.find((f) => f.contractAddress === element.address);
         let decoded = [];
+        element.data = element?.data?.replace('\\x', '');
+        element['isAllowSwitchDecodeDataField'] = true;
+
         if (!abiInfo?.abi) {
-          decoded = element.topics.map((i, tidx) => ({
-            index: tidx,
-            decode: '',
-            value: i,
-            isAllowSwitchDecode: false,
-          }));
+          decoded = this.mappingTopics(element)
         } else {
-          element.data = element?.data?.replace('\\x', '');
           const paramsDecode = abiInfo.interfaceCoder.parseLog({
             topics: element.topics?.filter((f) => f),
             data: `0x${element.data || this.transaction?.inputData}`,
           });
 
-          const params = paramsDecode?.fragment?.inputs.map((i) => `${i.type} ${i.indexed ? 'indexed' : ''} ${i.name}`);
-          const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${params.join(', ')})`;
-
-          decoded = [
-            {
-              index: 0,
-              decode: decodeTopic0,
-              value: element.topics[0],
-            },
-          ];
-          
-          const inputs = paramsDecode?.fragment?.inputs
-          if (inputs?.length > 0) {
-            const params = [];
-            const data = [];
-            let currentParamIndex = 0;
+          if(!paramsDecode) decoded = this.mappingTopics(element)
+          else {
+            const params = paramsDecode?.fragment?.inputs.map(this.mappingFunctionName);
+            const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${params.join(', ')})`;
+  
+            decoded = [
+              {
+                index: 0,
+                decode: decodeTopic0,
+                value: element.topics[0],
+              },
+            ];
             
-            inputs?.forEach((item, idx) => {              
-              const param = {
-                indexed: item?.indexed,
-                name: item.name,
-                type: item.type,
-                isLink: item.type === 'address',
-                decode: paramsDecode.args[idx]?.toString(),
-              }
-              if(item?.indexed) {
-                param["indexed"] = item.indexed;
-                param["index"] = idx + 1;
-                param["isAllowSwitchDecode"] = true;
-                param["value"] = element.topics[currentParamIndex + 1],
-                currentParamIndex += 1;
-                params.push(param);
-              }else {
-                data.push(param);
-              }
-            });
-            
-            element.dataDecoded = data;
-            decoded = [...decoded, ...params];
-          }
+            const inputs = paramsDecode?.fragment?.inputs
+            if (inputs?.length > 0) {
+              const params = [];
+              const data = [];
+              let currentParamIndex = 0;
+              
+              inputs?.forEach((item, idx) => {
+                if(item?.type === "tuple") {
+                  const tupleType = `(${item?.components?.map(this.mappingFunctionName)?.join(', ')}) ${item?.name}`;
+                  const replaceTuple = new RegExp(`\\b${item?.type} ${item?.name}\\b`, 'g');
+                  decoded[0].decode = decoded[0]?.decode?.replace(replaceTuple, tupleType);
+                } 
+                
+                const param = {
+                  indexed: item?.indexed,
+                  name: item.name,
+                  type: item.type,
+                  isLink: item.type === 'address',
+                  decode: paramsDecode.args[idx]?.toString(),
+                }
+                if(item?.indexed) {
+                  param["indexed"] = item.indexed;
+                  param["index"] = currentParamIndex + 1;
+                  param["isAllowSwitchDecode"] = true;
+                  param["value"] = element.topics[currentParamIndex + 1],
+                  currentParamIndex += 1;
+                  params.push(param);
+                }else {
+                  data.push(param);
+                }
+              });
+              
+              element.dataDecoded = data;
+              decoded = [...decoded, ...params];
+            }}
         }
+        
         this.topicsDecoded[index] = decoded;
       } catch (e) {}
       this.arrTopicDecode[index] = arrTopicTemp;
