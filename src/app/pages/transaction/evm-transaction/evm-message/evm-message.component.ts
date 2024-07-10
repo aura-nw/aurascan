@@ -55,9 +55,9 @@ export class EvmMessageComponent {
   ) {}
 
   ngOnInit(): void {
-    if (!this.isEvmContract) {
+    if(!this.isEvmContract){
       this.typeInput = this.inputDataType.DECODED;
-      if (!this.transaction?.memo) this.typeInput = this.inputDataType.ORIGINAL;
+      if(!this.transaction?.memo) this.typeInput = this.inputDataType.ORIGINAL;
     } else this.typeInput = this.inputDataType.RAW;
 
     this.inputDataRaw['methodId'] = this.transaction?.inputData?.substring(0, 8);
@@ -221,7 +221,6 @@ export class EvmMessageComponent {
               decoded = [...decoded, ...params];
             }}
         }
-        console.log(decoded);
         
         this.topicsDecoded[index] = decoded;
       } catch (e) {}
@@ -233,6 +232,9 @@ export class EvmMessageComponent {
   getMethodName(methodId) {
     this.transactionService.getListMappingName(methodId).subscribe((res) => {
       this.method = mappingMethodName(res, methodId);
+      if(!this.isEvmContract) this.method = 'Send';
+      if(!this.transaction?.to) this.method = 'Create Contract';
+
     });
   }
 }

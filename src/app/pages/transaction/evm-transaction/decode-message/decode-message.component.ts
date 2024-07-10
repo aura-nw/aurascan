@@ -31,6 +31,7 @@ export class DecodeMessageComponent implements OnInit {
       this.data = this.decode;
       return;
     }
+
     this.data = Array.isArray(this.decode) && this.decode?.map(item => {
       if(item?.type !== 'tuple') {
         return {
@@ -58,8 +59,6 @@ export class DecodeMessageComponent implements OnInit {
         }
       }
     })
-    console.log(this.data);
-    
   }
 
   onHex() {
