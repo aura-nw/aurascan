@@ -35,3 +35,8 @@ export const TABS_TITLE_ACCOUNT = [
 export const EVM_ACCOUNT_MESSAGE_TYPE = "'/ethermint.types.v1.EthAccount'";
 export const COSMOS_WARNING_MESSAGE = "An account created by a EVM wallet (such as Metamask, Rabby, etc.) cannot be used to sign Cosmos transactions."
 export const EVM_WARNING_MESSAGE = "An account created by a Cosmos wallet (such as Keplr, Leap,...) cannot be used to sign EVM transactions."
+
+export const BASE_ACCOUNT_ADDRESS = {
+  cosmos: "aura1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqg4ha9y",
+  evm: "0x0000000000000000000000000000000000000000"
+}
