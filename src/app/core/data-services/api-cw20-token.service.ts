@@ -144,7 +144,7 @@ export class ApiCw20TokenService {
       denom: USDC_ADDRESS,
       price: USDCMarket?.currentPrice || 0,
       priceChangePercentage24h: USDCMarket?.priceChangePercentage24h || 0,
-      value: value.toNumber(),
+      value: value.toFixed(),
       image: USDCMarket?.image,
       max_total_supply: USDCMarket?.totalSupply,
       verify_status: USDCMarket?.verifyStatus || '',
