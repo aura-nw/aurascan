@@ -151,14 +151,13 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
             const { type, sequence, pubkey = {} } = account[0] || {};
 
             if (!type && !sequence) return;
-            console.log( type, sequence, pubkey);
             
             if (type === EVM_ACCOUNT_MESSAGE_TYPE) {
               this.accountType = 'evm';
               this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
               return;
             }
-            if(!Object.keys(pubkey)?.length) {
+            if(!pubkey || !Object.keys(pubkey)?.length) {
               this.accountType = 'evm';
               this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
               return;
