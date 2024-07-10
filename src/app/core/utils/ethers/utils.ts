@@ -41,3 +41,11 @@ export async function addNetwork(chain) {
   }
 }
 
+export const hex2a = (hex: string) => {
+  if(!hex && typeof hex != 'string') return "";
+  const data = hex.toString();
+  let str = '';
+  for (let i = 0; i < data.length; i += 2)
+      str += String.fromCharCode(parseInt(data.substr(i, 2), 16));
+  return str;
+}
