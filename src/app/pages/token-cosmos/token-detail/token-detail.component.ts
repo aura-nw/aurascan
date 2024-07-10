@@ -65,41 +65,35 @@ export class TokenDetailComponent implements OnInit {
   getCW20Detail(): void {
     let now = new Date();
     now.setDate(now.getDate() - 1);
-    this.tokenService
+    this.tokenService.getTokenDetail(this.contractAddress).subscribe((tokenMarket) => {
+      this.tokenService
       .getCW20Detail(this.contractAddress, this.datePipe.transform(now, DATEFORMAT.DATE_ONLY))
       .subscribe({
         next: (res) => {
           const data = _.get(res, `smart_contract`);
           if (data.length > 0) {
-            this.tokenService.tokensMarket$
-              .pipe(
-                filter((data) => _.isArray(data)),
-                take(1),
-              )
-              .subscribe((item) => {
-                const tokenMarket = item.find((token) => token.denom === data[0].address);
-
-                const token = data[0];
-                token.contract_address = token.address;
-                token.name = tokenMarket?.name || token.cw20_contract.name;
-                token.symbol = tokenMarket?.symbol || token.cw20_contract.symbol;
-                token.decimals = token.cw20_contract.decimal;
-                token.type = this.contractType.CW20;
-                token.max_total_supply = tokenMarket?.max_supply || 0;
-                token.price = tokenMarket?.currentPrice || 0;
-                token.verify_status = tokenMarket?.verifyStatus || '';
-                token.verify_text = tokenMarket?.verifyText || '';
-                token.modeToken = EModeToken.CWToken;
-                token.priceChangePercentage24h = tokenMarket?.priceChangePercentage24h || 0;
-                token.contract_verification = token.code?.code_id_verifications[0]?.verification_status;
-                token.supplyAmount = BigNumber(token.cw20_contract?.total_supply).dividedBy(
-                  BigNumber(10).pow(token.decimals),
-                );
-                token.officialSite = tokenMarket?.officialSite;
-                token.overviewInfo = tokenMarket?.overviewInfo;
-                token.socialProfiles = this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles);
-                this.tokenDetail = token;                
-              });
+            const token = data[0];
+            token.contract_address = token.address;
+            token.name = tokenMarket?.name || token.cw20_contract.name;
+            token.symbol = tokenMarket?.symbol || token.cw20_contract.symbol;
+            token.decimals = token.cw20_contract.decimal;
+            token.type = this.contractType.CW20;
+            token.max_total_supply = tokenMarket?.max_supply || 0;
+            token.price = tokenMarket?.currentPrice || 0;
+            token.verify_status = tokenMarket?.verifyStatus || '';
+            token.verify_text = tokenMarket?.verifyText || '';
+            token.modeToken = EModeToken.CWToken;
+            token.priceChangePercentage24h = tokenMarket?.priceChangePercentage24h || 0;
+            token.contract_verification = token.code?.code_id_verifications[0]?.verification_status;
+            token.supplyAmount = BigNumber(token.cw20_contract?.total_supply).dividedBy(
+              BigNumber(10).pow(token.decimals),
+            );
+            token.officialSite = tokenMarket?.officialSite;
+            token.overviewInfo = tokenMarket?.overviewInfo;
+            token.socialProfiles = this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles);
+            console.log(token);
+            
+            this.tokenDetail = token;                
           }
         },
         error: (e) => {
@@ -114,6 +108,7 @@ export class TokenDetailComponent implements OnInit {
           this.loading = false;
         },
       });
+    })
   }
 
   getTokenDetail(): void {
