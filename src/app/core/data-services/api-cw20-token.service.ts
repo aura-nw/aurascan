@@ -76,7 +76,7 @@ export class ApiCw20TokenService {
         );
 
         const usdcCoin = this.parseUSDCToken(USDCToken, coinsMarkets);
-
+        
         const idx = tokens?.findIndex((f) => f.contract_address?.toLowerCase() === USDC_ADDRESS);
         if (idx >= 0) {
           tokens[idx] = usdcCoin;
@@ -133,7 +133,8 @@ export class ApiCw20TokenService {
 
   parseUSDCToken(token, coinsMarkets) {
     const USDCMarket = coinsMarkets?.find((item) => item.coinId === USDC_COIN_ID);
-
+    const value = new BigNumber(token?.balance).multipliedBy(Number(USDCMarket?.currentPrice || 0));
+    
     return {
       ...token,
       change: null,
@@ -141,9 +142,13 @@ export class ApiCw20TokenService {
       type: COIN_TOKEN_TYPE.ERC20,
       tokenUrl: USDC_ADDRESS,
       denom: USDC_ADDRESS,
-      price: USDCMarket?.currentPrice,
-      priceChangePercentage24h: USDCMarket?.priceChangePercentage24h,
-      value: Number(USDCMarket?.currentPrice) * token?.balance,
+      price: USDCMarket?.currentPrice || 0,
+      priceChangePercentage24h: USDCMarket?.priceChangePercentage24h || 0,
+      value: value.toFixed(),
+      image: USDCMarket?.image,
+      max_total_supply: USDCMarket?.totalSupply,
+      verify_status: USDCMarket?.verifyStatus || '',
+      verify_text: USDCMarket?.verifyText || '',
     };
   }
 
