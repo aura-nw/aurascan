@@ -1,4 +1,10 @@
 <div class="message-container text--white">
+  <div *ngIf="isCreateContract" class="row mb-2 body justify-content-between justify-content-lg-start">
+    <div class="col-auto col-lg-2 text--gray-4">
+      {{ 'Method' }}
+    </div>
+    <div class="col-auto col-lg-10 text--gray-1">{{ method }}</div>
+  </div>
   <div
     class="row mb-3 body justify-content-between justify-content-lg-start align-items-center"
     *ngIf="transaction?.contractAddress > 0">
@@ -12,7 +18,10 @@
     </div>
   </div>
   <div class="d-flex flex-wrap mb-4" *ngIf="transaction?.inputData">
-    <div class="col-12">
+    <div *ngIf="isCreateContract" class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4 body">
+      {{ 'Input Data' }}
+    </div>
+    <div class="col-12 {{isCreateContract ? 'col-lg-10' : ''}}">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
         <button
           *ngIf="isEvmContract"
@@ -25,11 +34,11 @@
         <button
           *ngIf="isEvmContract || (!isEvmContract && transaction?.memo)"
           class="button body-04 {{
-            !isContractVerified || isCreateContract ? 'text--gray-7 pe-none' : ''
+            (!isContractVerified || isCreateContract) && isEvmContract ? 'text--gray-7 pe-none' : ''
           }} active-gradient"
           (click)="changeType(inputDataType.DECODED)"
           [class.active-gradient]="typeInput === inputDataType.DECODED"
-          [disabled]="!isContractVerified || isCreateContract">
+          [disabled]="(!isContractVerified || isCreateContract) && isEvmContract">
           <span>{{ inputDataType.DECODED }}</span>
         </button>
         <button
