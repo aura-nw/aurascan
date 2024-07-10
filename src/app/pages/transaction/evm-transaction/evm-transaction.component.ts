@@ -8,6 +8,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { getBalance } from 'src/app/core/utils/common/parsing';
+import { hex2a } from 'src/app/core/utils/ethers/utils';
 
 @Component({
   selector: 'app-evm-transaction',
@@ -131,7 +132,7 @@ export class EvmTransactionComponent implements OnChanges {
         next: (res) => {
           if (res?.evm_smart_contract?.length > 0)
             this.isEvmContract = true;
-          else this.transaction.memo = this.transaction.inputData as any;
+          else this.transaction.memo = hex2a(this.transaction.inputData as any);
         },
       });
     }
