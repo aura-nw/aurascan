@@ -968,14 +968,17 @@ export class TokenService extends CommonService {
   mappingSocialProfiles(socialProfiles: { [key: string]: string }) {
     if (!socialProfiles) return [];
 
-    return Object.keys(socialProfiles)
-      ?.filter((key) => socialProfiles[key])
-      ?.map((key) => {
-        return {
+    const socialMapping = [];
+    Object.keys(SOCIAL_MEDIA).forEach((key) => {
+      if (socialProfiles[key]) {
+        const social = {
           name: SOCIAL_MEDIA[key]?.name,
           icon: SOCIAL_MEDIA[key]?.icon,
           url: socialProfiles[key],
-        };
-      });
+        }
+        socialMapping.push(social);
+      }
+    })
+    return socialMapping;
   }
 }
