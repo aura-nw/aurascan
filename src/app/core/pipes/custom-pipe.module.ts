@@ -14,6 +14,7 @@ import { ObjectKeysPipe } from './object-keys.pipe';
 import { CombineTxsMsgPipe, EllipsisPipe } from './string.pipe';
 import { NameTagTooltipPipe } from './tooltip.pipe';
 import { HighlightFunctionPipe } from './highlight-function.pipe';
+import { NewlinePipe } from './newline.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -42,6 +43,7 @@ import { HighlightFunctionPipe } from './highlight-function.pipe';
     CapacityPipe,
     EvmAddressPipe,
     HighlightFunctionPipe,
+    NewlinePipe
   ],
   exports: [
     JsonPipe,
@@ -68,6 +70,7 @@ import { HighlightFunctionPipe } from './highlight-function.pipe';
     CapacityPipe,
     EvmAddressPipe,
     HighlightFunctionPipe,
+    NewlinePipe
   ],
   providers: [],
 })

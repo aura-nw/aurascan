@@ -19,6 +19,7 @@ export class EvmTransactionEventLogComponent {
     }[];
     data: string;
     dataDecoded?: string;
+    isAllowSwitchDecodeDataField ?:boolean
   };
   @Input() index;
 }
