@@ -59,17 +59,18 @@ export const getValueOfKeyInObject = (obj: object, key: string) => {
         break;
       }   
     }
-  }
-  for(let prop in obj) {
-    if(prop === key) {
-      return obj[key];
-    }
-    if(obj[prop] instanceof Object) {
-      result = getValueOfKeyInObject(obj[prop], key);
-      if (result) {
-        break;
+  } else if (obj instanceof Object) {
+    for(let prop in obj) {
+      if(prop === key) {
+        return obj[key] || {};
       }
-    } 
-  }
+      if(obj[prop] instanceof Object || obj[prop] instanceof Array) {
+        result = getValueOfKeyInObject(obj[prop], key);
+        if (result) {
+          break;
+        }
+      } 
+    }
   return result;
+  }
 }
