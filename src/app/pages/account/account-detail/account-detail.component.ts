@@ -22,6 +22,7 @@ import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constant
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { getValueOfKeyInObject } from 'src/app/core/utils/ethers/utils';
 
 @Component({
   selector: 'app-account-detail',
@@ -128,24 +129,17 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.getAccountDetail();
         this.checkWatchList();
 
-        const payload = {
-          address: accountAddress,
-        };
-
         if(accountAddress === BASE_ACCOUNT_ADDRESS.cosmos && accountEvmAddress === BASE_ACCOUNT_ADDRESS.evm) {
           this.accountType = 'evm';
           this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
           return;
         }
 
-        this.userService.getAccountInfoOfAddress(payload).subscribe({
-          next: (data: { account?: {type?: any; sequence?: number; pubkey?: object}[] } = {}) => {
+        this.accountService.getAccountInfo(accountAddress).subscribe({
+          next: (data: { account?: {'@type'?: string } } = {}) => {
             const { account } = data;
+            const { "@type": type } = account || {};
 
-            if(!account?.length) return;
-  
-            const { type, sequence, pubkey = {} } = account[0] || {};
-            
             if (type === EVM_ACCOUNT_MESSAGE_TYPE) {
               this.accountType = 'evm';
               this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
@@ -153,7 +147,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
             }
 
             if (type === COSMOS_ACCOUNT_MESSAGE_TYPE) {
-              if (!sequence) return;
+              const sequence = getValueOfKeyInObject(account, 'sequence');
+              const pubkey = getValueOfKeyInObject(account, 'pub_key');
+              
+              if (Number(sequence) <= 0) return;
 
               if(!pubkey || !Object.keys(pubkey)?.length) {
                 this.accountType = 'evm';

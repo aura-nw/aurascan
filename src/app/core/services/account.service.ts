@@ -11,6 +11,8 @@ import { CommonService } from './common.service';
 
 @Injectable()
 export class AccountService extends CommonService {
+    lcd = this.environmentService.chainConfig.chain_info.rest;
+
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
@@ -18,6 +20,10 @@ export class AccountService extends CommonService {
     private apiService: ApiAccountService,
   ) {
     super(http, environmentService);
+  }
+
+  getAccountInfo(address: string) {
+    return this.http.get(`${this.lcd}/cosmos/auth/v1beta1/accounts/${address}`);
   }
 
   getAccountDetail(account_id: string | number): Observable<any> {
