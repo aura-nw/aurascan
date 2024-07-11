@@ -49,3 +49,27 @@ export const hex2a = (hex: string) => {
       str += String.fromCharCode(parseInt(data.substr(i, 2), 16));
   return str;
 }
+
+export const getValueOfKeyInObject = (obj: object, key: string) => {
+  let result = null;
+  if(obj instanceof Array) {
+    for(const element of obj) {
+      result = getValueOfKeyInObject(element, key);
+      if (result) {
+        break;
+      }   
+    }
+  }
+  for(let prop in obj) {
+    if(prop === key) {
+      return obj[key];
+    }
+    if(obj[prop] instanceof Object) {
+      result = getValueOfKeyInObject(obj[prop], key);
+      if (result) {
+        break;
+      }
+    } 
+  }
+  return result;
+}
