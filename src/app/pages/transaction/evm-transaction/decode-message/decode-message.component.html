@@ -28,7 +28,16 @@
         <p class="mb-0 font-space-mono" [innerHTML]="decode | highlight_function"></p>
     </div>
     <div *ngIf="isAllowSwitchDecode" class="data flex-grow-1" [class]="isHighlight ? 'highlight' : ''">
-        <a *ngIf="isLink && type === 'Decode'" class="text--primary font-space-mono" routerLink="/address/{{ data }}">
+        <img
+          [src]="'assets/images/icons/token-contract.svg' | imageS3"
+          width="16px"
+          height="16px"
+          *ngIf="isEvmContract" />
+        <a
+         *ngIf="isLink && type === 'Decode'"
+          class="text--primary font-space-mono d-inline-block"
+          [class]="isEvmContract ? 'p-1' : ''"
+          routerLink="/{{ isEvmContract ? 'evm-contracts' : 'address' }}/{{ data }}">
             {{data}}
         </a>
         <span class="font-space-mono" *ngIf="!isLink || type === 'Hex'">{{data}}</span>
@@ -50,7 +59,16 @@
                         <div *ngIf="!item?.isLink" class="font-space-mono">
                             <div *ngIf="item?.type === 'tuple'" class="d-flex flex-wrap gap-2 align-items-center">
                                 <div *ngFor="let dataDecoded of item?.decode">
-                                    <a ngClass="font-space-mono" *ngIf="dataDecoded?.isLink" class="text--primary" routerLink="/address/{{ dataDecoded?.name }}">
+                                    <img
+                                      [src]="'assets/images/icons/token-contract.svg' | imageS3"
+                                      width="16px"
+                                      height="16px"
+                                      *ngIf="dataDecoded?.isEvmContract" />
+                                    <a
+                                      *ngIf="dataDecoded?.isLink"
+                                      class="text--primary font-space-mono d-inline-block"
+                                      [class]="dataDecoded?.isEvmContract ? 'p-1' : ''"
+                                      routerLink="/{{ dataDecoded?.isEvmContract ? 'evm-contracts' : 'address' }}/{{ dataDecoded?.name }}">
                                         {{dataDecoded?.name}}
                                     </a>
                                     <p class="font-space-mono" *ngIf="!dataDecoded?.isLink" >{{dataDecoded?.name}}</p>
