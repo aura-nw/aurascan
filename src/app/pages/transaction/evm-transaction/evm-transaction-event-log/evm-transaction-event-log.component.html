@@ -1,6 +1,5 @@
 <div class="event-log-container break-word" *ngIf="eventLog">
   <div class="event-number">{{ index + 1 }}</div>
-
   <div class="event-content w-100">
     <div class="d-flex flex-wrap mb-3">
       <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
@@ -10,9 +9,9 @@
       <div class="col-12 col-lg-11 row">
         <div class="col-12">
           <div class="d-block d-lg-inline">
-            {{ eventLog.contractName }}
+            {{ eventLog?.contractName }}
           </div>
-          <span class="font-space-mono">{{ eventLog.address }}</span>
+          <span class="font-space-mono">{{ eventLog?.address }}</span>
         </div>
       </div>
     </div>
