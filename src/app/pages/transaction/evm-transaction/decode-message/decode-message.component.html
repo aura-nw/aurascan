@@ -1,5 +1,5 @@
-<div *ngIf="!isDataField" class="decode-message d-flex justify-content-start align-items-start col-12 d-flex gap-3"
-    [class]="!isMobile ? 'flex-nowrap' : 'flex-wrap'">
+<div *ngIf="!isDataField" class="decode-message d-flex justify-content-start align-items-start col-12 d-flex"
+    [class]="isMobile ? isAllowSwitchDecode ? 'flex-wrap gap-2' : 'flex-nowrap' : 'flex-nowrap gap-3'">
     <div class="param-field d-flex gap-3 justify-content-center align-items-start flex-nowrap">
         <p *ngIf="index !== ''" class="name">
             {{index}} <span *ngIf="name">: {{ name }}</span>
@@ -27,7 +27,7 @@
         <p class="mb-1 font-space-mono">{{value}}</p>
         <p class="mb-0 font-space-mono" [innerHTML]="decode | highlight_function"></p>
     </div>
-    <div *ngIf="isAllowSwitchDecode" class="data flex-grow-1" [class]="isHighlight ? 'highlight' : ''">
+    <div *ngIf="isAllowSwitchDecode" class="data flex-grow-1" [class]="isEvmContract ? 'd-flex align-items-center' : ''">
         <img
           [src]="'assets/images/icons/token-contract.svg' | imageS3"
           width="16px"
@@ -50,7 +50,7 @@
                 <p class="font-space-mono">{{ data }}</p>
             </div>
             <div *ngIf="type === 'Decode'">
-                <div class="data-item">
+                <div class="data-item" [style]="isMobile ? 'grid-template-columns: minmax(40px, max-content) 1fr' : ''">
                     <ng-container *ngFor="let item of data">
                         <p class="item-name">{{item?.name}}</p>
                         <a *ngIf="item?.isLink" class="text--primary font-space-mono" routerLink="/address/{{ item?.decode }}">
@@ -58,7 +58,7 @@
                         </a>
                         <div *ngIf="!item?.isLink" class="font-space-mono">
                             <div *ngIf="item?.type === 'tuple'" class="d-flex flex-wrap gap-2 align-items-center">
-                                <div *ngFor="let dataDecoded of item?.decode">
+                                <div *ngFor="let dataDecoded of item?.decode" [class]="dataDecoded?.isEvmContract ? 'd-flex align-items-center' : ''">
                                     <img
                                       [src]="'assets/images/icons/token-contract.svg' | imageS3"
                                       width="16px"
