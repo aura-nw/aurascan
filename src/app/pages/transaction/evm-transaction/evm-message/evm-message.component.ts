@@ -117,8 +117,9 @@ export class EvmMessageComponent {
           this.isContractVerified = true;
           const value = parseEther('1.0');
           const rawData = abiInfo.interfaceCoder.parseTransaction({ data: '0x' + this.transaction?.inputData, value });
+          
           this.inputDataRaw['name'] =
-          abiInfo.interfaceCoder.getFunction(rawData?.fragment?.name)?.format() || rawData.name;
+          abiInfo.interfaceCoder.getFunction(rawData?.selector)?.format() || rawData.name;
           this.inputDataDecoded['name'] = rawData.name;
           
           if (rawData?.fragment?.inputs?.length > 0) {
@@ -131,8 +132,8 @@ export class EvmMessageComponent {
             });
           }
         }
-        this.getListTopicDecode();
       }
+      this.getListTopicDecode();
     });
   }
 
