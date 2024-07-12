@@ -133,7 +133,7 @@ export class ApiCw20TokenService {
 
   parseUSDCToken(token, coinsMarkets) {
     const USDCMarket = coinsMarkets?.find((item) => item.coinId === USDC_COIN_ID);
-    const amount = getBalance(token?.balance, token?.decimals);
+    const amount = getBalance(token?.balance || 0, token?.decimals);
     const value = new BigNumber(amount).multipliedBy(Number(USDCMarket?.currentPrice || 0));
     
     return {
