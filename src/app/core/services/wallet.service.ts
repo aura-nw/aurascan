@@ -255,7 +255,10 @@ export class WalletService implements OnDestroy {
         this.connectToChain();
       }, 1000);
     };
-    (window as any).ethereum?.on('accountsChanged', reconnect);
+
+    (window as any).ethereum?.on('accountsChanged', () => {
+      this.connectEvmWallet(true);
+    });
     (window as any).ethereum?.on('chainChanged', reconnect);
   }
 
@@ -421,9 +424,9 @@ export class WalletService implements OnDestroy {
     );
   }
 
-  async connectEvmWallet() {
+  async connectEvmWallet(changedWallet = false) {
     const connected = await this.connectToChain();
-    if (!connected) {
+    if (!changedWallet && !connected) {
       return;
     }
 

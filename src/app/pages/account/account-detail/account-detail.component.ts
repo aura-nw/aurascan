@@ -22,6 +22,7 @@ import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constant
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
+import { isAddress, isEvmAddress } from '../../../core/utils/common/validation';
 import { getValueOfKeyInObject } from 'src/app/core/utils/ethers/utils';
 
 @Component({
@@ -73,6 +74,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   tooltipCosmosText: string;
   tooltipEvmText: string;
   chainInfo = this.environmentService.chainInfo;
+  isValidAddress = false;
 
   constructor(
     public commonService: CommonService,
@@ -113,6 +115,15 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
+        if (
+          !isEvmAddress(params.address) &&
+          !isAddress(params.address, this.chainInfo.bech32Config.bech32PrefixAccAddr)
+        ) {
+          this.isValidAddress = false;
+          return;
+        }
+        this.isValidAddress = true;
+
         const { accountAddress, accountEvmAddress } = transferAddress(
           this.chainInfo.bech32Config.bech32PrefixAccAddr,
           params?.address,

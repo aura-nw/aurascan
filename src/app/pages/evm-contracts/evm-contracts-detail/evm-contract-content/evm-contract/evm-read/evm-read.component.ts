@@ -87,10 +87,6 @@ export class EvmReadComponent implements OnChanges {
   }
 
   createContract() {
-    if (this.contract) {
-      return this.contract;
-    }
-
     try {
       const provider = getEthersProvider(this.environmentService.etherJsonRpc);
 

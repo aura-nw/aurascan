@@ -8,6 +8,7 @@ import { ApiCw20TokenService } from '../data-services/api-cw20-token.service';
 import { TYPE_CW4973 } from '../constants/contract.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { isEvmAddress } from '../utils/common/validation';
 
 @Injectable()
 export class AccountService extends CommonService {
@@ -188,7 +189,7 @@ export class AccountService extends CommonService {
   }
 
   getAssetERC721ByOwner(payload): Observable<any> {
-    if (payload.keyword?.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
+    if (payload.keyword?.length >= LENGTH_CHARACTER.EVM_ADDRESS && isEvmAddress(payload.keyword)) {
       payload.contractAddress = payload.keyword;
     } else if (payload.keyword?.length > 0) {
       payload.token_id = payload.keyword;

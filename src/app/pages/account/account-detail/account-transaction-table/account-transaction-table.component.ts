@@ -72,6 +72,7 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'height', headerCellDef: 'Height', headerWidth: 10 },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12 },
     { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 15 },
+    { matColumnDef: 'arrow', headerCellDef: ' ', headerWidth: 5 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 15 },
     { matColumnDef: 'evmAmount', headerCellDef: 'Amount', headerWidth: 11 },
     { matColumnDef: 'hash', headerCellDef: this.denom ? `Cosmos Txn` : 'Txn', headerWidth: 8, cssClass: 'pt-3' },
@@ -81,7 +82,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
     { matColumnDef: 'type', headerCellDef: 'Message', headerWidth: 18, cssClass: 'pt-4' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
-    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'fromAddress', headerCellDef: 'From', headerWidth: 24, cssClass: 'pt-0' },
+    { matColumnDef: 'arrow', headerCellDef: ' ', headerWidth: 5 },
     { matColumnDef: 'toAddress', headerCellDef: 'To', headerWidth: 20, cssClass: 'pt-0' },
   ];
 
@@ -89,7 +91,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash', headerWidth: 18, cssClass: 'pt-3' },
     { matColumnDef: 'method', headerCellDef: 'Message', headerWidth: 14, cssClass: 'pt-4' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time', headerWidth: 12, cssClass: 'pt-4' },
-    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 22, cssClass: 'pt-0' },
+    { matColumnDef: 'from', headerCellDef: 'From', headerWidth: 24, cssClass: 'pt-0' },
+    { matColumnDef: 'arrow', headerCellDef: ' ', headerWidth: 5 },
     { matColumnDef: 'to', headerCellDef: 'To', headerWidth: 20, cssClass: 'pt-0' },
   ];
 
@@ -512,8 +515,8 @@ export class AccountTransactionTableComponent implements OnInit, OnDestroy {
                       const methodId = _.get(tx, 'data')?.substring(0, 8);
                       const isEvmContract = evmList?.evm_smart_contract?.some((evm) => evm?.address === tx?.to)
                       let method = mappingMethodName(element, methodId)
+
                       if (tx?.to && !isEvmContract) method = 'Send';
-                      
                       tx['method'] = method;
                     });
                   })

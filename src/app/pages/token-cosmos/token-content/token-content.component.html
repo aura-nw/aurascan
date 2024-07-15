@@ -2,7 +2,7 @@
   <section class="text--white">
     <div *ngIf="isSearchTx" class="px-4 py-4 py-lg-3 card border-none">
       <p class="caption d-flex align-item-center mb-1">
-        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px"/>
+        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
         FILTER BY TOKEN TXN HASH
       </p>
       <a class="text--primary body-02 break-word" [copyBtn]="textSearch" [routerLink]="['/tx', textSearch]">
@@ -33,7 +33,7 @@
             </app-name-tag>
           </div>
         </div>
-        <div
+        <div 
           class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
             tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3'
           }}">
@@ -131,7 +131,7 @@
             [disabled]="paramQuery?.length > 0"
             autocomplete="off"/>
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
-            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
@@ -165,8 +165,10 @@
     <app-token-inventory-tab
       *ngIf="currentTab === tokenTab.Inventory"
       [typeContract]="tokenDetail?.type"></app-token-inventory-tab>
-    <app-token-info-tab *ngIf="currentTab === tokenTab.Info"></app-token-info-tab>
-    <app-token-contract-tab
+    <app-token-info-tab
+      *ngIf="currentTab === tokenTab.Info"
+      [overviewInfo]="tokenDetail?.overviewInfo"></app-token-info-tab>
+    <app-token-contract-tab 
       *ngIf="currentTab === tokenTab.Contract"
       [contractAddress]="contractAddress"
       [typeContract]="tokenDetail?.type"></app-token-contract-tab>

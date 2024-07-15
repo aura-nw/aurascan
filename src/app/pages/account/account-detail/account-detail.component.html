@@ -1,4 +1,4 @@
-<section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<section class="account-detail text--white" *ngIf="isValidAddress && { value: breakpoint$ | async } as breakpoint">
   <div class="mb-1 mb-md-6">
     <div class="d-flex d-block align-items-center">
       <span class="h2 fw-700 text--white mr-lg-5 mr-2">Account</span>
@@ -23,7 +23,6 @@
           <span>{{ accountAddress }}</span>
         </div>
       </span>
-
     </div>
     <div class="d-lg-flex align-items-center mb-4 body-01 body-mob" *ngIf="accountEvmAddress">
       <div class="text--gray-4 title-address mb-1 mb-lg-0">EVM Address:</div>
@@ -101,7 +100,7 @@
   </div>
 </section>
 
-<section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<section class="account-detail text--white" *ngIf="isValidAddress && { value: breakpoint$ | async } as breakpoint">
   <!--SBT  -->
   <div class="card" *ngIf="
       (totalSBTPick > 0 || (accountAddress === connectedAddress && totalSBT > 0)) &&
@@ -137,3 +136,5 @@
     </div>
   </div>
 </ng-template>
+
+<app-table-no-data *ngIf="!isValidAddress"></app-table-no-data>

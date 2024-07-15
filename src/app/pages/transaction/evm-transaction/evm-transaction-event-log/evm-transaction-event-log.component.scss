@@ -17,6 +17,7 @@
 
   .event-number {
     width: 44px;
+    min-width: max-content;
     max-width: 20%;
     height: 34px;
     border-radius: 8px;
@@ -28,6 +29,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    white-space: nowrap;
 
     &.secondary {
       color: var(--while);

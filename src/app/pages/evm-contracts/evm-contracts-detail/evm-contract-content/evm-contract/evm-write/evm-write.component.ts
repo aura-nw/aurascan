@@ -202,10 +202,6 @@ export class EvmWriteComponent implements OnChanges {
   }
 
   createContract() {
-    if (this.contract) {
-      return this.contract;
-    }
-
     try {
       const account = this.walletService.getEvmAccount();
 

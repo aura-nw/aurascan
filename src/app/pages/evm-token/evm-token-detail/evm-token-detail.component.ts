@@ -17,7 +17,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 export class EvmTokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
-  tokenDetail: any;
+  tokenDetail: any = {};
   contractType = ContractRegisterType;
   errTxt: string;
   EModeToken = EModeToken;
@@ -39,14 +39,13 @@ export class EvmTokenDetailComponent implements OnInit {
         this.contractAddress = contractAddress;
         switch (type) {
           case 'erc721':
-            this.getTokenDetailNFT()
+            this.getTokenDetailNFT();
             break;
           default:
             this.getTokenDetail();
             this.getAssetsDetail();
             break;
         }
-
       }
     });
   }
@@ -82,6 +81,7 @@ export class EvmTokenDetailComponent implements OnInit {
     const payload = {
       address: this.contractAddress,
     };
+
     this.tokenService.getEvmTokenDetail(payload).subscribe({
       next: (res) => {
         const token = res.erc20_contract[0];
@@ -113,7 +113,10 @@ export class EvmTokenDetailComponent implements OnInit {
               price: tokenMarket?.currentPrice || 0,
               priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
               verify_text: tokenMarket?.verifyText || '',
-              verify_status: tokenMarket?.verifyStatus || ''
+              verify_status: tokenMarket?.verifyStatus || '',
+              officialSite : tokenMarket?.officialSite,
+              overviewInfo : tokenMarket?.overviewInfo,
+              socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles)
             };
             this.getAssetsDetail();
           });
@@ -132,7 +135,6 @@ export class EvmTokenDetailComponent implements OnInit {
     });
   }
 
-
   getTokenDetailNFT(): void {
     const payload = {
       address: this.contractAddress,
@@ -146,7 +148,11 @@ export class EvmTokenDetailComponent implements OnInit {
 
         const modeToken = EModeEvmToken.ERCToken;
         this.tokenDetail = { name, type, contract_address, isNFTContract, modeToken };
-        this.tokenDetail.contract_verification = _.get(res, 'evm_smart_contract[0].evm_contract_verifications[0].status', undefined);
+        this.tokenDetail.contract_verification = _.get(
+          res,
+          'evm_smart_contract[0].evm_contract_verifications[0].status',
+          undefined,
+        );
       },
       error: (e) => {
         if (e.name === TIMEOUT_ERROR) {
@@ -166,3 +172,4 @@ export class EvmTokenDetailComponent implements OnInit {
     this.tokenDetail['hasMoreTx'] = event;
   }
 }
+
