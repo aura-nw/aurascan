@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FeatureFlagService } from '../../../../../core/data-services/feature-flag.service';
 
 @Component({
   selector: 'app-evm-token-info-tab',
@@ -10,4 +11,3 @@ export class EvmTokenInfoTabComponent implements OnInit {
   @Input() overviewInfo?: string;
   ngOnInit(): void {}
 }
-
