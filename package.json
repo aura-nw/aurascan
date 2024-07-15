@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "run-p featureflags start:mainnet",
+    "start": "run-p featureflags start:dev",
     "start:dev": "ng serve",
     "build": "ng build --aot=true --output-hashing=all",
     "build:production": "ng build --aot=true --output-hashing=all --configuration production",
-    "featureflags": "node scripts/encryptFeatureFlags.mjs euphoria",
+    "featureflags": "node scripts/encryptFeatureFlags.mjs main",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
