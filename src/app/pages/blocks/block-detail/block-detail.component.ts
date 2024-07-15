@@ -277,4 +277,8 @@ export class BlockDetailComponent implements OnInit {
       });
     }
   }
+
+  isSameHeight(value: string, blockHeight: string | number, blockDetailHeight: string | number): boolean {
+    return value?.toString() === (blockHeight || blockDetailHeight)?.toString();
+  }
 }

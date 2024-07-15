@@ -107,6 +107,14 @@ export class EvmTokenContentComponent implements OnInit {
         this.handleSearch();
         this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
       }
+
+      if (!this.paramQuery) {
+        this.TABS.push({
+          key: TokenTab.Info,
+          value: 'Info',
+        });
+        this.tabsBackup = this.TABS;
+      }
     });
 
     if (local.getItem(STORAGE_KEYS.IS_VERIFY_TAB) == 'true') {
@@ -231,3 +239,4 @@ export class EvmTokenContentComponent implements OnInit {
       .toFixed();
   }
 }
+

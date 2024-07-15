@@ -127,14 +127,14 @@
               </mat-expansion-panel-header>
               <div class="body-03">
                 <div class="divider divider-horizontal divider-lighter my-2"></div>
-                <div class="d-flex justify-content-between">
-                  <div class="text--gray-4">Height</div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="text--gray-4 title">Height</div>
                   <a class="text--primary cursor-pointer block-link" [routerLink]="['/block', data['height']]">
                     {{ data?.height }}
                   </a>
                 </div>
-                <div class="d-flex justify-content-between mt-2">
-                  <div class="text--gray-4">Amount</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <div class="text--gray-4 title">Amount</div>
                   <div class="text--white">
                     <ng-container *ngIf="!data['contractAddress']">
                       <span
@@ -166,18 +166,18 @@
                     </ng-container>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-2">
-                  <div class="text--gray-4">From</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <div class="text--gray-4 title">From</div>
                   <app-name-tag [value]="data?.from" *ngIf="data?.from" [nameTagDark]="true"></app-name-tag>
                   <span *ngIf="!data?.from">-</span>
                 </div>
-                <div class="d-flex justify-content-between mt-2">
-                  <div class="text--gray-4">To</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <div class="text--gray-4 title">To</div>
                   <app-name-tag [value]="data?.to" *ngIf="data?.to" [nameTagDark]="true"></app-name-tag>
                   <span *ngIf="!data?.to">-</span>
                 </div>
-                <div class="d-flex justify-content-between mt-2">
-                  <div class="text--gray-4">Cosmos Txn</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <div class="text--gray-4 title">Cosmos Txn</div>
                   <a
                     *ngIf="data?.hash"
                     [copyBtn]="data.hash"

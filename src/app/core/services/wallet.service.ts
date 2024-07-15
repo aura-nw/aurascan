@@ -255,7 +255,10 @@ export class WalletService implements OnDestroy {
         this.connectToChain();
       }, 1000);
     };
-    (window as any).ethereum?.on('accountsChanged', reconnect);
+
+    (window as any).ethereum?.on('accountsChanged', () => {
+      this.connectEvmWallet(true).then().catch();
+    });
     (window as any).ethereum?.on('chainChanged', reconnect);
   }
 
@@ -421,10 +424,10 @@ export class WalletService implements OnDestroy {
     );
   }
 
-  async connectEvmWallet() {
+  async connectEvmWallet(changedWallet = false) {
     const connected = await this.connectToChain();
-    if (!connected) {
-      return;
+    if (!changedWallet && !connected) {
+      throw Error('Can not connect!');
     }
 
     getSigner(this.env.etherJsonRpc).then((signer) => {
@@ -458,10 +461,10 @@ export class WalletService implements OnDestroy {
           await addNetwork(this.env.evmChainInfo);
           break;
         case 4001:
-          // This error code : "User rejected the request."
-          return false;
+        // This error code : "User rejected the request."
         case -32002:
-          // This error code : "Request of type 'wallet_switchEthereumChain' already pending"
+        // This error code : "Request of type 'wallet_switchEthereumChain' already pending"
+        default:
           return false;
       }
     }
