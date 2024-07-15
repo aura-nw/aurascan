@@ -53,7 +53,9 @@
     </div>
 
     <div class="d-flex flex-wrap mb-3" *ngIf="eventLog.data">
-      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">Data</div>
+      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
+        <span style="line-height: 28px;">Data</span>
+      </div>
       <div class="col-12 col-lg-11">
         <div class="highlight font-space-mono" [featureFlag]="'EnhanceEventLog'" [flagEnabled]="false">
           {{ eventLog.data }}
