@@ -48,7 +48,11 @@
     max-width: calc(100% - 38px);
   }
 
-  .event-log-msg {
-    color: var(--aura-gray-3);
+  .highlight {
+    width: max-content;
+    max-width: 98%;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--aura-gray-10);
   }
 }

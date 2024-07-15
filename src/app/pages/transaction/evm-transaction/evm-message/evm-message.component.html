@@ -134,6 +134,16 @@
           <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog?.length }})</div>
           <div class="">
             <app-evm-transaction-event-log
+              [featureFlag]="'EnhanceEventLog'"
+              [flagEnabled]="false"
+              *ngFor="let log of eventLog; index as idx"
+              [eventLog]="log"
+              [arrTopicDecode]="arrTopicDecode"
+              [index]="idx">
+            </app-evm-transaction-event-log>
+
+            <app-evm-transaction-event-log
+              [featureFlag]="'EnhanceEventLog'"
               *ngFor="let topic of topicsDecoded; let i = index"
               [eventLog]="eventLog[i]"
               [arrTopicDecode]="arrTopicDecode"
