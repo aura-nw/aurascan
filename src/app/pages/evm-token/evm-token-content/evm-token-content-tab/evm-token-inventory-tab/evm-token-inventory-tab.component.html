@@ -54,7 +54,7 @@
                 <app-name-tag
                   *ngIf="!breakpoint.value.matches"
                   class="small-text text--primary hover-link"
-                  [value]="item.owner"
+                  [value]="item.owner | beautyAddress"
                   [linkRouter]="['/token', item.contract_address]"
                   [linkParams]="{ a: item.owner }">
                 </app-name-tag>

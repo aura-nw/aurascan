@@ -107,12 +107,21 @@ export class CosmosTransactionComponent implements OnChanges {
     }
 
     this.transaction = txs[0];
+
+    const eventsTx = txs[0]?.tx?.events?.find((item) => item?.type === 'message');
+
+    let feePayer = '';
+    eventsTx?.attributes?.forEach((attr) => {
+      if (attr?.key === 'sender') feePayer = attr?.value;
+    });
+
     this.transaction = {
       ...this.transaction,
       chainid: this.chainId,
       gas_used: _.get(res, 'transaction[0].gas_used'),
       gas_wanted: _.get(res, 'transaction[0].gas_wanted'),
       raw_log: _.get(res, 'transaction[0].data.tx_response.raw_log'),
+      fee_payer: feePayer,
       type: this.transaction.typeOrigin,
     };
 
@@ -140,3 +149,4 @@ export class CosmosTransactionComponent implements OnChanges {
     this.isRawData = type;
   }
 }
+

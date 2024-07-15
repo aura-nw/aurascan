@@ -87,7 +87,7 @@
             <div class="col-auto col-lg-2 text--gray-4">From</div>
             <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
               <ng-container *ngIf="transaction.from; else dash">
-                <app-name-tag [value]="transaction.from" [fullText]="true"></app-name-tag>
+                <app-name-tag [value]="transaction.from | beautyAddress" [fullText]="true"></app-name-tag>
               </ng-container>
             </div>
           </div>
@@ -97,7 +97,7 @@
             <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
               <ng-container *ngIf="transaction.to; else dash">
                 <app-name-tag
-                  [value]="transaction.to?.toLowerCase()"
+                  [value]="transaction.to | beautyAddress"
                   [fullText]="true"
                   [linkRouter]="[isEvmContract ? '/evm-contracts' : '/address', transaction.to]"
                   [iconContract]="isEvmContract"></app-name-tag>
@@ -148,7 +148,10 @@
     </ng-container>
 
     <div class="row body justify-content-between justify-content-lg-start">
-      <app-evm-message [transaction]="transaction" [eventLog]="transaction.eventLog"></app-evm-message>
+      <app-evm-message 
+      [transaction]="transaction"
+      [eventLog]="transaction.eventLog"
+      [isEvmContract]="isEvmContract"></app-evm-message>
     </div>
   </ng-container>
 </ng-container>

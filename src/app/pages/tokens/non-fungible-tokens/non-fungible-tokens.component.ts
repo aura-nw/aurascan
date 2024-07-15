@@ -13,6 +13,7 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { TableTemplate } from '../../../core/models/common.model';
+import { isEvmAddress } from 'src/app/core/utils/common/validation';
 
 @Component({
   selector: 'app-non-fungible-tokens',
@@ -78,19 +79,20 @@ export class NonFungibleTokensComponent implements OnInit {
       sort_order: this.sortOrder,
     };
 
-    let keySearch = this.textSearch;
+    let keySearch = isEvmAddress(this.textSearch) ? this.textSearch.toLowerCase() : this.textSearch;
 
     if (this.filterBy === 'ERC721') {
       const listAddress = this.nameTagService.findAddressListByNameTag(keySearch, this.filterBy === 'ERC721');
-      let tagAddress = `["${keySearch}"]`;
-      if (listAddress?.length > 0) {
-        tagAddress = '';
-        listAddress.forEach((addr) => {
-          tagAddress += `"${addr}",`;
-        });
-        tagAddress = `[${tagAddress}"${keySearch}"]`;
+      let addressIn = [];
+      if (keySearch.length > 0) {
+        addressIn.push(keySearch);
       }
-      this.tokenService.getListErc721Token(payload, keySearch, tagAddress).subscribe({
+      if (listAddress?.length > 0) {
+        listAddress.forEach((addr) => {
+          addressIn.push(addr);
+        });
+      }
+      this.tokenService.getListErc721Token(payload, keySearch, addressIn).subscribe({
         next: (res) => {
           this.dataSource = new MatTableDataSource<any>(res.list_token);
           this.pageData.length = res.total_token?.aggregate?.count;

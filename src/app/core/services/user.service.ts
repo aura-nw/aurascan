@@ -136,6 +136,28 @@ export class UserService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
+  getAccountInfoOfAddress(payload) {
+    const operationsDoc = `
+    query QueryAccountInfo($address: String!) {
+      ${this.envDB} {
+        account(where: {address: {_eq: $address}}){
+          type
+          sequence
+          pubkey
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: payload,
+        operationName: 'QueryAccountInfo',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : {})));
+  }
+
   getListEvmTxByAddress(payload) {
     const operationsDoc = `
     query QueryEvmTxOfAccount($startTime: timestamptz = null, $endTime: timestamptz = null, $limit: Int = null, $orderId: order_by = desc, $address: String! = null) {
@@ -240,27 +262,27 @@ export class UserService {
   getCW20TxByAddress(payload) {
     const operationsDoc = `
     query QueryCW20ListTX(
-      $receiver: String = null, 
-      $sender: String = null, 
-      $heightGT: Int = null, 
-      $heightLT: Int = null, 
-      $limit: Int = 100, 
+      $receiver: String = null,
+      $sender: String = null,
+      $heightGT: Int = null,
+      $heightLT: Int = null,
+      $limit: Int = 100,
       $actionIn: [String!] = null,
       $actionNotIn: [String!] = null,
-      $startTime: timestamptz = null, 
+      $startTime: timestamptz = null,
       $endTime: timestamptz = null
       ) {
       ${this.envDB} {
         transaction(
           where: {
             cw20_activities: {
-              _or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}], 
+              _or: [{to: {_eq: $receiver}}, {from: {_eq: $sender}}],
               action: {_in: $actionIn, _nin: $actionNotIn}
             },
-            height: {_gt: $heightGT, _lt: $heightLT}, 
+            height: {_gt: $heightGT, _lt: $heightLT},
             timestamp: {_lte: $endTime, _gte: $startTime}
-          }, 
-          order_by: {height: desc}, 
+          },
+          order_by: {height: desc},
           limit: $limit) {
             hash
             height
@@ -285,7 +307,7 @@ export class UserService {
               }
             }
           }
-        } 
+        }
       }`;
     return this.http
       .post<any>(this.graphUrl, {
@@ -443,7 +465,6 @@ export class UserService {
       $heightGT: Int = null
       $heightLT: Int = null
       $limit: Int = null
-      $neqCw4973: String
       $actionIn: [String!] = null
       $actionNotIn: [String!] = null
     ) {
@@ -453,7 +474,6 @@ export class UserService {
             erc721_activities: {
               _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }]
               action: { _in: $actionIn, _nin: $actionNotIn }
-              erc721_contract: { name: { _neq: $neqCw4973 } }
             }
             transaction: {
               timestamp: { _gte: $startTime, _lte: $endTime }
@@ -480,7 +500,10 @@ export class UserService {
             type
           }
           erc721_activities(
-            where: { _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }] }
+            where: {
+              _or: [{ to: { _eq: $receiver } }, { from: { _eq: $sender } }]
+              action: { _in: $actionIn, _nin: $actionNotIn }
+            }
           ) {
             action
             from
@@ -511,10 +534,10 @@ export class UserService {
           actionIn: ERC721_TRACKING,
           actionNotIn: null, //  ['approve', 'instantiate', 'revoke']
           limit: payload.limit,
-          neqCw4973: 'crates.io:cw4973',
         },
         operationName: 'QueryERC721ListTX',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 }
+

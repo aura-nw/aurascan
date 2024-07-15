@@ -143,7 +143,7 @@ export class TransactionService extends CommonService {
       ${this.envDB} {
         transaction(
           limit: $limit
-          order_by: [{ height: $order}],
+          order_by: [{ id: $order}],
           where: {evm_transaction: {hash: {_is_null: false}}}
         ) {
           id
@@ -772,6 +772,34 @@ export class TransactionService extends CommonService {
           address: address,
         },
         operationName: 'QueryAbiContract',
+      })
+      .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  getListAbiContract(addressList: string[]) {
+    const operationsDoc = `
+    query getListAbiContract($address: [String] = null) {
+      ${this.envDB} {
+        evm_contract_verification(where: {contract_address: {_in: $address}, status: {_eq: "SUCCESS"}}, order_by: {id: desc}) {
+          contract_address
+          created_at
+          creator_tx_hash
+          id
+          status
+          updated_at
+          abi
+        }
+      }
+    }
+    `;
+
+    return this.http
+      .post<any>(this.graphUrl, {
+        query: operationsDoc,
+        variables: {
+          address: addressList,
+        },
+        operationName: 'getListAbiContract',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }

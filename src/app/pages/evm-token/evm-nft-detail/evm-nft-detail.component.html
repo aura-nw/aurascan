@@ -164,7 +164,7 @@
               <div class="label-detail text--gray-5">Owner:</div>
               <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner">
                 <app-name-tag
-                  [value]="nftDetail?.owner"
+                  [value]="nftDetail?.owner | beautyAddress"
                   [fullText]="true"
                   [widthAuto]="true"
                   [linkRouter]="[
@@ -179,7 +179,7 @@
               <div class="label-detail text--gray-5">Contract Address:</div>
               <div class="d-flex align-items-center position-relative">
                 <app-name-tag
-                  [value]="nftDetail?.contract_address"
+                  [value]="nftDetail?.contract_address | beautyAddress"
                   [linkRouter]="['/evm-contracts', nftDetail?.contract_address]"
                   [fullText]="true"
                   [widthAuto]="true"
@@ -192,7 +192,7 @@
               <div class="d-flex align-items-center">
                 <app-name-tag
                   *ngIf="nftDetail?.creator"
-                  [value]="nftDetail?.creator"
+                  [value]="nftDetail?.creator | beautyAddress"
                   [fullText]="true"
                   [widthAuto]="true"
                   [linkRouter]="[
@@ -344,7 +344,7 @@
                       ">
                       <app-name-tag
                         *ngIf="data[template.matColumnDef]"
-                        [value]="data[template.matColumnDef]"
+                        [value]="data[template.matColumnDef] | beautyAddress"
                         [linkRouter]="[
                           isEvmSmartContract(data[template.matColumnDef]) ? '/evm-contracts' : '/address',
                           data[template.matColumnDef]
@@ -376,7 +376,7 @@
                         data.modeExecute !== modeExecuteTransaction.UnEquip &&
                         data[template.matColumnDef]
                       "
-                      [value]="data[template.matColumnDef]"
+                      [value]="data[template.matColumnDef] | beautyAddress"
                       [linkRouter]="[
                         isEvmSmartContract(data[template.matColumnDef]) ? '/evm-contracts' : '/address',
                         data[template.matColumnDef]

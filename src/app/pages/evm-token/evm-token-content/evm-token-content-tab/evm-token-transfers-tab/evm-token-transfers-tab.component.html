@@ -107,7 +107,7 @@
                           ">
                           <app-name-tag
                             *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]"
-                            [value]="data[template.matColumnDef]"
+                            [value]="data[template.matColumnDef] | beautyAddress"
                             [linkRouter]="['/token', linkAddress]"
                             [linkParams]="{ a: data[template.matColumnDef] }"
                             [iconContract]="isEvmSmartContract(data[template.matColumnDef])"
@@ -115,13 +115,6 @@
                           </app-name-tag>
                         </ng-container>
                       </div>
-                      <ng-container *ngIf="!isSearchAddress">
-                        <img
-                          [src]="'assets/images/icons/arrow-right.png' | imageS3"
-                          width="14"
-                          height="9"
-                          class="mr-lg-3 mr-0 ml-3" />
-                      </ng-container>
                       <ng-container *ngIf="isSearchAddress">
                         <div class="box-token-transfer">
                           <span
@@ -134,11 +127,14 @@
                       </ng-container>
                     </div>
                   </ng-container>
+                  <ng-container *ngSwitchCase="'arrow'">
+                    <img [src]="'assets/icons/icons-svg/basic/arrow-circle-right.svg'" alt="" class="mr-1" />
+                  </ng-container>
                   <ng-container *ngSwitchCase="'to_address'">
                     <div [style.min-width]="'210px'">
                       <app-name-tag
                         *ngIf="data[template.matColumnDef]"
-                        [value]="data[template.matColumnDef]"
+                        [value]="data[template.matColumnDef] | beautyAddress"
                         [iconContract]="isEvmSmartContract(data[template.matColumnDef])"
                         [maxCharacter]="15"
                         [isEnableRouter]="!data[template.matColumnDef]?.startsWith('Null')"

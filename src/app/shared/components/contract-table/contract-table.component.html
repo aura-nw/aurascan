@@ -42,14 +42,14 @@
                       <ng-container *ngIf="template.isNameTag">
                         <app-name-tag
                           *ngIf="template.matColumnDef !== 'from' && template.matColumnDef !== 'to'"
-                          [value]="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef] | beautyAddress"
                           [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
                           [isEnableRouter]="
                             data[template.matColumnDef] !== contractInfo?.contractsAddress?.toLowerCase()
                           "></app-name-tag>
                         <app-name-tag
                           *ngIf="template.matColumnDef === 'from'"
-                          [value]="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef] | beautyAddress"
                           [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
                           [iconContract]="data['fromIsEvmContract']"
                           [isEnableRouter]="
@@ -57,7 +57,7 @@
                           "></app-name-tag>
                         <app-name-tag
                           *ngIf="template.matColumnDef === 'to'"
-                          [value]="data[template.matColumnDef]"
+                          [value]="data[template.matColumnDef] | beautyAddress"
                           [linkRouter]="[template?.isUrl, data[template.matColumnDef]]"
                           [iconContract]="data['toIsEvmContract']"
                           [isEnableRouter]="
@@ -128,6 +128,9 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'time-distance'">
                     {{ data[template.matColumnDef] | customDateTime: 'Distance' }}
+                  </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'arrow'">
+                    <img [src]="'assets/icons/icons-svg/basic/arrow-circle-right.svg'" alt="" class="mr-1" />
                   </ng-container>
                   <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                 </ng-container>

@@ -75,13 +75,15 @@ export class ApiCw20TokenService {
           BigNumber(token.balance).gt(0),
         );
 
-        const usdcCoin = this.parseUSDCToken(USDCToken, coinsMarkets);
-        
-        const idx = tokens?.findIndex((f) => f.contract_address?.toLowerCase() === USDC_ADDRESS);
-        if (idx >= 0) {
-          tokens[idx] = usdcCoin;
-        } else {
-          tokens.push(usdcCoin);
+        if (USDCToken) {
+          const usdcCoin = this.parseUSDCToken(USDCToken, coinsMarkets);
+
+          const idx = tokens?.findIndex((f) => f.contract_address?.toLowerCase() === USDC_ADDRESS);
+          if (idx >= 0) {
+            tokens[idx] = usdcCoin;
+          } else {
+            tokens.push(usdcCoin);
+          }
         }
 
         const allTokens = [nativeToken, ...tokens];
@@ -115,12 +117,14 @@ export class ApiCw20TokenService {
   }
 
   async getUSDCToken(address: string) {
+    if (!address) {
+      return null;
+    }
     const contract = this.createContract();
     const balance = await contract.balanceOf(address);
     const name = await contract.name();
     const symbol = await contract.symbol();
     const decimals = await contract.decimals();
-    
     return {
       ...USDC_TOKEN,
       tokenUrl: USDC_ADDRESS,
@@ -135,7 +139,6 @@ export class ApiCw20TokenService {
     const USDCMarket = coinsMarkets?.find((item) => item.coinId === USDC_COIN_ID);
     const amount = getBalance(token?.balance || 0, token?.decimals);
     const value = new BigNumber(amount).multipliedBy(Number(USDCMarket?.currentPrice || 0));
-    
     return {
       ...token,
       change: null,
@@ -218,12 +221,13 @@ export class ApiCw20TokenService {
   parseNativeToken(account, coinsMarkets) {
     const nativeId = this.env.coingecko.ids[0];
     const coinMarket = coinsMarkets.find((coin) => coin.coinId === nativeId);
+
     return {
       name: this.env.chainName,
       symbol: this.currencies.coinDenom,
       decimals: this.currencies.coinDecimals,
       denom: this.currencies.coinMinimalDenom,
-      image: this.currencies.coinImageUrl,
+      image: this.currencies.coinImageUrl || coinMarket?.image,
       contract_address: '-',
       balance: account.data.total,
       price: coinMarket?.currentPrice || 0,

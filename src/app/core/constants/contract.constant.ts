@@ -62,6 +62,7 @@ export const EVM_CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
     isUrl: '/address',
     isNameTag: true,
   },
+  { matColumnDef: 'arrow', headerCellDef: ' ', type: 'status', headerWidth: 1 },
   {
     matColumnDef: 'to',
     headerCellDef: 'To',
