@@ -18,6 +18,8 @@
         font-size: 12px;
         white-space: nowrap;
         margin: 0;
+        min-width: 30px;
+        max-width: max-content;
     }
     button.button {
         background-color: #494C58;
