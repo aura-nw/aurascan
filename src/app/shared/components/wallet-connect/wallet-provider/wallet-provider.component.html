@@ -13,7 +13,7 @@
             'button button-pill button-fixed button--lg caption fw-normal cursor-pointer': true,
             'button-outline--gradient': walletTab === 'evm'
           }">
-          <span class="text--white">Aura EVM</span>
+          <span class="text--white">Aura EVM <span class="installed-highlight">Installed</span></span>
         </button>
       </div>
       <div class="wallet-tab">
@@ -24,7 +24,18 @@
             'button button-pill button-fixed button--lg caption fw-normal cursor-pointer': true,
             'button-outline--gradient': walletTab === 'cosmos'
           }">
-          <span class="text--white">Aura Cosmos</span>
+          <span class="text--white">Aura Cosmos <span class="installed-highlight">Installed</span></span>
+        </button>
+      </div>
+      <div class="wallet-tab">
+        <button
+          type="button"
+          (click)="changeWalletTab('other')"
+          [ngClass]="{
+            'button button-pill button-fixed button--lg caption fw-normal cursor-pointer': true,
+            'button-outline--gradient': walletTab === 'other'
+          }">
+          <span class="text--white">Other wallets</span>
         </button>
       </div>
     </div>
@@ -50,18 +61,6 @@
                 </span>
               </div>
             </div>
-            <div
-              *ngFor="let wallet of otherWallets"
-              class="wallet-item col"
-              (click)="connect(wallet)"
-              [ngClass]="{ active: currentChainWallet?.qrUrl && wallet.mode == 'wallet-connect' }">
-              <div class="d-flex flex-column align-items-center">
-                <img class="wallet-icon" [src]="wallet.logo" />
-                <span class="wallet-name">
-                  {{ wallet.prettyName }}
-                </span>
-              </div>
-            </div>
           </ng-container>
 
           <ng-container *ngIf="walletTab === 'evm'">
@@ -82,15 +81,30 @@
                 </span>
               </div>
             </div>
-            <div *ngFor="let evmWallet of othersEvmWallet" class="wallet-item col" (click)="connectEvm(evmWallet)">
-              <div class="d-flex flex-column align-items-center">
-                <img class="wallet-icon" [src]="evmWallet.logo" />
-                <span class="wallet-name">
-                  {{ evmWallet.prettyName }}
-                </span>
-              </div>
-            </div>
           </ng-container>
+        </div>
+
+        <div *ngIf="walletTab === 'other' && (otherWallets?.length || othersEvmWallet)" class="row row-cols-3 w-100">
+          <div
+            *ngFor="let wallet of otherWallets"
+            class="wallet-item col"
+            (click)="connect(wallet)"
+            [ngClass]="{ active: currentChainWallet?.qrUrl && wallet.mode == 'wallet-connect' }">
+            <div class="d-flex flex-column align-items-center">
+              <img class="wallet-icon" [src]="wallet.logo" />
+              <span class="wallet-name">
+                {{ wallet.prettyName }}
+              </span>
+            </div>
+          </div>
+          <div *ngFor="let evmWallet of othersEvmWallet" class="wallet-item col" (click)="connectEvm(evmWallet)">
+            <div class="d-flex flex-column align-items-center">
+              <img class="wallet-icon" [src]="evmWallet.logo" />
+              <span class="wallet-name">
+                {{ evmWallet.prettyName }}
+              </span>
+            </div>
+          </div>
         </div>
       </ng-container>
 
