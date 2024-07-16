@@ -19,6 +19,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set environment variable
         run: |
+          SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
+          echo SHORT_SHA_COMMIT=${SHORT_SHA_COMMIT} >> $GITHUB_ENV
+          echo ENVIRONMENT=${GITHUB_REF_NAME} >> $GITHUB_ENV
           echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/explorer-frontend:${{ inputs.version }} >> $GITHUB_ENV
           echo REPO_MANIFEST_NAME=gitops-prod >> $GITHUB_ENV
           echo REPO_MANIFEST_URL=github.com/aura-nw/gitops-prod.git >> $GITHUB_ENV
