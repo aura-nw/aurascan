@@ -16,13 +16,14 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { ACCOUNT_WALLET_COLOR, COSMOS_WARNING_MESSAGE, EVM_WARNING_MESSAGE, EVM_ACCOUNT_MESSAGE_TYPE, BASE_ACCOUNT_ADDRESS } from '../../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR, COSMOS_WARNING_MESSAGE, EVM_WARNING_MESSAGE, EVM_ACCOUNT_MESSAGE_TYPE, BASE_ACCOUNT_ADDRESS, COSMOS_ACCOUNT_MESSAGE_TYPE } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
 import { isAddress, isEvmAddress } from '../../../core/utils/common/validation';
+import { getValueOfKeyInObject } from 'src/app/core/utils/ethers/utils';
 
 @Component({
   selector: 'app-account-detail',
@@ -139,36 +140,41 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.getAccountDetail();
         this.checkWatchList();
 
-        const payload = {
-          address: accountAddress,
-        };
-
         if(accountAddress === BASE_ACCOUNT_ADDRESS.cosmos && accountEvmAddress === BASE_ACCOUNT_ADDRESS.evm) {
           this.accountType = 'evm';
           this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
           return;
         }
 
-        this.userService.getAccountInfoOfAddress(payload).subscribe({
-          next: (data: { account?: {type?: any; sequence?: number; pubkey?: object}[] } = {}) => {
+        this.accountService.getAccountInfo(accountAddress).subscribe({
+          next: (data: { account?: {'@type'?: string } } = {}) => {
             const { account } = data;
+            const { "@type": type } = account || {};
 
-            if(!account?.length) return;
-  
-            const { type, sequence, pubkey = {} } = account[0] || {};
-
-            if (!type && !sequence) return;
-            
             if (type === EVM_ACCOUNT_MESSAGE_TYPE) {
               this.accountType = 'evm';
               this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
               return;
             }
-            if(!pubkey || !Object.keys(pubkey)?.length) {
-              this.accountType = 'evm';
-              this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
-              return;
-            }else {
+
+            if (type === COSMOS_ACCOUNT_MESSAGE_TYPE) {
+              const sequence = getValueOfKeyInObject(account, 'sequence');
+              const pubkey = getValueOfKeyInObject(account, 'pub_key');
+              
+              if (Number(sequence) <= 0) return;
+
+              if(!pubkey || !Object.keys(pubkey)?.length) {
+                this.accountType = 'evm';
+                this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
+                return;
+              }else {
+                this.accountType = 'cosmos';
+                this.tooltipEvmText = EVM_WARNING_MESSAGE;
+                return;
+              }
+            }
+
+            if (type) {
               this.accountType = 'cosmos';
               this.tooltipEvmText = EVM_WARNING_MESSAGE;
               return;

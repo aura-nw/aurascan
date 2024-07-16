@@ -1,10 +1,4 @@
 <div class="message-container text--white">
-  <div *ngIf="isCreateContract" class="row mb-2 body justify-content-between justify-content-lg-start">
-    <div class="col-auto col-lg-2 text--gray-4">
-      {{ 'Method' }}
-    </div>
-    <div class="col-auto col-lg-10 text--gray-1">{{ method }}</div>
-  </div>
   <div
     class="row mb-3 body justify-content-between justify-content-lg-start align-items-center"
     *ngIf="transaction?.contractAddress > 0">
@@ -18,10 +12,7 @@
     </div>
   </div>
   <div class="d-flex flex-wrap mb-4" *ngIf="transaction?.inputData">
-    <div *ngIf="isCreateContract" class="col-12 col-lg-2 mb-2 mb-lg-0 text--gray-4 body">
-      {{ 'Input Data' }}
-    </div>
-    <div class="col-12 {{isCreateContract ? 'col-lg-10' : ''}}">
+    <div class="col-12">
       <div class="button-switch-stage box-input-data mt-lg-0 mb-2">
         <button
           *ngIf="isEvmContract"
@@ -67,7 +58,7 @@
           </ng-container>
         </div>
 
-        <div class="log-data body-02 break-word box-decoded overflow-auto" *ngIf="typeInput === inputDataType.DECODED">
+        <div class="log-data body-02 break-word box-decoded" *ngIf="typeInput === inputDataType.DECODED">
           <ng-container *ngIf="isEvmContract">
             <ng-container *ngIf="!env.isMobile">
               <div class="row pb-3 text--gray-4 body-01 fw-semibold decoded-header">
@@ -108,7 +99,7 @@
         </div>
 
         <div
-          class="log-data break-word font-space-mono overflow-auto"
+          class="log-data break-word font-space-mono"
           *ngIf="typeInput === inputDataType.ORIGINAL"
           [appExpandable]="transaction?.inputData"
           [maxCharVisible]="500">
@@ -143,6 +134,16 @@
           <div class="mb-6">Transaction Receipt Event Logs ({{ eventLog?.length }})</div>
           <div class="">
             <app-evm-transaction-event-log
+              [featureFlag]="'EnhanceEventLog'"
+              [flagEnabled]="false"
+              *ngFor="let log of eventLog; index as idx"
+              [eventLog]="log"
+              [arrTopicDecode]="arrTopicDecode"
+              [index]="idx">
+            </app-evm-transaction-event-log>
+
+            <app-evm-transaction-event-log
+              [featureFlag]="'EnhanceEventLog'"
               *ngFor="let topic of topicsDecoded; let i = index"
               [eventLog]="eventLog[i]"
               [arrTopicDecode]="arrTopicDecode"

@@ -14,6 +14,8 @@ import { NameTagService } from 'src/app/core/services/name-tag.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
+import { FeatureFlagService } from '../../../core/data-services/feature-flag.service';
+import { FeatureFlags } from '../../../core/constants/feature-flags.enum';
 
 @Component({
   selector: 'app-evm-token-content',
@@ -65,6 +67,7 @@ export class EvmTokenContentComponent implements OnInit {
     private nameTagService: NameTagService,
     private router: Router,
     private beautyAddress: EvmAddressPipe,
+    private featureFlag: FeatureFlagService,
   ) {}
 
   ngOnInit(): void {
@@ -108,12 +111,14 @@ export class EvmTokenContentComponent implements OnInit {
         this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
       }
 
-      if (!this.paramQuery) {
-        this.TABS.push({
-          key: TokenTab.Info,
-          value: 'Info',
-        });
-        this.tabsBackup = this.TABS;
+      if (this.featureFlag.isEnabled(FeatureFlags.SetTokenInfo)) {
+        if (!this.paramQuery) {
+          this.TABS.push({
+            key: TokenTab.Info,
+            value: 'Info',
+          });
+          this.tabsBackup = this.TABS;
+        }
       }
     });
 
@@ -239,4 +244,3 @@ export class EvmTokenContentComponent implements OnInit {
       .toFixed();
   }
 }
-

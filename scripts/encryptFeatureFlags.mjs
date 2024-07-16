@@ -4,14 +4,14 @@ import { v5 } from 'uuid';
 const args = process.argv;
 if (args.length < 3) {
   console.error(
-    'Missing env:<dev|serenity|euphoria|mainnet>: `node encryptFeatureFlags.mjs <dev|serenity|euphoria|mainnet>`',
+    'Missing env:<dev|serenity|euphoria|main>: `node encryptFeatureFlags.mjs <dev|serenity|euphoria|main>`',
   );
   process.exit(1);
 }
 
 const env = args[2];
 
-const envs = { develop: 'dev', serenity: 'serenity', euphoria: 'euphoria', main: 'mainnet' };
+const envs = { develop: 'dev', serenity: 'serenity', euphoria: 'euphoria', main: 'main' };
 const getEnv = () => {
   return envs[env] || 'dev';
 };
