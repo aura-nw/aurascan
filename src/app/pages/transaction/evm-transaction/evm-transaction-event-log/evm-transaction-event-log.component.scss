@@ -8,6 +8,13 @@
     gap: 8px;
   }
 
+  .row-name {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
   .item-topic {
     min-height: 40px;
     &:last-child {
