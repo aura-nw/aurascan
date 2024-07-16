@@ -73,12 +73,6 @@ export class TokenContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.featureFlag.isEnabled(FeatureFlags.SetTokenInfo)) {
-      this.tabStaking = [TokenTab.Holders, TokenTab.Info];
-      this.tabIBC = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info];
-      this.tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract, TokenTab.Info];
-    }
-
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
     let tabFilter;
     switch (this.tokenDetail.modeToken) {
@@ -113,11 +107,14 @@ export class TokenContentComponent implements OnInit {
       this.handleSearch();
       this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
 
-      if(!this.paramQuery) {
-        this.TABS.push({
-          key: TokenTab.Info,
-          value: 'Info',
-        },)
+      if (this.featureFlag.isEnabled(FeatureFlags.SetTokenInfo)) {
+        if(!this.paramQuery){
+          this.TABS.push({
+            key: TokenTab.Info,
+            value: 'Info',
+          });
+          this.tabsBackup = this.TABS;
+        }
       }
     });
 
