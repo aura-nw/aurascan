@@ -2,8 +2,8 @@
   <div class="event-number">{{ index + 1 }}</div>
   <div class="event-content w-100">
     <div class="d-flex flex-wrap mb-3">
-      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
-        {{ 'Contract' }}
+      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4">
+        <div class="row-name">Contract</div>
       </div>
 
       <div class="col-12 col-lg-11 row">
@@ -17,8 +17,8 @@
     </div>
 
     <div class="d-flex flex-wrap mb-3">
-      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
-        Topics
+      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4">
+        <div class="row-name" style="margin-top: 5px;">Topics</div>
       </div>
       <div class="col-12 col-lg-11 d-flex flex-column gap-2">
         <ng-container *ngFor="let topic of topicsDecoded; index as idx">
@@ -35,8 +35,8 @@
     </div>
 
     <div class="d-flex flex-wrap mb-3" *ngIf="eventLog.data">
-      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4 body">
-        <span style="line-height: 28px;">Data</span>
+      <div class="col-12 col-lg-1 mb-2 mb-lg-0 text--gray-4">
+        <div class="row-name" style="margin-top: 9px;">Data</div>
       </div>
       <div class="col-12 col-lg-11">
         <app-decode-message
