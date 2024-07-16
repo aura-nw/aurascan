@@ -13,6 +13,8 @@ import { LENGTH_CHARACTER, STORAGE_KEYS } from '../../../app/core/constants/comm
 import { TransactionService } from '../../core/services/transaction.service';
 import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
+import { FeatureFlagService } from 'src/app/core/data-services/feature-flag.service';
+import { FeatureFlags } from 'src/app/core/constants/feature-flags.enum';
 @Component({
   selector: 'app-horizontaltopbar',
   templateUrl: './horizontaltopbar.component.html',
@@ -45,6 +47,7 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private nameTagService: NameTagService,
     private userService: UserService,
+    private featureFlag: FeatureFlagService,
   ) {}
 
   ngOnDestroy(): void {
@@ -56,6 +59,10 @@ export class HorizontaltopbarComponent implements OnInit, OnDestroy {
     this.getMenuLink();
     this.checkEnv();
     this.checkFeatures();
+
+    if (this.featureFlag.isEnabled(FeatureFlags.DevTest)) {
+      console.warn('FeatureFlags.DevTest is enabled. remove later!');
+    }
 
     this.userService.user$?.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
       this.userEmail = currentUser ? currentUser.email : null;

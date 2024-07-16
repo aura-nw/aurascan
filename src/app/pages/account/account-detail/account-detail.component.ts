@@ -9,19 +9,21 @@ import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EFeature } from 'src/app/core/models/common.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR, COSMOS_WARNING_MESSAGE, EVM_WARNING_MESSAGE, EVM_ACCOUNT_MESSAGE_TYPE, BASE_ACCOUNT_ADDRESS, COSMOS_ACCOUNT_MESSAGE_TYPE } from '../../../core/constants/account.constant';
 import { ACCOUNT_WALLET_COLOR_ENUM, ENameTag, WalletAcount } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, STORAGE_KEYS } from '../../../core/constants/common.constant';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { CHART_OPTION, ChartOptions, chartCustomOptions } from './chart-options';
-import { ContractService } from 'src/app/core/services/contract.service';
+import { isAddress, isEvmAddress } from '../../../core/utils/common/validation';
+import { getValueOfKeyInObject } from 'src/app/core/utils/ethers/utils';
 
 @Component({
   selector: 'app-account-detail',
@@ -68,7 +70,11 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   EFeature = EFeature;
   ENameTag = ENameTag;
   accountEvmAddress = '';
+  accountType: 'cosmos' | 'evm' | '';
+  tooltipCosmosText: string;
+  tooltipEvmText: string;
   chainInfo = this.environmentService.chainInfo;
+  isValidAddress = false;
 
   constructor(
     public commonService: CommonService,
@@ -109,6 +115,15 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params?.address) {
+        if (
+          !isEvmAddress(params.address) &&
+          !isAddress(params.address, this.chainInfo.bech32Config.bech32PrefixAccAddr)
+        ) {
+          this.isValidAddress = false;
+          return;
+        }
+        this.isValidAddress = true;
+
         const { accountAddress, accountEvmAddress } = transferAddress(
           this.chainInfo.bech32Config.bech32PrefixAccAddr,
           params?.address,
@@ -124,6 +139,48 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
         this.getAccountDetail();
         this.checkWatchList();
+
+        if(accountAddress === BASE_ACCOUNT_ADDRESS.cosmos && accountEvmAddress === BASE_ACCOUNT_ADDRESS.evm) {
+          this.accountType = 'evm';
+          this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
+          return;
+        }
+
+        this.accountService.getAccountInfo(accountAddress).subscribe({
+          next: (data: { account?: {'@type'?: string } } = {}) => {
+            const { account } = data;
+            const { "@type": type } = account || {};
+
+            if (type === EVM_ACCOUNT_MESSAGE_TYPE) {
+              this.accountType = 'evm';
+              this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
+              return;
+            }
+
+            if (type === COSMOS_ACCOUNT_MESSAGE_TYPE) {
+              const sequence = getValueOfKeyInObject(account, 'sequence');
+              const pubkey = getValueOfKeyInObject(account, 'pub_key');
+              
+              if (Number(sequence) <= 0) return;
+
+              if(!pubkey || !Object.keys(pubkey)?.length) {
+                this.accountType = 'evm';
+                this.tooltipCosmosText = COSMOS_WARNING_MESSAGE;
+                return;
+              }else {
+                this.accountType = 'cosmos';
+                this.tooltipEvmText = EVM_WARNING_MESSAGE;
+                return;
+              }
+            }
+
+            if (type) {
+              this.accountType = 'cosmos';
+              this.tooltipEvmText = EVM_WARNING_MESSAGE;
+              return;
+            }
+          },
+        });
       }
     });
   }
@@ -289,3 +346,4 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     }
   }
 }
+

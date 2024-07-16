@@ -8,7 +8,7 @@ import { CW20_TRACKING } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import { TOKEN_EVM_BURNT } from '../constants/token.constant';
+import { SOCIAL_MEDIA, TOKEN_EVM_BURNT } from '../constants/token.constant';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService extends CommonService {
@@ -141,28 +141,29 @@ export class TokenService extends CommonService {
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
   }
 
-  getListErc721Token(payload, textSearch: string = null, address: string = null): Observable<any> {
-    let queryUpdate = '';
-    if (textSearch?.length > 0) {
-      queryUpdate = `erc721_contract: { _or: [{name: {_ilike: "%${textSearch}%"}} ,  {evm_smart_contract: {address: {_in: ${address} }}}]}`;
-    }
-
-    let querySort = `, order_by: [{${payload.sort_column}: ${payload.sort_order}}, {id: desc}]`;
+  getListErc721Token(payload, textSearch: string = null, addressIn: string[] = []): Observable<any> {
+    let querySort = `order_by: [{erc721_stat: {${payload.sort_column}: ${
+      payload.sort_order === 'asc' ? 'asc_nulls_first' : 'desc_nulls_last'
+    } }}, {id: desc}]`;
+    let queryWhere = `where: {_or: [{address: {_in: $addressIn}}, {name: {_ilike: "%${textSearch}%"}}]}`;
     const operationsDoc = `
-    query queryListErc721($limit: Int = 10, $offset: Int = 0) {
+    query queryListErc721($limit: Int = 10, $offset: Int = 0, $addressIn: [String!] = null) {
       ${this.envDB} {
-        list_token: erc721_stats(limit: $limit, offset: $offset ${querySort}, where: { ${queryUpdate} }) {
-          transfer_24h
-          total_activity
-          erc721_contract {
-            name
-            symbol
-            evm_smart_contract {
-              address
-            }
+        list_token: erc721_contract(
+          limit: $limit
+          offset: $offset
+          ${querySort}
+          ${queryWhere}
+        ) {
+          address
+          name
+          symbol
+          erc721_stat {
+            total_activity
+            transfer_24h
           }
         }
-        total_token: erc721_stats_aggregate (where: { ${queryUpdate} }) {
+        total_token: erc721_contract_aggregate (${queryWhere}) {
           aggregate {
             count
           }
@@ -176,6 +177,7 @@ export class TokenService extends CommonService {
         variables: {
           limit: payload.limit || 20,
           offset: payload.offset || 0,
+          addressIn: addressIn,
         },
         operationName: 'queryListErc721',
       })
@@ -961,5 +963,22 @@ export class TokenService extends CommonService {
         operationName: 'queryListTxsERC20',
       })
       .pipe(map((res) => (res?.data ? res?.data[this.envDB] : null)));
+  }
+
+  mappingSocialProfiles(socialProfiles: { [key: string]: string }) {
+    if (!socialProfiles) return [];
+
+    const socialMapping = [];
+    Object.keys(SOCIAL_MEDIA).forEach((key) => {
+      if (socialProfiles[key]) {
+        const social = {
+          name: SOCIAL_MEDIA[key]?.name,
+          icon: SOCIAL_MEDIA[key]?.icon,
+          url: socialProfiles[key],
+        }
+        socialMapping.push(social);
+      }
+    })
+    return socialMapping;
   }
 }

@@ -5,8 +5,11 @@
         <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
         FILTER BY TOKEN TXN HASH
       </p>
-      <a class="text--primary body-02 break-word" [copyBtn]="textSearch" [routerLink]="['/tx', textSearch]">
-        {{ textSearch }}
+      <a
+        class="text--primary body-02 break-word"
+        [copyBtn]="textSearch | beautyAddress"
+        [routerLink]="['/tx', textSearch]">
+        {{ textSearch | beautyAddress }}
       </a>
     </div>
     <div *ngIf="!isSearchTx && isSearchAddress" class="card main-tab py-3 py-lg-4 px-4">
@@ -24,8 +27,8 @@
           <div class="mt-2">
             <app-name-tag
               [iconContract]="textSearch | isContract"
-              [value]="textSearch"
-              [linkRouter]="[(textSearch | isContract) ? '/contracts' : '/address', textSearch]"
+              [value]="textSearch | beautyAddress"
+              [linkRouter]="[(textSearch | isContract) ? '/contracts' : '/address', textSearch | beautyAddress]"
               [fullText]="true"
               [widthAuto]="true"
               [maxCharacter]="30"
@@ -33,14 +36,13 @@
             </app-name-tag>
           </div>
         </div>
-        <div
-          class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
+        <div class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
             tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3'
           }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <ng-container *ngIf="!tokenDetail?.isNFTContract">
             <span *ngIf="infoSearch['balance'] == 0 || !infoSearch['balance']">0</span>
-            <span
+            <span 
               [appTooltip]="{ priceAmount: infoSearch['balance'], decimal: tokenDetail.decimals }"
               *ngIf="(infoSearch['balance'] | balance: tokenDetail.decimals | lt: 0.001) && infoSearch['balance'] != 0">
               {{ '<0.001' }}
@@ -164,9 +166,11 @@
     <app-evm-token-inventory-tab
       *ngIf="currentTab === tokenTab.Inventory"
       [typeContract]="tokenDetail?.type"></app-evm-token-inventory-tab>
-    <app-evm-token-info-tab *ngIf="currentTab === tokenTab.Info"></app-evm-token-info-tab>
-    <app-evm-token-contract-tab
-      *ngIf="currentTab === tokenTab.Contract"
+    <app-evm-token-info-tab 
+      *ngIf="currentTab === tokenTab.Info"
+      [overviewInfo]="tokenDetail?.overviewInfo"></app-evm-token-info-tab>
+    <app-evm-token-contract-tab 
+      *ngIf="currentTab === tokenTab.Contract" 
       [contractAddress]="contractAddress"
       [contractTypeData]="tokenDetail?.type"></app-evm-token-contract-tab>
   </div>

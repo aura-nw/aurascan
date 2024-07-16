@@ -124,11 +124,15 @@ export class TokenTableComponent implements OnChanges {
 
       if (this.textSearch && searchList) {
         searchList = searchList?.filter(
-          (item) => item.name?.toLowerCase().includes(txtSearch.toLowerCase()) || item.contract_address == txtSearch,
+          (item) =>
+            item.name?.toLowerCase().includes(txtSearch.toLowerCase()) ||
+            item.contract_address == txtSearch.toLowerCase(),
         );
       } else if (this.tokenFilter === '') {
         searchList = this.dataTable?.filter(
-          (item) => item.name?.toLowerCase().includes(txtSearch.toLowerCase()) || item.contract_address == txtSearch,
+          (item) =>
+            item.name?.toLowerCase().includes(txtSearch.toLowerCase()) ||
+            item.contract_address == txtSearch.toLowerCase(),
         );
       }
 

@@ -376,12 +376,21 @@
                             [routerLink]="['/tx', data['hash']]">
                             {{ data[template.matColumnDef] | ellipsis: 8 : 8 }}
                           </a>
-                          <a
-                            *ngSwitchCase="'height'"
-                            class="text--primary cursor-pointer block-link"
-                            [routerLink]="['/block', data['height']]">
-                            {{ data[template.matColumnDef] }}
-                          </a>
+                          <ng-container
+                            *ngIf="
+                              isSameHeight(data[template.matColumnDef], blockHeight, blockDetail?.height);
+                              else showLink
+                            ">
+                            <div *ngSwitchCase="'height'">{{ data[template.matColumnDef] }}</div>
+                          </ng-container>
+                          <ng-template #showLink>
+                            <a
+                              *ngSwitchCase="'height'"
+                              class="text--primary cursor-pointer block-link"
+                              [routerLink]="['/block', data['height']]">
+                              {{ data[template.matColumnDef] }}
+                            </a>
+                          </ng-template>
                           <div *ngSwitchCase="'method'" class="g-type aura-status">
                             <div class="d-flex" [appTooltip]="data.lstType | combineTxsMsg">
                               {{ data[template.matColumnDef] }}

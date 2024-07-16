@@ -8,9 +8,12 @@ import { ApiCw20TokenService } from '../data-services/api-cw20-token.service';
 import { TYPE_CW4973 } from '../constants/contract.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import { isEvmAddress } from '../utils/common/validation';
 
 @Injectable()
 export class AccountService extends CommonService {
+    lcd = this.environmentService.chainConfig.chain_info.rest;
+
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
@@ -18,6 +21,10 @@ export class AccountService extends CommonService {
     private apiService: ApiAccountService,
   ) {
     super(http, environmentService);
+  }
+
+  getAccountInfo(address: string) {
+    return this.http.get(`${this.lcd}/cosmos/auth/v1beta1/accounts/${address}`);
   }
 
   getAccountDetail(account_id: string | number): Observable<any> {
@@ -182,7 +189,7 @@ export class AccountService extends CommonService {
   }
 
   getAssetERC721ByOwner(payload): Observable<any> {
-    if (payload.keyword?.length >= LENGTH_CHARACTER.EVM_ADDRESS) {
+    if (payload.keyword?.length >= LENGTH_CHARACTER.EVM_ADDRESS && isEvmAddress(payload.keyword)) {
       payload.contractAddress = payload.keyword;
     } else if (payload.keyword?.length > 0) {
       payload.token_id = payload.keyword;

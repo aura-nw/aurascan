@@ -3,15 +3,21 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {saveAs} from 'file-saver';
 import * as moment from 'moment';
-import {Subject, takeUntil} from 'rxjs';
-import {ETypeFtExport, ExportFileName, TabsAccount, TabsAccountLink} from 'src/app/core/constants/account.enum';
-import {DATEFORMAT, LENGTH_CHARACTER, STORAGE_KEYS} from 'src/app/core/constants/common.constant';
-import {EWalletType} from 'src/app/core/constants/wallet.constant';
-import {EnvironmentService} from 'src/app/core/data-services/environment.service';
-import {CommonService} from 'src/app/core/services/common.service';
-import {NgxToastrService} from 'src/app/core/services/ngx-toastr.service';
-import {UserService} from 'src/app/core/services/user.service';
-import {transferAddress} from 'src/app/core/utils/common/address-converter';
+import { Subject, takeUntil } from 'rxjs';
+import {
+  ETypeFtExport,
+  ETypeNftExport,
+  ExportFileName,
+  TabsAccount,
+  TabsAccountLink,
+} from 'src/app/core/constants/account.enum';
+import { DATEFORMAT, LENGTH_CHARACTER, STORAGE_KEYS } from 'src/app/core/constants/common.constant';
+import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { transferAddress } from 'src/app/core/utils/common/address-converter';
 import local from 'src/app/core/utils/storage/local';
 
 declare var grecaptcha: any;
@@ -46,9 +52,14 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   chainInfo = this.environmentService.chainInfo;
   evmPrefix = EWalletType;
   ETypeFtExport = ETypeFtExport;
+  ETypeNftExport = ETypeNftExport;
   typeFtDisplay = {
     CW20: 'CW20 Token Transfer',
     ERC20: 'ERC20 Token Transfer',
+  };
+  typeNftDisplay = {
+    CW721: 'CW721 Token Transfer',
+    ERC721: 'ERC721 Token Transfer',
   };
 
   destroyed$ = new Subject<void>();
@@ -109,7 +120,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   setDataConfig(dataConfig) {
     const data = JSON.parse(dataConfig);
-    const {accountAddress, accountEvmAddress} = transferAddress(
+    const { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       data['address'],
     );
@@ -134,8 +145,10 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
         return this.typeFtDisplay.CW20;
       case ETypeFtExport.ERC20:
         return this.typeFtDisplay.ERC20;
-      case TabsAccountLink.NftTxs:
-        return this.TabsAccount.NftTxs;
+      case ETypeNftExport.CW721:
+        return this.typeNftDisplay.CW721;
+      case ETypeNftExport.ERC721:
+        return this.typeNftDisplay.ERC721;
       default:
         return this.TabsAccount.ExecutedTxs;
     }
@@ -148,7 +161,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
     this.csvForm.value.dataType = this.dataType;
     this.csvForm.value.isFilterDate = this.isFilterDate;
-    let {address, displayPrivate, endDate, fromBlock, startDate, toBlock} = this.csvForm.getRawValue();
+    let { address, displayPrivate, endDate, fromBlock, startDate, toBlock } = this.csvForm.getRawValue();
 
     if (startDate || endDate) {
       startDate = moment(startDate).startOf('day').toISOString();
@@ -156,7 +169,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     }
 
     // send both evm + native address for execute + evm execute
-    const {accountAddress, accountEvmAddress} = transferAddress(
+    const { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
@@ -217,19 +230,12 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
     let nameTab;
     switch (payload.dataType) {
       case TabsAccountLink.EVMExecutedTxs:
-        nameTab = ExportFileName.EVMExecutedTxs;
-        break;
       case TabsAccountLink.NativeTxs:
-        nameTab = ExportFileName.NativeTxs;
-        break;
       case ETypeFtExport.CW20:
-        nameTab = ETypeFtExport.CW20;
-        break;
       case ETypeFtExport.ERC20:
-        nameTab = ETypeFtExport.ERC20;
-        break;
-      case TabsAccountLink.NftTxs:
-        nameTab = ExportFileName.NftTxs;
+      case ETypeNftExport.CW721:
+      case ETypeNftExport.ERC721:
+        nameTab = payload.dataType;
         break;
       default:
         nameTab = ExportFileName.ExecutedTxs;
@@ -239,11 +245,13 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
       type: 'text/csv;charset=utf-8',
     });
 
+    const evmAddressTypes = [TabsAccountLink.EVMExecutedTxs, ETypeFtExport.ERC20, ETypeNftExport.ERC721];
+    const address = evmAddressTypes.includes(payload.dataType) ? payload.evmAddress : payload.address;
     const fileName =
       'export-account-' +
       (payload.dataType === TabsAccountLink.NativeTxs ? 'native-ibc-transfer' : nameTab) +
       '-' +
-      payload.address +
+      address +
       '.csv';
     saveAs(data, fileName);
     this.isDownload = false;
@@ -284,7 +292,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
 
   checkFormValid(): boolean {
     this.getAddress.setValue(this.getAddress?.value?.trim());
-    const {address, endDate, fromBlock, startDate, toBlock} = this.csvForm.value;
+    const { address, endDate, fromBlock, startDate, toBlock } = this.csvForm.value;
     this.isValidBlock = true;
     //check null/invalid block
     if (!this.isFilterDate) {
@@ -355,7 +363,7 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
   setAddressOther(address, controlName?: string) {
     this.isValidAddress = true;
     this.isValidEvmAddress = true;
-    let {accountAddress, accountEvmAddress} = transferAddress(
+    let { accountAddress, accountEvmAddress } = transferAddress(
       this.chainInfo.bech32Config.bech32PrefixAccAddr,
       address,
     );
@@ -368,12 +376,12 @@ export class ExportCsvComponent implements OnInit, OnDestroy {
         if (controlName === 'address') {
           this.toastr.error('Invalid ' + this.chainName + ' address format');
           this.csvForm.get('evmAddress').disable();
-          this.csvForm.get('address').setErrors({incorrect: true});
+          this.csvForm.get('address').setErrors({ incorrect: true });
         }
         if (controlName === 'evmAddress') {
           this.toastr.error('Invalid EVM address format');
           this.csvForm.get('address').disable();
-          this.csvForm.get('evmAddress').setErrors({incorrect: true});
+          this.csvForm.get('evmAddress').setErrors({ incorrect: true });
         }
         return;
       }

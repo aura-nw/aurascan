@@ -1,4 +1,20 @@
 section.account-detail {
+  .warning {
+      border: 1px solid #ffa237;
+      background: #3d3730;
+      padding: 8px;
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-end;
+
+      span {
+        font-size: 12px;
+        line-height: 16px;
+        color: #CCD0D5;
+        margin-left: 4px;
+      }
+    }
+
   .qr-code {
     background-color: var(--aura-gray-9);
     border-top-left-radius: 12px;
