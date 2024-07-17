@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { FeatureFlagService } from '../../../../core/data-services/feature-flag.service';
+import { FeatureFlags } from '../../../../core/constants/feature-flags.enum';
 
 @Component({
   selector: 'app-evm-transaction-event-log',
@@ -8,6 +10,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 })
 export class EvmTransactionEventLogComponent implements OnInit {
   @Input() arrTopicDecode;
+  @Input() topicsDecoded;
   @Input() eventLog: {
     id: number;
     contractName?: string;
@@ -17,13 +20,18 @@ export class EvmTransactionEventLogComponent implements OnInit {
       data: string;
     }[];
     data: string;
+    dataDecoded?: string;
+    isAllowSwitchDecodeDataField?: boolean;
   };
   @Input() index;
 
+  constructor(private featureFlag: FeatureFlagService) {}
+
   ngOnInit(): void {
-    if (this.eventLog?.data) {
-      this.eventLog['data'] = this.eventLog?.data.replace('\\x', '');
+    if (!this.featureFlag.isEnabled(FeatureFlags.EnhanceEventLog)) {
+      if (this.eventLog?.data) {
+        this.eventLog['data'] = this.eventLog?.data.replace('\\x', '');
+      }
     }
   }
 }
-

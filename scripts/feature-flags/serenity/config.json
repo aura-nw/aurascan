@@ -1,1 +1,1 @@
-{ "devTest": false }
+{ "devTest": false, "enhanceEventLog": true, "setTokenInfo": true }

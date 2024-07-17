@@ -1,0 +1,93 @@
+<div *ngIf="!isDataField" class="decode-message d-flex justify-content-start align-items-start col-12 d-flex"
+    [class]="isMobile ? isAllowSwitchDecode ? 'flex-wrap gap-2' : 'flex-nowrap' : 'flex-nowrap gap-3'">
+    <div class="param-field d-flex gap-3 justify-content-center align-items-start flex-nowrap">
+        <p *ngIf="index !== ''" class="name">
+            {{index}} <span *ngIf="name">: {{ name }}</span>
+        </p>
+        <div style="height: 24px;" *ngIf="isAllowSwitchDecode" class="dropdown aura-dropdown btn-item">
+            <button 
+                style="min-width: max-content;"
+                class="button button--sm button--md-mob button-pill button-outline button-dropdown w-100 h-100"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span>{{type}}</span>
+            </button>
+            <ul class="dropdown-menu aura-dropdown-menu">
+                <li (click)="onHex()" class="dropdown-item cursor-pointer" [class.active]="type === 'Hex'">
+                    <button type="button" class="button p-0">Hex</button>
+                </li>
+                <li (click)="onDecode()" class="dropdown-item cursor-pointer" [class.active]="type === 'Decode'">
+                    <button type="button" class="button p-0">Decode</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div *ngIf="!isAllowSwitchDecode" class="data flex-grow-1" style="margin: auto 0px;">
+        <p class="font-space-mono" [class]="decode ? 'mb-1' : 'mb-0'">{{value}}</p>
+        <p class="mb-0 font-space-mono" [innerHTML]="decode | highlight_function"></p>
+    </div>
+    <div *ngIf="isAllowSwitchDecode" style="margin: auto 0px;" class="data flex-grow-1" [class]="isEvmContract ? 'd-flex align-items-center' : ''">
+        <img
+          [src]="'assets/images/icons/token-contract.svg' | imageS3"
+          width="16px"
+          height="16px"
+          alt="contract"
+          style="margin-right: 2px;"
+          *ngIf="isEvmContract" />
+        <a
+         *ngIf="isLink && type === 'Decode'"
+          class="text--primary font-space-mono d-inline-block"
+          routerLink="/{{ isEvmContract ? 'evm-contracts' : 'address' }}/{{ data }}">
+            {{data}}
+        </a>
+        <span class="font-space-mono" *ngIf="!isLink || type === 'Hex'">{{data}}</span>
+    </div>
+</div>
+<div class="decode-message">
+    <div *ngIf="isDataField" class="d-flex align-items-start highlight" [style]="!isMobile ? 'column-gap: 25px;' : ''">
+        <div class="flex-grow-1 data-field-msg">
+            <div *ngIf="type === 'Hex'">
+                <p class="font-space-mono">{{ data }}</p>
+            </div>
+            <div *ngIf="type === 'Decode'">
+                <div class="data-item" [style]="isMobile ? 'grid-template-columns: 1fr' : ''">
+                    <ng-container *ngFor="let item of data">
+                        <p class="item-name" style="margin: auto 0px;">{{item?.name}}</p>
+                        <a
+                          *ngIf="item?.isLink"
+                          class="text--primary font-space-mono"
+                          [class]="item?.isEvmContract ? 'd-flex align-items-center' : ''"
+                          routerLink="/{{ item?.isEvmContract ? 'evm-contracts' : 'address' }}/{{ item?.decode }}">
+                            <img
+                              [src]="'assets/images/icons/token-contract.svg' | imageS3"
+                              width="16px"
+                              height="16px"
+                              alt="contract"
+                              style="margin-right: 2px;"
+                              *ngIf="item?.isEvmContract" />
+                            <span>{{item?.decode}}</span>
+                        </a>
+                        <div *ngIf="!item?.isLink">
+                            <p class="font-space-mono">{{item?.decode}}</p>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isAllowSwitchDecode" class="button-container">
+            <button
+                class="button-data body-04 button-dec"
+                [class.active]="type === 'Decode'"
+                (click)="onDecode('data')">
+                <span>Dec</span>
+            </button>
+            <button 
+                class="button-data body-04 button-hex"
+                [class.active]="type === 'Hex'"
+                (click)="onHex()">
+                <span>Hex</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -75,13 +75,15 @@ export class ApiCw20TokenService {
           BigNumber(token.balance).gt(0),
         );
 
-        const usdcCoin = this.parseUSDCToken(USDCToken, coinsMarkets);
+        if (USDCToken) {
+          const usdcCoin = this.parseUSDCToken(USDCToken, coinsMarkets);
 
-        const idx = tokens?.findIndex((f) => f.contract_address?.toLowerCase() === USDC_ADDRESS);
-        if (idx >= 0) {
-          tokens[idx] = usdcCoin;
-        } else {
-          tokens.push(usdcCoin);
+          const idx = tokens?.findIndex((f) => f.contract_address?.toLowerCase() === USDC_ADDRESS);
+          if (idx >= 0) {
+            tokens[idx] = usdcCoin;
+          } else {
+            tokens.push(usdcCoin);
+          }
         }
 
         const allTokens = [nativeToken, ...tokens];
@@ -115,10 +117,14 @@ export class ApiCw20TokenService {
   }
 
   async getUSDCToken(address: string) {
+    if (!address) {
+      return null;
+    }
     const contract = this.createContract();
     const balance = await contract.balanceOf(address);
     const name = await contract.name();
     const symbol = await contract.symbol();
+    const decimals = await contract.decimals();
 
     return {
       ...USDC_TOKEN,
@@ -126,23 +132,29 @@ export class ApiCw20TokenService {
       name: name?.toString(),
       symbol: symbol?.toString(),
       balance: Number(balance?.toString()),
+      decimals: Number(decimals?.toString()),
     };
   }
 
   parseUSDCToken(token, coinsMarkets) {
     const USDCMarket = coinsMarkets?.find((item) => item.coinId === USDC_COIN_ID);
+    const amount = getBalance(token?.balance || 0, token?.decimals);
+    const value = new BigNumber(amount).multipliedBy(Number(USDCMarket?.currentPrice || 0));
 
     return {
       ...token,
       change: null,
       isValueUp: true,
-      type: COIN_TOKEN_TYPE.CW20,
+      type: COIN_TOKEN_TYPE.ERC20,
       tokenUrl: USDC_ADDRESS,
-      denom: USDCMarket?.denom,
-      decimals: USDCMarket?.decimal,
-      price: USDCMarket?.currentPrice,
-      priceChangePercentage24h: USDCMarket?.priceChangePercentage24h,
-      value: Number(USDCMarket?.currentPrice) * token?.balance,
+      denom: USDC_ADDRESS,
+      price: USDCMarket?.currentPrice || 0,
+      priceChangePercentage24h: USDCMarket?.priceChangePercentage24h || 0,
+      value: value.toFixed(),
+      image: USDCMarket?.image,
+      max_total_supply: USDCMarket?.totalSupply,
+      verify_status: USDCMarket?.verifyStatus || '',
+      verify_text: USDCMarket?.verifyText || '',
     };
   }
 
