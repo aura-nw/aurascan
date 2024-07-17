@@ -125,6 +125,7 @@ export class ApiCw20TokenService {
     const name = await contract.name();
     const symbol = await contract.symbol();
     const decimals = await contract.decimals();
+
     return {
       ...USDC_TOKEN,
       tokenUrl: USDC_ADDRESS,

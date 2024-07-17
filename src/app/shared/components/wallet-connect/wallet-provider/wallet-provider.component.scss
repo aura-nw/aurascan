@@ -17,11 +17,11 @@
       border-radius: 8px;
 
       &:hover {
-        background-color: var(--aura-gray-9);
+        background-color: var(--aura-gray-8);
       }
       &.disabled {
         cursor: not-allowed;
-        background-color: var(--aura-gray-8);
+        background-color: var(--aura-gray-7);
         img,
         span {
           opacity: 0.3;
@@ -40,6 +40,13 @@
       .spin-icon {
         animation: spin-keyframe 2s linear infinite;
       }
+
+      .wallet-name {
+        color: var(--aura-white);
+        margin-top: 8px;
+        font-size: 12px;
+        text-align: center;
+      }
     }
 
     .wallet-info {
@@ -48,12 +55,49 @@
       min-height: 234px;
     }
 
-    @media (min-width: 991.98px) {
+    .wallet-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .wallet-tab {
+        display: flex;
+
+        .button {
+          flex: 1;
+          justify-content: flex-start;
+          padding: 12px 16px;
+          box-shadow: 2px 1000px 1px var(--aura-gray-9) inset;
+
+          &-outline--gradient {
+            box-shadow: 2px 1000px 1px var(--aura-gray-10) inset;
+          }
+        }
+
+        .installed-highlight {
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 16px;
+          padding-left: 8px;
+          background: var(--aura-gradient-button);
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      }
+    }
+
+    @media (min-width: 992px) {
       .wallet-list,
       .wallet-info {
-        flex: 0 1 50%;
-        width: 50%;
         min-height: unset;
+      }
+
+      .wallet-list {
+        width: 220px;
+      }
+      .wallet-info {
+        flex: auto;
       }
     }
   }
