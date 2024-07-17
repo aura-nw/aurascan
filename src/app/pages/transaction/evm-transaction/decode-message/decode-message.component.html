@@ -4,10 +4,10 @@
         <p *ngIf="index !== ''" class="name">
             {{index}} <span *ngIf="name">: {{ name }}</span>
         </p>
-        <div *ngIf="isAllowSwitchDecode" class="dropdown aura-dropdown btn-item">
+        <div style="height: 24px;" *ngIf="isAllowSwitchDecode" class="dropdown aura-dropdown btn-item">
             <button 
-                style="height: 26px; min-width: max-content;"
-                class="button button--sm button--md-mob button-pill button-outline button-dropdown w-100"
+                style="min-width: max-content;"
+                class="button button--sm button--md-mob button-pill button-outline button-dropdown w-100 h-100"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -45,13 +45,13 @@
     </div>
 </div>
 <div class="decode-message">
-    <div *ngIf="isDataField" class="d-flex align-items-start highlight">
+    <div *ngIf="isDataField" class="d-flex align-items-start highlight" [style]="!isMobile ? 'column-gap: 25px;' : ''">
         <div class="flex-grow-1 data-field-msg">
             <div *ngIf="type === 'Hex'">
                 <p class="font-space-mono">{{ data }}</p>
             </div>
             <div *ngIf="type === 'Decode'">
-                <div class="data-item" [style]="isMobile ? 'grid-template-columns: minmax(40px, max-content) 1fr' : ''">
+                <div class="data-item" [style]="isMobile ? 'grid-template-columns: 1fr' : ''">
                     <ng-container *ngFor="let item of data">
                         <p class="item-name" style="margin: auto 0px;">{{item?.name}}</p>
                         <a
