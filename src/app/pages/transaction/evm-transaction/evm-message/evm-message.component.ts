@@ -261,8 +261,20 @@ export class EvmMessageComponent {
                   const tupleType = `(${item?.components?.map(this.mappingFunctionName)?.join(', ')}) ${item?.name}`;
                   const replaceTuple = new RegExp(`\\b${item?.type} ${item?.name}\\b`, 'g');
                   decoded[0].decode = decoded[0]?.decode?.replace(replaceTuple, tupleType);
-                }
 
+                  item?.components?.forEach((tupleParam, tidx) => {
+                    const tupleDecode = {
+                      indexed: tupleParam?.indexed,
+                      name: tupleParam?.name,
+                      type: tupleParam?.type,
+                      isLink: tupleParam?.type === 'address',
+                      decode: paramsDecode.args[idx][tidx]?.toString(),
+                    }
+                    data.push(tupleDecode);
+                  });
+                  return;        
+                } 
+                
                 const param = {
                   indexed: item?.indexed,
                   name: item.name,
