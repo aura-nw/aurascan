@@ -44,18 +44,24 @@
 
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Status</div>
-            <div class="col-auto col-lg-10 d-flex align-items-center">
-              <img
-                [src]="
-                  transaction?.code == evmSuccessCode
-                    ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
-                    : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
-                "
-                width="20px"
-                height="20px" />
-              <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">
-                {{ transaction?.status | uppercase }}
-              </span>
+            <div class="status-container col-auto col-lg-10 d-flex align-items-center flex-nowrap">
+              <div class="d-flex align-items-center">
+                <img
+                  [src]="
+                    transaction?.code == evmSuccessCode
+                      ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
+                      : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
+                  "
+                  alt="status"
+                  width="20px"
+                  height="20px" />
+                <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">
+                  {{ transaction?.status | uppercase }}
+                </span>
+              </div>
+              <div class="method">
+                <span>Method field</span>
+              </div>
             </div>
           </div>
           <div class="row mb-2 body justify-content-between justify-content-lg-start">

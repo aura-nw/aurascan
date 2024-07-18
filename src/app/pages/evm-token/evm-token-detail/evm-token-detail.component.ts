@@ -119,6 +119,8 @@ export class EvmTokenDetailComponent implements OnInit {
               socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles)
             };
             this.getAssetsDetail();
+            console.log(this.tokenDetail);
+            
           });
       },
       error: (e) => {
