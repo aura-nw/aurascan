@@ -223,23 +223,23 @@ export class EvmMessageComponent {
   getFunctionColor(inputs: any[]) {
     return inputs?.map((i, index) => {
       const { type, indexed, name, components} = i;
+      let param = index > 0 ? ' ' : '';
+
+      const nameHTML = name ? `<span style="color: var(--aura-red-3); font-family: inherit">${name}</span>` : '';
+
       if (type === 'tuple') {
-        const paramHTML = `<span style="color: var(--aura-green-3); font-family: inherit">${components?.map(this.mappingFunctionName)?.join(', ')}</span>`
-        const tupleType = `(${paramHTML}) ${name}`;
-        console.log(tupleType);
-        
+        const tupleHTML = `<span style="color: var(--aura-green-3); font-family: inherit"> (${components?.map(this.mappingFunctionName)?.join(', ')})</span>`
+        param = `${tupleHTML} ${nameHTML}`;
+        return param;
       }
+
       const dataTypeHTML = type
         ? `<span style="color: var(--aura-green-3); font-family: inherit">${type}</span>`
         : '';
       const modifierHTML = indexed
-        ? `<span style="color: ${
-            !name ? 'var(--aura-red-3)' : 'var(--aura-gray-3)'
-          }; font-family: inherit">indexed</span>`
+        ? `<span style="color: var(--aura-gray-3); font-family: inherit">indexed</span>`
         : '';
-      const nameHTML = name ? `<span style="color: var(--aura-red-3); font-family: inherit">${name}</span>` : '';
 
-      let param = index > 0 ? ' ' : '';
       if(type) param += dataTypeHTML;
       if(indexed) param += ` ${modifierHTML}`;
       if(name) param += ` ${nameHTML}`;
@@ -267,11 +267,7 @@ export class EvmMessageComponent {
 
           if (!paramsDecode) decoded = this.mappingTopics(element);
           else {
-            
             const paramsHTML = this.getFunctionColor(paramsDecode?.fragment?.inputs);
-            
-            const params = paramsDecode?.fragment?.inputs.map(this.mappingFunctionName);
-            
             const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${paramsHTML})`;
             
             decoded = [
