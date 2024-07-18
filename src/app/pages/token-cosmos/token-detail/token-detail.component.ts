@@ -79,7 +79,7 @@ export class TokenDetailComponent implements OnInit {
             token.decimals = token.cw20_contract.decimal;
             token.type = this.contractType.CW20;
             token.max_total_supply = tokenMarket?.max_supply || 0;
-            token.price = tokenMarket?.currentPrice || 0;
+            token.price = tokenMarket?.coinId ? tokenMarket?.currentPrice : null,
             token.verify_status = tokenMarket?.verifyStatus || '';
             token.verify_text = tokenMarket?.verifyText || '';
             token.modeToken = EModeToken.CWToken;

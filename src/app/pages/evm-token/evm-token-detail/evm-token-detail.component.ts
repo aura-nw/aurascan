@@ -82,57 +82,47 @@ export class EvmTokenDetailComponent implements OnInit {
       address: this.contractAddress,
     };
 
-    this.tokenService.getEvmTokenDetail(payload).subscribe({
-      next: (res) => {
-        const token = res.erc20_contract[0];
-        if (!token) {
+    this.tokenService.getTokenDetail(this.contractAddress).subscribe((tokenMarket) => {
+      this.tokenService.getEvmTokenDetail(payload).subscribe({
+        next: (res) => {
+          const token = res.erc20_contract[0];
+          if (!token) {
+            this.loading = false;
+            this.errTxt = 'No Data';
+            return;
+          }
+          this.tokenDetail = {
+            ...token,
+            supplyAmount: token.total_supply,
+            modeToken: EModeEvmToken.ERCToken,
+            contract_address: this.contractAddress,
+            decimals: token.decimal,
+            contract_verification: token.evm_smart_contract?.evm_contract_verifications[0]?.status,
+            type: EvmContractRegisterType.ERC20,
+            price: tokenMarket?.coinId ? tokenMarket?.currentPrice : null,
+            priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
+            verify_text: tokenMarket?.verifyText || '',
+            verify_status: tokenMarket?.verifyStatus || '',
+            officialSite : tokenMarket?.officialSite,
+            overviewInfo : tokenMarket?.overviewInfo,
+            socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles)
+          };
+          this.getAssetsDetail();
+        },
+        error: (e) => {
+          if (e.name === TIMEOUT_ERROR) {
+            this.errTxt = e.message;
+          } else {
+            this.errTxt = e.status + ' ' + e.statusText;
+          }
           this.loading = false;
-          this.errTxt = 'No Data';
-          return;
-        }
-
-        this.tokenService.tokensMarket$
-          .pipe(
-            filter((data) => _.isArray(data)),
-            take(1),
-          )
-          .subscribe((item) => {
-            
-            let tokenMarket = null;
-            if(token?.address === USDC_ADDRESS) tokenMarket = item.find((element) => element.coinId === USDC_COIN_ID);
-            else tokenMarket = item.find((element) => element.denom === token?.address);
-
-            this.tokenDetail = {
-              ...token,
-              supplyAmount: token.total_supply,
-              modeToken: EModeEvmToken.ERCToken,
-              contract_address: this.contractAddress,
-              decimals: token.decimal,
-              contract_verification: token.evm_smart_contract?.evm_contract_verifications[0]?.status,
-              type: EvmContractRegisterType.ERC20,
-              price: tokenMarket?.currentPrice || 0,
-              priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
-              verify_text: tokenMarket?.verifyText || '',
-              verify_status: tokenMarket?.verifyStatus || '',
-              officialSite : tokenMarket?.officialSite,
-              overviewInfo : tokenMarket?.overviewInfo,
-              socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles)
-            };
-            this.getAssetsDetail();
-          });
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
     });
+
   }
 
   getTokenDetailNFT(): void {
