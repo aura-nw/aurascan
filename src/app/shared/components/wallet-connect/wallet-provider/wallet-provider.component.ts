@@ -26,6 +26,7 @@ export class WalletProviderComponent implements AfterViewInit {
   chainName = this.environmentService.chainName;
 
   wallets: (Wallet & { state?: State })[] = [];
+  walletTab: 'cosmos' | 'evm' = 'evm';
 
   evmWallets: {
     name: string;
@@ -102,7 +103,6 @@ export class WalletProviderComponent implements AfterViewInit {
         .connectEvmWallet()
         .then(() => {
           wallet.state = 'Done';
-
           this.close();
         })
         .catch((error) => {
@@ -152,6 +152,11 @@ export class WalletProviderComponent implements AfterViewInit {
 
   close() {
     this.onClose.emit(null);
+  }
+
+  changeWalletTab(tab: 'cosmos' | 'evm') {
+    this.isWalletConnectMode = false;
+    this.walletTab = tab;
   }
 }
 

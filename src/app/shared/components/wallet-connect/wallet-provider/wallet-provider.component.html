@@ -70,11 +70,68 @@
       </ul>
     </div>
     <div
-      class="ml-lg-6 mt-6 mt-lg-0 wallet-info px-4 py-5 d-flex flex-column align-items-center justify-content-center w-full">
+      class="ml-md-6 mt-6 mt-md-0 wallet-info px-8 py-9 d-flex flex-column align-items-center justify-content-center w-full">
       <ng-container *ngIf="!(currentChainWallet?.qrUrl?.data && isWalletConnectMode); else qrCode">
-        <img src="./../../../../../assets/icons/icons-svg/color/wallets.svg" alt="" />
-        <div class="body mt-4 text--gray-1 text-center">
-          Wallets are used to send, receive, store digital assets like {{ chainName | titlecase }} and NFTs.
+        <div class="row row-cols-3 w-100">
+          <ng-container *ngIf="walletTab === 'cosmos'">
+            <div *ngFor="let wallet of wallets" class="wallet-item col" (click)="connect(wallet)">
+              <div class="d-flex flex-column align-items-center">
+                <img class="wallet-icon" [src]="wallet.logo" *ngIf="wallet.state != 'Pending'" />
+                <i class="spin-icon" *ngIf="wallet.state == 'Pending'">
+                  <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M16.4995 6.75C11.3909 6.75 7.24951 10.8914 7.24951 16C7.24951 21.1086 11.3909 25.25 16.4995 25.25C21.1359 25.25 24.9768 21.8382 25.6461 17.3884C25.7077 16.9788 26.0897 16.6967 26.4993 16.7583C26.9089 16.82 27.191 17.202 27.1294 17.6116C26.3513 22.7843 21.8892 26.75 16.4995 26.75C10.5624 26.75 5.74951 21.9371 5.74951 16C5.74951 10.0629 10.5624 5.25 16.4995 5.25C18.8184 5.25 20.9679 5.98509 22.7246 7.23488C23.0622 7.475 23.1411 7.94326 22.901 8.28078C22.6609 8.6183 22.1926 8.69726 21.8551 8.45714C20.3439 7.38206 18.4966 6.75 16.4995 6.75Z"
+                      fill="#5EE6D0" />
+                  </svg>
+                </i>
+                <span class="wallet-name">
+                  {{ wallet.prettyName }}
+                </span>
+              </div>
+            </div>
+            <div
+              *ngFor="let wallet of otherWallets"
+              class="wallet-item col"
+              (click)="connect(wallet)"
+              [ngClass]="{ active: currentChainWallet?.qrUrl && wallet.mode == 'wallet-connect' }">
+              <div class="d-flex flex-column align-items-center">
+                <img class="wallet-icon" [src]="wallet.logo" />
+                <span class="wallet-name">
+                  {{ wallet.prettyName }}
+                </span>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="walletTab === 'evm'">
+            <div *ngFor="let wallet of evmWallets" class="wallet-item col" (click)="connectEvm(wallet)">
+              <div class="d-flex flex-column align-items-center">
+                <img class="wallet-icon" [src]="wallet.logo" *ngIf="wallet.state != 'Pending'" height="48" width="48" />
+                <i class="spin-icon" *ngIf="wallet.state == 'Pending'">
+                  <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M16.4995 6.75C11.3909 6.75 7.24951 10.8914 7.24951 16C7.24951 21.1086 11.3909 25.25 16.4995 25.25C21.1359 25.25 24.9768 21.8382 25.6461 17.3884C25.7077 16.9788 26.0897 16.6967 26.4993 16.7583C26.9089 16.82 27.191 17.202 27.1294 17.6116C26.3513 22.7843 21.8892 26.75 16.4995 26.75C10.5624 26.75 5.74951 21.9371 5.74951 16C5.74951 10.0629 10.5624 5.25 16.4995 5.25C18.8184 5.25 20.9679 5.98509 22.7246 7.23488C23.0622 7.475 23.1411 7.94326 22.901 8.28078C22.6609 8.6183 22.1926 8.69726 21.8551 8.45714C20.3439 7.38206 18.4966 6.75 16.4995 6.75Z"
+                      fill="#5EE6D0" />
+                  </svg>
+                </i>
+                <span class="wallet-name">
+                  {{ wallet.prettyName }}
+                </span>
+              </div>
+            </div>
+            <div *ngFor="let evmWallet of othersEvmWallet" class="wallet-item col" (click)="connectEvm(evmWallet)">
+              <div class="d-flex flex-column align-items-center">
+                <img class="wallet-icon" [src]="evmWallet.logo" />
+                <span class="wallet-name">
+                  {{ evmWallet.prettyName }}
+                </span>
+              </div>
+            </div>
+          </ng-container>
         </div>
       </ng-container>
 
