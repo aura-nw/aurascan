@@ -19,7 +19,7 @@ export class DecodeMessageComponent implements OnInit {
   @Input() isDataField?: boolean;
 
   data: string | any = '';
-  type: 'Decode' | 'Hex' = 'Hex';
+  type: 'Decode' | 'Hex' = 'Decode';
   isMobile = false;
   isEvmContract = false;
   constructor(
@@ -31,6 +31,7 @@ export class DecodeMessageComponent implements OnInit {
   ngOnInit(): void {
     this.isMobile = this.environmentService.isMobile;
     this.data = this.value;
+    if(this.isAllowSwitchDecode || this.isDataField) this.onDecode(this.isDataField ? 'data' : '');
   }
 
   checkEvmContract(address: string, cb: (isContract: boolean) => void) {
