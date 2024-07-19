@@ -25,7 +25,7 @@
     </div>
     <div *ngIf="!isAllowSwitchDecode" class="data flex-grow-1" style="margin: auto 0px;">
         <p class="font-space-mono" [class]="decode ? 'mb-1' : 'mb-0'">{{value}}</p>
-        <p class="mb-0 font-space-mono" [innerHTML]="decode | highlight_function"></p>
+        <p class="mb-0 font-space-mono" style="color: var(--aura-gray-3);" [innerHTML]="decode | highlight_function"></p>
     </div>
     <div *ngIf="isAllowSwitchDecode" style="margin: auto 0px;" class="data flex-grow-1" [class]="isEvmContract ? 'd-flex align-items-center' : ''">
         <img
@@ -47,10 +47,10 @@
 <div class="decode-message">
     <div *ngIf="isDataField" class="d-flex align-items-start highlight" [style]="!isMobile ? 'column-gap: 25px;' : ''">
         <div class="flex-grow-1 data-field-msg">
-            <div *ngIf="type === 'Hex'">
+            <div *ngIf="type === 'Hex' || !isAllowSwitchDecode">
                 <p class="font-space-mono">{{ data }}</p>
             </div>
-            <div *ngIf="type === 'Decode'">
+            <div *ngIf="type === 'Decode' && isAllowSwitchDecode">
                 <div class="data-item" [style]="isMobile ? 'grid-template-columns: 1fr' : ''">
                     <ng-container *ngFor="let item of data">
                         <p class="item-name" style="margin: auto 0px;">{{item?.name}}</p>

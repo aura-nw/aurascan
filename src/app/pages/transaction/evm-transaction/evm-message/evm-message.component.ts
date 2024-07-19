@@ -220,6 +220,34 @@ export class EvmMessageComponent {
     this.arrTopicDecode = [...this.arrTopicDecode];
   }
 
+  getFunctionColor(inputs: any[]) {
+    return inputs?.map((i, index) => {
+      const { type, indexed, name, components} = i;
+      let param = index > 0 ? ' ' : '';
+
+      const nameHTML = name ? `<span style="color: var(--aura-red-3); font-family: inherit">${name}</span>` : '';
+
+      if (type === 'tuple') {
+        const tupleHTML = `<span style="color: var(--aura-green-3); font-family: inherit"> (${components?.map(this.mappingFunctionName)?.join(', ')})</span>`
+        param = `${tupleHTML} ${nameHTML}`;
+        return param;
+      }
+
+      const dataTypeHTML = type
+        ? `<span style="color: var(--aura-green-3); font-family: inherit">${type}</span>`
+        : '';
+      const modifierHTML = indexed
+        ? `<span style="color: var(--aura-gray-3); font-family: inherit">indexed</span>`
+        : '';
+
+      if(type) param += dataTypeHTML;
+      if(indexed) param += ` ${modifierHTML}`;
+      if(name) param += ` ${nameHTML}`;
+      
+      return param;
+    })
+  }
+
   getListTopicDecode() {
     this.transaction.eventLog.forEach((element, index) => {
       let arrTopicTemp = element?.evm_signature_mapping_topic || [];
@@ -239,9 +267,9 @@ export class EvmMessageComponent {
 
           if (!paramsDecode) decoded = this.mappingTopics(element);
           else {
-            const params = paramsDecode?.fragment?.inputs.map(this.mappingFunctionName);
-            const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${params.join(', ')})`;
-
+            const paramsHTML = this.getFunctionColor(paramsDecode?.fragment?.inputs);
+            const decodeTopic0 = `> ${paramsDecode?.fragment?.name}(${paramsHTML})`;
+            
             decoded = [
               {
                 index: 0,
@@ -258,10 +286,6 @@ export class EvmMessageComponent {
 
               inputs?.forEach((item, idx) => {
                 if (item?.type === 'tuple') {
-                  const tupleType = `(${item?.components?.map(this.mappingFunctionName)?.join(', ')}) ${item?.name}`;
-                  const replaceTuple = new RegExp(`\\b${item?.type} ${item?.name}\\b`, 'g');
-                  decoded[0].decode = decoded[0]?.decode?.replace(replaceTuple, tupleType);
-
                   item?.components?.forEach((tupleParam, tidx) => {
                     const tupleDecode = {
                       indexed: tupleParam?.indexed,
@@ -286,7 +310,8 @@ export class EvmMessageComponent {
                   param['indexed'] = item.indexed;
                   param['index'] = currentParamIndex + 1;
                   param['isAllowSwitchDecode'] = true;
-                  (param['value'] = element.topics[currentParamIndex + 1]), (currentParamIndex += 1);
+                  param['value'] = element.topics[currentParamIndex + 1];
+                  currentParamIndex += 1;
                   params.push(param);
                 } else {
                   data.push(param);
