@@ -9,6 +9,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { getBalance } from 'src/app/core/utils/common/parsing';
 import { hex2a } from 'src/app/core/utils/ethers/utils';
+import { mappingMethodName } from 'src/app/global/global';
 
 @Component({
   selector: 'app-evm-transaction',
@@ -34,7 +35,7 @@ export class EvmTransactionComponent implements OnChanges {
     memo: string;
     type: string;
     contractAddress?: string;
-    inputData: { [key: string]: string };
+    inputData: string;
     eventLog: {
       id: number;
       contractName?: string;
@@ -70,6 +71,7 @@ export class EvmTransactionComponent implements OnChanges {
   isDisplayMore = false;
   topicLength = 4;
   isEvmContract = false;
+  method = ''
 
   constructor(
     private transactionService: TransactionService,
@@ -126,13 +128,24 @@ export class EvmTransactionComponent implements OnChanges {
     }
   }
 
+  getMethod() {
+    const methodId = this.transaction?.inputData?.substring(0, 8);
+    this.transactionService.getListMappingName(methodId).subscribe((res) => {
+      this.method = mappingMethodName(res, methodId);
+      if (!this.isEvmContract) this.method = 'Send';
+      if (!this.transaction?.to) this.method = 'Create Contract';
+    });
+  }
+
   checkEvmContract() {
     if (this.transaction?.to) {
       this.contractService.findEvmContract(this.transaction.to).subscribe({
         next: (res) => {
           if (res?.evm_smart_contract?.length > 0)
             this.isEvmContract = true;
-          else this.transaction.memo = hex2a(this.transaction.inputData as any);
+          else this.transaction.memo = hex2a(this.transaction.inputData);
+          
+          this.getMethod();
         },
       });
     }
