@@ -1,9 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import {
-  MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
-import { MsgVote } from 'cosmjs-types/cosmos/gov/v1beta1/tx';
 import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -43,6 +42,11 @@ export class ProposalVoteComponent {
   }
 
   async vote() {
+    const connected = await this.walletService.connectToChain();
+    if (!connected) {
+      return;
+    }
+    
     const account = this.walletService.getAccount();
 
     if (!account) {

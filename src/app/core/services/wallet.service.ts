@@ -212,11 +212,10 @@ export class WalletService implements OnDestroy {
   }
 
   restoreEvmAccounts() {
-    let account = local.getItem(STORAGE_KEY.CURRENT_EVM_WALLET);
+    const account = local.getItem(STORAGE_KEY.CURRENT_EVM_WALLET);
+    if (!account) return;
 
-    if (account) {
-      this.connectEvmWallet().then().catch();
-    }
+    this.walletAccount = account    
   }
 
   restoreAccounts() {
@@ -249,17 +248,9 @@ export class WalletService implements OnDestroy {
   }
 
   evmChangeEvent() {
-    const reconnect = () => {
-      const timeoutId = setTimeout(() => {
-        clearTimeout(timeoutId);
-        this.connectToChain();
-      }, 1000);
-    };
-
     (window as any).ethereum?.on('accountsChanged', () => {
       this.connectEvmWallet(true).then().catch();
     });
-    (window as any).ethereum?.on('chainChanged', reconnect);
   }
 
   private async _getSigningCosmWasmClientAuto() {
