@@ -10,6 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 
 @Component({
@@ -66,6 +67,7 @@ export class TransferAssetsComponent {
     private ibcService: IBCService,
     private commonService: CommonService,
     private route: ActivatedRoute,
+    private tokenService: TokenService,
   ) {}
 
   ngOnInit(): void {
@@ -90,9 +92,9 @@ export class TransferAssetsComponent {
       type: 'send_packet',
     };
     this.ibcService.getTransferAsset(payload).subscribe({
-      next: (res) => {
+      next: async (res) => {
         if (res.view_ibc_channel_detail_statistic?.length > 0) {
-          const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
+          const txs = await this.convertTxAssets(res.view_ibc_channel_detail_statistic);
           this.lstSendingRaw = txs;
           this.dataIBCSending.data = [...txs];
         }
@@ -148,9 +150,9 @@ export class TransferAssetsComponent {
       type: 'recv_packet',
     };
     this.ibcService.getTransferAsset(payload).subscribe({
-      next: (res) => {
+      next: async (res) => {
         if (res.view_ibc_channel_detail_statistic?.length > 0) {
-          const txs = this.convertTxAssets(res.view_ibc_channel_detail_statistic);
+          const txs = await this.convertTxAssets(res.view_ibc_channel_detail_statistic);
           this.lstSendingReceive = txs;
           this.dataIBCReceiving.data = [...txs];
         }
@@ -179,23 +181,43 @@ export class TransferAssetsComponent {
     }
   }
 
-  convertTxAssets(data) {
-    const txs = data?.map((data) => {
-      let denom = _.get(data, 'denom');
-      let dataDenom;
-      if (denom?.includes('/')) {
-        denom = 'ibc/' + sha256(denom)?.toUpperCase();
-        dataDenom = this.commonService.mappingNameIBC(denom);
-      } else {
-        dataDenom = { decimals: this.coinInfo.coinDecimals, symbol: denom === this.denom ? this.assetName : denom };
-      }
-      return {
-        amount: _.get(data, 'amount'),
-        denom,
-        dataDenom,
-        total_messages: _.get(data, 'total_messages'),
-      };
+  getTokenImage(denom: string) {
+    return new Promise((resolve) => {
+      this.tokenService.getTokenDetail(denom).subscribe({
+        next: (res) => {
+          resolve(res?.image);
+        },
+        error: (e) => {
+          resolve(null);
+        }
+      });
     });
+  }
+
+  async convertTxAssets(data) {
+    const txs = await Promise.all(
+      data?.map(async (data) => {
+        let denom = _.get(data, 'denom');
+        let dataDenom;
+        if (denom?.includes('/')) {
+          denom = 'ibc/' + sha256(denom)?.toUpperCase();
+          dataDenom = this.commonService.mappingNameIBC(denom);
+        } else {
+          const image = await this.getTokenImage(denom);
+          dataDenom = {
+            decimals: this.coinInfo.coinDecimals,
+            symbol: denom === this.denom ? this.assetName : denom,
+            image,
+          };
+        }
+        return {
+          amount: _.get(data, 'amount'),
+          denom,
+          dataDenom,
+          total_messages: _.get(data, 'total_messages'),
+        };
+      }),
+    );
     return txs;
   }
 }
