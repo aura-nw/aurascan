@@ -140,16 +140,6 @@ export class EvmReadComponent implements OnChanges {
       return;
     }
 
-    const connected = await this.walletService.connectToChain();
-    if (!connected) {
-      jsonFragment.isLoading = false;
-      jsonFragment.error = {
-        code: 'error',
-        message: `Please switch to ${this.environmentService.evmChainInfo.chain} chain.`,
-      };
-      return;
-    }
-
     const contract = this.createContract();
 
     if (!contract) {
