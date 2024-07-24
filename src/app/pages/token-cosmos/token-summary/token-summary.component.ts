@@ -16,6 +16,7 @@ import { Globals } from 'src/app/global/global';
 export class TokenSummaryComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() channelPath: any;
+
   projectDetail: ProjectDetail;
   EModeToken = EModeToken;
   channelId: string;

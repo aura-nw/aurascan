@@ -12,6 +12,7 @@ import { Globals } from 'src/app/global/global';
 })
 export class EvmTokenSummaryComponent implements OnInit {
   @Input() tokenDetail: any;
+
   projectDetail: ProjectDetail;
   EModeToken = EModeToken;
   chainInfo = this.environmentService.chainInfo;

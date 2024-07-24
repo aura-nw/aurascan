@@ -81,6 +81,7 @@ export class EvmTokenDetailComponent implements OnInit {
     const payload = {
       address: this.contractAddress,
     };
+
     this.tokenService.getEvmTokenDetail(payload).subscribe({
       next: (res) => {
         const token = res.erc20_contract[0];
