@@ -1,9 +1,9 @@
 {
   "environment": {
-    "name": "euphoria",
+    "name": "serenity",
     "label": {
-      "desktop": "Euphoria Testnet Network (v0.8.1)",
-      "mobile": "Euphoria Testnet"
+      "desktop": "Serenity Testnet (v0.7.2)",
+      "mobile": "Serenity Testnet"
     },
     "logo": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/token/download.png",
     "notice": {
@@ -13,13 +13,13 @@
     "nativeName": "Aura"
   },
   "chainConfig": {
-    "stakingTime": "172800",
+    "stakingTime": "86400",
     "excludedAddresses": [
       "aura1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3wd7dmw",
-      "aura1h9ckdkrca4xp95nxemaxs4m6y8jqtt52eyv7je",
-      "aura1gr5unjftq7s983uhxe9csumgqsn828lkv5g0mt"
+      "aura1z9whsygd9hdquamn84vs76uy8ytatnw28aff3m",
+      "aura1752fawv92g2c9eegqedj5689gevgscsc0y7stk"
     ],
-    "blockTime": 5000,
+    "blockTime": 2000,
     "quotaSetPrivateName": 20,
     "quotaSetWatchList": 20,
     "quotaNotification": 100,
@@ -42,21 +42,21 @@
       },
       "currencies": [
         {
-          "coinDenom": "EAURA",
-          "coinMinimalDenom": "ueaura",
+          "coinDenom": "AURA",
+          "coinMinimalDenom": "uaura",
           "coinDecimals": 6
         }
       ],
       "feeCurrencies": [
         {
-          "coinDenom": "EAURA",
-          "coinMinimalDenom": "ueaura",
+          "coinDenom": "AURA",
+          "coinMinimalDenom": "uaura",
           "coinDecimals": 6
         }
       ],
       "stakeCurrency": {
-        "coinDenom": "EAURA",
-        "coinMinimalDenom": "ueaura",
+        "coinDenom": "AURA",
+        "coinMinimalDenom": "uaura",
         "coinDecimals": 6
       },
       "coinType": 118,
@@ -68,7 +68,7 @@
       "features": ["ibc-transfer"],
       "walletUrlForStaking": "https://serenity.aurascan.io/validators",
       "logo": "https://i.imgur.com/zi0mTYb.png",
-      "explorer": "https://euphoria.aurascan.io/",
+      "explorer": "https://serenity.aurascan.io/",
       "beta": "false"
     },
     "evmChainInfo": {
@@ -102,7 +102,7 @@
   },
   "image": {
     "validator": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
-    "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/euphoria-assets/",
+    "assets": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/",
     "banner": [
       {
         "src": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/images/pages/banner_aurascan-2.png",
@@ -115,10 +115,9 @@
     ]
   },
   "api": {
-    "backend": "https://euphoria-api.aurascan.io/api/v1",
-    "socket": "https://euphoria-api.aurascan.io",
+    "backend": "https://serenity-api.aurascan.io/api/v1",
+    "socket": "https://serenity-api.aurascan.io",
     "ipfsDomain": "https://ipfs.io/",
-    "verifyContract": "https://indexer-v2.staging.aurascan.io/verify-contract/v1",
     "coingecko": {
       "url": "https://api.coingecko.com/api/v3",
       "ids": ["aura-network"]
@@ -129,10 +128,10 @@
       "siteKeyCaptcha": "6Lf3_rYoAAAAAAERC5hKPYug-DSJ37t55O8O_1yc"
     },
     "horoscope": {
-      "url": "https://indexer-v2.staging.aurascan.io/api",
+      "url": "https://indexer-v2.dev.aurascan.io/api",
       "graphql": "/v2/graphql",
       "rest": "/v2",
-      "chain": "euphoria"
+      "chain": "serenity"
     },
     "walletConnect": {
       "signClient": {
