@@ -34,7 +34,7 @@ export class EvmTransactionComponent implements OnChanges {
     memo: string;
     type: string;
     contractAddress?: string;
-    inputData: { [key: string]: string };
+    inputData: string;
     eventLog: {
       id: number;
       contractName?: string;
