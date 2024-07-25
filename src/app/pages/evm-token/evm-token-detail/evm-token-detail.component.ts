@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { filter, take } from 'rxjs';
 import { TIMEOUT_ERROR } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, EvmContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { USDC_ADDRESS, USDC_COIN_ID } from 'src/app/core/constants/token.constant';
 import { EModeEvmToken, EModeToken } from 'src/app/core/constants/token.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -81,22 +82,17 @@ export class EvmTokenDetailComponent implements OnInit {
       address: this.contractAddress,
     };
 
-    this.tokenService.getEvmTokenDetail(payload).subscribe({
-      next: (res) => {
-        const token = res.erc20_contract[0];
-        if (!token) {
-          this.loading = false;
-          this.errTxt = 'No Data';
-          return;
-        }
-
-        this.tokenService.tokensMarket$
-          .pipe(
-            filter((data) => _.isArray(data)),
-            take(1),
-          )
-          .subscribe((item) => {
-            const tokenMarket = item.find((element) => element.denom === token?.address);
+    this.tokenService.getTokenDetail(this.contractAddress).subscribe({
+      next: (tokenMarket) => {
+        this.tokenService.getEvmTokenDetail(payload).subscribe({
+          next: (res) => {
+            const token = res.erc20_contract[0];
+            if (!token) {
+              this.loading = false;
+              this.errTxt = 'No Data';
+              return;
+            }
+    
             this.tokenDetail = {
               ...token,
               supplyAmount: token.total_supply,
@@ -114,20 +110,21 @@ export class EvmTokenDetailComponent implements OnInit {
               socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles)
             };
             this.getAssetsDetail();
-          });
-      },
-      error: (e) => {
-        if (e.name === TIMEOUT_ERROR) {
-          this.errTxt = e.message;
-        } else {
-          this.errTxt = e.status + ' ' + e.statusText;
-        }
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+          },
+          error: (e) => {
+            if (e.name === TIMEOUT_ERROR) {
+              this.errTxt = e.message;
+            } else {
+              this.errTxt = e.status + ' ' + e.statusText;
+            }
+            this.loading = false;
+          },
+          complete: () => {
+            this.loading = false;
+          },
+        });
+      }
+    })
   }
 
   getTokenDetailNFT(): void {

@@ -50,3 +50,11 @@ export class LtPipe implements PipeTransform {
     return BigNumber(amount).lt(BigNumber(val));
   }
 }
+
+@Pipe({ name: 'eq' })
+export class EqPipe implements PipeTransform {
+  constructor() {}
+  transform(amount: number | string, val: number | string): any {
+    return BigNumber(amount).eq(BigNumber(val));
+  }
+}

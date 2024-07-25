@@ -61,7 +61,6 @@ export class EvmTokenHoldersTabComponent implements OnInit {
   countTotal = 0;
 
   chainInfo = this.environmentService.chainInfo;
-
   smartContractList: string[] = [];
 
   constructor(
