@@ -334,8 +334,7 @@ export class EvmMessageComponent {
   getMethodName(methodId) {
     this.transactionService.getListMappingName(methodId).subscribe((res) => {
       this.method = mappingMethodName(res, methodId);
-      if (!this.isEvmContract) this.method = 'Send';
-      if (!this.transaction?.to) this.method = 'Create Contract';
+      if (this.transaction?.to && !this.isEvmContract) this.method = 'Send';
     });
   }
 }
