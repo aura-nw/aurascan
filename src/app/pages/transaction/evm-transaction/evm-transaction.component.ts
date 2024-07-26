@@ -132,7 +132,7 @@ export class EvmTransactionComponent implements OnChanges {
     const methodId = this.transaction?.inputData?.substring(0, 8);
     this.transactionService.getListMappingName(methodId).subscribe((res) => {
       this.method = mappingMethodName(res, methodId);
-      if (!this.isEvmContract) this.method = 'Send';
+      if (this.transaction.to && !this.isEvmContract) this.method = 'Send';
     });
   }
 
@@ -147,7 +147,7 @@ export class EvmTransactionComponent implements OnChanges {
           this.getMethod();
         },
       });
-    } else this.method = 'Create Contract'
+    } else this.getMethod();
   }
 
   parseEvmTx(tx: unknown): typeof this.transaction {
