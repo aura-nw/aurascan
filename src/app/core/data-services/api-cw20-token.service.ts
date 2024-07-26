@@ -125,6 +125,7 @@ export class ApiCw20TokenService {
     const name = await contract.name();
     const symbol = await contract.symbol();
     const decimals = await contract.decimals();
+
     return {
       ...USDC_TOKEN,
       tokenUrl: USDC_ADDRESS,
@@ -139,6 +140,7 @@ export class ApiCw20TokenService {
     const USDCMarket = coinsMarkets?.find((item) => item.coinId === USDC_COIN_ID);
     const amount = getBalance(token?.balance || 0, token?.decimals);
     const value = new BigNumber(amount).multipliedBy(Number(USDCMarket?.currentPrice || 0));
+
     return {
       ...token,
       change: null,
