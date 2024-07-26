@@ -216,7 +216,7 @@ export class WalletService implements OnDestroy {
 
     if (account) {
       this.connectEvmWallet().then().catch();
-    }
+    }  
   }
 
   restoreAccounts() {
