@@ -24,7 +24,7 @@ import {
   NUMBER_6_DIGIT,
   PAGE_EVENT,
   TIMEOUT_ERROR,
-  TITLE_LOGO
+  TITLE_LOGO,
 } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
