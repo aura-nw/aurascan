@@ -19,3 +19,25 @@
 #contentError.line-claim-v {
   -webkit-line-clamp: 3;
 }
+
+.status-container {
+  column-gap: 12px;
+  
+  .method {
+    height: 24px;
+    display: flex;
+    padding: 4px 10px;
+    align-items: center;
+    gap: 4px;
+    border-radius: 6px;
+    background: var(--aura-gray-9);
+  
+    span {
+      color: var(--aura-gray-3);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+    }
+  }
+}
