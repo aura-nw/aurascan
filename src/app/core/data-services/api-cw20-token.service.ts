@@ -13,6 +13,7 @@ import { CW20_TOKENS_TEMPLATE, ERC20_TOKENS_TEMPLATE } from './template';
 import { getEthersProvider } from '../utils/ethers';
 import { ERC20_ABI } from 'src/app/pages/account/account-detail/token-table/ABI/erc20-abi';
 import { Contract } from 'ethers';
+import { isContract } from '../utils/ethers/utils';
 
 export interface IAsset {
   name: string;
@@ -120,20 +121,24 @@ export class ApiCw20TokenService {
     if (!address) {
       return null;
     }
-    const contract = this.createContract();
-    const balance = await contract.balanceOf(address);
-    const name = await contract.name();
-    const symbol = await contract.symbol();
-    const decimals = await contract.decimals();
 
-    return {
-      ...USDC_TOKEN,
-      tokenUrl: USDC_ADDRESS,
-      name: name?.toString(),
-      symbol: symbol?.toString(),
-      balance: Number(balance?.toString()),
-      decimals: Number(decimals?.toString()),
-    };
+    if (await isContract(USDC_ADDRESS, this.env.etherJsonRpc)) {
+      const contract = this.createContract();
+      const balance = await contract.balanceOf(address);
+      const name = await contract.name();
+      const symbol = await contract.symbol();
+      const decimals = await contract.decimals();
+
+      return {
+        ...USDC_TOKEN,
+        tokenUrl: USDC_ADDRESS,
+        name: name?.toString(),
+        symbol: symbol?.toString(),
+        balance: Number(balance?.toString()),
+        decimals: Number(decimals?.toString()),
+      };
+    }
+    return null;
   }
 
   parseUSDCToken(token, coinsMarkets) {
