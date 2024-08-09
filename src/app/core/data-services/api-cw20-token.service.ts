@@ -120,20 +120,24 @@ export class ApiCw20TokenService {
     if (!address) {
       return null;
     }
-    const contract = this.createContract();
-    const balance = await contract.balanceOf(address);
-    const name = await contract.name();
-    const symbol = await contract.symbol();
-    const decimals = await contract.decimals();
+    try {
+      const contract = this.createContract();
+      const balance = await contract.balanceOf(address);
+      const name = await contract.name();
+      const symbol = await contract.symbol();
+      const decimals = await contract.decimals();
 
-    return {
-      ...USDC_TOKEN,
-      tokenUrl: USDC_ADDRESS,
-      name: name?.toString(),
-      symbol: symbol?.toString(),
-      balance: Number(balance?.toString()),
-      decimals: Number(decimals?.toString()),
-    };
+      return {
+        ...USDC_TOKEN,
+        tokenUrl: USDC_ADDRESS,
+        name: name?.toString(),
+        symbol: symbol?.toString(),
+        balance: Number(balance?.toString()),
+        decimals: Number(decimals?.toString()),
+      };
+    } catch (error) {
+      return null;
+    }
   }
 
   parseUSDCToken(token, coinsMarkets) {
