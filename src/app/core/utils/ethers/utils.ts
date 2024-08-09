@@ -1,3 +1,5 @@
+import { getEthersProvider } from './ethers';
+
 export function getMetamask() {
   return (window as any).ethereum;
 }
@@ -14,6 +16,16 @@ export async function checkNetwork(targetNetworkId: string) {
   }
 
   return false;
+}
+
+export async function isContract(address: string, rpc: string): Promise<boolean> {
+  try {
+    const provider = getEthersProvider(rpc);
+    const result = await provider.getCode(address);
+    return result !== '0x';
+  } catch (error) {
+    return false;
+  }
 }
 
 export async function addNetwork(chain) {
@@ -42,35 +54,34 @@ export async function addNetwork(chain) {
 }
 
 export const hex2a = (hex: string) => {
-  if(!hex && typeof hex != 'string') return "";
+  if (!hex && typeof hex != 'string') return '';
   const data = hex.toString();
   let str = '';
-  for (let i = 0; i < data.length; i += 2)
-      str += String.fromCharCode(parseInt(data.substr(i, 2), 16));
+  for (let i = 0; i < data.length; i += 2) str += String.fromCharCode(parseInt(data.substr(i, 2), 16));
   return str;
-}
+};
 
 export const getValueOfKeyInObject = (obj: object, key: string) => {
   let result = null;
-  if(obj instanceof Array) {
-    for(const element of obj) {
+  if (obj instanceof Array) {
+    for (const element of obj) {
       result = getValueOfKeyInObject(element, key);
       if (result) {
         break;
-      }   
+      }
     }
   } else {
-    for(let prop in obj) {
-      if(prop === key) {
+    for (let prop in obj) {
+      if (prop === key) {
         return obj[key] || {};
       }
-      if(obj[prop] instanceof Object || obj[prop] instanceof Array) {
+      if (obj[prop] instanceof Object || obj[prop] instanceof Array) {
         result = getValueOfKeyInObject(obj[prop], key);
         if (result) {
           break;
         }
-      } 
+      }
     }
   }
   return result;
-}
+};
