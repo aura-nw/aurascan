@@ -140,6 +140,10 @@ export class EnvironmentService {
     return _.get(this.configValue, 'image.banner');
   }
 
+  get mobileBanner() {
+    return _.get(this.configValue, 'image.mobileBanner');
+  }
+
   get ipfsDomain() {
     return _.get(this.configValue, 'api.ipfsDomain');
   }
