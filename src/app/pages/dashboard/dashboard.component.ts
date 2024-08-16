@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
-  bannerList = this.environmentService.banner;
+  bannerList = [];
   coingeckoCoinId = this.environmentService.coingecko.ids[0];
   chainLogo = TITLE_LOGO;
   nativeName = this.environmentService.environment.nativeName;
@@ -140,6 +140,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getListTransaction(latestHeight);
       }
     });
+
+    if (!this.isMobileMatched) this.bannerList = this.environmentService.banner || [];
+    else this.bannerList = this.environmentService.mobileBanner || [];
   }
 
   ngOnDestroy(): void {
