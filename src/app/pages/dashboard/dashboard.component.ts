@@ -19,12 +19,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import {
-  CHART_RANGE,
-  NUMBER_6_DIGIT,
-  PAGE_EVENT,
-  TIMEOUT_ERROR,
-} from '../../core/constants/common.constant';
+import { CHART_RANGE, NUMBER_6_DIGIT, PAGE_EVENT, TIMEOUT_ERROR } from '../../core/constants/common.constant';
 import { Globals, convertDataBlock, convertDataTransactionSimple } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 import BigNumber from 'bignumber.js';
@@ -61,7 +56,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
   coinInfo = this.environmentService.chainInfo.currencies[0];
-  bannerList = this.environmentService.banner;
+  bannerList = [];
   coingeckoCoinId = this.environmentService.coingecko.ids[0];
   nativeName = this.environmentService.environment.nativeName;
 
@@ -139,6 +134,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getListTransaction(latestHeight);
       }
     });
+
+    if (!this.isMobileMatched) this.bannerList = this.environmentService.banner || [];
+    else this.bannerList = this.environmentService.mobileBanner || [];
   }
 
   ngOnDestroy(): void {
