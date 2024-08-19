@@ -215,7 +215,7 @@ export class WalletService implements OnDestroy {
     const account = local.getItem(STORAGE_KEY.CURRENT_EVM_WALLET);
     if (!account) return;
 
-    this.walletAccount = account    
+    this.walletAccount = account;
   }
 
   restoreAccounts() {
@@ -348,11 +348,11 @@ export class WalletService implements OnDestroy {
     return this.walletAccount;
   }
 
-  getEvmAccount() {
-    const account = this.walletAccount;
+  async getEvmAccount() {
+    const signer = await this.getWalletSigner();
 
-    if (account?.evmAccount) {
-      return account;
+    if (signer) {
+      return signer;
     }
 
     const repo = this._walletManager.getWalletRepo(this._chain?.chain_name);
@@ -413,6 +413,10 @@ export class WalletService implements OnDestroy {
     return this._getSigningStargateClient().then((client) =>
       client.signAndBroadcast(signerAddress, messages, fee, memo, timeoutHeight),
     );
+  }
+
+  getWalletSigner() {
+    return getSigner(this.env.etherJsonRpc);
   }
 
   async connectEvmWallet(changedWallet = false) {
