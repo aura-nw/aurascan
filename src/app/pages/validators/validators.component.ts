@@ -168,9 +168,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async createContract(contractAddr, evmAccount) {
+  async createContract(contractAddr) {
     try {
       const connected = await this.walletService.connectToChain();
+
       if (!connected) {
         this.isLoading = false;
         this.isHandleStake = false;
@@ -178,7 +179,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let contract = new Contract(contractAddr, stakeAbi, evmAccount);
+      const signer = await this.walletService.getWalletSigner();
+      let contract = new Contract(contractAddr, stakeAbi, signer);
 
       if (contract) {
         this.contract = contract;
@@ -555,7 +557,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.checkTxStatusOnchain({ error });
           });
       } else {
-        const contract = await this.createContract(this.stakeContractAddr, account.evmAccount);
+        const contract = await this.createContract(this.stakeContractAddr);
 
         if (!contract) {
           return;
@@ -621,7 +623,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               this.checkTxStatusOnchain({ error });
             });
         } else {
-          const contract = await this.createContract(this.claimContractAddr, account.evmAccount);
+          const contract = await this.createContract(this.claimContractAddr);
 
           if (!contract) {
             return;
@@ -678,7 +680,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.checkTxStatusOnchain({ error });
           });
       } else {
-        const contract = await this.createContract(this.stakeContractAddr, account.evmAccount);
+        const contract = await this.createContract(this.stakeContractAddr);
 
         if (!contract) {
           return;
@@ -744,7 +746,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             this.checkTxStatusOnchain({ error });
           });
       } else {
-        const contract = await this.createContract(this.stakeContractAddr, account.evmAccount);
+        const contract = await this.createContract(this.stakeContractAddr);
 
         if (!contract) {
           return;
