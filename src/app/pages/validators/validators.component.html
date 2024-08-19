@@ -253,14 +253,16 @@
                           </div>
                         </div>
                         <div *ngSwitchCase="'action'">
-                          <button
-                            type="button"
-                            class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
-                            [disabled]="clicked"
-                            *ngIf="!data['jailed']"
-                            (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
-                            <span class="body-02 text--gray-1">Delegate</span>
-                          </button>
+                          <div *ngSwitchCase="'action'">
+                            <button
+                              type="button"
+                              [appTooltip]="isEvmAccount ? 'Using cosmos account. Please!': ''"
+                              class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
+                              [disabled]="clicked || isEvmAccount" *ngIf="!data['jailed']"
+                              (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
+                              <span class="body-02 text--gray-1">Delegate</span>
+                            </button>
+                          </div>
                         </div>
                         <div *ngSwitchDefault class="text-center">{{ data[template.matColumnDef] }}</div>
                       </ng-container>
