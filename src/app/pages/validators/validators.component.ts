@@ -119,6 +119,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   coinMinimalDenom = this.chainInfo.currencies[0].coinMinimalDenom;
   stakeContractAddr = this.environmentService.evmChainInfo.stakeContract;
   claimContractAddr = this.environmentService.evmChainInfo.claimContract;
+  isEvmAccount = false;
 
   constructor(
     private validatorService: ValidatorService,
@@ -133,7 +134,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private proposalService: ProposalService,
     private transactionService: TransactionService,
-  ) {}
+  ) {
+    this.walletService.walletAccount$.subscribe({
+      next: (wallet) => {
+        this.isEvmAccount = !!wallet.evmAccount;
+      },
+    });
+  }
 
   async ngOnInit() {
     this.getCountProposal();

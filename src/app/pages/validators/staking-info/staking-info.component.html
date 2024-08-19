@@ -24,8 +24,9 @@
           <button
             class="button button-outline button--sm button-pill button-flat d-flex text--black"
             type="button"
-            [disabled]="isDisableClaim || isLoading"
-            (click)="viewDialog(true)">
+            (click)="viewDialog(true)"
+            [appTooltip]="isEvmAccount ? 'Using cosmos account. Please!': ''"
+            [disabled]="isEvmAccount || isDisableClaim || isLoading">
             <img
               [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
               alt=""
@@ -85,8 +86,9 @@
                       <div *ngSwitchCase="'action'" class="py-4">
                         <button
                           type="button"
+                          [appTooltip]="isEvmAccount ? 'Using cosmos account. Please!': ''"
                           class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
-                          [disabled]="clicked"
+                          [disabled]="isEvmAccount || clicked"
                           (click)="clicked = true; viewDialog(false, modalManage, data['validator_address'])">
                           <span class="body-02 text--gray-1">Manage</span>
                         </button>
