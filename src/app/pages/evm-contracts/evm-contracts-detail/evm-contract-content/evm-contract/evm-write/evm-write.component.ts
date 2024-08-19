@@ -172,7 +172,7 @@ export class EvmWriteComponent implements OnChanges {
       return;
     }
 
-    const contract = this.createContract();
+    const contract = await this.createContract();
 
     if (!contract) {
       return;
@@ -201,15 +201,15 @@ export class EvmWriteComponent implements OnChanges {
       });
   }
 
-  createContract() {
+  async createContract() {
     try {
-      const account = this.walletService.getEvmAccount();
+      const accountSigner = await this.walletService.getEvmAccount();
 
-      if (!account?.evmAccount) {
+      if (!accountSigner) {
         return undefined;
       }
 
-      let contract = new Contract(this.contractAddress, this.abi, account.evmAccount);
+      let contract = new Contract(this.contractAddress, this.abi, accountSigner);
 
       if (contract) {
         this.contract = contract;
