@@ -8,6 +8,8 @@ export class NewlinePipe implements PipeTransform {
     if (!value) return null;
     let replacedValue = value;
     replacedValue = replacedValue?.replace(/\n/gi, '<br/>');
+    replacedValue = replacedValue?.replace(/ /gi, '&nbsp;');
+
     return this.sanitizer.bypassSecurityTrustHtml(replacedValue);
   }
 }

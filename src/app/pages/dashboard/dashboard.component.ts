@@ -24,7 +24,6 @@ import {
   NUMBER_6_DIGIT,
   PAGE_EVENT,
   TIMEOUT_ERROR,
-  TITLE_LOGO,
 } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransactionSimple, Globals } from '../../global/global';
 import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
@@ -64,7 +63,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   coinInfo = this.environmentService.chainInfo.currencies[0];
   bannerList = [];
   coingeckoCoinId = this.environmentService.coingecko.ids[0];
-  chainLogo = TITLE_LOGO;
   nativeName = this.environmentService.environment.nativeName;
 
   chart: IChartApi = null;
@@ -95,6 +93,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     priceChangePercentage24h: number;
     totalVolume: number;
     totalSupply: number;
+    image: string;
   };
 
   originalData = [];
