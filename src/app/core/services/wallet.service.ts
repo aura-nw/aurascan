@@ -212,11 +212,10 @@ export class WalletService implements OnDestroy {
   }
 
   restoreEvmAccounts() {
-    let account = local.getItem(STORAGE_KEY.CURRENT_EVM_WALLET);
+    const account = local.getItem(STORAGE_KEY.CURRENT_EVM_WALLET);
+    if (!account) return;
 
-    if (account) {
-      this.connectEvmWallet().then().catch();
-    }
+    this.walletAccount = account;
   }
 
   restoreAccounts() {
@@ -249,17 +248,9 @@ export class WalletService implements OnDestroy {
   }
 
   evmChangeEvent() {
-    const reconnect = () => {
-      const timeoutId = setTimeout(() => {
-        clearTimeout(timeoutId);
-        this.connectToChain();
-      }, 1000);
-    };
-
     (window as any).ethereum?.on('accountsChanged', () => {
       this.connectEvmWallet(true);
     });
-    (window as any).ethereum?.on('chainChanged', reconnect);
   }
 
   private async _getSigningCosmWasmClientAuto() {
@@ -357,11 +348,11 @@ export class WalletService implements OnDestroy {
     return this.walletAccount;
   }
 
-  getEvmAccount() {
-    const account = this.walletAccount;
+  async getEvmAccount() {
+    const signer = await this.getWalletSigner();
 
-    if (account?.evmAccount) {
-      return account;
+    if (signer) {
+      return signer;
     }
 
     const repo = this._walletManager.getWalletRepo(this._chain?.chain_name);
@@ -424,6 +415,10 @@ export class WalletService implements OnDestroy {
     );
   }
 
+  getWalletSigner() {
+    return getSigner(this.env.etherJsonRpc);
+  }
+
   async connectEvmWallet(changedWallet = false) {
     const connected = await this.connectToChain();
     if (!changedWallet && !connected) {
@@ -476,4 +471,3 @@ export class WalletService implements OnDestroy {
     return transferAddress(this.env.chainInfo.bech32Config.bech32PrefixAccAddr, address);
   }
 }
-
