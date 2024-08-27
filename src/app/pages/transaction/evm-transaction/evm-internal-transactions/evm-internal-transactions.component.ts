@@ -23,7 +23,7 @@ export class EvmInternalTransactionsComponent implements OnInit {
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
   denom = this.environmentService.chainInfo.currencies[0].coinDenom;
-  decimal = this.environmentService.chainInfo.currencies[0].coinDecimals;
+  decimal = 18;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(

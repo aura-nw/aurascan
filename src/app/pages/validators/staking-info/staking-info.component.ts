@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-staking-info',
@@ -30,8 +31,15 @@ export class StakingInfoComponent implements OnChanges {
   displayedColumnsWallet: string[] = this.templatesWallet.map((dta) => dta.matColumnDef);
   clicked = false;
   isDisableClaim = true;
+  isEvmAccount = false;
 
-  constructor() {}
+  constructor(private walletService: WalletService) {
+    this.walletService.walletAccount$.subscribe({
+      next: (wallet) => {
+        this.isEvmAccount = !!wallet.evmAccount;
+      },
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSourceWallet = new MatTableDataSource(this.dataUserDelegate?.delegations);
