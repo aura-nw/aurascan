@@ -704,9 +704,25 @@ export class TokenService extends CommonService {
     txHash?: string;
   }): Observable<any> {
     const operationsDoc = `
-    query queryListTxIBC($denom: String = null, $limit: Int = null, $offset: Int = null, $address: String = null, $hash: String =null) {
+    query queryListTxIBC(
+      $denom: String = null
+      $limit: Int = null
+      $offset: Int = null
+      $address: String = null
+      $hash: String = null
+      $order: order_by = desc
+    ) {
       ${this.envDB} {
-        ibc_ics20(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}], ibc_message: {tx_hash: {_eq: $hash}}}, limit: $limit, offset: $offset) {
+        ibc_ics20(
+          where: {
+            denom: { _eq: $denom }
+            _or: [{ receiver: { _eq: $address } }, { sender: { _eq: $address } }]
+            ibc_message: { tx_hash: { _eq: $hash } }
+          }
+          limit: $limit
+          offset: $offset
+          order_by: [{ id: $order }]
+        ) {
           denom
           sender
           receiver
@@ -723,7 +739,13 @@ export class TokenService extends CommonService {
             }
           }
         }
-        ibc_ics20_aggregate(where: {denom: {_eq: $denom}, _or: [{receiver: {_eq: $address}}, {sender: {_eq: $address}}], ibc_message: {tx_hash: {_eq: $hash}}}) {
+        ibc_ics20_aggregate(
+          where: {
+            denom: { _eq: $denom }
+            _or: [{ receiver: { _eq: $address } }, { sender: { _eq: $address } }]
+            ibc_message: { tx_hash: { _eq: $hash } }
+          }
+        ) {
           aggregate {
             count
           }
@@ -975,10 +997,10 @@ export class TokenService extends CommonService {
           name: SOCIAL_MEDIA[key]?.name,
           icon: SOCIAL_MEDIA[key]?.icon,
           url: socialProfiles[key],
-        }
+        };
         socialMapping.push(social);
       }
-    })
+    });
     return socialMapping;
   }
 }
