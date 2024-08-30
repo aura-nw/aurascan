@@ -74,9 +74,9 @@ export class TokenContentComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.featureFlag.isEnabled(FeatureFlags.SetTokenInfo)) {
-      this.tabStaking = [TokenTab.Holders, TokenTab.Info];
-      this.tabIBC = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info];
-      this.tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract, TokenTab.Info];
+      this.tabStaking = [TokenTab.Holders];
+      this.tabIBC = [TokenTab.Transfers, TokenTab.Holders];
+      this.tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Contract];
     }
 
     this.linkAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -106,7 +106,7 @@ export class TokenContentComponent implements OnInit {
       key: tab.key,
     }));
     this.tabsBackup = this.TABS;
-    
+
     this.route.queryParams.subscribe((params) => {
       this.paramQuery = params?.a || '';
       this.searchTemp = this.paramQuery;
@@ -114,7 +114,7 @@ export class TokenContentComponent implements OnInit {
       this.searchTemp = this.nameTagService.findNameTagByAddress(this.searchTemp);
 
       if (this.featureFlag.isEnabled(FeatureFlags.SetTokenInfo)) {
-        if(!this.paramQuery){
+        if (!this.paramQuery) {
           this.TABS.push({
             key: TokenTab.Info,
             value: 'Info',
@@ -122,7 +122,6 @@ export class TokenContentComponent implements OnInit {
           this.tabsBackup = this.TABS;
         }
       }
-      this.tabsBackup = this.TABS;
     });
 
     if (local.getItem(STORAGE_KEYS.IS_VERIFY_TAB) == 'true') {
