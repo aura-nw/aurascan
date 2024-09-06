@@ -264,7 +264,7 @@ export class ApiCw20TokenService {
                   image: coinMarket?.image,
                   max_total_supply: 0,
                   contract_address: '-',
-                  balance: balanceOf(item.amount, this.currencies.coinDecimals),
+                  balance: balanceOf(item?.amount, this.currencies.coinDecimals),
                   price: coinMarket?.currentPrice || 0,
                   priceChangePercentage24h: coinMarket?.priceChangePercentage24h || 0,
                   value: value.toFixed(),
