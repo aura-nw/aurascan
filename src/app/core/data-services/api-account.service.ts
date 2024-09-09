@@ -149,7 +149,7 @@ export class ApiAccountService {
     }
 
     const value = spendableBalances?.find((f) => f.denom === this.currencies.coinMinimalDenom);
-    const amount = value.amount || 0;
+    const amount = value?.amount || 0;
     return balanceOf(amount, this.currencies.coinDecimals);
   }
 
