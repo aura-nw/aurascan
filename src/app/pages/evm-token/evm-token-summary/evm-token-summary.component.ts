@@ -25,4 +25,3 @@ export class EvmTokenSummaryComponent implements OnInit {
 
   ngOnInit(): void {}
 }
-

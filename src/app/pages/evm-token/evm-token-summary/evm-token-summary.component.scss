@@ -1,7 +1,5 @@
 .box-token-info {
   table.aura-basic-table {
-    table-layout: fixed;
-    
     tr,
     td {
       color: var(--aura-contract);
@@ -12,9 +10,8 @@
   .socials {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     column-gap: 20px;
-    flex-wrap: wrap;
 
     img {
       min-width: 16px;
