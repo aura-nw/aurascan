@@ -164,4 +164,3 @@ export class EvmTokenDetailComponent implements OnInit {
     this.tokenDetail['hasMoreTx'] = event;
   }
 }
-

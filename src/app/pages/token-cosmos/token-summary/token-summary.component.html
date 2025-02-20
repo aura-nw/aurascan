@@ -110,23 +110,21 @@
         <div class="d-flex align-items-center py-2">
           <span class="first-col text--gray-5">Official Site:</span>
           <a *ngIf="tokenDetail?.officialSite" [href]="tokenDetail?.officialSite" target="_blank"
-            rel="noopener noreferrer" class="text--primary text-truncate">{{tokenDetail?.officialSite}}</a>
+            rel="noopener noreferrer" class="text--primary">{{tokenDetail?.officialSite}}</a>
         </div>
       </td>
     </tr>
     <tr>
       <td colspan="2">
-        <div class="d-flex align-items-start py-2">
+        <div class="d-flex align-items-center py-2">
           <div class="first-col text--gray-5">
             Social Profiles:
           </div>
-          <div *ngIf="tokenDetail?.socialProfiles?.length">
-            <div class="socials">
-              <a *ngFor="let item of tokenDetail?.socialProfiles" [href]="item?.url" target="_blank"
-                rel="noopener noreferrer">
-                <img [src]="item?.icon" alt="social-media">
-              </a>
-            </div>
+          <div class="socials" *ngIf="tokenDetail?.socialProfiles?.length">
+            <a *ngFor="let item of tokenDetail?.socialProfiles" [href]="item?.url" target="_blank"
+              rel="noopener noreferrer">
+              <img [src]="item?.icon" alt="social-media">
+            </a>
           </div>
         </div>
       </td>
