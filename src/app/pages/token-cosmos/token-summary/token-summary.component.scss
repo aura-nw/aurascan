@@ -9,14 +9,12 @@
       padding: 0 var(--spacer-4);
     }
   }
-
   .socials {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     column-gap: 20px;
-    row-gap: 5px;
-    flex-wrap: wrap;
+
     img {
       min-width: 16px;
       max-width: 16px;
