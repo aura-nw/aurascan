@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="body py-4">
-        <div *ngIf="!isRawData">
+        <div *ngIf="!isRawData" class="transaction-detail-wrapper">
           <div class="row mb-2 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Chain Id</div>
             <div class="col-auto col-lg-10 text--gray-1 mb-0">{{ transaction?.chainid }}</div>
