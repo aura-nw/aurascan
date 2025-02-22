@@ -23,141 +23,156 @@
       </div>
 
       <div class="body">
-        <div>
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">EVM Txn hash</div>
-            <div class="col-auto col-lg-10 mb-0">
-              <span class="text--gray-1" [copyBtn]="transaction?.evm_hash">
-                {{ environmentService.isMobile ? (transaction?.evm_hash | ellipsis: 8 : 8) : transaction?.evm_hash }}
-              </span>
-            </div>
-          </div>
-
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Cosmos Txn hash</div>
-            <div class="col-auto col-lg-10">
-              <a class="text--primary" routerLink="/tx/{{ transaction?.hash }}" [copyBtn]="transaction?.hash">
-                {{ environmentService.isMobile ? (transaction?.hash | ellipsis: 8 : 8) : transaction?.hash }}
-              </a>
-            </div>
-          </div>
-
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Status</div>
-            <div class="status-container col-auto col-lg-10 d-flex align-items-center flex-nowrap">
-              <div class="d-flex align-items-center">
-                <img
-                  [src]="
-                    transaction?.code == evmSuccessCode
-                      ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
-                      : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
-                  "
-                  alt="status"
-                  width="20px"
-                  height="20px" />
-                <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">
-                  {{ transaction?.status | uppercase }}
+        <div class="transaction-detail-wrapper">
+          <div class="row flex-column token-transfer-wrapper">
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">EVM Txn hash</div>
+              <div class="col-auto col-lg-10 mb-0">
+                <span class="text--gray-1" [copyBtn]="transaction?.evm_hash">
+                  {{ environmentService.isMobile ? (transaction?.evm_hash | ellipsis: 8 : 8) : transaction?.evm_hash }}
                 </span>
               </div>
-              <div class="method">
-                <span>{{ method }}</span>
+            </div>
+
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Cosmos Txn hash</div>
+              <div class="col-auto col-lg-10">
+                <a class="text--primary" routerLink="/tx/{{ transaction?.hash }}" [copyBtn]="transaction?.hash">
+                  {{ environmentService.isMobile ? (transaction?.hash | ellipsis: 8 : 8) : transaction?.hash }}
+                </a>
+              </div>
+            </div>
+
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Status</div>
+              <div class="status-container col-auto col-lg-10 d-flex align-items-center flex-nowrap">
+                <div class="d-flex align-items-center">
+                  <img
+                    [src]="
+                      transaction?.code == evmSuccessCode
+                        ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
+                        : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
+                    "
+                    alt="status"
+                    width="20px"
+                    height="20px" />
+                  <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">
+                    {{ transaction?.status | uppercase }}
+                  </span>
+                </div>
+                <div class="method">
+                  <span>{{ method }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Height</div>
+              <div class="col-auto col-lg-10">
+                <a
+                  class="text--primary"
+                  routerLink="/block/{{ transaction?.height }}"
+                  [copyBtn]="transaction?.height?.toString()">
+                  {{ transaction?.height | number }}
+                </a>
+              </div>
+            </div>
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Time</div>
+              <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+                <div>{{ transaction?.timestamp | customDateTime: 'Distance' }}</div>
+                <div class="d-flex align-items-center ml-1 text--gray-4">
+                  <span>(</span>
+                  <span>{{ transaction?.timestamp | customDateTime: 'DateOnly' }}</span>
+                  <div class="divider divider-vertical divider-lighter mx-2"></div>
+                  <span>{{ transaction?.timestamp | customDateTime: 'TimeOnly' }}</span>
+                  <span>)</span>
+                </div>
               </div>
             </div>
           </div>
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Height</div>
+          <div class="row mb-3 mt-3 body token-transfer-wrapper justify-content-between">
+            <div class="col-auto col-lg-2 text--gray-4">Token transfer</div>
             <div class="col-auto col-lg-10">
-              <a
-                class="text--primary"
-                routerLink="/block/{{ transaction?.height }}"
-                [copyBtn]="transaction?.height?.toString()">
-                {{ transaction?.height | number }}
-              </a>
+              <app-token-transfer [transaction]="transaction" [transferType]="'asset'"></app-token-transfer>
             </div>
           </div>
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Time</div>
-            <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
-              <div>{{ transaction?.timestamp | customDateTime: 'Distance' }}</div>
-              <div class="d-flex align-items-center ml-1 text--gray-4">
-                <span>(</span>
-                <span>{{ transaction?.timestamp | customDateTime: 'DateOnly' }}</span>
-                <div class="divider divider-vertical divider-lighter mx-2"></div>
-                <span>{{ transaction?.timestamp | customDateTime: 'TimeOnly' }}</span>
-                <span>)</span>
+          <div class="row mb-3 mt-3 body token-transfer-wrapper no-border-top justify-content-between">
+            <div class="col-auto col-lg-2 text--gray-4">NFT transfer</div>
+            <div class="col-auto col-lg-10">
+              <app-token-transfer [transaction]="transaction" [transferType]="'nft'"></app-token-transfer>
+            </div>
+          </div>
+          <div class="row flex-column token-transfer-wrapper">
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">From</div>
+              <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+                <ng-container *ngIf="transaction.from; else dash">
+                  <app-name-tag [value]="transaction.from | beautyAddress" [fullText]="true"></app-name-tag>
+                </ng-container>
               </div>
             </div>
-          </div>
 
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">From</div>
-            <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
-              <ng-container *ngIf="transaction.from; else dash">
-                <app-name-tag [value]="transaction.from | beautyAddress" [fullText]="true"></app-name-tag>
-              </ng-container>
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">To</div>
+              <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+                <ng-container *ngIf="transaction.to; else dash">
+                  <app-name-tag
+                    [value]="transaction.to | beautyAddress"
+                    [fullText]="true"
+                    [linkRouter]="[isEvmContract ? '/evm-contracts' : '/address', transaction.to]"
+                    [iconContract]="isEvmContract"></app-name-tag>
+                </ng-container>
+              </div>
             </div>
-          </div>
 
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">To</div>
-            <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
-              <ng-container *ngIf="transaction.to; else dash">
-                <app-name-tag
-                  [value]="transaction.to | beautyAddress"
-                  [fullText]="true"
-                  [linkRouter]="[isEvmContract ? '/evm-contracts' : '/address', transaction.to]"
-                  [iconContract]="isEvmContract"></app-name-tag>
-              </ng-container>
-            </div>
-          </div>
-
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Amount</div>
-            <div class="col-auto col-lg-10 text--gray-1">
-              <span class="text--gray-1 mr-1" [appTooltip]="{ priceAmount: transaction.amount, decimal: 0 }">
-                <span *ngIf="transaction.amount | lt: 0.001">
-                  {{ +transaction.amount == 0 ? 0 : '< 0.001' }}
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Amount</div>
+              <div class="col-auto col-lg-10 text--gray-1">
+                <span class="text--gray-1 mr-1" [appTooltip]="{ priceAmount: transaction.amount, decimal: 0 }">
+                  <span *ngIf="transaction.amount | lt: 0.001">
+                    {{ +transaction.amount == 0 ? 0 : '< 0.001' }}
+                  </span>
+                  <span
+                    [decimal]="0"
+                    [appBigNumber]="transaction.amount || 0"
+                    *ngIf="transaction.amount | gte: 0.001"></span>
                 </span>
-                <span
-                  [decimal]="0"
-                  [appBigNumber]="transaction.amount || 0"
-                  *ngIf="transaction.amount | gte: 0.001"></span>
-              </span>
-              <a appLinkDenom>{{ denom }}</a>
+                <a appLinkDenom>{{ denom }}</a>
+              </div>
             </div>
-          </div>
 
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Transaction Fee</div>
-            <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.fee }} <a appLinkDenom>{{ denom }}</a>
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Transaction Fee</div>
+              <div class="col-auto col-lg-10 text--gray-1">
+                {{ transaction?.fee }} <a appLinkDenom>{{ denom }}</a>
+              </div>
             </div>
-          </div>
 
-          <div class="row body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-              <div>Gas limit & Usage by Txn</div>
-            </div>
-            <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.gas_limit | number }} | {{ transaction?.gasUsed | number }}
+            <div class="row body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
+                <div>Gas limit & Usage by Txn</div>
+              </div>
+              <div class="col-auto col-lg-10 text--gray-1">
+                {{ transaction?.gas_limit | number }} | {{ transaction?.gasUsed | number }}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <ng-container>
+    <!-- <ng-container>
       <h2 class="text--white">Asset Transfer</h2>
       <div class="mb-6">
         <app-token-transfer [transaction]="transaction"></app-token-transfer>
       </div>
-    </ng-container>
+    </ng-container> -->
 
     <div class="row body justify-content-between justify-content-lg-start">
-      <app-evm-message 
-      [transaction]="transaction"
-      [eventLog]="transaction.eventLog"
-      [isEvmContract]="isEvmContract"></app-evm-message>
+      <app-evm-message
+        [transaction]="transaction"
+        [eventLog]="transaction.eventLog"
+        [isEvmContract]="isEvmContract"></app-evm-message>
     </div>
   </ng-container>
 </ng-container>

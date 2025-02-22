@@ -26,7 +26,9 @@
       <div class="d-flex align-items-baseline">
         <h2 *ngIf="!isRawData" class="mb-0 text--white pb-0 pr-0">Information</h2>
         <div *ngIf="isRawData">
-          <h2 class="mb-0 text--white pb-0 pr-0" [copyBtn]="transaction.tx | json"
+          <h2
+            class="mb-0 text--white pb-0 pr-0"
+            [copyBtn]="transaction.tx | json"
             [btnClass]="['button', 'button--xxs', 'button--sm-mob', 'button-circle', 'ml-2']">
             Raw Data
           </h2>
@@ -34,89 +36,114 @@
       </div>
       <div class="body py-4">
         <div *ngIf="!isRawData" class="transaction-detail-wrapper">
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Chain Id</div>
-            <div class="col-auto col-lg-10 text--gray-1 mb-0">{{ transaction?.chainid }}</div>
-          </div>
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4 d-flex align-items-center">TxHash</div>
-            <div class="col-auto col-lg-10 text--gray-1 d-flex align-items-center">
-              <div [copyBtn]="transaction?.tx_hash" [btnClass]="!environmentService.isMobile ? ['mr-2'] : []">
-                <span *ngIf="!environmentService.isMobile">{{ transaction?.tx_hash }}</span>
-                <span *ngIf="environmentService.isMobile">{{ transaction?.tx_hash | ellipsis: 8 : 8 }}</span>
+          <div class="row flex-column token-transfer-wrapper">
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Chain Id</div>
+              <div class="col-auto col-lg-10 text--gray-1 mb-0">{{ transaction?.chainid }}</div>
+            </div>
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4 d-flex align-items-center">TxHash</div>
+              <div class="col-auto col-lg-10 text--gray-1 d-flex align-items-center">
+                <div [copyBtn]="transaction?.tx_hash" [btnClass]="!environmentService.isMobile ? ['mr-2'] : []">
+                  <span *ngIf="!environmentService.isMobile">{{ transaction?.tx_hash }}</span>
+                  <span *ngIf="environmentService.isMobile">{{ transaction?.tx_hash | ellipsis: 8 : 8 }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Status</div>
-            <div class="col-auto col-lg-10 d-flex align-items-center">
-              <img [src]="
-                  transaction?.code == codeTransaction.Success
-                    ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
-                    : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
-                " width="20px" height="20px" />
-              <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">{{
-                transaction?.status | uppercase
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Status</div>
+              <div class="col-auto col-lg-10 d-flex align-items-center">
+                <img
+                  [src]="
+                    transaction?.code == codeTransaction.Success
+                      ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
+                      : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
+                  "
+                  width="20px"
+                  height="20px" />
+                <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">{{
+                  transaction?.status | uppercase
                 }}</span>
+              </div>
             </div>
-          </div>
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Height</div>
-            <div class="col-auto col-lg-10">
-              <a class="text--primary" routerLink="/block/{{ transaction?.height }}">
-                {{ transaction?.height | number }}
-              </a>
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Height</div>
+              <div class="col-auto col-lg-10">
+                <a class="text--primary" routerLink="/block/{{ transaction?.height }}">
+                  {{ transaction?.height | number }}
+                </a>
+              </div>
             </div>
-          </div>
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Time</div>
-            <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
-              <div>{{ transaction?.timestamp | customDateTime: 'Distance' }}</div>
-              <div class="d-flex align-items-center ml-1 text--gray-4">
-                <span>(</span>
-                <span>{{ transaction?.timestamp | customDateTime: 'DateOnly' }}</span>
-                <div class="divider divider-vertical divider-lighter mx-2"></div>
-                <span>{{ transaction?.timestamp | customDateTime: 'TimeOnly' }}</span>
-                <span>)</span>
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Time</div>
+              <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+                <div>{{ transaction?.timestamp | customDateTime: 'Distance' }}</div>
+                <div class="d-flex align-items-center ml-1 text--gray-4">
+                  <span>(</span>
+                  <span>{{ transaction?.timestamp | customDateTime: 'DateOnly' }}</span>
+                  <div class="divider divider-vertical divider-lighter mx-2"></div>
+                  <span>{{ transaction?.timestamp | customDateTime: 'TimeOnly' }}</span>
+                  <span>)</span>
+                </div>
               </div>
             </div>
           </div>
-          <div class="row mb-2 body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4">Fee</div>
-            <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.fee }}
-              <span appLinkDenom>{{ denom }}</span>
+          <div class="row mb-3 mt-3 body token-transfer-wrapper justify-content-between">
+            <div class="col-auto col-lg-2 text--gray-4">Token transfer</div>
+            <div class="col-auto col-lg-10">
+              <app-token-transfer [transaction]="transaction" [transferType]="'asset'"></app-token-transfer>
             </div>
           </div>
-          <div class="row body justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-              <div>Gas</div>
-              <div class="ml-md-1">(used / wanted)</div>
-            </div>
-            <div class="col-auto col-lg-10 text--gray-1">
-              {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
+          <div class="row mb-3 mt-3 body token-transfer-wrapper no-border-top justify-content-between">
+            <div class="col-auto col-lg-2 text--gray-4">NFT transfer</div>
+            <div class="col-auto col-lg-10">
+              <app-token-transfer [transaction]="transaction" [transferType]="'nft'"></app-token-transfer>
             </div>
           </div>
-          <div class="row body mt-2 justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-              <div>Memo</div>
+          <div class="row flex-column token-transfer-wrapper">
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">Fee</div>
+              <div class="col-auto col-lg-10 text--gray-1">
+                {{ transaction?.fee }}
+                <span appLinkDenom>{{ denom }}</span>
+              </div>
             </div>
-            <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
-              {{ !transaction?.memo ? '-' : (transaction?.memo | ellipsis: (environmentService.isMobile ? 25 : 100)) }}
+            <div class="row body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
+                <div>Gas</div>
+                <div class="ml-md-1">(used / wanted)</div>
+              </div>
+              <div class="col-auto col-lg-10 text--gray-1">
+                {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
+              </div>
             </div>
-          </div>
-          <div class="row body justify-content-between justify-content-lg-start flex-nowrap align-items-center">
-            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-              <div>Fee payer</div>
+            <div class="row body mt-2 justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
+                <div>Memo</div>
+              </div>
+              <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
+                {{
+                  !transaction?.memo ? '-' : (transaction?.memo | ellipsis: (environmentService.isMobile ? 25 : 100))
+                }}
+              </div>
             </div>
-            <div style="max-width: max-content;">
-              <div *ngIf="!transaction?.fee_payer">-</div>
-              <a *ngIf="transaction?.fee_payer" [copyBtn]="transaction?.fee_payer"
-                [btnClass]="!environmentService.isMobile ? ['mr-2'] : []" class="text--primary d-block"
-                routerLink="/address/{{ transaction?.fee_payer }}">
-                {{ environmentService.isMobile ? (transaction?.fee_payer | ellipsis: 8 :
-                8) : transaction?.fee_payer }}
-              </a>
+            <div class="row body justify-content-between justify-content-lg-start flex-nowrap align-items-center">
+              <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
+                <div>Fee payer</div>
+              </div>
+              <div style="max-width: max-content" class="col-auto col-lg-10">
+                <div *ngIf="!transaction?.fee_payer">-</div>
+                <a
+                  *ngIf="transaction?.fee_payer"
+                  [copyBtn]="transaction?.fee_payer"
+                  [btnClass]="!environmentService.isMobile ? ['mr-2'] : []"
+                  class="text--primary d-block"
+                  routerLink="/address/{{ transaction?.fee_payer }}">
+                  {{
+                    environmentService.isMobile ? (transaction?.fee_payer | ellipsis: 8 : 8) : transaction?.fee_payer
+                  }}
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -125,16 +152,18 @@
       </div>
     </div>
 
-    <ng-container *ngIf="!isRawData">
+    <!-- <ng-container *ngIf="!isRawData">
       <h2 class="text--white">Asset Transfer</h2>
       <div class="mb-6">
         <app-token-transfer [transaction]="transaction"></app-token-transfer>
       </div>
-    </ng-container>
+    </ng-container> -->
 
     <ng-container *ngIf="!isRawData && transaction?.messages">
       <h2 class="text--white">Messages</h2>
-      <app-transaction-messages [transactionDetail]="transaction" [listValidator]="commonService.listValidator || []"
+      <app-transaction-messages
+        [transactionDetail]="transaction"
+        [listValidator]="commonService.listValidator || []"
         *ngIf="commonService.listValidator?.length > 0">
       </app-transaction-messages>
     </ng-container>

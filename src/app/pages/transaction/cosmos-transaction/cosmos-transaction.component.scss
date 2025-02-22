@@ -25,3 +25,12 @@
   border-radius: 8px;
   background: #24262e;
 }
+
+.token-transfer-wrapper {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #545454;
+  flex-wrap: nowrap;
+  max-height: 250px;
+  overflow: auto;
+}
