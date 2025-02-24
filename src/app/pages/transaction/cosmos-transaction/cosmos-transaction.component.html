@@ -88,15 +88,15 @@
               </div>
             </div>
           </div>
-          <div class="row mb-3 mt-3 body token-transfer-wrapper justify-content-between">
-            <div class="col-auto col-lg-2 text--gray-4">Token transfer</div>
-            <div class="col-auto col-lg-10">
+          <div class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper justify-content-between">
+            <div class="col-12 col-lg-2 text--gray-4">Token transfer</div>
+            <div class="col-12 col-lg-10">
               <app-token-transfer [transaction]="transaction" [transferType]="'asset'"></app-token-transfer>
             </div>
           </div>
-          <div class="row mb-3 mt-3 body token-transfer-wrapper no-border-top justify-content-between">
-            <div class="col-auto col-lg-2 text--gray-4">NFT transfer</div>
-            <div class="col-auto col-lg-10">
+          <div class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper no-border-top justify-content-between">
+            <div class="col-12 col-lg-2 text--gray-4">NFT transfer</div>
+            <div class="col-12 col-lg-10">
               <app-token-transfer [transaction]="transaction" [transferType]="'nft'"></app-token-transfer>
             </div>
           </div>

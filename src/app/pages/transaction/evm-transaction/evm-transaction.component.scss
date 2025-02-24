@@ -46,6 +46,10 @@
   padding: 24px;
   border-radius: 8px;
   background: #24262e;
+  
+  @media(max-width: 768px) {
+    padding: 16px;
+  }
 }
 
 .token-transfer-wrapper {
