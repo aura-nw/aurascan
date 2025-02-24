@@ -61,3 +61,35 @@
     max-width: 80px;
   }
 }
+
+.text-white {
+  color: #e5e7ea;
+  /* Desktop/Body/S (Sb) */
+  font-family: 'Inter';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18px; /* 128.571% */
+  letter-spacing: 0.14px;
+}
+
+.nft-bg-white {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  aspect-ratio: 1/1;
+
+  border-radius: 6px;
+  background: #f8f9fa;
+
+  color: #5c606d;
+  font-family: Inter;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px; /* 200% */
+}

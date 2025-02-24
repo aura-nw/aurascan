@@ -92,6 +92,7 @@ export class TransactionMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.transactionDetail);
     if (this.transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1) {
       this.checkTypeMessage();
     }

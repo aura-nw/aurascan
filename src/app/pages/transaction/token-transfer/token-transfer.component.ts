@@ -22,6 +22,7 @@ import * as _ from 'lodash';
 })
 export class TokenTransferComponent implements OnInit, OnDestroy {
   @Input() transaction: any;
+  @Input() transferType: string = 'nft';
   nullAddress = NULL_ADDRESS;
   dataSourceFTs = new MatTableDataSource<any>([]);
   dataSourceNFTs = new MatTableDataSource<any>([]);
