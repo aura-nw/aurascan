@@ -33,6 +33,7 @@ import { TokenDetailComponent } from './token-detail/token-detail.component';
 import { TokenOverviewComponent } from './token-overview/token-overview.component';
 import { TokenCosmosRoutingModule } from './token-cosmos-routing.module';
 import { TokenSummaryComponent } from './token-summary/token-summary.component';
+import { TokenMarketComponent } from './token-detail/token-market/token-market.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,8 @@ import { TokenSummaryComponent } from './token-summary/token-summary.component';
     TokenInventoryComponent,
     NFTDetailComponent,
     PopupShareComponent,
+    TokenMarketComponent,
+    
   ],
   imports: [
     CommonModule,

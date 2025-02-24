@@ -29,7 +29,7 @@
       </ng-container>
 
       <ng-container *ngIf="!tokenDetail.isNFTContract">
-        <tr>
+        <!-- <tr>
           <td colspan="2" class="py-2">
             <div class="d-flex align-items-center">
               <div class="flex-item">
@@ -93,12 +93,13 @@
               </div>
             </div>
           </td>
-        </tr>
+        </tr> -->
 
         <tr>
           <td colspan="2">
             <div class="d-flex">
-              <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span>
+              <!-- <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span> -->
+              <span class="text--gray-5 body-02 fixed-col">Max Total Supply</span>
               <div
                 class="body-02 text--gray-1"
                 [appTooltip]="{ priceAmount: tokenDetail.supplyAmount, multipliedBy: tokenDetail.price, lt: 0.01 }">
@@ -144,7 +145,7 @@
                 </span>
               </div>
             </div>
-            <ng-container *ngIf="!tokenDetail.isNFTContract">
+            <!-- <ng-container *ngIf="!tokenDetail.isNFTContract">
               <div class="divider divider-item" *ngIf="tokenDetail.modeToken !== EModeToken.Native && !params"></div>
               <div class="pl-4" *ngIf="tokenDetail.modeToken !== EModeToken.Native && !params">
                 <div class="body-02 text--gray-5">Transfers:</div>
@@ -152,11 +153,21 @@
                   <span *ngIf="tokenDetail?.hasMoreTx">More than </span>{{ tokenService.totalTransfer || 0 }}
                 </div>
               </div>
-            </ng-container>
+            </ng-container> -->
           </div>
         </td>
       </tr>
 
+      <tr *ngIf="!tokenDetail.isNFTContract && tokenDetail.modeToken !== EModeToken.Native && !params">
+        <td colspan="2">
+          <div class="d-flex">
+            <div class="body-02 text--gray-5 fixed-col">Transfers:</div>
+            <div class="body-02 text--gray-11">
+              <span *ngIf="tokenDetail.hasMoreTx">More than </span>{{ tokenService.totalTransfer || 0 }}
+            </div>
+          </div>
+        </td>
+      </tr>
       <tr *ngIf="tokenDetail.isNFTContract">
         <td colspan="2" *ngIf="!params">
           <div class="d-flex">

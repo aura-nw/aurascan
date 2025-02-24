@@ -18,11 +18,14 @@
     </h1>
   </div>
   <div class="row">
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-4">
       <app-token-overview *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-overview>
     </div>
+    <div class="col-12 col-lg-4">
+      <app-token-market *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-market>
+    </div>
 
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-4">
       <app-token-summary
       *ngIf="tokenDetail"
       [tokenDetail]="tokenDetail"
