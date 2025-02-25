@@ -34,6 +34,7 @@ import { EvmTokenOverviewComponent } from './evm-token-overview/evm-token-overvi
 import { EvmTokenRoutingModule } from './evm-token-routing.module';
 import { EvmTokenSummaryComponent } from './evm-token-summary/evm-token-summary.component';
 import { EvmAddressPipe } from 'src/app/core/pipes/evm-address.pipe';
+import { EvmTokenMarketComponent } from './evm-token-market/evm-token-market.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { EvmAddressPipe } from 'src/app/core/pipes/evm-address.pipe';
     EvmTokenInventoryComponent,
     EvmNFTDetailComponent,
     EvmPopupShareComponent,
+    EvmTokenMarketComponent
   ],
   imports: [
     CommonModule,

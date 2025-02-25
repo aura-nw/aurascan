@@ -1,4 +1,4 @@
-<div class="card box-token-info">
+<div class="card box-token-info h-100">
   <table class="aura-basic-table w-100 body-02">
     <tr>
       <td colspan="2">
@@ -23,6 +23,14 @@
               <li class="dropdown-item cursor-pointer">Update Name Tag</li>
             </ul>
           </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="d-flex align-items-center py-2">
+          <div class="first-col text--gray-5">Type:</div>
+          <div class="text--white">{{ tokenDetail?.modeToken }}</div>
         </div>
       </td>
     </tr>
@@ -105,29 +113,36 @@
       </tr>
     </ng-container>
 
-    <tr>
+    <!-- <tr>
       <td colspan="2">
         <div class="d-flex align-items-center py-2">
           <span class="first-col text--gray-5">Official Site:</span>
-          <a *ngIf="tokenDetail?.officialSite" [href]="tokenDetail?.officialSite" target="_blank"
-            rel="noopener noreferrer" class="text--primary">{{tokenDetail?.officialSite}}</a>
+          <a
+            *ngIf="tokenDetail?.officialSite"
+            [href]="tokenDetail?.officialSite"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text--primary"
+            >{{ tokenDetail?.officialSite }}</a
+          >
         </div>
       </td>
     </tr>
     <tr>
       <td colspan="2">
         <div class="d-flex align-items-center py-2">
-          <div class="first-col text--gray-5">
-            Social Profiles:
-          </div>
+          <div class="first-col text--gray-5">Social Profiles:</div>
           <div class="socials" *ngIf="tokenDetail?.socialProfiles?.length">
-            <a *ngFor="let item of tokenDetail?.socialProfiles" [href]="item?.url" target="_blank"
+            <a
+              *ngFor="let item of tokenDetail?.socialProfiles"
+              [href]="item?.url"
+              target="_blank"
               rel="noopener noreferrer">
-              <img [src]="item?.icon" alt="social-media">
+              <img [src]="item?.icon" alt="social-media" />
             </a>
           </div>
         </div>
       </td>
-    </tr>
+    </tr> -->
   </table>
 </div>

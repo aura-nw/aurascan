@@ -1,17 +1,17 @@
-<div class="card box-token-info">
+<div class="card box-token-info h-100">
   <div class="table-responsive">
     <table class="aura-basic-table w-100">
       <tr class="body">
         <td class="h4 mb-0">
           <span class="text--white">Overview</span>
-          <span class="text--gray-light-3 ml-1">
+          <!-- <span class="text--gray-light-3 ml-1">
             <ng-container *ngIf="tokenDetail.modeToken === EModeEvmToken.ERCToken; else defaultMode">
               <ng-container *ngIf="tokenDetail.type === contractType.ERC20">[ERC-20]</ng-container>
               <ng-container *ngIf="tokenDetail.type === contractType.ERC721">[ERC-721]</ng-container>
               <ng-container *ngIf="tokenDetail.type === contractType.ERC1155">[ERC-4973]</ng-container>
             </ng-container>
             <ng-template #defaultMode>[{{ tokenDetail.modeToken }}]</ng-template>
-          </span>
+          </span> -->
         </td>
       </tr>
 
@@ -29,7 +29,7 @@
       </ng-container>
 
       <ng-container *ngIf="!tokenDetail.isNFTContract">
-        <tr>
+        <!-- <tr>
           <td colspan="2" class="py-2">
             <div class="d-flex align-items-center">
               <div class="flex-item">
@@ -123,6 +123,29 @@
                       [tokenPrice]="tokenDetail.price"></span>
                   </span>
                 </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr> -->
+        <tr>
+          <td colspan="2">
+            <div class="d-flex">
+              <!-- <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span> -->
+              <span class="text--gray-5 body-02 fixed-col">Max Total Supply</span>
+              <div class="body-02 text--gray-11">
+                <span
+                  class="text--gray-1"
+                  [appTooltip]="{ priceAmount: tokenDetail.supplyAmount, decimal: tokenDetail.decimal }">
+                  <span *ngIf="tokenDetail.supplyAmount | balance: tokenDetail.decimal | lt: 0.001">
+                    {{ tokenDetail.supplyAmount == 0 ? 0 : '< 0.001' }}
+                  </span>
+                  <span
+                    [decimal]="tokenDetail.decimal"
+                    [numberDecimal]="environmentService?.isMobile ? 0 : 6"
+                    [appBigNumber]="tokenDetail.supplyAmount || 0"
+                    *ngIf="tokenDetail.supplyAmount | balance: tokenDetail.decimal | gte: 0.001"></span>
+                </span>
+                <span class="ml-1">{{ tokenDetail?.symbol }}</span>
               </div>
             </div>
           </td>

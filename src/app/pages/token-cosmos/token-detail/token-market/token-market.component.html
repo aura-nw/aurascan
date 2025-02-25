@@ -1,4 +1,4 @@
-<div class="card box-token-info">
+<div class="card box-token-info h-100">
   <div class="table-responsive">
     <table class="aura-basic-table w-100">
       <tr class="body">
@@ -8,7 +8,7 @@
       </tr>
 
       <ng-container *ngIf="!tokenDetail.isNFTContract">
-        <tr>
+        <!-- <tr>
           <td colspan="2" class="py-2">
             <div class="d-flex align-items-center">
               <div class="flex-item">
@@ -26,9 +26,9 @@
               </div>
             </div>
           </td>
-        </tr>
+        </tr> -->
 
-        <tr>
+        <!-- <tr>
           <td colspan="2" class="py-2">
             <div class="d-flex align-items-center">
               <div class="flex-item">
@@ -72,6 +72,31 @@
               </div>
             </div>
           </td>
+        </tr> -->
+        <tr>
+          <td colspan="2">
+            <div class="d-flex">
+              <!-- <span class="text--gray-5 body-02 fixed-col">In-Chain Supply Value</span> -->
+              <span class="text--gray-5 body-02 fixed-col">Price:</span>
+              <div class="body-02">
+                <div class="text--gray-11">
+                  <span class="small-body" [appTooltip]="{ priceAmount: +tokenDetail.price }">
+                    <span *ngIf="tokenDetail.price | lt: 0.001">
+                      {{ tokenDetail.price == 0 ? '$0.00' : '< $0.001' }}
+                    </span>
+                    <span *ngIf="tokenDetail.price | gte: 0.001">
+                      ${{ +tokenDetail.price | mask: 'separator.3' }}
+                    </span>
+                  </span>
+                  <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
+                    (<span>
+                      {{ tokenDetail.isValueUp ? '+' : '-' }}{{ tokenDetail.change || 0 | formatDigit: 2 }}% </span
+                    >)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
         </tr>
 
         <tr>
@@ -84,7 +109,7 @@
                   {{ tokenDetail?.marketCap == 0 ? '$0.00' : '< $0.01' }}
                 </span>
                 <ng-container *ngIf="(tokenDetail.marketCap | balance: 0 : true).gte(0.01)">
-                  <span [decimal]="0" [appBigNumber]="tokenDetail?.marketCap" [tokenPrice]="tokenDetail?.marketCap"></span>
+                  ${{ +tokenDetail.marketCap | mask: 'separator.3' }}
                 </ng-container>
               </div>
             </div>
