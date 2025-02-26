@@ -3,9 +3,14 @@
   <div class="d-flex mb-4 mb-lg-5 align-items-center">
     <h1 class="mb-0 text--white ml-2">
       <div class="d-flex">
-        Token <span class="text--gray-5 break-word ml-2 flex-grow-1" style="max-width: max-content;">{{ tokenDetail?.name }}</span>
+        Token
+        <span class="text--gray-5 break-word ml-2 flex-grow-1" style="max-width: max-content"
+          >{{ tokenDetail?.name }} ({{
+            tokenDetail.modeToken === EModeToken.Native ? tokenDetail.denom : tokenDetail.symbol
+          }})</span
+        >
         <div class="status cursor-pointer">
-           <img
+          <img
             [src]="'assets/images/icons/CircleWavyCheck.svg' | imageS3"
             alt=""
             width="18"
@@ -18,15 +23,18 @@
     </h1>
   </div>
   <div class="row">
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-4">
       <app-token-overview *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-overview>
     </div>
+    <div class="col-12 col-lg-4">
+      <app-token-market *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-market>
+    </div>
 
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-4">
       <app-token-summary
-      *ngIf="tokenDetail"
-      [tokenDetail]="tokenDetail"
-      [channelPath]="channelPath"></app-token-summary>
+        *ngIf="tokenDetail"
+        [tokenDetail]="tokenDetail"
+        [channelPath]="channelPath"></app-token-summary>
     </div>
   </div>
 
