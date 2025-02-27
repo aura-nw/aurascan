@@ -90,6 +90,28 @@
               </div>
             </div>
           </div>
+          <div class="row flex-column token-transfer-wrapper">
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">From</div>
+              <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+                <ng-container *ngIf="transaction.from; else dash">
+                  <app-name-tag [value]="transaction.from | beautyAddress" [fullText]="true"></app-name-tag>
+                </ng-container>
+              </div>
+            </div>
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4">To</div>
+              <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+                <ng-container *ngIf="transaction.to; else dash">
+                  <app-name-tag
+                    [value]="transaction.to | beautyAddress"
+                    [fullText]="true"
+                    [linkRouter]="[isEvmContract ? '/evm-contracts' : '/address', transaction.to]"
+                    [iconContract]="isEvmContract"></app-name-tag>
+                </ng-container>
+              </div>
+            </div>
+          </div>
           <div
             class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper justify-content-between"
             *ngIf="isShowTokenTransfer">
@@ -113,28 +135,6 @@
             </div>
           </div>
           <div class="row flex-column token-transfer-wrapper">
-            <div class="row mb-2 body justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-2 text--gray-4">From</div>
-              <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
-                <ng-container *ngIf="transaction.from; else dash">
-                  <app-name-tag [value]="transaction.from | beautyAddress" [fullText]="true"></app-name-tag>
-                </ng-container>
-              </div>
-            </div>
-
-            <div class="row mb-2 body justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-2 text--gray-4">To</div>
-              <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
-                <ng-container *ngIf="transaction.to; else dash">
-                  <app-name-tag
-                    [value]="transaction.to | beautyAddress"
-                    [fullText]="true"
-                    [linkRouter]="[isEvmContract ? '/evm-contracts' : '/address', transaction.to]"
-                    [iconContract]="isEvmContract"></app-name-tag>
-                </ng-container>
-              </div>
-            </div>
-
             <div class="row mb-2 body justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-2 text--gray-4">Amount</div>
               <div class="col-auto col-lg-10 text--gray-1">
