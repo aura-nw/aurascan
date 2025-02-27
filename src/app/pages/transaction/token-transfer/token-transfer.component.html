@@ -5,24 +5,26 @@
         <div class="d-flex gap-3 align-items-center" *ngFor="let transaction of dataSourceFTs?.data">
           <img src="assets/icons/icons-svg/basic/token-transfer-row-arrow.svg" />
           <div class="text-white">From</div>
-          <div class="text-white">
+          <div class="text-white min-w-custom">
             <app-name-tag
               [isEnableRouter]="!!transaction.from"
               [maxCharacter]="breakpoint.value.matches ? 6 : 16"
               [iconContract]="transaction.from | isContract"
               [value]="transaction.from || nullAddress | beautyAddress"
               [isShorterText]="breakpoint.value.matches"
+              [showCopyBtn]="false"
               [linkRouter]="[(transaction.from | isContract) ? '/contracts' : '/address', transaction.from]">
             </app-name-tag>
           </div>
           <div class="text-white">To</div>
-          <div class="text-white">
+          <div class="text-white min-w-custom">
             <app-name-tag
               [isEnableRouter]="!!transaction.from"
               [maxCharacter]="breakpoint.value.matches ? 6 : 16"
               [iconContract]="transaction.from | isContract"
               [value]="transaction.to || nullAddress | beautyAddress"
               [isShorterText]="breakpoint.value.matches"
+              [showCopyBtn]="false"
               [linkRouter]="[(transaction.from | isContract) ? '/contracts' : '/address', transaction.from]">
             </app-name-tag>
           </div>
@@ -42,11 +44,11 @@
               [appBigNumber]="transaction['amount']"
               [decimal]="transaction.decimal"></div>
           </div>
-          <img src="assets/icons/icons-svg/basic/token-transfer-currency.svg" />
+          <img class="rounded-circle" [appImg]="transaction | marketInfo: 'logo'" width="20" height="20" alt="" />
           <div class="text-white">
             <span
               [appTooltip]="transaction | marketInfo: 'symbol'"
-              class="caption-mob text-sm mb-1"
+              class="caption-mob text-sm"
               [appLinkDenom]="
                 (transaction | marketInfo: 'symbol') == coinInfo.coinDenom
                   ? coinInfo.coinMinimalDenom

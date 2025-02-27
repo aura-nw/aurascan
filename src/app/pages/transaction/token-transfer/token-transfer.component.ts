@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Router } from '@angular/router';
@@ -23,6 +23,10 @@ import * as _ from 'lodash';
 export class TokenTransferComponent implements OnInit, OnDestroy {
   @Input() transaction: any;
   @Input() transferType: string = 'nft';
+  @Output() transferDataLength: EventEmitter<{ transferType: 'nft' | 'token'; length: number }> = new EventEmitter<{
+    transferType: 'nft' | 'token';
+    length: number;
+  }>();
   nullAddress = NULL_ADDRESS;
   dataSourceFTs = new MatTableDataSource<any>([]);
   dataSourceNFTs = new MatTableDataSource<any>([]);
@@ -150,13 +154,19 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
           // remove record approve && revoke
           const arrCW721 = res.cw721_activity?.filter((k) => k.action !== 'approve' && k.action !== 'revoke');
           this.dataSourceNFTs.data = arrCW721;
+          this.transferDataLength.emit({ transferType: 'nft', length: arrCW721?.length });
+        } else {
+          this.transferDataLength.emit({ transferType: 'nft', length: 0 });
         }
         if (res.cw20_activity?.length > 0 || coinTransfer?.length > 0) {
           this.dataSourceFTs.data = [...coinTransfer, ...(res.cw20_activity || [])];
+          this.transferDataLength.emit({ transferType: 'token', length: this.dataSourceFTs?.data?.length });
 
           res.cw20_activity.forEach((element) => {
             element.decimal = element.decimal || element.cw20_contract?.decimal || 6;
           });
+        } else {
+          this.transferDataLength.emit({ transferType: 'token', length: 0 });
         }
       });
   }
@@ -189,13 +199,19 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
         if (res?.erc721_activity?.length > 0) {
           const arrCW721 = res.erc721_activity;
           this.dataSourceNFTs.data = arrCW721;
+          this.transferDataLength.emit({ transferType: 'nft', length: arrCW721?.length });
+        } else {
+          this.transferDataLength.emit({ transferType: 'nft', length: 0 });
         }
         if (res.erc20_activity?.length > 0 || coinTransfer?.length > 0) {
           this.dataSourceFTs.data = [...coinTransfer, ...(res.erc20_activity || [])];
+          this.transferDataLength.emit({ transferType: 'token', length: this.dataSourceFTs?.data?.length });
 
           res.erc20_activity.forEach((element) => {
             element.decimal = element.decimal || element.erc20_contract?.decimal || 6;
           });
+        } else {
+          this.transferDataLength.emit({ transferType: 'token', length: 0 });
         }
       });
   }
