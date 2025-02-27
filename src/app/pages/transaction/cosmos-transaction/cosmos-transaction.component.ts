@@ -15,7 +15,8 @@ import { convertDataTransaction } from 'src/app/global/global';
 })
 export class CosmosTransactionComponent implements OnChanges {
   @Input() txHash = '';
-
+  isShowTokenTransfer = true;
+  isShowNFTTransfer = true;
   transaction = null;
   codeTransaction = CodeTransaction;
   isRawData = false;
@@ -148,5 +149,14 @@ export class CosmosTransactionComponent implements OnChanges {
   changeType(type: boolean): void {
     this.isRawData = type;
   }
-}
 
+  checkShowTransferTx(res: any): void {
+    if (res?.transferType === 'token') {
+      this.isShowTokenTransfer = res?.length > 0;
+    }
+
+    if (res?.transferType === 'nft') {
+      this.isShowNFTTransfer = res?.length > 0;
+    }
+  }
+}

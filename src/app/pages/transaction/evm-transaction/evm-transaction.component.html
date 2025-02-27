@@ -90,18 +90,6 @@
               </div>
             </div>
           </div>
-          <div class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper justify-content-between">
-            <div class="col-12 col-lg-2 text--gray-4">Token transfer</div>
-            <div class="col-12 col-lg-10">
-              <app-token-transfer [transaction]="transaction" [transferType]="'asset'"></app-token-transfer>
-            </div>
-          </div>
-          <div class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper no-border-top justify-content-between">
-            <div class="col-12 col-lg-2 text--gray-4">NFT transfer</div>
-            <div class="col-12 col-lg-10">
-              <app-token-transfer [transaction]="transaction" [transferType]="'nft'"></app-token-transfer>
-            </div>
-          </div>
           <div class="row flex-column token-transfer-wrapper">
             <div class="row mb-2 body justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-2 text--gray-4">From</div>
@@ -111,7 +99,6 @@
                 </ng-container>
               </div>
             </div>
-
             <div class="row mb-2 body justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-2 text--gray-4">To</div>
               <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
@@ -124,7 +111,30 @@
                 </ng-container>
               </div>
             </div>
-
+          </div>
+          <div
+            class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper justify-content-between"
+            *ngIf="isShowTokenTransfer">
+            <div class="col-12 col-lg-2 text--gray-4">Token transfer</div>
+            <div class="col-12 col-lg-10">
+              <app-token-transfer
+                [transaction]="transaction"
+                [transferType]="'asset'"
+                (transferDataLength)="checkShowTransferTx($event)"></app-token-transfer>
+            </div>
+          </div>
+          <div
+            class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper no-border-top justify-content-between"
+            *ngIf="isShowNFTTransfer">
+            <div class="col-12 col-lg-2 text--gray-4">NFT transfer</div>
+            <div class="col-12 col-lg-10">
+              <app-token-transfer
+                [transaction]="transaction"
+                [transferType]="'nft'"
+                (transferDataLength)="checkShowTransferTx($event)"></app-token-transfer>
+            </div>
+          </div>
+          <div class="row flex-column token-transfer-wrapper">
             <div class="row mb-2 body justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-2 text--gray-4">Amount</div>
               <div class="col-auto col-lg-10 text--gray-1">

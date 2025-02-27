@@ -14,7 +14,7 @@
       }">
       <ng-container [ngTemplateOutlet]="contentData"></ng-container>
     </a>
-    <div class="ml-lg-2 ml-1" [copyBtn]="addressOnly || value"></div>
+    <div *ngIf="showCopyBtn" class="ml-lg-2 ml-1" [copyBtn]="addressOnly || value"></div>
   </ng-container>
 
   <ng-template #displayText>

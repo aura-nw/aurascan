@@ -18,6 +18,8 @@ import { mappingMethodName } from 'src/app/global/global';
 })
 export class EvmTransactionComponent implements OnChanges {
   @Input() txHash = '';
+  isShowTokenTransfer = true;
+  isShowNFTTransfer = true;
   transaction: {
     evm_hash: string;
     hash: string;
@@ -71,7 +73,7 @@ export class EvmTransactionComponent implements OnChanges {
   isDisplayMore = false;
   topicLength = 4;
   isEvmContract = false;
-  method = ''
+  method = '';
 
   constructor(
     private transactionService: TransactionService,
@@ -140,10 +142,9 @@ export class EvmTransactionComponent implements OnChanges {
     if (this.transaction?.to) {
       this.contractService.findEvmContract(this.transaction.to).subscribe({
         next: (res) => {
-          if (res?.evm_smart_contract?.length > 0)
-            this.isEvmContract = true;
+          if (res?.evm_smart_contract?.length > 0) this.isEvmContract = true;
           else this.transaction.memo = hex2a(this.transaction.inputData);
-          
+
           this.getMethod();
         },
       });
@@ -198,5 +199,15 @@ export class EvmTransactionComponent implements OnChanges {
       contractAddress: _.get(tx, 'evm_transaction.contract_address'),
       evm_internal_transactions: _.get(tx, 'evm_transaction.evm_internal_transactions'),
     };
+  }
+
+  checkShowTransferTx(res: any): void {
+    if (res?.transferType === 'token') {
+      this.isShowTokenTransfer = res?.length > 0;
+    }
+
+    if (res?.transferType === 'nft') {
+      this.isShowNFTTransfer = res?.length > 0;
+    }
   }
 }

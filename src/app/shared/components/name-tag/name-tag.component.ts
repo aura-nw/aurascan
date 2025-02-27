@@ -35,6 +35,7 @@ export class NameTagComponent implements OnInit {
   @Input() screen = EScreen.Account;
   @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
   @Input() nameTagDark = false;
+  @Input() showCopyBtn = true;
 
   ENameTag = ENameTag;
   EScreen = EScreen;
