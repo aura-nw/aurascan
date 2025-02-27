@@ -180,6 +180,7 @@
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
+                          [showCopyBtn]="false"
                           [linkRouter]="[(data.from | isContract) ? '/contracts' : '/address', data.from]">
                         </app-name-tag>
                       </div>
@@ -193,6 +194,7 @@
                           [iconContract]="data.to | isContract"
                           [value]="data.to || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
+                          [showCopyBtn]="false"
                           [linkRouter]="[(data.to | isContract) ? '/contracts' : '/address', data.to]">
                         </app-name-tag>
                       </div>
@@ -225,7 +227,7 @@
   </ng-template>
   <section class="card-h-100 mb-4 mb-lg-0" *ngIf="transferType === 'nft'">
     <div *ngIf="!breakpoint.value.matches">
-      <div *ngIf="dataSourceNFTs?.data?.length > 0; else noValues">
+      <div *ngIf="dataSourceNFTs?.data?.length > 0; else noValues" class="d-flex flex-column gap-1">
         <div class="d-flex gap-3 align-items-center" *ngFor="let transaction of dataSourceNFTs?.data">
           <img src="assets/icons/icons-svg/basic/token-transfer-row-arrow.svg" />
           <div
@@ -262,6 +264,7 @@
               "
               [iconContract]="true"
               [isShorterText]="breakpoint.value.matches"
+              [showCopyBtn]="false"
               [linkRouter]="[
                 transaction['evm_hash'] ? '/evm-contracts' : '/contracts',
                 transaction?.cw721_contract?.smart_contract?.address ||
@@ -277,6 +280,7 @@
               [iconContract]="transaction.from | isContract"
               [value]="transaction.from || nullAddress | beautyAddress"
               [isShorterText]="breakpoint.value.matches"
+              [showCopyBtn]="false"
               [linkRouter]="[(transaction.from | isContract) ? '/contracts' : '/address', transaction.from]">
             </app-name-tag>
           </div>
@@ -288,6 +292,7 @@
               [iconContract]="transaction.from | isContract"
               [value]="transaction.to || nullAddress | beautyAddress"
               [isShorterText]="breakpoint.value.matches"
+              [showCopyBtn]="false"
               [linkRouter]="[(transaction.from | isContract) ? '/contracts' : '/address', transaction.from]">
             </app-name-tag>
           </div>
@@ -357,6 +362,7 @@
                             "
                             [iconContract]="true"
                             [isShorterText]="breakpoint.value.matches"
+                            [showCopyBtn]="false"
                             [linkRouter]="[
                               transaction['evm_hash'] ? '/evm-contracts' : '/contracts',
                               data?.cw721_contract?.smart_contract?.address ||
@@ -379,6 +385,7 @@
                           [iconContract]="data.from | isContract"
                           [value]="data.from || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
+                          [showCopyBtn]="false"
                           [linkRouter]="[(data.from | isContract) ? '/contracts' : '/address', data.from]">
                         </app-name-tag>
                         <app-name-tag
@@ -388,6 +395,7 @@
                           [iconContract]="isEvmSmartContract(data.from)"
                           [value]="data.from || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
+                          [showCopyBtn]="false"
                           [linkRouter]="[isEvmSmartContract(data.from) ? '/evm-contracts' : '/address', data.from]">
                         </app-name-tag>
                       </div>
@@ -402,6 +410,7 @@
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [value]="data.to || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
+                          [showCopyBtn]="false"
                           [linkRouter]="[(data.to | isContract) ? '/contracts' : '/address', data.to]"></app-name-tag>
                         <app-name-tag
                           *ngIf="transaction['evm_hash']"
@@ -410,6 +419,7 @@
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
                           [value]="data.to || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
+                          [showCopyBtn]="false"
                           [linkRouter]="[
                             isEvmSmartContract(data.to) ? '/evm-contracts' : '/address',
                             data.to

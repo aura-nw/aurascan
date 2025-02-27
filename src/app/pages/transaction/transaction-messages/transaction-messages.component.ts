@@ -619,7 +619,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Validator Address',
             value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
-            link: { url: '/validators', data: data?.validator_address },
+            link: { url: '/validators', data: data?.validator_address, nameTag: true },
           });
 
           if (this.commissionAutoClaim > 0) {
