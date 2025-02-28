@@ -14,6 +14,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { IBCService } from 'src/app/core/services/ibc.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import * as _ from 'lodash';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-token-transfer',
@@ -55,6 +56,8 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
   coinInfo = this.environmentService.chainInfo.currencies[0];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   destroy$ = new Subject<void>();
+  image_s3 = this.environmentService.imageUrl;
+  defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
 
   constructor(
     private environmentService: EnvironmentService,
@@ -64,6 +67,7 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
     private commonService: CommonService,
     private contractService: ContractService,
     private ibcService: IBCService,
+    private tokenService: TokenService,
   ) {
     this.breakpoint$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state?.matches) {
@@ -119,11 +123,12 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
                 indexData = index + 1;
               }
               const arrAmount = event.event_attributes[indexData]?.value?.split(',');
-              arrAmount.forEach((amountTemp) => {
+              arrAmount.forEach(async (amountTemp) => {
                 let cw20_contract = {};
                 let dataAmount = {};
                 cw20_contract['symbol'] = cw20_contract['symbol'] || this.coinInfo.coinDenom;
                 cw20_contract['name'] = cw20_contract['name'] || this.coinInfo.coinDenom;
+                
                 let decimal = cw20_contract['decimal'] || this.coinInfo.coinDecimals;
                 let from = event.event_attributes[index - 2]?.value;
                 if (event.event_attributes[index - 2]?.composite_key === 'coin_received.receiver') {
@@ -227,5 +232,18 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
 
   isEvmSmartContract(addr) {
     return this.smartContractList.filter((i) => i === addr).length > 0;
+  }
+
+  getTokenImage(denom: string) {
+    return new Promise((resolve) => {
+      this.tokenService.getTokenDetail(denom).subscribe({
+        next: (res) => {
+          resolve(res?.image);
+        },
+        error: (e) => {
+          resolve(null);
+        },
+      });
+    });
   }
 }

@@ -632,6 +632,7 @@ export class TransactionService extends CommonService {
           to
           cw721_token {
             token_id
+            media_info
           }
           cw721_contract {
             smart_contract {
@@ -716,6 +717,7 @@ export class TransactionService extends CommonService {
           to
           erc721_token {
             token_id
+            media_info
           }
           erc721_contract {
             evm_smart_contract {
