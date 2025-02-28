@@ -88,6 +88,8 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.transaction['status'] == 'Fail') {
+      this.transferDataLength.emit({ transferType: 'nft', length: 0 });
+      this.transferDataLength.emit({ transferType: 'token', length: 0 });
       return;
     }
     if (this.transaction['evm_hash']) {
@@ -128,7 +130,7 @@ export class TokenTransferComponent implements OnInit, OnDestroy {
                 let dataAmount = {};
                 cw20_contract['symbol'] = cw20_contract['symbol'] || this.coinInfo.coinDenom;
                 cw20_contract['name'] = cw20_contract['name'] || this.coinInfo.coinDenom;
-                
+
                 let decimal = cw20_contract['decimal'] || this.coinInfo.coinDecimals;
                 let from = event.event_attributes[index - 2]?.value;
                 if (event.event_attributes[index - 2]?.composite_key === 'coin_received.receiver') {
