@@ -19,13 +19,13 @@
           <div class="text-white">To</div>
           <div class="text-white min-w-custom">
             <app-name-tag
-              [isEnableRouter]="!!transaction.from"
+              [isEnableRouter]="!!transaction.to"
               [maxCharacter]="breakpoint.value.matches ? 6 : 16"
-              [iconContract]="transaction.from | isContract"
+              [iconContract]="transaction.to | isContract"
               [value]="transaction.to || nullAddress | beautyAddress"
               [isShorterText]="breakpoint.value.matches"
               [showCopyBtn]="false"
-              [linkRouter]="[(transaction.from | isContract) ? '/contracts' : '/address', transaction.from]">
+              [linkRouter]="[(transaction.to | isContract) ? '/contracts' : '/address', transaction.to]">
             </app-name-tag>
           </div>
           <div class="text-white">For</div>
@@ -307,13 +307,13 @@
                 </div>
                 <div class="text-white">To</div>
                 <app-name-tag
-                  [isEnableRouter]="!!transaction.from"
+                  [isEnableRouter]="!!transaction.to"
                   [maxCharacter]="breakpoint.value.matches ? 6 : 16"
-                  [iconContract]="transaction.from | isContract"
+                  [iconContract]="transaction.to | isContract"
                   [value]="transaction.to || nullAddress | beautyAddress"
                   [isShorterText]="breakpoint.value.matches"
                   [showCopyBtn]="false"
-                  [linkRouter]="[(transaction.from | isContract) ? '/contracts' : '/address', transaction.from]">
+                  [linkRouter]="[(transaction.to | isContract) ? '/contracts' : '/address', transaction.to]">
                 </app-name-tag>
               </div>
             </div>
@@ -408,12 +408,12 @@
                         </app-name-tag>
                         <app-name-tag
                           *ngIf="transaction['evm_hash']"
-                          [isEnableRouter]="!!data.from"
+                          [isEnableRouter]="!!data.to"
                           [maxCharacter]="breakpoint.value.matches ? 6 : 16"
-                          [iconContract]="isEvmSmartContract(data.from)"
-                          [value]="data.from || nullAddress | beautyAddress"
+                          [iconContract]="isEvmSmartContract(data.to)"
+                          [value]="data.to || nullAddress | beautyAddress"
                           [isShorterText]="breakpoint.value.matches"
-                          [linkRouter]="[isEvmSmartContract(data.from) ? '/evm-contracts' : '/address', data.from]">
+                          [linkRouter]="[isEvmSmartContract(data.to) ? '/evm-contracts' : '/address', data.to]">
                         </app-name-tag>
                       </div>
                       <div class="d-flex align-items-center justify-content-between justify-content-lg-start">
