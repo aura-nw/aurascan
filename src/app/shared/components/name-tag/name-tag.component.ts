@@ -58,9 +58,9 @@ export class NameTagComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.isShorterText) {
-      this.maxCharacter = 6;
-    }
+    // if (this.isShorterText) {
+    //   this.maxCharacter = 6;
+    // }
 
     if (this.mode === ENameTag.Private) {
       this.checkIsContract();

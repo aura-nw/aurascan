@@ -25,7 +25,7 @@
   border-radius: 8px;
   background: #24262e;
 
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     padding: 16px;
   }
 }
@@ -37,4 +37,8 @@
   flex-wrap: nowrap;
   max-height: 250px;
   overflow: auto;
+
+  @media (max-width: 768px) {
+    overflow: unset;
+  }
 }

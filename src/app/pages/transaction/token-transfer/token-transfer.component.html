@@ -272,8 +272,14 @@
                           encodeData(transaction?.erc721_token?.token_id)
                         ]
                   "
-                  >{{ transaction?.cw721_token?.token_id || transaction?.erc721_token?.token_id }}</a
-                >
+                  ><span style="color: white">[</span
+                  ><span>{{ transaction?.cw721_token?.token_id || transaction?.erc721_token?.token_id }}</span
+                  ><span style="color: white">]</span>
+                  {{
+                    transaction?.erc721_contract?.evm_smart_contract?.erc721_contract?.name ||
+                      transaction?.cw721_contract?.smart_contract?.cw721_contract?.name
+                  }}
+                </a>
                 <!-- <span
                   class="line-claim w-100"
                   [copyBtn]="transaction?.cw721_token?.token_id || transaction?.erc721_token?.token_id"
@@ -377,27 +383,52 @@
                           <div class="d-flex mb-1">
                             <span>Token ID</span>
                           </div>
-                          <app-name-tag
-                            [maxCharacter]="breakpoint.value.matches ? 6 : 16"
-                            [isEnableRouter]="true"
-                            [value]="data?.cw721_token?.token_id || data?.erc721_token?.token_id | beautyAddress"
-                            [iconContract]="false"
-                            [isShorterText]="breakpoint.value.matches"
-                            [showCopyBtn]="false"
-                            [linkRouter]="[
-                              data?.cw721_contract
-                                ? [
-                                    '/token/cw721',
-                                    data?.cw721_contract?.smart_contract?.address,
-                                    encodeData(transaction?.cw721_token?.token_id)
-                                  ]
-                                : [
-                                    '/token/evm/erc721',
-                                    data?.erc721_contract?.evm_smart_contract?.address,
-                                    encodeData(data?.erc721_token?.token_id)
-                                  ]
-                            ]">
-                          </app-name-tag>
+                          <div class="d-flex gap-1">
+                            <a
+                              class="cursor-pointer token-id-link-text"
+                              [routerLink]="
+                                data?.cw721_contract
+                                  ? [
+                                      '/token/cw721',
+                                      data?.cw721_contract?.smart_contract?.address,
+                                      encodeData(transaction?.cw721_token?.token_id)
+                                    ]
+                                  : [
+                                      '/token/evm/erc721',
+                                      data?.erc721_contract?.evm_smart_contract?.address,
+                                      encodeData(data?.erc721_token?.token_id)
+                                    ]
+                              "
+                              ><span style="color: white">[</span
+                              ><span>{{ data?.cw721_token?.token_id || data?.erc721_token?.token_id }}</span
+                              ><span style="color: white">]</span>
+                              {{
+                                data?.erc721_contract?.evm_smart_contract?.erc721_contract?.name ||
+                                  data?.cw721_contract?.smart_contract?.cw721_contract?.name | ellipsis: 3 : 3
+                              }}
+                            </a>
+                            <!-- <app-name-tag
+                              [maxCharacter]="6"
+                              [isEnableRouter]="true"
+                              [value]="data?.erc721_contract?.evm_smart_contract?.erc721_contract?.name | beautyAddress"
+                              [iconContract]="false"
+                              [isShorterText]="true"
+                              [showCopyBtn]="false"
+                              [linkRouter]="[
+                                data?.cw721_contract
+                                  ? [
+                                      '/token/cw721',
+                                      data?.cw721_contract?.smart_contract?.address,
+                                      encodeData(transaction?.cw721_token?.token_id)
+                                    ]
+                                  : [
+                                      '/token/evm/erc721',
+                                      data?.erc721_contract?.evm_smart_contract?.address,
+                                      encodeData(data?.erc721_token?.token_id)
+                                    ]
+                              ]">
+                            </app-name-tag> -->
+                          </div>
                         </div>
                       </div>
                     </ng-container>

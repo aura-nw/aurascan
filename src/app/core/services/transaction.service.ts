@@ -637,6 +637,9 @@ export class TransactionService extends CommonService {
           cw721_contract {
             smart_contract {
               address
+              cw721_contract {
+                name
+              }
             }
           }
           smart_contract_event {
@@ -722,6 +725,9 @@ export class TransactionService extends CommonService {
           erc721_contract {
             evm_smart_contract {
               address
+              erc721_contract {
+                name
+              }
             }
           }
           # smart_contract_event {
