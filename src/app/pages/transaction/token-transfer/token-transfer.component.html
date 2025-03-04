@@ -246,7 +246,13 @@
               ">
               <img
                 class="h-100 w-100"
-                [src]="transaction?.cw721_token?.media_info?.offchain?.image?.url || transaction?.erc721_token?.media_info?.offchain?.image?.url || defaultImgToken" />
+                [src]="
+                  transaction?.cw721_token?.media_info?.offchain?.image?.url ||
+                  transaction?.cw721_token?.media_info?.onchain?.metadata?.image ||
+                  transaction?.erc721_token?.media_info?.offchain?.image?.url ||
+                  transaction?.erc721_token?.media_info?.onchain?.metadata?.image ||
+                  defaultImgToken
+                " />
             </div>
             <div class="d-flex flex-column justify-content-between">
               <div class="text-white d-flex gap-3 align-items-baseline">
@@ -359,13 +365,17 @@
                           ">
                           <img
                             class="h-100 w-100"
-                            [src]="data?.cw721_token?.media_info?.offchain?.image?.url || defaultImgToken" />
+                            [src]="
+                              data?.cw721_token?.media_info?.offchain?.image?.url ||
+                              data?.cw721_token?.media_info?.onchain?.metadata?.image ||
+                              data?.erc721_token?.media_info?.offchain?.image?.url ||
+                              data?.erc721_token?.media_info?.onchain?.metadata?.image ||
+                              defaultImgToken
+                            " />
                         </div>
                         <div class="d-flex transfer-token-info">
                           <div class="d-flex mb-1">
-                            <span
-                              >Token ID</span
-                            >
+                            <span>Token ID</span>
                           </div>
                           <app-name-tag
                             [maxCharacter]="breakpoint.value.matches ? 6 : 16"
