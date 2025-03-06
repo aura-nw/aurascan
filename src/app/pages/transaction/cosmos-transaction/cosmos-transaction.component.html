@@ -110,9 +110,17 @@
                 (transferDataLength)="checkShowTransferTx($event)"></app-token-transfer>
             </div>
           </div>
+          <div class="row body mt-2 justify-content-between justify-content-lg-start">
+            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
+              <div>Memo</div>
+            </div>
+            <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
+              {{ !transaction?.memo ? '-' : (transaction?.memo | ellipsis: (environmentService.isMobile ? 25 : 100)) }}
+            </div>
+          </div>
           <div class="row flex-column token-transfer-wrapper">
             <div class="row mb-2 body justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-2 text--gray-4">Fee</div>
+              <div class="col-auto col-lg-2 text--gray-4">Transaction Fee</div>
               <div class="col-auto col-lg-10 text--gray-1">
                 {{ transaction?.fee }}
                 <span appLinkDenom>{{ denom }}</span>
@@ -120,26 +128,16 @@
             </div>
             <div class="row body justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-                <div>Gas</div>
-                <div class="ml-md-1">(used / wanted)</div>
+                <div>Gas Limit & Usage</div>
+                <!-- <div class="ml-md-1">(used / wanted)</div> -->
               </div>
               <div class="col-auto col-lg-10 text--gray-1">
                 {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
               </div>
             </div>
-            <div class="row body mt-2 justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-                <div>Memo</div>
-              </div>
-              <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
-                {{
-                  !transaction?.memo ? '-' : (transaction?.memo | ellipsis: (environmentService.isMobile ? 25 : 100))
-                }}
-              </div>
-            </div>
             <div class="row body justify-content-between justify-content-lg-start flex-nowrap align-items-center">
               <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-                <div>Fee payer</div>
+                <div>Fee Payer</div>
               </div>
               <div style="max-width: max-content" class="col-auto col-lg-10">
                 <div *ngIf="!transaction?.fee_payer">-</div>
