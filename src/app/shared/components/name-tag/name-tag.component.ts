@@ -35,6 +35,7 @@ export class NameTagComponent implements OnInit {
   @Input() screen = EScreen.Account;
   @Input() tooltipPosition: 'tooltip--left' | 'tooltip--right' | 'tooltip--below' | null = null;
   @Input() nameTagDark = false;
+  @Input() showCopyBtn = true;
 
   ENameTag = ENameTag;
   EScreen = EScreen;
@@ -57,9 +58,9 @@ export class NameTagComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.isShorterText) {
-      this.maxCharacter = 6;
-    }
+    // if (this.isShorterText) {
+    //   this.maxCharacter = 6;
+    // }
 
     if (this.mode === ENameTag.Private) {
       this.checkIsContract();

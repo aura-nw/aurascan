@@ -10,7 +10,7 @@
 
   .card-nodata,
   .table-token {
-    height: 210px;
+    max-height: 210px;
     margin-bottom: 0;
     overflow-y: auto;
 
@@ -60,4 +60,59 @@
   .token-id {
     max-width: 80px;
   }
+}
+
+.text-white {
+  color: #e5e7ea;
+  /* Desktop/Body/S (Sb) */
+  font-family: 'Inter';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18px; /* 128.571% */
+  letter-spacing: 0.14px;
+}
+
+.nft-bg-white {
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  aspect-ratio: 1/1;
+
+  border-radius: 6px;
+  background: #f8f9fa;
+
+  color: #5c606d;
+  font-family: Inter;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px; /* 200% */
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.token-id-link-text {
+  color: #2cb1f5;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0.14px;
+
+  &:hover {
+    color: var(--aura-blue-shade-3) !important;
+  }
+}
+
+.min-w-custom {
+  min-width: 150px;
 }

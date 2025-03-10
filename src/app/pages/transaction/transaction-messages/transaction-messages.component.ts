@@ -92,6 +92,7 @@ export class TransactionMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.transactionDetail);
     if (this.transactionDetail?.type?.toLowerCase().indexOf('ibc') == -1) {
       this.checkTypeMessage();
     }
@@ -618,7 +619,7 @@ export class TransactionMessagesComponent implements OnInit {
           result.push({
             key: 'Validator Address',
             value: `${data?.validator_address} (${this.getNameValidator(data?.validator_address)})`,
-            link: { url: '/validators', data: data?.validator_address },
+            link: { url: '/validators', data: data?.validator_address, nameTag: true },
           });
 
           if (this.commissionAutoClaim > 0) {
