@@ -41,4 +41,13 @@
   @media (max-width: 768px) {
     overflow: unset;
   }
+
+  > * {
+    min-height: 24px;
+    max-height: 24px;
+  }
+}
+
+.h-24px {
+  height: 24px;
 }

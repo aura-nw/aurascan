@@ -42,8 +42,8 @@
               <div class="col-auto col-lg-10 text--gray-1 mb-0">{{ transaction?.chainid }}</div>
             </div>
             <div class="row mb-2 body justify-content-between justify-content-lg-start">
-              <div class="col-auto col-lg-2 text--gray-4 d-flex align-items-center">TxHash</div>
-              <div class="col-auto col-lg-10 text--gray-1 d-flex align-items-center">
+              <div class="col-auto col-lg-2 text--gray-4 d-flex">TxHash</div>
+              <div class="col-auto col-lg-10 text--gray-1 d-flex align-items-center h-24px">
                 <div [copyBtn]="transaction?.tx_hash" [btnClass]="!environmentService.isMobile ? ['mr-2'] : []">
                   <span *ngIf="!environmentService.isMobile">{{ transaction?.tx_hash }}</span>
                   <span *ngIf="environmentService.isMobile">{{ transaction?.tx_hash | ellipsis: 8 : 8 }}</span>
@@ -110,15 +110,17 @@
                 (transferDataLength)="checkShowTransferTx($event)"></app-token-transfer>
             </div>
           </div>
-          <div class="row body mt-2 justify-content-between justify-content-lg-start">
-            <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
-              <div>Memo</div>
-            </div>
-            <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
-              {{ !transaction?.memo ? '-' : (transaction?.memo | ellipsis: (environmentService.isMobile ? 25 : 100)) }}
-            </div>
-          </div>
           <div class="row flex-column token-transfer-wrapper">
+            <div class="row body mb-2 justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
+                <div>Memo</div>
+              </div>
+              <div class="col-auto col-lg-10 text--gray-1 line-claim-v">
+                {{
+                  !transaction?.memo ? '-' : (transaction?.memo | ellipsis: (environmentService.isMobile ? 25 : 100))
+                }}
+              </div>
+            </div>
             <div class="row mb-2 body justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-2 text--gray-4">Transaction Fee</div>
               <div class="col-auto col-lg-10 text--gray-1">
@@ -126,7 +128,7 @@
                 <span appLinkDenom>{{ denom }}</span>
               </div>
             </div>
-            <div class="row body justify-content-between justify-content-lg-start">
+            <div class="row mb-2 body justify-content-between justify-content-lg-start">
               <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
                 <div>Gas Limit & Usage</div>
                 <!-- <div class="ml-md-1">(used / wanted)</div> -->
