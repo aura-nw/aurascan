@@ -179,7 +179,8 @@
               <div class="pl-4" *ngIf="tokenDetail.modeToken !== EModeEvmToken.ERCToken && !params">
                 <div class="body-02 text--gray-5">Transfers:</div>
                 <div class="body-02 text--gray-11">
-                  <span *ngIf="tokenDetail?.hasMoreTx">More than </span>{{ tokenService.totalTransfer || 0 }}
+                  <!-- <span *ngIf="tokenDetail?.hasMoreTx">More than </span>{{ tokenService.totalTransfer || 0 }} -->
+                  {{ tokenDetail?.totalTransfer || 0 | mask: 'separator.0' }}
                 </div>
               </div>
             </ng-container>
@@ -192,7 +193,8 @@
           <div class="d-flex">
             <div class="body-02 text--gray-5 fixed-col">Transfers:</div>
             <div class="body-02 text--gray-11">
-              <span *ngIf="tokenDetail.hasMoreTx">More than </span>{{ tokenService.totalTransfer || 0 }}
+              <!-- <span *ngIf="tokenDetail.hasMoreTx">More than </span>{{ tokenService.totalTransfer || 0 }} -->
+              {{ tokenDetail?.totalTransfer || 0 | mask: 'separator.0' }}
             </div>
           </div>
         </td>
