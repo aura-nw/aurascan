@@ -110,6 +110,9 @@ export class EvmTokenDetailComponent implements OnInit {
               overviewInfo: tokenMarket?.overviewInfo,
               socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles),
             };
+
+            this.tokenService.setTotalTransfer(this.tokenDetail?.totalTransfer);
+
             this.getAssetsDetail();
           },
           error: (e) => {
@@ -141,6 +144,7 @@ export class EvmTokenDetailComponent implements OnInit {
 
         const modeToken = EModeEvmToken.ERCToken;
         const totalTransfer = res?.asset?.reduce((acc, asset) => acc + (asset?.transactions || 0), 0);
+        this.tokenService.setTotalTransfer(totalTransfer);
         this.tokenDetail = { name, type, contract_address, isNFTContract, modeToken, totalTransfer };
         this.tokenDetail.contract_verification = _.get(
           res,
