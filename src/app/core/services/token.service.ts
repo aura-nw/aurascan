@@ -884,6 +884,14 @@ export class TokenService extends CommonService {
             amount
           }
         }
+        asset(where: {
+          type: {
+            _eq: "ERC20_TOKEN"
+          }, denom: {_eq: $address}
+        }) {
+          denom
+          transactions
+        }
       }
     }
     `;
@@ -914,6 +922,15 @@ export class TokenService extends CommonService {
             symbol
           }
         }
+        asset(where: {
+          type: {
+            _eq: "ERC20_TOKEN"
+          }, denom: {_eq: $address}
+          }) {
+            origin_id
+            denom
+            transactions
+          }
       }
     }
     `;

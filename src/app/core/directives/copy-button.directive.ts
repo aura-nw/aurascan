@@ -11,6 +11,7 @@ export class CopyButtonDirective implements OnChanges {
   @Input() isDisableCopy: boolean = false;
   @Input() btnClass: string[];
   @Input() iconClass: string[];
+  @Input() iconHeight: string = '24px';
   button;
   tooltip;
 
@@ -35,6 +36,7 @@ export class CopyButtonDirective implements OnChanges {
     const contain = document.createElement('div');
     this.button = document.createElement('button');
     this.button.classList.add('button', 'position-relative');
+    this.button.style.height = this.iconHeight;
     // add class btn
     if (this.btnClass?.length > 0) {
       this.btnClass.forEach((c) => {
