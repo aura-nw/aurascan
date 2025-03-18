@@ -242,7 +242,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
             }
 
             this.pageData.length = this.dataSource.data.length;
-            this.tokenService.setTotalTransfer(this.pageData.length);
+            // this.tokenService.setTotalTransfer(this.pageData.length);
           }
         },
         error: (e) => {
@@ -332,7 +332,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
             }
 
             this.pageData.length = this.dataSource.data.length;
-            this.tokenService.totalTransfer$.next(this.pageData.length);
+            // this.tokenService.totalTransfer$.next(this.pageData.length);
           }
         },
         error: (e) => {
