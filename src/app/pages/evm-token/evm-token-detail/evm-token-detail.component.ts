@@ -29,7 +29,7 @@ export class EvmTokenDetailComponent implements OnInit {
     private router: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
@@ -92,11 +92,12 @@ export class EvmTokenDetailComponent implements OnInit {
               this.errTxt = 'No Data';
               return;
             }
-    
+
             this.tokenDetail = {
               ...token,
               supplyAmount: token.total_supply,
               modeToken: EModeEvmToken.ERCToken,
+              totalTransfer: res?.asset?.reduce((acc, asset) => acc + (asset?.transactions || 0), 0),
               contract_address: this.contractAddress,
               decimals: token.decimal,
               contract_verification: token.evm_smart_contract?.evm_contract_verifications[0]?.status,
@@ -105,10 +106,13 @@ export class EvmTokenDetailComponent implements OnInit {
               priceChangePercentage24h: tokenMarket?.priceChangePercentage24h || 0,
               verify_text: tokenMarket?.verifyText || '',
               verify_status: tokenMarket?.verifyStatus || '',
-              officialSite : tokenMarket?.officialSite,
-              overviewInfo : tokenMarket?.overviewInfo,
-              socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles)
+              officialSite: tokenMarket?.officialSite,
+              overviewInfo: tokenMarket?.overviewInfo,
+              socialProfiles: this.tokenService?.mappingSocialProfiles(tokenMarket?.socialProfiles),
             };
+
+            this.tokenService.setTotalTransfer(this.tokenDetail?.totalTransfer);
+
             this.getAssetsDetail();
           },
           error: (e) => {
@@ -123,8 +127,8 @@ export class EvmTokenDetailComponent implements OnInit {
             this.loading = false;
           },
         });
-      }
-    })
+      },
+    });
   }
 
   getTokenDetailNFT(): void {
@@ -139,7 +143,9 @@ export class EvmTokenDetailComponent implements OnInit {
         const contract_address = _.get(res, 'evm_smart_contract[0].address');
 
         const modeToken = EModeEvmToken.ERCToken;
-        this.tokenDetail = { name, type, contract_address, isNFTContract, modeToken };
+        const totalTransfer = res?.asset?.reduce((acc, asset) => acc + (asset?.transactions || 0), 0);
+        this.tokenService.setTotalTransfer(totalTransfer);
+        this.tokenDetail = { name, type, contract_address, isNFTContract, modeToken, totalTransfer };
         this.tokenDetail.contract_verification = _.get(
           res,
           'evm_smart_contract[0].evm_contract_verifications[0].status',

@@ -92,7 +92,7 @@ export class EvmTokenTransfersTabComponent implements OnInit, AfterViewInit {
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private tokenService: TokenService,
+    public tokenService: TokenService,
     private router: Router,
     private transactionService: TransactionService,
     private nameTagService: NameTagService,
