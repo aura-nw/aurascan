@@ -6,9 +6,10 @@ on:
       - main
     inputs:
       version:
-        type: string
-        description: Release version
+        description: 'Specify which version to bump (major, minor, patch)'
         required: true
+        type: string
+        default: 'patch'
 
 jobs:
   build:
@@ -17,12 +18,48 @@ jobs:
     if: github.actor == 'hoangthanh212' || github.actor == 'peara' || github.actor == 'kienvc' 
     steps:
       - uses: actions/checkout@v2
+      - name: Get the previous Git tag
+        id: get_version
+        run: |
+          # Get the most recent tag (previous tag of the current commit)
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^)
+          
+          # If there is no previous tag, default to 1.0.0
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "No previous tag found, defaulting to version 1.0.0"
+            PREVIOUS_TAG="1.0.0"
+          fi
+
+          echo "Previous tag: $PREVIOUS_TAG"
+          CURRENT_VERSION=$(echo $PREVIOUS_TAG | sed 's/^.*://g')
+          echo "version=$CURRENT_VERSION" >> $GITHUB_ENV
+
+      - name: Increment version based on input
+        id: increment_version
+        run: |
+          VERSION=${{ env.version }}
+          if [ "${{ github.event.inputs.version }}" == "major" ]; then
+            VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$1+=1; $2=0; $3=0; print}')
+          elif [ "${{ github.event.inputs.version }}" == "minor" ]; then
+            VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$2+=1; $3=0; print}')
+          elif [ "${{ github.event.inputs.version }}" == "patch" ]; then
+            VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$3+=1; print}')
+          else
+            echo "Invalid version input! Use 'major', 'minor', or 'patch'."
+            exit 1
+          fi
+          echo "New version: $VERSION"
+          echo "new_version=$VERSION" >> $GITHUB_ENV
+          
+      - name: Tag commit
+        uses: tvdias/github-tagger@v0.0.1
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          tag: "v${{ env.new_version }}"
+          
       - name: Set environment variable
         run: |
-          SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
-          echo SHORT_SHA_COMMIT=${SHORT_SHA_COMMIT} >> $GITHUB_ENV
-          echo ENVIRONMENT=${GITHUB_REF_NAME} >> $GITHUB_ENV
-          echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/explorer-frontend:${{ inputs.version }} >> $GITHUB_ENV
+          echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/explorer-frontend:${{ env.new_version }} >> $GITHUB_ENV
           echo REPO_MANIFEST_NAME=gitops-prod >> $GITHUB_ENV
           echo REPO_MANIFEST_URL=github.com/aura-nw/gitops-prod.git >> $GITHUB_ENV
           echo REPO_MANIFEST_BRANCH=master >> $GITHUB_ENV
