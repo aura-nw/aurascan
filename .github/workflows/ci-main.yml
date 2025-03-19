@@ -57,10 +57,11 @@ jobs:
         uses: tvdias/github-tagger@v0.0.1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: "v${{ env.new_version }}"
+          tag: "${{ env.new_version }}"
           
       - name: Set environment variable
         run: |
+          echo ENVIRONMENT=${GITHUB_REF_NAME} >> $GITHUB_ENV
           echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/explorer-frontend:${{ env.new_version }} >> $GITHUB_ENV
           echo REPO_MANIFEST_NAME=gitops-prod >> $GITHUB_ENV
           echo REPO_MANIFEST_URL=github.com/aura-nw/gitops-prod.git >> $GITHUB_ENV
