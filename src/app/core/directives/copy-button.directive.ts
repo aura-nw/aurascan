@@ -60,7 +60,7 @@ export class CopyButtonDirective implements OnChanges {
           icon.classList.add(c);
         });
       } else {
-        icon.classList.add('ph', 'ph-copy', 'text--white', 'body-01');
+        icon.classList.add('ph', 'ph-copy', 'text--gray-6', 'body-01');
       }
       this.button.appendChild(icon);
     } else {
