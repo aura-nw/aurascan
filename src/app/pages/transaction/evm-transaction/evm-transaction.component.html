@@ -116,7 +116,7 @@
             class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper justify-content-between"
             *ngIf="isShowTokenTransfer">
             <div class="col-12 col-lg-2 text--gray-4 position-sticky top-0">Token transfer</div>
-            <div class="col-12 col-lg-10 h-100">
+            <div class="col-12 col-lg-10 h-100 transfer-list">
               <app-token-transfer
                 [transaction]="transaction"
                 [transferType]="'asset'"
@@ -127,7 +127,7 @@
             class="row flex-column flex-lg-row mb-3 mt-3 body token-transfer-wrapper no-border-top justify-content-between"
             *ngIf="isShowNFTTransfer">
             <div class="col-12 col-lg-2 text--gray-4 position-sticky top-0">NFT transfer</div>
-            <div class="col-12 col-lg-10 h-100">
+            <div class="col-12 col-lg-10 h-100 transfer-list">
               <app-token-transfer
                 [transaction]="transaction"
                 [transferType]="'nft'"
