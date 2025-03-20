@@ -57,8 +57,11 @@
   padding-bottom: 12px;
   border-bottom: 1px solid #545454;
   flex-wrap: nowrap;
-  max-height: 250px;
   overflow: auto;
+
+  .transfer-list {
+    max-height: 250px;
+  }
 
   @media (max-width: 768px) {
     overflow: unset;
