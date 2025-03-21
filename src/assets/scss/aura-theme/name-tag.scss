@@ -45,27 +45,27 @@
   background-color: var(--aura-gray-9);
   border-radius: 4px 0 0 4px;
   padding-left: var(--spacer-2);
-  padding-right: var(--spacer-5);
+  padding-right: var(--spacer-2);
   color: var(--aura-gray-light);
-  &:not(.private-name-tag) {
-    position: relative;
-    &:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      border-top: 13px solid transparent;
-      border-right: 15px solid var(--aura-black);
-      border-bottom: 13px solid transparent;
-    }
+  // &:not(.private-name-tag) {
+  //   position: relative;
+  //   &:after {
+  //     content: '';
+  //     position: absolute;
+  //     width: 0;
+  //     height: 0;
+  //     right: 0;
+  //     top: 0;
+  //     bottom: 0;
+  //     border-top: 13px solid transparent;
+  //     border-right: 15px solid var(--aura-black);
+  //     border-bottom: 13px solid transparent;
+  //   }
 
-    .after-gray &:after {
-      border-right: 15px solid var(--aura-gray-10);
-    }
-  }
+  //   .after-gray &:after {
+  //     border-right: 15px solid var(--aura-gray-10);
+  //   }
+  // }
 }
 
 .private-name-tag {
