@@ -10,3 +10,18 @@
     }
   }
 }
+
+::ng-deep {
+  .box-name-tag {
+    &:not(.private-name-tag) {
+      position: relative;
+      border: solid 1px var(--aura-blue-6);
+      border-radius: 4px;
+      &:after {
+        border-right: 15px solid transparent;
+      }
+    }
+  }
+}
+  
+  
