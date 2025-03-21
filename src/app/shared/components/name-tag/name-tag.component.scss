@@ -3,11 +3,6 @@
 
   &:not(.private-name-tag).dark-style {
     background-color: var(--aura-gray-8);
-
-    &::after {
-      border-right-color: var(--aura-gray-9);
-      right: -2px;
-    }
   }
 }
 
