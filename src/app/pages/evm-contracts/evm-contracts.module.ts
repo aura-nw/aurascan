@@ -29,6 +29,7 @@ import { EvmContractsRoutingModule } from './evm-contracts-routing.module';
 import { EvmContractsVerifyComponent } from './evm-contracts-verify/evm-contracts-verify.component';
 import { EvmProxyContractsVerifyComponent } from './evm-proxy-contracts-verify/evm-proxy-contracts-verify.component';
 import { PopupProxyContractComponent } from './evm-proxy-contracts-verify/popup-proxy-contract/popup-proxy-contract.component';
+import { WalletConnectModule } from 'src/app/shared/components/wallet-connect/wallet-connect.module';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { PopupProxyContractComponent } from './evm-proxy-contracts-verify/popup-
     NgxMaskDirective,
     ContractTableModule,
     NgbNavModule,
+    WalletConnectModule
   ],
   exports: [EvmReadComponent, EvmWriteComponent, EvmContractComponent],
   providers: [provideEnvironmentNgxMask(MASK_CONFIG)],
