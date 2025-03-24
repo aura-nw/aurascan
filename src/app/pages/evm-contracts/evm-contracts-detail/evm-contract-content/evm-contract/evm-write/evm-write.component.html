@@ -1,86 +1,8 @@
 <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="abi; else noValues">
-    <div class="d-lg-flex justify-content-between align-items-center" *ngIf="{ wallet: wallet$ | async } as ng">
-      <div class="my-t mb-1 mb-lg-3 small-text">
-        <button
-          (click)="connectWallet()"
-          *ngIf="!ng.wallet"
-          type="button"
-          class="button button-pill button-outline button-outline--gradient caption fw-normal cursor-pointer">
-          <span class="icon-connect"></span>
-          <span class="text--white">Connect Wallet</span>
-        </button>
-
-        <!-- <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet justify-content-between justify-content-lg-start">
-          <div *ngIf="ng.wallet?.cosmosAccount" class="button button-pill button-outline button--xs caption fw-normal">
-            <span class="icon-connect connected"></span>
-            <span class="text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
-              <span class="txt-wallet cursor-pointer" [routerLink]="['/address/', ng.wallet?.address]">
-                Connected [<ng-container *ngIf="ng.wallet?.cosmosAccount?.username">
-                  {{ ng.wallet?.cosmosAccount?.username | ellipsis: (!breakpoint.value.matches ? 16 : 8) }}
-                </ng-container>
-                <ng-container *ngIf="!ng.wallet?.cosmosAccount?.username">
-                  {{ ng.wallet?.address | ellipsis: 8 : (!breakpoint.value.matches ? 8 : null) }} </ng-container
-                >]
-              </span>
-            </span>
-          </div>
-          <button
-            [routerLink]="['/address/', ng.wallet?.address]"
-            class="button button-pill button--xs button-outline button-outline__in-card"
-            *ngIf="ng.wallet?.address && !ng.wallet?.cosmosAccount">
-            <span class="icon-connect connected"></span>
-            <span class="text--gray-1">Connected to Web3</span>
-          </button>
-          <ng-container>
-            <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
-            <div
-              class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center"
-              (click)="disconnect()">
-              <span class="txt-disconnect">Disconnect</span>
-              <img
-                [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
-                alt=""
-                width="18px"
-                height="18px"
-                class="ml-1" />
-            </div>
-          </ng-container>
-        </div> -->
-
-        <div *ngIf="ng.wallet" class="d-flex align-items-center box-connect-wallet">
-          <div class="button button-pill button-outline button-outline--gradient button--xs caption fw-normal">
-            <span class="icon-connect connected"></span>
-            <span class="text--gray-1 d-flex align-items-center" [copyBtn]="ng.wallet?.address">
-              <span class="txt-wallet cursor-pointer" [routerLink]="['/address/', ng.wallet?.address]">
-                <ng-container *ngIf="ng.wallet?.cosmosAccount?.username">
-                  {{ ng.wallet?.cosmosAccount?.username | ellipsis: 16 }}
-                </ng-container>
-                <ng-container *ngIf="!ng.wallet?.cosmosAccount?.username">
-                  {{ ng.wallet?.address | ellipsis: 8 : 8 }}
-                </ng-container>
-              </span>
-            </span>
-          </div>
-          <div class="divider divider-vertical mx-2 mx-lg-3 d-none d-lg-flex"></div>
-          <div class="text--blue-3link caption fw-normal cursor-pointer d-flex align-items-center" (click)="disconnect()">
-            <span class="txt-disconnect">Disconnect</span>
-            <img
-              [src]="'assets/icons/icons-svg/color/disconnect.svg' | imageS3"
-              alt=""
-              width="18px"
-              height="18px"
-              class="ml-1" />
-          </div>
-        </div>
-
-        <div class="warning-wrapper" *ngIf="ng.wallet?.cosmosAccount">
-          <img src="assets/icons/icons-svg/color/warning.svg" alt="warning" />
-          <span>Need to connect by EVM address to interact with EVM contract</span>
-        </div>
-      </div>
-
-      <div class="caption fw-normal d-flex align-items-center justify-content-end mt-3 mt-lg-0">
+    <div class="d-lg-flex justify-content-between align-items-center connect-wallet">
+      <app-wallet-connect></app-wallet-connect>
+      <div class="caption fw-normal d-flex align-items-center justify-content-start mt-3 mt-lg-0">
         <span class="cursor-pointer text--primary" (click)="expandMenu()">
           <ng-container *ngIf="!isExpand">Expand all</ng-container>
           <ng-container *ngIf="isExpand">Collapse all</ng-container>

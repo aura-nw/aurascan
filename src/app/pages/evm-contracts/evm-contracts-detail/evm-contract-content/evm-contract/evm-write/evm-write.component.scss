@@ -50,3 +50,11 @@ textarea {
   padding: 8px 16px 8px 8px;
   width: fit-content;
 }
+
+.connect-wallet {
+  ::ng-deep {
+    .wallet-connect-container {
+      margin-bottom: 10px !important;
+    }
+  }
+}
