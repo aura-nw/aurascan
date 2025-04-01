@@ -5,8 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import BigNumber from 'bignumber.js';
-import { Subject } from 'rxjs';
-import { debounceTime, map, takeUntil } from 'rxjs/operators';
+import { Subject, filter } from 'rxjs';
+import { debounceTime, map, takeUntil, window } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
@@ -14,6 +14,7 @@ import { PAGE_EVENT, TIMEOUT_ERROR } from '../../../core/constants/common.consta
 import { ETokenCoinType, ETokenCoinTypeBE, MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
 import { EWalletType } from 'src/app/core/constants/wallet.constant';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-fungible-tokens',
@@ -65,6 +66,8 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
     private tokenService: TokenService,
     public environmentService: EnvironmentService,
     private breakpointObserver: BreakpointObserver,
+    private route: Router,
+    private activeRoute: ActivatedRoute
   ) {}
 
   ngOnDestroy(): void {
@@ -74,13 +77,16 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getListToken();
-    this.searchSubject
-      .asObservable()
-      .pipe(debounceTime(500), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.textSearch = this.textSearch?.trim();
-        this.pageChange.selectPage(0);
+    this.activeRoute.fragment.subscribe((fragment) => {
+      this.filterType = fragment?.split(',') || [];
+      this.getListToken();
+      this.searchSubject
+        .asObservable()
+        .pipe(debounceTime(500), takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.textSearch = this.textSearch?.trim();
+          this.pageChange.selectPage(0);
+        });
       });
   }
 
@@ -95,7 +101,7 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
       offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.textSearch?.startsWith(EWalletType.EVM) ? this.textSearch?.toLowerCase() : this.textSearch || '',
     };
-    if (this.filterType) {
+    if (this.filterType?.length > 0) {
       payload['type'] = this.filterType?.toString();
     }
 
@@ -178,7 +184,7 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
     this.getListToken();
   }
 
-  filterToken(val: string = null) {
+  filterToken(val: string = null, event?: Event) {
     this.isLoadingTable = true;
     if (!val) {
       this.filterType = [];
@@ -187,8 +193,11 @@ export class FungibleTokensComponent implements OnInit, OnDestroy {
     } else {
       this.filterType.push(val);
     }
-    this.getListToken();
-
+    if (this.filterType.length > 1) {
+      this.route.navigate([], {fragment: this.filterType?.toString()});
+    } else {
+      this.route.navigate([], {fragment: this.filterType?.toString()});
+    }
     this.pageData.length = this.dataSource.data.length;
     this.pageChange.selectPage(0);
   }
