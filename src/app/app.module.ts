@@ -29,6 +29,7 @@ import { NgHttpCachingLocalStorage, NgHttpCachingModule, NgHttpCachingStrategy }
 import { CommonDirectiveModule } from './core/directives/common-directive.module';
 import { ChainInfoInterceptor } from './core/helpers/chain-info.interceptor';
 import { FeatureFlagService } from './core/data-services/feature-flag.service';
+import { TermsPopupModule } from './shared/components/terms-popup/terms-popup.module';
 
 initializeApp(environment.firebaseConfig);
 
@@ -52,6 +53,7 @@ initializeApp(environment.firebaseConfig);
     MediaExpandModule,
     SchemaViewerModule,
     CommonDirectiveModule,
+    TermsPopupModule,
     NgHttpCachingModule.forRoot({
       cacheStrategy: NgHttpCachingStrategy.DISALLOW_ALL,
       lifetime: 1000 * 60 * 5, // 5 minutes,
