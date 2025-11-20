@@ -115,6 +115,7 @@ export const STORAGE_KEYS = {
   TAB_UNEQUIP: 'tabUnEquip',
   LAST_USED_PROVIDER: 'LAST_USED_PROVIDER',
   DATA_NATIVE: 'nativeData',
+  TERMS_ACCEPTED: 'termsAccepted',
 };
 
 export const TITLE_LOGO = 'assets/images/logo/title-logo.png';
